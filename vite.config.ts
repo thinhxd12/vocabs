@@ -1,9 +1,4 @@
 import { defineConfig } from "@solidjs/start/config";
+import 'dotenv/config';
 
-export default defineConfig({
-    start: {
-        server: {
-            preset: "netlify_edge"
-        }
-    }
-});
+export default defineConfig({});
