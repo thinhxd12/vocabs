@@ -3,8 +3,8 @@
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
-    "build": "vinxi build --config my-app-ssr/vite.config.ts",
-    "start": "vinxi start --config my-app-ssr/vite.config.ts"
+    "build": "vinxi build",
+    "start": "vinxi start"
   },
   "devDependencies": {
     "@types/node": "^20.10.1"
