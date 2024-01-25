@@ -38,7 +38,6 @@ async function register(username: string, password: string) {
 function getSession() {
   return useSession(getRequestEvent()!, {
     password:
-      // process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace",
       import.meta.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace",
   });
 }
