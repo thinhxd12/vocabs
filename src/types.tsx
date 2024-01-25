@@ -9,4 +9,8 @@ export interface VocabularyType {
   number: number;
 }
 
-export type StoryTypes = "top" | "new" | "show" | "ask" | "job";
+export interface BookmarkType {
+  check: boolean;
+  value: string;
+}
+

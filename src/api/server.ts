@@ -2,8 +2,7 @@
 import { redirect } from "@solidjs/router";
 import { useSession } from "@solidjs/start/server";
 import { getRequestEvent } from "solid-js/web";
-import { db } from "./db";
-import { supabase } from "./supabaseClient";
+import { supabase } from "./supabase";
 
 function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
