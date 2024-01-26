@@ -1,7 +1,5 @@
 "use server";
 import { redirect } from "@solidjs/router";
-import { useSession } from "@solidjs/start/server";
-import { getRequestEvent } from "solid-js/web";
 import { supabase } from "./supabase";
 
 function validateUsername(username: unknown) {
@@ -22,7 +20,7 @@ async function login(username: string, password: string) {
     password: password,
   })
   if (error?.message) throw new Error("Invalid login");
-  return { username: data.user?.email, refreshToken: data.session?.refresh_token, accessToken: data.session?.access_token }
+  return { username: username }
 }
 
 async function register(username: string, password: string) {
@@ -31,14 +29,7 @@ async function register(username: string, password: string) {
     password: password,
   })
   if (error?.message) throw new Error("User already exists");
-  return { username: data.user?.email, refreshToken: data.session?.refresh_token, accessToken: data.session?.access_token }
-}
-
-function getSession() {
-  return useSession(getRequestEvent()!, {
-    password:
-      import.meta.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace",
-  });
+  throw redirect("/");
 }
 
 export async function loginOrRegister(formData: FormData) {
@@ -52,10 +43,6 @@ export async function loginOrRegister(formData: FormData) {
     const user = await (loginType !== "login"
       ? register(username, password)
       : login(username, password));
-
-    const session = await getSession();
-    await session.update((d) => (d = { username: user!.username, refreshToken: user!.refreshToken, accessToken: user!.accessToken }));
-
   } catch (err) {
     return err as Error;
   }
@@ -63,16 +50,18 @@ export async function loginOrRegister(formData: FormData) {
 }
 
 export async function logout() {
-  const session = await getSession();
-  await session.update((d) => (d.username = undefined));
+  const { error } = await supabase.auth.signOut();
+  if (error) return new Error(error.message);
   throw redirect("/login");
 }
 
 
 export async function getUser() {
-  const session = await getSession();
-  const userName = session.data.username;
-  if (userName === undefined) throw redirect("/login");
-  return { userName: userName }
+  const { data: userData, error } = await supabase.auth.getUser();
+  if (userData.user?.email === undefined) throw redirect("/login");
+  return { email: userData.user.email }
 }
+
+
+
 

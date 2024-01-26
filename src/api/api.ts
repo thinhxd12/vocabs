@@ -1,10 +1,6 @@
-import { cache } from "@solidjs/router";
-import { BookmarkType, VocabularyType } from "~/types";
+import { action, cache, useAction, useSubmission } from "@solidjs/router";
+import { BookmarkType, HistoryType, VocabularyType, mapTables } from "~/types";
 import { supabase } from "./supabase";
-
-const mapTables = {
-    vocabulary: "vocabulary",
-} as const;
 
 const getBookmarkUrl = (path: string) => `https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec?action=${path}`;
 const setBookmarkUrl = (path: string) => `https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec?action=${path}`;
@@ -32,20 +28,18 @@ export const setBookmark = async (check: boolean) => {
     return fetchAPIsheet(`setBookmark&check=${check}`);
 };
 
-export const getSearchText = async (text: string) => {
+export const getSearchText = action(async (text: string) => {
+    "use server";
     try {
-        if (text !== "" && text.length > 2) {
-            const { data, error } = await supabase
-                .from(mapTables.vocabulary)
-                .select()
-                .like("text", `${text}%`);
-            if (error) throw error;
-            return data;
-        }
+        const { data, error } = await supabase
+            .from(mapTables.vocabulary)
+            .select()
+            .like("text", `${text}%`);
+        return data as VocabularyType[];
     } catch (error) {
         console.error(error);
     }
-};
+});
 
 const chunk = (array: any[], size: number) =>
     array.reduce((acc, _, i) => {
@@ -53,7 +47,7 @@ const chunk = (array: any[], size: number) =>
         return acc;
     }, []);
 
-export const getCalendarData = cache(async () => {
+export const getCalendarScheduleData = cache(async () => {
     "use server";
     const date = new Date();
     const thisMonth = date.getMonth();
@@ -71,25 +65,49 @@ export const getCalendarData = cache(async () => {
         monthDateArr.push({
             date: lastDateofLastMonth - i + 1,
             month: thisMonth - 1,
-            thisMonth: false,
         });
     }
     for (let i = 1; i <= lastDateofMonth; i++) {
         monthDateArr.push({
             date: i,
             month: thisMonth,
-            thisMonth: true,
         });
     }
     for (let i = lastDayofMonth; i < 6; i++) {
         monthDateArr.push({
             date: i - lastDayofMonth + 1,
             month: thisMonth + 1,
-            thisMonth: false,
         });
     }
-    const calendarScheduleArr = chunk(monthDateArr, 7);
+    const { data, error } = await supabase.from(mapTables.schedule).select();
 
-    return calendarScheduleArr
+    if (data) {
+        const scheduleData = data?.map((item, index) => {
+            const day = new Date(item.date);
+            return { ...item, date: day.getDate(), month: day.getMonth() };
+        });
 
-}, "calendar");
+        const mergedArray = monthDateArr.map(item => {
+            return {
+                ...item,
+                ...scheduleData.find((item2) => item2.date === item.date && item2.month === item.month) // find the item from the second array with the same id
+            };
+        });
+        const calendarScheduleArr = chunk(mergedArray, 7);
+        return calendarScheduleArr
+    }
+}, "calendar-schedule");
+
+//get all history
+// export const getCalendarHistoryData = cache(async () => {
+//     "use server";
+//     const { data, error } = await supabase.from(mapTables.history).select();
+//     return data as HistoryType[];
+// }, "calendar-history");
+
+//get last row history table
+export const getCalendarHistoryData = cache(async () => {
+    "use server";
+    const { data, error } = await supabase.from(mapTables.history).select().order("id", { ascending: false }).limit(1);
+    return data as HistoryType[];
+}, "calendar-history");

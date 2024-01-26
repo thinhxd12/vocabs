@@ -1,0 +1,16 @@
+.date {
+    display: inline-flex;
+    width: 60px;
+    height: 30px;
+    align-items: center;
+}
+
+.dateIndex {
+    display: block;
+    flex-direction: column;
+}
+
+.desc {
+    width: 100px;
+    display: inline-block;
+}

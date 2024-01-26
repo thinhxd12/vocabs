@@ -6,7 +6,14 @@ import {
   createResource,
   createSignal,
 } from "solid-js";
-import { RouteDefinition, createAsync } from "@solidjs/router";
+import {
+  RouteDefinition,
+  action,
+  createAsync,
+  useAction,
+  useSubmission,
+  useSubmissions,
+} from "@solidjs/router";
 import { getUser } from "~/api";
 import { supabase } from "~/api/supabase";
 import { BookmarkType, VocabularyType } from "~/types";
@@ -14,13 +21,15 @@ import { debounce } from "@solid-primitives/scheduled";
 import { createAudio } from "@solid-primitives/audio";
 import { getBookmarkText, getSearchText, setBookmark } from "~/api/api";
 import { createStore } from "solid-js/store";
+import { run } from "node:test";
 
-// export const route = {
-//   load: () => getUser(),
-// } satisfies RouteDefinition;
-
+export const route = {
+  load: () => {
+    getUser();
+  },
+} satisfies RouteDefinition;
 const page: Component<{}> = (props) => {
-  const user = createAsync(getUser, { deferStream: true });
+  // const user = createAsync(getUser, { deferStream: true });
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
   const [currentText, setCurrentText] = createSignal<VocabularyType | null>();
@@ -37,11 +46,12 @@ const page: Component<{}> = (props) => {
 
   let divRef: HTMLDivElement | undefined;
 
+  //call sever action search text
+  const getSearchTextAction = useAction(getSearchText);
+
   const trigger = debounce(async (str: string) => {
-    const res = await getSearchText(str);
-    if (res) {
-      setSearchResult(res);
-    }
+    const res = await getSearchTextAction(str);
+    setSearchResult(res || []);
   }, 300);
 
   const onKeyDownDiv: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (
