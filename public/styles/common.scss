@@ -1,0 +1,193 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  -webkit-user-drag: none;
+}
+
+@mixin font($family: false, $size: false, $colour: false, $weight: false, $style: false, $lh: false) {
+
+  @if $family {
+    font-family: $family ;
+  }
+
+  @else {
+    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+  }
+
+  @if $size {
+    font-size: calculateRem($size);
+  }
+
+  @if $colour {
+    color: $colour;
+  }
+
+  @if $weight {
+    font-weight: $weight;
+  }
+
+  @if $style {
+    font-style: $style;
+  }
+
+  @if $lh {
+    line-height: calculateRem($lh);
+  }
+}
+
+@function calculateRem($size) {
+  $remSize: calc($size / 16px);
+  @return $remSize * 1rem;
+}
+
+@mixin flex {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-center-column {
+  @include flex-center;
+  flex-direction: column;
+}
+
+$color-boder: #343434;
+$color-black: #000000;
+$color-white: #ffffff;
+$color-background: #070707;
+$color-background-input: #0c0c0c;
+$color-red-1: #f90000;
+$color-red-2: #de0000;
+$color-red-3: #ca140c;
+$color-calendar-bg: rgba(255, 255, 255, 0.96);
+$color-calendar-white: #f4f4f4;
+$color-calendar-black: #161616;
+$color-calendar-border: #16161633;
+$color-calendar-text-1: #383838;
+$color-calendar-text-2: #0000004d;
+$color-calendar-text-3: #ffffff73;
+$color-calendar-green: #38E07B;
+
+
+@mixin baseButton($width) {
+  width: $width;
+  height: round(calc($width *19/36));
+  margin-left: 1px;
+  border-radius: 3px;
+  outline: 0;
+  border: none;
+  color: #ececec;
+  background-color: $color-background;
+  cursor: pointer;
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url('../images/main/input-left-corner.png'),
+    url('../images/main/input-right-corner.png');
+  background-position: left top,
+    right top;
+  background-repeat: no-repeat,
+    no-repeat;
+  background-size: auto 100%,
+    auto 100%;
+
+  i {
+    font-size: round(calc($width *15/36));
+    line-height: round(calc($width *19/36));
+  }
+
+  &:hover {
+    color: $color-white;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+  }
+}
+
+@mixin baseBody() {
+  font-family: 'nyt-imperial';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 12px;
+  padding: 3px;
+  margin-bottom: 1px;
+  background: url('../images/main/paper.jpeg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+@mixin myInput() {
+  height: 25px;
+  font-family: 'basier', sans-serif;
+  color: $color-white;
+  font-size: 11px;
+  padding: 0 9px;
+  background: $color-background-input;
+  border: 0;
+  outline: 0;
+}
+
+// -------------------RESPONSIVE START-------------------- //
+// @media only screen and (max-width: 960px) {
+//   .mainImageDescriptionContainter {
+//     display: none !important;
+//   }
+
+//   .mainImageContent {
+//     width: calc(100vw - 360px) !important;
+//   }
+// }
+
+// @media only screen and (max-width: 650px) {
+
+//   .mainImageContent,
+//   .mainImageDescriptionContainter {
+//     display: none !important;
+//   }
+
+//   .subContainLeft {
+//     display: block !important;
+//     border-right: 1px solid $color-boder;
+//   }
+
+//   .subContainRight {
+//     display: block !important;
+//     border-left: 1px solid $color-boder;
+//   }
+
+// }
+
+// -------------------RESPONSIVE END-------------------- //

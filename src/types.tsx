@@ -21,8 +21,9 @@ export interface BookmarkType {
 }
 
 export interface HistoryItemContentType {
-  from_day: string;
-  to_day: string;
+  index: number;
+  from_date: string;
+  to_date: string;
 }
 
 export interface HistoryType {
@@ -33,4 +34,16 @@ export interface HistoryType {
   week3: HistoryItemContentType;
   week4: HistoryItemContentType;
   week5: HistoryItemContentType;
+}
+
+export interface ImageType {
+  image: string;
+  date: string;
+  title: string;
+  attr: string;
+  authorImg: string;
+  authorName: string;
+  authorYear: string;
+  content: string;
+  nextImageUrl:string;
 }

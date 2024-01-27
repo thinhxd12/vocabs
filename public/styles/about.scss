@@ -13,4 +13,9 @@
 .desc {
     width: 100px;
     display: inline-block;
+
+    +span {
+        display: inline-block;
+        margin-right: 12px;
+    }
 }

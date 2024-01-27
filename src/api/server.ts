@@ -1,6 +1,8 @@
 "use server";
 import { redirect } from "@solidjs/router";
 import { supabase } from "./supabase";
+import { useSession } from "@solidjs/start/server";
+import { getRequestEvent } from "solid-js/web";
 
 function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
@@ -20,7 +22,7 @@ async function login(username: string, password: string) {
     password: password,
   })
   if (error?.message) throw new Error("Invalid login");
-  return { username: username }
+  return { email: username }
 }
 
 async function register(username: string, password: string) {
@@ -29,8 +31,9 @@ async function register(username: string, password: string) {
     password: password,
   })
   if (error?.message) throw new Error("User already exists");
-  throw redirect("/");
+  return { email: username }
 }
+
 
 export async function loginOrRegister(formData: FormData) {
   const username = String(formData.get("username"));
@@ -43,23 +46,33 @@ export async function loginOrRegister(formData: FormData) {
     const user = await (loginType !== "login"
       ? register(username, password)
       : login(username, password));
+    //luu mot session value email khi khoi dong route se tim toi email de verify
+    const session = await getSession();
+    await session.update(d => (d.email = user!.email));
   } catch (err) {
     return err as Error;
   }
-  throw redirect("/");
+  throw redirect("/main");
 }
 
 export async function logout() {
   const { error } = await supabase.auth.signOut();
-  if (error) return new Error(error.message);
-  throw redirect("/login");
+  if (error) throw new Error(error.message);
+  const session = await getSession();
+  await session.update((d) => (d.email = undefined));
+  throw redirect("/");
 }
 
 
+function getSession() {
+  return useSession(getRequestEvent()!, { password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace" });
+}
+
 export async function getUser() {
-  const { data: userData, error } = await supabase.auth.getUser();
-  if (userData.user?.email === undefined) throw redirect("/login");
-  return { email: userData.user.email }
+  const session = await getSession();
+  const userEmail = session.data.email;
+  if (userEmail === undefined) throw redirect("/");
+  return { email: userEmail };
 }
 
 

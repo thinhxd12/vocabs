@@ -8,7 +8,7 @@ export default defineConfig({
             prerender: {
                 crawlLinks: true
             },
-            preset: "netlify-edge"
-        }
+            preset: "netlify-edge",
+        },
     }
 });

@@ -1,6 +1,8 @@
 import { action, cache, useAction, useSubmission } from "@solidjs/router";
-import { BookmarkType, HistoryType, VocabularyType, mapTables } from "~/types";
+import { BookmarkType, HistoryType, ImageType, VocabularyType, mapTables } from "~/types";
 import { supabase } from "./supabase";
+import { getElAttribute, getElText } from "~/utils";
+import parse from "node-html-parser";
 
 const getBookmarkUrl = (path: string) => `https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec?action=${path}`;
 const setBookmarkUrl = (path: string) => `https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec?action=${path}`;
@@ -99,15 +101,76 @@ export const getCalendarScheduleData = cache(async () => {
 }, "calendar-schedule");
 
 //get all history
-// export const getCalendarHistoryData = cache(async () => {
-//     "use server";
-//     const { data, error } = await supabase.from(mapTables.history).select();
-//     return data as HistoryType[];
-// }, "calendar-history");
-
-//get last row history table
-export const getCalendarHistoryData = cache(async () => {
+export const getCalendarHistoryData = action(async () => {
     "use server";
-    const { data, error } = await supabase.from(mapTables.history).select().order("id", { ascending: false }).limit(1);
-    return data as HistoryType[];
-}, "calendar-history");
+    try {
+        const { data, error } = await supabase.from(mapTables.history).select();
+        return data as HistoryType[];
+    } catch (error) {
+        console.error(error);
+    }
+});
+
+//insert data table history
+export const uploadObjToSupabase = action(async (objs: Object[]) => {
+    "use server";
+    for (let obj of objs) {
+        let { error } = await supabase.from("history").insert([obj]);
+        console.log(error);
+    }
+});
+
+//get image link
+export const getDataImage = action(async (url:string) => {
+    "use server";
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const pageImgHtml = await response.text();
+        const doc = parse(pageImgHtml);
+        const imgSrcGet = getElAttribute(doc, ".main-image>img", "srcset");
+        const imgDateGet = getElText(doc, ".main-description__share-date", "");
+        const imgTitleGet = getElText(doc, ".main-description__title", "");
+        const imgAttGet = getElText(doc, ".main-description__attr", "");
+        const imgAuthorImg = getElAttribute(
+            doc,
+            ".main-description__author img",
+            "srcset"
+        );
+        const imgAuthorName = getElText(doc, ".main-description__author", "");
+        const imgAuthorYear = getElText(doc, ".main-description__author-years", "");
+        const textDesc = doc.querySelectorAll(".main-description__text-content p");
+        const imgDesc =
+            textDesc.length > 0
+                ? [...textDesc]
+                    .map((item, index) => {
+                        const text =
+                            item?.textContent &&
+                            item.textContent.replace(/[\n\r]+|\s{2,}/g, " ").trim();
+                        return `<p>${text}</p>`;
+                    })
+                    .join("")
+                : `<p>${getElText(doc, ".main-description__text-content", "")}</p>`;
+        const nextImgUrl = getElAttribute(
+            doc,
+            `.also__item:nth-child(${Math.floor(Math.random() * 15) + 1}) a`,
+            "href"
+        );
+        const breakpoint = /\s\w+\,/;
+        return {
+            image: imgSrcGet.split(breakpoint)[0],
+            date: imgDateGet,
+            title: imgTitleGet,
+            attr: imgAttGet,
+            authorImg: imgAuthorImg,
+            authorName: imgAuthorName,
+            authorYear: imgAuthorYear,
+            content: imgDesc,
+            nextImageUrl: nextImgUrl
+        } as ImageType;
+    } catch (error) {
+        console.error(error);
+    }
+});

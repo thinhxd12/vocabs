@@ -1,0 +1,165 @@
+.main {
+    width: 100vw;
+    height: 100vh;
+    @include flex;
+
+    .mainImageContainer {
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+        @include flex-center;
+        padding: 2.5vw 3.5vw 3.5vw;
+        background: $color-black;
+        border-right: 1px solid $color-boder;
+        flex-grow: 1;
+
+        .mainImage {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+            position: inherit;
+            z-index: 3;
+            box-shadow: rgba(0, 0, 0, 0.9) 0px 21px 39px 0px, rgba(0, 0, 0, 0.81) 0px 15px 12px 0px;
+        }
+
+        .mainImageBlurred {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 1;
+            filter: blur(120px);
+        }
+
+        .mainImageRoundBtn {
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            border-radius: 50%;
+            background: #3b3735;
+            padding: 9px 12px;
+            border: none;
+            transition: all 0.2s ease-in;
+            z-index: 36;
+            opacity: 0.3;
+            transform: translateX(60%);
+            box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px 0px, rgba(0, 0, 0, 0.22) 0px 10px 10px 0px;
+
+            &:hover {
+                background: #4e423c;
+                opacity: 1;
+                transform: translateX(0%);
+            }
+
+            i {
+                font-size: 25px;
+                line-height: 25px;
+                text-align: center;
+                padding-top: 2px;
+                color: $color-white;
+            }
+        }
+
+    }
+
+    .mainImageContent {
+        min-width: 360px;
+        max-width: 360px;
+        // background: $color-black;
+        height: 100%;
+        overflow: hidden;
+        z-index: 99;
+        position: relative;
+        box-shadow: rgba(0, 0, 0, 0.9) 0px 21px 39px 0px, rgba(0, 0, 0, 0.81) 0px 15px 12px 0px;
+        max-width: 300px;
+    }
+
+    .mainDescriptionContainter {
+        height: 100%;
+        overflow: hidden;
+        padding: 21px;
+        // background: $color-black;
+        border-left: 1px solid $color-boder;
+        flex-grow: 1;
+        background: #19191c;
+        max-width: 300px;
+
+        .mainDescriptionContent {
+            height: 100%;
+            overflow-y: scroll;
+            max-width: 248px;
+            position: relative;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .mainDescriptionHeader {
+                position: sticky;
+                top: 0;
+                padding-bottom: 6px;
+                border-bottom: 1px solid #474747;
+
+                .mainDescriptionDate {
+                    display: block;
+                    text-transform: uppercase;
+                    @include font('basier', 11px, #989da7, bold, normal, 16px);
+                }
+
+                .mainDescriptionTitle {
+                    @include font('Roslindale', 25px, $color-white, 600, normal, 32px);
+                }
+
+                .mainDescriptionAttribute {
+                    letter-spacing: -0.25px;
+                    margin-bottom: 5px;
+                    @include font('basier', 11px, #989da7, 400, normal);
+                }
+
+                .mainDescriptionAuthors {
+                    display: flex;
+                    justify-content: flex-start;
+
+                    .mainDescriptionAuthorImage {
+                        width: 45px;
+                        height: 45px;
+                        border-radius: 6px;
+                        object-fit: fill;
+                        margin-right: 6px;
+                    }
+
+                    .mainDescriptionAuthor {
+                        @include font('basier', 12px, $color-white, 400, normal, 12px);
+
+                        .mainDescriptionAuthorName {
+                            background: #343434;
+                            padding: 3px 6px;
+                            border-radius: 6px;
+                            margin-bottom: 6px;
+                        }
+
+                        .mainDescriptionAuthorYear {
+                            padding-left: 6px;
+                        }
+                    }
+                }
+            }
+
+            .mainDescriptionBody {
+                padding: 6px 0 9px;
+
+                p {
+                    @include font('basier', 12px, #989da7, 400, normal, 16px);
+                    margin-bottom: 3px;
+                    text-indent: 9px;
+                }
+            }
+        }
+    }
+}
