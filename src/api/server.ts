@@ -52,7 +52,7 @@ export async function loginOrRegister(formData: FormData) {
   } catch (err) {
     return err as Error;
   }
-  throw redirect("/main");
+  throw redirect("/main/vocabulary");
 }
 
 export async function logout() {

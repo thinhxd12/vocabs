@@ -4,10 +4,12 @@ import {
   RouteSectionProps,
   A,
 } from "@solidjs/router";
-import { createResource, createSignal } from "solid-js";
+import { createEffect, createResource, createSignal, onMount } from "solid-js";
+import { createStore } from "solid-js/store";
 import { getUser, logout } from "~/api";
 import { getDataImage } from "~/api/api";
 import Bottom from "~/components/bottom";
+import { ImageType } from "~/types";
 import { URL_IMAGE_MAIN_PAGE } from "~/utils";
 
 export const route = {
@@ -17,22 +19,39 @@ export const route = {
 const MainLayout = (props: RouteSectionProps) => {
   const [imageUrl, setImageUrl] = createSignal<string>(URL_IMAGE_MAIN_PAGE);
   const [focusMode, setFocusMode] = createSignal<boolean>(false);
-
   const getDataImageAction = useAction(getDataImage);
 
-  const [imageObj, { mutate, refetch }] = createResource(
-    imageUrl,
-    getDataImageAction
-  );
+  const mockObj = {
+    image: "",
+    date: "",
+    title: "",
+    attr: "",
+    authorImg: "",
+    authorName: "",
+    authorYear: "",
+    content: "",
+    nextImageUrl: "",
+  };
+
+  const [imageObj, setImageObj] = createStore<ImageType>(mockObj);
+
+  const getNextImageData = async (url: string) => {
+    const result = await getDataImageAction(url);
+    setImageObj(result!);
+  };
+
+  createEffect(() => {
+    getNextImageData(imageUrl());
+  });
 
   return (
     <div>
       <div class="main">
         <div class="mainImageContainer">
-          <img class="mainImage" src={imageObj()?.image} />
-          <img class="mainImageBlurred" src={imageObj()?.image} />
+          <img class="mainImage" src={imageObj.image} />
+          <img class="mainImageBlurred" src={imageObj.image} />
           <button
-            onClick={() => setImageUrl(imageObj()?.nextImageUrl!)}
+            onClick={() => setImageUrl(imageObj.nextImageUrl!)}
             class="mainImageRoundBtn"
           >
             <svg
@@ -60,28 +79,21 @@ const MainLayout = (props: RouteSectionProps) => {
         <div class="mainDescriptionContainter">
           <div class="mainDescriptionContent">
             <div class="mainDescriptionHeader">
-              <p class="mainDescriptionDate">{imageObj()?.date}</p>
-              <h3 class="mainDescriptionTitle">{imageObj()?.title}</h3>
-              <p class="mainDescriptionAttribute">{imageObj()?.attr}</p>
+              <p class="mainDescriptionDate">{imageObj.date}</p>
+              <h3 class="mainDescriptionTitle">{imageObj.title}</h3>
+              <p class="mainDescriptionAttribute">{imageObj.attr}</p>
               <div class="mainDescriptionAuthors">
                 <img
                   class="mainDescriptionAuthorImage"
-                  srcset={imageObj()?.authorImg}
+                  src={imageObj.authorImg}
                 />
                 <div class="mainDescriptionAuthor">
-                  <p class="mainDescriptionAuthorName">
-                    {imageObj()?.authorName}
-                  </p>
-                  <p class="mainDescriptionAuthorYear">
-                    {imageObj()?.authorYear}
-                  </p>
+                  <p class="mainDescriptionAuthorName">{imageObj.authorName}</p>
+                  <p class="mainDescriptionAuthorYear">{imageObj.authorYear}</p>
                 </div>
               </div>
             </div>
-            <div
-              class="mainDescriptionBody"
-              innerHTML={imageObj()?.content}
-            ></div>
+            <div class="mainDescriptionBody" innerHTML={imageObj.content}></div>
           </div>
         </div>
       </div>

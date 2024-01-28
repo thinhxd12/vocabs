@@ -1,3 +1,6 @@
+@import "./fonts.scss";
+@import "./mixins.scss";
+
 .main {
     width: 100vw;
     height: 100vh;
@@ -77,7 +80,8 @@
         z-index: 99;
         position: relative;
         box-shadow: rgba(0, 0, 0, 0.9) 0px 21px 39px 0px, rgba(0, 0, 0, 0.81) 0px 15px 12px 0px;
-        max-width: 300px;
+        position: relative;
+        
     }
 
     .mainDescriptionContainter {
@@ -87,7 +91,8 @@
         // background: $color-black;
         border-left: 1px solid $color-boder;
         flex-grow: 1;
-        background: #19191c;
+        background: $color-background-3;
+        min-width: 300px;
         max-width: 300px;
 
         .mainDescriptionContent {
@@ -105,6 +110,7 @@
                 top: 0;
                 padding-bottom: 6px;
                 border-bottom: 1px solid #474747;
+                background: $color-background-3;
 
                 .mainDescriptionDate {
                     display: block;
@@ -138,7 +144,7 @@
                         @include font('basier', 12px, $color-white, 400, normal, 12px);
 
                         .mainDescriptionAuthorName {
-                            background: #343434;
+                            background: $color-boder;
                             padding: 3px 6px;
                             border-radius: 6px;
                             margin-bottom: 6px;

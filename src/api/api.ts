@@ -4,9 +4,12 @@ import { supabase } from "./supabase";
 import { getElAttribute, getElText } from "~/utils";
 import parse from "node-html-parser";
 
-const getBookmarkUrl = (path: string) => `https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec?action=${path}`;
-const setBookmarkUrl = (path: string) => `https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec?action=${path}`;
 
+// const baseUrl = "https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec";
+const baseUrl = "https://script.google.com/macros/s/AKfycbyyx7SmjI3iSF4uFVTtfVDYxN_5xL7jntJvnKVlaSNgXS8fWDdP_6iz7DgGogEtiXGR/exec";
+
+const getBookmarkUrl = (path: string) => `${baseUrl}?action=${path}`;
+const setBookmarkUrl = (path: string) => `${baseUrl}?action=${path}`;
 async function fetchAPIsheet(path: string) {
     const url = path.startsWith("getBookmark") ? getBookmarkUrl(path) : setBookmarkUrl(path);
     try {
@@ -15,7 +18,6 @@ async function fetchAPIsheet(path: string) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        // console.log(data);
         return data;
     } catch (error) {
         console.error(error);
@@ -121,7 +123,7 @@ export const uploadObjToSupabase = action(async (objs: Object[]) => {
 });
 
 //get image link
-export const getDataImage = action(async (url:string) => {
+export const getDataImage = action(async (url: string) => {
     "use server";
     try {
         const response = await fetch(url);
@@ -134,11 +136,7 @@ export const getDataImage = action(async (url:string) => {
         const imgDateGet = getElText(doc, ".main-description__share-date", "");
         const imgTitleGet = getElText(doc, ".main-description__title", "");
         const imgAttGet = getElText(doc, ".main-description__attr", "");
-        const imgAuthorImg = getElAttribute(
-            doc,
-            ".main-description__author img",
-            "srcset"
-        );
+        const imgAuthorImg = getElAttribute(doc, ".main-description__author img", "srcset");
         const imgAuthorName = getElText(doc, ".main-description__author", "");
         const imgAuthorYear = getElText(doc, ".main-description__author-years", "");
         const textDesc = doc.querySelectorAll(".main-description__text-content p");
@@ -158,13 +156,17 @@ export const getDataImage = action(async (url:string) => {
             `.also__item:nth-child(${Math.floor(Math.random() * 15) + 1}) a`,
             "href"
         );
-        const breakpoint = /\s\w+\,/;
+        const regexImage = /(https?:\/\/[^\s]+iPhone\.jpg)/g;
+        const regexAuthor = /(https?:\/\/[^\s]+)/g;
+        const convertedImage = imgSrcGet.match(regexImage)[0] || "";
+        const convertedAuthorImg = imgAuthorImg.match(regexAuthor)[0] || "";
+
         return {
-            image: imgSrcGet.split(breakpoint)[0],
+            image: convertedImage,
             date: imgDateGet,
             title: imgTitleGet,
             attr: imgAttGet,
-            authorImg: imgAuthorImg,
+            authorImg: convertedAuthorImg,
             authorName: imgAuthorName,
             authorYear: imgAuthorYear,
             content: imgDesc,

@@ -1,0 +1,32 @@
+@import '/public/styles/main.scss';
+@import "/public/styles/bottom.scss";
+@import "/public/styles/vocabulary.scss";
+@import "/public/styles/quote.scss";
+@import "/public/styles/definition.scss";
+
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    height: 100vh;
+    width: 100vw;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    -webkit-user-drag: none;
+}

@@ -1,10 +1,17 @@
-import { useSubmission, type RouteSectionProps } from "@solidjs/router";
+import {
+  useSubmission,
+  type RouteSectionProps,
+  RouteDefinition,
+} from "@solidjs/router";
 import { Show } from "solid-js";
-import { loginOrRegister } from "~/api";
+import { loginOrRegister, getUser } from "~/api";
+
+export const route = {
+  load: () => getUser(),
+} satisfies RouteDefinition;
 
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginOrRegister);
-
   return (
     <main>
       <h1>Login</h1>
@@ -12,7 +19,7 @@ export default function Login(props: RouteSectionProps) {
         <input
           type="hidden"
           name="redirectTo"
-          value={props.params.redirectTo ?? "/main"}
+          value={props.params.redirectTo ?? "/main/vocabulary"}
         />
         <fieldset>
           <legend>Login or Register?</legend>

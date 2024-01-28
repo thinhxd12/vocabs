@@ -1,28 +1,21 @@
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  height: 100vh;
-  width: 100vw;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  font-family: Gordita, Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-}
-
-a {
-  text-decoration: none;
-}
-
-img {
-  -webkit-user-drag: none;
-}
+$color-boder: #343434;
+$color-black: #000000;
+$color-white: #ffffff;
+$color-background-1: #070707;
+$color-background-2: #0c0c0c;
+$color-background-3: #19191c;
+$color-background-4: #dcd8d1;
+$color-red-1: #f90000;
+$color-red-2: #de0000;
+$color-red-3: #ca140c;
+$color-calendar-bg: rgba(255, 255, 255, 0.96);
+$color-calendar-white: #f4f4f4;
+$color-calendar-black: #161616;
+$color-calendar-border: #16161633;
+$color-calendar-text-1: #383838;
+$color-calendar-text-2: #0000004d;
+$color-calendar-text-3: #ffffff73;
+$color-calendar-green: #38E07B;
 
 @mixin font($family: false, $size: false, $colour: false, $weight: false, $style: false, $lh: false) {
 
@@ -81,24 +74,6 @@ img {
   flex-direction: column;
 }
 
-$color-boder: #343434;
-$color-black: #000000;
-$color-white: #ffffff;
-$color-background: #070707;
-$color-background-input: #0c0c0c;
-$color-red-1: #f90000;
-$color-red-2: #de0000;
-$color-red-3: #ca140c;
-$color-calendar-bg: rgba(255, 255, 255, 0.96);
-$color-calendar-white: #f4f4f4;
-$color-calendar-black: #161616;
-$color-calendar-border: #16161633;
-$color-calendar-text-1: #383838;
-$color-calendar-text-2: #0000004d;
-$color-calendar-text-3: #ffffff73;
-$color-calendar-green: #38E07B;
-
-
 @mixin baseButton($width) {
   width: $width;
   height: round(calc($width *19/36));
@@ -107,25 +82,18 @@ $color-calendar-green: #38E07B;
   outline: 0;
   border: none;
   color: #ececec;
-  background-color: $color-background;
+  background-color: $color-background-1;
   cursor: pointer;
   transition: 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-image: url('../images/main/input-left-corner.png'),
-    url('../images/main/input-right-corner.png');
+  @include flex-center();
+  background-image: url('/images/main/input-left-corner.png'),
+    url('/images/main/input-right-corner.png');
   background-position: left top,
     right top;
   background-repeat: no-repeat,
     no-repeat;
   background-size: auto 100%,
     auto 100%;
-
-  i {
-    font-size: round(calc($width *15/36));
-    line-height: round(calc($width *19/36));
-  }
 
   &:hover {
     color: $color-white;
@@ -137,13 +105,10 @@ $color-calendar-green: #38E07B;
 }
 
 @mixin baseBody() {
-  font-family: 'nyt-imperial';
-  font-weight: 400;
-  font-style: normal;
-  font-size: 12px;
+  @include font("nyt-imperial", 12px, false, 400, normal, 16px);
   padding: 3px;
   margin-bottom: 1px;
-  background: url('../images/main/paper.jpeg');
+  background: $color-background-4;
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
@@ -151,9 +116,7 @@ $color-calendar-green: #38E07B;
 
 @mixin myInput() {
   height: 25px;
-  font-family: 'basier', sans-serif;
-  color: $color-white;
-  font-size: 11px;
+  @include font("basier", 11px,  $color-white, 400, normal, 16px);
   padding: 0 9px;
   background: $color-background-input;
   border: 0;

@@ -1,0 +1,139 @@
+@import "./fonts.scss";
+@import "./mixins.scss";
+
+.definition {
+    @include baseBody;
+    width: 360px;
+    display: block;
+    overflow: hidden;
+
+    .definitionTop {
+        position: absolute;
+        top: 0;
+        right: 0;
+        display: flex;
+        padding: 1px;
+
+        .definitionBtn {
+            @include baseButton(28px);
+        }
+    }
+
+    .definitionHeader {
+        border-bottom: 1px solid $color-boder;
+
+        .definitionHeaderIndex {
+            @include font('nyt-cheltenham', 13px, $color-black, 500, normal);
+        }
+
+        span:nth-child(2) {
+            @include font('nyt-cheltenham', 16px, $color-black, 500, normal, 18px);
+            margin: 0 3px;
+        }
+
+        span:nth-child(3) {
+            @include font('nyt-cheltenham', 11px, #727272, 400, italic);
+        }
+    }
+
+    .definitionBody {
+        .sn-g {
+            padding: 2px 0;
+            position: relative;
+
+            &:not(:last-child) {
+                border-bottom: 1px solid $color-boder;
+            }
+
+            .def {
+                @include font('nyt-imperial', 12px, $color-black, 500, normal, 15px);
+                text-indent: 12px;
+                display: block
+            }
+
+            .num+.def {
+                text-indent: 15px;
+            }
+
+            .thumb_img+.def {
+                text-indent: 3px;
+            }
+
+            .num {
+                @include font('nyt-cheltenham', 8px, $color-black, 700, normal, 11px);
+                @include flex-center;
+                width: 11px;
+                height: 11px;
+                border-radius: 50%;
+                border: 1px solid #707070;
+                position: absolute;
+                top: 4px;
+                left: 2px;
+                background: #c7c7b5;
+            }
+
+            .x {
+                @include font('nyt-imperial', 12px, $color-black, 500, italic, 18px);
+                display: block;
+
+                &::before {
+                    content: '';
+                    display: inline-block;
+                    margin-right: 2px;
+                    width: 15px;
+                    height: 15px;
+                    background: url('/images/main/clover.png');
+                    background-size: contain;
+                    vertical-align: bottom;
+                    transform: rotate(-18deg);
+                }
+
+                b {
+                    font-weight: 600;
+                    color: $color-red-1;
+                }
+            }
+
+            .xr-gs {
+                font-weight: 500;
+                font-size: 13px;
+                display: block;
+                text-transform: uppercase;
+                color: #181818;
+                margin-left: 3px;
+
+                small {
+                    color: #727272;
+                    text-transform: lowercase;
+                }
+            }
+
+            .dsense_h {
+                @include font('nyt-imperial', 12px, $color-black, 500, italic, 15px);
+                text-indent: 15px;
+                display: block
+            }
+
+            .thumb_img {
+                display: flex;
+                margin-bottom: 2px;
+
+                .thumb {
+                    margin-right: 3px;
+                    display: block;
+                    max-height: 150px;
+                    max-width: 180px;
+                }
+
+                .def {
+                    text-indent: 0;
+                }
+            }
+        }
+
+        .sn-g>.def {
+            text-indent: 1px;
+        }
+
+    }
+}

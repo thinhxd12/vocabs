@@ -1,0 +1,321 @@
+@import "./fonts.scss";
+@import "./mixins.scss";
+
+.vocabulary {
+    width: 100%;
+    height: calc(100vh - 31px);
+    overflow: hidden;
+    position: relative;
+    outline: none;
+
+    .flashCardContainer {
+        height: 186px;
+        width: 360px;
+        background-color: $color-black;
+        @include flex;
+    }
+
+    .myInputContainer {
+        position: relative;
+        @include flex;
+        width: 100%;
+        background: $color-background-2;
+
+        .myInputLeftOrnament {
+            z-index: inherit;
+            height: 27px;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .myInputRightOrnament {
+            z-index: inherit;
+            height: 27px;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .myInputText {
+            width: 50%;
+            padding: 0 9px;
+            height: 27px;
+            @include font('basier', 12px, $color-white, 400, normal, 27px);
+        }
+
+        .myInput {
+            height: 27px;
+            width: 50%;
+            padding: 0 9px;
+            background: none;
+            border: 0;
+            outline: 0;
+            @include font('basier', 12px, $color-white, 400, normal, 27px);
+        }
+
+        .myInputTransContent {
+            width: 50%;
+            @include flex;
+            justify-content: space-between;
+
+            .myInput {
+                flex-grow: 1;
+            }
+
+            .myInputBtn {
+                cursor: pointer;
+                transition: opacity 0.3s ease;
+                margin-right: 3px;
+                opacity: 0;
+                z-index: 36;
+                background-color: transparent;
+                border: none;
+                outline: none;
+
+                img {
+                    height: 18px;
+                    margin-top: 3px;
+                }
+            }
+
+            &:hover .myInputBtn {
+                opacity: 1;
+            }
+        }
+    }
+
+    .vocabularyContainer {
+        height: calc(100vh - 244px);
+        width: 360px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+        background: $color-black;
+        position: relative;
+        padding-top: 1px;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .searchContainer {
+            .my-item {
+                @include flex;
+                justify-content: space-between;
+
+                small {
+                    margin-right: 3px;
+                    font-size: 8px;
+                }
+
+                @include font('basier', 12px, $color-black, 500, normal, 15px);
+                padding: 0 6px;
+                max-width: 360px;
+                overflow: hidden;
+                cursor: pointer;
+                margin-bottom: 1px;
+                background: #ffffff80;
+                transition: all 0.3s ease;
+
+                .itemText {
+                    flex-grow: 1;
+                    padding: 3px 0;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-end;
+                }
+
+                &:hover {
+                    background-color: $color-white;
+                    color: $color-calendar-green;
+                    margin-left: 3px;
+                    border-left: 3px solid $color-calendar-green;
+                }
+
+                &:hover .itemNumb {
+                    opacity: 1;
+                }
+            }
+
+            .itemDeleteBtn {
+                @include baseButton(28px);
+                display: inline-flex;
+
+                &:hover {
+                    color: $color-red-3;
+                }
+            }
+
+            .itemNumb {
+                font-size: 10px;
+                opacity: 0;
+                margin-right: 3px;
+            }
+        }
+    }
+
+
+    .vocabularyBtnContainer {
+        width: 60px;
+        height: 60px;
+        position: absolute;
+        z-index: 99;
+        bottom: 0;
+        right: 0;
+    }
+
+    .vocabularyBtn:nth-child(1) {
+        transition: right 0.3s ease, bottom 0.3s ease;
+        transition-delay: 0ms;
+    }
+
+    .vocabularyBtn:nth-child(2) {
+        transition: right 0.3s ease, bottom 0.3s ease;
+        transition-delay: 50ms;
+    }
+
+    .vocabularyBtn:nth-child(3) {
+        transition: right 0.3s ease, bottom 0.3s ease;
+        transition-delay: 100ms;
+    }
+
+    .vocabularyBtn:nth-child(4) {
+        transition: right 0.3s ease, bottom 0.3s ease;
+        transition-delay: 150ms;
+    }
+
+    .vocabularyBtn:nth-child(5) {
+        transition: right 0.3s ease, bottom 0.3s ease;
+        transition-delay: 200ms;
+    }
+
+    .vocabularyBtn:nth-child(6) {
+        transition: right 0.3s ease, bottom 0.3s ease;
+        transition-delay: 250ms;
+    }
+
+    .vocabularyBtn:nth-child(7) {
+        transition: right 0.3s ease, bottom 0.3s ease;
+        transition-delay: 300ms;
+    }
+
+    .vocabularyBtn:nth-child(8) {
+        transition: right 0.3s ease, bottom 0.3s ease;
+        transition-delay: 350ms;
+    }
+
+    .vocabularyBtn:nth-child(9) {
+        transition: right 0.3s ease, bottom 0.3s ease;
+        transition-delay: 100ms;
+    }
+
+    .vocabularyBtnContainer:hover .vocabularyBtn:nth-child(1) {
+        right: 3px;
+        bottom: 41px;
+        opacity: 1;
+        z-index: 36;
+    }
+
+    .vocabularyBtnContainer:hover .vocabularyBtn:nth-child(2) {
+        right: 22px;
+        bottom: 41px;
+        opacity: 1;
+        z-index: 36;
+    }
+
+    .vocabularyBtnContainer:hover .vocabularyBtn:nth-child(3) {
+        right: 41px;
+        bottom: 41px;
+        opacity: 1;
+        z-index: 36;
+    }
+
+    .vocabularyBtnContainer:hover .vocabularyBtn:nth-child(4) {
+        right: 41px;
+        bottom: 22px;
+        opacity: 1;
+        z-index: 36;
+    }
+
+    .vocabularyBtnContainer:hover .vocabularyBtn:nth-child(5) {
+        right: 41px;
+        bottom: 3px;
+        opacity: 1;
+        z-index: 36;
+    }
+
+    .vocabularyBtnContainer:hover .vocabularyBtn:nth-child(6) {
+        right: 22px;
+        bottom: 3px;
+        opacity: 1;
+        z-index: 36;
+    }
+
+    .vocabularyBtnContainer:hover .vocabularyBtn:nth-child(7) {
+        right: 3px;
+        bottom: 3px;
+        opacity: 1;
+        z-index: 36;
+    }
+
+    .vocabularyBtnContainer:hover .vocabularyBtn:nth-child(8) {
+        right: 3px;
+        bottom: 22px;
+        opacity: 1;
+        z-index: 36;
+    }
+
+    .vocabularyBtnContainer:hover .vocabularyBtn:nth-child(9) {
+        right: 22px;
+        bottom: 22px;
+        opacity: 1;
+        z-index: 36;
+    }
+
+    .vocabularyBtn {
+        border-radius: 27%;
+        position: inherit;
+        right: 3px;
+        bottom: 41px;
+        z-index: 1;
+        font-size: 14px;
+        line-height: 1rem;
+        font-family: 'Poppins', sans-serif;
+        font-weight: bold;
+        color: #ffffff80;
+        text-align: center;
+        background: $color-background-2;
+        cursor: pointer;
+        width: 16px;
+        height: 16px;
+        padding: 1px;
+        border: 0;
+        outline: 0;
+        border-radius: 2px;
+        opacity: 0;
+        overflow: hidden;
+    }
+
+    .vocabularyBtn:hover {
+        transition: all 0.1s linear;
+        color: #fff;
+        box-shadow: 1px 1px 12px #121212;
+        text-shadow: 0px 0px 6px #f4f4f4;
+    }
+
+
+    .timerBtn {
+        @include font('basier', 9px, #ffffff80, 500, normal, 9px);
+        text-align: center;
+        padding: 3px 0;
+        display: none;
+        opacity: 1;
+        cursor: pointer;
+    }
+
+    .timerBtnActive {
+        display: block;
+    }
+
+
+}
