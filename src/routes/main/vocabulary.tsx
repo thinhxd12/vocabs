@@ -3,8 +3,12 @@ import { RouteDefinition, useAction } from "@solidjs/router";
 import { getUser } from "~/api";
 import { BookmarkType, VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
-import { createAudio } from "@solid-primitives/audio";
-import { getBookmarkText, getSearchText, setBookmark } from "~/api/api";
+import {
+  getBookmarkText,
+  getSearchText,
+  getTranslate,
+  setBookmark,
+} from "~/api/api";
 import { createStore } from "solid-js/store";
 import {
   OcTrash2,
@@ -14,8 +18,13 @@ import {
   OcChevronright2,
   OcPaste2,
   OcX2,
+  OcCopy2,
+  OcCopy3,
 } from "solid-icons/oc";
 import Definition from "~/components/definition";
+import "/public/styles/vocabulary.scss";
+import "/public/styles/quote.scss";
+import FlipCard from "~/components/flipcard";
 
 export const route = {
   load: () => {
@@ -27,16 +36,12 @@ const page: Component<{}> = (props) => {
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
   const [currentText, setCurrentText] = createSignal<VocabularyType>();
-  const [audioSource, setAudioSource] = createSignal("");
   const [showDefinitions, setShowDefinitions] = createSignal(false);
   const [currentQuote, setCurrentQuote] = createStore<BookmarkType>({
     check: false,
     value: "",
   });
   const [showQuotes, setShowQuotes] = createSignal(false);
-  const [playing, setPlaying] = createSignal(false);
-  const [volume, setVolume] = createSignal(1);
-  const [audio, { seek }] = createAudio(audioSource, playing, volume);
 
   let divRef: HTMLDivElement | undefined;
 
@@ -59,8 +64,11 @@ const page: Component<{}> = (props) => {
         trigger(searchTerm());
       }
     }
-    if (keyDown?.match(/^[1-9]$/) && searchResult().length > 0) {
-      handleRenderText(searchResult()[Number(keyDown) - 1]);
+    if (keyDown?.match(/^[1-9]$/)) {
+      const keyDonwNumber = Number(keyDown);
+      if (searchResult().length > 0 && keyDonwNumber <= searchResult().length) {
+        handleRenderText(searchResult()[Number(keyDown) - 1]);
+      }
     }
     if (keyDown === "Backspace") {
       setSearchTerm(searchTerm().slice(0, -1));
@@ -77,8 +85,6 @@ const page: Component<{}> = (props) => {
 
   const handleRenderText = (text: VocabularyType) => {
     setCurrentText(text);
-    setAudioSource(text.sound);
-    setPlaying(true);
     setShowDefinitions(true);
     setSearchTerm("");
     setSearchResult([]);
@@ -108,6 +114,28 @@ const page: Component<{}> = (props) => {
     }
   };
 
+  // -------------------TRANSLATE START-------------------- //
+  const [translateTerm, setTranslateTerm] = createSignal<string>("");
+  const [renderTranslate, setRenderTranslate] = createSignal<boolean>(false);
+
+  const onKeyDownTrans: JSX.EventHandlerUnion<
+    HTMLInputElement,
+    KeyboardEvent
+  > = (event) => {
+    event.stopPropagation();
+    const keyDown = event.key;
+    if (keyDown === " ") {
+      setTranslateTerm("");
+      setRenderTranslate(false);
+    }
+    if (keyDown === "Enter") handleTranslate();
+  };
+  const handleTranslate = async () => {
+    const data = await getTranslate(translateTerm());
+    console.log(data);
+  };
+  // -------------------TRANSLATE END-------------------- //
+
   return (
     <div
       ref={divRef}
@@ -117,8 +145,7 @@ const page: Component<{}> = (props) => {
       class="vocabulary"
     >
       <div class="flashCardContainer">
-        {/* <FlipNumber />
-        <FlipCard /> */}
+        <FlipCard item={currentText()!} />
       </div>
 
       <div class="myInputContainer">
@@ -128,8 +155,13 @@ const page: Component<{}> = (props) => {
         />
         <div class="myInputText">{searchTerm()}</div>
         <div class="myInputTransContent">
-          <input class="myInput" />
-          <button class="myInputBtn">
+          <input
+            class="myInput"
+            value={translateTerm()}
+            onInput={(e) => setTranslateTerm(e.target.value)}
+            onKeyDown={onKeyDownTrans}
+          />
+          <button class="myInputBtn" onClick={handleTranslate}>
             <img src="/images/main/center.png" />
           </button>
         </div>
@@ -186,7 +218,7 @@ const page: Component<{}> = (props) => {
                     class="quoteBtn"
                     onclick={() => copyQuoteToClipboard(currentQuote.value)}
                   >
-                    <OcPaste2 size={17} />
+                    <OcCopy2 size={17} />
                   </button>
                 </div>
                 <button
@@ -207,18 +239,6 @@ const page: Component<{}> = (props) => {
           {/* Definition */}
           <Show when={showDefinitions()}>
             <Definition item={currentText()!} onClose={handleCloseDefinition} />
-            {/* <button onClick={() => setShowDefinitions(false)}>X</button>
-            <h4>{currentText()?.text}</h4>
-            <p>{currentText()?.phonetic}</p>
-            <p>{currentText()?.number}</p>
-            <p>{currentText()?.meaning}</p>
-            <br></br>
-            <p>
-              Definition of <b>{currentText()?.text}</b>
-            </p>
-            <Index each={currentText()?.definitions}>
-              {(item, i) => <div innerHTML={item()} />}
-            </Index> */}
           </Show>
         </div>
       </div>

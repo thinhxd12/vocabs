@@ -11,6 +11,8 @@ import { getDataImage } from "~/api/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import { URL_IMAGE_MAIN_PAGE } from "~/utils";
+import "/public/styles/main.scss";
+
 
 export const route = {
   load: () => getUser(),

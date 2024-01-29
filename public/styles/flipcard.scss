@@ -1,0 +1,211 @@
+@import "./fonts.scss";
+@import "./mixins.scss";
+
+.flipCardLeftContent {
+    width: 78px;
+    height: 100%;
+
+    .numberFlipContainer {
+        width: 60px;
+        height: 100%;
+        float: right;
+        border-left: 3px solid $color-white;
+        border-right: 3px solid $color-white;
+
+        .numberFlipContent {
+            width: 100%;
+            height: 100%;
+            background-color: $color-red-2;
+            border-left: 2px solid $color-black;
+            border-right: 2px solid $color-black;
+            padding-top: 66px;
+        }
+    }
+}
+
+.number {
+    @include font('Roslindale', 18px, $color-black, 600, normal, 16px);
+    text-align: center;
+    text-shadow: 0px 0px 1px #000000d1;
+    padding: 4px 0;
+    vertical-align: baseline;
+}
+
+.flipNumber {
+    width: 44px;
+    height: 44px;
+    background-color: $color-white;
+    border-radius: 50%;
+    margin: 0 auto;
+    @include flex-center;
+
+    .numListContent {
+        width: 44px;
+        height: 24px;
+        display: flex;
+        justify-content: center;
+        margin-top: 1px;
+        overflow: hidden;
+    }
+}
+
+
+.flipImage {
+    width: 44px;
+    height: 44px;
+    background-color: $color-white;
+    border-radius: 50%;
+    margin: 0 auto;
+    @include flex-center;
+    overflow: hidden;
+
+    .flipImageList {
+        @include flex-center-column;
+
+        .number {
+            line-height: 44px;
+        }
+
+        .flipImageCup {
+            height: 44px;
+        }
+    }
+}
+
+.flipCardRightContent {
+    height: 100%;
+    width: 282px;
+
+    .turnBoxContainer {
+        width: 100%;
+        height: 100%;
+        transition: all 200ms linear 0ms;
+        perspective: 600px;
+        position: relative;
+        overflow: hidden;
+
+        .turnBoxFace {
+            transform-origin: 50% 50%;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            color: $color-white;
+            transition: all 500ms ease 0ms;
+
+            .turnBoxContent1 {
+                width: 100%;
+                height: 100%;
+                @include flex-center-column;
+                position: relative;
+
+                .turnBoxItemClass {
+                    @include font(false, 9px, $color-white, 500, normal);
+                }
+
+                .turnBoxItemText {
+                    @include font('Roslindale', 33px, $color-white, 600, normal);
+                    letter-spacing: 1.5px;
+                    margin-bottom: 3px;
+                }
+
+                .turnBoxItemPhonetic {
+                    @include font(sans-serif, 21px, $color-red-3, normal, normal);
+                }
+
+                .turnBoxItemDate {
+                    display: none;
+                }
+            }
+
+            .turnBoxContent2 {
+                width: 100%;
+                height: 100%;
+                @include flex-center-column;
+                align-items: flex-start;
+                position: relative;
+                padding-left: 12px;
+
+                .turnBoxItemMeaning {
+                    @include font('Roslindale', 14px, $color-white, 500, normal);
+                    letter-spacing: 1px;
+                    text-align: left;
+                    white-space: break-spaces;
+                    cursor: default;
+
+                    .turnBoxItemMeaningClass {
+                        margin-left: -6px;
+                        margin-bottom: 3px;
+                    }
+
+                    .turnBoxItemMeaningText {
+                        margin-bottom: 2px;
+
+                        &::before {
+                            content: '';
+                            display: inline-block;
+                            margin-right: 2px;
+                            width: 15px;
+                            height: 15px;
+                            background: url('../images/main/clover.png');
+                            background-size: contain;
+                            vertical-align: bottom;
+                            transform: rotate(-18deg);
+                        }
+                    }
+                }
+
+                .turnBoxSign {
+                    position: absolute;
+                    bottom: 0px;
+                    right: 3px;
+                }
+            }
+        }
+
+        .turnBoxItemProgress {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            @include font('Roslindale', 15px, $color-red-3, 500, normal);
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            z-index: 99;
+        }
+
+        .turnBoxFaceNum1 {
+            transform: rotateX(0deg) translate3d(0px, 0px, 0px);
+            z-index: 20;
+            opacity: 1;
+        }
+
+        .turnBoxFaceNum2 {
+            transform: rotateX(90deg) translate3d(0px, -93px, 93px);
+            z-index: 10;
+            opacity: 0;
+        }
+
+        .turnBoxFaceNum3 {
+            transform: rotateX(-90deg) translate3d(0px, 93px, -93px);
+            z-index: 10;
+            opacity: 0;
+        }
+    }
+
+    .turnBoxContainer:hover .turnBoxFaceNum1,
+    .turnBoxHover .turnBoxFaceNum1 {
+        transform: rotateX(-90deg) translate3d(0px, 93px, 93px);
+        z-index: 10;
+        opacity: 0;
+    }
+
+    .turnBoxContainer:hover .turnBoxFaceNum2,
+    .turnBoxHover .turnBoxFaceNum2 {
+        transform: rotateX(0deg) translate3d(0px, 0px, 0px);
+        z-index: 20;
+        opacity: 1;
+    }
+
+}

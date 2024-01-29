@@ -3,6 +3,7 @@ import { redirect } from "@solidjs/router";
 import { supabase } from "./supabase";
 import { useSession } from "@solidjs/start/server";
 import { getRequestEvent } from "solid-js/web";
+import { createSignal } from "solid-js";
 
 function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
@@ -16,12 +17,15 @@ function validatePassword(password: unknown) {
   }
 }
 
+const [emailSig, setEmailSig] = createSignal<string>("");
+
 async function login(username: string, password: string) {
   const { data, error } = await supabase.auth.signInWithPassword({
     email: username,
     password: password,
   })
   if (error?.message) throw new Error("Invalid login");
+  setEmailSig(username);
   return { email: username }
 }
 
@@ -33,7 +37,6 @@ async function register(username: string, password: string) {
   if (error?.message) throw new Error("User already exists");
   return { email: username }
 }
-
 
 export async function loginOrRegister(formData: FormData) {
   const username = String(formData.get("username"));
@@ -72,7 +75,7 @@ export async function getUser() {
   const session = await getSession();
   const userEmail = session.data.email;
   if (userEmail === undefined) throw redirect("/");
-  return { email: userEmail };
+  if (userEmail === emailSig()) return { email: userEmail };
 }
 
 

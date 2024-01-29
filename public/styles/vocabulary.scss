@@ -7,11 +7,11 @@
     overflow: hidden;
     position: relative;
     outline: none;
+    background-color: $color-black;
 
     .flashCardContainer {
         height: 186px;
         width: 360px;
-        background-color: $color-black;
         @include flex;
     }
 
@@ -20,6 +20,7 @@
         @include flex;
         width: 100%;
         background: $color-background-2;
+        margin-bottom: 1px;
 
         .myInputLeftOrnament {
             z-index: inherit;
@@ -86,13 +87,12 @@
     }
 
     .vocabularyContainer {
-        height: calc(100vh - 244px);
+        height: calc(100vh - 245px);
         width: 360px;
         overflow-y: scroll;
         overflow-x: hidden;
         background: $color-black;
         position: relative;
-        padding-top: 1px;
 
         &::-webkit-scrollbar {
             display: none;
@@ -153,7 +153,6 @@
             }
         }
     }
-
 
     .vocabularyBtnContainer {
         width: 60px;

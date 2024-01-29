@@ -4,40 +4,48 @@
 .definition {
     @include baseBody;
     width: 360px;
-    display: block;
-    overflow: hidden;
-
-    .definitionTop {
-        position: absolute;
-        top: 0;
-        right: 0;
-        display: flex;
-        padding: 1px;
-
-        .definitionBtn {
-            @include baseButton(28px);
-        }
-    }
+    padding-top: 0;
 
     .definitionHeader {
-        border-bottom: 1px solid $color-boder;
+        position: sticky;
+        top: 0;
+        left: 0;
+        width: 100%;
+        @include flex;
+        justify-content: space-between;
+        border-bottom: 1px solid #343434;
+        background: $color-background-4;
+        padding: 3px 0;
+        z-index: 99;
+        height: 27px;
 
-        .definitionHeaderIndex {
-            @include font('nyt-cheltenham', 13px, $color-black, 500, normal);
+        .definitionHeaderLeft {
+            .definitionHeaderIndex {
+                @include font('nyt-cheltenham', 13px, $color-black, 500, normal);
+            }
+
+            span:nth-child(2) {
+                @include font('nyt-cheltenham', 16px, $color-black, 500, normal, 18px);
+                margin: 0 3px;
+            }
+
+            span:nth-child(3) {
+                @include font('nyt-cheltenham', 11px, #727272, 400, italic);
+            }
         }
 
-        span:nth-child(2) {
-            @include font('nyt-cheltenham', 16px, $color-black, 500, normal, 18px);
-            margin: 0 3px;
-        }
+        .definitionHeaderRight {
+            @include flex;
 
-        span:nth-child(3) {
-            @include font('nyt-cheltenham', 11px, #727272, 400, italic);
+            .definitionBtn {
+                @include baseButton(28px);
+            }
         }
     }
 
+
     .definitionBody {
-        .sn-g {
+        .sn-gs {
             padding: 2px 0;
             position: relative;
 
@@ -47,16 +55,8 @@
 
             .def {
                 @include font('nyt-imperial', 12px, $color-black, 500, normal, 15px);
-                text-indent: 12px;
-                display: block
-            }
-
-            .num+.def {
                 text-indent: 15px;
-            }
-
-            .thumb_img+.def {
-                text-indent: 3px;
+                display: block
             }
 
             .num {
@@ -65,11 +65,12 @@
                 width: 11px;
                 height: 11px;
                 border-radius: 50%;
-                border: 1px solid #707070;
+                border: 1px solid $color-boder;
                 position: absolute;
-                top: 4px;
+                top: 6px;
                 left: 2px;
-                background: #c7c7b5;
+                z-index: 9;
+                background: $color-background-4;
             }
 
             .x {
@@ -116,13 +117,14 @@
 
             .thumb_img {
                 display: flex;
-                margin-bottom: 2px;
 
                 .thumb {
+                    margin-bottom: 3px;
                     margin-right: 3px;
                     display: block;
                     max-height: 150px;
                     max-width: 180px;
+                    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
                 }
 
                 .def {
@@ -130,10 +132,5 @@
                 }
             }
         }
-
-        .sn-g>.def {
-            text-indent: 1px;
-        }
-
     }
 }

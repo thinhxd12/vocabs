@@ -1,6 +1,7 @@
 import { A, useAction } from "@solidjs/router";
 import { Component } from "solid-js";
 import { logout } from "~/api";
+import "/public/styles/bottom.scss";
 
 const Bottom: Component<{}> = (props) => {
   const logoutAction = useAction(logout);

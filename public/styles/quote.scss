@@ -3,16 +3,15 @@
 
 .quoteContainer {
     @include baseBody;
-    max-width: 360px;
-    min-width: 360px;
+    width: 360px;
     padding: 0 !important;
 
     .quoteHeader {
         position: sticky;
-        top: -1px;
+        top: 0;
         left: 0;
         width: 100%;
-        display: flex;
+        @include flex;
         justify-content: space-between;
         border-bottom: 1px solid $color-boder;
         background: $color-background-4;
@@ -54,13 +53,13 @@
             background: $color-black;
             text-align: center;
             float: left;
-            width: 40px;
-            height: 50px;
-            padding: 2px 4px;
-            margin-right: 6px;
+            padding: 0 4px;
+            @include flex-center;
+            margin-right: 3px;
+            margin-top: 3px;
         }
 
-        .quoteMark{
+        .quoteMark {
             font-size: 32px;
             font-weight: 700;
             line-height: 1rem;

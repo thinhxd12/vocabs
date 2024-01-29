@@ -176,3 +176,18 @@ export const getDataImage = action(async (url: string) => {
         console.error(error);
     }
 });
+
+//get translate data
+export const getTranslate = async (text: string) => {
+    const url = `https://myapp-9r5h.onrender.com/trans?text=${text}&from=auto&to=vi`
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error);
+    }
+}
