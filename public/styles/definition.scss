@@ -11,27 +11,30 @@
         top: 0;
         left: 0;
         width: 100%;
-        @include flex;
+        display: flex;
         justify-content: space-between;
+        align-items: flex-start;
         border-bottom: 1px solid #343434;
         background: $color-background-4;
-        padding: 3px 0;
         z-index: 99;
-        height: 27px;
+        height: 25px;
+        padding: 2px 0 2px 2px;
 
         .definitionHeaderLeft {
+            .definitionHeaderText {
+                b {
+                    @include font('nyt-cheltenham', 16px, $color-black, 500, normal);
+                }
+
+                i {
+                    @include font('nyt-cheltenham', 11px, #727272, 400, italic);
+                }
+            }
+
             .definitionHeaderIndex {
-                @include font('nyt-cheltenham', 13px, $color-black, 500, normal);
+                @include font('nyt-cheltenham', 13px, $color-black, 500, normal, 21px);
             }
 
-            span:nth-child(2) {
-                @include font('nyt-cheltenham', 16px, $color-black, 500, normal, 18px);
-                margin: 0 3px;
-            }
-
-            span:nth-child(3) {
-                @include font('nyt-cheltenham', 11px, #727272, 400, italic);
-            }
         }
 
         .definitionHeaderRight {
@@ -46,17 +49,11 @@
 
     .definitionBody {
         .sn-gs {
-            padding: 2px 0;
+            padding: 3px 0;
             position: relative;
 
             &:not(:last-child) {
                 border-bottom: 1px solid $color-boder;
-            }
-
-            .def {
-                @include font('nyt-imperial', 12px, $color-black, 500, normal, 15px);
-                text-indent: 15px;
-                display: block
             }
 
             .num {
@@ -67,25 +64,41 @@
                 border-radius: 50%;
                 border: 1px solid $color-boder;
                 position: absolute;
-                top: 6px;
-                left: 2px;
-                z-index: 9;
+                top: 4.5px;
+                left: 1px;
+                z-index: 39;
                 background: $color-background-4;
             }
 
+            .def {
+                @include font('nyt-imperial', 12px, $color-black, 500, normal, 15px);
+                display: block
+            }
+
+            .num+.def,
+            .num+.sn-g>.def,
+            .num+.sn-g>.dsense_h {
+                text-indent: 15px;
+            }
+
+            .dsense_h {
+                @include font('nyt-imperial', 12px, $color-black, 500, italic, 15px);
+                display: block
+            }
+
             .x {
-                @include font('nyt-imperial', 12px, $color-black, 500, italic, 18px);
+                @include font('nyt-imperial', 12px, $color-black, 500, italic, 17px);
                 display: block;
 
                 &::before {
                     content: '';
-                    display: inline-block;
-                    margin-right: 2px;
+                    display: block;
+                    margin-right: 1px;
+                    float: left;
                     width: 15px;
                     height: 15px;
                     background: url('/images/main/clover.png');
                     background-size: contain;
-                    vertical-align: bottom;
                     transform: rotate(-18deg);
                 }
 
@@ -98,9 +111,9 @@
             .xr-gs {
                 font-weight: 500;
                 font-size: 13px;
+                line-height: 17px;
                 display: block;
                 text-transform: uppercase;
-                color: #181818;
                 margin-left: 3px;
 
                 small {
@@ -109,26 +122,18 @@
                 }
             }
 
-            .dsense_h {
-                @include font('nyt-imperial', 12px, $color-black, 500, italic, 15px);
-                text-indent: 15px;
-                display: block
-            }
 
             .thumb_img {
                 display: flex;
+                margin-bottom: 6px;
 
                 .thumb {
-                    margin-bottom: 3px;
-                    margin-right: 3px;
+                    margin-right: 6px;
                     display: block;
-                    max-height: 150px;
-                    max-width: 180px;
-                    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
-                }
-
-                .def {
-                    text-indent: 0;
+                    width: 180px;
+                    max-height: 180px;
+                    border-radius: 3px;
+                    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
                 }
             }
         }

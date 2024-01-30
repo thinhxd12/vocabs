@@ -1,7 +1,7 @@
 import { Component, Index, JSX, Show, createSignal } from "solid-js";
 import { RouteDefinition, useAction } from "@solidjs/router";
 import { getUser } from "~/api";
-import { BookmarkType, VocabularyType } from "~/types";
+import { BookmarkType, TranslateType, VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
   getBookmarkText,
@@ -25,6 +25,8 @@ import Definition from "~/components/definition";
 import "/public/styles/vocabulary.scss";
 import "/public/styles/quote.scss";
 import FlipCard from "~/components/flipcard";
+import { Motion, Presence } from "solid-motionone";
+import Translation from "~/components/translation";
 
 export const route = {
   load: () => {
@@ -60,6 +62,7 @@ const page: Component<{}> = (props) => {
     const keyDown = event.key;
     if (keyDown.match(/^[a-z]$/)) {
       setSearchTerm(searchTerm() + keyDown);
+      showDefinitions() && setShowDefinitions(false);
       if (searchTerm().length > 2) {
         trigger(searchTerm());
       }
@@ -80,6 +83,7 @@ const page: Component<{}> = (props) => {
       event.preventDefault();
       setSearchTerm("");
       setSearchResult([]);
+      showDefinitions() && setShowDefinitions(false);
     }
   };
 
@@ -93,6 +97,10 @@ const page: Component<{}> = (props) => {
 
   const handleCloseDefinition = () => {
     setShowDefinitions(false);
+  };
+
+  const handleCloseTranslation = () => {
+    setShowTranslate(false);
   };
 
   const getQuote = async (numb: number) => {
@@ -116,7 +124,8 @@ const page: Component<{}> = (props) => {
 
   // -------------------TRANSLATE START-------------------- //
   const [translateTerm, setTranslateTerm] = createSignal<string>("");
-  const [renderTranslate, setRenderTranslate] = createSignal<boolean>(false);
+  const [translateText, setTranslateText] = createSignal<TranslateType>();
+  const [showTranslate, setShowTranslate] = createSignal(false);
 
   const onKeyDownTrans: JSX.EventHandlerUnion<
     HTMLInputElement,
@@ -126,13 +135,14 @@ const page: Component<{}> = (props) => {
     const keyDown = event.key;
     if (keyDown === " ") {
       setTranslateTerm("");
-      setRenderTranslate(false);
+      setShowTranslate(false);
     }
     if (keyDown === "Enter") handleTranslate();
   };
   const handleTranslate = async () => {
     const data = await getTranslate(translateTerm());
-    console.log(data);
+    setShowTranslate(true);
+    setTranslateText(data);
   };
   // -------------------TRANSLATE END-------------------- //
 
@@ -153,17 +163,27 @@ const page: Component<{}> = (props) => {
           src="/images/main/input-left-corner.png"
           class="myInputLeftOrnament"
         />
-        <div class="myInputText">{searchTerm()}</div>
-        <div class="myInputTransContent">
-          <input
-            class="myInput"
-            value={translateTerm()}
-            onInput={(e) => setTranslateTerm(e.target.value)}
-            onKeyDown={onKeyDownTrans}
-          />
-          <button class="myInputBtn" onClick={handleTranslate}>
-            <img src="/images/main/center.png" />
-          </button>
+        <div class="myInputCenterContent">
+          <Motion.div
+            class="myInputText"
+            animate={{
+              background: searchTerm().length > 0 ? "#272727" : "unset",
+            }}
+            transition={{ duration: 0.6, easing: "linear" }}
+          >
+            {searchTerm()}
+          </Motion.div>
+          <div class="myInputTransContent">
+            <input
+              class="myInput"
+              value={translateTerm()}
+              onInput={(e) => setTranslateTerm(e.target.value)}
+              onKeyDown={onKeyDownTrans}
+            />
+            <button class="myInputBtn" onClick={handleTranslate}>
+              <img src="/images/main/center.png" />
+            </button>
+          </div>
         </div>
         <img
           src="/images/main/input-right-corner.png"
@@ -237,9 +257,55 @@ const page: Component<{}> = (props) => {
             </div>
           </Show>
           {/* Definition */}
-          <Show when={showDefinitions()}>
-            <Definition item={currentText()!} onClose={handleCloseDefinition} />
-          </Show>
+          <Presence>
+            <Show when={showDefinitions()}>
+              <Motion
+                initial={{
+                  opacity: 0,
+                  y: -30,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: 30,
+                }}
+                transition={{ duration: 0.3, easing: "ease-in-out" }}
+              >
+                <Definition
+                  item={currentText()!}
+                  onClose={handleCloseDefinition}
+                />
+              </Motion>
+            </Show>
+          </Presence>
+          {/* Translation */}
+          <Presence>
+            <Show when={showTranslate()}>
+              <Motion
+                initial={{
+                  opacity: 0,
+                  y: -30,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: 30,
+                }}
+                transition={{ duration: 0.3, easing: "ease-in-out" }}
+              >
+                <Translation
+                  item={translateText()!}
+                  onClose={handleCloseTranslation}
+                />
+              </Motion>
+            </Show>
+          </Presence>
         </div>
       </div>
 

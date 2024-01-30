@@ -17,10 +17,10 @@
 
     .myInputContainer {
         position: relative;
-        @include flex;
         width: 100%;
-        background: $color-background-2;
+        height: 27px;
         margin-bottom: 1px;
+        background: $color-background-2;
 
         .myInputLeftOrnament {
             z-index: inherit;
@@ -28,6 +28,7 @@
             position: absolute;
             left: 0;
             top: 0;
+            z-index: 99;
         }
 
         .myInputRightOrnament {
@@ -36,52 +37,80 @@
             position: absolute;
             right: 0;
             top: 0;
+            z-index: 99;
         }
 
-        .myInputText {
-            width: 50%;
-            padding: 0 9px;
-            height: 27px;
-            @include font('basier', 12px, $color-white, 400, normal, 27px);
-        }
-
-        .myInput {
-            height: 27px;
-            width: 50%;
-            padding: 0 9px;
-            background: none;
-            border: 0;
-            outline: 0;
-            @include font('basier', 12px, $color-white, 400, normal, 27px);
-        }
-
-        .myInputTransContent {
-            width: 50%;
+        .myInputCenterContent {
             @include flex;
-            justify-content: space-between;
+            position: absolute;
+            width: 100%;
+            height: 27px;
+            top: 0;
+            left: 0;
+            z-index: 72;
 
-            .myInput {
-                flex-grow: 1;
+            .myInputText {
+                width: 100%;
+                padding: 0 9px;
+                height: 27px;
+                // @include font('basier', 12px, $color-white, 400, normal, 27px);
+                @include font('Roslindale', 12px, $color-white, 400, normal, 27px);
+                text-align: center;
+                // background-color: red;
+                // background: url("/images/main/paper.jpeg");
+                // background-size: cover;
+                // background: #363636;
+                transition: 0.3s;
             }
 
-            .myInputBtn {
-                cursor: pointer;
-                transition: opacity 0.3s ease;
-                margin-right: 3px;
-                opacity: 0;
-                z-index: 36;
-                background-color: transparent;
-                border: none;
-                outline: none;
+            .myInput {
+                height: 27px;
+                width: 50%;
+                padding: 0 9px;
+                background: none;
+                border: 0;
+                outline: 0;
+                @include font('basier', 12px, $color-white, 400, normal, 27px);
+            }
 
-                img {
-                    height: 18px;
-                    margin-top: 3px;
+            .myInputTransContent {
+                width: 0;
+                @include flex;
+                justify-content: space-between;
+                transition: 0.3s;
+
+                .myInput {
+                    flex-grow: 1;
+                }
+
+                .myInputBtn {
+                    cursor: pointer;
+                    transition: opacity 0.3s ease;
+                    margin-right: 3px;
+                    opacity: 0;
+                    z-index: 36;
+                    background-color: transparent;
+                    border: none;
+                    outline: none;
+
+                    img {
+                        height: 18px;
+                        margin-top: 3px;
+                    }
+                }
+
+                &:hover .myInputBtn {
+                    opacity: 1;
                 }
             }
 
-            &:hover .myInputBtn {
-                opacity: 1;
+        }
+
+        &:hover {
+
+            .myInputText,
+            .myInputTransContent {
+                width: 50%;
             }
         }
     }

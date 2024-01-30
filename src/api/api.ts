@@ -1,5 +1,5 @@
 import { action, cache, useAction, useSubmission } from "@solidjs/router";
-import { BookmarkType, HistoryType, ImageType, VocabularyType, mapTables } from "~/types";
+import { BookmarkType, HistoryType, ImageType, TranslateType, VocabularyType, mapTables } from "~/types";
 import { supabase } from "./supabase";
 import { getElAttribute, getElText } from "~/utils";
 import parse from "node-html-parser";
@@ -186,7 +186,7 @@ export const getTranslate = async (text: string) => {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        return data;
+        return data as TranslateType;
     } catch (error) {
         console.error(error);
     }

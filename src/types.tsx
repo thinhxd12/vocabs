@@ -47,3 +47,13 @@ export interface ImageType {
   content: string;
   nextImageUrl:string;
 }
+
+export interface TranslateType {
+  definitions: Object;
+  examples: Array<any>;
+  translation: string;
+  translationTranscription: string | null;
+  translations: { [key: string]: any[] };
+  word: string;
+  wordTranscription: string;
+}
