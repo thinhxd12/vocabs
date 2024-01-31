@@ -1,0 +1,24 @@
+@import "./fonts.scss";
+@import "./mixins.scss";
+
+.alert {
+    @include baseBody($color-calendar-bg);
+    width: 360px;
+    border-radius: 6px;
+    @include flex;
+    padding: 6px;
+    margin-bottom: 3px;
+
+    .alertIcon {
+        margin-right: 6px;
+    }
+
+    .alertMessage {
+        @include font("basier", 11px, $color-black, 600, normal, 14px);
+        text-align: center;
+
+        &::first-letter {
+            text-transform: uppercase;
+        }
+    }
+}

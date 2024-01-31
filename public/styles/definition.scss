@@ -5,6 +5,7 @@
     @include baseBody;
     width: 360px;
     padding-top: 0;
+    margin-bottom: 3px;
 
     .definitionHeader {
         position: sticky;
@@ -17,7 +18,7 @@
         border-bottom: 1px solid #343434;
         background: $color-background-4;
         z-index: 99;
-        height: 25px;
+        height: 21px;
         padding: 2px 0 2px 2px;
 
         .definitionHeaderLeft {
@@ -133,7 +134,7 @@
                     width: 180px;
                     max-height: 180px;
                     border-radius: 3px;
-                    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset;
+                    box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px;
                 }
             }
         }

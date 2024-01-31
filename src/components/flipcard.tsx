@@ -150,7 +150,7 @@ const FlipCard = (props: Props) => {
                   animate={{ y: 27, transition: { delay: 2.5 } }}
                   transition={{ duration: 0.6, easing: "ease-in-out" }}
                 >
-                  <img class="flipImageCup" src="/images/main/cup.png" />
+                  <img src="/images/main/cup.png" height={44} />
                   <span class="number">1</span>
                 </Motion.div>
               </div>

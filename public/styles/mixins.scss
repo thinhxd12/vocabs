@@ -105,11 +105,11 @@ $color-calendar-green: #38E07B;
   }
 }
 
-@mixin baseBody() {
+@mixin baseBody($bg: $color-background-4) {
   @include font("nyt-imperial", 12px, false, 400, normal, 16px);
   padding: 3px;
   margin-bottom: 1px;
-  background: $color-background-4;
+  background: $bg;
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
@@ -117,7 +117,7 @@ $color-calendar-green: #38E07B;
 
 @mixin myInput() {
   height: 25px;
-  @include font("basier", 11px,  $color-white, 400, normal, 16px);
+  @include font("basier", 11px, $color-white, 400, normal, 16px);
   padding: 0 9px;
   background: $color-background-input;
   border: 0;

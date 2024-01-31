@@ -23,18 +23,6 @@
             .quoteBtn {
                 @include baseButton(36px);
             }
-
-            .quoteBtnActive {
-                color: #ffc107;
-
-                &:hover {
-                    color: #ffc107;
-                }
-            }
-
-            .quoteBtnCopied {
-                color: $color-white;
-            }
         }
 
         .quoteBtnClose {

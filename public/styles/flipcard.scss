@@ -65,10 +65,6 @@
         .number {
             line-height: 44px;
         }
-
-        .flipImageCup {
-            height: 44px;
-        }
     }
 }
 
@@ -111,7 +107,7 @@
                 }
 
                 .turnBoxItemPhonetic {
-                    @include font(sans-serif, 21px, $color-red-3, normal, normal);
+                    @include font(false, 21px, $color-red-3, normal, normal);
                 }
 
                 .turnBoxItemDate {

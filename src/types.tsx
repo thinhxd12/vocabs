@@ -5,7 +5,6 @@ export const mapTables = {
 };
 
 export interface VocabularyType {
-  id: string;
   text: string;
   sound: string;
   class: string;
@@ -28,7 +27,6 @@ export interface HistoryItemContentType {
 
 export interface HistoryType {
   id: number;
-  type: number;
   week1: HistoryItemContentType;
   week2: HistoryItemContentType;
   week3: HistoryItemContentType;
@@ -45,7 +43,7 @@ export interface ImageType {
   authorName: string;
   authorYear: string;
   content: string;
-  nextImageUrl:string;
+  nextImageUrl: string;
 }
 
 export interface TranslateType {

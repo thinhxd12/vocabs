@@ -12,7 +12,7 @@ import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import { URL_IMAGE_MAIN_PAGE } from "~/utils";
 import "/public/styles/main.scss";
-
+import { createPolled } from "@solid-primitives/timer";
 
 export const route = {
   load: () => getUser(),
@@ -44,6 +44,18 @@ const MainLayout = (props: RouteSectionProps) => {
 
   createEffect(() => {
     getNextImageData(imageUrl());
+  });
+
+  //Wakeup sever render after 14 minutes
+  const getWakeup = async () => {
+    const url = "https://myapp-9r5h.onrender.com/wakeup";
+    const response = await fetch(url);
+    const result = response.json();
+    return result;
+  };
+
+  onMount(() => {
+    const wakeup = createPolled(getWakeup, 840000);
   });
 
   return (

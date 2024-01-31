@@ -4,6 +4,7 @@ import { getUser } from "~/api";
 import { BookmarkType, TranslateType, VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
+  deleteVocabulary,
   getBookmarkText,
   getSearchText,
   getTranslate,
@@ -145,6 +146,29 @@ const page: Component<{}> = (props) => {
     setTranslateText(data);
   };
   // -------------------TRANSLATE END-------------------- //
+  // -------------------DELETE START-------------------- //
+  const [deleteBtnIndex, setDeleteBtnIndex] = createSignal<number>(0);
+
+  const deleteVocabularyAction = useAction(deleteVocabulary);
+  const handleDeleteVocabulary = (text: string) => {
+    console.log(text);
+    deleteVocabularyAction(text);
+    setSearchTerm("");
+    setDeleteBtnIndex(0);
+    setSearchResult([]);
+    // try {
+    //   deleteVocabularyItem({
+    //     id: item._id,
+    //     col: DEFAULT_COLLECTION.collection,
+    //   });
+    //   setSearchTerm("");
+    //   setConfirmDeleteId(0);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+  };
+
+  // -------------------DELETE END-------------------- //
 
   return (
     <div
@@ -190,22 +214,34 @@ const page: Component<{}> = (props) => {
           class="myInputRightOrnament"
         />
       </div>
+
       <div class="vocabularyContainer">
         <div class="searchContainer">
           {/* Search result */}
           <Index each={searchResult()}>
             {(data, i) => (
-              <div class="my-item" onclick={() => handleRenderText(data())}>
-                <span class="itemText">
+              <div class="my-item">
+                <span class="itemText" onclick={() => handleRenderText(data())}>
                   <span>
                     <small>{i + 1}</small>
                     <span>{data().text}</span>
                   </span>
                   <span class="itemNumb">{data().number}</span>
                 </span>
-                <button class="itemDeleteBtn">
-                  <OcTrash2 size={12} />
-                </button>
+                <Show when={i + 1 !== deleteBtnIndex()}>
+                  <button
+                    class="itemDeleteBtn"
+                    onClick={() => setDeleteBtnIndex(i + 1)}
+                  ></button>
+                </Show>
+                <Show when={i + 1 === deleteBtnIndex()}>
+                  <button
+                    class="itemDeleteBtn"
+                    onClick={() => handleDeleteVocabulary(data().text)}
+                  >
+                    <OcTrash2 size={12} />
+                  </button>
+                </Show>
               </div>
             )}
           </Index>
@@ -226,7 +262,7 @@ const page: Component<{}> = (props) => {
                     onclick={() => checkQuote(!currentQuote.check)}
                   >
                     {currentQuote.check ? (
-                      <OcStarfill2 size={17} />
+                      <OcStarfill2 size={17} color="#ffc107" />
                     ) : (
                       <OcStar2 size={17} />
                     )}
