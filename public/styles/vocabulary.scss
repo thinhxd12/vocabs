@@ -1,11 +1,18 @@
 @import "./fonts.scss";
 @import "./mixins.scss";
 
+
+.vocabularyContainer {
+    position: relative;
+    width: 360px;
+    height: calc(100vh - 31px);
+}
+
 .vocabulary {
     width: 100%;
-    height: calc(100vh - 31px);
+    height: 100%;
     overflow: hidden;
-    position: relative;
+    position: inherit;
     outline: none;
     background-color: $color-black;
 
@@ -53,13 +60,8 @@
                 width: 100%;
                 padding: 0 9px;
                 height: 27px;
-                // @include font('basier', 12px, $color-white, 400, normal, 27px);
                 @include font('Roslindale', 12px, $color-white, 400, normal, 27px);
                 text-align: center;
-                // background-color: red;
-                // background: url("/images/main/paper.jpeg");
-                // background-size: cover;
-                // background: #363636;
                 transition: 0.3s;
             }
 
@@ -115,7 +117,7 @@
         }
     }
 
-    .vocabularyContainer {
+    .vocabularyContent {
         height: calc(100vh - 245px);
         width: 360px;
         overflow-y: scroll;
@@ -160,10 +162,6 @@
                     margin-left: 3px;
                     border-left: 3px solid $color-calendar-green;
                 }
-
-                &:hover .itemNumb {
-                    opacity: 1;
-                }
             }
 
             .itemDeleteBtn {
@@ -176,9 +174,15 @@
             }
 
             .itemNumb {
-                font-size: 10px;
-                opacity: 0;
+                font-size: 8px;
                 margin-right: 3px;
+                cursor: pointer;
+                background: transparent;
+                border: 1px solid $color-boder;
+                outline: none;
+                height: 12px;
+                padding: 1px 2px;
+                border-radius: 3px;
             }
         }
     }
@@ -346,4 +350,15 @@
     }
 
 
+}
+
+.editOverlay {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: $color-background-3;
+    z-index: 1001;
 }

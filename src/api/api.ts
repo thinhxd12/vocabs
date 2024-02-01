@@ -3,6 +3,7 @@ import { BookmarkType, HistoryType, ImageType, TranslateType, VocabularyType, ma
 import { supabase } from "./supabase";
 import { getElAttribute, getElText } from "~/utils";
 import parse from "node-html-parser";
+import { PostgrestError } from "@supabase/supabase-js";
 
 
 // const baseUrl = "https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec";
@@ -448,4 +449,29 @@ export const deleteVocabulary = action(async (text: string) => {
         .delete()
         .match({ text: text });
     if (error) return error;
+});
+
+//edit vocabulary
+export const editVocabularyItem = action(async (formData: FormData) => {
+    "use server";
+    const textT = String(formData.get("text"));
+    const soundT = String(formData.get("sound"));
+    const classT = String(formData.get("class"));
+    const definitionsT = JSON.parse(String(formData.get("definitions")));
+    const phoneticT = String(formData.get("phonetic"));
+    const meaningT = String(formData.get("meaning"));
+    const numberT = Number(formData.get("number"));
+    const { error } = await supabase
+        .from(mapTables.vocabulary)
+        .update({
+            sound: soundT,
+            class: classT,
+            definitions: definitionsT,
+            phonetic: phoneticT,
+            meaning: meaningT,
+            number: numberT
+        })
+        .eq("text", textT)
+    if (error) return error;
+    return { message: "success" } as PostgrestError
 });

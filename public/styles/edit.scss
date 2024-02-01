@@ -1,0 +1,92 @@
+@import "./fonts.scss";
+@import "./mixins.scss";
+
+.edit {
+    width: 360px;
+    height: 100%;
+    padding-top: 0;
+    margin-bottom: 3px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .editHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        border-bottom: 1px solid #343434;
+        height: 25px;
+        padding: 3px;
+        background-color: $color-calendar-bg;
+
+        .editHeaderLeft {
+            .editHeaderText {
+                b {
+                    @include font('nyt-cheltenham', 13px, $color-black, 500, normal);
+                }
+            }
+        }
+
+        .editHeaderRight {
+            @include flex;
+
+            .editBtn {
+                @include baseButton(28px);
+            }
+        }
+    }
+
+    .editBody {
+        .handyEditContainer {
+            transform-origin: top;
+            @include baseBody($color-calendar-bg);
+        }
+
+        .editForm {
+            @include baseBody($color-calendar-bg);
+            margin: 3px 0;
+        }
+
+        .editInputGroup {
+            .editInput {
+                @include font("Roslindale", 13px, $color-black, 500, normal, 15px);
+                width: 100%;
+                padding: 6px 0;
+                background: $color-calendar-text-2;
+                outline: none;
+                border: none;
+                text-align: center
+            }
+
+            .editInputItem {
+                @include font("basier", 12px, $color-black, 400, normal, 15px);
+                width: 100%;
+                padding: 3px;
+                background: none;
+                outline: none;
+                border: none;
+                border-bottom: 1px solid $color-boder;
+                margin-bottom: 3px;
+            }
+
+            .editInputItemResult {
+                border: 1px solid $color-boder;
+                min-height: 90px;
+                resize: vertical;
+                margin: 3px 0;
+
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
+        }
+
+        .editSubmitBtn {
+            @include baseButton(42px);
+            font-size: 10px;
+        }
+    }
+}

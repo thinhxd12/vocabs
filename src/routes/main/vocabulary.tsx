@@ -153,7 +153,6 @@ const page: Component<{}> = (props) => {
 
   const deleteVocabularyAction = useAction(deleteVocabulary);
   const handleDeleteVocabulary = (text: string) => {
-    console.log(text);
     deleteVocabularyAction(text);
     setSearchTerm("");
     setDeleteBtnIndex(0);
@@ -162,11 +161,22 @@ const page: Component<{}> = (props) => {
   // -------------------DELETE END-------------------- //
   // -------------------EDIT START-------------------- //
   const [showEdit, setShowEdit] = createSignal(false);
+  const [editText, setEditText] = createSignal<VocabularyType>();
 
+  const handleCloseEdit = () => {
+    setShowEdit(false);
+  };
+
+  const handleEditVocabulary = (text: VocabularyType) => {
+    setEditText(text);
+    setShowEdit(true);
+    setSearchTerm("");
+    setSearchResult([]);
+  };
   // -------------------EDIT END-------------------- //
 
   return (
-    <>
+    <div class="vocabularyContainer">
       <div
         ref={divRef}
         tabIndex={0}
@@ -211,7 +221,7 @@ const page: Component<{}> = (props) => {
           />
         </div>
 
-        <div class="vocabularyContainer">
+        <div class="vocabularyContent">
           <div class="searchContainer">
             {/* Search result */}
             <Index each={searchResult()}>
@@ -225,8 +235,13 @@ const page: Component<{}> = (props) => {
                       <small>{i + 1}</small>
                       <span>{data().text}</span>
                     </span>
-                    <span class="itemNumb">{data().number}</span>
                   </span>
+                  <button
+                    class="itemNumb"
+                    onClick={() => handleEditVocabulary(data())}
+                  >
+                    {data().number}
+                  </button>
                   <Show when={i + 1 !== deleteBtnIndex()}>
                     <button
                       class="itemDeleteBtn"
@@ -350,9 +365,7 @@ const page: Component<{}> = (props) => {
           </button>
           <button class="vocabularyBtn">Ν</button>
           <button class="vocabularyBtn">Ε</button>
-          <button class="vocabularyBtn" onClick={() => setShowEdit(true)}>
-            Λ
-          </button>
+          <button class="vocabularyBtn">Λ</button>
           <button class="vocabularyBtn">Δ</button>
           <button class="vocabularyBtn">Χ</button>
           <button class="vocabularyBtn">Σ</button>
@@ -363,26 +376,24 @@ const page: Component<{}> = (props) => {
       {/* Edit */}
       <Presence>
         <Show when={showEdit()}>
-          <Motion
+          <Motion.div
+            class="editOverlay"
             initial={{
               opacity: 0,
-              y: -30,
             }}
             animate={{
               opacity: 1,
-              y: 0,
             }}
             exit={{
               opacity: 0,
-              y: 30,
             }}
             transition={{ duration: 0.3, easing: "ease-in-out" }}
           >
-            <Edit />
-          </Motion>
+            <Edit item={editText()} onClose={handleCloseEdit} />
+          </Motion.div>
         </Show>
       </Presence>
-    </>
+    </div>
   );
 };
 

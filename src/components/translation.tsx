@@ -96,7 +96,7 @@ const Translation = (props: Props) => {
       setShowAlert(true);
       setTimeout(() => {
         setShowAlert(false);
-      }, 6000);
+      }, 3000);
     }
   };
   //alert and insert text end
@@ -140,17 +140,9 @@ const Translation = (props: Props) => {
       <Presence>
         <Show when={showAlert()}>
           <Motion
-            initial={{
-              scale: 0,
-              transformOrigin: "top",
-            }}
-            animate={{
-              scale: 1,
-            }}
-            exit={{
-              scale: 0,
-              transformOrigin: "bottom",
-            }}
+            initial={{ x: 360 }}
+            animate={{ x: 0 }}
+            exit={{ x: 360 }}
             transition={{
               duration: 0.45,
               easing: [0.785, 0.135, 0.15, 0.86],
