@@ -90,7 +90,7 @@ const Translation = (props: Props) => {
       }, 6000);
     } else {
       setAlertObj({
-        message: `${newInsertText.text} has been added successfully!`,
+        message: `"${newInsertText.text}" has been added successfully!`,
         alert: false,
       });
       setShowAlert(true);

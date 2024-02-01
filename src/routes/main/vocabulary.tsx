@@ -28,6 +28,8 @@ import "/public/styles/quote.scss";
 import FlipCard from "~/components/flipcard";
 import { Motion, Presence } from "solid-motionone";
 import Translation from "~/components/translation";
+import { Portal } from "solid-js/web";
+import Edit from "~/components/edit";
 
 export const route = {
   load: () => {
@@ -156,209 +158,231 @@ const page: Component<{}> = (props) => {
     setSearchTerm("");
     setDeleteBtnIndex(0);
     setSearchResult([]);
-    // try {
-    //   deleteVocabularyItem({
-    //     id: item._id,
-    //     col: DEFAULT_COLLECTION.collection,
-    //   });
-    //   setSearchTerm("");
-    //   setConfirmDeleteId(0);
-    // } catch (error) {
-    //   console.error(error);
-    // }
   };
-
   // -------------------DELETE END-------------------- //
+  // -------------------EDIT START-------------------- //
+  const [showEdit, setShowEdit] = createSignal(false);
+
+  // -------------------EDIT END-------------------- //
 
   return (
-    <div
-      ref={divRef}
-      tabIndex={0}
-      onMouseOver={() => divRef?.focus()}
-      onKeyDown={onKeyDownDiv}
-      class="vocabulary"
-    >
-      <div class="flashCardContainer">
-        <FlipCard item={currentText()!} />
-      </div>
-
-      <div class="myInputContainer">
-        <img
-          src="/images/main/input-left-corner.png"
-          class="myInputLeftOrnament"
-        />
-        <div class="myInputCenterContent">
-          <Motion.div
-            class="myInputText"
-            animate={{
-              background: searchTerm().length > 0 ? "#272727" : "unset",
-            }}
-            transition={{ duration: 0.6, easing: "linear" }}
-          >
-            {searchTerm()}
-          </Motion.div>
-          <div class="myInputTransContent">
-            <input
-              class="myInput"
-              value={translateTerm()}
-              onInput={(e) => setTranslateTerm(e.target.value)}
-              onKeyDown={onKeyDownTrans}
-            />
-            <button class="myInputBtn" onClick={handleTranslate}>
-              <img src="/images/main/center.png" />
-            </button>
-          </div>
+    <>
+      <div
+        ref={divRef}
+        tabIndex={0}
+        onMouseOver={() => divRef?.focus()}
+        onKeyDown={onKeyDownDiv}
+        class="vocabulary"
+      >
+        <div class="flashCardContainer">
+          <FlipCard item={currentText()!} />
         </div>
-        <img
-          src="/images/main/input-right-corner.png"
-          class="myInputRightOrnament"
-        />
-      </div>
 
-      <div class="vocabularyContainer">
-        <div class="searchContainer">
-          {/* Search result */}
-          <Index each={searchResult()}>
-            {(data, i) => (
-              <div class="my-item">
-                <span class="itemText" onclick={() => handleRenderText(data())}>
-                  <span>
-                    <small>{i + 1}</small>
-                    <span>{data().text}</span>
+        <div class="myInputContainer">
+          <img
+            src="/images/main/input-left-corner.png"
+            class="myInputLeftOrnament"
+          />
+          <div class="myInputCenterContent">
+            <Motion.div
+              class="myInputText"
+              animate={{
+                background: searchTerm().length > 0 ? "#272727" : "unset",
+              }}
+              transition={{ duration: 0.6, easing: "linear" }}
+            >
+              {searchTerm()}
+            </Motion.div>
+            <div class="myInputTransContent">
+              <input
+                class="myInput"
+                value={translateTerm()}
+                onInput={(e) => setTranslateTerm(e.target.value)}
+                onKeyDown={onKeyDownTrans}
+              />
+              <button class="myInputBtn" onClick={handleTranslate}>
+                <img src="/images/main/center.png" />
+              </button>
+            </div>
+          </div>
+          <img
+            src="/images/main/input-right-corner.png"
+            class="myInputRightOrnament"
+          />
+        </div>
+
+        <div class="vocabularyContainer">
+          <div class="searchContainer">
+            {/* Search result */}
+            <Index each={searchResult()}>
+              {(data, i) => (
+                <div class="my-item">
+                  <span
+                    class="itemText"
+                    onclick={() => handleRenderText(data())}
+                  >
+                    <span>
+                      <small>{i + 1}</small>
+                      <span>{data().text}</span>
+                    </span>
+                    <span class="itemNumb">{data().number}</span>
                   </span>
-                  <span class="itemNumb">{data().number}</span>
-                </span>
-                <Show when={i + 1 !== deleteBtnIndex()}>
+                  <Show when={i + 1 !== deleteBtnIndex()}>
+                    <button
+                      class="itemDeleteBtn"
+                      onClick={() => setDeleteBtnIndex(i + 1)}
+                    ></button>
+                  </Show>
+                  <Show when={i + 1 === deleteBtnIndex()}>
+                    <button
+                      class="itemDeleteBtn"
+                      onClick={() => handleDeleteVocabulary(data().text)}
+                    >
+                      <OcTrash2 size={12} />
+                    </button>
+                  </Show>
+                </div>
+              )}
+            </Index>
+            {/* Quote content */}
+            <Show when={showQuotes()}>
+              <div class="quoteContainer">
+                <div class="quoteHeader">
+                  <div class="quoteHeaderLeft">
+                    <button class="quoteBtn" onclick={() => getQuote(-1)}>
+                      <OcChevronleft2 size={17} />
+                    </button>
+                    <button
+                      class={
+                        currentQuote.check
+                          ? "quoteBtn quoteBtnActive"
+                          : "quoteBtn"
+                      }
+                      onclick={() => checkQuote(!currentQuote.check)}
+                    >
+                      {currentQuote.check ? (
+                        <OcStarfill2 size={17} color="#ffc107" />
+                      ) : (
+                        <OcStar2 size={17} />
+                      )}
+                    </button>
+                    <button class="quoteBtn" onclick={() => getQuote(1)}>
+                      <OcChevronright2 size={17} />
+                    </button>
+                    <button
+                      class="quoteBtn"
+                      onclick={() => copyQuoteToClipboard(currentQuote.value)}
+                    >
+                      <OcCopy2 size={17} />
+                    </button>
+                  </div>
                   <button
-                    class="itemDeleteBtn"
-                    onClick={() => setDeleteBtnIndex(i + 1)}
-                  ></button>
-                </Show>
-                <Show when={i + 1 === deleteBtnIndex()}>
-                  <button
-                    class="itemDeleteBtn"
-                    onClick={() => handleDeleteVocabulary(data().text)}
+                    class="quoteBtnClose"
+                    onClick={() => setShowQuotes(false)}
                   >
-                    <OcTrash2 size={12} />
-                  </button>
-                </Show>
-              </div>
-            )}
-          </Index>
-          {/* Quote content */}
-          <Show when={showQuotes()}>
-            <div class="quoteContainer">
-              <div class="quoteHeader">
-                <div class="quoteHeaderLeft">
-                  <button class="quoteBtn" onclick={() => getQuote(-1)}>
-                    <OcChevronleft2 size={17} />
-                  </button>
-                  <button
-                    class={
-                      currentQuote.check
-                        ? "quoteBtn quoteBtnActive"
-                        : "quoteBtn"
-                    }
-                    onclick={() => checkQuote(!currentQuote.check)}
-                  >
-                    {currentQuote.check ? (
-                      <OcStarfill2 size={17} color="#ffc107" />
-                    ) : (
-                      <OcStar2 size={17} />
-                    )}
-                  </button>
-                  <button class="quoteBtn" onclick={() => getQuote(1)}>
-                    <OcChevronright2 size={17} />
-                  </button>
-                  <button
-                    class="quoteBtn"
-                    onclick={() => copyQuoteToClipboard(currentQuote.value)}
-                  >
-                    <OcCopy2 size={17} />
+                    <OcX2 size={12} />
                   </button>
                 </div>
-                <button
-                  class="quoteBtnClose"
-                  onClick={() => setShowQuotes(false)}
+                <div class="quoteBody">
+                  <span class="quoteDropCap">
+                    {currentQuote.value.slice(0, 1)}
+                  </span>
+                  <span>{currentQuote.value.slice(1)}</span>
+                </div>
+              </div>
+            </Show>
+            {/* Definition */}
+            <Presence>
+              <Show when={showDefinitions()}>
+                <Motion
+                  initial={{
+                    opacity: 0,
+                    y: -30,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: 30,
+                  }}
+                  transition={{ duration: 0.3, easing: "ease-in-out" }}
                 >
-                  <OcX2 size={12} />
-                </button>
-              </div>
-              <div class="quoteBody">
-                <span class="quoteDropCap">
-                  {currentQuote.value.slice(0, 1)}
-                </span>
-                <span>{currentQuote.value.slice(1)}</span>
-              </div>
-            </div>
-          </Show>
-          {/* Definition */}
-          <Presence>
-            <Show when={showDefinitions()}>
-              <Motion
-                initial={{
-                  opacity: 0,
-                  y: -30,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  y: 30,
-                }}
-                transition={{ duration: 0.3, easing: "ease-in-out" }}
-              >
-                <Definition
-                  item={currentText()!}
-                  onClose={handleCloseDefinition}
-                />
-              </Motion>
-            </Show>
-          </Presence>
-          {/* Translation */}
-          <Presence>
-            <Show when={showTranslate()}>
-              <Motion
-                initial={{
-                  opacity: 0,
-                  y: -30,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  y: 30,
-                }}
-                transition={{ duration: 0.3, easing: "ease-in-out" }}
-              >
-                <Translation
-                  item={translateText()!}
-                  onClose={handleCloseTranslation}
-                />
-              </Motion>
-            </Show>
-          </Presence>
+                  <Definition
+                    item={currentText()!}
+                    onClose={handleCloseDefinition}
+                  />
+                </Motion>
+              </Show>
+            </Presence>
+            {/* Translation */}
+            <Presence>
+              <Show when={showTranslate()}>
+                <Motion
+                  initial={{
+                    opacity: 0,
+                    y: -30,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: 30,
+                  }}
+                  transition={{ duration: 0.3, easing: "ease-in-out" }}
+                >
+                  <Translation
+                    item={translateText()!}
+                    onClose={handleCloseTranslation}
+                  />
+                </Motion>
+              </Show>
+            </Presence>
+          </div>
+        </div>
+
+        <div class="vocabularyBtnContainer">
+          <button class="vocabularyBtn" onClick={() => getQuote(0)}>
+            Π
+          </button>
+          <button class="vocabularyBtn">Ν</button>
+          <button class="vocabularyBtn">Ε</button>
+          <button class="vocabularyBtn" onClick={() => setShowEdit(true)}>
+            Λ
+          </button>
+          <button class="vocabularyBtn">Δ</button>
+          <button class="vocabularyBtn">Χ</button>
+          <button class="vocabularyBtn">Σ</button>
+          <button class="vocabularyBtn">Ξ</button>
+          <button class="vocabularyBtn timerBtn timerBtnActive">6m</button>
         </div>
       </div>
-
-      <div class="vocabularyBtnContainer">
-        <button class="vocabularyBtn" onClick={() => getQuote(0)}>
-          Π
-        </button>
-        <button class="vocabularyBtn">Ν</button>
-        <button class="vocabularyBtn">Ε</button>
-        <button class="vocabularyBtn">Λ</button>
-        <button class="vocabularyBtn">Δ</button>
-        <button class="vocabularyBtn">Χ</button>
-        <button class="vocabularyBtn">Σ</button>
-        <button class="vocabularyBtn">Ξ</button>
-        <button class="vocabularyBtn timerBtn timerBtnActive">6m</button>
-      </div>
-    </div>
+      {/* Edit */}
+      <Presence>
+        <Show when={showEdit()}>
+          <Motion
+            initial={{
+              opacity: 0,
+              y: -30,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+            }}
+            exit={{
+              opacity: 0,
+              y: 30,
+            }}
+            transition={{ duration: 0.3, easing: "ease-in-out" }}
+          >
+            <Edit />
+          </Motion>
+        </Show>
+      </Presence>
+    </>
   );
 };
 
