@@ -63,7 +63,7 @@ const Edit = (props: Props) => {
   });
   const [visible, setVisible] = createSignal([true, true, true]);
 
-  const getTextDataAmericaAction = useAction(getTextDataAmerica);
+  // const getTextDataAmericaAction = useAction(getTextDataAmerica);
   const getTextDataEnglishAction = useAction(getTextDataEnglish);
   const getTextDataCambridgeAction = useAction(getTextDataCambridge);
 
@@ -85,7 +85,7 @@ const Edit = (props: Props) => {
 
   createEffect(async () => {
     if (props.item) {
-      const data1 = await getTextDataAmericaAction(props.item?.text);
+      const data1 = await getTextDataAmerica(props.item?.text);
       const data2 = await getTextDataEnglishAction(props.item?.text);
       const data3 = await getTextDataCambridgeAction(props.item?.text);
       setDefinitionData({ america: data1, english: data2, cambridge: data3 });

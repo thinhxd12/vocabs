@@ -203,75 +203,75 @@ export const insertNewVocabularyItem = action(async (obj: VocabularyType) => {
 });
 
 //get data definition from oxfox america
-export const getTextDataAmerica = action(async (text: string) => {
-    "use server";
-    const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-    const result: VocabularyType = {
-        text: "",
-        sound: "",
-        class: "",
-        definitions: [],
-        phonetic: "",
-        meaning: "",
-        number: 240,
-    };
-    const newText = text.length > 4 ? text.slice(0, -2) : text;
-    const regText = new RegExp(`(${newText}\\w*)`, "gi");
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const pageImgHtml = await response.text();
-        const doc = parse(pageImgHtml);
+// export const getTextDataAmerica = action(async (text: string) => {
+//     "use server";
+//     const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+//     const result: VocabularyType = {
+//         text: "",
+//         sound: "",
+//         class: "",
+//         definitions: [],
+//         phonetic: "",
+//         meaning: "",
+//         number: 240,
+//     };
+//     const newText = text.length > 4 ? text.slice(0, -2) : text;
+//     const regText = new RegExp(`(${newText}\\w*)`, "gi");
+//     try {
+//         const response = await fetch(url);
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+//         const pageImgHtml = await response.text();
+//         const doc = parse(pageImgHtml);
 
-        result.sound = getElAttribute(
-            doc,
-            ".audio_play_button,.pron-us",
-            "data-src-mp3"
-        );
-        result.text = text;
-        result.class = getElText(doc, ".pos", "");
-        const img = getElAttribute(doc, "img.thumb", "src");
-        const defArr: string[] = [];
-        doc
-            .querySelector(".sn-gs")
-            ?.querySelectorAll(".sn-g")
-            ?.forEach((item, index) => {
-                let def = "";
-                const label = getElText(item, ".label-g", "");
-                const definition = getElText(item, ".def", "");
-                if (img !== "" && index == 0) {
-                    def += `<span class="thumb_img"><img class="thumb" src="${img}"/><span><span class="def">${definition || label}</span>`;
-                } else def += `<span class="def">${definition || label}</span>`;
-                const xr = item.querySelector(".xr-gs");
-                if (xr) {
-                    const textNodes = Array.from(xr.childNodes)
-                        .map((item, index) => {
-                            if (index === 0) {
-                                return `<span class="xr-gs">${item.textContent}`;
-                            }
-                            if (index === 1) {
-                                return `${item.textContent}<small>`;
-                            }
-                            return item.textContent?.toLowerCase();
-                        })
-                        .join("");
-                    def += `${textNodes}</small></span>`;
-                }
-                const meaning = getElText(item, ".x-gs .x", "");
-                if (meaning !== "") {
-                    const meaningX = meaning.replace(regText, `<b>$1</b>`);
-                    def += `<span class="x">${meaningX}</span></span>`;
-                }
-                defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
-            });
-        result.definitions = defArr;
-        return result;
-    } catch (error) {
-        console.error(error);
-    }
-});
+//         result.sound = getElAttribute(
+//             doc,
+//             ".audio_play_button,.pron-us",
+//             "data-src-mp3"
+//         );
+//         result.text = text;
+//         result.class = getElText(doc, ".pos", "");
+//         const img = getElAttribute(doc, "img.thumb", "src");
+//         const defArr: string[] = [];
+//         doc
+//             .querySelector(".sn-gs")
+//             ?.querySelectorAll(".sn-g")
+//             ?.forEach((item, index) => {
+//                 let def = "";
+//                 const label = getElText(item, ".label-g", "");
+//                 const definition = getElText(item, ".def", "");
+//                 if (img !== "" && index == 0) {
+//                     def += `<span class="thumb_img"><img class="thumb" src="${img}"/><span><span class="def">${definition || label}</span>`;
+//                 } else def += `<span class="def">${definition || label}</span>`;
+//                 const xr = item.querySelector(".xr-gs");
+//                 if (xr) {
+//                     const textNodes = Array.from(xr.childNodes)
+//                         .map((item, index) => {
+//                             if (index === 0) {
+//                                 return `<span class="xr-gs">${item.textContent}`;
+//                             }
+//                             if (index === 1) {
+//                                 return `${item.textContent}<small>`;
+//                             }
+//                             return item.textContent?.toLowerCase();
+//                         })
+//                         .join("");
+//                     def += `${textNodes}</small></span>`;
+//                 }
+//                 const meaning = getElText(item, ".x-gs .x", "");
+//                 if (meaning !== "") {
+//                     const meaningX = meaning.replace(regText, `<b>$1</b>`);
+//                     def += `<span class="x">${meaningX}</span></span>`;
+//                 }
+//                 defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
+//             });
+//         result.definitions = defArr;
+//         return result;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// });
 
 //get data definition from oxfox english
 export const getTextDataEnglish = action(async (text: string) => {
@@ -440,6 +440,158 @@ export const getOedSound = action(async (text: string) => {
     const altMp3 = `https://ssl.gstatic.com/dictionary/static/sounds/20220808/${text}--_us_1.mp3`;
     return mp3 || altMp3;
 });
+
+
+
+export const getAllTextDefinitions = action(async (text: string) => {
+    "use server";
+    let resultData = {
+        america: {} as VocabularyType,
+        english: {} as VocabularyType,
+        cambridge: {} as VocabularyType,
+    }
+
+
+})
+
+const getTextDataAmerica1 = async (text: string) => {
+    "use server";
+    const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+    const result: VocabularyType = {
+        text: "",
+        sound: "",
+        class: "",
+        definitions: [],
+        phonetic: "",
+        meaning: "",
+        number: 240,
+    };
+    const newText = text.length > 4 ? text.slice(0, -2) : text;
+    const regText = new RegExp(`(${newText}\\w*)`, "gi");
+    const response = await fetch(url);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const pageImgHtml = await response.text();
+    const doc = parse(pageImgHtml);
+
+    result.sound = getElAttribute(
+        doc,
+        ".audio_play_button,.pron-us",
+        "data-src-mp3"
+    );
+    result.text = text;
+    result.class = getElText(doc, ".pos", "");
+    const img = getElAttribute(doc, "img.thumb", "src");
+    const defArr: string[] = [];
+    doc
+        .querySelector(".sn-gs")
+        ?.querySelectorAll(".sn-g")
+        ?.forEach((item, index) => {
+            let def = "";
+            const label = getElText(item, ".label-g", "");
+            const definition = getElText(item, ".def", "");
+            if (img !== "" && index == 0) {
+                def += `<span class="thumb_img"><img class="thumb" src="${img}"/><span><span class="def">${definition || label}</span>`;
+            } else def += `<span class="def">${definition || label}</span>`;
+            const xr = item.querySelector(".xr-gs");
+            if (xr) {
+                const textNodes = Array.from(xr.childNodes)
+                    .map((item, index) => {
+                        if (index === 0) {
+                            return `<span class="xr-gs">${item.textContent}`;
+                        }
+                        if (index === 1) {
+                            return `${item.textContent}<small>`;
+                        }
+                        return item.textContent?.toLowerCase();
+                    })
+                    .join("");
+                def += `${textNodes}</small></span>`;
+            }
+            const meaning = getElText(item, ".x-gs .x", "");
+            if (meaning !== "") {
+                const meaningX = meaning.replace(regText, `<b>$1</b>`);
+                def += `<span class="x">${meaningX}</span></span>`;
+            }
+            defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
+        });
+    result.definitions = { ...defArr };
+    return { ...result };
+}
+
+export async function getTextDataAmerica(text: string) {
+    "use server";
+    try {
+        const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+        const result: VocabularyType = {
+            text: "",
+            sound: "",
+            class: "",
+            definitions: [],
+            phonetic: "",
+            meaning: "",
+            number: 240,
+        };
+        const newText = text.length > 4 ? text.slice(0, -2) : text;
+        const regText = new RegExp(`(${newText}\\w*)`, "gi");
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const pageImgHtml = await response.text();
+        const doc = parse(pageImgHtml);
+
+        result.sound = getElAttribute(
+            doc,
+            ".audio_play_button,.pron-us",
+            "data-src-mp3"
+        );
+        result.text = text;
+        result.class = getElText(doc, ".pos", "");
+        const img = getElAttribute(doc, "img.thumb", "src");
+        const defArr: string[] = [];
+        doc
+            .querySelector(".sn-gs")
+            ?.querySelectorAll(".sn-g")
+            ?.forEach((item, index) => {
+                let def = "";
+                const label = getElText(item, ".label-g", "");
+                const definition = getElText(item, ".def", "");
+                if (img !== "" && index == 0) {
+                    def += `<span class="thumb_img"><img class="thumb" src="${img}"/><span><span class="def">${definition || label}</span>`;
+                } else def += `<span class="def">${definition || label}</span>`;
+                const xr = item.querySelector(".xr-gs");
+                if (xr) {
+                    const textNodes = Array.from(xr.childNodes)
+                        .map((item, index) => {
+                            if (index === 0) {
+                                return `<span class="xr-gs">${item.textContent}`;
+                            }
+                            if (index === 1) {
+                                return `${item.textContent}<small>`;
+                            }
+                            return item.textContent?.toLowerCase();
+                        })
+                        .join("");
+                    def += `${textNodes}</small></span>`;
+                }
+                const meaning = getElText(item, ".x-gs .x", "");
+                if (meaning !== "") {
+                    const meaningX = meaning.replace(regText, `<b>$1</b>`);
+                    def += `<span class="x">${meaningX}</span></span>`;
+                }
+                defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
+            });
+        result.definitions = defArr;
+        return result;
+    } catch (error) {
+        // Handle any errors here
+        console.error(error);
+    }
+}
+
+
 
 //delete vocabulary
 export const deleteVocabulary = action(async (text: string) => {
