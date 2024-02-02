@@ -4,7 +4,6 @@ import { supabase } from "./supabase";
 import { getElAttribute, getElText } from "~/utils";
 import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
-import axios from "axios";
 
 // const baseUrl = "https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec";
 const baseUrl = "https://script.google.com/macros/s/AKfycbyyx7SmjI3iSF4uFVTtfVDYxN_5xL7jntJvnKVlaSNgXS8fWDdP_6iz7DgGogEtiXGR/exec";
@@ -454,11 +453,15 @@ export const getTextDataAmerica = action(async (text: string) => {
         // const response = await axios.get("https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract");
         // const response = await fetch(mockUrl, { redirect: 'manual' });
         const response = await fetch(url);
+        if (response.status === 302) {
+
+            const urlget = response.headers.get("location");
+
+            return urlget;
+
+        }
+
         // const res = response.text();
-
-        const urlget = response.url;
-
-        return urlget;
 
 
         // if (nextUrl) {
