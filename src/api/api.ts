@@ -451,14 +451,14 @@ export const getTextDataAmerica = action(async (text: string) => {
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
     try {
-        const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-        // const mockUrl = "https://mywebapp.abcworker.workers.dev/https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract"
+        // const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+        const mockUrl = "https://www.oxfordlearnersdictionaries.com/definition/american_english/hello?q=hello"
         // const response = await fetch(mockUrl, { redirect: 'manual' });
         // const nextUrl = response.headers.get("location");
         // const urrrl = "https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract";
         // const response = await axios.get("https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract");
-        // const response = await fetch(mockUrl, { redirect: 'manual' });
-        const response = await fetch(url, { headers: CORS_HEADERS });
+        const response = await fetch(mockUrl);
+        // const response = await fetch(url, { headers: CORS_HEADERS });
 
 
         const res = response.text();
