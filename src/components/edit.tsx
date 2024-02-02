@@ -86,7 +86,8 @@ const Edit = (props: Props) => {
 
   createEffect(() => {
     if (textDataAmerica.result) {
-      setInsertText(textDataAmerica.result);
+      // setInsertText(textDataAmerica.result);
+      console.log(textDataAmerica.result);
     }
   });
 
@@ -227,12 +228,12 @@ const Edit = (props: Props) => {
           </button>
         </form>
 
-        <Show when={true}>
+        {/* <Show when={true}>
           <Definition
             item={insertText}
             // onCheck={() => handleCheck(0, definitionData.america)}
           />
-        </Show>
+        </Show> */}
 
         {/* <Show when={visible()[0]}>
           <Definition

@@ -449,12 +449,12 @@ export const getTextDataAmerica = action(async (text: string) => {
         const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
         const response = await fetch(url);
         const pageImgHtml = await response.text();
-        const doc = parse(pageImgHtml);
+        // const doc = parse(pageImgHtml);
 
-        const soundT = getElAttribute(doc, ".audio_play_button,.pron-us", "data-src-mp3");
-        const classT = getElText(doc, ".pos", "");
-        const img = getElAttribute(doc, "img.thumb", "src");
-        let definitionsT: string[] = [];
+        // const soundT = getElAttribute(doc, ".audio_play_button,.pron-us", "data-src-mp3");
+        // const classT = getElText(doc, ".pos", "");
+        // const img = getElAttribute(doc, "img.thumb", "src");
+        // let definitionsT: string[] = [];
         // doc.querySelector(".sn-gs")
         //     ?.querySelectorAll(".sn-g")
         //     ?.forEach((item, index) => {
@@ -487,15 +487,16 @@ export const getTextDataAmerica = action(async (text: string) => {
         //         definitionsT.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
         //     });
 
-        return {
-            text: text,
-            sound: soundT,
-            class: classT,
-            definitions: definitionsT,
-            phonetic: "",
-            meaning: "",
-            number: 240
-        } as VocabularyType;
+        // return {
+        //     text: text,
+        //     sound: soundT,
+        //     class: classT,
+        //     definitions: definitionsT,
+        //     phonetic: "",
+        //     meaning: "",
+        //     number: 240
+        // } as VocabularyType;
+        return pageImgHtml;
     } catch (error) {
         console.error(error);
     }
