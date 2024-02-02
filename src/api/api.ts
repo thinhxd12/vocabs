@@ -491,7 +491,6 @@ export const getTextDataAmerica = action(async (text: string) => {
                 definitionsT.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
             });
 
-
         return {
             text: text,
             sound: soundT,
