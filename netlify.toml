@@ -1,5 +1,4 @@
- [[redirects]]
-  from = "https://www.oxfordlearnersdictionaries.com/search/american_english/*"
-  to = "https://www.oxfordlearnersdictionaries.com/definition/american_english/*"
-  status = 302
-  force = true
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"

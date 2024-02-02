@@ -440,6 +440,12 @@ export const getOedSound = action(async (text: string) => {
     return mp3 || altMp3;
 });
 
+const CORS_HEADERS = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': '*',
+};
+
 export const getTextDataAmerica = action(async (text: string) => {
     "use server";
     const newText = text.length > 4 ? text.slice(0, -2) : text;
@@ -452,17 +458,12 @@ export const getTextDataAmerica = action(async (text: string) => {
         // const urrrl = "https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract";
         // const response = await axios.get("https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract");
         // const response = await fetch(mockUrl, { redirect: 'manual' });
-        const response = await fetch(url);
-        if (response.status === 302) {
+        const response = await fetch(url, { headers: CORS_HEADERS });
 
-            const urlget = response.headers.get("location");
 
-            return urlget;
+        const res = response.text();
 
-        }
-
-        // const res = response.text();
-
+        return res;
 
         // if (nextUrl) {
         // const nextResponse = await fetch(nextUrl);
