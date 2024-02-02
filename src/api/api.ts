@@ -481,8 +481,12 @@ export const getTextDataAmerica = action(async (id: string) => {
 export const getTextDataCambridge = action(async (text: string) => {
     "use server";
     const url = `https://dictionary.cambridge.org/dictionary/english/${text}`;
-    const request = new Request(url);
-    const response = await fetch(request);
+
+    const response = await fetch(url, {
+        headers: {
+            "Content-Type": "application/json",
+        }, method: "GET"
+    });
     const html = await response.text();
     return html;
 }, "getTextDataCambridge");
