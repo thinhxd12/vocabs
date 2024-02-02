@@ -42,7 +42,7 @@ type Props = {
 
 const Edit = (props: Props) => {
   const [insertText, setInsertText] = createStore<VocabularyType>({
-    text: "",
+    text: props.item!.text,
     sound: "",
     class: "",
     definitions: props.item!.definitions,
@@ -64,6 +64,8 @@ const Edit = (props: Props) => {
   const [visible, setVisible] = createSignal([true, true, true]);
 
   const getTextDataAmericaAction = useAction(getTextDataAmerica);
+  const americaData = useSubmission(getTextDataAmerica);
+
   // const getTextDataEnglishAction = useAction(getTextDataEnglish);
   // const getTextDataCambridgeAction = useAction(getTextDataCambridge);
 
@@ -84,57 +86,41 @@ const Edit = (props: Props) => {
   const [clicked, setClicked] = createSignal<boolean>(false);
 
   createEffect(() => {
-    // if (props.item) {
-    //   const data1 = await getTextDataAmerica(props.item?.text);
-    //   const data2 = await getTextDataEnglishAction(props.item?.text);
-    //   const data3 = await getTextDataCambridgeAction(props.item?.text);
-    //   setDefinitionData({ america: data1, english: data2, cambridge: data3 });
-    // }
-    // if (props.item) {
-    // getAllDataText("hello");
-    // }
-    getTextDataAmericaAction(props.item?.text);
+    const propText = { ...insertText };
+    getTextDataAmericaAction(propText.text);
   });
 
-  const americaData = useSubmission(getTextDataAmerica);
-
-  const getAllDataText = async (text: string) => {
-    // const result = await getTextDataAmericaAction(text);
-    // setDefinitionData({ america: result });
-    getTextDataAmericaAction(text);
-    // setDefinitionData({ america: americaData.result });
-  };
-
-  createEffect(() => {
-    if (editError.result && clicked()) {
-      if (editError.result.message === "success") {
-        setAlertObj({
-          message: "Edit successfully!",
-          alert: false,
-        });
-        setShowAlert(true);
-        const timer1 = setTimeout(() => {
-          setShowAlert(false);
-          setClicked(false);
-          props.onClose(true);
-        }, 3000);
-        onCleanup(() => {
-          clearTimeout(timer1);
-        });
-      } else {
-        setAlertObj({ message: editError.result?.message, alert: true });
-        setShowAlert(true);
-        //make timeout 3s close alert
-        const timer2 = setTimeout(() => {
-          setShowAlert(false);
-          setClicked(false);
-        }, 6000);
-        onCleanup(() => {
-          clearTimeout(timer2);
-        });
-      }
-    }
-  });
+  // effect alert
+  // createEffect(() => {
+  //   if (editError.result && clicked()) {
+  //     if (editError.result.message === "success") {
+  //       setAlertObj({
+  //         message: "Edit successfully!",
+  //         alert: false,
+  //       });
+  //       setShowAlert(true);
+  //       const timer1 = setTimeout(() => {
+  //         setShowAlert(false);
+  //         setClicked(false);
+  //         props.onClose(true);
+  //       }, 3000);
+  //       onCleanup(() => {
+  //         clearTimeout(timer1);
+  //       });
+  //     } else {
+  //       setAlertObj({ message: editError.result?.message, alert: true });
+  //       setShowAlert(true);
+  //       //make timeout 3s close alert
+  //       const timer2 = setTimeout(() => {
+  //         setShowAlert(false);
+  //         setClicked(false);
+  //       }, 6000);
+  //       onCleanup(() => {
+  //         clearTimeout(timer2);
+  //       });
+  //     }
+  //   }
+  // });
 
   return (
     <div class="edit" tabIndex={1}>

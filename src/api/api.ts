@@ -446,6 +446,7 @@ export const getTextDataAmerica = action(async (text: string) => {
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
     const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+    // const url = `https://www.oxfordlearnersdictionaries.com/definition/american_english/hello?q=${text}`;
     try {
         const response = await fetch(url);
         if (!response.ok) {
