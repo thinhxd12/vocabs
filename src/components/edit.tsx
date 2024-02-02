@@ -63,9 +63,9 @@ const Edit = (props: Props) => {
   });
   const [visible, setVisible] = createSignal([true, true, true]);
 
-  // const getTextDataAmericaAction = useAction(getTextDataAmerica);
-  const getTextDataEnglishAction = useAction(getTextDataEnglish);
-  const getTextDataCambridgeAction = useAction(getTextDataCambridge);
+  const getTextDataAmericaAction = useAction(getTextDataAmerica);
+  // const getTextDataEnglishAction = useAction(getTextDataEnglish);
+  // const getTextDataCambridgeAction = useAction(getTextDataCambridge);
 
   const handleCheck = (index: number, data: VocabularyType) => {
     setInsertText(data);
@@ -84,13 +84,21 @@ const Edit = (props: Props) => {
   const [clicked, setClicked] = createSignal<boolean>(false);
 
   createEffect(async () => {
+    // if (props.item) {
+    //   const data1 = await getTextDataAmerica(props.item?.text);
+    //   const data2 = await getTextDataEnglishAction(props.item?.text);
+    //   const data3 = await getTextDataCambridgeAction(props.item?.text);
+    //   setDefinitionData({ america: data1, english: data2, cambridge: data3 });
+    // }
     if (props.item) {
-      const data1 = await getTextDataAmerica(props.item?.text);
-      const data2 = await getTextDataEnglishAction(props.item?.text);
-      const data3 = await getTextDataCambridgeAction(props.item?.text);
-      setDefinitionData({ america: data1, english: data2, cambridge: data3 });
+      getAllDataText(props.item.text);
     }
   });
+
+  const getAllDataText = async (text: string) => {
+    const result = await getTextDataAmericaAction(text);
+    setDefinitionData({ america: result });
+  };
 
   createEffect(() => {
     if (editError.result && clicked()) {
@@ -268,7 +276,7 @@ const Edit = (props: Props) => {
             onCheck={() => handleCheck(0, definitionData.america)}
           />
         </Show>
-        <Show when={visible()[1]}>
+        {/* <Show when={visible()[1]}>
           <Definition
             item={definitionData.english}
             onCheck={() => handleCheck(1, definitionData.english)}
@@ -279,7 +287,7 @@ const Edit = (props: Props) => {
             item={definitionData.cambridge}
             onCheck={() => handleCheck(2, definitionData.cambridge)}
           />
-        </Show>
+        </Show> */}
       </div>
     </div>
   );

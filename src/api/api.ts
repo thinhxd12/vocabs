@@ -441,100 +441,12 @@ export const getOedSound = action(async (text: string) => {
     return mp3 || altMp3;
 });
 
-
-
-export const getAllTextDefinitions = action(async (text: string) => {
+export const getTextDataAmerica = action(async (text: string) => {
     "use server";
-    let resultData = {
-        america: {} as VocabularyType,
-        english: {} as VocabularyType,
-        cambridge: {} as VocabularyType,
-    }
-
-
-})
-
-const getTextDataAmerica1 = async (text: string) => {
-    "use server";
-    const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-    const result: VocabularyType = {
-        text: "",
-        sound: "",
-        class: "",
-        definitions: [],
-        phonetic: "",
-        meaning: "",
-        number: 240,
-    };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
-    const response = await fetch(url);
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    const pageImgHtml = await response.text();
-    const doc = parse(pageImgHtml);
-
-    result.sound = getElAttribute(
-        doc,
-        ".audio_play_button,.pron-us",
-        "data-src-mp3"
-    );
-    result.text = text;
-    result.class = getElText(doc, ".pos", "");
-    const img = getElAttribute(doc, "img.thumb", "src");
-    const defArr: string[] = [];
-    doc
-        .querySelector(".sn-gs")
-        ?.querySelectorAll(".sn-g")
-        ?.forEach((item, index) => {
-            let def = "";
-            const label = getElText(item, ".label-g", "");
-            const definition = getElText(item, ".def", "");
-            if (img !== "" && index == 0) {
-                def += `<span class="thumb_img"><img class="thumb" src="${img}"/><span><span class="def">${definition || label}</span>`;
-            } else def += `<span class="def">${definition || label}</span>`;
-            const xr = item.querySelector(".xr-gs");
-            if (xr) {
-                const textNodes = Array.from(xr.childNodes)
-                    .map((item, index) => {
-                        if (index === 0) {
-                            return `<span class="xr-gs">${item.textContent}`;
-                        }
-                        if (index === 1) {
-                            return `${item.textContent}<small>`;
-                        }
-                        return item.textContent?.toLowerCase();
-                    })
-                    .join("");
-                def += `${textNodes}</small></span>`;
-            }
-            const meaning = getElText(item, ".x-gs .x", "");
-            if (meaning !== "") {
-                const meaningX = meaning.replace(regText, `<b>$1</b>`);
-                def += `<span class="x">${meaningX}</span></span>`;
-            }
-            defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
-        });
-    result.definitions = { ...defArr };
-    return { ...result };
-}
-
-export async function getTextDataAmerica(text: string) {
-    "use server";
+    const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
     try {
-        const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-        const result: VocabularyType = {
-            text: "",
-            sound: "",
-            class: "",
-            definitions: [],
-            phonetic: "",
-            meaning: "",
-            number: 240,
-        };
-        const newText = text.length > 4 ? text.slice(0, -2) : text;
-        const regText = new RegExp(`(${newText}\\w*)`, "gi");
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -542,17 +454,11 @@ export async function getTextDataAmerica(text: string) {
         const pageImgHtml = await response.text();
         const doc = parse(pageImgHtml);
 
-        result.sound = getElAttribute(
-            doc,
-            ".audio_play_button,.pron-us",
-            "data-src-mp3"
-        );
-        result.text = text;
-        result.class = getElText(doc, ".pos", "");
+        const soundT = getElAttribute(doc, ".audio_play_button,.pron-us", "data-src-mp3");
+        const classT = getElText(doc, ".pos", "");
         const img = getElAttribute(doc, "img.thumb", "src");
-        const defArr: string[] = [];
-        doc
-            .querySelector(".sn-gs")
+        let definitionsT: string[] = [];
+        doc.querySelector(".sn-gs")
             ?.querySelectorAll(".sn-g")
             ?.forEach((item, index) => {
                 let def = "";
@@ -581,15 +487,23 @@ export async function getTextDataAmerica(text: string) {
                     const meaningX = meaning.replace(regText, `<b>$1</b>`);
                     def += `<span class="x">${meaningX}</span></span>`;
                 }
-                defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
+                definitionsT.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
             });
-        result.definitions = defArr;
-        return result;
+
+
+        return {
+            text: text,
+            sound: soundT,
+            class: classT,
+            definitions: definitionsT,
+            phonetic: "",
+            meaning: "",
+            number: 240
+        } as VocabularyType;
     } catch (error) {
-        // Handle any errors here
         console.error(error);
     }
-}
+});
 
 
 
