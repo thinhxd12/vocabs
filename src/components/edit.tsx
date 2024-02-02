@@ -83,16 +83,16 @@ const Edit = (props: Props) => {
 
   const [clicked, setClicked] = createSignal<boolean>(false);
 
-  createEffect(async () => {
+  createEffect(() => {
     // if (props.item) {
     //   const data1 = await getTextDataAmerica(props.item?.text);
     //   const data2 = await getTextDataEnglishAction(props.item?.text);
     //   const data3 = await getTextDataCambridgeAction(props.item?.text);
     //   setDefinitionData({ america: data1, english: data2, cambridge: data3 });
     // }
-    if (props.item) {
-      getAllDataText(props.item.text);
-    }
+    // if (props.item) {
+    getAllDataText("hello");
+    // }
   });
 
   const getAllDataText = async (text: string) => {
