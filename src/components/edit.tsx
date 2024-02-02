@@ -86,10 +86,16 @@ const Edit = (props: Props) => {
 
   const [clicked, setClicked] = createSignal<boolean>(false);
 
-  createEffect(() => {
+  // createEffect(() => {
+  // });
+  
+  onMount(()=>{
     setCurrentText(props.item.text);
     getTextDataAmericaAction(currentText());
-  });
+  })
+
+  console.log(americaData.result);
+  
 
   // effect alert
   // createEffect(() => {
