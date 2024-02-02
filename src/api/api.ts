@@ -25,7 +25,7 @@ async function fetchAPIsheet(path: string) {
     }
 }
 
-export const getBookmarkText = async (id: number): Promise<BookmarkType> => {
+export const getBookmarkText = async (id: number) => {
     return fetchAPIsheet(`getBookmark&num=${id}`);
 };
 
@@ -447,7 +447,7 @@ export const getTextDataAmerica = action(async (text: string) => {
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
     try {
         const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-        const mockUrl = "https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract"
+        const mockUrl = "https://mywebapp.abcworker.workers.dev/https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract"
         const response = await fetch(mockUrl, { redirect: 'manual' });
         const nextUrl = response.headers.get("location");
         // if (nextUrl) {
