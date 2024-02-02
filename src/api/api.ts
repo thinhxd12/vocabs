@@ -446,82 +446,33 @@ const CORS_HEADERS = {
     'Access-Control-Allow-Methods': '*',
 };
 
+
+async function fetchAPIdictionary(url: string) {
+    const headers: Record<string, string> = { "Access-Control-Allow-Origin": "*" };
+    try {
+        let response = await fetch(url, { headers });
+        let text = await response.text();
+        try {
+            if (text === null) {
+                return { error: "Not found" };
+            }
+            return text;
+        } catch (e) {
+            console.error(`Received from API: ${text}`);
+            console.error(e);
+            return { error: e };
+        }
+    } catch (error) {
+        return { error };
+    }
+}
+
 export const getTextDataAmerica = action(async (text: string) => {
     "use server";
-    const newText = text.length > 4 ? text.slice(0, -2) : text;
-    const regText = new RegExp(`(${newText}\\w*)`, "gi");
-    try {
-        // const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-        const mockUrl = "https://www.oxfordlearnersdictionaries.com/definition/american_english/hello?q=hello"
-        // const homepage = "https://www.oxfordlearnersdictionaries.com";
-        // const response = await fetch(mockUrl, { redirect: 'manual' });
-        // const nextUrl = response.headers.get("location");
-        // const urrrl = "https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract";
-        // const response = await axios.get("https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract");
-        const response = await fetch(mockUrl);
-        // const response = await fetch(url, { headers: CORS_HEADERS });
+    return fetchAPIdictionary("https://www.oxfordlearnersdictionaries.com/definition/american_english/hello?q=hello");
+}, "getTextDataAmerica");
 
 
-        const html = response.text();
-        return {
-            statusCode: 200,
-            body: html,
-        };
-        // if (nextUrl) {
-        // const nextResponse = await fetch(nextUrl);
-        // const pageImgHtml = await nextResponse.text();
-
-        // const doc = parse(pageImgHtml);
-        // const soundT = getElAttribute(doc, ".audio_play_button,.pron-us", "data-src-mp3");
-        // const classT = getElText(doc, ".pos", "");
-        // const img = getElAttribute(doc, "img.thumb", "src");
-        // let definitionsT: string[] = [];
-        // doc.querySelector(".sn-gs")
-        //     ?.querySelectorAll(".sn-g")
-        //     ?.forEach((item, index) => {
-        //         let def = "";
-        //         const label = getElText(item, ".label-g", "");
-        //         const definition = getElText(item, ".def", "");
-        //         if (img !== "" && index == 0) {
-        //             def += `<span class="thumb_img"><img class="thumb" src="${img}"/><span><span class="def">${definition || label}</span>`;
-        //         } else def += `<span class="def">${definition || label}</span>`;
-        //         const xr = item.querySelector(".xr-gs");
-        //         if (xr) {
-        //             const textNodes = Array.from(xr.childNodes)
-        //                 .map((item, index) => {
-        //                     if (index === 0) {
-        //                         return `<span class="xr-gs">${item.textContent}`;
-        //                     }
-        //                     if (index === 1) {
-        //                         return `${item.textContent}<small>`;
-        //                     }
-        //                     return item.textContent?.toLowerCase();
-        //                 })
-        //                 .join("");
-        //             def += `${textNodes}</small></span>`;
-        //         }
-        //         const meaning = getElText(item, ".x-gs .x", "");
-        //         if (meaning !== "") {
-        //             const meaningX = meaning.replace(regText, `<b>$1</b>`);
-        //             def += `<span class="x">${meaningX}</span></span>`;
-        //         }
-        //         definitionsT.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
-        //     });
-
-        // return {
-        //     text: text,
-        //     sound: soundT,
-        //     class: classT,
-        //     definitions: definitionsT,
-        //     phonetic: "",
-        //     meaning: "",
-        //     number: 240
-        // } as VocabularyType;
-        //     return nextUrl;
-        // }
-        // return await response.text();
-    } catch { }
-});
 
 
 
