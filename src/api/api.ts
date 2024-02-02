@@ -441,12 +441,12 @@ export const getOedSound = action(async (text: string) => {
     return mp3 || altMp3;
 });
 
-export const getTextDataAmerica = action(async (text: string) => {
+export const getTextDataAmerica = action(async (url: string) => {
     "use server";
     try {
-        const newText = text.length > 4 ? text.slice(0, -2) : text;
-        const regText = new RegExp(`(${newText}\\w*)`, "gi");
-        const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+        // const newText = text.length > 4 ? text.slice(0, -2) : text;
+        // const regText = new RegExp(`(${newText}\\w*)`, "gi");
+        // const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
         const response = await fetch(url);
         const pageImgHtml = await response.text();
         // const doc = parse(pageImgHtml);

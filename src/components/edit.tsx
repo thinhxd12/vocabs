@@ -72,7 +72,9 @@ const Edit = (props: Props) => {
   const textDataAmerica = useSubmission(getTextDataAmerica);
 
   onMount(() => {
-    getTextDataAmericaAction(props.item.text);
+    getTextDataAmericaAction(
+      `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${props.item.text}`
+    );
   });
   const [insertText, setInsertText] = createStore<VocabularyType>({
     text: "",
