@@ -443,60 +443,63 @@ export const getOedSound = action(async (text: string) => {
 
 export const getTextDataAmerica = action(async (text: string) => {
     "use server";
+    const newText = text.length > 4 ? text.slice(0, -2) : text;
+    const regText = new RegExp(`(${newText}\\w*)`, "gi");
     try {
-        // const newText = text.length > 4 ? text.slice(0, -2) : text;
-        // const regText = new RegExp(`(${newText}\\w*)`, "gi");
         const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-        const response = await fetch(url, { method: 'POST', redirect: 'follow' });
-        const pageImgHtml = await response.text();
-        // const doc = parse(pageImgHtml);
+        const response = await fetch(url, { redirect: 'manual' });
+        const nextUrl = response.headers.get("location");
+        if (nextUrl) {
+            const nextResponse = await fetch(nextUrl);
+            const pageImgHtml = await nextResponse.text();
 
-        // const soundT = getElAttribute(doc, ".audio_play_button,.pron-us", "data-src-mp3");
-        // const classT = getElText(doc, ".pos", "");
-        // const img = getElAttribute(doc, "img.thumb", "src");
-        // let definitionsT: string[] = [];
-        // doc.querySelector(".sn-gs")
-        //     ?.querySelectorAll(".sn-g")
-        //     ?.forEach((item, index) => {
-        //         let def = "";
-        //         const label = getElText(item, ".label-g", "");
-        //         const definition = getElText(item, ".def", "");
-        //         if (img !== "" && index == 0) {
-        //             def += `<span class="thumb_img"><img class="thumb" src="${img}"/><span><span class="def">${definition || label}</span>`;
-        //         } else def += `<span class="def">${definition || label}</span>`;
-        //         const xr = item.querySelector(".xr-gs");
-        //         if (xr) {
-        //             const textNodes = Array.from(xr.childNodes)
-        //                 .map((item, index) => {
-        //                     if (index === 0) {
-        //                         return `<span class="xr-gs">${item.textContent}`;
-        //                     }
-        //                     if (index === 1) {
-        //                         return `${item.textContent}<small>`;
-        //                     }
-        //                     return item.textContent?.toLowerCase();
-        //                 })
-        //                 .join("");
-        //             def += `${textNodes}</small></span>`;
-        //         }
-        //         const meaning = getElText(item, ".x-gs .x", "");
-        //         if (meaning !== "") {
-        //             const meaningX = meaning.replace(regText, `<b>$1</b>`);
-        //             def += `<span class="x">${meaningX}</span></span>`;
-        //         }
-        //         definitionsT.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
-        //     });
+            const doc = parse(pageImgHtml);
+            const soundT = getElAttribute(doc, ".audio_play_button,.pron-us", "data-src-mp3");
+            const classT = getElText(doc, ".pos", "");
+            const img = getElAttribute(doc, "img.thumb", "src");
+            let definitionsT: string[] = [];
+            doc.querySelector(".sn-gs")
+                ?.querySelectorAll(".sn-g")
+                ?.forEach((item, index) => {
+                    let def = "";
+                    const label = getElText(item, ".label-g", "");
+                    const definition = getElText(item, ".def", "");
+                    if (img !== "" && index == 0) {
+                        def += `<span class="thumb_img"><img class="thumb" src="${img}"/><span><span class="def">${definition || label}</span>`;
+                    } else def += `<span class="def">${definition || label}</span>`;
+                    const xr = item.querySelector(".xr-gs");
+                    if (xr) {
+                        const textNodes = Array.from(xr.childNodes)
+                            .map((item, index) => {
+                                if (index === 0) {
+                                    return `<span class="xr-gs">${item.textContent}`;
+                                }
+                                if (index === 1) {
+                                    return `${item.textContent}<small>`;
+                                }
+                                return item.textContent?.toLowerCase();
+                            })
+                            .join("");
+                        def += `${textNodes}</small></span>`;
+                    }
+                    const meaning = getElText(item, ".x-gs .x", "");
+                    if (meaning !== "") {
+                        const meaningX = meaning.replace(regText, `<b>$1</b>`);
+                        def += `<span class="x">${meaningX}</span></span>`;
+                    }
+                    definitionsT.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
+                });
 
-        // return {
-        //     text: text,
-        //     sound: soundT,
-        //     class: classT,
-        //     definitions: definitionsT,
-        //     phonetic: "",
-        //     meaning: "",
-        //     number: 240
-        // } as VocabularyType;
-        return pageImgHtml;
+            return {
+                text: text,
+                sound: soundT,
+                class: classT,
+                definitions: definitionsT,
+                phonetic: "",
+                meaning: "",
+                number: 240
+            } as VocabularyType;
+        }
     } catch (error) {
         console.error(error);
     }
