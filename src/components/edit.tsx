@@ -91,13 +91,18 @@ const Edit = (props: Props) => {
     //   setDefinitionData({ america: data1, english: data2, cambridge: data3 });
     // }
     // if (props.item) {
-    getAllDataText("hello");
+    // getAllDataText("hello");
     // }
+    getTextDataAmericaAction(props.item?.text);
   });
 
+  const americaData = useSubmission(getTextDataAmerica);
+
   const getAllDataText = async (text: string) => {
-    const result = await getTextDataAmericaAction(text);
-    setDefinitionData({ america: result });
+    // const result = await getTextDataAmericaAction(text);
+    // setDefinitionData({ america: result });
+    getTextDataAmericaAction(text);
+    // setDefinitionData({ america: americaData.result });
   };
 
   createEffect(() => {
@@ -270,12 +275,19 @@ const Edit = (props: Props) => {
           </button>
         </form>
 
-        <Show when={visible()[0]}>
+        {americaData.result && (
+          <Definition
+            item={americaData.result}
+            onCheck={() => handleCheck(0, definitionData.america)}
+          />
+        )}
+
+        {/* <Show when={visible()[0]}>
           <Definition
             item={definitionData.america}
             onCheck={() => handleCheck(0, definitionData.america)}
           />
-        </Show>
+        </Show> */}
         {/* <Show when={visible()[1]}>
           <Definition
             item={definitionData.english}
