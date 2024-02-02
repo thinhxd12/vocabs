@@ -4,7 +4,7 @@ import { supabase } from "./supabase";
 import { getElAttribute, getElText } from "~/utils";
 import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
-
+import axios from "axios";
 
 // const baseUrl = "https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec";
 const baseUrl = "https://script.google.com/macros/s/AKfycbyyx7SmjI3iSF4uFVTtfVDYxN_5xL7jntJvnKVlaSNgXS8fWDdP_6iz7DgGogEtiXGR/exec";
@@ -447,9 +447,20 @@ export const getTextDataAmerica = action(async (text: string) => {
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
     try {
         const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-        const mockUrl = "https://mywebapp.abcworker.workers.dev/https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract"
-        const response = await fetch(mockUrl, { redirect: 'manual' });
-        const nextUrl = response.headers.get("location");
+        // const mockUrl = "https://mywebapp.abcworker.workers.dev/https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract"
+        // const response = await fetch(mockUrl, { redirect: 'manual' });
+        // const nextUrl = response.headers.get("location");
+        // const urrrl = "https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract";
+        // const response = await axios.get("https://www.oxfordlearnersdictionaries.com/definition/american_english/attract?q=attract");
+        // const response = await fetch(mockUrl, { redirect: 'manual' });
+        const response = await fetch(url);
+        // const res = response.text();
+
+        const urlget = response.url;
+
+        return urlget;
+
+
         // if (nextUrl) {
         // const nextResponse = await fetch(nextUrl);
         // const pageImgHtml = await nextResponse.text();
@@ -502,8 +513,7 @@ export const getTextDataAmerica = action(async (text: string) => {
         // } as VocabularyType;
         //     return nextUrl;
         // }
-        return await response.text();
-
+        // return await response.text();
     } catch (error) {
         console.error(error);
     }
