@@ -41,6 +41,7 @@ type Props = {
 };
 
 const Edit = (props: Props) => {
+  const [currentText, setCurrentText] = createSignal<string>("");
   const [insertText, setInsertText] = createStore<VocabularyType>({
     text: props.item!.text,
     sound: "",
@@ -86,8 +87,8 @@ const Edit = (props: Props) => {
   const [clicked, setClicked] = createSignal<boolean>(false);
 
   createEffect(() => {
-    const propText = { ...insertText };
-    getTextDataAmericaAction(propText.text);
+    setCurrentText(props.item.text);
+    getTextDataAmericaAction(currentText());
   });
 
   // effect alert
