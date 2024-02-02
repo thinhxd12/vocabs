@@ -69,14 +69,13 @@ const Edit = (props: Props) => {
   //----------------------------DONE NO EDIT--------------
 
   const getTextDataAmericaAction = useAction(getTextDataAmerica);
+  const getTextDataCambridgeAction = useAction(getTextDataCambridge);
   const textDataAmerica = useSubmission(getTextDataAmerica);
+  const textDataCambridge = useSubmission(getTextDataCambridge);
 
   onMount(() => {
-    getTextDataAmericaAction(
-      // "https://www.getdailyart.com/en/22485/albrecht-durer/lot-and-his-daughters-reverse"
-      // `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${props.item.text}`
-      props.item.text
-    );
+    // getTextDataAmericaAction(props.item.text);
+    getTextDataCambridgeAction(props.item.text);
   });
   const [insertText, setInsertText] = createStore<VocabularyType>({
     text: "",
@@ -89,9 +88,9 @@ const Edit = (props: Props) => {
   });
 
   createEffect(() => {
-    if (textDataAmerica.result) {
+    if (textDataCambridge.result) {
       // setInsertText(textDataAmerica.result);
-      console.log(textDataAmerica.result);
+      console.log(textDataCambridge.result);
     }
   });
 

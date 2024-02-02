@@ -344,82 +344,82 @@ export const getTextDataEnglish = action(async (text: string) => {
 });
 
 //get data definition from cambridge
-export const getTextDataCambridge = action(async (text: string) => {
-    "use server";
-    const url = `https://dictionary.cambridge.org/dictionary/english/${text}`;
-    const result: VocabularyType = {
-        text: "",
-        sound: "",
-        class: "",
-        definitions: [],
-        phonetic: "",
-        meaning: "",
-        number: 240,
-    };
-    const newText = text.length > 4 ? text.slice(0, -2) : text;
-    const regText = new RegExp(`(${newText}\\w*)`, "gi");
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const pageImgHtml = await response.text();
-        const doc = parse(pageImgHtml);
+// export const getTextDataCambridge = action(async (text: string) => {
+//     "use server";
+//     const url = `https://dictionary.cambridge.org/dictionary/english/${text}`;
+//     const result: VocabularyType = {
+//         text: "",
+//         sound: "",
+//         class: "",
+//         definitions: [],
+//         phonetic: "",
+//         meaning: "",
+//         number: 240,
+//     };
+//     const newText = text.length > 4 ? text.slice(0, -2) : text;
+//     const regText = new RegExp(`(${newText}\\w*)`, "gi");
+//     try {
+//         const response = await fetch(url);
+//         if (!response.ok) {
+//             throw new Error(`HTTP error! status: ${response.status}`);
+//         }
+//         const pageImgHtml = await response.text();
+//         const doc = parse(pageImgHtml);
 
-        result.sound = "";
-        result.text = getElText(doc, ".di-title", text);
-        result.class = getElText(doc, ".pos.dpos", "");
-        const defArr: string[] = [];
-        const body = doc.querySelector(".entry-body");
-        if (body) {
-            body.querySelectorAll(".dsense").forEach((item, index) => {
-                let def = "";
-                const head =
-                    getElText(item, ".dsense_pos", "") +
-                    getElText(item, ".guideword", "");
-                if (head !== "") def += `<span class="dsense_h">${head}</span>`;
-                const defblocks = item.querySelectorAll(".def-block");
-                defblocks.forEach((m, n) => {
-                    const img = m.querySelector(".dimg");
-                    let defin = getElText(m, ".def", "");
-                    let example = "";
-                    const meaning = getElText(m, ".eg.deg", "");
-                    if (meaning !== "") {
-                        const meaningX = meaning.replace(regText, `<b>$1</b>`);
-                        example += `<span class="x">${meaningX}</span>`;
-                    }
-                    m.querySelectorAll(".xref").forEach((j, k) => {
-                        example += `<span class="xr-gs">${getElText(
-                            j,
-                            ".xref-title",
-                            ""
-                        )} <small>`;
-                        const lcs = j.querySelector(".lcs");
-                        if (lcs) {
-                            const textNodes = Array.from(j.querySelectorAll(".x-h.dx-h"))
-                                .map((item, index) => {
-                                    return item.textContent?.toLowerCase();
-                                })
-                                .join(", ");
-                            example += `${textNodes}</small></span>`;
-                        }
-                    });
+//         result.sound = "";
+//         result.text = getElText(doc, ".di-title", text);
+//         result.class = getElText(doc, ".pos.dpos", "");
+//         const defArr: string[] = [];
+//         const body = doc.querySelector(".entry-body");
+//         if (body) {
+//             body.querySelectorAll(".dsense").forEach((item, index) => {
+//                 let def = "";
+//                 const head =
+//                     getElText(item, ".dsense_pos", "") +
+//                     getElText(item, ".guideword", "");
+//                 if (head !== "") def += `<span class="dsense_h">${head}</span>`;
+//                 const defblocks = item.querySelectorAll(".def-block");
+//                 defblocks.forEach((m, n) => {
+//                     const img = m.querySelector(".dimg");
+//                     let defin = getElText(m, ".def", "");
+//                     let example = "";
+//                     const meaning = getElText(m, ".eg.deg", "");
+//                     if (meaning !== "") {
+//                         const meaningX = meaning.replace(regText, `<b>$1</b>`);
+//                         example += `<span class="x">${meaningX}</span>`;
+//                     }
+//                     m.querySelectorAll(".xref").forEach((j, k) => {
+//                         example += `<span class="xr-gs">${getElText(
+//                             j,
+//                             ".xref-title",
+//                             ""
+//                         )} <small>`;
+//                         const lcs = j.querySelector(".lcs");
+//                         if (lcs) {
+//                             const textNodes = Array.from(j.querySelectorAll(".x-h.dx-h"))
+//                                 .map((item, index) => {
+//                                     return item.textContent?.toLowerCase();
+//                                 })
+//                                 .join(", ");
+//                             example += `${textNodes}</small></span>`;
+//                         }
+//                     });
 
-                    if (img) {
-                        const imgUrl = getElAttribute(img, "amp-img", "src");
-                        def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org/${imgUrl}"/><span><span class="def">${defin}</span>${example}</span></span>`;
-                    } else if (defin !== "")
-                        def += `<span class="def">${defin}</span>${example}`;
-                });
-                defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
-            });
-        }
-        result.definitions = defArr;
-        return result;
-    } catch (error) {
-        console.error(error);
-    }
-});
+//                     if (img) {
+//                         const imgUrl = getElAttribute(img, "amp-img", "src");
+//                         def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org/${imgUrl}"/><span><span class="def">${defin}</span>${example}</span></span>`;
+//                     } else if (defin !== "")
+//                         def += `<span class="def">${defin}</span>${example}`;
+//                 });
+//                 defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
+//             });
+//         }
+//         result.definitions = defArr;
+//         return result;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// });
 
 //find sound from oed
 export const getOedSound = action(async (text: string) => {
@@ -477,6 +477,15 @@ export const getTextDataAmerica = action(async (id: string) => {
     const text = await response.text();
     return text;
 }, "getTextDataAmerica");
+
+export const getTextDataCambridge = action(async (text: string) => {
+    "use server";
+    const url = `https://dictionary.cambridge.org/dictionary/english/${text}`;
+    const request = new Request(url);
+    const response = await fetch(request);
+    const html = await response.text();
+    return html;
+}, "getTextDataCambridge");
 
 
 
