@@ -448,7 +448,7 @@ const CORS_HEADERS = {
 
 
 async function fetchAPIdictionary(url: string) {
-    const headers: Record<string, string> = { "Access-Control-Allow-Origin": "*" };
+    const headers: Record<string, string> = { "Access-Control-Allow-Origin": "*", "Accept-Encoding": "gzip,deflate,compress" };
     try {
         let response = await fetch(url, { headers });
         let text = await response.text();
