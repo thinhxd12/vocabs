@@ -447,7 +447,7 @@ const CORS_HEADERS = {
 };
 
 
-async function fetchAPIdictionary(url: string) {
+async function fetchGetText(url: string) {
     const headers: Record<string, string> = { "Access-Control-Allow-Origin": "*", "Accept-Encoding": "gzip,deflate,compress" };
     try {
         let response = await fetch(url, { headers });
@@ -467,9 +467,15 @@ async function fetchAPIdictionary(url: string) {
     }
 }
 
-export const getTextDataAmerica = action(async (text: string) => {
+export const getTextDataAmerica = action(async (id: string) => {
     "use server";
-    return fetchAPIdictionary("https://www.oxfordlearnersdictionaries.com/definition/american_english/hello?q=hello");
+    // const url = "https://www.oxfordlearnersdictionaries.com/definition/american_english/hello?q=hello";
+    const url = "https://example.com";
+    // return fetchGetText("https://www.oxfordlearnersdictionaries.com/definition/american_english/hello?q=hello");
+    const request = new Request(url);
+    const response = await fetch(request);
+    const text = await response.text();
+    return text;
 }, "getTextDataAmerica");
 
 
