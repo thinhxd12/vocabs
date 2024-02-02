@@ -73,8 +73,9 @@ const Edit = (props: Props) => {
 
   onMount(() => {
     getTextDataAmericaAction(
-      "https://www.getdailyart.com/en/22485/albrecht-durer/lot-and-his-daughters-reverse"
+      // "https://www.getdailyart.com/en/22485/albrecht-durer/lot-and-his-daughters-reverse"
       // `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${props.item.text}`
+      props.item.text
     );
   });
   const [insertText, setInsertText] = createStore<VocabularyType>({
