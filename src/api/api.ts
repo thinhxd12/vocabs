@@ -520,13 +520,7 @@ export const getTextDataAmerica = action(async (text: string) => {
         //     return nextUrl;
         // }
         // return await response.text();
-    } catch (error) {
-        console.error(error);
-        return {
-            statusCode: 500,
-            body: JSON.stringify({ error: 'An error occurred' }),
-        };
-    }
+    } catch { }
 });
 
 
