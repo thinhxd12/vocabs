@@ -41,93 +41,54 @@ type Props = {
 };
 
 const Edit = (props: Props) => {
-  const [currentText, setCurrentText] = createSignal<string>("");
+  const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
+  const editActionResult = useSubmission(editVocabularyItem);
+  const [submitForm, setSubmitForm] = createSignal<boolean>(false);
+  const [alertObj, setAlertObj] = createStore({
+    showAlert: false,
+    alert: false,
+    message: "",
+  });
+
+  createEffect(() => {
+    if (submitForm()) {
+      setTimeout(() => {
+        setAlertObj({
+          showAlert: true,
+          message: editActionResult.result?.message,
+          alert: editActionResult.result?.message !== "success",
+        });
+      }, 1000);
+      setTimeout(() => {
+        setAlertObj({ showAlert: false });
+        setSubmitForm(false);
+      }, 6000);
+    }
+  });
+
+  //----------------------------DONE NO EDIT--------------
+
+  const getTextDataAmericaAction = useAction(getTextDataAmerica);
+  const textDataAmerica = useSubmission(getTextDataAmerica);
+
+  onMount(() => {
+    getTextDataAmericaAction(props.item.text);
+  });
   const [insertText, setInsertText] = createStore<VocabularyType>({
-    text: props.item!.text,
+    text: "",
     sound: "",
     class: "",
-    definitions: props.item!.definitions,
+    definitions: [],
     phonetic: "",
     meaning: "",
     number: 240,
   });
 
-  //select definitions
-  const [definitionData, setDefinitionData] = createStore<{
-    america: VocabularyType;
-    english: VocabularyType;
-    cambridge: VocabularyType;
-  }>({
-    america: insertText,
-    english: insertText,
-    cambridge: insertText,
+  createEffect(() => {
+    if (textDataAmerica.result) {
+      setInsertText(textDataAmerica.result);
+    }
   });
-  const [visible, setVisible] = createSignal([true, true, true]);
-
-  const getTextDataAmericaAction = useAction(getTextDataAmerica);
-  const americaData = useSubmission(getTextDataAmerica);
-
-  // const getTextDataEnglishAction = useAction(getTextDataEnglish);
-  // const getTextDataCambridgeAction = useAction(getTextDataCambridge);
-
-  const handleCheck = (index: number, data: VocabularyType) => {
-    setInsertText(data);
-    setVisible(visible().map((item, i) => i === index));
-  };
-
-  //-------------------------------------------------
-  const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
-  const editError = useSubmission(editVocabularyItem);
-  const [showAlert, setShowAlert] = createSignal(false);
-  const [alertObj, setAlertObj] = createStore({
-    alert: true,
-    message: "",
-  });
-
-  const [clicked, setClicked] = createSignal<boolean>(false);
-
-  // createEffect(() => {
-  // });
-  
-  onMount(()=>{
-    setCurrentText(props.item.text);
-    getTextDataAmericaAction(currentText());
-  })
-
-  console.log(americaData.result);
-  
-
-  // effect alert
-  // createEffect(() => {
-  //   if (editError.result && clicked()) {
-  //     if (editError.result.message === "success") {
-  //       setAlertObj({
-  //         message: "Edit successfully!",
-  //         alert: false,
-  //       });
-  //       setShowAlert(true);
-  //       const timer1 = setTimeout(() => {
-  //         setShowAlert(false);
-  //         setClicked(false);
-  //         props.onClose(true);
-  //       }, 3000);
-  //       onCleanup(() => {
-  //         clearTimeout(timer1);
-  //       });
-  //     } else {
-  //       setAlertObj({ message: editError.result?.message, alert: true });
-  //       setShowAlert(true);
-  //       //make timeout 3s close alert
-  //       const timer2 = setTimeout(() => {
-  //         setShowAlert(false);
-  //         setClicked(false);
-  //       }, 6000);
-  //       onCleanup(() => {
-  //         clearTimeout(timer2);
-  //       });
-  //     }
-  //   }
-  // });
 
   return (
     <div class="edit" tabIndex={1}>
@@ -185,7 +146,7 @@ const Edit = (props: Props) => {
         </Presence>
 
         <Presence>
-          <Show when={showAlert()}>
+          <Show when={alertObj.showAlert}>
             <Motion
               initial={{ x: 360 }}
               animate={{ x: 0 }}
@@ -207,7 +168,6 @@ const Edit = (props: Props) => {
               name="text"
               autocomplete="off"
               value={props.item?.text}
-              disabled
             />
           </div>
           <div class="editInputGroup">
@@ -230,9 +190,8 @@ const Edit = (props: Props) => {
             <textarea
               name="definitions"
               class="editInputItem editInputItemResult"
-            >
-              {JSON.stringify(insertText.definitions)}
-            </textarea>
+              value={JSON.stringify(props.item.definitions)}
+            />
           </div>
           <div class="editInputGroup">
             <input
@@ -262,18 +221,18 @@ const Edit = (props: Props) => {
           <button
             type="submit"
             class="editSubmitBtn"
-            onClick={() => setClicked(true)}
+            onClick={() => setSubmitForm(true)}
           >
             Submit
           </button>
         </form>
 
-        {americaData.result && (
+        <Show when={true}>
           <Definition
-            item={americaData.result}
-            onCheck={() => handleCheck(0, definitionData.america)}
+            item={insertText}
+            // onCheck={() => handleCheck(0, definitionData.america)}
           />
-        )}
+        </Show>
 
         {/* <Show when={visible()[0]}>
           <Definition

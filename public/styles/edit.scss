@@ -21,6 +21,7 @@
         height: 25px;
         padding: 3px;
         background-color: $color-calendar-bg;
+        margin-bottom: 3px;
 
         .editHeaderLeft {
             .editHeaderText {
@@ -47,7 +48,7 @@
 
         .editForm {
             @include baseBody($color-calendar-bg);
-            margin: 3px 0;
+            margin-bottom: 3px;
         }
 
         .editInputGroup {
