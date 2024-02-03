@@ -448,7 +448,11 @@ const CORS_HEADERS = {
 
 
 async function fetchGetText(url: string) {
-    const headers: Record<string, string> = { "Access-Control-Allow-Origin": "*", "Accept-Encoding": "gzip,deflate,compress" };
+    const headers: Record<string, string> = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
+    };
     try {
         let response = await fetch(url, { headers });
         let text = await response.text();
@@ -481,14 +485,7 @@ export const getTextDataAmerica = action(async (id: string) => {
 export const getTextDataCambridge = action(async (text: string) => {
     "use server";
     const url = `https://dictionary.cambridge.org/dictionary/english/${text}`;
-    return fetch(url)
-        .then((response) => {
-            if (response.ok) {
-                return response.text();
-            }
-
-            throw new Error('Something went wrong.');
-        })
+    return fetchGetText(url);
 }, "getTextDataCambridge");
 
 
