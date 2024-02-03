@@ -14,3 +14,5 @@ export function getElAttribute(doc: any, query: string, attr: string) {
 
 export const URL_IMAGE_MAIN_PAGE =
   "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez";
+
+export const DEFAULT_CORS_PROXY = "https://mywebapp.abcworker.workers.dev/";

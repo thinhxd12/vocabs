@@ -1,7 +1,7 @@
 import { action, cache, redirect } from "@solidjs/router";
 import { BookmarkType, HistoryType, ImageType, TranslateType, VocabularyType, mapTables } from "~/types";
 import { supabase } from "./supabase";
-import { getElAttribute, getElText } from "~/utils";
+import { DEFAULT_CORS_PROXY, getElAttribute, getElText } from "~/utils";
 import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
 
@@ -198,84 +198,33 @@ export const insertNewVocabularyItem = action(async (obj: VocabularyType) => {
     const { error } = await supabase
         .from(mapTables.vocabulary)
         .insert(obj)
-    if (error) return error;
+    if (error) return { message: error.message };
+    return { message: "success" } as PostgrestError
 });
 
+
+async function fetchGetText(url: string) {
+    try {
+        let response = await fetch(url);
+        let text = await response.text();
+        try {
+            if (text === null) {
+                return { error: "Not found" };
+            }
+            return text;
+        } catch (e) {
+            console.error(`Received from API: ${text}`);
+            console.error(e);
+            return { error: e };
+        }
+    } catch (error) {
+        return { error };
+    }
+}
+
 //get data definition from oxfox america
-// export const getTextDataAmerica = action(async (text: string) => {
-//     "use server";
-//     const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-//     const result: VocabularyType = {
-//         text: "",
-//         sound: "",
-//         class: "",
-//         definitions: [],
-//         phonetic: "",
-//         meaning: "",
-//         number: 240,
-//     };
-//     const newText = text.length > 4 ? text.slice(0, -2) : text;
-//     const regText = new RegExp(`(${newText}\\w*)`, "gi");
-//     try {
-//         const response = await fetch(url);
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-//         const pageImgHtml = await response.text();
-//         const doc = parse(pageImgHtml);
-
-//         result.sound = getElAttribute(
-//             doc,
-//             ".audio_play_button,.pron-us",
-//             "data-src-mp3"
-//         );
-//         result.text = text;
-//         result.class = getElText(doc, ".pos", "");
-//         const img = getElAttribute(doc, "img.thumb", "src");
-//         const defArr: string[] = [];
-//         doc
-//             .querySelector(".sn-gs")
-//             ?.querySelectorAll(".sn-g")
-//             ?.forEach((item, index) => {
-//                 let def = "";
-//                 const label = getElText(item, ".label-g", "");
-//                 const definition = getElText(item, ".def", "");
-//                 if (img !== "" && index == 0) {
-//                     def += `<span class="thumb_img"><img class="thumb" src="${img}"/><span><span class="def">${definition || label}</span>`;
-//                 } else def += `<span class="def">${definition || label}</span>`;
-//                 const xr = item.querySelector(".xr-gs");
-//                 if (xr) {
-//                     const textNodes = Array.from(xr.childNodes)
-//                         .map((item, index) => {
-//                             if (index === 0) {
-//                                 return `<span class="xr-gs">${item.textContent}`;
-//                             }
-//                             if (index === 1) {
-//                                 return `${item.textContent}<small>`;
-//                             }
-//                             return item.textContent?.toLowerCase();
-//                         })
-//                         .join("");
-//                     def += `${textNodes}</small></span>`;
-//                 }
-//                 const meaning = getElText(item, ".x-gs .x", "");
-//                 if (meaning !== "") {
-//                     const meaningX = meaning.replace(regText, `<b>$1</b>`);
-//                     def += `<span class="x">${meaningX}</span></span>`;
-//                 }
-//                 defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
-//             });
-//         result.definitions = defArr;
-//         return result;
-//     } catch (error) {
-//         console.error(error);
-//     }
-// });
-
-//get data definition from oxfox english
-export const getTextDataEnglish = action(async (text: string) => {
-    "use server";
-    const url = `https://www.oxfordlearnersdictionaries.com/search/english/direct/?q=${text}`;
+export const getTextDataAmerica = async (text: string) => {
+    const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
     const result: VocabularyType = {
         text: "",
         sound: "",
@@ -289,9 +238,73 @@ export const getTextDataEnglish = action(async (text: string) => {
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
     try {
         const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        const pageImgHtml = await response.text();
+        const doc = parse(pageImgHtml);
+
+        result.sound = getElAttribute(
+            doc,
+            ".audio_play_button,.pron-us",
+            "data-src-mp3"
+        );
+        result.text = text;
+        result.class = getElText(doc, ".pos", "");
+        const img = getElAttribute(doc, "img.thumb", "src");
+        const defArr: string[] = [];
+        doc
+            .querySelector(".sn-gs")
+            ?.querySelectorAll(".sn-g")
+            ?.forEach((item, index) => {
+                let def = "";
+                const label = getElText(item, ".label-g", "");
+                const definition = getElText(item, ".def", "");
+                if (img !== "" && index == 0) {
+                    def += `<span class="thumb_img"><img class="thumb" src="${img}"/><span><span class="def">${definition || label}</span>`;
+                } else def += `<span class="def">${definition || label}</span>`;
+                const xr = item.querySelector(".xr-gs");
+                if (xr) {
+                    const textNodes = Array.from(xr.childNodes)
+                        .map((item, index) => {
+                            if (index === 0) {
+                                return `<span class="xr-gs">${item.textContent}`;
+                            }
+                            if (index === 1) {
+                                return `${item.textContent}<small>`;
+                            }
+                            return item.textContent?.toLowerCase();
+                        })
+                        .join("");
+                    def += `${textNodes}</small></span>`;
+                }
+                const meaning = getElText(item, ".x-gs .x", "");
+                if (meaning !== "") {
+                    const meaningX = meaning.replace(regText, `<b>$1</b>`);
+                    def += `<span class="x">${meaningX}</span></span>`;
+                }
+                defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
+            });
+        result.definitions = defArr;
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+//get data definition from oxfox english
+export const getTextDataEnglish = async (text: string) => {
+    const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/english/direct/?q=${text}`;
+    const result: VocabularyType = {
+        text: "",
+        sound: "",
+        class: "",
+        definitions: [],
+        phonetic: "",
+        meaning: "",
+        number: 240,
+    };
+    const newText = text.length > 4 ? text.slice(0, -2) : text;
+    const regText = new RegExp(`(${newText}\\w*)`, "gi");
+    try {
+        const response = await fetch(url);
         const pageImgHtml = await response.text();
         const doc = parse(pageImgHtml);
 
@@ -341,85 +354,81 @@ export const getTextDataEnglish = action(async (text: string) => {
     } catch (error) {
         console.error(error);
     }
-});
+};
 
 //get data definition from cambridge
-// export const getTextDataCambridge = action(async (text: string) => {
-//     "use server";
-//     const url = `https://dictionary.cambridge.org/dictionary/english/${text}`;
-//     const result: VocabularyType = {
-//         text: "",
-//         sound: "",
-//         class: "",
-//         definitions: [],
-//         phonetic: "",
-//         meaning: "",
-//         number: 240,
-//     };
-//     const newText = text.length > 4 ? text.slice(0, -2) : text;
-//     const regText = new RegExp(`(${newText}\\w*)`, "gi");
-//     try {
-//         const response = await fetch(url);
-//         if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`);
-//         }
-//         const pageImgHtml = await response.text();
-//         const doc = parse(pageImgHtml);
+export const getTextDataCambridge = async (text: string) => {
+    const url = DEFAULT_CORS_PROXY + `https://dictionary.cambridge.org/dictionary/english/${text}`;
+    const result: VocabularyType = {
+        text: "",
+        sound: "",
+        class: "",
+        definitions: [],
+        phonetic: "",
+        meaning: "",
+        number: 240,
+    };
+    const newText = text.length > 4 ? text.slice(0, -2) : text;
+    const regText = new RegExp(`(${newText}\\w*)`, "gi");
+    try {
+        const response = await fetch(url);
+        const pageImgHtml = await response.text();
+        const doc = parse(pageImgHtml);
 
-//         result.sound = "";
-//         result.text = getElText(doc, ".di-title", text);
-//         result.class = getElText(doc, ".pos.dpos", "");
-//         const defArr: string[] = [];
-//         const body = doc.querySelector(".entry-body");
-//         if (body) {
-//             body.querySelectorAll(".dsense").forEach((item, index) => {
-//                 let def = "";
-//                 const head =
-//                     getElText(item, ".dsense_pos", "") +
-//                     getElText(item, ".guideword", "");
-//                 if (head !== "") def += `<span class="dsense_h">${head}</span>`;
-//                 const defblocks = item.querySelectorAll(".def-block");
-//                 defblocks.forEach((m, n) => {
-//                     const img = m.querySelector(".dimg");
-//                     let defin = getElText(m, ".def", "");
-//                     let example = "";
-//                     const meaning = getElText(m, ".eg.deg", "");
-//                     if (meaning !== "") {
-//                         const meaningX = meaning.replace(regText, `<b>$1</b>`);
-//                         example += `<span class="x">${meaningX}</span>`;
-//                     }
-//                     m.querySelectorAll(".xref").forEach((j, k) => {
-//                         example += `<span class="xr-gs">${getElText(
-//                             j,
-//                             ".xref-title",
-//                             ""
-//                         )} <small>`;
-//                         const lcs = j.querySelector(".lcs");
-//                         if (lcs) {
-//                             const textNodes = Array.from(j.querySelectorAll(".x-h.dx-h"))
-//                                 .map((item, index) => {
-//                                     return item.textContent?.toLowerCase();
-//                                 })
-//                                 .join(", ");
-//                             example += `${textNodes}</small></span>`;
-//                         }
-//                     });
+        result.sound = "";
+        result.text = getElText(doc, ".di-title", text);
+        result.class = getElText(doc, ".pos.dpos", "");
+        const defArr: string[] = [];
+        const body = doc.querySelector(".entry-body");
+        if (body) {
+            body.querySelectorAll(".dsense").forEach((item, index) => {
+                let def = "";
+                const head =
+                    getElText(item, ".dsense_pos", "") +
+                    getElText(item, ".guideword", "");
+                if (head !== "") def += `<span class="dsense_h">${head}</span>`;
+                const defblocks = item.querySelectorAll(".def-block");
+                defblocks.forEach((m, n) => {
+                    const img = m.querySelector(".dimg");
+                    let defin = getElText(m, ".def", "");
+                    let example = "";
+                    const meaning = getElText(m, ".eg.deg", "");
+                    if (meaning !== "") {
+                        const meaningX = meaning.replace(regText, `<b>$1</b>`);
+                        example += `<span class="x">${meaningX}</span>`;
+                    }
+                    m.querySelectorAll(".xref").forEach((j, k) => {
+                        example += `<span class="xr-gs">${getElText(
+                            j,
+                            ".xref-title",
+                            ""
+                        )} <small>`;
+                        const lcs = j.querySelector(".lcs");
+                        if (lcs) {
+                            const textNodes = Array.from(j.querySelectorAll(".x-h.dx-h"))
+                                .map((item, index) => {
+                                    return item.textContent?.toLowerCase();
+                                })
+                                .join(", ");
+                            example += `${textNodes}</small></span>`;
+                        }
+                    });
 
-//                     if (img) {
-//                         const imgUrl = getElAttribute(img, "amp-img", "src");
-//                         def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org/${imgUrl}"/><span><span class="def">${defin}</span>${example}</span></span>`;
-//                     } else if (defin !== "")
-//                         def += `<span class="def">${defin}</span>${example}`;
-//                 });
-//                 defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
-//             });
-//         }
-//         result.definitions = defArr;
-//         return result;
-//     } catch (error) {
-//         console.error(error);
-//     }
-// });
+                    if (img) {
+                        const imgUrl = getElAttribute(img, "amp-img", "src");
+                        def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org/${imgUrl}"/><span><span class="def">${defin}</span>${example}</span></span>`;
+                    } else if (defin !== "")
+                        def += `<span class="def">${defin}</span>${example}`;
+                });
+                defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
+            });
+        }
+        result.definitions = defArr;
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
+};
 
 //find sound from oed
 export const getOedSound = action(async (text: string) => {
@@ -439,56 +448,6 @@ export const getOedSound = action(async (text: string) => {
     const altMp3 = `https://ssl.gstatic.com/dictionary/static/sounds/20220808/${text}--_us_1.mp3`;
     return mp3 || altMp3;
 });
-
-const CORS_HEADERS = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': '*',
-};
-
-
-async function fetchGetText(url: string) {
-    const headers: Record<string, string> = {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PATCH, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Origin, Content-Type, X-Auth-Token"
-    };
-    try {
-        let response = await fetch(url, { headers });
-        let text = await response.text();
-        try {
-            if (text === null) {
-                return { error: "Not found" };
-            }
-            return text;
-        } catch (e) {
-            console.error(`Received from API: ${text}`);
-            console.error(e);
-            return { error: e };
-        }
-    } catch (error) {
-        return { error };
-    }
-}
-
-export const getTextDataAmerica = action(async (id: string) => {
-    "use server";
-    // const url = "https://www.oxfordlearnersdictionaries.com/definition/american_english/hello?q=hello";
-    const url = "https://example.com";
-    // return fetchGetText("https://www.oxfordlearnersdictionaries.com/definition/american_english/hello?q=hello");
-    const request = new Request(url);
-    const response = await fetch(request);
-    const text = await response.text();
-    return text;
-}, "getTextDataAmerica");
-
-export const getTextDataCambridge = action(async (text: string) => {
-    "use server";
-    const url = `https://dictionary.cambridge.org/dictionary/english/${text}`;
-    return fetchGetText(url);
-}, "getTextDataCambridge");
-
-
 
 
 

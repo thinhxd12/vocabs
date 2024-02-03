@@ -104,6 +104,7 @@ const page: Component<{}> = (props) => {
 
   const handleCloseTranslation = () => {
     setShowTranslate(false);
+    setTranslateTerm("");
   };
 
   const getQuote = async (numb: number) => {
@@ -351,6 +352,7 @@ const page: Component<{}> = (props) => {
                 >
                   <Translation
                     item={translateText()!}
+                    text={translateTerm()}
                     onClose={handleCloseTranslation}
                   />
                 </Motion>
@@ -389,7 +391,7 @@ const page: Component<{}> = (props) => {
             }}
             transition={{ duration: 0.3, easing: "ease-in-out" }}
           >
-            <Edit item={editText()} onClose={handleCloseEdit} />
+            <Edit item={editText()!} onClose={handleCloseEdit} />
           </Motion.div>
         </Show>
       </Presence>

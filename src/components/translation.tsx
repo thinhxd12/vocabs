@@ -11,8 +11,8 @@ import {
 } from "solid-js";
 import "/public/styles/translate.scss";
 import { OcRepopush2, OcX2 } from "solid-icons/oc";
-import { VocabularyType } from "~/types";
-import { useAction } from "@solidjs/router";
+import { TranslateType, VocabularyType } from "~/types";
+import { useAction, useSubmission } from "@solidjs/router";
 import {
   getOedSound,
   getTextDataAmerica,
@@ -22,12 +22,12 @@ import {
 } from "~/api/api";
 import { Motion, Presence } from "solid-motionone";
 import Alert from "./alert";
-import { makeTimer } from "@solid-primitives/timer";
 import { createStore } from "solid-js/store";
 import Definition from "./definition";
 
 type Props = {
-  item: any;
+  item: TranslateType;
+  text: string;
   onClose: Setter<boolean>;
 };
 
@@ -49,10 +49,30 @@ const Translation = (props: Props) => {
   };
 
   //alert and insert text start
-  const [showAlert, setShowAlert] = createSignal(false);
+  const [sendInsert, setSendInsert] = createSignal<boolean>(false);
+  const insertNewVocabularyItemAction = useAction(insertNewVocabularyItem);
+  const insertActionResult = useSubmission(insertNewVocabularyItem);
+  const getOedSoundAction = useAction(getOedSound);
   const [alertObj, setAlertObj] = createStore({
-    alert: true,
+    showAlert: false,
+    alert: false,
     message: "",
+  });
+
+  createEffect(() => {
+    if (sendInsert()) {
+      setTimeout(() => {
+        setAlertObj({
+          showAlert: true,
+          message: insertActionResult.result?.message,
+          alert: insertActionResult.result?.message !== "success",
+        });
+      }, 1000);
+      setTimeout(() => {
+        setAlertObj({ showAlert: false });
+        setSendInsert(false);
+      }, 3000);
+    }
   });
 
   const [insertText, setInsertText] = createStore<VocabularyType>({
@@ -65,9 +85,6 @@ const Translation = (props: Props) => {
     number: 240,
   });
 
-  const insertNewVocabularyItemAction = useAction(insertNewVocabularyItem);
-  const getOedSoundAction = useAction(getOedSound);
-
   const handleInsertNewVocabulary = async () => {
     const newInsertText: VocabularyType = {
       ...insertText,
@@ -79,27 +96,9 @@ const Translation = (props: Props) => {
     if (newInsertText.sound === "") {
       newInsertText.sound = await getOedSoundAction(newInsertText.text);
     }
-
-    const result = await insertNewVocabularyItemAction(newInsertText);
-    if (result) {
-      setAlertObj({ message: result.message });
-      setShowAlert(true);
-      //make timeout 3s close alert
-      setTimeout(() => {
-        setShowAlert(false);
-      }, 6000);
-    } else {
-      setAlertObj({
-        message: `"${newInsertText.text}" has been added successfully!`,
-        alert: false,
-      });
-      setShowAlert(true);
-      setTimeout(() => {
-        setShowAlert(false);
-      }, 3000);
-    }
+    insertNewVocabularyItemAction(newInsertText);
+    setSendInsert(true);
   };
-  //alert and insert text end
 
   //select definitions
   const [definitionData, setDefinitionData] = createStore<{
@@ -111,34 +110,32 @@ const Translation = (props: Props) => {
     english: insertText,
     cambridge: insertText,
   });
+
   const [visible, setVisible] = createSignal([true, true, true]);
 
-  const getTextDataAmericaAction = useAction(getTextDataAmerica);
-  const getTextDataEnglishAction = useAction(getTextDataEnglish);
-  const getTextDataCambridgeAction = useAction(getTextDataCambridge);
-
-  createEffect(() => {
-    getAllDefinition();
+  onMount(() => {
+    Promise.all([
+      getTextDataAmerica(props.text),
+      getTextDataEnglish(props.text),
+      getTextDataCambridge(props.text),
+    ]).then((data) => {
+      setDefinitionData({
+        america: data[0],
+        english: data[1],
+        cambridge: data[2],
+      });
+    });
   });
 
-  const getAllDefinition = async () => {
-    if (props.item) {
-      const data1 = await getTextDataAmericaAction(props.item?.word);
-      const data2 = await getTextDataEnglishAction(props.item?.word);
-      const data3 = await getTextDataCambridgeAction(props.item?.word);
-      setDefinitionData({ america: data1, english: data2, cambridge: data3 });
-    }
-  };
-
   const handleCheck = (index: number, data: VocabularyType) => {
-    setInsertText(data);
     setVisible(visible().map((item, i) => i === index));
+    setInsertText(data);
   };
 
   return (
     <>
       <Presence>
-        <Show when={showAlert()}>
+        <Show when={alertObj.showAlert}>
           <Motion
             initial={{ x: 360 }}
             animate={{ x: 0 }}

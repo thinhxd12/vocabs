@@ -1,39 +1,29 @@
 import {
-  Index,
-  JSX,
-  Match,
   Setter,
   Show,
-  Switch,
   createEffect,
   createSignal,
-  onCleanup,
   onMount,
 } from "solid-js";
 import "/public/styles/edit.scss";
 import {
-  OcCheck2,
   OcChevrondown2,
   OcChevronup2,
-  OcPencil2,
-  OcRepopush2,
   OcX2,
 } from "solid-icons/oc";
 import { VocabularyType } from "~/types";
-import { useAction, useSubmission } from "@solidjs/router";
+import { useSubmission } from "@solidjs/router";
+
+import { Motion, Presence } from "solid-motionone";
+import Alert from "./alert";
+import { createStore } from "solid-js/store";
+import Definition from "./definition";
 import {
   editVocabularyItem,
-  getOedSound,
   getTextDataAmerica,
   getTextDataCambridge,
   getTextDataEnglish,
-  insertNewVocabularyItem,
 } from "~/api/api";
-import { Motion, Presence } from "solid-motionone";
-import Alert from "./alert";
-import { makeTimer } from "@solid-primitives/timer";
-import { createStore } from "solid-js/store";
-import Definition from "./definition";
 
 type Props = {
   item: VocabularyType;
@@ -42,8 +32,8 @@ type Props = {
 
 const Edit = (props: Props) => {
   const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
-  const editActionResult = useSubmission(editVocabularyItem);
   const [submitForm, setSubmitForm] = createSignal<boolean>(false);
+  const editActionResult = useSubmission(editVocabularyItem);
   const [alertObj, setAlertObj] = createStore({
     showAlert: false,
     alert: false,
@@ -62,22 +52,29 @@ const Edit = (props: Props) => {
       setTimeout(() => {
         setAlertObj({ showAlert: false });
         setSubmitForm(false);
-      }, 6000);
+      }, 3000);
     }
   });
 
   //----------------------------DONE NO EDIT--------------
-
-  const getTextDataAmericaAction = useAction(getTextDataAmerica);
-  const getTextDataCambridgeAction = useAction(getTextDataCambridge);
-  const textDataAmerica = useSubmission(getTextDataAmerica);
-  const textDataCambridge = useSubmission(getTextDataCambridge);
+  const [definitionValue, setDefinitionValue] = createSignal<string>("");
 
   onMount(() => {
-    // getTextDataAmericaAction(props.item.text);
-    getTextDataCambridgeAction(props.item.text);
+    setDefinitionValue(JSON.stringify(props.item.definitions));
+    Promise.all([
+      getTextDataAmerica(props.item.text),
+      getTextDataEnglish(props.item.text),
+      getTextDataCambridge(props.item.text),
+    ]).then((data) => {
+      setDefinitionData({
+        america: data[0],
+        english: data[1],
+        cambridge: data[2],
+      });
+    });
   });
-  const [insertText, setInsertText] = createStore<VocabularyType>({
+
+  const mockData = {
     text: "",
     sound: "",
     class: "",
@@ -85,14 +82,24 @@ const Edit = (props: Props) => {
     phonetic: "",
     meaning: "",
     number: 240,
-  });
+  };
 
-  createEffect(() => {
-    if (textDataCambridge.result) {
-      // setInsertText(textDataAmerica.result);
-      console.log(textDataCambridge.result);
-    }
+  //select definitions
+  const [definitionData, setDefinitionData] = createStore<{
+    america: VocabularyType;
+    english: VocabularyType;
+    cambridge: VocabularyType;
+  }>({
+    america: mockData,
+    english: mockData,
+    cambridge: mockData,
   });
+  const [visible, setVisible] = createSignal([true, true, true]);
+
+  const handleCheck = (index: number, data: string) => {
+    setVisible(visible().map((item, i) => i === index));
+    setDefinitionValue(data);
+  };
 
   return (
     <div class="edit" tabIndex={1}>
@@ -194,7 +201,7 @@ const Edit = (props: Props) => {
             <textarea
               name="definitions"
               class="editInputItem editInputItemResult"
-              value={JSON.stringify(props.item.definitions)}
+              value={definitionValue()}
             />
           </div>
           <div class="editInputGroup">
@@ -231,31 +238,33 @@ const Edit = (props: Props) => {
           </button>
         </form>
 
-        {/* <Show when={true}>
-          <Definition
-            item={insertText}
-            // onCheck={() => handleCheck(0, definitionData.america)}
-          />
-        </Show> */}
-
-        {/* <Show when={visible()[0]}>
+        <Show when={visible()[0]}>
           <Definition
             item={definitionData.america}
-            onCheck={() => handleCheck(0, definitionData.america)}
+            onCheck={() =>
+              handleCheck(0, JSON.stringify(definitionData.america.definitions))
+            }
           />
-        </Show> */}
-        {/* <Show when={visible()[1]}>
+        </Show>
+        <Show when={visible()[1]}>
           <Definition
             item={definitionData.english}
-            onCheck={() => handleCheck(1, definitionData.english)}
+            onCheck={() =>
+              handleCheck(1, JSON.stringify(definitionData.english.definitions))
+            }
           />
         </Show>
         <Show when={visible()[2]}>
           <Definition
             item={definitionData.cambridge}
-            onCheck={() => handleCheck(2, definitionData.cambridge)}
+            onCheck={() =>
+              handleCheck(
+                2,
+                JSON.stringify(definitionData.cambridge.definitions)
+              )
+            }
           />
-        </Show> */}
+        </Show>
       </div>
     </div>
   );
