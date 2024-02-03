@@ -1,4 +1,4 @@
-import { action, cache } from "@solidjs/router";
+import { action, cache, redirect } from "@solidjs/router";
 import { BookmarkType, HistoryType, ImageType, TranslateType, VocabularyType, mapTables } from "~/types";
 import { supabase } from "./supabase";
 import { getElAttribute, getElText } from "~/utils";
@@ -482,13 +482,11 @@ export const getTextDataCambridge = action(async (text: string) => {
     "use server";
     const url = `https://dictionary.cambridge.org/dictionary/english/${text}`;
 
-    const response = await fetch(url, {
-        headers: {
-            "Content-Type": "application/json",
-        }, method: "GET"
-    });
-    const html = await response.text();
-    return html;
+
+    const response = await fetch(url, { redirect: "follow" });
+    const string = await response.text();
+    const json = string === "" ? {} : string;
+    return json;
 }, "getTextDataCambridge");
 
 
