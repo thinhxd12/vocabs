@@ -481,12 +481,14 @@ export const getTextDataAmerica = action(async (id: string) => {
 export const getTextDataCambridge = action(async (text: string) => {
     "use server";
     const url = `https://dictionary.cambridge.org/dictionary/english/${text}`;
+    return fetch(url)
+        .then((response) => {
+            if (response.ok) {
+                return response.text();
+            }
 
-
-    const response = await fetch(url, { redirect: "follow" });
-    const string = await response.text();
-    const json = string === "" ? {} : string;
-    return json;
+            throw new Error('Something went wrong.');
+        })
 }, "getTextDataCambridge");
 
 
