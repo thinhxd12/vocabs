@@ -98,7 +98,7 @@ export const getCalendarScheduleData = cache(async () => {
             };
         });
         const calendarScheduleArr = chunk(mergedArray, 7);
-        return calendarScheduleArr
+        return calendarScheduleArr;
     }
 }, "calendar-schedule");
 
@@ -485,3 +485,42 @@ export const editVocabularyItem = action(async (formData: FormData) => {
     if (error) return { message: error.message };
     return { message: "success" } as PostgrestError
 });
+
+//get image from unsplash
+export const getImageFromUnsplash = cache(async () => {
+    "use server";
+    const apiKey = "EAEQdLT0Wze4Lhf_Xn2O-IAuow2Z-Rh2sHIEu7pTXms";
+    const month = new Date().getMonth();
+    let keyword = "";
+    switch (month) {
+        case 11: case 0: case 1:
+            keyword = "winter";
+            break;
+        case 2:
+            keyword = "spring-flowers";
+            break;
+        case 3: case 4:
+            keyword = "spring-fields";
+            break;
+        case 5: case 6:
+            keyword = "beach";
+            break;
+        case 7:
+            keyword = "field";
+            break;
+        case 8:
+            keyword = "autumn-lake";
+            break;
+        case 9:
+            keyword = "autumn road";
+            break;
+        case 10:
+            keyword = "autumn";
+            break;
+        default:
+            break;
+    }
+    const response = await fetch(`https://api.unsplash.com/photos/random?query=${keyword}&count=1&client_id=${apiKey}`);
+    const data = await response.json();
+    return data[0].urls.regular;
+}, "get-image");

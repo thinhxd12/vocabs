@@ -5,6 +5,7 @@
     @include baseBody;
     width: 360px;
     padding-top: 0;
+    padding-bottom: 6px;
     margin-bottom: 3px;
 
     .definitionHeader {
@@ -49,13 +50,23 @@
 
 
     .definitionBody {
+        padding-top: 3px;
+
         .sn-gs {
-            padding: 3px 0;
             position: relative;
 
             &:not(:last-child) {
-                border-bottom: 1px solid $color-boder;
+                margin-bottom: 6px;
             }
+
+            .sn-g {
+                background: $color-white;
+                border-radius: 3px;
+                overflow: hidden;
+                padding: 3px;
+                box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+            }
+
 
             .num {
                 @include font('nyt-cheltenham', 8px, $color-black, 700, normal, 11px);
@@ -66,13 +77,13 @@
                 border: 1px solid $color-boder;
                 position: absolute;
                 top: 4.5px;
-                left: 1px;
+                left: 3px;
                 z-index: 39;
-                background: $color-background-4;
+                background: $color-white;
             }
 
             .def {
-                @include font('nyt-imperial', 12px, $color-black, 500, normal, 15px);
+                @include font('nyt-imperial', 12px, $color-black, 600, normal, 15px);
                 display: block
             }
 
@@ -125,16 +136,21 @@
 
 
             .thumb_img {
-                display: flex;
-                margin-bottom: 6px;
+                @include flex;
+                border-radius: 3px;
+                overflow: hidden;
+                box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+                margin: 3px 0 3px;
+
+                &:not(:last-child) {
+                    margin-bottom: 6px;
+                }
 
                 .thumb {
-                    margin-right: 6px;
+                    margin-right: 3px;
                     display: block;
                     width: 180px;
                     max-height: 180px;
-                    border-radius: 3px;
-                    // box-shadow: rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px;
                 }
             }
         }

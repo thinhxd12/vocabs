@@ -1,10 +1,15 @@
-import { Component, Index, createSignal, onMount } from "solid-js";
+import { Component, Index, Show, createSignal, onMount } from "solid-js";
 import { RouteDefinition, createAsync, useAction } from "@solidjs/router";
 import { getUser } from "~/api";
-import { getCalendarHistoryData, getCalendarScheduleData } from "~/api/api";
+import {
+  getCalendarHistoryData,
+  getCalendarScheduleData,
+  getImageFromUnsplash,
+} from "~/api/api";
 
-import "/public/styles/about.scss";
 import { HistoryType } from "~/types";
+import "/public/styles/calendar.scss";
+import { url } from "inspector";
 
 export const route = {
   load: () => {
@@ -17,10 +22,17 @@ const About: Component<{}> = (props) => {
     deferStream: true,
   });
 
+  const calendarImageUrl = createAsync(getImageFromUnsplash, {
+    deferStream: true,
+  });
+
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();
   const getCalendarHistoryDataAction = useAction(getCalendarHistoryData);
+  const [todayDate, setTodayDate] = createSignal<Date>(new Date());
 
   onMount(() => {
+    // console.log([...calendarScheduleData()]);
+    // setTodayDate(new Date());
     getCalendarHistoryDataFromStorage();
   });
   const getCalendarHistoryDataFromStorage = async () => {
@@ -33,27 +45,8 @@ const About: Component<{}> = (props) => {
   };
 
   return (
-    <div>
-      {/* <button onclick={()=>uploadObjToSupabaseAction(newdata)}>click</button> */}
-      <Index each={calendarScheduleData()}>
-        {(data, i) => {
-          return (
-            <Index each={data()}>
-              {(date, n) => {
-                return (
-                  <div class="date">
-                    <div>{date().date}</div>
-                    <div class="dateIndex">
-                      <div>{date().time1}</div>
-                      <div>{date().time2}</div>
-                    </div>
-                  </div>
-                );
-              }}
-            </Index>
-          );
-        }}
-      </Index>
+    <div class="calendar">
+      {/* 
       <br></br>
       <Index each={historyData()}>
         {(data, i) => {
@@ -87,7 +80,89 @@ const About: Component<{}> = (props) => {
             </div>
           );
         }}
-      </Index>
+      </Index> */}
+      <div class="calendarCard">
+        <div
+          class="calendarImage"
+          // style={{
+          //   "background-image": `url('/images/main/${
+          //     todayDate().getMonth() + 1
+          //   }.jpg')`,
+          // }}
+          style={{
+            "background-image": `url(${calendarImageUrl()})`,
+          }}
+        >
+          <div class="calendarImageContent">
+            <p>{todayDate().toLocaleString("default", { month: "long" })}</p>
+            <p>{todayDate().getFullYear()}</p>
+            <p>201 &#183; 400</p>
+          </div>
+        </div>
+        <div class="calendarDates">
+          <div class="calendarWeek">
+            <div class="calendarWeekTitle">Sun</div>
+            <div class="calendarWeekTitle">Mon</div>
+            <div class="calendarWeekTitle">Tue</div>
+            <div class="calendarWeekTitle">Wed</div>
+            <div class="calendarWeekTitle">Thu</div>
+            <div class="calendarWeekTitle">Fri</div>
+            <div class="calendarWeekTitle">Sat</div>
+          </div>
+          <Index each={calendarScheduleData()}>
+            {(data, i) => {
+              return (
+                <div class="calendarWeek">
+                  <Index each={data()}>
+                    {(date, n) => {
+                      return (
+                        <div class="calendarDay">
+                          <Show when={"time1" in date()}>
+                            <div class="dateTimeIndexHidden">
+                              {Math.max(date().time1, date().time2)}
+                            </div>
+                          </Show>
+                          <div
+                            class={
+                              date().month === todayDate().getMonth()
+                                ? "dateTextThisMonth"
+                                : "dateText"
+                            }
+                          >
+                            <Show
+                              when={
+                                date().month === todayDate().getMonth() &&
+                                date().date === todayDate().getDate()
+                              }
+                              fallback={date().date}
+                            >
+                              <div class="todayDate">{date().date}</div>
+                            </Show>
+                          </div>
+                          <Show when={"time1" in date()}>
+                            <div
+                              class={
+                                date().time1 > 0
+                                  ? "dateTimeIndex dateTimeIndexDone"
+                                  : date().date === todayDate().getDate()
+                                  ? "dateTimeIndex dateTimeIndexToday"
+                                  : "dateTimeIndex"
+                              }
+                            >
+                              <div>{date().time1}</div>
+                              <div>{date().time2}</div>
+                            </div>
+                          </Show>
+                        </div>
+                      );
+                    }}
+                  </Index>
+                </div>
+              );
+            }}
+          </Index>
+        </div>
+      </div>
     </div>
   );
 };

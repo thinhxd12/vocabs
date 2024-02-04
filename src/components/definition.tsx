@@ -47,16 +47,25 @@ const Definition = (props: Props) => {
         </div>
       </div>
       <div class="definitionBody">
-        <Index each={props.item?.definitions}>
-          {(m, i) => {
-            return (
-              <div class="sn-gs">
-                <div class="num">{1 + i}</div>
-                <div innerHTML={m()} class="sn-g" />
-              </div>
-            );
-          }}
-        </Index>
+        <Show when={props.item?.definitions.length > 0}>
+          <Index each={props.item?.definitions}>
+            {(m, i) => {
+              if (props.item?.definitions.length > 1) {
+                return (
+                  <div class="sn-gs">
+                    <div class="num">{1 + i}</div>
+                    <div innerHTML={m()} class="sn-g" />
+                  </div>
+                );
+              }
+              return (
+                <div class="sn-gs">
+                  <div innerHTML={m()} class="sn-g" />
+                </div>
+              );
+            }}
+          </Index>
+        </Show>
       </div>
     </div>
   );

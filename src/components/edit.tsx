@@ -1,18 +1,8 @@
-import {
-  Setter,
-  Show,
-  createEffect,
-  createSignal,
-  onMount,
-} from "solid-js";
+import { Setter, Show, createEffect, createSignal, onMount } from "solid-js";
 import "/public/styles/edit.scss";
-import {
-  OcChevrondown2,
-  OcChevronup2,
-  OcX2,
-} from "solid-icons/oc";
+import { OcChevrondown2, OcChevronup2, OcX2 } from "solid-icons/oc";
 import { VocabularyType } from "~/types";
-import { useSubmission } from "@solidjs/router";
+import { action, useSubmission } from "@solidjs/router";
 
 import { Motion, Presence } from "solid-motionone";
 import Alert from "./alert";
@@ -57,10 +47,19 @@ const Edit = (props: Props) => {
   });
 
   //----------------------------DONE NO EDIT--------------
-  const [definitionValue, setDefinitionValue] = createSignal<string>("");
+  const [definitionValue, setDefinitionValue] = createStore<{
+    type: string;
+    example: string;
+  }>({
+    type: "",
+    example: "",
+  });
 
   onMount(() => {
-    setDefinitionValue(JSON.stringify(props.item.definitions));
+    setDefinitionValue({
+      type: props.item.class,
+      example: JSON.stringify(props.item.definitions),
+    });
     Promise.all([
       getTextDataAmerica(props.item.text),
       getTextDataEnglish(props.item.text),
@@ -96,10 +95,44 @@ const Edit = (props: Props) => {
   });
   const [visible, setVisible] = createSignal([true, true, true]);
 
-  const handleCheck = (index: number, data: string) => {
+  const handleCheck = (index: number, data: VocabularyType) => {
     setVisible(visible().map((item, i) => i === index));
-    setDefinitionValue(data);
+    setDefinitionValue({
+      type: data.class,
+      example: JSON.stringify(data.definitions),
+    });
   };
+
+  const [handyEditResult, setHandyEditResult] = createSignal<string>("");
+  const handleSubmitDefinition = action(async (formData: FormData) => {
+    const newText =
+      props.item.text.length > 4
+        ? props.item.text.slice(0, -2)
+        : props.item.text;
+    const regText = new RegExp(`(${newText}\\w*)`, "gi");
+    let res = "";
+    const image = String(formData.get("image"));
+    const definition = String(formData.get("definition"));
+    const example = String(formData.get("example"));
+    const synonym = String(formData.get("synonym"));
+
+    if (image !== "")
+      res += `<span class=\"thumb_img\"><img class=\"thumb\" src=\"${image}\"/><span><span class=\"def\">${definition}</span>${
+        example !== ""
+          ? `<span class=\"x\">${example.replace(regText, `<b>$1</b>`)}</span>`
+          : ""
+      }</span></span>`;
+    else
+      res += `<span class=\"def\">${definition}</span>${
+        example !== ""
+          ? `<span class=\"x\">${example.replace(regText, `<b>$1</b>`)}</span>`
+          : ""
+      }`;
+    if (synonym !== "")
+      res += `<span class=\"xr-gs\">synonym <small>${synonym}</small></span>`;
+
+    setHandyEditResult(JSON.stringify(res));
+  });
 
   return (
     <div class="edit" tabIndex={1}>
@@ -132,26 +165,49 @@ const Edit = (props: Props) => {
               exit={{ scaleY: 0 }}
               transition={{ duration: 0.3, easing: "ease-in-out" }}
             >
-              <div class="editInputGroup">
-                <input class="editInputItem" placeholder="Image" />
-              </div>
-              <div class="editInputGroup">
-                <input class="editInputItem" placeholder="Definition" />
-              </div>
-              <div class="editInputGroup">
-                <input class="editInputItem" placeholder="Example" />
-              </div>
-              <div class="editInputGroup">
-                <input class="editInputItem" placeholder="Synonym" />
-              </div>
-              <div class="editInputGroup">
-                <textarea class="editInputItem editInputItemResult">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Numquam eos, similique ipsa neque hic distinctio consectetur
-                  labore, dolores quasi corrupti fuga harum, odio voluptas
-                  laborum. Ducimus vel porro maiores ullam.
-                </textarea>
-              </div>
+              <form action={handleSubmitDefinition} method="post">
+                <div class="editInputGroup">
+                  <input
+                    class="editInputItem"
+                    placeholder="Image"
+                    name="image"
+                    autocomplete="off"
+                  />
+                </div>
+                <div class="editInputGroup">
+                  <input
+                    class="editInputItem"
+                    placeholder="Definition"
+                    autocomplete="off"
+                    name="definition"
+                  />
+                </div>
+                <div class="editInputGroup">
+                  <input
+                    class="editInputItem"
+                    placeholder="Example"
+                    autocomplete="off"
+                    name="example"
+                  />
+                </div>
+                <div class="editInputGroup">
+                  <input
+                    class="editInputItem"
+                    placeholder="Synonym"
+                    autocomplete="off"
+                    name="synonym"
+                  />
+                </div>
+                <div class="editInputGroup">
+                  <textarea
+                    class="editInputItem editInputItemResult"
+                    value={handyEditResult()}
+                  />
+                </div>
+                <button type="submit" class="editSubmitBtn">
+                  Submit
+                </button>
+              </form>
             </Motion.div>
           </Show>
         </Presence>
@@ -194,14 +250,14 @@ const Edit = (props: Props) => {
               class="editInputItem"
               name="class"
               autocomplete="off"
-              value={props.item?.class}
+              value={definitionValue.type}
             />
           </div>
           <div class="editInputGroup">
             <textarea
               name="definitions"
               class="editInputItem editInputItemResult"
-              value={definitionValue()}
+              value={definitionValue.example}
             />
           </div>
           <div class="editInputGroup">
@@ -241,28 +297,19 @@ const Edit = (props: Props) => {
         <Show when={visible()[0]}>
           <Definition
             item={definitionData.america}
-            onCheck={() =>
-              handleCheck(0, JSON.stringify(definitionData.america.definitions))
-            }
+            onCheck={() => handleCheck(0, definitionData.america)}
           />
         </Show>
         <Show when={visible()[1]}>
           <Definition
             item={definitionData.english}
-            onCheck={() =>
-              handleCheck(1, JSON.stringify(definitionData.english.definitions))
-            }
+            onCheck={() => handleCheck(1, definitionData.english)}
           />
         </Show>
         <Show when={visible()[2]}>
           <Definition
             item={definitionData.cambridge}
-            onCheck={() =>
-              handleCheck(
-                2,
-                JSON.stringify(definitionData.cambridge.definitions)
-              )
-            }
+            onCheck={() => handleCheck(2, definitionData.cambridge)}
           />
         </Show>
       </div>

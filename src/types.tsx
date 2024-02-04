@@ -25,6 +25,14 @@ export interface HistoryItemContentType {
   to_date: string;
 }
 
+export interface ScheduleType {
+  date: string;
+  index1: number;
+  index2: number;
+  time1: number;
+  time2: number;
+}
+
 export interface HistoryType {
   id: number;
   week1: HistoryItemContentType;
