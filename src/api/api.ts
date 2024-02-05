@@ -1,5 +1,5 @@
 import { action, cache, redirect } from "@solidjs/router";
-import { BookmarkType, HistoryType, ImageType, TranslateType, VocabularyType, mapTables } from "~/types";
+import { BookmarkType, HistoryType, ImageType, ScheduleType, TranslateType, VocabularyType, mapTables } from "~/types";
 import { supabase } from "./supabase";
 import { DEFAULT_CORS_PROXY, getElAttribute, getElText } from "~/utils";
 import parse from "node-html-parser";
@@ -10,6 +10,7 @@ const baseUrl = "https://script.google.com/macros/s/AKfycbyyx7SmjI3iSF4uFVTtfVDY
 
 const getBookmarkUrl = (path: string) => `${baseUrl}?action=${path}`;
 const setBookmarkUrl = (path: string) => `${baseUrl}?action=${path}`;
+
 async function fetchAPIsheet(path: string) {
     const url = path.startsWith("getBookmark") ? getBookmarkUrl(path) : setBookmarkUrl(path);
     try {
@@ -18,19 +19,21 @@ async function fetchAPIsheet(path: string) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        return data;
+        return data as BookmarkType;
     } catch (error) {
         console.error(error);
     }
 }
 
-export const getBookmarkText = async (id: number) => {
+export const getBookmarkText = action(async (id: number) => {
+    "use server";
     return fetchAPIsheet(`getBookmark&num=${id}`);
-};
+}, "getBookmarkText");
 
-export const setBookmark = async (check: boolean) => {
+export const setBookmark = action(async (check: boolean) => {
+    "use server";
     return fetchAPIsheet(`setBookmark&check=${check}`);
-};
+}, "setBookmark");
 
 export const getSearchText = action(async (text: string) => {
     "use server";
@@ -51,7 +54,7 @@ const chunk = (array: any[], size: number) =>
         return acc;
     }, []);
 
-export const getCalendarScheduleData = cache(async () => {
+export const getCalendarScheduleData = action(async () => {
     "use server";
     const date = new Date();
     const thisMonth = date.getMonth();
@@ -101,6 +104,20 @@ export const getCalendarScheduleData = cache(async () => {
         return calendarScheduleArr;
     }
 }, "calendar-schedule");
+
+//get start index of schedule
+export const getThisWeekData = action(async () => {
+    "use server";
+    const { data, error } = await supabase.from(mapTables.schedule).select();
+    if (error) throw error;
+    if (data) return data[0].index1;
+});
+
+export const getCalendarTodayData = action(async () => {
+    "use server";
+    const { data, error } = await supabase.from(mapTables.schedule).select().eq('date', new Date().toISOString());
+    if (data) return data;
+});
 
 //get all history
 export const getCalendarHistoryData = action(async () => {
@@ -487,7 +504,7 @@ export const editVocabularyItem = action(async (formData: FormData) => {
 });
 
 //get image from unsplash
-export const getImageFromUnsplash = cache(async () => {
+export const getImageFromUnsplash = action(async () => {
     "use server";
     const apiKey = "EAEQdLT0Wze4Lhf_Xn2O-IAuow2Z-Rh2sHIEu7pTXms";
     const month = new Date().getMonth();
@@ -523,4 +540,4 @@ export const getImageFromUnsplash = cache(async () => {
     const response = await fetch(`https://api.unsplash.com/photos/random?query=${keyword}&count=1&client_id=${apiKey}`);
     const data = await response.json();
     return data[0].urls.regular;
-}, "get-image");
+});

@@ -3,24 +3,30 @@ import {
   type RouteDefinition,
   RouteSectionProps,
   A,
+  useSubmission,
 } from "@solidjs/router";
-import { createEffect, createResource, createSignal, onMount } from "solid-js";
+import {
+  createContext,
+  createEffect,
+  createResource,
+  createSignal,
+  onMount,
+} from "solid-js";
 import { createStore } from "solid-js/store";
 import { getUser, logout } from "~/api";
-import { getDataImage } from "~/api/api";
+import { getDataImage, getImageFromUnsplash } from "~/api/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import { URL_IMAGE_MAIN_PAGE } from "~/utils";
 import "/public/styles/main.scss";
 import { createPolled } from "@solid-primitives/timer";
+import { OcChevronleft2, OcChevronright2 } from "solid-icons/oc";
 
 export const route = {
   load: () => getUser(),
 } satisfies RouteDefinition;
 
 const MainLayout = (props: RouteSectionProps) => {
-  const [imageUrl, setImageUrl] = createSignal<string>(URL_IMAGE_MAIN_PAGE);
-  const [focusMode, setFocusMode] = createSignal<boolean>(false);
   const getDataImageAction = useAction(getDataImage);
 
   const mockObj = {
@@ -42,10 +48,6 @@ const MainLayout = (props: RouteSectionProps) => {
     setImageObj(result!);
   };
 
-  createEffect(() => {
-    getNextImageData(imageUrl());
-  });
-
   //Wakeup sever render after 14 minutes
   const getWakeup = async () => {
     const url = "https://myapp-9r5h.onrender.com/wakeup";
@@ -54,8 +56,13 @@ const MainLayout = (props: RouteSectionProps) => {
     return result;
   };
 
+
   onMount(() => {
-    const wakeup = createPolled(getWakeup, 840000);
+    getNextImageData(URL_IMAGE_MAIN_PAGE);
+    getWakeup();
+    setInterval(() => {
+      getWakeup();
+    }, 840000);
   });
 
   return (
@@ -65,7 +72,7 @@ const MainLayout = (props: RouteSectionProps) => {
           <img class="mainImage" src={imageObj.image} />
           <img class="mainImageBlurred" src={imageObj.image} />
           <button
-            onClick={() => setImageUrl(imageObj.nextImageUrl!)}
+            onClick={() => getNextImageData(imageObj.nextImageUrl!)}
             class="mainImageRoundBtn"
           >
             <svg

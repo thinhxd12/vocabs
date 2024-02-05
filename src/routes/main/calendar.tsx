@@ -1,102 +1,134 @@
-import { Component, Index, Show, createSignal, onMount } from "solid-js";
-import { RouteDefinition, createAsync, useAction } from "@solidjs/router";
+import {
+  Component,
+  For,
+  Index,
+  Show,
+  createEffect,
+  createSignal,
+  onMount,
+  useContext,
+} from "solid-js";
+import {
+  RouteDefinition,
+  createAsync,
+  useAction,
+  useSubmission,
+  useSubmissions,
+} from "@solidjs/router";
 import { getUser } from "~/api";
 import {
   getCalendarHistoryData,
   getCalendarScheduleData,
+  getCalendarTodayData,
   getImageFromUnsplash,
+  getThisWeekData,
 } from "~/api/api";
 
 import { HistoryType } from "~/types";
 import "/public/styles/calendar.scss";
 import { url } from "inspector";
+import {
+  Slider,
+  SliderButton,
+  SliderProvider,
+  createSlider,
+} from "solid-slider";
+import HistoryCard from "~/components/historycard";
 
 export const route = {
   load: () => {
     getUser();
   },
 } satisfies RouteDefinition;
+let ref: HTMLDivElement;
 
 const About: Component<{}> = (props) => {
-  const calendarScheduleData = createAsync(getCalendarScheduleData, {
-    deferStream: true,
-  });
-
-  const calendarImageUrl = createAsync(getImageFromUnsplash, {
-    deferStream: true,
-  });
+  // const calendarScheduleData = createAsync(getCalendarScheduleData, {
+  //   deferStream: true,
+  // });
 
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();
   const getCalendarHistoryDataAction = useAction(getCalendarHistoryData);
   const [todayDate, setTodayDate] = createSignal<Date>(new Date());
 
+  const getImageFromUnsplashAction = useAction(getImageFromUnsplash);
+  const getImageFromUnsplashResult = useSubmission(getImageFromUnsplash);
+  const getCalendarScheduleDataAction = useAction(getCalendarScheduleData);
+  const calendarScheduleDataResult = useSubmission(getCalendarScheduleData);
+  const getThisWeekDataAction = useAction(getThisWeekData);
+  const getThisWeekDataResult = useSubmission(getThisWeekData);
+
+  const options = {
+    duration: 1000,
+    loop: true,
+    initial: -1,
+  };
+  const [slider, { current, next, prev, moveTo }] = createSlider(options);
+
   onMount(() => {
-    // console.log([...calendarScheduleData()]);
-    // setTodayDate(new Date());
+    //get image calendar
+    // getImageFromUnsplashAction();
+    //get calendar schedule
+    getCalendarScheduleDataAction();
+    //get calendar history
     getCalendarHistoryDataFromStorage();
+    // set slider
+    slider(ref);
+    //get calendarImageContent
+    getThisWeekDataAction();
   });
   const getCalendarHistoryDataFromStorage = async () => {
     const data = sessionStorage.getItem("history");
-    if (!data) {
+    if (data === null || JSON.parse(data).length === 0) {
       const result = await getCalendarHistoryDataAction();
       setHistoryData(result);
       sessionStorage.setItem("history", JSON.stringify(result));
     } else setHistoryData(JSON.parse(data));
   };
 
+  const CalendarLoading = () => {
+    return (
+      <>
+        <Index each={Array.from(Array(5).keys())}>
+          {(item, n) => {
+            return (
+              <div class="calendarWeek">
+                <div class="calendarDayLoading">11</div>
+                <div class="calendarDayLoading">12</div>
+                <div class="calendarDayLoading">13</div>
+                <div class="calendarDayLoading">14</div>
+                <div class="calendarDayLoading">15</div>
+                <div class="calendarDayLoading">16</div>
+                <div class="calendarDayLoading">17</div>
+              </div>
+            );
+          }}
+        </Index>
+      </>
+    );
+  };
+
   return (
     <div class="calendar">
-      {/* 
-      <br></br>
-      <Index each={historyData()}>
-        {(data, i) => {
-          return (
-            <div>
-              <div>
-                <span class="desc">{data().week1.index}</span>
-                <span>{data().week1.from_date}</span>
-                <span>{data().week1.to_date}</span>
-              </div>
-              <div>
-                <span class="desc">{data().week2.index}</span>
-                <span>{data().week2.from_date}</span>
-                <span>{data().week2.to_date}</span>
-              </div>{" "}
-              <div>
-                <span class="desc">{data().week3.index}</span>
-                <span>{data().week3.from_date}</span>
-                <span>{data().week3.to_date}</span>
-              </div>{" "}
-              <div>
-                <span class="desc">{data().week4.index}</span>
-                <span>{data().week4.from_date}</span>
-                <span>{data().week4.to_date}</span>
-              </div>{" "}
-              <div>
-                <span class="desc">{data().week5.index}</span>
-                <span>{data().week5.from_date}</span>
-                <span>{data().week5.to_date}</span>
-              </div>
-            </div>
-          );
-        }}
-      </Index> */}
       <div class="calendarCard">
         <div
           class="calendarImage"
-          // style={{
-          //   "background-image": `url('/images/main/${
-          //     todayDate().getMonth() + 1
-          //   }.jpg')`,
-          // }}
           style={{
-            "background-image": `url(${calendarImageUrl()})`,
+            "background-image": `url('/images/main/${
+              todayDate().getMonth() + 1
+            }.jpg')`,
           }}
+          // style={{
+          //   "background-image": `url(${getImageFromUnsplashResult.result})`,
+          // }}
         >
           <div class="calendarImageContent">
             <p>{todayDate().toLocaleString("default", { month: "long" })}</p>
             <p>{todayDate().getFullYear()}</p>
-            <p>201 &#183; 400</p>
+            <p>
+              {getThisWeekDataResult.result + 1} &#183;{" "}
+              {getThisWeekDataResult.result + 200}
+            </p>
           </div>
         </div>
         <div class="calendarDates">
@@ -109,59 +141,71 @@ const About: Component<{}> = (props) => {
             <div class="calendarWeekTitle">Fri</div>
             <div class="calendarWeekTitle">Sat</div>
           </div>
-          <Index each={calendarScheduleData()}>
-            {(data, i) => {
-              return (
-                <div class="calendarWeek">
-                  <Index each={data()}>
-                    {(date, n) => {
-                      return (
-                        <div class="calendarDay">
-                          <Show when={"time1" in date()}>
-                            <div class="dateTimeIndexHidden">
-                              {Math.max(date().time1, date().time2)}
-                            </div>
-                          </Show>
-                          <div
-                            class={
-                              date().month === todayDate().getMonth()
-                                ? "dateTextThisMonth"
-                                : "dateText"
-                            }
-                          >
-                            <Show
-                              when={
-                                date().month === todayDate().getMonth() &&
-                                date().date === todayDate().getDate()
-                              }
-                              fallback={date().date}
-                            >
-                              <div class="todayDate">{date().date}</div>
+          <Show
+            when={calendarScheduleDataResult.result}
+            fallback={<CalendarLoading />}
+          >
+            <Index each={calendarScheduleDataResult.result}>
+              {(data, i) => {
+                return (
+                  <div class="calendarWeek">
+                    <Index each={data()}>
+                      {(date, n) => {
+                        return (
+                          <div class="calendarDay">
+                            <Show when={"time1" in date()}>
+                              <div class="dateTimeIndexHidden">
+                                {Math.max(date().time1, date().time2)}
+                              </div>
                             </Show>
-                          </div>
-                          <Show when={"time1" in date()}>
                             <div
                               class={
-                                date().time1 > 0
-                                  ? "dateTimeIndex dateTimeIndexDone"
-                                  : date().date === todayDate().getDate()
-                                  ? "dateTimeIndex dateTimeIndexToday"
-                                  : "dateTimeIndex"
+                                date().month === todayDate().getMonth()
+                                  ? "dateTextThisMonth"
+                                  : "dateText"
                               }
                             >
-                              <div>{date().time1}</div>
-                              <div>{date().time2}</div>
+                              <Show
+                                when={
+                                  date().month === todayDate().getMonth() &&
+                                  date().date === todayDate().getDate()
+                                }
+                                fallback={date().date}
+                              >
+                                <div class="todayDate">{date().date}</div>
+                              </Show>
                             </div>
-                          </Show>
-                        </div>
-                      );
-                    }}
-                  </Index>
-                </div>
-              );
-            }}
-          </Index>
+                            <Show when={"time1" in date()}>
+                              <div
+                                class={
+                                  date().time1 > 0
+                                    ? "dateTimeIndex dateTimeIndexDone"
+                                    : date().date === todayDate().getDate()
+                                    ? "dateTimeIndex dateTimeIndexToday"
+                                    : "dateTimeIndex"
+                                }
+                              >
+                                <div>{date().time1}</div>
+                                <div>{date().time2}</div>
+                              </div>
+                            </Show>
+                          </div>
+                        );
+                      }}
+                    </Index>
+                  </div>
+                );
+              }}
+            </Index>
+          </Show>
         </div>
+      </div>
+      <div class="calendarHistory" ref={ref}>
+        <Index each={historyData()}>
+          {(data, i) => {
+            return <HistoryCard item={data()} />;
+          }}
+        </Index>
       </div>
     </div>
   );

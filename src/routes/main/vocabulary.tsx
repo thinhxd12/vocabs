@@ -1,5 +1,10 @@
 import { Component, Index, JSX, Show, createSignal } from "solid-js";
-import { RouteDefinition, useAction } from "@solidjs/router";
+import {
+  RouteDefinition,
+  useAction,
+  useSubmission,
+  useSubmissions,
+} from "@solidjs/router";
 import { getUser } from "~/api";
 import { BookmarkType, TranslateType, VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
@@ -30,6 +35,7 @@ import { Motion, Presence } from "solid-motionone";
 import Translation from "~/components/translation";
 import { Portal } from "solid-js/web";
 import Edit from "~/components/edit";
+import QuoteDummy from "~/components/quote";
 
 export const route = {
   load: () => {
@@ -42,11 +48,6 @@ const page: Component<{}> = (props) => {
   const [searchTerm, setSearchTerm] = createSignal<string>("");
   const [currentText, setCurrentText] = createSignal<VocabularyType>();
   const [showDefinitions, setShowDefinitions] = createSignal(false);
-  const [currentQuote, setCurrentQuote] = createStore<BookmarkType>({
-    check: false,
-    value: "",
-  });
-  const [showQuotes, setShowQuotes] = createSignal(false);
 
   let divRef: HTMLDivElement | undefined;
 
@@ -107,15 +108,26 @@ const page: Component<{}> = (props) => {
     setTranslateTerm("");
   };
 
+  // -------------------QUOTE START-------------------- //
+  const [currentQuote, setCurrentQuote] = createStore<BookmarkType>({
+    check: false,
+    value: "",
+  });
+  const [showQuotes, setShowQuotes] = createSignal(false);
+  const getBookmarkAction = useAction(getBookmarkText);
+  const getBookmarkTextResult = useSubmission(getBookmarkText);
+  const setBookmarkAction = useAction(setBookmark);
+
   const getQuote = async (numb: number) => {
-    if (!showQuotes()) setShowQuotes(true);
-    const data = await getBookmarkText(numb);
-    setCurrentQuote(data);
+    setShowQuotes(true);
+    const result = await getBookmarkAction(numb);
+    setCurrentQuote(result!);
+    // getBookmarkAction(numb);
   };
 
-  const checkQuote = async (check: boolean) => {
+  const checkQuote = (check: boolean) => {
     setCurrentQuote("check", check);
-    setBookmark(check);
+    setBookmarkAction(check);
   };
 
   const copyQuoteToClipboard = async (text: string) => {
@@ -125,6 +137,7 @@ const page: Component<{}> = (props) => {
       console.error("Failed to copy text: ", err);
     }
   };
+  // -------------------QUOTE END-------------------- //
 
   // -------------------TRANSLATE START-------------------- //
   const [translateTerm, setTranslateTerm] = createSignal<string>("");
@@ -261,7 +274,7 @@ const page: Component<{}> = (props) => {
               )}
             </Index>
             {/* Quote content */}
-            <Show when={showQuotes()}>
+            {/* <Show when={showQuotes()} fallback={<p>Loading</p>}>
               <div class="quoteContainer">
                 <div class="quoteHeader">
                   <div class="quoteHeaderLeft">
@@ -306,6 +319,57 @@ const page: Component<{}> = (props) => {
                   <span>{currentQuote.value.slice(1)}</span>
                 </div>
               </div>
+            </Show> */}
+            <Show when={showQuotes()}>
+              <Show
+                when={getBookmarkTextResult.result}
+                fallback={<QuoteDummy />}
+              >
+                <div class="quoteContainer">
+                  <div class="quoteHeader">
+                    <div class="quoteHeaderLeft">
+                      <button class="quoteBtn" onclick={() => getQuote(-1)}>
+                        <OcChevronleft2 size={17} />
+                      </button>
+                      <button
+                        class={
+                          currentQuote.check
+                            ? "quoteBtn quoteBtnActive"
+                            : "quoteBtn"
+                        }
+                        onclick={() => checkQuote(!currentQuote.check)}
+                      >
+                        {currentQuote.check ? (
+                          <OcStarfill2 size={17} color="#ffc107" />
+                        ) : (
+                          <OcStar2 size={17} />
+                        )}
+                      </button>
+                      <button class="quoteBtn" onclick={() => getQuote(1)}>
+                        <OcChevronright2 size={17} />
+                      </button>
+                      <button
+                        class="quoteBtn"
+                        onclick={() => copyQuoteToClipboard(currentQuote.value)}
+                      >
+                        <OcCopy2 size={17} />
+                      </button>
+                    </div>
+                    <button
+                      class="quoteBtnClose"
+                      onClick={() => setShowQuotes(false)}
+                    >
+                      <OcX2 size={12} />
+                    </button>
+                  </div>
+                  <div class="quoteBody">
+                    <span class="quoteDropCap">
+                      {currentQuote.value.slice(0, 1)}
+                    </span>
+                    <span>{currentQuote.value.slice(1)}</span>
+                  </div>
+                </div>
+              </Show>
             </Show>
             {/* Definition */}
             <Presence>

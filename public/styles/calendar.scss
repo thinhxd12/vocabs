@@ -7,7 +7,6 @@
     overflow: hidden;
     position: inherit;
     outline: none;
-    // background-color: $color-black;
 
     .calendarImage {
         position: relative;
@@ -16,21 +15,20 @@
         width: 360px;
         background-size: cover;
         background-position: center bottom;
+        overflow: hidden;
 
         .calendarImageContent {
             height: 54px;
             width: 62px;
             padding: 3px;
-            cursor: pointer;
-            background-color: #33333333;
-            backdrop-filter: blur(6px);
-            position: absolute;
-            top: 208px;
-            right: 8px;
-            border-radius: 3px;
-            box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
-            @include font('Poppins', false, $color-calendar-white);
             @include flex-center-column;
+            @include font('Poppins', false, $color-calendar-white);
+            cursor: pointer;
+            background-color: $color-black;
+            position: absolute;
+            bottom: 9px;
+            right: 9px;
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 9px 15px, rgba(0, 0, 0, 0.22) 0px 12px 9px;
 
             p {
                 text-align: center;
@@ -142,5 +140,96 @@
                 }
             }
         }
+
+        .calendarDayLoading {
+            height: 21px;
+            width: 49px;
+            @include flex-center;
+            @include font('Rubik', 13px, $color-calendar-text-2, 600, normal, 21px);
+            filter: blur(3px);
+        }
     }
+
+    .historyCard {
+        width: 100%;
+        height: 100px;
+        overflow: hidden;
+        padding: 0 6px;
+
+        .historyCardItem {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+
+            &:not(:last-child) {
+                margin-bottom: 2px;
+            }
+
+            .historyCardItemDesc {
+                background: $color-calendar-black;
+                width: 90px;
+                height: 18px;
+                padding: 0 6px;
+                position: relative;
+                cursor: pointer;
+                @include font('Rubik', 11px, $color-white, 400, normal, 18px);
+
+                &::after {
+                    content: '';
+                    width: 6px;
+                    height: 10px;
+                    position: absolute;
+                    left: 99%;
+                    top: 4px;
+                    background: #161616;
+                    clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+                    z-index: 33;
+                }
+            }
+
+            .historyCardItemFrom,
+            .historyCardItemTo {
+                width: 120px;
+                height: 18px;
+                padding: 0 12px;
+                @include font('Rubik', 11px, $color-black, 400, normal, 18px);
+                cursor: default;
+            }
+        }
+    }
+}
+
+.keen-slider:not([data-keen-slider-disabled]) {
+    align-content: flex-start;
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -khtml-user-select: none;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+    width: 100%;
+}
+
+.keen-slider:not([data-keen-slider-disabled]) .keen-slider__slide {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    min-height: 100%;
+}
+
+.keen-slider:not([data-keen-slider-disabled])[data-keen-slider-reverse] {
+    flex-direction: row-reverse;
+}
+
+.keen-slider:not([data-keen-slider-disabled])[data-keen-slider-v] {
+    flex-wrap: wrap;
+}
+
+.keen-slider:not([data-keen-slider-disabled])[data-keen-slider-moves] * {
+    pointer-events: none;
 }
