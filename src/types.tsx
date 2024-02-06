@@ -33,6 +33,15 @@ export interface ScheduleType {
   time2: number;
 }
 
+export interface CalendarScheduleType {
+  date: number;
+  index1: number;
+  index2: number;
+  time1: number;
+  time2: number;
+  month: number;
+}
+
 export interface HistoryType {
   id: number;
   week1: HistoryItemContentType;

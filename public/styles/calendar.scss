@@ -171,7 +171,7 @@
                 height: 18px;
                 padding: 0 6px;
                 position: relative;
-                cursor: pointer;
+                cursor: default;
                 @include font('Rubik', 11px, $color-white, 400, normal, 18px);
 
                 &::after {
@@ -194,6 +194,97 @@
                 padding: 0 12px;
                 @include font('Rubik', 11px, $color-black, 400, normal, 18px);
                 cursor: default;
+            }
+        }
+    }
+
+    .calendarDropdownContainer {
+        overflow: hidden;
+    }
+
+    .calendarDropdown {
+        @include baseBody($color-calendar-bg);
+        width: 360px;
+        margin-bottom: 3px;
+
+        .calendarDropdownHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid $color-calendar-border;
+            height: 21px;
+            padding: 2px 0 2px 2px;
+
+            .calendarDropdownHeaderLeft {
+                p {
+                    @include font('Rubik', 12px, $color-black, 400, normal, 18px);
+                }
+            }
+
+            .calendarDropdownHeaderRight {
+                @include flex;
+
+                .calendarDropdownBtn {
+                    @include baseButton(28px);
+                }
+            }
+        }
+
+        .calendarDropdownBody {
+            padding-top: 3px;
+
+            .calendarDropdownFormContent {
+                @include flex;
+                width: 100%;
+
+                .calendarInputGroup {
+                    flex-grow: 1;
+
+                    &:not(:last-child) {
+                        margin-right: 3px;
+                    }
+
+                    .calendarInputDate,
+                    .calendarInput {
+                        border: 1px solid $color-calendar-border;
+                        height: 21px;
+                        border-radius: 3px;
+                        padding: 3px;
+                        outline: 0;
+                        width: 100%;
+                        @include font('Rubik', 12px, $color-black, 400, normal, 18px);
+                    }
+
+                    .calendarSelect {
+                        border: 1px solid $color-calendar-border;
+                        height: 21px;
+                        border-radius: 3px;
+                        padding: 3px;
+                        outline: 0;
+                        width: 100%;
+                        @include font('Rubik', 12px, $color-white, 400, normal, 18px);
+                        background: $color-calendar-black;
+                    }
+
+                }
+
+                .calendarFormText {
+                    height: 21px;
+                    background-color: $color-black;
+                    @include font('Rubik', 12px, $color-white, 400, normal, 18px);
+                    padding: 3px;
+                    border-radius: 3px;
+                    margin-right: 3px;
+                    width: 18%;
+                    border: 1px solid $color-calendar-border;
+                    color: $color-white;
+                }
+            }
+
+            .calendarSubmitBtn {
+                @include baseButton(42px);
+                font-size: 10px;
+                margin-top: 3px;
             }
         }
     }

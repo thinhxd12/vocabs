@@ -1,4 +1,4 @@
-import { action, cache, redirect } from "@solidjs/router";
+import { action, cache, redirect, useAction } from "@solidjs/router";
 import { BookmarkType, HistoryType, ImageType, ScheduleType, TranslateType, VocabularyType, mapTables } from "~/types";
 import { supabase } from "./supabase";
 import { DEFAULT_CORS_PROXY, getElAttribute, getElText } from "~/utils";
@@ -214,7 +214,7 @@ export const insertNewVocabularyItem = action(async (obj: VocabularyType) => {
     "use server";
     const { error } = await supabase
         .from(mapTables.vocabulary)
-        .insert(obj)
+        .upsert(obj)
     if (error) return { message: error.message };
     return { message: "success" } as PostgrestError
 });
@@ -433,7 +433,10 @@ export const getTextDataCambridge = async (text: string) => {
 
                     if (img) {
                         const imgUrl = getElAttribute(img, "amp-img", "src");
-                        def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org/${imgUrl}"/><span><span class="def">${defin}</span>${example}</span></span>`;
+                        if (example) {
+                            def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org/${imgUrl}"/><span><span class="def">${defin}</span>${example}</span></span>`;
+                        } else
+                            def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org/${imgUrl}"/><span class="def">${defin}</span></span>`;
                     } else if (defin !== "")
                         def += `<span class="def">${defin}</span>${example}`;
                 });
@@ -541,3 +544,80 @@ export const getImageFromUnsplash = action(async () => {
     const data = await response.json();
     return data[0].urls.regular;
 });
+
+//reset today schedule
+export const submitTodayReset = action(async (formData: FormData) => {
+    "use server";
+    const todayIndex1 = Number(formData.get("todayIndex1"));
+    const todayIndex2 = Number(formData.get("todayIndex2"));
+    const { error } = await supabase
+        .from(mapTables.schedule)
+        .update({
+            time1: todayIndex1,
+            time2: todayIndex2,
+        })
+        .eq('date', new Date().toISOString());
+    if (error) return { message: error.message };
+    throw redirect("/main/vocabulary");
+}, "todayReset");
+
+export const submitNewHistory = action(async (formData: FormData) => {
+    "use server";
+    const indexWeek = Number(formData.get("indexWeek"));
+    const fromDate = String(formData.get("fromDate"));
+    const toDate = String(formData.get("toDate"));
+    const monthId = String(formData.get("monthId"));
+
+    let key = indexWeek % 1000 === 1 ? "week1" : "week" + ((indexWeek % 1000 - 1) / 200 + 1);
+    const { error } = await supabase
+        .from(mapTables.history)
+        .update({
+            [key]: {
+                index: indexWeek, from_date: fromDate, to_date: toDate
+            }
+        })
+        .eq('id', monthId);
+    if (error) return { message: error.message };
+    throw redirect("/main/vocabulary");
+}, "newHistory");
+
+export const submitNewWeek = action(async (formData: FormData) => {
+    "use server";
+    const startDay = String(formData.get("startDay"));
+    const startIndex = Number(formData.get("startIndex"));
+    const { error } = await supabase
+        .from(mapTables.schedule)
+        .delete()
+        .gte('time1', 0)
+    for (let i = 0; i < 6; i++) {
+        let { error } = await supabase
+            .from(mapTables.schedule)
+            .insert([{
+                date: (new Date(new Date(startDay).getTime() + i * 86400000)).toISOString().split('T')[0],
+                index1: i % 2 == 0 ? startIndex : startIndex + 50,
+                index2: i % 2 == 0 ? startIndex + 100 : startIndex + 150,
+                time1: 0,
+                time2: 0,
+            }]);
+        if (error) console.log(error);
+    }
+    throw redirect("/main/vocabulary");
+}, "startNewWeek");
+
+export const submitNewMonth = action(async (formData: FormData) => {
+    "use server";
+    const monthId = Number(formData.get("monthId"));
+    const startMonthIndex = Number(formData.get("startMonthIndex"));
+    let { error } = await supabase
+        .from(mapTables.history)
+        .upsert([{
+            id: monthId,
+            week1: { index: startMonthIndex, from_date: "", to_date: "" },
+            week2: { index: startMonthIndex + 200, from_date: "", to_date: "" },
+            week3: { index: startMonthIndex + 400, from_date: "", to_date: "" },
+            week4: { index: startMonthIndex + 600, from_date: "", to_date: "" },
+            week5: { index: startMonthIndex + 800, from_date: "", to_date: "" },
+        }])
+    if (error) console.error(error);
+    throw redirect("/main/vocabulary");
+}, "startMonth");
