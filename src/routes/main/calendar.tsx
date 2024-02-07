@@ -217,6 +217,13 @@ const About: Component<{}> = (props) => {
           </Show>
         </div>
       </div>
+      <div class="calendarHistory" ref={ref}>
+        <Index each={historyData()}>
+          {(data, i) => {
+            return <HistoryCard item={data()} />;
+          }}
+        </Index>
+      </div>
       <div class="calendarDropdownContainer">
         {/* new week */}
         <Presence>
@@ -422,13 +429,6 @@ const About: Component<{}> = (props) => {
             </Motion>
           </Show>
         </Presence>
-      </div>
-      <div class="calendarHistory" ref={ref}>
-        <Index each={historyData()}>
-          {(data, i) => {
-            return <HistoryCard item={data()} />;
-          }}
-        </Index>
       </div>
     </div>
   );

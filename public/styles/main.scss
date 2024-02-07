@@ -22,7 +22,7 @@
             object-fit: contain;
             position: inherit;
             z-index: 3;
-            box-shadow: rgba(0, 0, 0, 0.9) 0px 21px 39px 0px, rgba(0, 0, 0, 0.81) 0px 15px 12px 0px;
+            box-shadow: -12px 15px 9px 1px rgba(0, 0, 0, 0.72);
         }
 
         .mainImageBlurred {
@@ -37,27 +37,30 @@
             filter: blur(120px) brightness(0.9);
         }
 
-        .mainImageRoundBtn {
+        .mainImageBottomBar {
             position: absolute;
-            bottom: 3px;
-            right: 3px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            @include flex-center;
+            z-index: 1001;
+            height: 45px;
+        }
+
+        .mainImageRoundBtn {
             width: 30px;
             height: 30px;
             cursor: pointer;
             border-radius: 50%;
-            background: #3b3735;
+            background: transparent;
             padding: 9px 12px;
             border: none;
-            transition: all 0.2s ease-in;
-            z-index: 36;
-            opacity: 0.3;
-            transform: translateX(60%);
-            box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px 0px, rgba(0, 0, 0, 0.22) 0px 10px 10px 0px;
+            transition: all 0.2s;
+            opacity: 0.12;
 
             &:hover {
-                background: #4e423c;
                 opacity: 1;
-                transform: translateX(0%);
+                box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
             }
 
             i {
@@ -74,21 +77,19 @@
     .mainImageContent {
         min-width: 360px;
         max-width: 360px;
-        // background: $color-black;
-        height: 100%;
+        height: 100vh;
         overflow: hidden;
         z-index: 99;
         position: relative;
         box-shadow: rgba(0, 0, 0, 0.9) 0px 21px 39px 0px, rgba(0, 0, 0, 0.81) 0px 15px 12px 0px;
         position: relative;
-        
+
     }
 
     .mainDescriptionContainter {
         height: 100%;
         overflow: hidden;
         padding: 21px;
-        // background: $color-black;
         border-left: 1px solid $color-boder;
         flex-grow: 1;
         background: $color-background-3;

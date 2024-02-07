@@ -69,7 +69,7 @@
 
 
             .num {
-                @include font('nyt-cheltenham', 8px, $color-black, 700, normal, 10px);
+                @include font('nyt-cheltenham', 8px, $color-black, 700, normal, 11px);
                 @include flex-center;
                 width: 11px;
                 height: 11px;

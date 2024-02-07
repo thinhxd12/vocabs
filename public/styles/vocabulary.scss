@@ -328,6 +328,15 @@
         overflow: hidden;
     }
 
+    .vocabularyBtnText {
+        span{
+            font-size: 12px;
+        }
+        small {
+            font-size: 9px;
+        }
+    }
+
     .vocabularyBtn:hover {
         transition: all 0.1s linear;
         color: #fff;

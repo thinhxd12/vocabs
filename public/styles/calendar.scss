@@ -3,10 +3,15 @@
 
 .calendar {
     width: 100%;
-    height: 100%;
-    overflow: hidden;
+    height: calc(100vh - 31px);
+    overflow-x: hidden;
+    overflow-y: scroll;
     position: inherit;
     outline: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
     .calendarImage {
         position: relative;
@@ -145,7 +150,7 @@
             height: 21px;
             width: 49px;
             @include flex-center;
-            @include font('Rubik', 13px, $color-calendar-text-2, 600, normal, 21px);
+            @include font('Rubik', 13px, $color-calendar-text-1, 600, normal, 21px);
             filter: blur(3px);
         }
     }

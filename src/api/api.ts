@@ -115,8 +115,11 @@ export const getThisWeekData = action(async () => {
 
 export const getCalendarTodayData = action(async () => {
     "use server";
-    const { data, error } = await supabase.from(mapTables.schedule).select().eq('date', new Date().toISOString());
-    if (data) return data;
+    const { data, error } = await supabase
+        .from(mapTables.schedule)
+        .select()
+        .eq('date', new Date().toISOString());
+    if (data) return data[0] as ScheduleType;
 });
 
 //get all history
@@ -474,10 +477,8 @@ export const getOedSound = action(async (text: string) => {
 //delete vocabulary
 export const deleteVocabulary = action(async (text: string) => {
     "use server";
-    const { data, error } = await supabase
-        .from(mapTables.vocabulary)
-        .delete()
-        .match({ text: text });
+    const { error } = await supabase
+        .rpc('deleteitem', { word: text })
     if (error) return error;
 });
 
@@ -621,3 +622,19 @@ export const submitNewMonth = action(async (formData: FormData) => {
     if (error) console.error(error);
     throw redirect("/main/vocabulary");
 }, "startMonth");
+
+//handle vocabulary
+export const checkVocabulary = action(async (text: string) => {
+    "use server";
+    const { error } = await supabase
+        .rpc('checkitem', { word: text })
+    if (error) return error;
+}, "checkVocabulary");
+
+//archive vocabulary
+export const archiveVocabulary = action(async (text: string) => {
+    "use server";
+    const { error } = await supabase
+        .rpc('archiveitem', { word: text })
+    if (error) return error;
+}, "archiveVocabulary");

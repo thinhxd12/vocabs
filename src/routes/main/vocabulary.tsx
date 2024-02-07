@@ -1,4 +1,4 @@
-import { Component, Index, JSX, Show, createSignal } from "solid-js";
+import { Component, Index, JSX, Show, createSignal, onMount } from "solid-js";
 import {
   RouteDefinition,
   useAction,
@@ -13,7 +13,10 @@ import {
   getBookmarkText,
   getSearchText,
   getTranslate,
+  checkVocabulary,
   setBookmark,
+  archiveVocabulary,
+  getCalendarTodayData,
 } from "~/api/api";
 import { createStore } from "solid-js/store";
 import {
@@ -91,12 +94,21 @@ const page: Component<{}> = (props) => {
     }
   };
 
-  const handleRenderText = (text: VocabularyType) => {
+  const checkVocabularyAction = useAction(checkVocabulary);
+  const archiveVocabularyAction = useAction(archiveVocabulary);
+
+  const handleRenderText = async (text: VocabularyType) => {
     setCurrentText(text);
     setShowDefinitions(true);
     setSearchTerm("");
     setSearchResult([]);
     // handlecheck function
+    if (text.number > 1) {
+      checkVocabularyAction(text.text);
+    } else {
+      await archiveVocabularyAction(text.text);
+      deleteVocabularyAction(text.text);
+    }
   };
 
   const handleCloseDefinition = () => {
@@ -188,6 +200,15 @@ const page: Component<{}> = (props) => {
     setSearchResult([]);
   };
   // -------------------EDIT END-------------------- //
+  // -------------------AUTOPLAY START-------------------- //
+  const getCalendarTodayDataAction = useAction(getCalendarTodayData);
+  const getCalendarTodayDataResult = useSubmission(getCalendarTodayData);
+
+  onMount(() => {
+    getCalendarTodayDataAction();
+  });
+
+  // -------------------AUTOPLAY END-------------------- //
 
   return (
     <div class="vocabularyContainer">
@@ -273,53 +294,6 @@ const page: Component<{}> = (props) => {
                 </div>
               )}
             </Index>
-            {/* Quote content */}
-            {/* <Show when={showQuotes()} fallback={<p>Loading</p>}>
-              <div class="quoteContainer">
-                <div class="quoteHeader">
-                  <div class="quoteHeaderLeft">
-                    <button class="quoteBtn" onclick={() => getQuote(-1)}>
-                      <OcChevronleft2 size={17} />
-                    </button>
-                    <button
-                      class={
-                        currentQuote.check
-                          ? "quoteBtn quoteBtnActive"
-                          : "quoteBtn"
-                      }
-                      onclick={() => checkQuote(!currentQuote.check)}
-                    >
-                      {currentQuote.check ? (
-                        <OcStarfill2 size={17} color="#ffc107" />
-                      ) : (
-                        <OcStar2 size={17} />
-                      )}
-                    </button>
-                    <button class="quoteBtn" onclick={() => getQuote(1)}>
-                      <OcChevronright2 size={17} />
-                    </button>
-                    <button
-                      class="quoteBtn"
-                      onclick={() => copyQuoteToClipboard(currentQuote.value)}
-                    >
-                      <OcCopy2 size={17} />
-                    </button>
-                  </div>
-                  <button
-                    class="quoteBtnClose"
-                    onClick={() => setShowQuotes(false)}
-                  >
-                    <OcX2 size={12} />
-                  </button>
-                </div>
-                <div class="quoteBody">
-                  <span class="quoteDropCap">
-                    {currentQuote.value.slice(0, 1)}
-                  </span>
-                  <span>{currentQuote.value.slice(1)}</span>
-                </div>
-              </div>
-            </Show> */}
             <Show when={showQuotes()}>
               <Show
                 when={getBookmarkTextResult.result}
@@ -431,8 +405,14 @@ const page: Component<{}> = (props) => {
           </button>
           <button class="vocabularyBtn">Ν</button>
           <button class="vocabularyBtn">Ε</button>
-          <button class="vocabularyBtn">Λ</button>
-          <button class="vocabularyBtn">Δ</button>
+          <button class="vocabularyBtn vocabularyBtnText">
+            <span>Α</span>
+            <small>{getCalendarTodayDataResult.result?.time1}</small>
+          </button>
+          <button class="vocabularyBtn vocabularyBtnText">
+            <span>Β</span>
+            <small>{getCalendarTodayDataResult.result?.time2}</small>
+          </button>
           <button class="vocabularyBtn">Χ</button>
           <button class="vocabularyBtn">Σ</button>
           <button class="vocabularyBtn">Ξ</button>
