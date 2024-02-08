@@ -83,6 +83,7 @@ const Translation = (props: Props) => {
     phonetic: "",
     meaning: "",
     number: 240,
+    created_at: new Date().toISOString(),
   });
 
   const handleInsertNewVocabulary = async () => {

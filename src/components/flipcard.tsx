@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, onCleanup } from "solid-js";
+import { Component, createEffect, createSignal, on, onCleanup } from "solid-js";
 import { VocabularyType } from "~/types";
 import "/public/styles/flipcard.scss";
 import { Motion } from "solid-motionone";
@@ -7,13 +7,13 @@ import { AudioState, createAudio } from "@solid-primitives/audio";
 type Props = {
   item: VocabularyType;
 };
+const [playing, setPlaying] = createSignal(false);
 
 const FlipCard = (props: Props) => {
   const [audioSource, setAudioSource] = createSignal<string>(props.item?.sound);
-  const [playing, setPlaying] = createSignal(false);
+  const [turnBoxClass, setTurnBoxClass] = createSignal<string>("");
   const [volume, setVolume] = createSignal(1);
   const [audio, { seek }] = createAudio(audioSource, playing, volume);
-  const [turnBoxClass, setTurnBoxClass] = createSignal<string>("");
 
   const renderMeaning = () => {
     if (props.item) {
@@ -39,40 +39,45 @@ const FlipCard = (props: Props) => {
   const [renderNumber, setRenderNumber] = createSignal<number>(3);
   const [numbArray, setNumbArray] = createSignal<number[]>([3, 6, 9]);
 
-  createEffect(() => {
-    if (props.item?.sound) {
-      setAudioSource(props.item?.sound);
-      setPlaying(true);
-    }
-    if (props.item?.number > 1) {
-      setRenderNumber(props.item?.number);
-      setNumbArray(createNumberArray(props.item?.number));
-      const timer1 = setTimeout(() => {
-        setRenderNumber(renderNumber() - 1);
-        setNumbArray(createNumberArray(renderNumber()));
-        setPlaying(false);
-      }, 2500);
+  createEffect(
+    on(
+      () => props.item?.text,
+      () => {
+        if (props.item?.sound) {
+          setAudioSource(props.item.sound);
+          setPlaying(true);
+        }
+        if (props.item?.number > 1) {
+          setRenderNumber(props.item.number);
+          setNumbArray(createNumberArray(props.item.number));
+          const timer1 = setTimeout(() => {
+            setRenderNumber(renderNumber() - 1);
+            setNumbArray(createNumberArray(renderNumber()));
+            setPlaying(false);
+          }, 2500);
 
-      const timer2 = setTimeout(() => {
-        setTurnBoxClass(" turnBoxHover");
-        const meaningTTS = props.item?.meaning
-          .replace(/\s\-(.+?)\-/g, "+")
-          .replace(/\-/g, "+");
-        const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${meaningTTS}`;
-        setAudioSource(soundUrl);
-        setPlaying(true);
-      }, 3500);
+          const timer2 = setTimeout(() => {
+            setTurnBoxClass(" turnBoxHover");
+            const meaningTTS = props.item?.meaning
+              .replace(/\s\-(.+?)\-/g, "+")
+              .replace(/\-/g, "+");
+            const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${meaningTTS}`;
+            setAudioSource(soundUrl);
+            setPlaying(true);
+          }, 3500);
 
-      const timer3 = setTimeout(() => {
-        setTurnBoxClass("");
-      }, 5500);
-      onCleanup(() => {
-        clearTimeout(timer1);
-        clearTimeout(timer2);
-        clearTimeout(timer3);
-      });
-    }
-  });
+          const timer3 = setTimeout(() => {
+            setTurnBoxClass("");
+          }, 5500);
+          onCleanup(() => {
+            clearTimeout(timer1);
+            clearTimeout(timer2);
+            clearTimeout(timer3);
+          });
+        }
+      }
+    )
+  );
 
   return (
     <>
@@ -88,7 +93,7 @@ const FlipCard = (props: Props) => {
                       animate={{
                         y: -numbArray()[0] * 24,
                       }}
-                      transition={{ duration: 0.6, easing: "ease-in-out" }}
+                      transition={{ duration: 0.3, easing: "ease-in-out" }}
                     >
                       <div class="number">0</div>
                       <div class="number">1</div>
@@ -108,7 +113,7 @@ const FlipCard = (props: Props) => {
                       animate={{
                         y: -numbArray()[1] * 24,
                       }}
-                      transition={{ duration: 0.6, easing: "ease-in-out" }}
+                      transition={{ duration: 0.3, easing: "ease-in-out" }}
                     >
                       <div class="number">0</div>
                       <div class="number">1</div>
@@ -127,7 +132,7 @@ const FlipCard = (props: Props) => {
                     animate={{
                       y: -numbArray()[2] * 24,
                     }}
-                    transition={{ duration: 0.6, easing: "ease-in-out" }}
+                    transition={{ duration: 0.3, easing: "ease-in-out" }}
                   >
                     <div class="number">0</div>
                     <div class="number">1</div>
@@ -167,9 +172,6 @@ const FlipCard = (props: Props) => {
               <p class="turnBoxItemPhonetic">{props.item?.phonetic}</p>
               <p class="turnBoxItemDate">05/07/22</p>
             </div>
-            {/* <p class="turnBoxItemProgress">
-              <sup>T</sup>/<sub>9</sub>
-            </p> */}
           </div>
           <div class="turnBoxFace turnBoxFaceNum2">
             <div class="turnBoxContent2">

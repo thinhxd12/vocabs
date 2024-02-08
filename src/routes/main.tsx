@@ -20,7 +20,14 @@ import { ImageType } from "~/types";
 import { URL_IMAGE_MAIN_PAGE } from "~/utils";
 import "/public/styles/main.scss";
 import { createPolled } from "@solid-primitives/timer";
-import { OcChevronleft2, OcChevronright2 } from "solid-icons/oc";
+import {
+  OcChevronleft2,
+  OcChevronright2,
+  OcCircle2,
+  OcDot2,
+  OcSquare2,
+} from "solid-icons/oc";
+import { GlobalContextProvider } from "~/globalcontext/store";
 
 export const route = {
   load: () => getUser(),
@@ -75,27 +82,16 @@ const MainLayout = (props: RouteSectionProps) => {
               onClick={() => getNextImageData(imageObj.nextImageUrl!)}
               class="mainImageRoundBtn"
             >
-              <svg
-                width="8"
-                height="14"
-                viewBox="0 0 8 14"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M1.5 1L7.5 7L1.5 13"
-                  stroke="white"
-                  stroke-linecap="square"
-                  stroke-linejoin="round"
-                ></path>
-              </svg>
+              <OcDot2 size={21} color="#fff" />
             </button>
           </div>
         </div>
 
         <div class="mainImageContent">
-          {props.children}
-          <Bottom />
+          <GlobalContextProvider>
+            {props.children}
+            <Bottom />
+          </GlobalContextProvider>
         </div>
 
         <div class="mainDescriptionContainter">

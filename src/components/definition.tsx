@@ -1,4 +1,4 @@
-import { Index, Setter, Show, createEffect, createSignal } from "solid-js";
+import { Index, Setter, Show, createEffect, createSignal, on } from "solid-js";
 import { VocabularyType } from "~/types";
 import { OcMute2, OcX2, OcUnmute2, OcCheck2 } from "solid-icons/oc";
 import { createAudio } from "@solid-primitives/audio";
@@ -13,14 +13,22 @@ type Props = {
 };
 
 const Definition = (props: Props) => {
-  const [audioSource, setAudioSource] = createSignal(props.item.sound);
+  const [audioSource, setAudioSource] = createSignal("");
+  const [currentDefinitions, setCurrentDefinitions] = createSignal<string[]>(
+    []
+  );
   const [playing, setPlaying] = createSignal(false);
   const [volume, setVolume] = createSignal(1);
   const [audio, { seek }] = createAudio(audioSource, playing, volume);
-
-  createEffect(() => {
-    setAudioSource(props.item?.sound);
-  });
+  createEffect(
+    on(
+      () => props.item?.text,
+      () => {
+        setAudioSource(props.item?.sound);
+        setCurrentDefinitions(props.item?.definitions);
+      }
+    )
+  );
 
   return (
     <div class="definition">
@@ -47,10 +55,10 @@ const Definition = (props: Props) => {
         </div>
       </div>
       <div class="definitionBody">
-        <Show when={props.item?.definitions.length > 0}>
-          <Index each={props.item?.definitions}>
+        <Show when={currentDefinitions().length > 0}>
+          <Index each={currentDefinitions()}>
             {(m, i) => {
-              if (props.item?.definitions.length > 1) {
+              if (currentDefinitions().length > 1) {
                 return (
                   <div class="sn-gs">
                     <div class="num">{1 + i}</div>

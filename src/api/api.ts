@@ -253,6 +253,7 @@ export const getTextDataAmerica = async (text: string) => {
         phonetic: "",
         meaning: "",
         number: 240,
+        created_at: "",
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
@@ -298,7 +299,9 @@ export const getTextDataAmerica = async (text: string) => {
                 const meaning = getElText(item, ".x-gs .x", "");
                 if (meaning !== "") {
                     const meaningX = meaning.replace(regText, `<b>$1</b>`);
-                    def += `<span class="x">${meaningX}</span></span>`;
+                    if (img !== "") {
+                        def += `<span class="x">${meaningX}</span></span>`;
+                    } else def += `<span class="x">${meaningX}</span>`;
                 }
                 defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
             });
@@ -320,6 +323,7 @@ export const getTextDataEnglish = async (text: string) => {
         phonetic: "",
         meaning: "",
         number: 240,
+        created_at: "",
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
@@ -365,7 +369,9 @@ export const getTextDataEnglish = async (text: string) => {
                 const meaning = getElText(item, "span.x", "");
                 if (meaning !== "") {
                     const meaningX = meaning.replace(regText, `<b>$1</b>`);
-                    def += `<span class="x">${meaningX}</span></span>`;
+                    if (img !== "") {
+                        def += `<span class="x">${meaningX}</span></span>`;
+                    } else def += `<span class="x">${meaningX}</span>`;
                 }
                 defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
             });
@@ -387,6 +393,7 @@ export const getTextDataCambridge = async (text: string) => {
         phonetic: "",
         meaning: "",
         number: 240,
+        created_at: "",
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
@@ -562,6 +569,17 @@ export const submitTodayReset = action(async (formData: FormData) => {
     throw redirect("/main/vocabulary");
 }, "todayReset");
 
+//reset today schedule
+export const submitTodayProgress = action(async (type: number, numb: number) => {
+    "use server";
+    const updateObj = type === 1 ? { time1: numb } : { time2: numb }
+    const { error } = await supabase
+        .from(mapTables.schedule)
+        .update(updateObj)
+        .eq('date', new Date().toISOString());
+    if (error) console.error(error);
+}, "todaySubmitProgress");
+
 export const submitNewHistory = action(async (formData: FormData) => {
     "use server";
     const indexWeek = Number(formData.get("indexWeek"));
@@ -638,3 +656,14 @@ export const archiveVocabulary = action(async (text: string) => {
         .rpc('archiveitem', { word: text })
     if (error) return error;
 }, "archiveVocabulary");
+
+//archive vocabulary
+export const getVocabularyFromRange = action(async (start: number, end: number) => {
+    "use server";
+    const { data, error } = await supabase
+        .from(mapTables.vocabulary)
+        .select()
+        .order('created_at')
+        .range(start, end)
+    if (data) return data as VocabularyType[];
+}, "getVocabularyFromRange");

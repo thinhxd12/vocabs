@@ -1,10 +1,25 @@
-import { A, useAction } from "@solidjs/router";
-import { Component } from "solid-js";
+import { A, useAction, useSubmission } from "@solidjs/router";
+import { Component, onMount } from "solid-js";
 import { logout } from "~/api";
 import "/public/styles/bottom.scss";
+import { getCalendarTodayData } from "~/api/api";
+import { useGlobalContext } from "~/globalcontext/store";
 
 const Bottom: Component<{}> = (props) => {
   const logoutAction = useAction(logout);
+  const getCalendarTodayDataAction = useAction(getCalendarTodayData);
+  const getCalendarTodayDataResult = useSubmission(getCalendarTodayData);
+  onMount(() => {
+    getCalendarTodayDataAction();
+  });
+  const {
+    bottomIndex,
+    setBottomIndex,
+    bottomActive,
+    setBottomActive,
+    bottomLooping,
+    setBottomLooping,
+  } = useGlobalContext();
 
   return (
     <div class="bottom">
@@ -35,9 +50,25 @@ const Bottom: Component<{}> = (props) => {
       >
         Caelus
       </A>
-      <div class="mainFooterCornerBtn">
-        <img src="/images/main/sunrise.jpg" class="mainFooterCornerBtnImage" />
-        <input class="inputWordRow" />
+
+      <div
+        class="mainFooterCornerBtn"
+        onClick={() => setBottomActive(!bottomActive())}
+      >
+        <img
+          src={
+            bottomActive()
+              ? "/images/main/sunrise.jpg"
+              : "/images/main/sunset.jpg"
+          }
+          class="mainFooterCornerBtnImage"
+        />
+        <input
+          class={
+            bottomLooping() ? "inputWordRow inputWordRowActive" : "inputWordRow"
+          }
+          value={bottomIndex()}
+        />
       </div>
     </div>
   );

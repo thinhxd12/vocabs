@@ -48,15 +48,15 @@
         }
 
         .mainImageRoundBtn {
-            width: 30px;
-            height: 30px;
+            width: 31px;
+            height: 31px;
             cursor: pointer;
-            border-radius: 50%;
+            border-radius: 6px;
             background: transparent;
-            padding: 9px 12px;
             border: none;
             transition: all 0.2s;
-            opacity: 0.12;
+            // opacity: 0.12;
+            @include flex-center;
 
             &:hover {
                 opacity: 1;

@@ -1,4 +1,15 @@
-import { Component, Index, JSX, Show, createSignal, onMount } from "solid-js";
+import {
+  Component,
+  Index,
+  JSX,
+  Show,
+  createEffect,
+  createMemo,
+  createSignal,
+  on,
+  onCleanup,
+  onMount,
+} from "solid-js";
 import {
   RouteDefinition,
   useAction,
@@ -17,6 +28,8 @@ import {
   setBookmark,
   archiveVocabulary,
   getCalendarTodayData,
+  getVocabularyFromRange,
+  submitTodayProgress,
 } from "~/api/api";
 import { createStore } from "solid-js/store";
 import {
@@ -39,6 +52,8 @@ import Translation from "~/components/translation";
 import { Portal } from "solid-js/web";
 import Edit from "~/components/edit";
 import QuoteDummy from "~/components/quote";
+import { createIntervalCounter, createPolled } from "@solid-primitives/timer";
+import { useGlobalContext } from "~/globalcontext/store";
 
 export const route = {
   load: () => {
@@ -46,11 +61,15 @@ export const route = {
   },
 } satisfies RouteDefinition;
 
-const page: Component<{}> = (props) => {
+let timerRef: NodeJS.Timeout;
+const [counter, setCounter] = createSignal<number>(0);
+const [timerCounter, setTimerCounter] = createSignal<number>(6);
+const [currentText, setCurrentText] = createSignal<VocabularyType>();
+const [showDefinitions, setShowDefinitions] = createSignal(false);
+
+const Vocabulary: Component<{}> = (props) => {
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
-  const [currentText, setCurrentText] = createSignal<VocabularyType>();
-  const [showDefinitions, setShowDefinitions] = createSignal(false);
 
   let divRef: HTMLDivElement | undefined;
 
@@ -203,12 +222,161 @@ const page: Component<{}> = (props) => {
   // -------------------AUTOPLAY START-------------------- //
   const getCalendarTodayDataAction = useAction(getCalendarTodayData);
   const getCalendarTodayDataResult = useSubmission(getCalendarTodayData);
+  const getVocabularyFromRangeAction = useAction(getVocabularyFromRange);
+  const [wordList, setWordList] = createStore<VocabularyType[]>([]);
 
   onMount(() => {
     getCalendarTodayDataAction();
+
+    onCleanup(() => {
+      clearInterval(timerRef);
+    });
   });
 
+  const handleAutoplay = () => {
+    handleRenderText(wordList[counter()]);
+    setCounter(counter() + 1);
+  };
+
+  const submitTodayProgressAction = useAction(submitTodayProgress);
+
+  const startAutoplay = async () => {
+    setBottomLooping(true);
+    if (counter() === 0) {
+      const newProgress =
+        todayIndex() === 1
+          ? getCalendarTodayDataResult.result!.time1 + 1
+          : getCalendarTodayDataResult.result!.time2 + 1;
+      await submitTodayProgressAction(todayIndex(), newProgress);
+      await getCalendarTodayDataAction();
+    }
+    handleAutoplay();
+    timerRef = setInterval(() => {
+      if (counter() < wordList.length) {
+        handleAutoplay();
+      } else {
+        stopAutoplay();
+        //start timmer countdown
+        startTimer();
+      }
+    }, 7500);
+  };
+
+  const pauseAutoplay = () => {
+    clearInterval(timerRef);
+  };
+
+  const stopAutoplay = () => {
+    //wordlist index
+    setCounter(0);
+    //bottom button input background
+    setBottomLooping(false);
+    clearInterval(timerRef);
+    setBottomActive(false);
+  };
+
+  const {
+    bottomIndex,
+    setBottomIndex,
+    bottomActive,
+    setBottomActive,
+    bottomLooping,
+    setBottomLooping,
+  } = useGlobalContext();
+
+  createEffect(
+    on(
+      bottomActive,
+      () => {
+        if (bottomActive() && wordList.length > 0) {
+          startAutoplay();
+        } else {
+          pauseAutoplay();
+        }
+      },
+      { defer: true }
+    )
+  );
+
+  const [todayIndex, setTodayIndex] = createSignal<number>(0);
+
+  const handleSetDailyWord = async (id: number) => {
+    switch (id) {
+      case 1:
+        //get 50 word
+        setTodayIndex(1);
+        const start1 = getCalendarTodayDataResult.result!.index1;
+        const data1 = await getVocabularyFromRangeAction(start1, start1 + 49);
+        if (data1) {
+          setWordList(data1);
+        }
+        setBottomIndex(getCalendarTodayDataResult.result!.index1);
+        stopAutoplay();
+        break;
+      case 2:
+        //get 49word
+        setTodayIndex(2);
+        const start2 = getCalendarTodayDataResult.result!.index2;
+        const data2 = await getVocabularyFromRangeAction(start2, start2 + 49);
+        if (data2) {
+          setWordList(data2);
+        }
+        setBottomIndex(getCalendarTodayDataResult.result!.index2);
+        stopAutoplay();
+        break;
+      default:
+        break;
+    }
+  };
+
   // -------------------AUTOPLAY END-------------------- //
+  // -------------------TIMMER START-------------------- //
+  const [delay, setDelay] = createSignal<number | false>(false);
+  const countDownTimer = createIntervalCounter(delay);
+
+  createEffect(
+    on(
+      countDownTimer,
+      () => {
+        if (timerCounter() > 0) {
+          setTimerCounter(timerCounter() - 1);
+        } else stopTimer();
+      },
+      { defer: true }
+    )
+  );
+
+  const startTimer = () => {
+    setDelay(1000);
+  };
+
+  const stopTimer = () => {
+    setDelay(false);
+    setTimerCounter(6);
+    showDesktopNotification();
+  };
+
+  const showDesktopNotification = () => {
+    const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
+    const letter = todayIndex() === 1 ? "A" : "B";
+    const newProgress =
+      todayIndex() === 1
+        ? getCalendarTodayDataResult.result!.time1 + 1
+        : getCalendarTodayDataResult.result!.time2 + 1;
+    const notification = new Notification("Start Focusing", {
+      icon: img,
+      requireInteraction: true,
+      body: `${letter}${newProgress}`,
+    });
+
+    notification.onclose = (event) => {
+      if (wordList.length > 0) {
+        setBottomActive(true);
+      }
+    };
+  };
+
+  // -------------------TIMMER END-------------------- //
 
   return (
     <div class="vocabularyContainer">
@@ -403,20 +571,45 @@ const page: Component<{}> = (props) => {
           <button class="vocabularyBtn" onClick={() => getQuote(0)}>
             Π
           </button>
-          <button class="vocabularyBtn">Ν</button>
-          <button class="vocabularyBtn">Ε</button>
-          <button class="vocabularyBtn vocabularyBtnText">
-            <span>Α</span>
+          <button class="vocabularyBtn">&#x39D;</button>
+          <button class="vocabularyBtn">&#x395;</button>
+          <button
+            class={
+              getCalendarTodayDataResult.result &&
+              getCalendarTodayDataResult.result.time1 > 0
+                ? "vocabularyBtn vocabularyBtnActive"
+                : "vocabularyBtn"
+            }
+            onClick={() => handleSetDailyWord(1)}
+          >
+            <span>&#x391;</span>
             <small>{getCalendarTodayDataResult.result?.time1}</small>
           </button>
-          <button class="vocabularyBtn vocabularyBtnText">
-            <span>Β</span>
+          <button
+            class={
+              getCalendarTodayDataResult.result &&
+              getCalendarTodayDataResult.result.time2 > 0
+                ? "vocabularyBtn vocabularyBtnActive"
+                : "vocabularyBtn"
+            }
+            onClick={() => handleSetDailyWord(2)}
+          >
+            <span>&#x392;</span>
             <small>{getCalendarTodayDataResult.result?.time2}</small>
           </button>
-          <button class="vocabularyBtn">Χ</button>
+          <button class="vocabularyBtn" onClick={startTimer}>
+            &#x3A7;
+          </button>
           <button class="vocabularyBtn">Σ</button>
           <button class="vocabularyBtn">Ξ</button>
-          <button class="vocabularyBtn timerBtn timerBtnActive">6m</button>
+          <Show when={delay()}>
+            <button
+              class="vocabularyBtn timerBtn timerBtnActive"
+              onClick={stopTimer}
+            >
+              {timerCounter()}m
+            </button>
+          </Show>
         </div>
       </div>
       {/* Edit */}
@@ -443,4 +636,4 @@ const page: Component<{}> = (props) => {
   );
 };
 
-export default page;
+export default Vocabulary;
