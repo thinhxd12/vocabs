@@ -4,7 +4,8 @@
 
 .vocabularyContainer {
     position: relative;
-    width: 360px;
+    min-width: 360px;
+    max-width: 360px;
     height: calc(100vh - 31px);
 }
 
@@ -310,11 +311,7 @@
         right: 3px;
         bottom: 41px;
         z-index: 1;
-        font-size: 14px;
-        line-height: 1rem;
-        font-family: 'Poppins', sans-serif;
-        font-weight: bold;
-        color: #ffffff80;
+        @include font(sans-serif, 14px, #ffffff80, 700, normal, 16px);
         text-align: center;
         background: $color-background-2;
         cursor: pointer;

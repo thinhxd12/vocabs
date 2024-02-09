@@ -21,7 +21,7 @@ interface ContextProps {
 const GlobalContext = createContext<ContextProps>();
 
 export function GlobalContextProvider(props: { children: JSX.Element }) {
-  const [bottomIndex, setBottomIndex] = createSignal(0);
+  const [bottomIndex, setBottomIndex] = createSignal<number>(0);
   const [bottomActive, setBottomActive] = createSignal(false);
   const [bottomLooping, setBottomLooping] = createSignal(false);
 

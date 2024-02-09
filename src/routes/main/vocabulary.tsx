@@ -2,7 +2,9 @@ import {
   Component,
   Index,
   JSX,
+  Match,
   Show,
+  Switch,
   createEffect,
   createMemo,
   createSignal,
@@ -30,6 +32,7 @@ import {
   getCalendarTodayData,
   getVocabularyFromRange,
   submitTodayProgress,
+  getMemoriesLength,
 } from "~/api/api";
 import { createStore } from "solid-js/store";
 import {
@@ -115,8 +118,9 @@ const Vocabulary: Component<{}> = (props) => {
 
   const checkVocabularyAction = useAction(checkVocabulary);
   const archiveVocabularyAction = useAction(archiveVocabulary);
+  const getMemoriesLengthAction = useAction(getMemoriesLength);
 
-  const handleRenderText = async (text: VocabularyType) => {
+  const handleRenderText = async (text: VocabularyType, count?: number) => {
     setCurrentText(text);
     setShowDefinitions(true);
     setSearchTerm("");
@@ -127,6 +131,7 @@ const Vocabulary: Component<{}> = (props) => {
     } else {
       await archiveVocabularyAction(text.text);
       deleteVocabularyAction(text.text);
+      getMemoriesLengthAction();
     }
   };
 
@@ -226,8 +231,8 @@ const Vocabulary: Component<{}> = (props) => {
   const [wordList, setWordList] = createStore<VocabularyType[]>([]);
 
   onMount(() => {
+    getMemoriesLengthAction();
     getCalendarTodayDataAction();
-
     onCleanup(() => {
       clearInterval(timerRef);
     });
@@ -310,7 +315,7 @@ const Vocabulary: Component<{}> = (props) => {
         if (data1) {
           setWordList(data1);
         }
-        setBottomIndex(getCalendarTodayDataResult.result!.index1);
+        setBottomIndex(getCalendarTodayDataResult.result!.index1 + 1);
         stopAutoplay();
         break;
       case 2:
@@ -321,7 +326,7 @@ const Vocabulary: Component<{}> = (props) => {
         if (data2) {
           setWordList(data2);
         }
-        setBottomIndex(getCalendarTodayDataResult.result!.index2);
+        setBottomIndex(getCalendarTodayDataResult.result!.index2 + 1);
         stopAutoplay();
         break;
       default:
@@ -347,7 +352,7 @@ const Vocabulary: Component<{}> = (props) => {
   );
 
   const startTimer = () => {
-    setDelay(1000);
+    setDelay(60000);
   };
 
   const stopTimer = () => {
@@ -531,10 +536,21 @@ const Vocabulary: Component<{}> = (props) => {
                   }}
                   transition={{ duration: 0.3, easing: "ease-in-out" }}
                 >
-                  <Definition
-                    item={currentText()!}
-                    onClose={handleCloseDefinition}
-                  />
+                  <Show
+                    when={bottomLooping()}
+                    fallback={
+                      <Definition
+                        item={currentText()!}
+                        onClose={handleCloseDefinition}
+                      />
+                    }
+                  >
+                    <Definition
+                      item={currentText()!}
+                      onClose={handleCloseDefinition}
+                      count={bottomIndex() + counter() - 1}
+                    />
+                  </Show>
                 </Motion>
               </Show>
             </Presence>

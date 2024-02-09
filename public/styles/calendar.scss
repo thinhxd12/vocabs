@@ -2,12 +2,14 @@
 @import "./mixins.scss";
 
 .calendar {
-    width: 100%;
+    min-width: 360px;
+    max-width: 360px;
     height: calc(100vh - 31px);
     overflow-x: hidden;
     overflow-y: scroll;
     position: inherit;
     outline: none;
+    background: $color-white;
 
     &::-webkit-scrollbar {
         display: none;

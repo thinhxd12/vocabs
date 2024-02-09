@@ -6,6 +6,7 @@ import {
   useSubmission,
 } from "@solidjs/router";
 import {
+  Show,
   createContext,
   createEffect,
   createResource,
@@ -14,7 +15,11 @@ import {
 } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getUser, logout } from "~/api";
-import { getDataImage, getImageFromUnsplash } from "~/api/api";
+import {
+  getDataImage,
+  getImageFromUnsplash,
+  getMemoriesLength,
+} from "~/api/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import { URL_IMAGE_MAIN_PAGE } from "~/utils";
@@ -28,6 +33,7 @@ import {
   OcSquare2,
 } from "solid-icons/oc";
 import { GlobalContextProvider } from "~/globalcontext/store";
+import { Motion, Presence } from "solid-motionone";
 
 export const route = {
   load: () => getUser(),
@@ -71,21 +77,60 @@ const MainLayout = (props: RouteSectionProps) => {
     }, 840000);
   });
 
+  const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
+  const changeToggle = () => {
+    setToggleMainPage(!toggleMainPage());
+  };
+
+  const handleGetNextImage = () => {
+    getNextImageData(imageObj.nextImageUrl!);
+  };
+
   return (
     <div>
       <div class="main">
-        <div class="mainImageContainer">
-          <img class="mainImage" src={imageObj.image} />
-          <img class="mainImageBlurred" src={imageObj.image} />
+        <Motion.div
+          class="mainImageContainer"
+          animate={{
+            maxWidth: toggleMainPage() ? "calc(50vw - 180px)" : "unset",
+          }}
+          transition={{ duration: 0.6 }}
+        >
+          <Presence>
+            <Show when={!toggleMainPage()}>
+              <Motion.div
+                class="mainImageContentAnimation"
+                initial={{
+                  opacity: 0,
+                  x: "-100%",
+                  scale: 0.6,
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                  scale: 1,
+                }}
+                exit={{
+                  opacity: 0,
+                  x: "-100%",
+                  scale: 0.6,
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <img class="mainImage" src={imageObj.image} />
+                <img class="mainImageBlurred" src={imageObj.image} />
+              </Motion.div>
+            </Show>
+          </Presence>
           <div class="mainImageBottomBar">
-            <button
-              onClick={() => getNextImageData(imageObj.nextImageUrl!)}
-              class="mainImageRoundBtn"
-            >
-              <OcDot2 size={21} color="#fff" />
+            <button onClick={handleGetNextImage} class="mainImageRoundBtn">
+              &#924;
+            </button>
+            <button onClick={changeToggle} class="mainImageRoundBtn">
+              Ψ
             </button>
           </div>
-        </div>
+        </Motion.div>
 
         <div class="mainImageContent">
           <GlobalContextProvider>
@@ -94,26 +139,59 @@ const MainLayout = (props: RouteSectionProps) => {
           </GlobalContextProvider>
         </div>
 
-        <div class="mainDescriptionContainter">
-          <div class="mainDescriptionContent">
-            <div class="mainDescriptionHeader">
-              <p class="mainDescriptionDate">{imageObj.date}</p>
-              <h3 class="mainDescriptionTitle">{imageObj.title}</h3>
-              <p class="mainDescriptionAttribute">{imageObj.attr}</p>
-              <div class="mainDescriptionAuthors">
-                <img
-                  class="mainDescriptionAuthorImage"
-                  src={imageObj.authorImg}
-                />
-                <div class="mainDescriptionAuthor">
-                  <p class="mainDescriptionAuthorName">{imageObj.authorName}</p>
-                  <p class="mainDescriptionAuthorYear">{imageObj.authorYear}</p>
+        <Motion.div
+          class="mainDescriptionContainter"
+          animate={{
+            width: toggleMainPage() ? "calc(50vw - 180px)" : "300px",
+            background: toggleMainPage() ? "#000" : "#19191c",
+          }}
+          transition={{ duration: 0.6 }}
+        >
+          <Presence>
+            <Show when={!toggleMainPage()}>
+              <Motion.div
+                class="mainDescriptionContent"
+                initial={{
+                  opacity: 0,
+                  x: "-100%",
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  x: "-100%",
+                }}
+                transition={{ duration: 0.3 }}
+              >
+                <div class="mainDescriptionHeader">
+                  <p class="mainDescriptionDate">{imageObj.date}</p>
+                  <h3 class="mainDescriptionTitle">{imageObj.title}</h3>
+                  <p class="mainDescriptionAttribute">{imageObj.attr}</p>
+                  <div class="mainDescriptionAuthors">
+                    <img
+                      class="mainDescriptionAuthorImage"
+                      src={imageObj.authorImg}
+                    />
+                    <div class="mainDescriptionAuthor">
+                      <p class="mainDescriptionAuthorName">
+                        {imageObj.authorName}
+                      </p>
+                      <p class="mainDescriptionAuthorYear">
+                        {imageObj.authorYear}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div class="mainDescriptionBody" innerHTML={imageObj.content}></div>
-          </div>
-        </div>
+                <div
+                  class="mainDescriptionBody"
+                  innerHTML={imageObj.content}
+                ></div>
+              </Motion.div>
+            </Show>
+          </Presence>
+        </Motion.div>
       </div>
     </div>
   );

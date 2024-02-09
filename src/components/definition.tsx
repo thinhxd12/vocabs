@@ -1,18 +1,24 @@
-import { Index, Setter, Show, createEffect, createSignal, on } from "solid-js";
+import {
+  Component,
+  Index,
+  Setter,
+  Show,
+  createEffect,
+  createSignal,
+  on,
+} from "solid-js";
 import { VocabularyType } from "~/types";
 import { OcMute2, OcX2, OcUnmute2, OcCheck2 } from "solid-icons/oc";
 import { createAudio } from "@solid-primitives/audio";
 import "/public/styles/definition.scss";
-import { Motion, Presence } from "solid-motionone";
 
-type Props = {
+const Definition: Component<{
   item: VocabularyType;
   onClose?: Setter<boolean>;
   onCheck?: Setter<boolean>;
   check?: boolean;
-};
-
-const Definition = (props: Props) => {
+  count?: number;
+}> = (props) => {
   const [audioSource, setAudioSource] = createSignal("");
   const [currentDefinitions, setCurrentDefinitions] = createSignal<string[]>(
     []
@@ -20,12 +26,13 @@ const Definition = (props: Props) => {
   const [playing, setPlaying] = createSignal(false);
   const [volume, setVolume] = createSignal(1);
   const [audio, { seek }] = createAudio(audioSource, playing, volume);
+
   createEffect(
     on(
-      () => props.item?.text,
-      () => {
-        setAudioSource(props.item?.sound);
-        setCurrentDefinitions(props.item?.definitions);
+      () => props.item,
+      (cur: VocabularyType) => {
+        setAudioSource(cur.sound);
+        setCurrentDefinitions(cur.definitions);
       }
     )
   );
@@ -34,9 +41,20 @@ const Definition = (props: Props) => {
     <div class="definition">
       <div class="definitionHeader">
         <div class="definitionHeaderLeft">
-          <p class="definitionHeaderText">
-            Definitions of <b>{props.item?.text}</b> <i>{props.item?.class}</i>
-          </p>
+          <Show
+            when={props.count}
+            fallback={
+              <p class="definitionHeaderText">
+                Definitions of <b>{props.item?.text}</b>{" "}
+                <i>{props.item?.class}</i>
+              </p>
+            }
+          >
+            <p class="definitionHeaderText">
+              <span>{props.count}.</span> <b>{props.item?.text}</b>{" "}
+              <i>{props.item?.class}</i>
+            </p>
+          </Show>
         </div>
         <div class="definitionHeaderRight">
           <button class="definitionBtn" onclick={() => setPlaying(!playing())}>
@@ -55,19 +73,25 @@ const Definition = (props: Props) => {
         </div>
       </div>
       <div class="definitionBody">
-        <Show when={currentDefinitions().length > 0}>
-          <Index each={currentDefinitions()}>
-            {(m, i) => {
-              if (currentDefinitions().length > 1) {
+        <Show
+          when={currentDefinitions().length > 1}
+          fallback={
+            <Index each={currentDefinitions()}>
+              {(m, i) => {
                 return (
                   <div class="sn-gs">
-                    <div class="num">{1 + i}</div>
                     <div innerHTML={m()} class="sn-g" />
                   </div>
                 );
-              }
+              }}
+            </Index>
+          }
+        >
+          <Index each={currentDefinitions()}>
+            {(m, i) => {
               return (
                 <div class="sn-gs">
+                  <div class="num">{1 + i}</div>
                   <div innerHTML={m()} class="sn-g" />
                 </div>
               );

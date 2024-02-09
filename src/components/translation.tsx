@@ -1,4 +1,5 @@
 import {
+  Component,
   Index,
   JSX,
   Match,
@@ -25,13 +26,11 @@ import Alert from "./alert";
 import { createStore } from "solid-js/store";
 import Definition from "./definition";
 
-type Props = {
+const Translation: Component<{
   item: TranslateType;
   text: string;
   onClose: Setter<boolean>;
-};
-
-const Translation = (props: Props) => {
+}> = (props) => {
   const [transInput, setTransInput] = createSignal<string>("");
   const handleSetTransInput = (text: string) => {
     setTransInput(transInput() + text);
@@ -71,7 +70,7 @@ const Translation = (props: Props) => {
       setTimeout(() => {
         setAlertObj({ showAlert: false });
         setSendInsert(false);
-      }, 3000);
+      }, 12000);
     }
   });
 
@@ -83,7 +82,6 @@ const Translation = (props: Props) => {
     phonetic: "",
     meaning: "",
     number: 240,
-    created_at: new Date().toISOString(),
   });
 
   const handleInsertNewVocabulary = async () => {
@@ -130,7 +128,11 @@ const Translation = (props: Props) => {
 
   const handleCheck = (index: number, data: VocabularyType) => {
     setVisible(visible().map((item, i) => i === index));
-    setInsertText(data);
+    setInsertText({
+      text: data.text,
+      class: data.class,
+      definitions: data.definitions,
+    });
   };
 
   return (

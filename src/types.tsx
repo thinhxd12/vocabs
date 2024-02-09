@@ -1,9 +1,3 @@
-export const mapTables = {
-  vocabulary: "vocabulary",
-  schedule: "schedule",
-  history: "history",
-};
-
 export interface VocabularyType {
   text: string;
   sound: string;
@@ -12,7 +6,6 @@ export interface VocabularyType {
   phonetic: string;
   meaning: string;
   number: number;
-  created_at: string;
 }
 
 export interface BookmarkType {

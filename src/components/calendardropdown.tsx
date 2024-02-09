@@ -1,15 +1,13 @@
 import { Action, RouteSectionProps } from "@solidjs/router";
 import { OcX2 } from "solid-icons/oc";
-import { Setter } from "solid-js";
+import { Component, Setter } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
 
-type Props = {
+const CalendarDropdown: Component<{
   onClose: Setter<boolean>;
   header: string;
   children: JSX.Element;
-};
-
-const CalendarDropdown = (props: Props) => {
+}> = (props) => {
   return (
     <div class="calendarDropdown">
       <div class="calendarDropdownHeader">

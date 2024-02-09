@@ -1,7 +1,7 @@
 import { action, cache, redirect, useAction } from "@solidjs/router";
-import { BookmarkType, HistoryType, ImageType, ScheduleType, TranslateType, VocabularyType, mapTables } from "~/types";
+import { BookmarkType, HistoryType, ImageType, ScheduleType, TranslateType, VocabularyType } from "~/types";
 import { supabase } from "./supabase";
-import { DEFAULT_CORS_PROXY, getElAttribute, getElText } from "~/utils";
+import { DEFAULT_CORS_PROXY, getElAttribute, getElText, mapTables } from "~/utils";
 import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
 
@@ -253,7 +253,6 @@ export const getTextDataAmerica = async (text: string) => {
         phonetic: "",
         meaning: "",
         number: 240,
-        created_at: "",
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
@@ -323,7 +322,6 @@ export const getTextDataEnglish = async (text: string) => {
         phonetic: "",
         meaning: "",
         number: 240,
-        created_at: "",
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
@@ -393,7 +391,6 @@ export const getTextDataCambridge = async (text: string) => {
         phonetic: "",
         meaning: "",
         number: 240,
-        created_at: "",
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
@@ -666,4 +663,13 @@ export const getVocabularyFromRange = action(async (start: number, end: number) 
         .order('created_at')
         .range(start, end)
     if (data) return data as VocabularyType[];
+}, "getVocabularyFromRange");
+
+//get memories length
+export const getMemoriesLength = action(async () => {
+    "use server";
+    const { count } = await supabase
+        .from(mapTables.memories)
+        .select('*', { count: "exact" });
+    return count as number;
 }, "getVocabularyFromRange");

@@ -24,6 +24,10 @@
 
         .definitionHeaderLeft {
             .definitionHeaderText {
+                span {
+                    @include font('nyt-cheltenham', 13px, $color-black, 500, normal);
+                }
+
                 b {
                     @include font('nyt-cheltenham', 16px, $color-black, 500, normal);
                 }

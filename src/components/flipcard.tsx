@@ -4,12 +4,11 @@ import "/public/styles/flipcard.scss";
 import { Motion } from "solid-motionone";
 import { AudioState, createAudio } from "@solid-primitives/audio";
 
-type Props = {
-  item: VocabularyType;
-};
 const [playing, setPlaying] = createSignal(false);
 
-const FlipCard = (props: Props) => {
+const FlipCard: Component<{
+  item: VocabularyType;
+}> = (props) => {
   const [audioSource, setAudioSource] = createSignal<string>(props.item?.sound);
   const [turnBoxClass, setTurnBoxClass] = createSignal<string>("");
   const [volume, setVolume] = createSignal(1);

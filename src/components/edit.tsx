@@ -1,4 +1,11 @@
-import { Setter, Show, createEffect, createSignal, onMount } from "solid-js";
+import {
+  Component,
+  Setter,
+  Show,
+  createEffect,
+  createSignal,
+  onMount,
+} from "solid-js";
 import "/public/styles/edit.scss";
 import { OcChevrondown2, OcChevronup2, OcX2 } from "solid-icons/oc";
 import { VocabularyType } from "~/types";
@@ -15,12 +22,10 @@ import {
   getTextDataEnglish,
 } from "~/api/api";
 
-type Props = {
+const Edit: Component<{
   item: VocabularyType;
   onClose: Setter<boolean>;
-};
-
-const Edit = (props: Props) => {
+}> = (props) => {
   const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
   const [submitForm, setSubmitForm] = createSignal<boolean>(false);
   const editActionResult = useSubmission(editVocabularyItem);

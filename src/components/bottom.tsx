@@ -1,17 +1,15 @@
 import { A, useAction, useSubmission } from "@solidjs/router";
-import { Component, onMount } from "solid-js";
+import { Component, Show, onMount } from "solid-js";
 import { logout } from "~/api";
 import "/public/styles/bottom.scss";
-import { getCalendarTodayData } from "~/api/api";
+import { getCalendarTodayData, getMemoriesLength } from "~/api/api";
 import { useGlobalContext } from "~/globalcontext/store";
+import { OcDotfill2, OcKebabhorizontal2 } from "solid-icons/oc";
 
 const Bottom: Component<{}> = (props) => {
   const logoutAction = useAction(logout);
-  const getCalendarTodayDataAction = useAction(getCalendarTodayData);
-  const getCalendarTodayDataResult = useSubmission(getCalendarTodayData);
-  onMount(() => {
-    getCalendarTodayDataAction();
-  });
+  const getMemoriesLengthResult = useSubmission(getMemoriesLength);
+
   const {
     bottomIndex,
     setBottomIndex,
@@ -41,7 +39,9 @@ const Bottom: Component<{}> = (props) => {
         class="mainFooterCenterBtn mainFooterCenterBtnActive"
         onClick={() => logoutAction()}
       >
-        229
+        <Show when={getMemoriesLengthResult.result} fallback={229}>
+          {getMemoriesLengthResult.result}
+        </Show>
       </button>
       <A
         href="/main/weather"
@@ -68,6 +68,11 @@ const Bottom: Component<{}> = (props) => {
             bottomLooping() ? "inputWordRow inputWordRowActive" : "inputWordRow"
           }
           value={bottomIndex()}
+        />
+        <OcKebabhorizontal2
+          size={12}
+          class="wordListDot"
+          color={bottomIndex() > 0 ? "#38E07B" : "#000"}
         />
       </div>
     </div>

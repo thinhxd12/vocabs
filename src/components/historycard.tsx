@@ -1,8 +1,10 @@
+import { Component } from "solid-js";
 import { Slider, SliderProvider } from "solid-slider";
 import { HistoryType } from "~/types";
 
-const HistoryCard = (props: { item: HistoryType }) => {
-
+const HistoryCard: Component<{
+  item: HistoryType;
+}> = (props) => {
   return (
     <div class="historyCard">
       <div class="historyCardItem">

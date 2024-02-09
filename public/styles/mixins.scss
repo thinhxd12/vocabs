@@ -125,33 +125,28 @@ $color-calendar-green: #38E07B;
 }
 
 // -------------------RESPONSIVE START-------------------- //
-// @media only screen and (max-width: 960px) {
-//   .mainImageDescriptionContainter {
-//     display: none !important;
-//   }
+@media only screen and (max-width: 960px) {
+  .mainDescriptionContainter {
+    display: none !important;
+  }
+}
 
-//   .mainImageContent {
-//     width: calc(100vw - 360px) !important;
-//   }
-// }
+@media only screen and (max-width: 650px) {
 
-// @media only screen and (max-width: 650px) {
+  .mainImageContainer,
+  .mainDescriptionContainter {
+    display: none !important;
+  }
 
-//   .mainImageContent,
-//   .mainImageDescriptionContainter {
-//     display: none !important;
-//   }
+  .main {
+    @include flex-center();
+  }
 
-//   .subContainLeft {
-//     display: block !important;
-//     border-right: 1px solid $color-boder;
-//   }
+  .mainImageContent {
+    border-left: 1px solid $color-boder;
+    border-right: 1px solid $color-boder;
+  }
 
-//   .subContainRight {
-//     display: block !important;
-//     border-left: 1px solid $color-boder;
-//   }
-
-// }
+}
 
 // -------------------RESPONSIVE END-------------------- //
