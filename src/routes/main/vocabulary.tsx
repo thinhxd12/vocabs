@@ -58,6 +58,7 @@ import QuoteDummy from "~/components/quote";
 import { createIntervalCounter, createPolled } from "@solid-primitives/timer";
 import { useGlobalContext } from "~/globalcontext/store";
 import { createAudio } from "@solid-primitives/audio";
+import { Meta, MetaProvider, Title } from "@solidjs/meta";
 
 export const route = {
   load: () => {
@@ -404,272 +405,279 @@ const Vocabulary: Component<{}> = (props) => {
   // -------------------TIMMER END-------------------- //
 
   return (
-    <div class="vocabularyContainer">
-      <div
-        ref={divRef}
-        tabIndex={0}
-        onMouseOver={() => divRef?.focus()}
-        onKeyDown={onKeyDownDiv}
-        class="vocabulary"
-      >
-        <div class="flashCardContainer">
-          <FlipCard item={currentText()!} />
-        </div>
-
-        <div class="myInputContainer">
-          <img
-            src="/images/main/input-left-corner.png"
-            class="myInputLeftOrnament"
-          />
-          <div class="myInputCenterContent">
-            <Motion.div
-              class="myInputText"
-              animate={{
-                // background: searchTerm().length > 0 ? "#272727" : "unset",
-                backgroundColor: searchInputBackground(),
-              }}
-              transition={{ duration: 0.6, easing: "linear" }}
-            >
-              {searchTerm()}
-            </Motion.div>
-            <div class="myInputTransContent">
-              <input
-                class="myInput"
-                value={translateTerm()}
-                onInput={(e) => setTranslateTerm(e.target.value)}
-                onKeyDown={onKeyDownTrans}
-              />
-              <button class="myInputBtn" onClick={handleTranslate}>
-                <img src="/images/main/center.png" />
-              </button>
-            </div>
+    <MetaProvider>
+      <Title>thịnh - Übermensch</Title>
+      <Meta name="author" content="thinhxd12@gmail.com" />
+      <Meta name="description" content="Thinh's Vocabulary Learning App"/>
+      <div class="vocabularyContainer">
+        <div
+          ref={divRef}
+          tabIndex={0}
+          onMouseOver={() => divRef?.focus()}
+          onKeyDown={onKeyDownDiv}
+          class="vocabulary"
+        >
+          <div class="flashCardContainer">
+            <FlipCard item={currentText()!} />
           </div>
-          <img
-            src="/images/main/input-right-corner.png"
-            class="myInputRightOrnament"
-          />
-        </div>
 
-        <div class="vocabularyContent">
-          <div class="searchContainer">
-            {/* Search result */}
-            <Index each={searchResult()}>
-              {(data, i) => (
-                <div class="my-item">
-                  <span
-                    class="itemText"
-                    onclick={() => handleRenderText(data())}
-                  >
-                    <span>
-                      <small>{i + 1}</small>
-                      <span>{data().text}</span>
-                    </span>
-                  </span>
-                  <button
-                    class="itemNumb"
-                    onClick={() => handleEditVocabulary(data())}
-                  >
-                    {data().number}
-                  </button>
-                  <Show when={i + 1 !== deleteBtnIndex()}>
-                    <button
-                      class="itemDeleteBtn"
-                      onClick={() => setDeleteBtnIndex(i + 1)}
-                    ></button>
-                  </Show>
-                  <Show when={i + 1 === deleteBtnIndex()}>
-                    <button
-                      class="itemDeleteBtn"
-                      onClick={() => handleDeleteVocabulary(data().text)}
-                    >
-                      <OcTrash2 size={12} />
-                    </button>
-                  </Show>
-                </div>
-              )}
-            </Index>
-            <Show when={showQuotes()}>
-              <Show
-                when={getBookmarkTextResult.result}
-                fallback={<QuoteDummy />}
+          <div class="myInputContainer">
+            <img
+              src="/images/main/input-left-corner.png"
+              class="myInputLeftOrnament"
+            />
+            <div class="myInputCenterContent">
+              <Motion.div
+                class="myInputText"
+                animate={{
+                  // background: searchTerm().length > 0 ? "#272727" : "unset",
+                  backgroundColor: searchInputBackground(),
+                }}
+                transition={{ duration: 0.6, easing: "linear" }}
               >
-                <div class="quoteContainer">
-                  <div class="quoteHeader">
-                    <div class="quoteHeaderLeft">
-                      <button class="quoteBtn" onclick={() => getQuote(-1)}>
-                        <OcChevronleft2 size={17} />
-                      </button>
+                {searchTerm()}
+              </Motion.div>
+              <div class="myInputTransContent">
+                <input
+                  class="myInput"
+                  value={translateTerm()}
+                  onInput={(e) => setTranslateTerm(e.target.value)}
+                  onKeyDown={onKeyDownTrans}
+                />
+                <button class="myInputBtn" onClick={handleTranslate}>
+                  <img src="/images/main/center.png" />
+                </button>
+              </div>
+            </div>
+            <img
+              src="/images/main/input-right-corner.png"
+              class="myInputRightOrnament"
+            />
+          </div>
+
+          <div class="vocabularyContent">
+            <div class="searchContainer">
+              {/* Search result */}
+              <Index each={searchResult()}>
+                {(data, i) => (
+                  <div class="my-item">
+                    <span
+                      class="itemText"
+                      onclick={() => handleRenderText(data())}
+                    >
+                      <span>
+                        <small>{i + 1}</small>
+                        <span>{data().text}</span>
+                      </span>
+                    </span>
+                    <button
+                      class="itemNumb"
+                      onClick={() => handleEditVocabulary(data())}
+                    >
+                      {data().number}
+                    </button>
+                    <Show when={i + 1 !== deleteBtnIndex()}>
                       <button
-                        class={
-                          currentQuote.check
-                            ? "quoteBtn quoteBtnActive"
-                            : "quoteBtn"
-                        }
-                        onclick={() => checkQuote(!currentQuote.check)}
-                      >
-                        {currentQuote.check ? (
-                          <OcStarfill2 size={17} color="#ffc107" />
-                        ) : (
-                          <OcStar2 size={17} />
-                        )}
-                      </button>
-                      <button class="quoteBtn" onclick={() => getQuote(1)}>
-                        <OcChevronright2 size={17} />
-                      </button>
+                        class="itemDeleteBtn"
+                        onClick={() => setDeleteBtnIndex(i + 1)}
+                      ></button>
+                    </Show>
+                    <Show when={i + 1 === deleteBtnIndex()}>
                       <button
-                        class="quoteBtn"
-                        onclick={() => copyQuoteToClipboard(currentQuote.value)}
+                        class="itemDeleteBtn"
+                        onClick={() => handleDeleteVocabulary(data().text)}
                       >
-                        <OcCopy2 size={17} />
+                        <OcTrash2 size={12} />
+                      </button>
+                    </Show>
+                  </div>
+                )}
+              </Index>
+              <Show when={showQuotes()}>
+                <Show
+                  when={getBookmarkTextResult.result}
+                  fallback={<QuoteDummy />}
+                >
+                  <div class="quoteContainer">
+                    <div class="quoteHeader">
+                      <div class="quoteHeaderLeft">
+                        <button class="quoteBtn" onclick={() => getQuote(-1)}>
+                          <OcChevronleft2 size={17} />
+                        </button>
+                        <button
+                          class={
+                            currentQuote.check
+                              ? "quoteBtn quoteBtnActive"
+                              : "quoteBtn"
+                          }
+                          onclick={() => checkQuote(!currentQuote.check)}
+                        >
+                          {currentQuote.check ? (
+                            <OcStarfill2 size={17} color="#ffc107" />
+                          ) : (
+                            <OcStar2 size={17} />
+                          )}
+                        </button>
+                        <button class="quoteBtn" onclick={() => getQuote(1)}>
+                          <OcChevronright2 size={17} />
+                        </button>
+                        <button
+                          class="quoteBtn"
+                          onclick={() =>
+                            copyQuoteToClipboard(currentQuote.value)
+                          }
+                        >
+                          <OcCopy2 size={17} />
+                        </button>
+                      </div>
+                      <button
+                        class="quoteBtnClose"
+                        onClick={() => setShowQuotes(false)}
+                      >
+                        <OcX2 size={12} />
                       </button>
                     </div>
-                    <button
-                      class="quoteBtnClose"
-                      onClick={() => setShowQuotes(false)}
-                    >
-                      <OcX2 size={12} />
-                    </button>
+                    <div class="quoteBody">
+                      <span class="quoteDropCap">
+                        {currentQuote.value.slice(0, 1)}
+                      </span>
+                      <span>{currentQuote.value.slice(1)}</span>
+                    </div>
                   </div>
-                  <div class="quoteBody">
-                    <span class="quoteDropCap">
-                      {currentQuote.value.slice(0, 1)}
-                    </span>
-                    <span>{currentQuote.value.slice(1)}</span>
-                  </div>
-                </div>
+                </Show>
               </Show>
-            </Show>
-            {/* Definition */}
-            <Presence>
-              <Show when={showDefinitions()}>
-                <Motion
-                  initial={{
-                    opacity: 0,
-                    y: -30,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    y: 30,
-                  }}
-                  transition={{ duration: 0.3, easing: "ease-in-out" }}
-                >
-                  <Show
-                    when={bottomLooping()}
-                    fallback={
+              {/* Definition */}
+              <Presence>
+                <Show when={showDefinitions()}>
+                  <Motion
+                    initial={{
+                      opacity: 0,
+                      y: -30,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      y: 30,
+                    }}
+                    transition={{ duration: 0.3, easing: "ease-in-out" }}
+                  >
+                    <Show
+                      when={bottomLooping()}
+                      fallback={
+                        <Definition
+                          item={currentText()!}
+                          onClose={handleCloseDefinition}
+                        />
+                      }
+                    >
                       <Definition
                         item={currentText()!}
                         onClose={handleCloseDefinition}
+                        count={bottomIndex() + counter() - 1}
                       />
-                    }
+                    </Show>
+                  </Motion>
+                </Show>
+              </Presence>
+              {/* Translation */}
+              <Presence>
+                <Show when={showTranslate()}>
+                  <Motion
+                    initial={{
+                      opacity: 0,
+                      y: -30,
+                    }}
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      y: 30,
+                    }}
+                    transition={{ duration: 0.3, easing: "ease-in-out" }}
                   >
-                    <Definition
-                      item={currentText()!}
-                      onClose={handleCloseDefinition}
-                      count={bottomIndex() + counter() - 1}
+                    <Translation
+                      item={translateText()!}
+                      text={translateTerm()}
+                      onClose={handleCloseTranslation}
                     />
-                  </Show>
-                </Motion>
-              </Show>
-            </Presence>
-            {/* Translation */}
-            <Presence>
-              <Show when={showTranslate()}>
-                <Motion
-                  initial={{
-                    opacity: 0,
-                    y: -30,
-                  }}
-                  animate={{
-                    opacity: 1,
-                    y: 0,
-                  }}
-                  exit={{
-                    opacity: 0,
-                    y: 30,
-                  }}
-                  transition={{ duration: 0.3, easing: "ease-in-out" }}
-                >
-                  <Translation
-                    item={translateText()!}
-                    text={translateTerm()}
-                    onClose={handleCloseTranslation}
-                  />
-                </Motion>
-              </Show>
-            </Presence>
+                  </Motion>
+                </Show>
+              </Presence>
+            </div>
+          </div>
+
+          <div class="vocabularyBtnContainer">
+            <button class="vocabularyBtn" onClick={() => getQuote(0)}>
+              Π
+            </button>
+            <button class="vocabularyBtn">&#x39D;</button>
+            <button class="vocabularyBtn">&#x395;</button>
+            <button
+              class={
+                getCalendarTodayDataResult.result &&
+                getCalendarTodayDataResult.result.time1 > 0
+                  ? "vocabularyBtn vocabularyBtnActive"
+                  : "vocabularyBtn"
+              }
+              onClick={() => handleSetDailyWord(1)}
+            >
+              <span>&#x391;</span>
+              <small>{getCalendarTodayDataResult.result?.time1}</small>
+            </button>
+            <button
+              class={
+                getCalendarTodayDataResult.result &&
+                getCalendarTodayDataResult.result.time2 > 0
+                  ? "vocabularyBtn vocabularyBtnActive"
+                  : "vocabularyBtn"
+              }
+              onClick={() => handleSetDailyWord(2)}
+            >
+              <span>&#x392;</span>
+              <small>{getCalendarTodayDataResult.result?.time2}</small>
+            </button>
+            <button class="vocabularyBtn" onClick={startTimer}>
+              &#x3A7;
+            </button>
+            <button class="vocabularyBtn">Σ</button>
+            <button class="vocabularyBtn">Ξ</button>
+            <Show when={delay()}>
+              <button
+                class="vocabularyBtn timerBtn timerBtnActive"
+                onClick={stopTimer}
+              >
+                {timerCounter()}m
+              </button>
+            </Show>
           </div>
         </div>
-
-        <div class="vocabularyBtnContainer">
-          <button class="vocabularyBtn" onClick={() => getQuote(0)}>
-            Π
-          </button>
-          <button class="vocabularyBtn">&#x39D;</button>
-          <button class="vocabularyBtn">&#x395;</button>
-          <button
-            class={
-              getCalendarTodayDataResult.result &&
-              getCalendarTodayDataResult.result.time1 > 0
-                ? "vocabularyBtn vocabularyBtnActive"
-                : "vocabularyBtn"
-            }
-            onClick={() => handleSetDailyWord(1)}
-          >
-            <span>&#x391;</span>
-            <small>{getCalendarTodayDataResult.result?.time1}</small>
-          </button>
-          <button
-            class={
-              getCalendarTodayDataResult.result &&
-              getCalendarTodayDataResult.result.time2 > 0
-                ? "vocabularyBtn vocabularyBtnActive"
-                : "vocabularyBtn"
-            }
-            onClick={() => handleSetDailyWord(2)}
-          >
-            <span>&#x392;</span>
-            <small>{getCalendarTodayDataResult.result?.time2}</small>
-          </button>
-          <button class="vocabularyBtn" onClick={startTimer}>
-            &#x3A7;
-          </button>
-          <button class="vocabularyBtn">Σ</button>
-          <button class="vocabularyBtn">Ξ</button>
-          <Show when={delay()}>
-            <button
-              class="vocabularyBtn timerBtn timerBtnActive"
-              onClick={stopTimer}
+        {/* Edit */}
+        <Presence>
+          <Show when={showEdit()}>
+            <Motion.div
+              class="editOverlay"
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              transition={{ duration: 0.3, easing: "ease-in-out" }}
             >
-              {timerCounter()}m
-            </button>
+              <Edit item={editText()!} onClose={handleCloseEdit} />
+            </Motion.div>
           </Show>
-        </div>
+        </Presence>
       </div>
-      {/* Edit */}
-      <Presence>
-        <Show when={showEdit()}>
-          <Motion.div
-            class="editOverlay"
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-            transition={{ duration: 0.3, easing: "ease-in-out" }}
-          >
-            <Edit item={editText()!} onClose={handleCloseEdit} />
-          </Motion.div>
-        </Show>
-      </Presence>
-    </div>
+    </MetaProvider>
   );
 };
 

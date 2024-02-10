@@ -108,7 +108,9 @@ export const getCalendarScheduleData = action(async () => {
 //get start index of schedule
 export const getThisWeekData = action(async () => {
     "use server";
-    const { data, error } = await supabase.from(mapTables.schedule).select();
+    const { data, error } = await supabase.from(mapTables.schedule)
+        .select()
+        .order('date');
     if (error) throw error;
     if (data) return data[0].index1;
 });
@@ -475,8 +477,6 @@ export const getOedSound = action(async (text: string) => {
     const altMp3 = `https://ssl.gstatic.com/dictionary/static/sounds/20220808/${text}--_us_1.mp3`;
     return mp3 || altMp3;
 });
-
-
 
 //delete vocabulary
 export const deleteVocabulary = action(async (text: string) => {
