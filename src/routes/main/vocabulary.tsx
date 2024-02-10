@@ -275,6 +275,8 @@ const Vocabulary: Component<{}> = (props) => {
         stopAutoplay();
         //start timmer countdown
         startTimer();
+        //get wordlist to update lastest changed
+        handleSetDailyWord(todayIndex());
       }
     }, 7500);
   };
@@ -331,7 +333,7 @@ const Vocabulary: Component<{}> = (props) => {
         stopAutoplay();
         break;
       case 2:
-        //get 49word
+        //get 59word
         setTodayIndex(2);
         const start2 = getCalendarTodayDataResult.result!.index2;
         const data2 = await getVocabularyFromRangeAction(start2, start2 + 49);
