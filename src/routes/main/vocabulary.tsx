@@ -57,6 +57,7 @@ import Edit from "~/components/edit";
 import QuoteDummy from "~/components/quote";
 import { createIntervalCounter, createPolled } from "@solid-primitives/timer";
 import { useGlobalContext } from "~/globalcontext/store";
+import { createAudio } from "@solid-primitives/audio";
 
 export const route = {
   load: () => {
@@ -77,9 +78,9 @@ const Vocabulary: Component<{}> = (props) => {
     createSignal<string>("unset");
   let divRef: HTMLDivElement | undefined;
 
-  onMount(() => {
-    getCalendarTodayDataAction();
-    getMemoriesLengthAction();
+  onMount(async () => {
+    await getCalendarTodayDataAction();
+    await getMemoriesLengthAction();
     onCleanup(() => {
       clearInterval(timerRef);
     });
@@ -349,6 +350,10 @@ const Vocabulary: Component<{}> = (props) => {
   // -------------------TIMMER START-------------------- //
   const [delay, setDelay] = createSignal<number | false>(false);
   const countDownTimer = createIntervalCounter(delay);
+  const [audioSource, setAudioSource] = createSignal<string>("");
+  const [playing, setPlaying] = createSignal(false);
+  const [volume, setVolume] = createSignal(1);
+  const [audio, { seek }] = createAudio(audioSource, playing, volume);
 
   createEffect(
     on(
@@ -359,6 +364,8 @@ const Vocabulary: Component<{}> = (props) => {
         } else {
           stopTimer();
           showDesktopNotification();
+          setAudioSource("/sounds/09_Autumn_Mvt_3_Allegro.mp3");
+          setPlaying(true);
         }
       },
       { defer: true }
@@ -391,6 +398,7 @@ const Vocabulary: Component<{}> = (props) => {
       if (wordList.length > 0) {
         setBottomActive(true);
       }
+      setPlaying(false);
     };
   };
 
