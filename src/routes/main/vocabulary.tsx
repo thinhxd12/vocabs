@@ -73,15 +73,34 @@ const [showDefinitions, setShowDefinitions] = createSignal(false);
 const Vocabulary: Component<{}> = (props) => {
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
-
+  const [searchInputBackground, setSearchInputBackground] =
+    createSignal<string>("unset");
   let divRef: HTMLDivElement | undefined;
+
+  onMount(() => {
+    getCalendarTodayDataAction();
+    getMemoriesLengthAction();
+    onCleanup(() => {
+      clearInterval(timerRef);
+    });
+  });
+
+  createEffect(() => {
+    if (searchTerm().length > 0) {
+      setSearchInputBackground("#272727");
+    } else setSearchInputBackground("unset");
+  });
 
   //call sever action search text
   const getSearchTextAction = useAction(getSearchText);
 
   const trigger = debounce(async (str: string) => {
     const res = await getSearchTextAction(str);
-    setSearchResult(res || []);
+    if (res) {
+      if (res.length === 0) {
+        setSearchInputBackground("#000000");
+      } else setSearchResult(res);
+    }
   }, 300);
 
   const onKeyDownDiv: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (
@@ -230,14 +249,6 @@ const Vocabulary: Component<{}> = (props) => {
   const getVocabularyFromRangeAction = useAction(getVocabularyFromRange);
   const [wordList, setWordList] = createStore<VocabularyType[]>([]);
 
-  onMount(() => {
-    getMemoriesLengthAction();
-    getCalendarTodayDataAction();
-    onCleanup(() => {
-      clearInterval(timerRef);
-    });
-  });
-
   const handleAutoplay = () => {
     handleRenderText(wordList[counter()]);
     setCounter(counter() + 1);
@@ -345,7 +356,10 @@ const Vocabulary: Component<{}> = (props) => {
       () => {
         if (timerCounter() > 0) {
           setTimerCounter(timerCounter() - 1);
-        } else stopTimer();
+        } else {
+          stopTimer();
+          showDesktopNotification();
+        }
       },
       { defer: true }
     )
@@ -358,7 +372,6 @@ const Vocabulary: Component<{}> = (props) => {
   const stopTimer = () => {
     setDelay(false);
     setTimerCounter(6);
-    showDesktopNotification();
   };
 
   const showDesktopNotification = () => {
@@ -405,7 +418,8 @@ const Vocabulary: Component<{}> = (props) => {
             <Motion.div
               class="myInputText"
               animate={{
-                background: searchTerm().length > 0 ? "#272727" : "unset",
+                // background: searchTerm().length > 0 ? "#272727" : "unset",
+                backgroundColor: searchInputBackground(),
               }}
               transition={{ duration: 0.6, easing: "linear" }}
             >

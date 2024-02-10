@@ -90,7 +90,7 @@ const Translation: Component<{
       definitions: [...insertText.definitions],
       sound: definitionData.america.sound,
       meaning: transInput(),
-      phonetic: props.item?.wordTranscription,
+      phonetic: props.item?.wordTranscription || "null",
     };
     if (newInsertText.sound === "") {
       newInsertText.sound = await getOedSoundAction(newInsertText.text);
