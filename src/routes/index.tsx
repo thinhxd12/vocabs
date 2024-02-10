@@ -5,6 +5,8 @@ import {
 } from "@solidjs/router";
 import { Show } from "solid-js";
 import { loginOrRegister, getUser } from "~/api";
+import "/public/styles/login.scss";
+import { OcArrowleft2, OcArrowright2 } from "solid-icons/oc";
 
 export const route = {
   load: () => getUser(),
@@ -13,33 +15,19 @@ export const route = {
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginOrRegister);
   return (
-    <main>
-      <h1>Login</h1>
-      <form action={loginOrRegister} method="post">
+    <main class="login">
+      <form action={loginOrRegister} method="post" class="loginForm">
         <input
           type="hidden"
           name="redirectTo"
           value={props.params.redirectTo ?? "/main/vocabulary"}
         />
-        <fieldset>
-          <legend>Login or Register?</legend>
-          <label>
-            <input type="radio" name="loginType" value="login" checked={true} />{" "}
-            Login
-          </label>
-          <label>
-            <input type="radio" name="loginType" value="register" /> Register
-          </label>
-        </fieldset>
-        <div>
-          <label for="username-input">Username</label>
-          <input name="username" placeholder="kody" />
+        <div class="loginItem">
+          <input name="password" type="password" class="loginInput" />
+          <button type="submit" class="loginBtn">
+            <OcArrowright2 size={12} />
+          </button>
         </div>
-        <div>
-          <label for="password-input">Password</label>
-          <input name="password" type="password" placeholder="123456" />
-        </div>
-        <button type="submit">Login</button>
         <Show when={loggingIn.result}>
           <p style={{ color: "red" }} role="alert" id="error-message">
             {loggingIn.result!.message}

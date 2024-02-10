@@ -406,7 +406,7 @@ const Vocabulary: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <Title>thịnh - Übermensch</Title>
+      <Title>Übermensch</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App"/>
       <div class="vocabularyContainer">

@@ -24,7 +24,7 @@ async function login(username: string, password: string) {
     email: username,
     password: password,
   })
-  if (error?.message) throw new Error("Invalid login");
+  if (error?.message) throw new Error(error?.message);
   setEmailSig(username);
   return { email: username }
 }
@@ -39,16 +39,14 @@ async function register(username: string, password: string) {
 }
 
 export async function loginOrRegister(formData: FormData) {
-  const username = String(formData.get("username"));
+  // const username = String(formData.get("username"));
+  const username = import.meta.env.VITE_LOGIN_EMAIL;
   const password = String(formData.get("password"));
-  const loginType = String(formData.get("loginType"));
-  let error = validateUsername(username) || validatePassword(password);
+  let error = validatePassword(password);
   if (error) return new Error(error);
 
   try {
-    const user = await (loginType !== "login"
-      ? register(username, password)
-      : login(username, password));
+    const user = await login(username, password);
     //luu mot session value email khi khoi dong route se tim toi email de verify
     const session = await getSession();
     await session.update(d => (d.email = user!.email));

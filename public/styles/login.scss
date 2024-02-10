@@ -1,0 +1,54 @@
+@import "./fonts.scss";
+@import "./mixins.scss";
+
+.login {
+    width: 100vw;
+    height: 100vh;
+    @include flex-center;
+    background: $color-black;
+
+    .loginForm {
+        width: 360px;
+        height: 100%;
+        border-left: 1px solid $color-boder;
+        border-right: 1px solid $color-boder;
+        padding-top: 30vh;
+
+        .loginItem {
+            background: $color-black;
+            @include flex-center;
+
+            .loginInput {
+                background: $color-white;
+                height: 25px;
+                border-radius: 15px;
+                font-size: 12px;
+                transition: all .3s ease;
+                text-align: center;
+                border: 0;
+                outline: 0;
+            }
+
+            .loginBtn {
+                @include flex-center;
+                width: 21px;
+                height: 21px;
+                border-radius: 50%;
+                margin-left: 3px;
+                border: 0;
+                outline: 0;
+                background: #ca140c;
+                cursor: pointer;
+                transition: all .2s;
+                opacity: 0;
+            }
+
+            &:hover {
+                .loginBtn {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+}

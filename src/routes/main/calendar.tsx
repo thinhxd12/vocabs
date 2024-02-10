@@ -46,15 +46,15 @@ const About: Component<{}> = (props) => {
   };
   const [slider, { current, next, prev, moveTo }] = createSlider(options);
 
-  onMount(() => {
+  onMount(async () => {
     //get image calendar
     // getImageFromUnsplashAction();
-    //get calendar schedule
-    getCalendarScheduleDataAction();
     //get calendar history
-    getCalendarHistoryDataFromStorage();
+    await getCalendarHistoryDataFromStorage();
     // set slider
     slider(ref);
+    //get calendar schedule
+    getCalendarScheduleDataAction();
     //get calendarImageContent
     getThisWeekDataFromStorage();
   });
@@ -122,9 +122,9 @@ const About: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <Title>thịnh - Amor fati</Title>
+      <Title>Amor fati</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
-      <Meta name="description" content="Thinh's Vocabulary Learning App"/>
+      <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <div class="calendar">
         <div class="calendarCard">
           <div
@@ -222,6 +222,7 @@ const About: Component<{}> = (props) => {
             </Show>
           </div>
         </div>
+        {/* <Show when={historyData()}> */}
         <div class="calendarHistory" ref={ref}>
           <Index each={historyData()}>
             {(data, i) => {
@@ -229,6 +230,7 @@ const About: Component<{}> = (props) => {
             }}
           </Index>
         </div>
+        {/* </Show> */}
         <div class="calendarDropdownContainer">
           {/* new week */}
           <Presence>
