@@ -430,6 +430,14 @@ const About: Component<{}> = (props) => {
           </Show>
         </Presence>
       </div>
+      <div class="calendarQuote">
+        The tree that is supposed to grow to a proud height can dispense with
+        bad weather and storms. Whether misfortune and external resistance, some
+        kinds of hatred, jealousy, stubbornness, mistrust, hardness, avarice,
+        and violence do not belong among the favorable conditions without which
+        any great growth. The poison of which weaker natures perish strengthens
+        the strong — nor do they call it poison.
+      </div>
     </div>
   );
 };

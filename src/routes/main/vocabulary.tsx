@@ -81,9 +81,6 @@ const Vocabulary: Component<{}> = (props) => {
   onMount(async () => {
     await getCalendarTodayDataAction();
     await getMemoriesLengthAction();
-    onCleanup(() => {
-      clearInterval(timerRef);
-    });
   });
 
   createEffect(() => {

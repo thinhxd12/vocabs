@@ -295,6 +295,16 @@
             }
         }
     }
+
+    .calendarQuote {
+        margin-top: 3px;
+        background: url("/images/main/grunge-image-tree.webp");
+        background-size: cover;
+        background-position: left 0 bottom 27%;
+        padding: 6px;
+        @include font("nyt-cheltenham", 12px, $color-black, 600, normal, 14px);
+        cursor: default;
+    }
 }
 
 .keen-slider:not([data-keen-slider-disabled]) {
