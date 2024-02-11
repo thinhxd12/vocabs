@@ -11,7 +11,8 @@
         top: 0;
         left: 0;
         width: 100%;
-        @include flex;
+        display: flex;
+        align-items: flex-start;
         justify-content: space-between;
         border-bottom: 1px solid $color-boder;
         background: $color-background-4;
@@ -34,7 +35,8 @@
     .quoteBody {
         font-size: 12.5px;
         line-height: 1.1rem;
-        padding: 6px 12px;
+        padding: 6px 9px;
+        min-height: 52px;
 
         .quoteDropCap {
             @include font("nyt-cheltenham", 45px, $color-white, 700, normal, 45px);
@@ -44,7 +46,7 @@
             padding: 0 4px;
             @include flex-center;
             margin-right: 3px;
-            margin-top: 3px;
+            height: 50px;
         }
 
         .quoteMark {

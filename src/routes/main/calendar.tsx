@@ -416,11 +416,6 @@ const About: Component<{}> = (props) => {
                     method="post"
                   >
                     <div class="calendarDropdownFormContent">
-                      <input
-                        name="monthId"
-                        value={historyData()!.length + 1}
-                        style={{ display: "none" }}
-                      />
                       <div class="calendarInputGroup">
                         <select class="calendarSelect" name="startMonthIndex">
                           <option value="1">1 - 1000</option>

@@ -68,7 +68,6 @@ export const route = {
 
 let timerRef: NodeJS.Timeout;
 const [counter, setCounter] = createSignal<number>(0);
-const [timerCounter, setTimerCounter] = createSignal<number>(6);
 const [currentText, setCurrentText] = createSignal<VocabularyType>();
 const [showDefinitions, setShowDefinitions] = createSignal(false);
 
@@ -97,7 +96,8 @@ const Vocabulary: Component<{}> = (props) => {
     const res = await getSearchTextAction(str);
     if (res) {
       if (res.length === 0) {
-        setSearchInputBackground("#000000");
+        setSearchInputBackground("#360000");
+        setSearchResult([]);
       } else setSearchResult(res);
     }
   }, 300);
@@ -350,6 +350,7 @@ const Vocabulary: Component<{}> = (props) => {
   // -------------------TIMMER START-------------------- //
   const [delay, setDelay] = createSignal<number | false>(false);
   const countDownTimer = createIntervalCounter(delay);
+  const [timerCounter, setTimerCounter] = createSignal<number>(6);
   const [audioSource, setAudioSource] = createSignal<string>("");
   const [playing, setPlaying] = createSignal(false);
   const [volume, setVolume] = createSignal(1);
@@ -359,7 +360,7 @@ const Vocabulary: Component<{}> = (props) => {
     on(
       countDownTimer,
       () => {
-        if (timerCounter() > 0) {
+        if (timerCounter() > 1) {
           setTimerCounter(timerCounter() - 1);
         } else {
           stopTimer();
@@ -373,7 +374,7 @@ const Vocabulary: Component<{}> = (props) => {
   );
 
   const startTimer = () => {
-    setDelay(60000);
+    setDelay(3000);
   };
 
   const stopTimer = () => {
@@ -408,7 +409,7 @@ const Vocabulary: Component<{}> = (props) => {
     <MetaProvider>
       <Title>Übermensch</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
-      <Meta name="description" content="Thinh's Vocabulary Learning App"/>
+      <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <div class="vocabularyContainer">
         <div
           ref={divRef}
@@ -430,7 +431,6 @@ const Vocabulary: Component<{}> = (props) => {
               <Motion.div
                 class="myInputText"
                 animate={{
-                  // background: searchTerm().length > 0 ? "#272727" : "unset",
                   backgroundColor: searchInputBackground(),
                 }}
                 transition={{ duration: 0.6, easing: "linear" }}

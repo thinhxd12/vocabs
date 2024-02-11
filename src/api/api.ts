@@ -622,12 +622,10 @@ export const submitNewWeek = action(async (formData: FormData) => {
 
 export const submitNewMonth = action(async (formData: FormData) => {
     "use server";
-    const monthId = Number(formData.get("monthId"));
     const startMonthIndex = Number(formData.get("startMonthIndex"));
     let { error } = await supabase
         .from(mapTables.history)
         .upsert([{
-            id: monthId,
             week1: { index: startMonthIndex, from_date: "", to_date: "" },
             week2: { index: startMonthIndex + 200, from_date: "", to_date: "" },
             week3: { index: startMonthIndex + 400, from_date: "", to_date: "" },

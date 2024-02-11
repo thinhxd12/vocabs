@@ -5,6 +5,7 @@ import "/public/styles/bottom.scss";
 import { getCalendarTodayData, getMemoriesLength } from "~/api/api";
 import { useGlobalContext } from "~/globalcontext/store";
 import { OcDotfill2, OcKebabhorizontal2 } from "solid-icons/oc";
+import { Motion, Presence } from "solid-motionone";
 
 const Bottom: Component<{}> = (props) => {
   const logoutAction = useAction(logout);
@@ -55,14 +56,48 @@ const Bottom: Component<{}> = (props) => {
         class="mainFooterCornerBtn"
         onClick={() => setBottomActive(!bottomActive())}
       >
-        <img
-          src={
-            bottomActive()
-              ? "/images/main/sunrise.jpg"
-              : "/images/main/sunset.jpg"
-          }
-          class="mainFooterCornerBtnImage"
-        />
+        <Presence>
+          <Show
+            when={bottomActive()}
+            fallback={
+              <Motion.img
+                initial={{
+                  opacity: 0,
+                  y: -30,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: 30,
+                }}
+                transition={{ duration: 0.3, easing: "ease-in-out" }}
+                src="/images/main/sunset.jpg"
+                class="mainFooterCornerBtnImage"
+              />
+            }
+          >
+            <Motion.img
+              initial={{
+                opacity: 0,
+                y: -30,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+                y: 30,
+              }}
+              transition={{ duration: 0.3, easing: "ease-in-out" }}
+              src="/images/main/sunrise.jpg"
+              class="mainFooterCornerBtnImage"
+            />
+          </Show>
+        </Presence>
         <input
           class={
             bottomLooping() ? "inputWordRow inputWordRowActive" : "inputWordRow"
