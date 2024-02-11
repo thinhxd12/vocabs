@@ -285,11 +285,11 @@ const Vocabulary: Component<{}> = (props) => {
   };
 
   const stopAutoplay = () => {
+    clearInterval(timerRef);
     //wordlist index
     setCounter(0);
     //bottom button input background
     setBottomLooping(false);
-    clearInterval(timerRef);
     setBottomActive(false);
   };
 
@@ -303,17 +303,13 @@ const Vocabulary: Component<{}> = (props) => {
   } = useGlobalContext();
 
   createEffect(
-    on(
-      bottomActive,
-      () => {
-        if (bottomActive() && wordList.length > 0) {
-          startAutoplay();
-        } else {
-          pauseAutoplay();
-        }
-      },
-      { defer: true }
-    )
+    on(bottomActive, () => {
+      if (bottomActive() && wordList.length > 0) {
+        startAutoplay();
+      } else {
+        pauseAutoplay();
+      }
+    })
   );
 
   const [todayIndex, setTodayIndex] = createSignal<number>(0);
@@ -358,20 +354,16 @@ const Vocabulary: Component<{}> = (props) => {
   const [audio, { seek }] = createAudio(audioSource, playing, volume);
 
   createEffect(
-    on(
-      countDownTimer,
-      () => {
-        if (timerCounter() > 1) {
-          setTimerCounter(timerCounter() - 1);
-        } else {
-          stopTimer();
-          showDesktopNotification();
-          setAudioSource("/sounds/09_Autumn_Mvt_3_Allegro.mp3");
-          setPlaying(true);
-        }
-      },
-      { defer: true }
-    )
+    on(countDownTimer, () => {
+      if (timerCounter() > 1) {
+        setTimerCounter(timerCounter() - 1);
+      } else {
+        stopTimer();
+        showDesktopNotification();
+        setAudioSource("/sounds/09_Autumn_Mvt_3_Allegro.mp3");
+        setPlaying(true);
+      }
+    })
   );
 
   const startTimer = () => {
@@ -397,9 +389,7 @@ const Vocabulary: Component<{}> = (props) => {
     });
 
     notification.onclose = (event) => {
-      if (wordList.length > 0) {
-        setBottomActive(true);
-      }
+      setBottomActive(true);
       setPlaying(false);
     };
   };
