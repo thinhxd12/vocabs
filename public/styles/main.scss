@@ -13,7 +13,7 @@
         flex-grow: 1;
         position: relative;
         height: 100vh;
-        
+
         .mainImageContentAnimation {
             @include flex-center;
             padding: 1.5vw 3.5vw 3vw;
@@ -54,14 +54,13 @@
             z-index: 1001;
         }
 
-
         .mainImageRoundBtn {
             width: 31px;
             height: 31px;
             cursor: pointer;
             border-radius: 6px;
             background: transparent;
-            border: 1px solid $color-boder;
+            border: 1px solid #3434344d;
             transition: all 0.2s;
             @include flex-center;
             @include font(sans-serif, 14px, $color-white, 700, normal, 16px);

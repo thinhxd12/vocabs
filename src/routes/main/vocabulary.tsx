@@ -375,7 +375,7 @@ const Vocabulary: Component<{}> = (props) => {
   );
 
   const startTimer = () => {
-    setDelay(3000);
+    setDelay(60000);
   };
 
   const stopTimer = () => {

@@ -350,7 +350,7 @@ const About: Component<{}> = (props) => {
                   >
                     <input
                       name="monthId"
-                      value={historyData()!.length}
+                      value={historyData()!.pop()!.id}
                       style={{ display: "none" }}
                     />
                     <div class="calendarDropdownFormContent">
