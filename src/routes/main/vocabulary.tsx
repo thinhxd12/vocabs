@@ -262,6 +262,7 @@ const Vocabulary: Component<{}> = (props) => {
         todayIndex() === 1
           ? getCalendarTodayDataResult.result!.time1 + 1
           : getCalendarTodayDataResult.result!.time2 + 1;
+
       await submitTodayProgressAction(todayIndex(), newProgress);
       await getCalendarTodayDataAction();
     }
