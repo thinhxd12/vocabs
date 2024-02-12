@@ -76,6 +76,7 @@ const Vocabulary: Component<{}> = (props) => {
   const [searchTerm, setSearchTerm] = createSignal<string>("");
   const [searchInputBackground, setSearchInputBackground] =
     createSignal<string>("unset");
+  const [searchInputColor, setSearchInputColor] = createSignal<string>("#ffffff");
   let divRef: HTMLDivElement | undefined;
 
   onMount(async () => {
@@ -86,6 +87,7 @@ const Vocabulary: Component<{}> = (props) => {
   createEffect(() => {
     if (searchTerm().length > 0) {
       setSearchInputBackground("#272727");
+      setSearchInputColor("#ffffff");
     } else setSearchInputBackground("unset");
   });
 
@@ -96,7 +98,8 @@ const Vocabulary: Component<{}> = (props) => {
     const res = await getSearchTextAction(str);
     if (res) {
       if (res.length === 0) {
-        setSearchInputBackground("#360000");
+        setSearchInputBackground("#ffffff");
+        setSearchInputColor("#de0000");
         setSearchResult([]);
       } else setSearchResult(res);
     }
@@ -129,6 +132,7 @@ const Vocabulary: Component<{}> = (props) => {
     if (keyDown === " ") {
       event.preventDefault();
       setSearchTerm("");
+      setSearchInputColor("#ffffff");
       setSearchResult([]);
       showDefinitions() && setShowDefinitions(false);
     }
@@ -423,6 +427,7 @@ const Vocabulary: Component<{}> = (props) => {
                 class="myInputText"
                 animate={{
                   backgroundColor: searchInputBackground(),
+                  color: searchInputColor(),
                 }}
                 transition={{ duration: 0.6, easing: "linear" }}
               >

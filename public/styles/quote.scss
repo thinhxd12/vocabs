@@ -36,7 +36,7 @@
         font-size: 12.5px;
         line-height: 1.1rem;
         padding: 6px 9px;
-        min-height: 52px;
+        min-height: 63px;
 
         .quoteDropCap {
             @include font("nyt-cheltenham", 45px, $color-white, 700, normal, 45px);
