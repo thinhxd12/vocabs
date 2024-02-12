@@ -66,3 +66,65 @@ export interface TranslateType {
   word: string;
   wordTranscription: string;
 }
+
+export interface CurrentlyType {
+  time: number;
+  summary: string;
+  icon: string;
+  nearestStormDistance: number;
+  nearestStormBearing: number;
+  precipIntensity: number;
+  precipProbability: number;
+  precipIntensityError: number;
+  precipType: string;
+  temperature: number;
+  apparentTemperature: number;
+  dewPoint: number;
+  humidity: number;
+  pressure: number;
+  windSpeed: number;
+  windGust: number;
+  windBearing: number;
+  cloudCover: number;
+  uvIndex: number;
+  visibility: number;
+  ozone: number;
+  isDayTime?: boolean;
+}
+
+export interface MinutelyType {
+  time: number;
+  precipIntensity: number;
+  precipProbability: number;
+  precipIntensityError: number;
+  precipType: string;
+}
+
+export interface FixMinutelyType {
+  diffTime: number;
+  intensity: number;
+  probability: number;
+}
+
+export interface HourlyType {
+  time: number;
+  icon: string;
+  summary: string;
+  precipIntensity: number;
+  precipProbability: number;
+  precipIntensityError: number;
+  precipAccumulation: number;
+  precipType: string;
+  temperature: number;
+  apparentTemperature: number;
+  dewPoint: number;
+  humidity: number;
+  pressure: number;
+  windSpeed: number;
+  windGust: number;
+  windBearing: number;
+  cloudCover: number;
+  uvIndex: number;
+  visibility: number;
+  ozone: number;
+}

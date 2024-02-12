@@ -1,0 +1,76 @@
+@import "./fonts.scss";
+@import "./mixins.scss";
+
+
+.weather {
+    min-width: 360px;
+    max-width: 360px;
+    height: calc(100vh - 31px);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: inherit;
+    outline: none;
+    background-size: cover;
+    background-position: top left;
+    animation: moveBg 300s linear infinite;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .weatherGeos {
+        background: none;
+        outline: none;
+        border: none;
+    }
+
+    .weatherContent {
+        width: 100%;
+        @include flex-center;
+
+        .weatherImg {
+            width: 135px;
+        }
+
+        .weatherContentTemp {
+            @include font('Rubik', 66px, $color-black, 400, normal, 50px);
+        }
+
+        .weatherContentInfo {
+            &:last-child {
+                font-size: 10px
+            }
+
+            @include font('Rubik', 9px, $color-black, 400, normal, 9px);
+        }
+
+        .weatherContentWind {
+            @include font('Rubik', 9px, $color-black, 400, normal, 9px);
+            height: 10px;
+            @include flex;
+            margin-bottom: 2px;
+        }
+    }
+
+    .weatherPredict {
+        @include font('Rubik', 12px, $color-black, 600, normal, 15px);
+        text-align: center;
+    }
+}
+
+
+
+
+@keyframes moveBg {
+    0% {
+        background-position-x: 0;
+    }
+
+    50% {
+        background-position-x: right;
+    }
+
+    100% {
+        background-position-x: 0;
+    }
+}

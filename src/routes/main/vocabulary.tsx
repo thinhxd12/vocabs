@@ -2,21 +2,16 @@ import {
   Component,
   Index,
   JSX,
-  Match,
   Show,
-  Switch,
   createEffect,
-  createMemo,
   createSignal,
   on,
-  onCleanup,
   onMount,
 } from "solid-js";
 import {
   RouteDefinition,
   useAction,
   useSubmission,
-  useSubmissions,
 } from "@solidjs/router";
 import { getUser } from "~/api";
 import { BookmarkType, TranslateType, VocabularyType } from "~/types";
@@ -41,10 +36,8 @@ import {
   OcStar2,
   OcStarfill2,
   OcChevronright2,
-  OcPaste2,
   OcX2,
   OcCopy2,
-  OcCopy3,
 } from "solid-icons/oc";
 import Definition from "~/components/definition";
 import "/public/styles/vocabulary.scss";
@@ -52,10 +45,9 @@ import "/public/styles/quote.scss";
 import FlipCard from "~/components/flipcard";
 import { Motion, Presence } from "solid-motionone";
 import Translation from "~/components/translation";
-import { Portal } from "solid-js/web";
 import Edit from "~/components/edit";
 import QuoteDummy from "~/components/quote";
-import { createIntervalCounter, createPolled } from "@solid-primitives/timer";
+import { createIntervalCounter } from "@solid-primitives/timer";
 import { useGlobalContext } from "~/globalcontext/store";
 import { createAudio } from "@solid-primitives/audio";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
@@ -111,7 +103,7 @@ const Vocabulary: Component<{}> = (props) => {
   ) => {
     // console.log(event);
     const keyDown = event.key;
-    if (keyDown.match(/^[a-z]$/)) {
+    if (keyDown.match(/^[a-z\-]$/)) {
       setSearchTerm(searchTerm() + keyDown);
       showDefinitions() && setShowDefinitions(false);
       if (searchTerm().length > 2) {

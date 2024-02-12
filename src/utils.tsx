@@ -23,3 +23,6 @@ export const mapTables = {
   history: "history",
   memories: "memories",
 };
+
+export const PRECIP_NUMB = 0.8;
+export const DEVIATION_NUMB = 1.2;

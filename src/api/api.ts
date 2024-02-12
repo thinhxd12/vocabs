@@ -1,7 +1,7 @@
 import { action, cache, redirect, useAction } from "@solidjs/router";
-import { BookmarkType, HistoryType, ImageType, ScheduleType, TranslateType, VocabularyType } from "~/types";
+import { BookmarkType, CurrentlyType, HistoryType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyType } from "~/types";
 import { supabase } from "./supabase";
-import { DEFAULT_CORS_PROXY, getElAttribute, getElText, mapTables } from "~/utils";
+import { DEFAULT_CORS_PROXY, DEVIATION_NUMB, PRECIP_NUMB, getElAttribute, getElText, mapTables } from "~/utils";
 import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
 
@@ -671,3 +671,114 @@ export const getMemoriesLength = action(async () => {
         .select('*', { count: "exact" });
     return count as number;
 }, "getVocabularyFromRange");
+
+
+//get weather data
+export const getWeatherData = action(async (geo: string) => {
+    "use server";
+    const WEATHER_KEY = "gnunh5vxMIu0kLZG";
+    const time = Math.round(Date.now() / 1000);
+    const url = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo},${time}?exclude=daily&units=ca`
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const currentData = cleanDataCurrently(data.currently, data.offset);
+        const minuteData = cleanDataMinutely(data.minutely.data);
+        return { currentData: currentData, minuteData: minuteData };
+    } catch (error) {
+        console.error(error);
+    }
+}, "getWeatherData");
+
+const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
+    const time = new Date(data.time * 1000);
+    let hours = time.getUTCHours() + offset;
+    let minutes = time.getMinutes();
+
+    // Convert the hours to 12-hour format
+    let hoursText = hours % 12;
+    hoursText = hoursText ? hoursText : 12; // the hour '0' should be '12'
+    const minutesText = minutes < 10 ? "0" + minutes : minutes;
+    const period = hours >= 12 ? "PM" : "AM";
+    const timeText = `${hoursText}:${minutesText} ${period}`;
+
+    // 95% = DEVIATION_NUMB* standard deviation occur
+    let newPrecipIntensity = (
+        data.precipIntensity -
+        DEVIATION_NUMB * data.precipIntensityError
+    ).toFixed(3);
+
+    let newItem = {
+        icon: data.icon,
+        summary: data.summary,
+        timeText: timeText,
+        isDayTime: hours > 5 && hours < 18,
+        precipIntensity:
+            Number(newPrecipIntensity) > 0 ? Number(newPrecipIntensity) : 0,
+    };
+    switch (true) {
+        case newItem.precipIntensity >= 0.1 &&
+            newItem.precipIntensity < 0.5 &&
+            data.cloudCover >= 0.875 &&
+            data.precipProbability >= PRECIP_NUMB:
+            newItem.icon = "overcast-rain";
+            newItem.summary = "Overcast Light Rain";
+            break;
+        case newItem.precipIntensity >= 0.1 &&
+            newItem.precipIntensity < 0.5 &&
+            data.precipProbability >= PRECIP_NUMB:
+            newItem.icon = "drizzle";
+            newItem.summary = "Light Rain";
+            break;
+        case newItem.precipIntensity >= 1 &&
+            data.precipProbability >= PRECIP_NUMB:
+            newItem.icon = "overcast-rain";
+            newItem.summary = "Heavy Rain";
+            break;
+        case data.cloudCover <= 0.375:
+            newItem.isDayTime
+                ? (newItem.icon = "clear-day")
+                : (newItem.icon = "clear-night");
+            newItem.summary = "Clear";
+            break;
+        case data.cloudCover <= 0.875:
+            newItem.isDayTime
+                ? (newItem.icon = "partly-cloudy-day")
+                : (newItem.icon = "partly-cloudy-night");
+            newItem.summary = "Partly Cloudy";
+            break;
+        case data.cloudCover <= 0.95:
+            newItem.icon = "cloudy";
+            newItem.summary = "Cloudy";
+            break;
+        case data.cloudCover <= 1 &&
+            newItem.precipIntensity >= 0.5 &&
+            data.precipProbability >= PRECIP_NUMB:
+            newItem.icon = "overcast-rain";
+            newItem.summary = "Overcast";
+            break;
+        case data.cloudCover <= 1:
+            newItem.isDayTime
+                ? (newItem.icon = "overcast")
+                : (newItem.icon = "overcast-night");
+            newItem.summary = "Overcast";
+            break;
+        default:
+            break;
+    }
+    return { ...data, ...newItem };
+};
+
+const cleanDataMinutely = (data: MinutelyType[]) => {
+    return data.map((item, index) => {
+        let newItem = { diffTime: 0, intensity: 0, probability: 0 };
+        const newIntensity =
+            item.precipIntensity - DEVIATION_NUMB * item.precipIntensityError;
+        newItem.diffTime = (item.time - data[0].time) / 60;
+        newItem.intensity = Number(
+            newIntensity > 0 ? newIntensity.toFixed(3) : 0
+        );
+        newItem.probability = item.precipProbability;
+        return newItem;
+    });
+};
