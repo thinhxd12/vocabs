@@ -76,7 +76,8 @@ const Vocabulary: Component<{}> = (props) => {
   const [searchTerm, setSearchTerm] = createSignal<string>("");
   const [searchInputBackground, setSearchInputBackground] =
     createSignal<string>("unset");
-  const [searchInputColor, setSearchInputColor] = createSignal<string>("#ffffff");
+  const [searchInputColor, setSearchInputColor] =
+    createSignal<string>("#ffffff");
   let divRef: HTMLDivElement | undefined;
 
   onMount(async () => {
@@ -376,7 +377,7 @@ const Vocabulary: Component<{}> = (props) => {
 
   const stopTimer = () => {
     setDelay(false);
-    setTimerCounter(6);
+    setTimerCounter(7);
   };
 
   const showDesktopNotification = () => {
