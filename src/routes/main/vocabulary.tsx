@@ -8,11 +8,7 @@ import {
   on,
   onMount,
 } from "solid-js";
-import {
-  RouteDefinition,
-  useAction,
-  useSubmission,
-} from "@solidjs/router";
+import { RouteDefinition, useAction, useSubmission } from "@solidjs/router";
 import { getUser } from "~/api";
 import { BookmarkType, TranslateType, VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
@@ -59,7 +55,6 @@ export const route = {
 } satisfies RouteDefinition;
 
 let timerRef: NodeJS.Timeout;
-const [counter, setCounter] = createSignal<number>(0);
 const [currentText, setCurrentText] = createSignal<VocabularyType>();
 const [showDefinitions, setShowDefinitions] = createSignal(false);
 
@@ -173,7 +168,6 @@ const Vocabulary: Component<{}> = (props) => {
     setShowQuotes(true);
     const result = await getBookmarkAction(numb);
     setCurrentQuote(result!);
-    // getBookmarkAction(numb);
   };
 
   const checkQuote = (check: boolean) => {
@@ -243,10 +237,9 @@ const Vocabulary: Component<{}> = (props) => {
   const getCalendarTodayDataAction = useAction(getCalendarTodayData);
   const getCalendarTodayDataResult = useSubmission(getCalendarTodayData);
   const getVocabularyFromRangeAction = useAction(getVocabularyFromRange);
-  const [wordList, setWordList] = createStore<VocabularyType[]>([]);
 
   const handleAutoplay = () => {
-    handleRenderText(wordList[counter()]);
+    handleRenderText(wordList()[counter()]);
     setCounter(counter() + 1);
   };
 
@@ -265,7 +258,7 @@ const Vocabulary: Component<{}> = (props) => {
     }
     handleAutoplay();
     timerRef = setInterval(() => {
-      if (counter() < wordList.length) {
+      if (counter() < wordList().length) {
         handleAutoplay();
       } else {
         stopAutoplay();
@@ -297,11 +290,15 @@ const Vocabulary: Component<{}> = (props) => {
     setBottomActive,
     bottomLooping,
     setBottomLooping,
+    counter,
+    setCounter,
+    wordList,
+    setWordList,
   } = useGlobalContext();
 
   createEffect(
     on(bottomActive, () => {
-      if (bottomActive() && wordList.length > 0) {
+      if (bottomActive() && wordList().length > 0) {
         startAutoplay();
       } else {
         pauseAutoplay();

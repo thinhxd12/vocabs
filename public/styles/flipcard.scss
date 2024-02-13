@@ -97,7 +97,7 @@
                 position: relative;
 
                 .turnBoxItemClass {
-                    @include font(false, 9px, $color-white, 500, normal);
+                    @include font("SF-Pro", 9px, $color-white, 500, normal);
                 }
 
                 .turnBoxItemText {
@@ -107,7 +107,7 @@
                 }
 
                 .turnBoxItemPhonetic {
-                    @include font(false, 21px, $color-red-3, normal, normal);
+                    @include font("SF-Pro", 20px, $color-red-3, 600, normal, 27px);
                 }
 
                 .turnBoxItemDate {
