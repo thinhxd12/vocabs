@@ -159,9 +159,9 @@
 
                 &:hover {
                     background-color: $color-white;
-                    color: $color-calendar-green;
+                    color: $color-calendar-green-1;
                     margin-left: 3px;
-                    border-left: 3px solid $color-calendar-green;
+                    border-left: 3px solid $color-calendar-green-1;
                 }
             }
 
@@ -334,10 +334,12 @@
     }
 
     .vocabularyBtnActive {
-        color: $color-calendar-green;
+        @extend .vocabularyBtn;
+        color: $color-calendar-green-2;
 
         &:hover {
-            color: $color-calendar-green !important;
+            color: $color-calendar-green-1 !important;
+            text-shadow: 0px 0px 9px $color-calendar-green-1 !important;
         }
     }
 
@@ -356,12 +358,8 @@
         display: none;
         opacity: 1;
         cursor: pointer;
-    }
-
-    .timerBtnActive {
         display: block;
     }
-
 
 }
 

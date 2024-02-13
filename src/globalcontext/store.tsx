@@ -1,14 +1,11 @@
-import { RouteSectionProps } from "@solidjs/router";
 import {
   Accessor,
   Setter,
   createContext,
   useContext,
   createSignal,
-  Component,
   JSX,
 } from "solid-js";
-import { createStore } from "solid-js/store";
 import { VocabularyType } from "~/types";
 
 interface ContextProps {

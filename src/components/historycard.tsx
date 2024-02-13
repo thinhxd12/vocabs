@@ -1,5 +1,4 @@
 import { Component } from "solid-js";
-import { Slider, SliderProvider } from "solid-slider";
 import { HistoryType } from "~/types";
 
 const HistoryCard: Component<{

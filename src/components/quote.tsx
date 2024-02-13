@@ -5,9 +5,6 @@ import {
   OcStar2,
   OcX2,
 } from "solid-icons/oc";
-import { CustomIcon } from "solid-icons/lib";
-import { Component } from "solid-js";
-import { BookmarkType } from "~/types";
 
 const QuoteDummy = () => {
 

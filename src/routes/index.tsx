@@ -6,7 +6,7 @@ import {
 import { Show } from "solid-js";
 import { loginOrRegister, getUser } from "~/api";
 import "/public/styles/login.scss";
-import { OcArrowleft2, OcArrowright2 } from "solid-icons/oc";
+import { OcArrowright2 } from "solid-icons/oc";
 
 export const route = {
   load: () => getUser(),
@@ -29,7 +29,7 @@ export default function Login(props: RouteSectionProps) {
           </button>
         </div>
         <Show when={loggingIn.result}>
-          <p style={{ color: "red" }} role="alert" id="error-message">
+          <p class="loginAlert" role="alert" id="error-message">
             {loggingIn.result!.message}
           </p>
         </Show>

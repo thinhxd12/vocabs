@@ -2,36 +2,15 @@ import {
   useAction,
   type RouteDefinition,
   RouteSectionProps,
-  A,
-  useSubmission,
 } from "@solidjs/router";
-import {
-  Show,
-  createContext,
-  createEffect,
-  createResource,
-  createSignal,
-  onMount,
-} from "solid-js";
+import { Show, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
-import { getUser, logout } from "~/api";
-import {
-  getDataImage,
-  getImageFromUnsplash,
-  getMemoriesLength,
-} from "~/api/api";
+import { getUser } from "~/api";
+import { getDataImage } from "~/api/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import { URL_IMAGE_MAIN_PAGE } from "~/utils";
 import "/public/styles/main.scss";
-import { createPolled } from "@solid-primitives/timer";
-import {
-  OcChevronleft2,
-  OcChevronright2,
-  OcCircle2,
-  OcDot2,
-  OcSquare2,
-} from "solid-icons/oc";
 import { GlobalContextProvider } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
 

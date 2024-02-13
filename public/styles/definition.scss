@@ -2,11 +2,9 @@
 @import "./mixins.scss";
 
 .definition {
-    @include baseBody;
+    @include baseBody(#ececec);
     width: 360px;
     padding-top: 0;
-    padding-bottom: 6px;
-    margin-bottom: 3px;
 
     .definitionHeader {
         position: sticky;
@@ -64,7 +62,7 @@
             }
 
             .sn-g {
-                background: $color-white;
+                background: #fefefe;
                 border-radius: 3px;
                 overflow: hidden;
                 padding: 3px 6px;
@@ -130,7 +128,6 @@
                 line-height: 17px;
                 display: block;
                 text-transform: uppercase;
-                margin-left: 3px;
 
                 small {
                     color: #727272;

@@ -12,7 +12,7 @@
     @include flex;
 
     .mainFooterCenterBtn {
-        @include font('Breitkopf', 15px, #7c79794d, 400, normal, 30px);
+        @include font('Breitkopf', 15px, #7c7b7a, 400, normal, 30px);
         letter-spacing: 1px;
         height: 30px;
         width: 30px;
@@ -21,10 +21,6 @@
         background: none;
         outline: none;
         border: none;
-    }
-
-    .mainFooterCenterBtnActive {
-        color: #7c7b7a;
     }
 
     .mainFooterBtn {

@@ -2,7 +2,7 @@ import { Component, createEffect, createSignal, on, onCleanup } from "solid-js";
 import { VocabularyType } from "~/types";
 import "/public/styles/flipcard.scss";
 import { Motion } from "solid-motionone";
-import { AudioState, createAudio } from "@solid-primitives/audio";
+import { createAudio } from "@solid-primitives/audio";
 
 const [playing, setPlaying] = createSignal(false);
 
@@ -90,9 +90,9 @@ const FlipCard: Component<{
                     <Motion.div
                       class="numList"
                       animate={{
-                        y: -numbArray()[0] * 24,
+                        y: -numbArray()[0] * 40,
                       }}
-                      transition={{ duration: 0.3, easing: "ease-in-out" }}
+                      transition={{ duration: 0.3 }}
                     >
                       <div class="number">0</div>
                       <div class="number">1</div>
@@ -110,9 +110,9 @@ const FlipCard: Component<{
                     <Motion.div
                       class="numList"
                       animate={{
-                        y: -numbArray()[1] * 24,
+                        y: -numbArray()[1] * 40,
                       }}
-                      transition={{ duration: 0.3, easing: "ease-in-out" }}
+                      transition={{ duration: 0.3 }}
                     >
                       <div class="number">0</div>
                       <div class="number">1</div>
@@ -129,9 +129,9 @@ const FlipCard: Component<{
                   <Motion.div
                     class="numList"
                     animate={{
-                      y: -numbArray()[2] * 24,
+                      y: -numbArray()[2] * 40,
                     }}
-                    transition={{ duration: 0.3, easing: "ease-in-out" }}
+                    transition={{ duration: 0.3 }}
                   >
                     <div class="number">0</div>
                     <div class="number">1</div>
@@ -151,7 +151,7 @@ const FlipCard: Component<{
                 <Motion.div
                   class="flipImageList"
                   initial={{ y: -22 }}
-                  animate={{ y: 27, transition: { delay: 2.5 } }}
+                  animate={{ y: 22, transition: { delay: 2.5 } }}
                   transition={{ duration: 0.6, easing: "ease-in-out" }}
                 >
                   <img src="/images/main/cup.png" height={44} />

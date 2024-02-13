@@ -1,6 +1,5 @@
-import { Component, Setter, onMount } from "solid-js";
+import { Component } from "solid-js";
 import "/public/styles/alert.scss";
-import { makeTimer } from "@solid-primitives/timer";
 import { OcAlertfill2, OcCheckcirclefill2 } from "solid-icons/oc";
 
 const Alert: Component<{ message: string; alert: boolean }> = (props) => {

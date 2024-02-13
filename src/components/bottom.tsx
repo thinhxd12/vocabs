@@ -1,10 +1,10 @@
 import { A, useAction, useSubmission } from "@solidjs/router";
-import { Component, Show, onMount } from "solid-js";
+import { Component, Show } from "solid-js";
 import { logout } from "~/api";
 import "/public/styles/bottom.scss";
-import { getCalendarTodayData, getMemoriesLength } from "~/api/api";
+import { getMemoriesLength } from "~/api/api";
 import { useGlobalContext } from "~/globalcontext/store";
-import { OcDotfill2, OcKebabhorizontal2 } from "solid-icons/oc";
+import { OcKebabhorizontal2 } from "solid-icons/oc";
 import { Motion, Presence } from "solid-motionone";
 
 const Bottom: Component<{}> = (props) => {
@@ -37,7 +37,7 @@ const Bottom: Component<{}> = (props) => {
         Amor fati
       </A>
       <button
-        class="mainFooterCenterBtn mainFooterCenterBtnActive"
+        class="mainFooterCenterBtn"
         onClick={() => logoutAction()}
       >
         <Show when={getMemoriesLengthResult.result} fallback={229}>

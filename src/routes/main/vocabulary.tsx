@@ -607,7 +607,7 @@ const Vocabulary: Component<{}> = (props) => {
               class={
                 getCalendarTodayDataResult.result &&
                 getCalendarTodayDataResult.result.time1 > 0
-                  ? "vocabularyBtn vocabularyBtnActive"
+                  ? "vocabularyBtnActive"
                   : "vocabularyBtn"
               }
               onClick={() => handleSetDailyWord(1)}
@@ -619,7 +619,7 @@ const Vocabulary: Component<{}> = (props) => {
               class={
                 getCalendarTodayDataResult.result &&
                 getCalendarTodayDataResult.result.time2 > 0
-                  ? "vocabularyBtn vocabularyBtnActive"
+                  ? "vocabularyBtnActive"
                   : "vocabularyBtn"
               }
               onClick={() => handleSetDailyWord(2)}
@@ -633,10 +633,7 @@ const Vocabulary: Component<{}> = (props) => {
             <button class="vocabularyBtn">Σ</button>
             <button class="vocabularyBtn">Ξ</button>
             <Show when={delay()}>
-              <button
-                class="vocabularyBtn timerBtn timerBtnActive"
-                onClick={stopTimer}
-              >
+              <button class="vocabularyBtn timerBtn" onClick={stopTimer}>
                 {timerCounter()}m
               </button>
             </Show>
