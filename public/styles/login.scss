@@ -17,6 +17,7 @@
         .loginItem {
             background: $color-black;
             @include flex-center;
+            padding-left: 24px;
 
             .loginInput {
                 background: $color-white;
