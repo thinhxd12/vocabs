@@ -135,7 +135,9 @@ const Vocabulary: Component<{}> = (props) => {
     setShowDefinitions(true);
     setSearchTerm("");
     setSearchResult([]);
+
     // handlecheck function
+
     if (text.number > 1) {
       checkVocabularyAction(text.text);
     } else {
@@ -395,7 +397,11 @@ const Vocabulary: Component<{}> = (props) => {
       <Title>Übermensch</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <div class="vocabularyContainer">
+      <Motion.div
+        class="vocabularyContainer"
+        animate={{ opacity: [0, 1] }}
+        transition={{ duration: 0.6 }}
+      >
         <div
           ref={divRef}
           tabIndex={0}
@@ -659,7 +665,7 @@ const Vocabulary: Component<{}> = (props) => {
             </Motion.div>
           </Show>
         </Presence>
-      </div>
+      </Motion.div>
     </MetaProvider>
   );
 };

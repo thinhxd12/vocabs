@@ -15,6 +15,7 @@ import { PRECIP_NUMB } from "~/utils";
 import { OcArrowup2 } from "solid-icons/oc";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
+import { Motion } from "solid-motionone";
 
 type WeatherGeoType = {
   name: string;
@@ -249,11 +250,13 @@ const Weather: Component<{}> = (props) => {
       <TitleName>Caelus</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <div
+      <Motion.div
         class="weather"
         style={{
           "background-image": `url(/images/darksky/background/${getWeatherDataResult.result?.currentData.icon}.jpg)`,
         }}
+        animate={{ opacity: [0, 1] }}
+        transition={{ duration: 0.6 }}
       >
         <select
           class="weatherGeos"
@@ -326,7 +329,7 @@ const Weather: Component<{}> = (props) => {
             {makePrediction(getWeatherDataResult.result!.minuteData)}
           </p>
         </Show>
-      </div>
+      </Motion.div>
     </MetaProvider>
   );
 };

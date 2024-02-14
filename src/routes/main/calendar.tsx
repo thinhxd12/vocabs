@@ -125,7 +125,11 @@ const About: Component<{}> = (props) => {
       <Title>Amor fati</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <div class="calendar">
+      <Motion.div
+        class="calendar"
+        animate={{ opacity: [0, 1] }}
+        transition={{ duration: 0.6 }}
+      >
         <div class="calendarCard">
           <div
             class="calendarImage"
@@ -440,7 +444,7 @@ const About: Component<{}> = (props) => {
           without which any great growth. The poison of which weaker natures
           perish strengthens the strong — nor do they call it poison.
         </div>
-      </div>
+      </Motion.div>
     </MetaProvider>
   );
 };
