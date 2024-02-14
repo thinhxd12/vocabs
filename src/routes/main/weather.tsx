@@ -5,6 +5,7 @@ import {
   Show,
   createEffect,
   createSignal,
+  on,
   onMount,
 } from "solid-js";
 import "/public/styles/weather.scss";
@@ -16,6 +17,7 @@ import { OcArrowup2 } from "solid-icons/oc";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
 import { Motion } from "solid-motionone";
+import { createStore } from "solid-js/store";
 
 type WeatherGeoType = {
   name: string;
@@ -33,20 +35,58 @@ const Weather: Component<{}> = (props) => {
       name: "Cần Thơ",
       geo: "10.0364216,105.7875219",
     },
+    {
+      name: "Pinhais",
+      geo: "-25.4443488,-49.1900307",
+    },
   ];
 
-  const [minutelyData, setMinutelyData] = createSignal<FixMinutelyType[]>();
   const getWeatherDataAction = useAction(getWeatherData);
   const getWeatherDataResult = useSubmission(getWeatherData);
+  const [chartData, setChartData] = createStore();
 
   onMount(() => {
     getWeatherDataAction(WEATHER_GEOS[0].geo);
     Chart.register(Title, Tooltip, Legend, Colors, Filler);
   });
 
-  createEffect(() => {
-    setMinutelyData(getWeatherDataResult.result?.minuteData);
-  });
+  createEffect(
+    on(
+      () => getWeatherDataResult.result?.minuteData,
+      () => {
+        const minutelyData = getWeatherDataResult.result?.minuteData;
+        if (minutelyData) {
+          const labels = minutelyData.map((item) => item.diffTime);
+          setChartData({
+            labels,
+            datasets: [
+              {
+                label: "",
+                data: minutelyData.map((item) => item.intensity),
+                borderColor: "#009bff",
+                backgroundColor: "#52a0c1bf",
+                yAxisID: "y",
+                fill: true,
+                tension: 0.1,
+                pointRadius: 0,
+                borderWidth: 1,
+              },
+              {
+                label: "",
+                data: minutelyData.map((item) => item.intensity),
+                borderColor: "#f90000",
+                yAxisID: "y1",
+                fill: false,
+                tension: 0.1,
+                pointRadius: 0,
+                borderWidth: 1,
+              },
+            ],
+          });
+        }
+      }
+    )
+  );
 
   const chartOptions = {
     responsive: true,
@@ -138,41 +178,6 @@ const Weather: Component<{}> = (props) => {
         },
       },
     },
-  };
-
-  const labels = minutelyData()
-    ? minutelyData()!.map((item) => item.diffTime)
-    : [];
-
-  const chartData = {
-    labels,
-    datasets: [
-      {
-        label: "",
-        data: minutelyData()
-          ? minutelyData()!.map((item) => item.intensity)
-          : [],
-        borderColor: "#009bff",
-        backgroundColor: "#52a0c1bf",
-        yAxisID: "y",
-        fill: true,
-        tension: 0.1,
-        pointRadius: 0,
-        borderWidth: 1,
-      },
-      {
-        label: "",
-        data: minutelyData()
-          ? minutelyData()!.map((item) => item.probability)
-          : [],
-        borderColor: "#f90000",
-        yAxisID: "y1",
-        fill: false,
-        tension: 0.1,
-        pointRadius: 0,
-        borderWidth: 1,
-      },
-    ],
   };
 
   const makePrediction = (data: FixMinutelyType[]): string => {

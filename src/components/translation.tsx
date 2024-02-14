@@ -70,7 +70,7 @@ const Translation: Component<{
       setTimeout(() => {
         setAlertObj({ showAlert: false });
         setSendInsert(false);
-      }, 12000);
+      }, 3000);
     }
   });
 

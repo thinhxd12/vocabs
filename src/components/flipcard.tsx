@@ -82,15 +82,58 @@ const FlipCard: Component<{
     <>
       <div class="flipCardLeftContent">
         <div class="numberFlipContainer">
-          <div class="numberFlipContent">
-            {props.item?.number > 1 ? (
-              <div class="flipNumber">
-                <div class="numListContent">
-                  {renderNumber() >= 100 && (
+          <div class="numberFlipBackground">
+            <div class="numberFlipContent">
+              {props.item?.number > 1 ? (
+                <div class="flipNumber">
+                  <div class="numListContent">
+                    {renderNumber() >= 100 && (
+                      <Motion.div
+                        class="numList"
+                        animate={{
+                          y: -numbArray()[0] * 46,
+                          width: numbArray()[0] === 1 ? "8px" : "11px",
+                        }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div class="number">0</div>
+                        <div class="number">1</div>
+                        <div class="number">2</div>
+                        <div class="number">3</div>
+                        <div class="number">4</div>
+                        <div class="number">5</div>
+                        <div class="number">6</div>
+                        <div class="number">7</div>
+                        <div class="number">8</div>
+                        <div class="number">9</div>
+                      </Motion.div>
+                    )}
+                    {renderNumber() >= 10 && (
+                      <Motion.div
+                        class="numList"
+                        animate={{
+                          y: -numbArray()[1] * 46,
+                          width: numbArray()[1] === 1 ? "8px" : "13px",
+                        }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div class="number">0</div>
+                        <div class="number">1</div>
+                        <div class="number">2</div>
+                        <div class="number">3</div>
+                        <div class="number">4</div>
+                        <div class="number">5</div>
+                        <div class="number">6</div>
+                        <div class="number">7</div>
+                        <div class="number">8</div>
+                        <div class="number">9</div>
+                      </Motion.div>
+                    )}
                     <Motion.div
                       class="numList"
                       animate={{
-                        y: -numbArray()[0] * 40,
+                        y: -numbArray()[2] * 46,
+                        width: numbArray()[2] === 1 ? "8px" : "13px",
                       }}
                       transition={{ duration: 0.3 }}
                     >
@@ -105,60 +148,22 @@ const FlipCard: Component<{
                       <div class="number">8</div>
                       <div class="number">9</div>
                     </Motion.div>
-                  )}
-                  {renderNumber() >= 10 && (
-                    <Motion.div
-                      class="numList"
-                      animate={{
-                        y: -numbArray()[1] * 40,
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <div class="number">0</div>
-                      <div class="number">1</div>
-                      <div class="number">2</div>
-                      <div class="number">3</div>
-                      <div class="number">4</div>
-                      <div class="number">5</div>
-                      <div class="number">6</div>
-                      <div class="number">7</div>
-                      <div class="number">8</div>
-                      <div class="number">9</div>
-                    </Motion.div>
-                  )}
+                  </div>
+                </div>
+              ) : (
+                <div class="flipImage">
                   <Motion.div
-                    class="numList"
-                    animate={{
-                      y: -numbArray()[2] * 40,
-                    }}
-                    transition={{ duration: 0.3 }}
+                    class="flipImageList"
+                    initial={{ y: -22 }}
+                    animate={{ y: 24, transition: { delay: 2.5 } }}
+                    transition={{ duration: 0.6, easing: "ease-in-out" }}
                   >
-                    <div class="number">0</div>
-                    <div class="number">1</div>
-                    <div class="number">2</div>
-                    <div class="number">3</div>
-                    <div class="number">4</div>
-                    <div class="number">5</div>
-                    <div class="number">6</div>
-                    <div class="number">7</div>
-                    <div class="number">8</div>
-                    <div class="number">9</div>
+                    <img src="/images/main/cup.png" height={44} />
+                    <span class="number">1</span>
                   </Motion.div>
                 </div>
-              </div>
-            ) : (
-              <div class="flipImage">
-                <Motion.div
-                  class="flipImageList"
-                  initial={{ y: -22 }}
-                  animate={{ y: 22, transition: { delay: 2.5 } }}
-                  transition={{ duration: 0.6, easing: "ease-in-out" }}
-                >
-                  <img src="/images/main/cup.png" height={44} />
-                  <span class="number">1</span>
-                </Motion.div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
       </div>
