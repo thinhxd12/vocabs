@@ -86,9 +86,9 @@ const Vocabulary: Component<{}> = (props) => {
     const res = await getSearchTextAction(str);
     if (res) {
       if (res.length === 0) {
-        setSearchInputBackground("#ffffff");
         setSearchInputColor("#de0000");
         setSearchResult([]);
+        setTranslateTerm(str);
       } else setSearchResult(res);
     }
   }, 300);
@@ -424,7 +424,7 @@ const Vocabulary: Component<{}> = (props) => {
                   backgroundColor: searchInputBackground(),
                   color: searchInputColor(),
                 }}
-                transition={{ duration: 0.6, easing: "linear" }}
+                transition={{ duration: 0.3 }}
               >
                 {searchTerm()}
               </Motion.div>
