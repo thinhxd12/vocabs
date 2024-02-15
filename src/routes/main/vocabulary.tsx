@@ -135,16 +135,15 @@ const Vocabulary: Component<{}> = (props) => {
     setShowDefinitions(true);
     setSearchTerm("");
     setSearchResult([]);
-
     // handlecheck function
 
-    // if (text.number > 1) {
-    //   checkVocabularyAction(text.text);
-    // } else {
-    //   await archiveVocabularyAction(text.text);
-    //   deleteVocabularyAction(text.text);
-    //   getMemoriesLengthAction();
-    // }
+    if (text.number > 1) {
+      checkVocabularyAction(text.text);
+    } else {
+      await archiveVocabularyAction(text.text);
+      deleteVocabularyAction(text.text);
+      getMemoriesLengthAction();
+    }
   };
 
   const handleCloseDefinition = () => {
