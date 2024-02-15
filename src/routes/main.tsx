@@ -103,10 +103,10 @@ const MainLayout = (props: RouteSectionProps) => {
           </Presence>
           <div class="mainImageBottomBar">
             <button onClick={handleGetNextImage} class="mainImageRoundBtn">
-              &#924;
+              &#x395;
             </button>
             <button onClick={changeToggle} class="mainImageRoundBtn">
-              Ψ
+              III
             </button>
           </div>
         </Motion.div>

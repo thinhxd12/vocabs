@@ -19,33 +19,38 @@
             border-left: 2px solid $color-black;
             border-right: 2px solid $color-black;
             @include flex-center;
+
+            .numberFlipContent {
+                width: 46px;
+                height: 46px;
+            }
         }
     }
+}
+
+
+.numbersContentBackground {
+    width: 100%;
+    height: 100%;
+    background-color: $color-white;
+    border-radius: 50%;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.numbersContent {
+    @include flex-center;
+}
+
+.numbers {
+    @include flex-column;
 }
 
 .number {
     @include font('Fraktur', 24px, $color-black, 500, normal, 46px);
     text-align: center;
-    vertical-align: baseline;
+    vertical-align: middle;
 }
-
-.flipNumber {
-    width: 46px;
-    height: 46px;
-    background-color: $color-white;
-    border-radius: 50%;
-    margin: 0 auto;
-    @include flex-center;
-    overflow: hidden;
-
-    .numListContent {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-    }
-}
-
 
 .flipImage {
     width: 46px;
