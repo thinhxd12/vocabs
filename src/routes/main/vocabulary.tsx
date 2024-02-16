@@ -408,6 +408,7 @@ const Vocabulary: Component<{}> = (props) => {
   > = async (event) => {
     const keyDown = event.key;
     if (keyDown === "Enter") {
+      event.stopPropagation();
       const res = await getSearchTextAction(searchTerm());
       if (res) setSearchResult(res);
     }
