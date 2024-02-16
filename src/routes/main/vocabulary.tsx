@@ -415,6 +415,17 @@ const Vocabulary: Component<{}> = (props) => {
     }
   };
 
+  const onInputSearch: JSX.InputEventHandlerUnion<
+    HTMLInputElement,
+    InputEvent
+  > = async (event) => {
+    event.stopPropagation();
+    const inputValue = event.currentTarget.value;
+    if (inputValue.length > 2) {
+      trigger(inputValue);
+    }
+  };
+
   // -------------------MOBILE END-------------------- //
 
   return (
@@ -474,8 +485,9 @@ const Vocabulary: Component<{}> = (props) => {
               >
                 <input
                   class="myInput"
-                  onInput={(e) => setSearchTerm(e.target.value)}
-                  onKeyDown={onKeyDownSearch}
+                  // onInput={(e) => setSearchTerm(e.target.value)}
+                  // onKeyDown={onKeyDownSearch}
+                  onInput={onInputSearch}
                 />
                 <div class="myInputTransContent">
                   <input
