@@ -400,8 +400,6 @@ const Vocabulary: Component<{}> = (props) => {
         navigator.userAgent
       )
     );
-    // console.log(isMobile());
-    setSearchTerm(String(isMobile()));
   });
 
   // -------------------MOBILE END-------------------- //
@@ -433,27 +431,50 @@ const Vocabulary: Component<{}> = (props) => {
               class="myInputLeftOrnament"
             />
             <div class="myInputCenterContent">
-              <Motion.div
-                class="myInputText"
-                animate={{
-                  backgroundColor: searchInputBackground(),
-                  color: searchInputColor(),
-                }}
-                transition={{ duration: 0.3 }}
+              <Show
+                when={isMobile()}
+                fallback={
+                  <>
+                    <Motion.div
+                      class="myInputText"
+                      animate={{
+                        backgroundColor: searchInputBackground(),
+                        color: searchInputColor(),
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {searchTerm()}
+                    </Motion.div>
+                    <div class="myInputTransContent">
+                      <input
+                        class="myInput"
+                        value={translateTerm()}
+                        onInput={(e) => setTranslateTerm(e.target.value)}
+                        onKeyDown={onKeyDownTrans}
+                      />
+                      <button class="myInputBtn" onClick={handleTranslate}>
+                        <img src="/images/main/center.png" />
+                      </button>
+                    </div>
+                  </>
+                }
               >
-                {searchTerm()}
-              </Motion.div>
-              <div class="myInputTransContent">
                 <input
                   class="myInput"
-                  value={translateTerm()}
-                  onInput={(e) => setTranslateTerm(e.target.value)}
-                  onKeyDown={onKeyDownTrans}
+                  onInput={(e) => setSearchTerm(e.target.value)}
                 />
-                <button class="myInputBtn" onClick={handleTranslate}>
-                  <img src="/images/main/center.png" />
-                </button>
-              </div>
+                <div class="myInputTransContent">
+                  <input
+                    class="myInput"
+                    value={translateTerm()}
+                    onInput={(e) => setTranslateTerm(e.target.value)}
+                    onKeyDown={onKeyDownTrans}
+                  />
+                  <button class="myInputBtn" onClick={handleTranslate}>
+                    <img src="/images/main/center.png" />
+                  </button>
+                </div>
+              </Show>
             </div>
             <img
               src="/images/main/input-right-corner.png"
