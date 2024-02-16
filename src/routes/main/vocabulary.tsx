@@ -402,19 +402,6 @@ const Vocabulary: Component<{}> = (props) => {
     );
   });
 
-  const onKeyDownSearch: JSX.EventHandlerUnion<
-    HTMLInputElement,
-    KeyboardEvent
-  > = async (event) => {
-    event.stopPropagation();
-    const keyDown = event.key;
-    if (keyDown === "Enter") {
-      event.preventDefault();
-      const res = await getSearchTextAction(searchTerm());
-      if (res) setSearchResult(res);
-    }
-  };
-
   const onInputSearch: JSX.InputEventHandlerUnion<
     HTMLInputElement,
     InputEvent
@@ -483,12 +470,7 @@ const Vocabulary: Component<{}> = (props) => {
                   </>
                 }
               >
-                <input
-                  class="myInput"
-                  // onInput={(e) => setSearchTerm(e.target.value)}
-                  // onKeyDown={onKeyDownSearch}
-                  onInput={onInputSearch}
-                />
+                <input class="myInput" onInput={onInputSearch} />
                 <div class="myInputTransContent">
                   <input
                     class="myInput"
