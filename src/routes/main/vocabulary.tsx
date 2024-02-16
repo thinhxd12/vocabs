@@ -390,6 +390,21 @@ const Vocabulary: Component<{}> = (props) => {
   };
 
   // -------------------TIMMER END-------------------- //
+  // -------------------MOBILE START-------------------- //
+
+  const [isMobile, setIsMobile] = createSignal(false);
+
+  onMount(() => {
+    setIsMobile(
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    );
+    // console.log(isMobile());
+    setSearchTerm(String(isMobile()));
+  });
+
+  // -------------------MOBILE END-------------------- //
 
   return (
     <MetaProvider>
