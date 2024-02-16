@@ -402,6 +402,18 @@ const Vocabulary: Component<{}> = (props) => {
     );
   });
 
+  const onKeyDownSearch: JSX.EventHandlerUnion<
+    HTMLInputElement,
+    KeyboardEvent
+  > = async (event) => {
+    event.stopPropagation();
+    const keyDown = event.key;
+    if (keyDown === "Enter") {
+      const res = await getSearchTextAction(searchTerm());
+      if (res) setSearchResult(res);
+    }
+  };
+
   // -------------------MOBILE END-------------------- //
 
   return (
@@ -462,6 +474,7 @@ const Vocabulary: Component<{}> = (props) => {
                 <input
                   class="myInput"
                   onInput={(e) => setSearchTerm(e.target.value)}
+                  onKeyDown={onKeyDownSearch}
                 />
                 <div class="myInputTransContent">
                   <input
