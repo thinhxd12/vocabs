@@ -119,19 +119,19 @@
 
         .newInputContain {
             width: 100%;
-            height: 30px;
+            height: 28px;
             overflow: hidden;
             @include flex-center;
             position: relative;
 
             .newInputBackground {
                 background-color: $color-vintage-background;
-                width: 348px;
-                height: 30px;
+                width: 350px;
+                height: 28px;
                 @include flex-center;
 
                 p {
-                    @include font("nyt-imperial", 20px, $color-vintage-1, 700, normal, 15px);
+                    @include font("nyt-cheltenham", 21px, $color-vintage-1, 700, normal, 15px);
                     text-transform: uppercase;
                 }
 
@@ -139,20 +139,20 @@
                 &::after {
                     content: "";
                     position: absolute;
-                    width: 30px;
-                    height: 30px;
+                    width: 28px;
+                    height: 28px;
                     background-color: $color-vintage-background;
                 }
 
                 &::before {
                     transform: rotate(45deg);
-                    left: -5px;
+                    left: -4px;
                     top: 0px;
                 }
 
                 &::after {
                     transform: rotate(-45deg);
-                    right: -5px;
+                    right: -4px;
                     top: 0px;
                 }
 
@@ -240,10 +240,9 @@
                 }
 
                 &:hover {
-                    background-color: $color-white;
-                    color: $color-calendar-green-1;
+                    color: $color-vintage-1;
                     margin-left: 3px;
-                    border-left: 3px solid $color-calendar-green-1;
+                    border-left: 3px solid $color-vintage-1;
                 }
             }
 

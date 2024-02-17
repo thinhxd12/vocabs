@@ -77,7 +77,7 @@ const Vocabulary: Component<{}> = (props) => {
     const res = await getSearchTextAction(str);
     if (res) {
       if (res.length === 0) {
-        setSearchInputColor("#d35542");
+        setSearchInputColor("#ca140c");
         setSearchResult([]);
         setTranslateTerm(str);
       } else setSearchResult(res);
@@ -110,8 +110,8 @@ const Vocabulary: Component<{}> = (props) => {
     }
     if (keyDown === " ") {
       event.preventDefault();
-      setSearchTerm("");
       setSearchInputColor("#957c3e");
+      setSearchTerm("");
       setSearchResult([]);
       showDefinitions() && setShowDefinitions(false);
     }
