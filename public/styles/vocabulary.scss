@@ -116,7 +116,6 @@
         border-top: 1px solid $color-vintage-2;
         border-bottom: 1px solid $color-vintage-2;
         @include flex-center;
-        margin-bottom: 1px;
 
         .newInputContain {
             width: 100%;
@@ -202,7 +201,7 @@
 
 
     .vocabularyContent {
-        height: calc(100vh - 245px);
+        height: calc(100vh - 255px);
         width: 360px;
         overflow-y: scroll;
         overflow-x: hidden;

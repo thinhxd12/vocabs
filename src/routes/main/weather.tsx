@@ -4,7 +4,6 @@ import {
   Index,
   Show,
   createEffect,
-  createSignal,
   on,
   onMount,
 } from "solid-js";

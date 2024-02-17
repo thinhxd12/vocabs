@@ -226,15 +226,17 @@ const About: Component<{}> = (props) => {
             </Show>
           </div>
         </div>
-        {/* <Show when={historyData()}> */}
-        <div class="calendarHistory" ref={ref}>
-          <Index each={historyData()}>
-            {(data, i) => {
-              return <HistoryCard item={data()} />;
-            }}
-          </Index>
-        </div>
-        {/* </Show> */}
+
+        <Show when={historyData()}>
+          <div class="calendarHistory" ref={ref}>
+            <Index each={historyData()}>
+              {(data, i) => {
+                return <HistoryCard item={data()} />;
+              }}
+            </Index>
+          </div>
+        </Show>
+
         <div class="calendarDropdownContainer">
           {/* new week */}
           <Presence>
