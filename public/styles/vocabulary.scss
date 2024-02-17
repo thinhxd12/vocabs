@@ -61,7 +61,7 @@
                 width: 100%;
                 padding: 0 9px;
                 height: 27px;
-                @include font('Roslindale', 12px, $color-white, 400, normal, 27px);
+                @include font('Roslindale', 14px, $color-white, 600, normal, 27px);
                 text-align: center;
                 transition: 0.3s;
             }
@@ -77,7 +77,7 @@
             }
 
             .myInputTransContent {
-                width: 0;
+                width: 50%;
                 @include flex;
                 justify-content: space-between;
                 transition: 0.3s;
@@ -108,15 +108,98 @@
             }
 
         }
+    }
 
-        &:hover {
+    .newInputContainer {
+        width: 100%;
+        height: 36px;
+        border-top: 1px solid $color-vintage-2;
+        border-bottom: 1px solid $color-vintage-2;
+        @include flex-center;
+        margin-bottom: 1px;
 
-            .myInputText,
-            .myInputTransContent {
-                width: 50%;
+        .newInputContain {
+            width: 100%;
+            height: 30px;
+            overflow: hidden;
+            @include flex-center;
+            position: relative;
+
+            .newInputBackground {
+                background-color: $color-vintage-background;
+                width: 348px;
+                height: 30px;
+                @include flex-center;
+
+                p {
+                    @include font("nyt-imperial", 20px, $color-vintage-1, 700, normal, 15px);
+                    text-transform: uppercase;
+                }
+
+                &::before,
+                &::after {
+                    content: "";
+                    position: absolute;
+                    width: 30px;
+                    height: 30px;
+                    background-color: $color-vintage-background;
+                }
+
+                &::before {
+                    transform: rotate(45deg);
+                    left: -5px;
+                    top: 0px;
+                }
+
+                &::after {
+                    transform: rotate(-45deg);
+                    right: -5px;
+                    top: 0px;
+                }
+
             }
         }
     }
+
+    .newTranslateContainer {
+        position: relative;
+        width: 100%;
+        width: 100%;
+        height: 27px;
+        margin-bottom: 1px;
+        background: $color-background-2;
+
+        .myInputLeftOrnament {
+            z-index: inherit;
+            height: 27px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 99;
+        }
+
+        .myInputRightOrnament {
+            z-index: inherit;
+            height: 27px;
+            position: absolute;
+            right: 0;
+            top: 0;
+            z-index: 99;
+        }
+
+        .newTranslateInput {
+            height: 27px;
+            width: 100%;
+            padding: 0 9px;
+            background: none;
+            border: 0;
+            outline: 0;
+            text-align: center;
+            @include font('basier', 12px, $color-white, 400, normal, 27px);
+        }
+    }
+
+
 
     .vocabularyContent {
         height: calc(100vh - 245px);
@@ -147,6 +230,8 @@
                 cursor: pointer;
                 margin-bottom: 1px;
                 background: #ffffff80;
+                background: $color-vintage-background;
+
                 transition: all 0.3s ease;
 
                 .itemText {

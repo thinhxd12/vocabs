@@ -9,6 +9,7 @@ $color-background-5: #363636;
 $color-red-1: #f90000;
 $color-red-2: #de0000;
 $color-red-3: #ca140c;
+$color-red-4: #d35542;
 $color-calendar-bg: rgba(255, 255, 255, 0.96);
 $color-calendar-white: #f4f4f4;
 $color-calendar-black: #161616;
@@ -18,6 +19,10 @@ $color-calendar-text-2: #0000004d;
 $color-calendar-text-3: #ffffff73;
 $color-calendar-green-1: #38E07B;
 $color-calendar-green-2: #A7F1C4;
+$color-vintage-1: #957c3e;
+$color-vintage-2: #706659;
+$color-vintage-background: #fffeff;
+
 
 
 @mixin font($family: false, $size: false, $colour: false, $weight: false, $style: false, $lh: false) {

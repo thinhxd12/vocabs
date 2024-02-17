@@ -42,7 +42,6 @@ import FlipCard from "~/components/flipcard";
 import { Motion, Presence } from "solid-motionone";
 import Translation from "~/components/translation";
 import Edit from "~/components/edit";
-import QuoteDummy from "~/components/quote";
 import { createIntervalCounter } from "@solid-primitives/timer";
 import { useGlobalContext } from "~/globalcontext/store";
 import { createAudio } from "@solid-primitives/audio";
@@ -61,22 +60,14 @@ const [showDefinitions, setShowDefinitions] = createSignal(false);
 const Vocabulary: Component<{}> = (props) => {
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
-  const [searchInputBackground, setSearchInputBackground] =
-    createSignal<string>("unset");
+
   const [searchInputColor, setSearchInputColor] =
-    createSignal<string>("#ffffff");
+    createSignal<string>("#957c3e");
   let divRef: HTMLDivElement | undefined;
 
   onMount(async () => {
     await getCalendarTodayDataAction();
     await getMemoriesLengthAction();
-  });
-
-  createEffect(() => {
-    if (searchTerm().length > 0) {
-      setSearchInputBackground("#272727");
-      setSearchInputColor("#ffffff");
-    } else setSearchInputBackground("unset");
   });
 
   //call sever action search text
@@ -86,7 +77,7 @@ const Vocabulary: Component<{}> = (props) => {
     const res = await getSearchTextAction(str);
     if (res) {
       if (res.length === 0) {
-        setSearchInputColor("#de0000");
+        setSearchInputColor("#d35542");
         setSearchResult([]);
         setTranslateTerm(str);
       } else setSearchResult(res);
@@ -120,7 +111,7 @@ const Vocabulary: Component<{}> = (props) => {
     if (keyDown === " ") {
       event.preventDefault();
       setSearchTerm("");
-      setSearchInputColor("#ffffff");
+      setSearchInputColor("#957c3e");
       setSearchResult([]);
       showDefinitions() && setShowDefinitions(false);
     }
@@ -436,40 +427,31 @@ const Vocabulary: Component<{}> = (props) => {
             <FlipCard item={currentText()!} />
           </div>
 
-          <div class="myInputContainer">
-            <img
-              src="/images/main/input-left-corner.png"
-              class="myInputLeftOrnament"
-            />
-            <div class="myInputCenterContent">
-              <Show
-                when={isMobile()}
-                fallback={
-                  <>
-                    <Motion.div
-                      class="myInputText"
-                      animate={{
-                        backgroundColor: searchInputBackground(),
-                        color: searchInputColor(),
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {searchTerm()}
-                    </Motion.div>
-                    <div class="myInputTransContent">
-                      <input
-                        class="myInput"
-                        value={translateTerm()}
-                        onInput={(e) => setTranslateTerm(e.target.value)}
-                        onKeyDown={onKeyDownTrans}
-                      />
-                      <button class="myInputBtn" onClick={handleTranslate}>
-                        <img src="/images/main/center.png" />
-                      </button>
+          <Show
+            when={isMobile()}
+            fallback={
+              <>
+                <div class="newInputContainer">
+                  <div class="newInputContain">
+                    <div class="newInputBackground">
+                      <Motion.p
+                        animate={{ color: searchInputColor() }}
+                        transition={{ duration: 0.3, easing: "ease" }}
+                      >
+                        {searchTerm()}
+                      </Motion.p>
                     </div>
-                  </>
-                }
-              >
+                  </div>
+                </div>
+              </>
+            }
+          >
+            <div class="myInputContainer">
+              <img
+                src="/images/main/input-left-corner.png"
+                class="myInputLeftOrnament"
+              />
+              <div class="myInputCenterContent">
                 <input class="myInput" onInput={onInputSearch} />
                 <div class="myInputTransContent">
                   <input
@@ -482,13 +464,13 @@ const Vocabulary: Component<{}> = (props) => {
                     <img src="/images/main/center.png" />
                   </button>
                 </div>
-              </Show>
+              </div>
+              <img
+                src="/images/main/input-right-corner.png"
+                class="myInputRightOrnament"
+              />
             </div>
-            <img
-              src="/images/main/input-right-corner.png"
-              class="myInputRightOrnament"
-            />
-          </div>
+          </Show>
 
           <div class="vocabularyContent">
             <div class="searchContainer">
@@ -529,58 +511,57 @@ const Vocabulary: Component<{}> = (props) => {
                 )}
               </Index>
               <Show when={showQuotes()}>
-                <Show
-                  when={getBookmarkTextResult.result}
-                  fallback={<QuoteDummy />}
-                >
-                  <div class="quoteContainer">
-                    <div class="quoteHeader">
-                      <div class="quoteHeaderLeft">
-                        <button class="quoteBtn" onclick={() => getQuote(-1)}>
-                          <OcChevronleft2 size={17} />
-                        </button>
-                        <button
-                          class={
-                            currentQuote.check
-                              ? "quoteBtn quoteBtnActive"
-                              : "quoteBtn"
-                          }
-                          onclick={() => checkQuote(!currentQuote.check)}
-                        >
-                          {currentQuote.check ? (
-                            <OcStarfill2 size={17} color="#ffc107" />
-                          ) : (
-                            <OcStar2 size={17} />
-                          )}
-                        </button>
-                        <button class="quoteBtn" onclick={() => getQuote(1)}>
-                          <OcChevronright2 size={17} />
-                        </button>
-                        <button
-                          class="quoteBtn"
-                          onclick={() =>
-                            copyQuoteToClipboard(currentQuote.value)
-                          }
-                        >
-                          <OcCopy2 size={17} />
-                        </button>
-                      </div>
+                <div class="quoteContainer">
+                  <div class="quoteHeader">
+                    <div class="quoteHeaderLeft">
+                      <button class="quoteBtn" onclick={() => getQuote(-1)}>
+                        <OcChevronleft2 size={17} />
+                      </button>
                       <button
-                        class="quoteBtnClose"
-                        onClick={() => setShowQuotes(false)}
+                        class={
+                          currentQuote.check
+                            ? "quoteBtn quoteBtnActive"
+                            : "quoteBtn"
+                        }
+                        onclick={() => checkQuote(!currentQuote.check)}
                       >
-                        <OcX2 size={12} />
+                        {currentQuote.check ? (
+                          <OcStarfill2 size={17} color="#ffc107" />
+                        ) : (
+                          <OcStar2 size={17} />
+                        )}
+                      </button>
+                      <button class="quoteBtn" onclick={() => getQuote(1)}>
+                        <OcChevronright2 size={17} />
+                      </button>
+                      <button
+                        class="quoteBtn"
+                        onclick={() => copyQuoteToClipboard(currentQuote.value)}
+                      >
+                        <OcCopy2 size={17} />
                       </button>
                     </div>
-                    <div class="quoteBody">
+                    <button
+                      class="quoteBtnClose"
+                      onClick={() => setShowQuotes(false)}
+                    >
+                      <OcX2 size={12} />
+                    </button>
+                  </div>
+                  <div class="quoteBody">
+                    <Show
+                      when={getBookmarkTextResult.result}
+                      fallback={<p>loading...</p>}
+                    >
                       <span class="quoteDropCap">
                         {currentQuote.value.slice(0, 1)}
                       </span>
                       <span>{currentQuote.value.slice(1)}</span>
-                    </div>
+                    </Show>
                   </div>
-                </Show>
+                </div>
               </Show>
+
               {/* Definition */}
               <Presence>
                 <Show when={showDefinitions()}>
@@ -635,6 +616,24 @@ const Vocabulary: Component<{}> = (props) => {
                     }}
                     transition={{ duration: 0.3, easing: "ease-in-out" }}
                   >
+                    <Show when={!isMobile()}>
+                      <div class="newTranslateContainer">
+                        <img
+                          src="/images/main/input-left-corner.png"
+                          class="myInputLeftOrnament"
+                        />
+                        <input
+                          class="newTranslateInput"
+                          value={translateTerm()}
+                          onInput={(e) => setTranslateTerm(e.target.value)}
+                          onKeyDown={onKeyDownTrans}
+                        />
+                        <img
+                          src="/images/main/input-right-corner.png"
+                          class="myInputRightOrnament"
+                        />
+                      </div>
+                    </Show>
                     <Translation
                       item={translateText()!}
                       text={translateTerm()}
@@ -680,7 +679,12 @@ const Vocabulary: Component<{}> = (props) => {
               &#x3A7;
             </button>
             <button class="vocabularyBtn">Σ</button>
-            <button class="vocabularyBtn">Ξ</button>
+            <button
+              class="vocabularyBtn"
+              onClick={() => setShowTranslate(true)}
+            >
+              Ξ
+            </button>
             <Show when={delay()}>
               <button class="vocabularyBtn timerBtn" onClick={stopTimer}>
                 {timerCounter()}m

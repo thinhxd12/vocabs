@@ -8,6 +8,7 @@ import {
   Switch,
   createEffect,
   createSignal,
+  on,
   onMount,
 } from "solid-js";
 import "/public/styles/translate.scss";
@@ -112,19 +113,24 @@ const Translation: Component<{
 
   const [visible, setVisible] = createSignal([true, true, true]);
 
-  onMount(() => {
-    Promise.all([
-      getTextDataAmerica(props.text),
-      getTextDataEnglish(props.text),
-      getTextDataCambridge(props.text),
-    ]).then((data) => {
-      setDefinitionData({
-        america: data[0],
-        english: data[1],
-        cambridge: data[2],
-      });
-    });
-  });
+  createEffect(
+    on(
+      () => props.item,
+      () => {
+        Promise.all([
+          getTextDataAmerica(props.text),
+          getTextDataEnglish(props.text),
+          getTextDataCambridge(props.text),
+        ]).then((data) => {
+          setDefinitionData({
+            america: data[0],
+            english: data[1],
+            cambridge: data[2],
+          });
+        });
+      }
+    )
+  );
 
   const handleCheck = (index: number, data: VocabularyType) => {
     setVisible(visible().map((item, i) => i === index));
