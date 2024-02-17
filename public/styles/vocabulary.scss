@@ -131,7 +131,7 @@
                 @include flex-center;
 
                 p {
-                    @include font("nyt-cheltenham", 21px, $color-vintage-1, 700, normal, 15px);
+                    @include font("nyt-cheltenham", 18px, $color-vintage-1, 700, normal, 15px);
                     text-transform: uppercase;
                 }
 
