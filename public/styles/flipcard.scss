@@ -65,6 +65,10 @@
     .flipImageList {
         @include flex-center-column;
 
+        img {
+            height: 44px;
+        }
+
         .number {
             line-height: 46px;
         }
