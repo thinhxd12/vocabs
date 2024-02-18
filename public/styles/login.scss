@@ -2,17 +2,16 @@
 @import "./mixins.scss";
 
 .login {
-    width: 100vw;
-    height: 100vh;
     @include flex-center;
     background: $color-black;
+    height: 100vh;
 
     .loginForm {
         width: 360px;
         height: 100%;
         border-left: 1px solid $color-border;
         border-right: 1px solid $color-border;
-        padding-top: 30vh;
+        padding-top: 60vh;
 
         .loginItem {
             background: $color-black;

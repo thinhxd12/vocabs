@@ -131,13 +131,13 @@ const Vocabulary: Component<{}> = (props) => {
     setSearchResult([]);
     // handlecheck function
 
-    // if (text.number > 1) {
-    //   checkVocabularyAction(text.text);
-    // } else {
-    //   await archiveVocabularyAction(text.text);
-    //   deleteVocabularyAction(text.text);
-    //   getMemoriesLengthAction();
-    // }
+    if (text.number > 1) {
+      checkVocabularyAction(text.text);
+    } else {
+      await archiveVocabularyAction(text.text);
+      deleteVocabularyAction(text.text);
+      getMemoriesLengthAction();
+    }
   };
 
   const handleCloseDefinition = () => {
