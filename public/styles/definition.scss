@@ -13,7 +13,7 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
+        align-items: center;
         border-bottom: 1px solid #343434;
         background: #f7f7f7;
         z-index: 99;
@@ -74,7 +74,7 @@
             .num {
                 @include font("Fraktur", 13px, $color-black, 500, normal, 18px);
                 position: absolute;
-                top: 5px;
+                top: 3px;
                 left: 3px;
                 z-index: 39;
                 background: $color-white;
@@ -90,7 +90,7 @@
                 display: block;
                 margin-bottom: 3px;
                 text-transform: capitalize;
-                text-indent: 11px;
+                text-indent: 12px;
             }
 
             .dsense_h {
@@ -155,7 +155,7 @@
                 .thumb {
                     display: block;
                     max-width: 150px;
-                    border-radius: 6px;
+                    border-radius: 3px;
                 }
 
                 >span {

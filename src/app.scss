@@ -134,7 +134,7 @@ a:not([class]) {
 }
 
 /* Make it clear that interactive elements are interactive */
-:where(a[href], area, button, input, label[for], select, summary, textarea, [tabindex]:not([tabindex*="-"])) {
+:where(a[href], area, button, input, label[for], select, summary, textarea) {
     cursor: pointer;
     touch-action: manipulation;
 }
@@ -148,35 +148,8 @@ a:not([class]) {
     cursor: pointer;
 }
 
-/* Animate focus outline */
-@media (prefers-reduced-motion: no-preference) {
-    :focus-visible {
-        transition: outline-offset 145ms cubic-bezier(0.25, 0, 0.4, 1);
-    }
 
-    :where(:not(:active)):focus-visible {
-        transition-duration: 0.25s;
-    }
-}
 
-:where(:not(:active)):focus-visible {
-    outline-offset: 5px;
-}
-
-/* Make sure users can't select button text */
-:where(button, button[type], input[type="button"], input[type="submit"], input[type="reset"]),
-:where(input[type="file"])::-webkit-file-upload-button,
-:where(input[type="file"])::file-selector-button {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    user-select: none;
-    text-align: center;
-}
-
-/* Disabled cursor for disabled buttons */
-:where(button, button[type], input[type="button"], input[type="submit"], input[type="reset"])[disabled] {
-    cursor: not-allowed;
-}
 
 html {
     scroll-behavior: smooth;
