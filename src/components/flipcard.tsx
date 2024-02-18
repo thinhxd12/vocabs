@@ -158,7 +158,7 @@ const FlipCard: Component<{
                     animate={{ y: 24, transition: { delay: 2.5 } }}
                     transition={{ duration: 0.6, easing: "ease-in-out" }}
                   >
-                    <img src="/images/main/cup.png" height={44} />
+                    <img src="/images/main/cup.png" />
                     <span class="number">1</span>
                   </Motion.div>
                 </div>
