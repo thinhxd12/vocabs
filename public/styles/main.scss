@@ -9,7 +9,7 @@
 
     .mainImageContainer {
         background: $color-black;
-        border-right: 1px solid $color-boder;
+        border-right: 1px solid $color-border;
         flex-grow: 1;
         position: relative;
         height: 100vh;
@@ -100,7 +100,7 @@
         min-width: 300px;
         overflow: hidden;
         padding: 21px;
-        border-left: 1px solid $color-boder;
+        border-left: 1px solid $color-border;
         background: $color-black;
 
         .mainDescriptionContent {
@@ -152,7 +152,7 @@
                         @include font('basier', 12px, $color-white, 400, normal, 12px);
 
                         .mainDescriptionAuthorName {
-                            background: $color-boder;
+                            background: $color-border;
                             padding: 3px 6px;
                             border-radius: 6px;
                             margin-bottom: 6px;

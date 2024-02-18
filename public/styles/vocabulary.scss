@@ -131,7 +131,7 @@
                 @include flex-center;
 
                 p {
-                    @include font("nyt-cheltenham", 18px, $color-vintage-1, 700, normal, 15px);
+                    @include font("nyt-cheltenham", 16px, $color-vintage-1, 700, normal, 16px);
                     text-transform: uppercase;
                 }
 
@@ -229,7 +229,7 @@
                 background: #ffffff80;
                 background: $color-vintage-background;
 
-                transition: all 0.3s ease;
+                transition: all 0.1s ease;
 
                 .itemText {
                     flex-grow: 1;
@@ -240,9 +240,9 @@
                 }
 
                 &:hover {
-                    color: $color-vintage-1;
+                    color: $color-calendar-green-1;
                     margin-left: 3px;
-                    border-left: 3px solid $color-vintage-1;
+                    border-left: 3px solid $color-calendar-green-1;
                 }
             }
 
@@ -260,7 +260,7 @@
                 margin-right: 3px;
                 cursor: pointer;
                 background: transparent;
-                border: 1px solid $color-boder;
+                border: 1px solid $color-border;
                 outline: none;
                 height: 12px;
                 padding: 1px 2px;

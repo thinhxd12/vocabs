@@ -65,6 +65,10 @@ const Vocabulary: Component<{}> = (props) => {
     createSignal<string>("#957c3e");
   let divRef: HTMLDivElement | undefined;
 
+  createEffect(() => {
+    if (searchTerm() === "") setSearchInputColor("#957c3e");
+  });
+
   onMount(async () => {
     await getCalendarTodayDataAction();
     await getMemoriesLengthAction();
@@ -110,7 +114,6 @@ const Vocabulary: Component<{}> = (props) => {
     }
     if (keyDown === " ") {
       event.preventDefault();
-      setSearchInputColor("#957c3e");
       setSearchTerm("");
       setSearchResult([]);
       showDefinitions() && setShowDefinitions(false);
