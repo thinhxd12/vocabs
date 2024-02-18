@@ -336,7 +336,7 @@ const Vocabulary: Component<{}> = (props) => {
   // -------------------TIMMER START-------------------- //
   const [delay, setDelay] = createSignal<number | false>(false);
   const countDownTimer = createIntervalCounter(delay);
-  const [timerCounter, setTimerCounter] = createSignal<number>(6);
+  const [timerCounter, setTimerCounter] = createSignal<number>(7);
   const [audioSource, setAudioSource] = createSignal<string>("");
   const [playing, setPlaying] = createSignal(false);
   const [volume, setVolume] = createSignal(1);

@@ -23,7 +23,7 @@
         .definitionHeaderLeft {
             .definitionHeaderText {
                 span {
-                    @include font('nyt-cheltenham', 14px, $color-black, 500, normal);
+                    @include font('Fraktur', 14px, $color-black, 500, normal);
                 }
 
                 b {
@@ -103,13 +103,13 @@
                 @include font('nyt-imperial', 12px, $color-black, 600, italic, 18px);
                 display: block;
                 position: relative;
-                text-indent: 21px;
+                text-indent: 32px;
 
                 &::before {
                     content: '';
                     display: block;
                     position: absolute;
-                    left: 3px;
+                    left: 15px;
                     top: 2px;
                     width: 15px;
                     height: 15px;
@@ -125,15 +125,16 @@
             }
 
             .xr-gs {
-                font-weight: 500;
+                font-weight: 600;
                 font-size: 13px;
-                line-height: 17px;
+                line-height: 18px;
                 display: block;
                 text-transform: uppercase;
-                margin-bottom: 3px;
+                margin-left: 3px;
 
                 small {
                     color: #727272;
+                    font-weight: 400;
                     text-transform: lowercase;
                 }
             }
