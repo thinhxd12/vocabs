@@ -47,7 +47,7 @@
 }
 
 .number {
-    @include font('Fraktur', 24px, $color-black, 500, normal, 46px);
+    @include font('Fraktur', 24px, $color-black, normal, normal, 46px);
     text-align: center;
     vertical-align: middle;
 }
@@ -107,9 +107,9 @@
                 }
 
                 .turnBoxItemText {
-                    @include font('Roslindale', 33px, $color-white, 600, normal);
+                    @include font("Roslindale", 33px, $color-white, 600, normal, 36px);
                     letter-spacing: 1.5px;
-                    margin-bottom: 3px;
+                    padding: 3px 0;
                 }
 
                 .turnBoxItemPhonetic {
@@ -138,12 +138,9 @@
 
                     .turnBoxItemMeaningClass {
                         margin-left: -6px;
-                        margin-bottom: 3px;
                     }
 
                     .turnBoxItemMeaningText {
-                        margin-bottom: 2px;
-
                         &::before {
                             content: '';
                             display: inline-block;

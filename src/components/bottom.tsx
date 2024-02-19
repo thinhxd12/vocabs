@@ -102,6 +102,7 @@ const Bottom: Component<{}> = (props) => {
           class={
             bottomLooping() ? "inputWordRow inputWordRowActive" : "inputWordRow"
           }
+          name="inputWordRow"
           value={bottomIndex()}
         />
         <OcKebabhorizontal2
