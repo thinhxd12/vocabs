@@ -23,20 +23,20 @@
         .definitionHeaderLeft {
             .definitionHeaderText {
                 span {
-                    @include font('Fraktur', 14px, $color-black, 500, normal);
+                    @include font('Fraktur', 14px, $color-black, normal, normal, 14px);
                 }
 
                 b {
-                    @include font('nyt-cheltenham', 16px, $color-black, 700, normal);
+                    @include font('NYTCheltenham', 16px, $color-black, 700, normal);
                 }
 
                 i {
-                    @include font('nyt-cheltenham', 11px, #727272, 400, italic);
+                    @include font('NYTCheltenham', 11px, #727272, 500, italic);
                 }
             }
 
             .definitionHeaderIndex {
-                @include font('nyt-cheltenham', 13px, $color-black, 500, normal, 21px);
+                @include font('NYTCheltenham', 13px, $color-black, 500, normal, 21px);
             }
 
         }
@@ -72,9 +72,9 @@
 
 
             .num {
-                @include font("Fraktur", 13px, $color-black, 500, normal, 18px);
+                @include font("Fraktur", 13px, $color-black, normal, normal, 18px);
                 position: absolute;
-                top: 6px;
+                top: 5px;
                 left: 3px;
                 z-index: 39;
                 background: $color-white;
@@ -86,7 +86,7 @@
             }
 
             .def {
-                @include font('nyt-cheltenham', 13px, $color-black, 600, normal, 18px);
+                @include font('NYTCheltenham', 13px, $color-black, 700, normal, 18px);
                 display: block;
                 margin-bottom: 3px;
                 text-transform: capitalize;
@@ -94,13 +94,13 @@
             }
 
             .dsense_h {
-                @include font('nyt-imperial', 12px, $color-black, 600, italic, 18px);
+                @include font('NYTImperial', 12px, $color-black, 500, italic, 18px);
                 display: block;
                 text-indent: 11px;
             }
 
             .x {
-                @include font('nyt-imperial', 12px, $color-black, 600, italic, 18px);
+                @include font('NYTImperial', 12px, $color-black, 500, italic, 18px);
                 display: block;
                 position: relative;
                 text-indent: 32px;
@@ -134,7 +134,7 @@
 
                 small {
                     color: #727272;
-                    font-weight: 400;
+                    font-weight: 300;
                     text-transform: lowercase;
                 }
             }

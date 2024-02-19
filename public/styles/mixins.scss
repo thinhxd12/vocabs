@@ -113,7 +113,7 @@ $color-vintage-background: #fffeff;
 }
 
 @mixin baseBody($bg: $color-background-4) {
-  @include font("nyt-imperial", 12px, false, 400, normal, 16px);
+  @include font("NYTImperial", 12px, $color-black, 500, normal, 16px);
   padding: 3px;
   margin-bottom: 1px;
   background: $bg;
@@ -124,7 +124,7 @@ $color-vintage-background: #fffeff;
 
 @mixin myInput() {
   height: 25px;
-  @include font("basier", 11px, $color-white, 400, normal, 16px);
+  @include font("Basier", 11px, $color-white, 400, normal, 16px);
   padding: 0 9px;
   background: $color-background-input;
   border: 0;

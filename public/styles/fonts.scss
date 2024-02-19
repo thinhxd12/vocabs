@@ -1,290 +1,320 @@
-@import "./mixins.scss";
-
 @font-face {
-  font-family: 'basier';
-  src: url('/fonts/basiersquare-regular-webfont.woff2') format('woff2');
-  font-style: normal;
-  font-weight: 400;
+  font-family: "NYTCheltenham-Book";
+  src: url("/fonts/cheltenham/NYTCheltenham-BookItalic.woff2") format("woff2");
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
 }
 
-// ------------------------------------------------------------
-
 @font-face {
-  font-family: 'Fraktur';
-  src: url('/fonts/fraktur.otf') format('opentype');
-  font-weight: 400;
+  font-family: "NYTCheltenham-Book";
+  src: url("/fonts/cheltenham/NYTCheltenham-Book.woff2") format("woff2");
+  font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
-// ------------------------------------------------------------
-
 @font-face {
-  font-family: 'nyt-cheltenham';
-  src: url('/fonts/cheltenham/cheltenham-normal-300.ttf') format('truetype');
-  font-style: normal;
+  font-family: "NYTCheltenham";
+  src: url("/fonts/cheltenham/NYTCheltenham-LightItalic.woff2") format("woff2");
   font-weight: 300;
-}
-
-@font-face {
-  font-family: 'nyt-cheltenham';
-  src: url('/fonts/cheltenham/cheltenham-italic-300.ttf') format('truetype');
   font-style: italic;
-  font-weight: 300;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'nyt-cheltenham';
-  src: url('/fonts/cheltenham/cheltenham-normal-400.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: 'nyt-cheltenham';
-  src: url('/fonts/cheltenham/cheltenham-italic-400.ttf') format('truetype');
-  font-style: italic;
-  font-weight: 400;
-}
-
-@font-face {
-  font-family: 'nyt-cheltenham';
-  src: url('/fonts/cheltenham/cheltenham-normal-500.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: 'nyt-cheltenham';
-  src: url('/fonts/cheltenham/cheltenham-italic-500.ttf') format('truetype');
-  font-style: italic;
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: 'nyt-cheltenham';
-  src: url('/fonts/cheltenham/cheltenham-normal-700.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 700;
-}
-
-@font-face {
-  font-family: 'nyt-cheltenham';
-  src: url('/fonts/cheltenham/cheltenham-italic-700.ttf') format('truetype');
-  font-style: italic;
-  font-weight: 700;
-}
-
-// ------------------------------------------------------------
-
-@font-face {
-  font-family: 'nyt-imperial';
-  src: url('/fonts/imperial/imperial-normal-500.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: 'nyt-imperial';
-  src: url('/fonts/imperial/imperial-italic-500.ttf') format('truetype');
-  font-style: italic;
-  font-weight: 500;
-}
-
-@font-face {
-  font-family: 'nyt-imperial';
-  src: url('/fonts/imperial/imperial-normal-600.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 600;
-}
-
-@font-face {
-  font-family: 'nyt-imperial';
-  src: url('/fonts/imperial/imperial-italic-600.ttf') format('truetype');
-  font-style: italic;
-  font-weight: 600;
-}
-
-@font-face {
-  font-family: 'nyt-imperial';
-  src: url('/fonts/imperial/imperial-normal-700.ttf') format('truetype');
-  font-style: normal;
-  font-weight: 700;
-}
-
-@font-face {
-  font-family: 'nyt-imperial';
-  src: url('/fonts/imperial/imperial-italic-700.ttf') format('truetype');
-  font-style: italic;
-  font-weight: 700;
-}
-
-// ------------------------------------------------------------
-
-@font-face {
-  font-family: 'Rubik';
-  src: url('/fonts/Rubik/Rubik-Light.ttf') format('truetype');
+  font-family: "NYTCheltenham";
+  src: url("/fonts/cheltenham/NYTCheltenham-Light.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Rubik';
-  src: url('/fonts/Rubik/Rubik-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
+  font-family: "NYTCheltenham";
+  src: url("/fonts/cheltenham/NYTCheltenham-MediumItalic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Rubik';
-  src: url('/fonts/Rubik/Rubik-Medium.ttf') format('truetype');
+  font-family: "NYTCheltenham";
+  src: url("/fonts/cheltenham/NYTCheltenham-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Rubik';
-  src: url('/fonts/Rubik/Rubik-SemiBold.ttf') format('truetype');
-  font-weight: 600;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'Rubik';
-  src: url('/fonts/Rubik/Rubik-Bold.ttf') format('truetype');
+  font-family: "NYTCheltenham";
+  src: url("/fonts/cheltenham/NYTCheltenham-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Rubik';
-  src: url('/fonts/Rubik/Rubik-ExtraBold.ttf') format('truetype');
+  font-family: "NYTCheltenham";
+  src: url("/fonts/cheltenham/NYTCheltenham-BoldItalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+//-----------------------------------------------
+
+@font-face {
+  font-family: "NYTImperial";
+  src: url("/fonts/imperial/NYTImperial-Italic.woff2") format("woff2");
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NYTImperial";
+  src: url("/fonts/imperial/NYTImperial-Regular.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NYTImperial";
+  src: url("/fonts/imperial/NYTImperial-SemiboldItalic.woff2") format("woff2");
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NYTImperial";
+  src: url("/fonts/imperial/NYTImperial-Semibold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NYTImperial";
+  src: url("/fonts/imperial/NYTImperial-BoldItalic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "NYTImperial";
+  src: url("/fonts/imperial/NYTImperial-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+//-----------------------------------------------
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/Poppins-Light.woff2") format("woff2");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/Poppins-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/Poppins-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/Poppins-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/Poppins-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("/fonts/poppins/Poppins-ExtraBold.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Rubik';
-  src: url('/fonts/Rubik/Rubik-Italic.ttf') format('truetype');
+  font-family: "Poppins";
+  src: url("/fonts/poppins/Poppins-Italic.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
+  font-display: swap;
 }
 
-// ------------------------------------------------------------
-
+//-----------------------------------------------
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Light.ttf') format('truetype');
+  font-family: "Roslindale";
+  src: url("/fonts/roslindale/Roslindale-DisplayLight.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Regular.ttf') format('truetype');
+  font-family: "Roslindale";
+  src: url("/fonts/roslindale/Roslindale-DisplayRegular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Medium.ttf') format('truetype');
+  font-family: "Roslindale";
+  src: url("/fonts/roslindale/Roslindale-DisplayMedium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-SemiBold.ttf') format('truetype');
+  font-family: "Roslindale";
+  src: url("/fonts/roslindale/Roslindale-DisplaySemiBold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Bold.ttf') format('truetype');
+  font-family: "Roslindale";
+  src: url("/fonts/roslindale/Roslindale-DisplayBold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-ExtraBold.ttf') format('truetype');
+  font-family: "Roslindale";
+  src: url("/fonts/roslindale/Roslindale-DisplayUltra.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Poppins';
-  src: url('/fonts/Poppins/Poppins-Italic.ttf') format('truetype');
+  font-family: "Roslindale-Text";
+  src: url("/fonts/roslindale/Roslindale-TextSemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roslindale-Text";
+  src: url("/fonts/roslindale/Roslindale-TextItalic.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
+  font-display: swap;
 }
 
-// ------------------------------------------------------------
+//-----------------------------------------------
 
 @font-face {
-  font-family: 'Roslindale';
-  src: url('/fonts/Roslindale/Roslindale-DisplayLight-Testing.woff2') format('woff2');
+  font-family: "Rubik";
+  src: url("/fonts/rubik/Rubik-Light.woff2") format("woff2");
   font-weight: 300;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Roslindale';
-  src: url('/fonts/Roslindale/Roslindale-DisplayRegular-Testing.woff2') format('woff2');
+  font-family: "Rubik";
+  src: url("/fonts/rubik/Rubik-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Roslindale';
-  src: url('/fonts/Roslindale/Roslindale-DisplayMedium-Testing.woff2') format('woff2');
+  font-family: "Rubik";
+  src: url("/fonts/rubik/Rubik-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Roslindale';
-  src: url('/fonts/Roslindale/Roslindale-DisplaySemiBold-Testing.woff2') format('woff2');
+  font-family: "Rubik";
+  src: url("/fonts/rubik/Rubik-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Roslindale';
-  src: url('/fonts/Roslindale/Roslindale-DisplayBold-Testing.woff2') format('woff2');
+  font-family: "Rubik";
+  src: url("/fonts/rubik/Rubik-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Roslindale';
-  src: url('/fonts/Roslindale/Roslindale-DisplayUltra-Testing.woff2') format('woff2');
+  font-family: "Rubik";
+  src: url("/fonts/rubik/Rubik-ExtraBold.woff2") format("woff2");
   font-weight: 800;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Roslindale';
-  src: url('/fonts/Roslindale/Roslindale-TextItalic-Testing.woff2') format('woff2');
+  font-family: "Rubik";
+  src: url("/fonts/rubik/Rubik-Italic.woff2") format("woff2");
   font-weight: 400;
   font-style: italic;
+  font-display: swap;
+}
+
+//-----------------------------------------------
+
+@font-face {
+  font-family: "Basier";
+  src: url("/fonts/others/basiersquare-regular-webfont.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: 'Roslindale-Text';
-  src: url('/fonts/Roslindale/Roslindale-TextSemiBold-Testing.woff2') format('woff2');
-  font-weight: 700;
+  font-family: "Fraktur";
+  src: url("/fonts/others/Fraktur.woff2") format("woff2");
+  font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
-
-// ------------------------------------------------------------
 
 @font-face {
   font-family: 'SF-Pro';
-  src: url('/fonts/SF-Pro.ttf') format('truetype');
-  font-weight: 400;
+  src: url('/fonts/others/SFPro-Regular.woff2') format('woff2');
+  font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
-
-// ------------------------------------------------------------

@@ -26,7 +26,7 @@
         .editHeaderLeft {
             .editHeaderText {
                 b {
-                    @include font('nyt-cheltenham', 13px, $color-black, 500, normal);
+                    @include font('NYTCheltenham', 13px, $color-black, 500, normal);
                 }
             }
         }

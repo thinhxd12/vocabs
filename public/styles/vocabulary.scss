@@ -131,7 +131,7 @@
                 @include flex-center;
 
                 p {
-                    @include font("nyt-cheltenham", 16px, $color-vintage-1, 700, normal, 16px);
+                    @include font("NYTCheltenham", 16px, $color-vintage-1, 700, normal, 16px);
                     text-transform: uppercase;
                 }
 
@@ -194,7 +194,7 @@
             border: 0;
             outline: 0;
             text-align: center;
-            @include font('basier', 12px, $color-white, 400, normal, 27px);
+            @include font('Basier', 12px, $color-white, 400, normal, 27px);
         }
     }
 

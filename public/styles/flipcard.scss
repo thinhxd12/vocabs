@@ -40,7 +40,6 @@
 
 .numbersContent {
     @include flex-center;
-    padding-top: 2px;
 }
 
 .numbers {
@@ -104,7 +103,7 @@
                 position: relative;
 
                 .turnBoxItemClass {
-                    @include font("SF-Pro", 9px, $color-white, 500, normal);
+                    @include font("SF-Pro", 9px, $color-white, normal, normal, 9px);
                 }
 
                 .turnBoxItemText {
@@ -114,7 +113,7 @@
                 }
 
                 .turnBoxItemPhonetic {
-                    @include font("SF-Pro", 20px, $color-red-3, 600, normal, 27px);
+                    @include font("SF-Pro", 20px, $color-red-3, bold, normal, 27px);
                 }
 
                 .turnBoxItemDate {
