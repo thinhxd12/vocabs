@@ -1,12 +1,5 @@
 import { MetaProvider, Title as TitleName, Meta } from "@solidjs/meta";
-import {
-  Component,
-  Index,
-  Show,
-  createEffect,
-  on,
-  onMount,
-} from "solid-js";
+import { Component, Index, Show, createEffect, on, onMount } from "solid-js";
 import "/public/styles/weather.scss";
 import { useAction, useSubmission } from "@solidjs/router";
 import { getWeatherData } from "~/api/api";
@@ -17,6 +10,7 @@ import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
 import { Motion } from "solid-motionone";
 import { createStore } from "solid-js/store";
+import RSS from "~/components/rss";
 
 type WeatherGeoType = {
   name: string;
@@ -333,6 +327,7 @@ const Weather: Component<{}> = (props) => {
             {makePrediction(getWeatherDataResult.result!.minuteData)}
           </p>
         </Show>
+        <RSS />
       </Motion.div>
     </MetaProvider>
   );

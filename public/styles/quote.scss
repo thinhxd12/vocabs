@@ -39,7 +39,7 @@
         min-height: 63px;
 
         .quoteDropCap {
-            @include font("NYTCheltenham", 45px, $color-white, 700, normal, 45px);
+            @include font("Fraktur", 50px, $color-white, normal, normal, 50px);
             background: $color-black;
             text-align: center;
             float: left;

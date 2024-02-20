@@ -202,18 +202,26 @@ const About: Component<{}> = (props) => {
                                 </Show>
                               </div>
                               <Show when={"time1" in date()}>
-                                <div
-                                  class={
-                                    date().time1 > 0
-                                      ? "dateTimeIndex dateTimeIndexDone"
-                                      : date().date === todayDate().getDate()
-                                      ? "dateTimeIndex dateTimeIndexToday"
-                                      : "dateTimeIndex"
+                                <Show
+                                  when={date().date === todayDate().getDate()}
+                                  fallback={
+                                    <div
+                                      class={
+                                        date().time1 > 0
+                                          ? "dateTimeIndex dateTimeIndexDone"
+                                          : "dateTimeIndex"
+                                      }
+                                    >
+                                      <div>{date().time1}</div>
+                                      <div>{date().time2}</div>
+                                    </div>
                                   }
                                 >
-                                  <div>{date().time1}</div>
-                                  <div>{date().time2}</div>
-                                </div>
+                                  <div class="dateTimeIndex dateTimeIndexToday">
+                                    <div>{date().time1}</div>
+                                    <div>{date().time2}</div>
+                                  </div>
+                                </Show>
                               </Show>
                             </div>
                           );
