@@ -326,8 +326,8 @@ const Weather: Component<{}> = (props) => {
           <p class="weatherPredict">
             {makePrediction(getWeatherDataResult.result!.minuteData)}
           </p>
+          <RSS />
         </Show>
-        <RSS />
       </Motion.div>
     </MetaProvider>
   );

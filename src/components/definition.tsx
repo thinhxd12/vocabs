@@ -91,10 +91,7 @@ const Definition: Component<{
             {(m, i) => {
               return (
                 <div class="sn-gs">
-                  <div class="num">
-                    <span>{1 + i}</span>
-                    <span>:</span>
-                  </div>
+                  <div class="num">{1 + i}:</div>
                   <div innerHTML={m()} class="sn-g" />
                 </div>
               );

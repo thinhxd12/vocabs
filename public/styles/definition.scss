@@ -72,31 +72,37 @@
 
 
             .num {
-                @include font("Fraktur", 13px, $color-black, normal, normal, 18px);
+                @include font("Fraktur", 12px, $color-black, normal, normal, 15px);
                 position: absolute;
-                top: 2px;
+                top: 3px;
                 left: 3px;
-                z-index: 39;
-                background: $color-white;
+                letter-spacing: 0.1em;
+                height: 15px;
 
                 span:nth-child(2) {
                     font-size: 15px;
+                    line-height: 15px;
                     margin-left: 1px;
                 }
             }
 
-            .def {
-                @include font('NYTCheltenham', 13px, $color-black, 700, normal, 18px);
-                display: block;
-                text-transform: capitalize;
-                text-indent: 12px;
-            }
 
             .dsense_h {
-                @include font('NYTImperial', 12px, $color-black, 500, italic, 18px);
+                @include font('NYTImperial', 12px, $color-black, 500, italic, 15px);
                 display: block;
-                text-indent: 11px;
+                text-indent: 9px;
             }
+
+            .def {
+                @include font('NYTCheltenham', 13px, $color-black, 700, normal, 15px);
+                display: block;
+                text-indent: 12px;
+
+                &::first-letter {
+                    text-transform: uppercase;
+                }
+            }
+
 
             .x {
                 @include font('NYTImperial', 12px, $color-black, 500, italic, 18px);
@@ -138,27 +144,32 @@
                 }
             }
 
-
             .thumb_img {
                 display: flex;
-                align-items: center;
+                align-items: flex-start;
                 justify-content: space-between;
                 flex-direction: row-reverse;
 
                 &:not(:last-child) {
-                    padding-bottom: 5px;
-                    margin-bottom: 5px;
-                    border-bottom: 1px solid $color-border;
+                    padding-bottom: 4px;
+                    margin-bottom: 4px;
+                    border-bottom: 1px solid #dbdbdb;
                 }
 
                 .thumb {
                     display: block;
-                    max-width: 150px;
+                    width: 168px;
+                    height: 94px;
+                    object-fit: cover;
+                    object-position: left top;
                     border-radius: 3px;
                 }
 
                 >span {
                     padding-right: 3px;
+                    display: block;
+                    width: calc(100% - 168px);
+                    flex-grow: 1;
                 }
             }
         }

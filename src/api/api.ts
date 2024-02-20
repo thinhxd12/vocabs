@@ -443,9 +443,9 @@ export const getTextDataCambridge = async (text: string) => {
                     if (img) {
                         const imgUrl = getElAttribute(img, "amp-img", "src");
                         if (example) {
-                            def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org/${imgUrl}"/><span><span class="def">${defin}</span>${example}</span></span>`;
+                            def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org${imgUrl}"/><span><span class="def">${defin}</span>${example}</span></span>`;
                         } else
-                            def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org/${imgUrl}"/><span class="def">${defin}</span></span>`;
+                            def += `<span class="thumb_img"><img class="thumb" src="https://dictionary.cambridge.org${imgUrl}"/><span class="def">${defin}</span></span>`;
                     } else if (defin !== "")
                         def += `<span class="def">${defin}</span>${example}`;
                 });

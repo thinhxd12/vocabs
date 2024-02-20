@@ -257,10 +257,12 @@ const Vocabulary: Component<{}> = (props) => {
         handleAutoplay();
       } else {
         stopAutoplay();
-        //start timmer countdown
-        startTimer();
         //get wordlist to update lastest changed
         handleSetDailyWord(todayIndex());
+        //start timmer countdown
+        if (getCalendarTodayDataResult.result) {
+          getCalendarTodayDataResult.result.time2 < 9 && startTimer();
+        }
       }
     }, 7500);
   };
