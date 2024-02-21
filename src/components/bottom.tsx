@@ -1,23 +1,20 @@
-import { A, useAction, useSubmission } from "@solidjs/router";
+import { A, useAction } from "@solidjs/router";
 import { Component, Show } from "solid-js";
 import { logout } from "~/api";
 import "/public/styles/bottom.scss";
-import { getMemoriesLength } from "~/api/api";
 import { useGlobalContext } from "~/globalcontext/store";
 import { OcKebabhorizontal2 } from "solid-icons/oc";
 import { Motion, Presence } from "solid-motionone";
 
-const Bottom: Component<{}> = (props) => {
+const Bottom: Component<{}> = () => {
   const logoutAction = useAction(logout);
-  const getMemoriesLengthResult = useSubmission(getMemoriesLength);
 
   const {
     bottomIndex,
-    setBottomIndex,
     bottomActive,
     setBottomActive,
     bottomLooping,
-    setBottomLooping,
+    totalMemories,
   } = useGlobalContext();
 
   return (
@@ -36,12 +33,9 @@ const Bottom: Component<{}> = (props) => {
       >
         Amor fati
       </A>
-      <button
-        class="mainFooterCenterBtn"
-        onClick={() => logoutAction()}
-      >
-        <Show when={getMemoriesLengthResult.result} fallback={229}>
-          {getMemoriesLengthResult.result}
+      <button class="mainFooterCenterBtn" onClick={() => logoutAction()}>
+        <Show when={totalMemories()} fallback={229}>
+          {totalMemories()}
         </Show>
       </button>
       <A

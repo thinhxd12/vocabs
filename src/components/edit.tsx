@@ -4,6 +4,7 @@ import {
   Show,
   createEffect,
   createSignal,
+  on,
   onMount,
 } from "solid-js";
 import "/public/styles/edit.scss";
@@ -31,25 +32,28 @@ const Edit: Component<{
   const editActionResult = useSubmission(editVocabularyItem);
   const [alertObj, setAlertObj] = createStore({
     showAlert: false,
-    alert: false,
+    alert: true,
     message: "",
   });
 
-  createEffect(() => {
-    if (submitForm()) {
-      setTimeout(() => {
-        setAlertObj({
-          showAlert: true,
-          message: editActionResult.result?.message,
-          alert: editActionResult.result?.message !== "success",
-        });
-      }, 1000);
-      setTimeout(() => {
-        setAlertObj({ showAlert: false });
-        setSubmitForm(false);
-      }, 3000);
-    }
-  });
+  createEffect(
+    on(
+      () => editActionResult.result,
+      () => {
+        if (submitForm()) {
+          setAlertObj({
+            showAlert: true,
+            message: editActionResult.result?.message,
+            alert: editActionResult.result?.message !== "success",
+          });
+        }
+        setTimeout(() => {
+          setAlertObj({ showAlert: false });
+          setSubmitForm(false);
+        }, 6000);
+      }
+    )
+  );
 
   //----------------------------DONE NO EDIT--------------
   const [definitionValue, setDefinitionValue] = createStore<{
@@ -140,185 +144,174 @@ const Edit: Component<{
   });
 
   return (
-    <div class="edit" tabIndex={1}>
-      <div class="editHeader">
-        <div class="editHeaderLeft"></div>
-        <div class="editHeaderRight">
-          <button
-            class="editBtn"
-            onClick={() => setShowHandyEdit(!showHandyEdit())}
-          >
-            <Show
-              when={showHandyEdit()}
-              fallback={<OcChevrondown2 size={12} />}
+    <>
+      <div class="edit" tabIndex={1}>
+        <div class="editHeader">
+          <div class="editHeaderLeft"></div>
+          <div class="editHeaderRight">
+            <button
+              class="editBtn"
+              onClick={() => setShowHandyEdit(!showHandyEdit())}
             >
-              <OcChevronup2 size={12} />
+              <Show
+                when={showHandyEdit()}
+                fallback={<OcChevrondown2 size={12} />}
+              >
+                <OcChevronup2 size={12} />
+              </Show>
+            </button>
+            <button class="editBtn" onclick={props.onClose}>
+              <OcX2 size={12} />
+            </button>
+          </div>
+        </div>
+        <div class="editBody">
+          <Presence>
+            <Show when={showHandyEdit()}>
+              <Motion.div
+                class="handyEditContainer"
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                exit={{ scaleY: 0 }}
+                transition={{ duration: 0.3, easing: "ease-in-out" }}
+              >
+                <form action={handleSubmitDefinition} method="post">
+                  <div class="editInputGroup">
+                    <input
+                      class="editInputItem"
+                      placeholder="Image"
+                      name="image"
+                      autocomplete="off"
+                    />
+                  </div>
+                  <div class="editInputGroup">
+                    <input
+                      class="editInputItem"
+                      placeholder="Definition"
+                      autocomplete="off"
+                      name="definition"
+                    />
+                  </div>
+                  <div class="editInputGroup">
+                    <input
+                      class="editInputItem"
+                      placeholder="Example"
+                      autocomplete="off"
+                      name="example"
+                    />
+                  </div>
+                  <div class="editInputGroup">
+                    <input
+                      class="editInputItem"
+                      placeholder="Synonym"
+                      autocomplete="off"
+                      name="synonym"
+                    />
+                  </div>
+                  <div class="editInputGroup">
+                    <textarea
+                      class="editInputItem editInputItemResult"
+                      value={handyEditResult()}
+                    />
+                  </div>
+                  <button type="submit" class="editSubmitBtn">
+                    Submit
+                  </button>
+                </form>
+              </Motion.div>
             </Show>
-          </button>
-          <button class="editBtn" onclick={props.onClose}>
-            <OcX2 size={12} />
-          </button>
+          </Presence>
+
+          <form action={editVocabularyItem} method="post" class="editForm">
+            <div class="editInputGroup">
+              <input
+                class="editInput"
+                name="text"
+                autocomplete="off"
+                value={props.item?.text}
+              />
+            </div>
+            <div class="editInputGroup">
+              <input
+                class="editInputItem"
+                name="sound"
+                autocomplete="off"
+                value={props.item?.sound}
+              />
+            </div>
+            <div class="editInputGroup">
+              <input
+                class="editInputItem"
+                name="class"
+                autocomplete="off"
+                value={definitionValue.type}
+              />
+            </div>
+            <div class="editInputGroup">
+              <textarea
+                name="definitions"
+                class="editInputItem editInputItemResult"
+                value={definitionValue.example}
+              />
+            </div>
+            <div class="editInputGroup">
+              <input
+                class="editInputItem"
+                name="phonetic"
+                autocomplete="off"
+                value={props.item?.phonetic}
+              />
+            </div>
+            <div class="editInputGroup">
+              <input
+                class="editInputItem"
+                name="meaning"
+                autocomplete="off"
+                value={props.item?.meaning}
+              />
+            </div>
+            <div class="editInputGroup">
+              <input
+                type="number"
+                class="editInputItem"
+                name="number"
+                autocomplete="off"
+                value={props.item?.number}
+              />
+            </div>
+            <button
+              type="submit"
+              class="editSubmitBtn"
+              onClick={() => setSubmitForm(true)}
+            >
+              Submit
+            </button>
+          </form>
+
+          <Show when={visible()[0]}>
+            <Definition
+              item={definitionData.america}
+              onCheck={() => handleCheck(0, definitionData.america)}
+            />
+          </Show>
+          <Show when={visible()[1]}>
+            <Definition
+              item={definitionData.english}
+              onCheck={() => handleCheck(1, definitionData.english)}
+            />
+          </Show>
+          <Show when={visible()[2]}>
+            <Definition
+              item={definitionData.cambridge}
+              onCheck={() => handleCheck(2, definitionData.cambridge)}
+            />
+          </Show>
         </div>
       </div>
-      <div class="editBody">
-        <Presence>
-          <Show when={showHandyEdit()}>
-            <Motion.div
-              class="handyEditContainer"
-              initial={{ scaleY: 0 }}
-              animate={{ scaleY: 1 }}
-              exit={{ scaleY: 0 }}
-              transition={{ duration: 0.3, easing: "ease-in-out" }}
-            >
-              <form action={handleSubmitDefinition} method="post">
-                <div class="editInputGroup">
-                  <input
-                    class="editInputItem"
-                    placeholder="Image"
-                    name="image"
-                    autocomplete="off"
-                  />
-                </div>
-                <div class="editInputGroup">
-                  <input
-                    class="editInputItem"
-                    placeholder="Definition"
-                    autocomplete="off"
-                    name="definition"
-                  />
-                </div>
-                <div class="editInputGroup">
-                  <input
-                    class="editInputItem"
-                    placeholder="Example"
-                    autocomplete="off"
-                    name="example"
-                  />
-                </div>
-                <div class="editInputGroup">
-                  <input
-                    class="editInputItem"
-                    placeholder="Synonym"
-                    autocomplete="off"
-                    name="synonym"
-                  />
-                </div>
-                <div class="editInputGroup">
-                  <textarea
-                    class="editInputItem editInputItemResult"
-                    value={handyEditResult()}
-                  />
-                </div>
-                <button type="submit" class="editSubmitBtn">
-                  Submit
-                </button>
-              </form>
-            </Motion.div>
-          </Show>
-        </Presence>
-
-        <Presence>
-          <Show when={alertObj.showAlert}>
-            <Motion
-              initial={{ x: 360 }}
-              animate={{ x: 0 }}
-              exit={{ x: 360 }}
-              transition={{
-                duration: 0.45,
-                easing: [0.785, 0.135, 0.15, 0.86],
-              }}
-            >
-              <Alert message={alertObj.message} alert={alertObj.alert} />
-            </Motion>
-          </Show>
-        </Presence>
-
-        <form action={editVocabularyItem} method="post" class="editForm">
-          <div class="editInputGroup">
-            <input
-              class="editInput"
-              name="text"
-              autocomplete="off"
-              value={props.item?.text}
-            />
-          </div>
-          <div class="editInputGroup">
-            <input
-              class="editInputItem"
-              name="sound"
-              autocomplete="off"
-              value={props.item?.sound}
-            />
-          </div>
-          <div class="editInputGroup">
-            <input
-              class="editInputItem"
-              name="class"
-              autocomplete="off"
-              value={definitionValue.type}
-            />
-          </div>
-          <div class="editInputGroup">
-            <textarea
-              name="definitions"
-              class="editInputItem editInputItemResult"
-              value={definitionValue.example}
-            />
-          </div>
-          <div class="editInputGroup">
-            <input
-              class="editInputItem"
-              name="phonetic"
-              autocomplete="off"
-              value={props.item?.phonetic}
-            />
-          </div>
-          <div class="editInputGroup">
-            <input
-              class="editInputItem"
-              name="meaning"
-              autocomplete="off"
-              value={props.item?.meaning}
-            />
-          </div>
-          <div class="editInputGroup">
-            <input
-              type="number"
-              class="editInputItem"
-              name="number"
-              autocomplete="off"
-              value={props.item?.number}
-            />
-          </div>
-          <button
-            type="submit"
-            class="editSubmitBtn"
-            onClick={() => setSubmitForm(true)}
-          >
-            Submit
-          </button>
-        </form>
-
-        <Show when={visible()[0]}>
-          <Definition
-            item={definitionData.america}
-            onCheck={() => handleCheck(0, definitionData.america)}
-          />
-        </Show>
-        <Show when={visible()[1]}>
-          <Definition
-            item={definitionData.english}
-            onCheck={() => handleCheck(1, definitionData.english)}
-          />
-        </Show>
-        <Show when={visible()[2]}>
-          <Definition
-            item={definitionData.cambridge}
-            onCheck={() => handleCheck(2, definitionData.cambridge)}
-          />
-        </Show>
-      </div>
-    </div>
+      <Show when={alertObj.showAlert}>
+        <Alert message={alertObj.message} alert={alertObj.alert} />
+      </Show>
+    </>
   );
 };
 

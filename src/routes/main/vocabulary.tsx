@@ -10,13 +10,12 @@ import {
 } from "solid-js";
 import { RouteDefinition, useAction, useSubmission } from "@solidjs/router";
 import { getUser } from "~/api";
-import { BookmarkType, TranslateType, VocabularyType } from "~/types";
+import { BookmarkType, VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
   deleteVocabulary,
   getBookmarkText,
   getSearchText,
-  getTranslate,
   checkVocabulary,
   setBookmark,
   archiveVocabulary,
@@ -70,8 +69,12 @@ const Vocabulary: Component<{}> = (props) => {
   });
 
   onMount(async () => {
+    setIsMobile(
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    );
     await getCalendarTodayDataAction();
-    await getMemoriesLengthAction();
   });
 
   //call sever action search text
@@ -129,6 +132,7 @@ const Vocabulary: Component<{}> = (props) => {
     setShowDefinitions(true);
     setSearchTerm("");
     setSearchResult([]);
+    
     // handlecheck function
 
     if (text.number > 1) {
@@ -136,7 +140,8 @@ const Vocabulary: Component<{}> = (props) => {
     } else {
       await archiveVocabularyAction(text.text);
       deleteVocabularyAction(text.text);
-      getMemoriesLengthAction();
+      const count = await getMemoriesLengthAction();
+      setTotalMemories(count);
     }
   };
 
@@ -181,7 +186,6 @@ const Vocabulary: Component<{}> = (props) => {
 
   // -------------------TRANSLATE START-------------------- //
   const [translateTerm, setTranslateTerm] = createSignal<string>("");
-  const [translateText, setTranslateText] = createSignal<TranslateType>();
   const [showTranslate, setShowTranslate] = createSignal(false);
 
   const onKeyDownTrans: JSX.EventHandlerUnion<
@@ -194,12 +198,11 @@ const Vocabulary: Component<{}> = (props) => {
       setTranslateTerm("");
       setShowTranslate(false);
     }
-    if (keyDown === "Enter") handleTranslate();
+    if (keyDown === "Enter") setShowTranslate(true);
   };
-  const handleTranslate = async () => {
-    const data = await getTranslate(translateTerm());
+
+  const handleTranslate = () => {
     setShowTranslate(true);
-    setTranslateText(data);
   };
   // -------------------TRANSLATE END-------------------- //
   // -------------------DELETE START-------------------- //
@@ -281,6 +284,8 @@ const Vocabulary: Component<{}> = (props) => {
   };
 
   const {
+    totalMemories,
+    setTotalMemories,
     bottomIndex,
     setBottomIndex,
     bottomActive,
@@ -389,14 +394,6 @@ const Vocabulary: Component<{}> = (props) => {
   // -------------------MOBILE START-------------------- //
 
   const [isMobile, setIsMobile] = createSignal(false);
-
-  onMount(() => {
-    setIsMobile(
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      )
-    );
-  });
 
   const onInputSearch: JSX.InputEventHandlerUnion<
     HTMLInputElement,
@@ -604,7 +601,7 @@ const Vocabulary: Component<{}> = (props) => {
                 </Show>
               </Presence>
               {/* Translation */}
-              <Presence>
+              {/* <Presence>
                 <Show when={showTranslate()}>
                   <Motion
                     initial={{
@@ -646,7 +643,7 @@ const Vocabulary: Component<{}> = (props) => {
                     />
                   </Motion>
                 </Show>
-              </Presence>
+              </Presence> */}
             </div>
           </div>
 
@@ -714,6 +711,29 @@ const Vocabulary: Component<{}> = (props) => {
               transition={{ duration: 0.3, easing: "ease-in-out" }}
             >
               <Edit item={editText()!} onClose={handleCloseEdit} />
+            </Motion.div>
+          </Show>
+        </Presence>
+        {/* Translation */}
+        <Presence>
+          <Show when={showTranslate()}>
+            <Motion.div
+              class="editOverlay"
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              transition={{ duration: 0.3, easing: "ease-in-out" }}
+            >
+              <Translation
+                translateText={translateTerm()}
+                onClose={handleCloseTranslation}
+              />
             </Motion.div>
           </Show>
         </Presence>

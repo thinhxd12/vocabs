@@ -1,16 +1,27 @@
-import { Component } from "solid-js";
+import { Component, Show } from "solid-js";
 import "/public/styles/alert.scss";
-import { OcAlertfill2, OcCheckcirclefill2 } from "solid-icons/oc";
+import { OcCheck2, OcX2 } from "solid-icons/oc";
 
 const Alert: Component<{ message: string; alert: boolean }> = (props) => {
   return (
-    <div class="alert">
-      {props.alert ? (
-        <OcAlertfill2 size={27} color="#ff3a30" class="alertIcon" />
-      ) : (
-        <OcCheckcirclefill2 size={27} color="#10bb30" class="alertIcon" />
-      )}
-      <p class="alertMessage">{props.message}</p>
+    <div class="toast-notification slide-in-slide-out">
+      <div class="toast-content">
+        <div
+          class="toast-icon wiggle-me"
+          style={{ background: props.alert ? "#c0392b" : "#27ae60" }}
+        >
+          <Show
+            when={props.alert}
+            fallback={<OcCheck2 size={18} color="#fff" />}
+          >
+            <OcX2 size={18} color="#fff" />
+          </Show>
+        </div>
+        <div class="toast-msg">{props.message}</div>
+      </div>
+      <div class="toast-progress">
+        <div class="toast-progress-bar"></div>
+      </div>
     </div>
   );
 };

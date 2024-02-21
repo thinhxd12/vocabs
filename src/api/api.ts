@@ -214,17 +214,6 @@ export const getTranslate = async (text: string) => {
     }
 }
 
-//insert data table vocabulary
-export const insertNewVocabularyItem = action(async (obj: VocabularyType) => {
-    "use server";
-    const { error } = await supabase
-        .from(mapTables.vocabulary)
-        .upsert(obj)
-    if (error) return { message: error.message };
-    return { message: "success" } as PostgrestError
-});
-
-
 async function fetchGetText(url: string) {
     try {
         let response = await fetch(url);
@@ -460,7 +449,7 @@ export const getTextDataCambridge = async (text: string) => {
 };
 
 //find sound from oed
-export const getOedSound = action(async (text: string) => {
+export const getOedSoundURL = async (text: string) => {
     const baseUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
     const response = await fetch(baseUrl);
     const pageImgHtml = await response.text();
@@ -476,7 +465,7 @@ export const getOedSound = action(async (text: string) => {
         ?.getAttribute("data-src-mp3");
     const altMp3 = `https://ssl.gstatic.com/dictionary/static/sounds/20220808/${text}--_us_1.mp3`;
     return mp3 || altMp3;
-});
+};
 
 //delete vocabulary
 export const deleteVocabulary = action(async (text: string) => {
@@ -507,6 +496,31 @@ export const editVocabularyItem = action(async (formData: FormData) => {
             number: numberT
         })
         .eq("text", textT)
+    if (error) return { message: error.message };
+    return { message: "success" } as PostgrestError
+});
+
+//insert new vocabulary
+export const insertVocabularyItem = action(async (formData: FormData) => {
+    "use server";
+    const textT = String(formData.get("text"));
+    const soundT = String(formData.get("sound"));
+    const classT = String(formData.get("class"));
+    const definitionsT = JSON.parse(String(formData.get("definitions")));
+    const phoneticT = String(formData.get("phonetic"));
+    const meaningT = String(formData.get("meaning"));
+    const numberT = Number(formData.get("number"));
+    const { error } = await supabase
+        .from(mapTables.vocabulary)
+        .insert({
+            text: textT,
+            sound: soundT,
+            class: classT,
+            definitions: definitionsT,
+            phonetic: phoneticT,
+            meaning: meaningT,
+            number: numberT
+        })
     if (error) return { message: error.message };
     return { message: "success" } as PostgrestError
 });
@@ -625,7 +639,7 @@ export const submitNewMonth = action(async (formData: FormData) => {
     const startMonthIndex = Number(formData.get("startMonthIndex"));
     let { error } = await supabase
         .from(mapTables.history)
-        .upsert([{
+        .insert([{
             week1: { index: startMonthIndex, from_date: "", to_date: "" },
             week2: { index: startMonthIndex + 200, from_date: "", to_date: "" },
             week3: { index: startMonthIndex + 400, from_date: "", to_date: "" },
@@ -670,7 +684,7 @@ export const getMemoriesLength = action(async () => {
         .from(mapTables.memories)
         .select('*', { count: "exact" });
     return count as number;
-}, "getVocabularyFromRange");
+}, "getMemoriesLength");
 
 
 //get weather data

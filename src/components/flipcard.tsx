@@ -46,6 +46,7 @@ const FlipCard: Component<{
           setAudioSource(props.item.sound);
           setPlaying(true);
         }
+
         if (props.item?.number > 1) {
           setRenderNumber(props.item.number);
           setNumbArray(createNumberArray(props.item.number));
@@ -54,7 +55,11 @@ const FlipCard: Component<{
             setNumbArray(createNumberArray(renderNumber()));
             setPlaying(false);
           }, 2500);
-
+          onCleanup(() => {
+            clearTimeout(timer1);
+          });
+        }
+        if (props.item?.meaning) {
           const timer2 = setTimeout(() => {
             setTurnBoxClass(" turnBoxHover");
             const meaningTTS = props.item?.meaning
@@ -69,7 +74,6 @@ const FlipCard: Component<{
             setTurnBoxClass("");
           }, 5500);
           onCleanup(() => {
-            clearTimeout(timer1);
             clearTimeout(timer2);
             clearTimeout(timer3);
           });

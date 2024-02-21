@@ -1,36 +1,12 @@
 @import "./fonts.scss";
 @import "./mixins.scss";
 
+
 .translate {
     @include baseBody($color-calendar-bg);
     width: 360px;
     padding-top: 0;
     margin-bottom: 3px;
-
-    .translateHeader {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        border-bottom: 1px solid #343434;
-        height: 25px;
-        padding: 3px;
-
-        .translateHeaderLeft {
-            .translateHeaderText {
-                b {
-                    @include font('NYTCheltenham', 13px, $color-black, 500, normal);
-                }
-            }
-        }
-
-        .translateHeaderRight {
-            @include flex;
-
-            .translateBtn {
-                @include baseButton(28px);
-            }
-        }
-    }
 
     .translateBody {
         .translateInput {
@@ -84,7 +60,7 @@
                             height: 5px;
                             margin: 1px;
                             width: 9px;
-                            background: $color-black;
+                            background: #1A73E8;
                         }
 
                         .frequencyClear {
@@ -100,4 +76,62 @@
         }
 
     }
+}
+
+
+.newTranslateContainer {
+    position: relative;
+    width: 100%;
+    width: 100%;
+    height: 27px;
+    background: $color-background-2;
+
+    .myInputLeftOrnament {
+        z-index: inherit;
+        height: 27px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 99;
+    }
+
+    .myInputRightOrnament {
+        z-index: inherit;
+        height: 27px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 99;
+    }
+
+    .newTranslateInput {
+        height: 27px;
+        width: 100%;
+        padding: 0 9px;
+        background: none;
+        border: 0;
+        outline: 0;
+        text-align: center;
+        @include font('Roslindale', 15px, $color-white, 500, normal, 27px);
+    }
+
+    .translateBtn {
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+        margin-right: 6px;
+        height: 27px;
+        z-index: 1001;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        @include flex;
+
+        img {
+            height: 18px;
+        }
+    }
+
 }

@@ -1,3 +1,4 @@
+import { useAction } from "@solidjs/router";
 import {
   Accessor,
   Setter,
@@ -5,10 +6,14 @@ import {
   useContext,
   createSignal,
   JSX,
+  onMount,
 } from "solid-js";
+import { getMemoriesLength } from "~/api/api";
 import { VocabularyType } from "~/types";
 
 interface ContextProps {
+  totalMemories: Accessor<number>;
+  setTotalMemories: Setter<number>;
   bottomIndex: Accessor<number>;
   setBottomIndex: Setter<number>;
   bottomActive: Accessor<boolean>;
@@ -29,10 +34,20 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
   const [bottomLooping, setBottomLooping] = createSignal(false);
   const [counter, setCounter] = createSignal<number>(0);
   const [wordList, setWordList] = createSignal<VocabularyType[]>([]);
+  const [totalMemories, setTotalMemories] = createSignal<number>(0);
+
+  const getMemoriesLengthAction = useAction(getMemoriesLength);
+
+  onMount(async () => {
+    const count = await getMemoriesLengthAction();
+    setTotalMemories(count);
+  });
 
   return (
     <GlobalContext.Provider
       value={{
+        totalMemories,
+        setTotalMemories,
         bottomIndex,
         setBottomIndex,
         bottomActive,

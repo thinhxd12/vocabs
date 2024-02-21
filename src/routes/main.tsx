@@ -6,7 +6,7 @@ import {
 import { Show, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getUser } from "~/api";
-import { getDataImage } from "~/api/api";
+import { getDataImage, getMemoriesLength } from "~/api/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import { URL_IMAGE_MAIN_PAGE } from "~/utils";
