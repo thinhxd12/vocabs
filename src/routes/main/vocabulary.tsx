@@ -64,10 +64,6 @@ const Vocabulary: Component<{}> = (props) => {
     createSignal<string>("#957c3e");
   let divRef: HTMLDivElement | undefined;
 
-  createEffect(() => {
-    if (searchTerm() === "") setSearchInputColor("#957c3e");
-  });
-
   onMount(async () => {
     setIsMobile(
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -77,6 +73,10 @@ const Vocabulary: Component<{}> = (props) => {
     await getCalendarTodayDataAction();
   });
 
+  createEffect(() => {
+    if (searchResult().length > 0) setSearchInputColor("#957c3e");
+  });
+
   //call sever action search text
   const getSearchTextAction = useAction(getSearchText);
 
@@ -84,8 +84,8 @@ const Vocabulary: Component<{}> = (props) => {
     const res = await getSearchTextAction(str);
     if (res) {
       if (res.length === 0) {
-        setSearchInputColor("#ca140c");
         setSearchResult([]);
+        setSearchInputColor("#ca140c");
         setTranslateTerm(str);
       } else setSearchResult(res);
     }
@@ -116,6 +116,7 @@ const Vocabulary: Component<{}> = (props) => {
       }
     }
     if (keyDown === " ") {
+      setSearchInputColor("#957c3e");
       event.preventDefault();
       setSearchTerm("");
       setSearchResult([]);
@@ -132,7 +133,7 @@ const Vocabulary: Component<{}> = (props) => {
     setShowDefinitions(true);
     setSearchTerm("");
     setSearchResult([]);
-    
+
     // handlecheck function
 
     if (text.number > 1) {
