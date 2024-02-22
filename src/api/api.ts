@@ -235,7 +235,10 @@ async function fetchGetText(url: string) {
 
 //get data definition from oxfox america
 export const getTextDataAmerica = async (text: string) => {
-    const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+    "use server";
+
+    const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+    // const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
     const result: VocabularyType = {
         text: "",
         sound: "",
@@ -249,7 +252,8 @@ export const getTextDataAmerica = async (text: string) => {
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
     try {
         const response = await fetch(url);
-        const pageImgHtml = await response.text();
+        const redirectRes = await fetch(response.url);
+        const pageImgHtml = await redirectRes.text();
         const doc = parse(pageImgHtml);
 
         result.sound = getElAttribute(
@@ -796,3 +800,5 @@ const cleanDataMinutely = (data: MinutelyType[]) => {
         return newItem;
     });
 };
+
+
