@@ -31,8 +31,10 @@ const Definition: Component<{
     on(
       () => props.item,
       (cur: VocabularyType) => {
-        setAudioSource(cur.sound);
-        setCurrentDefinitions(cur.definitions);
+        if(cur){
+          setAudioSource(cur.sound);
+          setCurrentDefinitions(cur.definitions);
+        }
       }
     )
   );

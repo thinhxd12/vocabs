@@ -1,0 +1,15 @@
+@import "./fonts.scss";
+@import "./mixins.scss";
+
+
+.toast-container {
+    width: 360px;
+    height: 100vh;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+}
+
+.toast-content {
+    @include font("Basier", 12px, $color-black, 400, normal);
+}

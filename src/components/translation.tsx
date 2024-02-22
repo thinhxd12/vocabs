@@ -8,15 +8,14 @@ import {
   Switch,
   createEffect,
   createSignal,
-  on,
   onMount,
 } from "solid-js";
 import "/public/styles/edit.scss";
 import "/public/styles/translate.scss";
+import "/public/styles/toast.scss";
 import { OcX2 } from "solid-icons/oc";
 import { TranslateType, VocabularyType } from "~/types";
 import { useSubmission } from "@solidjs/router";
-import Alert from "./alert";
 import { createStore } from "solid-js/store";
 import Definition from "./definition";
 import {
@@ -27,49 +26,15 @@ import {
   getTranslate,
   insertVocabularyItem,
 } from "~/api/api";
+import toast, { Toaster } from "solid-toast";
 
 const Translation: Component<{
   translateText: string;
   onClose: Setter<boolean>;
 }> = (props) => {
-  const [submitForm, setSubmitForm] = createSignal<boolean>(false);
   const insertActionResult = useSubmission(insertVocabularyItem);
-  const [alertObj, setAlertObj] = createStore({
-    showAlert: false,
-    alert: true,
-    message: "",
-  });
-
-  const [insertText, setInsertText] = createStore<VocabularyType>({
-    text: "",
-    sound: "",
-    class: "",
-    definitions: [],
-    phonetic: "",
-    meaning: "",
-    number: 240,
-  });
   const [translateTerm, setTranslateTerm] = createSignal<string>("");
   const [translateData, setTranslateData] = createSignal<TranslateType>();
-
-  createEffect(
-    on(
-      () => insertActionResult.result,
-      () => {
-        if (submitForm()) {
-          setAlertObj({
-            showAlert: true,
-            message: insertActionResult.result?.message,
-            alert: insertActionResult.result?.message !== "success",
-          });
-        }
-        setTimeout(() => {
-          setAlertObj({ showAlert: false });
-          setSubmitForm(false);
-        }, 6000);
-      }
-    )
-  );
 
   //----------------------------DONE NO EDIT--------------
   const [definitionValue, setDefinitionValue] = createStore<{
@@ -157,204 +122,212 @@ const Translation: Component<{
     }
   };
 
+  //----------------------TOAST----------------------
+  const popSuccess = () => toast.success("Success", { duration: 3000 });
+  const popError = (msg: string) => toast.error(msg, { duration: 3000 });
+
+  createEffect(() => {
+    if (insertActionResult.result?.message === "success") {
+      popSuccess();
+    } else if (insertActionResult.result?.message !== undefined)
+      popError(insertActionResult.result?.message!);
+  });
+
   return (
-    <>
-      <div class="edit" tabIndex={1}>
-        <div class="editHeader">
-          <div class="editHeaderLeft"></div>
-          <div class="editHeaderRight">
-            <button class="editBtn" onclick={props.onClose}>
-              <OcX2 size={12} />
-            </button>
-          </div>
-        </div>
-        <div class="editBody">
-          <div class="newTranslateContainer">
-            <img
-              src="/images/main/input-left-corner.png"
-              class="myInputLeftOrnament"
-            />
-            <input
-              class="newTranslateInput"
-              autocomplete="off"
-              value={translateTerm()}
-              onInput={(e) => setTranslateTerm(e.target.value)}
-              onKeyDown={onKeyDownTranslate}
-            />
-            <button class="translateBtn" onClick={handleTranslate}>
-              <img src="/images/main/center.png" />
-            </button>
-            <img
-              src="/images/main/input-right-corner.png"
-              class="myInputRightOrnament"
-            />
-          </div>
-          <form action={insertVocabularyItem} method="post" class="editForm">
-            <input
-              style={{ display: "none" }}
-              name="text"
-              autocomplete="off"
-              value={translateTerm()}
-            />
-            <div class="editInputGroup">
-              <input
-                class="editInputItem"
-                name="sound"
-                autocomplete="off"
-                value={definitionValue.sound}
-              />
-            </div>
-            <div class="editInputGroup">
-              <input
-                class="editInputItem"
-                name="class"
-                autocomplete="off"
-                value={definitionValue.type}
-              />
-            </div>
-            <div class="editInputGroup">
-              <textarea
-                name="definitions"
-                class="editInputItem editInputItemResult"
-                value={definitionValue.example}
-              />
-            </div>
-            <div class="editInputGroup">
-              <input
-                class="editInputItem"
-                name="phonetic"
-                autocomplete="off"
-                value={translateData()?.wordTranscription}
-              />
-            </div>
-            <div class="editInputGroup">
-              <input
-                class="editInputItem"
-                name="meaning"
-                autocomplete="off"
-                value={transInput()}
-              />
-            </div>
-            <div class="editInputGroup">
-              <input
-                type="number"
-                class="editInputItem"
-                name="number"
-                autocomplete="off"
-                value={insertText.number}
-              />
-            </div>
-            <button
-              type="submit"
-              class="editSubmitBtn"
-              onClick={() => setSubmitForm(true)}
-            >
-              Submit
-            </button>
-          </form>
-
-          <Show when={translateData()}>
-            <div class="translate">
-              <div class="translateBody">
-                <p
-                  class="translateTranslation"
-                  onClick={() =>
-                    handleSetTransInput(
-                      "-" + translateData()!.translation.toLowerCase()
-                    )
-                  }
-                >
-                  {translateData()!.translation}
-                </p>
-                <div class="translateContent">
-                  <Index each={Object.keys(translateData()!.translations)}>
-                    {(item, index) => {
-                      let key = item() as string;
-                      return (
-                        <div class="translateContentItem">
-                          <p
-                            onClick={() =>
-                              handleSetTransInput(" -" + item().toLowerCase())
-                            }
-                          >
-                            {item()}
-                          </p>
-                          <div class="translateContentItemText">
-                            <Index each={translateData()!.translations[key]}>
-                              {(m, n) => {
-                                return (
-                                  <div class="translateContentItemRow">
-                                    <span
-                                      onClick={() =>
-                                        handleSetTransInput(
-                                          "-" + m().translation.toLowerCase()
-                                        )
-                                      }
-                                    >
-                                      {m().translation}
-                                    </span>
-                                    <span>{m().synonyms.join(", ")}</span>
-                                    <Switch>
-                                      <Match when={m().frequency === 3}>
-                                        <span class="frequencyContainer">
-                                          <span class="frequencyDot"></span>
-                                          <span class="frequencyDot"></span>
-                                          <span class="frequencyDot"></span>
-                                        </span>
-                                      </Match>
-                                      <Match when={m().frequency === 2}>
-                                        <span class="frequencyContainer">
-                                          <span class="frequencyDot"></span>
-                                          <span class="frequencyDot"></span>
-                                          <span class="frequencyClear"></span>
-                                        </span>
-                                      </Match>
-                                      <Match when={m().frequency === 1}>
-                                        <span class="frequencyContainer">
-                                          <span class="frequencyDot"></span>
-                                          <span class="frequencyClear"></span>
-                                          <span class="frequencyClear"></span>
-                                        </span>
-                                      </Match>
-                                    </Switch>
-                                  </div>
-                                );
-                              }}
-                            </Index>
-                          </div>
-                        </div>
-                      );
-                    }}
-                  </Index>
-                </div>
-              </div>
-            </div>
-          </Show>
-
-          <Show when={visible()[0]}>
-            <Definition
-              item={definitionData.america}
-              onCheck={() => handleCheck(0, definitionData.america)}
-            />
-          </Show>
-          <Show when={visible()[1]}>
-            <Definition
-              item={definitionData.english}
-              onCheck={() => handleCheck(1, definitionData.english)}
-            />
-          </Show>
-          <Show when={visible()[2]}>
-            <Definition
-              item={definitionData.cambridge}
-              onCheck={() => handleCheck(2, definitionData.cambridge)}
-            />
-          </Show>
+    <div class="edit" tabIndex={1}>
+      <div class="editHeader">
+        <div class="editHeaderLeft"></div>
+        <div class="editHeaderRight">
+          <button class="editBtn" onclick={props.onClose}>
+            <OcX2 size={12} />
+          </button>
         </div>
       </div>
-      <Show when={alertObj.showAlert}>
-        <Alert message={alertObj.message} alert={alertObj.alert} />
-      </Show>
-    </>
+      <div class="editBody">
+        <div class="newTranslateContainer">
+          <img
+            src="/images/main/input-left-corner.png"
+            class="myInputLeftOrnament"
+          />
+          <input
+            class="newTranslateInput"
+            autocomplete="off"
+            value={translateTerm()}
+            onInput={(e) => setTranslateTerm(e.target.value)}
+            onKeyDown={onKeyDownTranslate}
+          />
+          <button class="translateBtn" onClick={handleTranslate}>
+            <img src="/images/main/center.png" />
+          </button>
+          <img
+            src="/images/main/input-right-corner.png"
+            class="myInputRightOrnament"
+          />
+        </div>
+        <form action={insertVocabularyItem} method="post" class="editForm">
+          <input
+            style={{ display: "none" }}
+            name="text"
+            autocomplete="off"
+            value={translateTerm()}
+          />
+          <div class="editInputGroup">
+            <input
+              class="editInputItem"
+              name="sound"
+              autocomplete="off"
+              value={definitionValue.sound}
+            />
+          </div>
+          <div class="editInputGroup">
+            <input
+              class="editInputItem"
+              name="class"
+              autocomplete="off"
+              value={definitionValue.type}
+            />
+          </div>
+          <div class="editInputGroup">
+            <textarea
+              name="definitions"
+              class="editInputItem editInputItemResult"
+              value={definitionValue.example}
+            />
+          </div>
+          <div class="editInputGroup">
+            <input
+              class="editInputItem"
+              name="phonetic"
+              autocomplete="off"
+              value={translateData()?.wordTranscription}
+            />
+          </div>
+          <div class="editInputGroup">
+            <input
+              class="editInputItem"
+              name="meaning"
+              autocomplete="off"
+              value={transInput()}
+              onInput={(e) => setTransInput(e.target.value)}
+            />
+          </div>
+          <div class="editInputGroup">
+            <input
+              type="number"
+              class="editInputItem"
+              name="number"
+              autocomplete="off"
+              value={240}
+            />
+          </div>
+          <button type="submit" class="editSubmitBtn">
+            Submit
+          </button>
+        </form>
+
+        <Show when={translateData()}>
+          <div class="translate">
+            <div class="translateBody">
+              <p
+                class="translateTranslation"
+                onClick={() =>
+                  handleSetTransInput(
+                    "-" + translateData()!.translation.toLowerCase()
+                  )
+                }
+              >
+                {translateData()!.translation}
+              </p>
+              <div class="translateContent">
+                <Index each={Object.keys(translateData()!.translations)}>
+                  {(item, index) => {
+                    let key = item() as string;
+                    return (
+                      <div class="translateContentItem">
+                        <p
+                          onClick={() =>
+                            handleSetTransInput(" -" + item().toLowerCase())
+                          }
+                        >
+                          {item()}
+                        </p>
+                        <div class="translateContentItemText">
+                          <Index each={translateData()!.translations[key]}>
+                            {(m, n) => {
+                              return (
+                                <div class="translateContentItemRow">
+                                  <span
+                                    onClick={() =>
+                                      handleSetTransInput(
+                                        "-" + m().translation.toLowerCase()
+                                      )
+                                    }
+                                  >
+                                    {m().translation}
+                                  </span>
+                                  <span>{m().synonyms.join(", ")}</span>
+                                  <Switch>
+                                    <Match when={m().frequency === 3}>
+                                      <span class="frequencyContainer">
+                                        <span class="frequencyDot"></span>
+                                        <span class="frequencyDot"></span>
+                                        <span class="frequencyDot"></span>
+                                      </span>
+                                    </Match>
+                                    <Match when={m().frequency === 2}>
+                                      <span class="frequencyContainer">
+                                        <span class="frequencyDot"></span>
+                                        <span class="frequencyDot"></span>
+                                        <span class="frequencyClear"></span>
+                                      </span>
+                                    </Match>
+                                    <Match when={m().frequency === 1}>
+                                      <span class="frequencyContainer">
+                                        <span class="frequencyDot"></span>
+                                        <span class="frequencyClear"></span>
+                                        <span class="frequencyClear"></span>
+                                      </span>
+                                    </Match>
+                                  </Switch>
+                                </div>
+                              );
+                            }}
+                          </Index>
+                        </div>
+                      </div>
+                    );
+                  }}
+                </Index>
+              </div>
+            </div>
+          </div>
+        </Show>
+
+        <Show when={visible()[0]}>
+          <Definition
+            item={definitionData.america}
+            onCheck={() => handleCheck(0, definitionData.america)}
+          />
+        </Show>
+        <Show when={visible()[1]}>
+          <Definition
+            item={definitionData.english}
+            onCheck={() => handleCheck(1, definitionData.english)}
+          />
+        </Show>
+        <Show when={visible()[2]}>
+          <Definition
+            item={definitionData.cambridge}
+            onCheck={() => handleCheck(2, definitionData.cambridge)}
+          />
+        </Show>
+      </div>
+      <Toaster
+        position="top-center"
+        containerClassName="toast-container"
+        toastOptions={{ className: "toast-content" }}
+      />
+    </div>
   );
 };
 
