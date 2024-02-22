@@ -76,7 +76,7 @@
 
 .flipCardRightContent {
     height: 100%;
-    width: 282px;
+    width: 294px;
 
     .turnBoxContainer {
         width: 100%;
@@ -130,27 +130,29 @@
                 padding-left: 12px;
 
                 .turnBoxItemMeaning {
-                    @include font('Roslindale', 14px, $color-white, 500, normal);
+                    @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
                     letter-spacing: 1px;
                     text-align: left;
                     white-space: break-spaces;
                     cursor: default;
 
                     .turnBoxItemMeaningClass {
-                        margin-left: -6px;
+                        margin-left: -9px;
+                        margin-bottom: 3px;
                     }
 
                     .turnBoxItemMeaningText {
+                        margin-bottom: 3px;
+
                         &::before {
                             content: '';
                             display: inline-block;
-                            margin-right: 2px;
+                            margin-right: 3px;
                             width: 15px;
                             height: 15px;
-                            background: url('../images/main/clover.png');
+                            background: url('/images/main/clover1.png');
                             background-size: contain;
-                            vertical-align: bottom;
-                            transform: rotate(-18deg);
+                            vertical-align: middle;
                         }
                     }
                 }

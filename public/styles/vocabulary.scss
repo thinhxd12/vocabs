@@ -168,6 +168,8 @@
         overflow-x: hidden;
         background: $color-black;
         position: relative;
+        padding: 0 6px;
+        margin-top: 6px;
 
         &::-webkit-scrollbar {
             display: none;

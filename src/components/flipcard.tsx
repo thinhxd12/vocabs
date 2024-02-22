@@ -2,7 +2,7 @@ import { Component, createEffect, createSignal, on, onCleanup } from "solid-js";
 import { VocabularyType } from "~/types";
 import "/public/styles/flipcard.scss";
 import { Motion } from "solid-motionone";
-import { createAudio } from "@solid-primitives/audio";
+import { createAudio, makeAudioPlayer } from "@solid-primitives/audio";
 
 const [playing, setPlaying] = createSignal(false);
 
@@ -11,8 +11,7 @@ const FlipCard: Component<{
 }> = (props) => {
   const [audioSource, setAudioSource] = createSignal<string>(props.item?.sound);
   const [turnBoxClass, setTurnBoxClass] = createSignal<string>("");
-  const [volume, setVolume] = createSignal(1);
-  const [audio, { seek }] = createAudio(audioSource, playing, volume);
+  const [audio, { seek }] = createAudio(audioSource, playing);
 
   const renderMeaning = () => {
     if (props.item) {
