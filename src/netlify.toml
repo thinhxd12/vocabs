@@ -2,7 +2,7 @@
   publish = "dist"
   command = "npm run build"
   edge_functions = ".netlify/edge-functions"
-  functions = "src/netlify/functions/oxford"
+  functions = "src/functions/netlify-cors"
 
 [[edge_functions]]
   path = "/*"

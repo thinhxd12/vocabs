@@ -412,11 +412,11 @@ const Vocabulary: Component<{}> = (props) => {
   // -------------------MOBILE END-------------------- //
 
   const testFunction = async () => {
-    fetch("/.netlify/functions/oxford")
-      .then((resp) => resp.json())
+    fetch("/.netlify/functions/netlify-cors/https://translate.google.com/")
+      .then((resp) => resp.text())
       .then((data) => {
-        const text = data.last_counted;
-        console.log(text);
+        // const text = data.last_counted;
+        console.log(data);
       });
   };
 
