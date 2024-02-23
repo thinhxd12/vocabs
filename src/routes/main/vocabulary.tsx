@@ -412,7 +412,7 @@ const Vocabulary: Component<{}> = (props) => {
   // -------------------MOBILE END-------------------- //
 
   const testFunction = async () => {
-    fetch("https://thinhvocabs3.netlify.app/.netlify/functions/hello")
+    fetch("https://thinhvocabs3.netlify.app/.netlify/functions")
       .then((resp) => resp.text())
       .then((data) => {
         // const text = data.last_counted;
