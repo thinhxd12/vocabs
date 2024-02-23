@@ -13,6 +13,6 @@
   function = "server"
 
 [[redirects]]
-  from = "https://www.oxfordlearnersdictionaries.com/search/american_english/direct/*"
-  to = "https://www.oxfordlearnersdictionaries.com/definition/american_english/*"
+  from = "/_server/*"
+  to = "/src/functions/netlify-cors"
   status = 200

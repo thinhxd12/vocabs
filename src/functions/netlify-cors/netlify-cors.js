@@ -31,11 +31,14 @@ function handlePost(event) {
   };
 }
 
-function handleOptions(event) {
+function handleOptions(event,request) {
   return {
     statusCode: 200,
     headers: {
       ...getCorsHeaders(),
+      "Access-Control-Allow-Headers": request.headers.get(
+        "Access-Control-Request-Headers"
+      ),
     },
   };
 }
@@ -50,4 +53,4 @@ function getCorsHeaders() {
     "Access-Control-Allow-Credentials": "true",
   };
 }
-export default { handler };
+module.exports = { handler };
