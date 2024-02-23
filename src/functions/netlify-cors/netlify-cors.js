@@ -14,21 +14,21 @@ const handler = async (event) => {
 };
 
 function handleGet(event) {
-  // return {
-  //   statusCode: 200,
-  //   body: JSON.stringify({ dummyKey: `DummyGetVal` }),
-  //   headers: {},
-  // };
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ dummyKey: `DummyGetVal` }),
+    headers: {},
+  };
 }
 
 function handlePost(event) {
-  // return {
-  //   statusCode: 200,
-  //   body: JSON.stringify({ dummyKey: `DummyPostVal` }),
-  //   headers: {
-  //     ...getCorsHeaders(),
-  //   },
-  // };
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ dummyKey: `DummyPostVal` }),
+    headers: {
+      ...getCorsHeaders(),
+    },
+  };
 }
 
 function handleOptions(event) {
