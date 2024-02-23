@@ -2,7 +2,7 @@
   publish = "dist"
   command = "npm run build"
   edge_functions = ".netlify/edge-functions"
-  functions = "src/functions/netlify-cors"
+  functions = "src/netlify/functions/hello"
 
 [[edge_functions]]
   path = "/*"
@@ -10,8 +10,3 @@
 
 [functions]
   node_bundler = "esbuild"
-
-[[redirects]]
-  from = "/cors/*"
-  to = "/.netlify/functions/netlify-cors"
-  status = 200
