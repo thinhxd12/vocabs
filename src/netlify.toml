@@ -11,3 +11,8 @@
 [[edge_functions]]
   path = "/*"
   function = "server"
+
+[[redirects]]
+  from = "/_server"
+  to = "/src/functions/netlify-cors"
+  status = 200

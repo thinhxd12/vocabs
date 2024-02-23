@@ -1,6 +1,4 @@
-@import "./fonts.scss";
 @import "./mixins.scss";
-
 
 .translate {
     @include baseBody($color-calendar-bg);
@@ -77,7 +75,6 @@
 
     }
 }
-
 
 .newTranslateContainer {
     position: relative;

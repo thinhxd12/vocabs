@@ -1,4 +1,3 @@
-// @import "./fonts.scss";
 @import "./mixins.scss";
 
 
@@ -168,7 +167,7 @@
         overflow-x: hidden;
         background: $color-black;
         position: relative;
-        padding: 0 6px;
+        padding: 0 3px;
         margin-top: 6px;
 
         &::-webkit-scrollbar {
