@@ -8,4 +8,4 @@
     Access-Control-Allow-Origin = "*"
 
 [functions]
-  directory = ".netlify/"
+  directory = ".netlify/functions-internal/"
