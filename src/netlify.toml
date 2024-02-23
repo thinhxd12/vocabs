@@ -1,4 +1,12 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
 [[headers]]
   for = "/*"
   [headers.values]
     Access-Control-Allow-Origin = "*"
+
+[functions]
+  # Sets a custom directory for Netlify Functions
+  directory = ".netlify\edge-functions"
