@@ -24,6 +24,7 @@ import {
   submitTodayProgress,
   getMemoriesLength,
   textCors,
+  textCorsServer,
 } from "~/api/api";
 import { createStore } from "solid-js/store";
 import {
@@ -415,6 +416,11 @@ const Vocabulary: Component<{}> = (props) => {
     console.log(res);
   };
 
+  const testServerFunction = async () => {
+    const res = await textCorsServer();
+    console.log(res);
+  };
+
   return (
     <MetaProvider>
       <Title>Übermensch</Title>
@@ -483,6 +489,7 @@ const Vocabulary: Component<{}> = (props) => {
 
           <div class="vocabularyContent">
             <button onClick={testFunction}>click</button>
+            <button onClick={testServerFunction}>clickServer</button>
             <div class="searchContainer">
               {/* Search result */}
               <Index each={searchResult()}>

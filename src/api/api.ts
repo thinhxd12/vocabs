@@ -812,3 +812,16 @@ export const textCors = async () => {
         console.log(error);
     }
 }
+
+export const textCorsServer = async () => {
+    "use server";
+    // const url = `https://www.oxfordlearnersdictionaries.com/definition/american_english/${text}`;
+    const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=hello`;
+    try {
+        const response = await fetch(url);
+        const pageImgHtml = await response.text();
+        return pageImgHtml;
+    } catch (error) {
+        console.log(error);
+    }
+}
