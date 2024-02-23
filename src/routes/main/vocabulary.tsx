@@ -23,6 +23,7 @@ import {
   getVocabularyFromRange,
   submitTodayProgress,
   getMemoriesLength,
+  textCors,
 } from "~/api/api";
 import { createStore } from "solid-js/store";
 import {
@@ -409,6 +410,11 @@ const Vocabulary: Component<{}> = (props) => {
 
   // -------------------MOBILE END-------------------- //
 
+  const testFunction = async () => {
+    const res = await textCors();
+    console.log(res);
+  };
+
   return (
     <MetaProvider>
       <Title>Übermensch</Title>
@@ -476,6 +482,7 @@ const Vocabulary: Component<{}> = (props) => {
           </Show>
 
           <div class="vocabularyContent">
+            <button onClick={testFunction}>click</button>
             <div class="searchContainer">
               {/* Search result */}
               <Index each={searchResult()}>
