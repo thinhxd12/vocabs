@@ -818,9 +818,15 @@ export const textCorsServer = async () => {
     // const url = `https://www.oxfordlearnersdictionaries.com/definition/american_english/${text}`;
     const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=hello`;
     try {
-        const response = await fetch(url);
-        const pageImgHtml = await response.text();
-        return pageImgHtml;
+        const response = await fetch(url, { redirect: "manual" });
+        if (response.status === 302) {
+            const newLocation = response.headers.get("location");
+            // console.log(newLocation);
+
+            const newRes = await fetch(`${newLocation}`);
+            const pageImgHtml = await newRes.text();
+            return pageImgHtml;
+        }
     } catch (error) {
         console.log(error);
     }

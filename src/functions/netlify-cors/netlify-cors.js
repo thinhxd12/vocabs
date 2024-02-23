@@ -13,6 +13,7 @@ const handler = async (event) => {
   }
 };
 
+
 function handleGet(event) {
   return {
     statusCode: 200,
@@ -42,13 +43,11 @@ function handleOptions(event) {
 
 function getCorsHeaders() {
   return {
-    "access-control-allow-methods": "POST,OPTIONS",
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers":
-      "Origin, X-Requested-With, Content-Type, Accept",
-    "Access-Control-Max-Age": "2592000",
-    "Access-Control-Allow-Credentials": "true",
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE',
+    'Access-Control-Allow-Credentials': true,
   };
 }
 
-export default { handler };
+export default handler;
