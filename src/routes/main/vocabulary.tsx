@@ -546,12 +546,14 @@ const Vocabulary: Component<{}> = (props) => {
                         <OcCopy2 size={17} />
                       </button>
                     </div>
-                    <button
-                      class="quoteBtnClose"
-                      onClick={() => setShowQuotes(false)}
-                    >
-                      <OcX2 size={12} />
-                    </button>
+                    <div class="quoteHeaderRight">
+                      <button
+                        class="quoteBtnClose"
+                        onClick={() => setShowQuotes(false)}
+                      >
+                        <OcX2 size={12} />
+                      </button>
+                    </div>
                   </div>
                   <div class="quoteBody">
                     <Show

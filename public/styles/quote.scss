@@ -11,23 +11,29 @@
         left: 0;
         width: 100%;
         display: flex;
-        align-items: flex-start;
         justify-content: space-between;
+        align-items: flex-start;
         border-bottom: 1px solid $color-border;
         background: $color-background-4;
-        padding: 3px 0 3px 3px;
+        height: 27px;
 
         .quoteHeaderLeft {
+            height: 100%;
             @include flex;
+            padding: 0 3px;
 
             .quoteBtn {
                 @include baseButton(36px);
             }
         }
 
-        .quoteBtnClose {
-            margin-right: 2px;
-            @include baseButton(28px);
+        .quoteHeaderRight {
+            @include flex;
+            padding: 1px;
+
+            .quoteBtnClose {
+                @include baseButton(28px);
+            }
         }
     }
 

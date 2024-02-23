@@ -12,14 +12,17 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #343434;
+        align-items: flex-start;
+        border-bottom: 1px solid $color-border;
         background: #f7f7f7;
         z-index: 99;
-        height: 24px;
-        padding: 1px 1px 3px 3px;
+        height: 25px;
 
         .definitionHeaderLeft {
+            height: 100%;
+            @include flex;
+            padding: 0 6px;
+
             .definitionHeaderText {
                 span {
                     @include font('Fraktur', 14px, $color-black, normal, normal, 14px);
@@ -42,6 +45,7 @@
 
         .definitionHeaderRight {
             @include flex;
+            padding: 1px;
 
             .definitionBtn {
                 @include baseButton(28px);

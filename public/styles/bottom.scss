@@ -28,11 +28,11 @@
         border: 0;
         outline: 0;
         cursor: pointer;
-        @include font('Roslindale', 12px, #7c7b7a, 600, normal, 30px);
+        @include font('Roslindale', 12px, #7c7b7a, 500, normal, 30px);
         letter-spacing: 0.3px;
         text-align: center;
         overflow: hidden;
-        transition: color 0.2s ease-in-out;
+        transition: color 0.1s;
 
         &:first-child {
             max-width: 90px;
