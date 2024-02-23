@@ -2,7 +2,12 @@
   publish = "dist"
   command = "npm run build"
   edge_functions = ".netlify/edge-functions"
+  functions = "src/netlify/functions/oxford"
 
 [[edge_functions]]
   path = "/*"
   function = "server"
+
+[functions]
+  node_bundler = "esbuild"
+

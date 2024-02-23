@@ -412,8 +412,12 @@ const Vocabulary: Component<{}> = (props) => {
   // -------------------MOBILE END-------------------- //
 
   const testFunction = async () => {
-    const res = await textCors();
-    console.log(res);
+    fetch("/.netlify/functions/oxford")
+      .then((resp) => resp.json())
+      .then((data) => {
+        const text = data.last_counted;
+        console.log(text);
+      });
   };
 
   const testServerFunction = async () => {
