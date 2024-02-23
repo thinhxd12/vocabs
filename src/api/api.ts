@@ -801,7 +801,7 @@ const cleanDataMinutely = (data: MinutelyType[]) => {
 };
 
 export const textCors = async () => {
-    "use server";
+    // "use server";
     // const url = `https://www.oxfordlearnersdictionaries.com/definition/american_english/${text}`;
     const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=hello`;
     try {
