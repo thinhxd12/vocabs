@@ -3,16 +3,9 @@
   command = "npm run build"
   edge_functions = ".netlify/edge-functions"
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    Access-Control-Allow-Origin = "*"
-
 [[edge_functions]]
   path = "/*"
   function = "server"
 
-[[redirects]]
-  from = "https://www.oxfordlearnersdictionaries.com/search/american_english/direct/*"
-  to = "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez"
-  status = 200
+[functions]
+  directory = "src/functions/netlify-cors"

@@ -31,26 +31,32 @@ function handlePost(event) {
   };
 }
 
-function handleOptions(event,request) {
-  return {
-    statusCode: 200,
+function handleOptions(event, request) {
+  // return {
+  //   statusCode: 200,
+  //   headers: {
+  //     ...getCorsHeaders(),
+  //     "Access-Control-Allow-Headers": request.headers.get(
+  //       "Access-Control-Request-Headers"
+  //     ),
+  //   },
+  // };
+  return new Response(null, {
     headers: {
       ...getCorsHeaders(),
       "Access-Control-Allow-Headers": request.headers.get(
         "Access-Control-Request-Headers"
       ),
     },
-  };
+  });
 }
 
 function getCorsHeaders() {
   return {
-    "access-control-allow-methods": "POST,OPTIONS",
     "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Headers":
-      "Origin, X-Requested-With, Content-Type, Accept",
-    "Access-Control-Max-Age": "2592000",
-    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Allow-Methods": "GET,HEAD,POST,OPTIONS",
+    "Access-Control-Max-Age": "86400",
   };
+
 }
-module.exports = { handler };
+export default { handler };
