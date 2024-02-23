@@ -1,0 +1,17 @@
+[functions]
+  node_bundler = "esbuild" #Tell netlify to use esbuild to build either locally or remotely
+
+[build]
+# publish = "no-www" # The path to your static content folder after build
+functions = "src/functions/netlify-cors"# The path to your functions after build
+autoLaunch = false
+
+# Configuration for local deploy
+[dev]
+functions = "src/functions/netlify-cors"# The path to your functions after build
+autoLaunch = false
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/netlify-cors"
+  status = 200
