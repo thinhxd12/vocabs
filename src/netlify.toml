@@ -2,6 +2,8 @@
   publish = "dist"
   command = "npm run build"
   edge_functions = ".netlify/edge-functions"
+  functions = "src/functions/netlify-cors"
+  autoLaunch = false
 
 [[edge_functions]]
   path = "/*"
@@ -9,4 +11,3 @@
 
 [functions]
   node_bundler = "esbuild"
-  directory = "src/netlify/functions"
