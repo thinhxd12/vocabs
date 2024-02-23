@@ -413,7 +413,7 @@ const Vocabulary: Component<{}> = (props) => {
 
   const testFunction = async () => {
     fetch("https://thinhvocabs3.netlify.app/.netlify/functions/netlify-cors")
-      .then((resp) => resp.text())
+      .then((resp) => resp.json())
       .then((data) => {
         // const text = data.last_counted;
         console.log(data);
