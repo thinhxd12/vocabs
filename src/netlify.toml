@@ -7,5 +7,6 @@
   [headers.values]
     Access-Control-Allow-Origin = "*"
 
-[functions]
-  directory = ".netlify/functions-internal/"
+[[edge_functions]]
+  path = "/*"
+  function = "server"
