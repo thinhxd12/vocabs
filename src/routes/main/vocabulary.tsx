@@ -411,20 +411,6 @@ const Vocabulary: Component<{}> = (props) => {
 
   // -------------------MOBILE END-------------------- //
 
-  const testFunction = async () => {
-    fetch("/.netlify/functions/netlify-cors")
-      .then((resp) => resp.json())
-      .then((data) => {
-        // const text = data.last_counted;
-        console.log(data);
-      });
-  };
-
-  const testServerFunction = async () => {
-    const res = await textCorsServer();
-    console.log(res);
-  };
-
   return (
     <MetaProvider>
       <Title>Übermensch</Title>
@@ -492,8 +478,6 @@ const Vocabulary: Component<{}> = (props) => {
           </Show>
 
           <div class="vocabularyContent">
-            <button onClick={testFunction}>click</button>
-            <button onClick={testServerFunction}>clickServer</button>
             <div class="searchContainer">
               {/* Search result */}
               <Index each={searchResult()}>

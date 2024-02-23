@@ -2,7 +2,6 @@
   publish = "dist"
   command = "npm run build"
   edge_functions = ".netlify/edge-functions"
-  functions = "src/functions/netlify-cors"
   autoLaunch = false
 
 [[edge_functions]]
