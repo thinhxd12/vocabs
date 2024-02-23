@@ -13,5 +13,5 @@ autoLaunch = false
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/netlify-cors"
+  to = "/functions/netlify-cors/netlify-cors.js"
   status = 200
