@@ -74,7 +74,7 @@ const MainLayout = (props: RouteSectionProps) => {
           animate={{
             maxWidth: toggleMainPage() ? "calc(50vw - 180px)" : "unset",
           }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, easing: "ease" }}
         >
           <Presence>
             <Show when={!toggleMainPage()}>
@@ -83,19 +83,16 @@ const MainLayout = (props: RouteSectionProps) => {
                 initial={{
                   opacity: 0,
                   x: "-100%",
-                  scale: 0.6,
                 }}
                 animate={{
                   opacity: 1,
                   x: 0,
-                  scale: 1,
                 }}
                 exit={{
                   opacity: 0,
                   x: "-100%",
-                  scale: 0.6,
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.6, easing: "ease" }}
               >
                 <img class="mainImage" src={imageObj.image} />
                 <img class="mainImageBlurred" src={imageObj.image} />
@@ -125,7 +122,7 @@ const MainLayout = (props: RouteSectionProps) => {
             width: toggleMainPage() ? "calc(50vw - 180px)" : "300px",
             background: toggleMainPage() ? "#000" : "#121212",
           }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.6, easing: "ease" }}
         >
           <Presence>
             <Show when={!toggleMainPage()}>
@@ -143,7 +140,7 @@ const MainLayout = (props: RouteSectionProps) => {
                   opacity: 0,
                   x: "-100%",
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.6, easing: "ease" }}
               >
                 <div class="mainDescriptionHeader">
                   <p class="mainDescriptionDate">{imageObj.date}</p>
