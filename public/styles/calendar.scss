@@ -105,13 +105,13 @@
                 position: relative;
 
                 .dateText {
-                    @include font('Rubik', 14px, $color-calendar-text-2, 600, normal, 21px);
+                    @include font('Rubik', 13px, $color-calendar-text-2, 600, normal, 21px);
                     height: 21px;
                     padding-top: 1px;
                 }
 
                 .dateTextThisMonth {
-                    @include font('Rubik', 14px, $color-calendar-text-1, 700, normal, 21px);
+                    @include font('Rubik', 13px, $color-calendar-text-1, 600, normal, 21px);
                     height: 21px;
                     padding-top: 1px;
                 }
@@ -193,7 +193,7 @@
                 padding: 0 6px;
                 position: relative;
                 cursor: default;
-                @include font('Rubik', 11px, $color-white, 400, normal, 18px);
+                @include font('Rubik', 10px, $color-white, 500, normal, 18px);
 
                 &::after {
                     content: '';
@@ -213,7 +213,7 @@
                 width: 120px;
                 height: 18px;
                 padding: 0 12px;
-                @include font('Rubik', 11px, $color-black, 400, normal, 18px);
+                @include font('Rubik', 10px, $color-black, 400, normal, 18px);
                 cursor: default;
             }
         }
@@ -269,7 +269,7 @@
                         padding: 3px;
                         outline: 0;
                         width: 100%;
-                        @include font('Rubik', 12px, $color-black, 400, normal, 18px);
+                        @include font('Rubik', 11px, $color-black, 400, normal, 18px);
                     }
 
                     .calendarSelect {
@@ -279,7 +279,7 @@
                         padding: 0 3px;
                         outline: 0;
                         width: 100%;
-                        @include font('Rubik', 12px, $color-white, 400, normal, 18px);
+                        @include font('Rubik', 11px, $color-white, 400, normal, 18px);
                         background: $color-calendar-black;
                     }
 

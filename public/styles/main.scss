@@ -116,7 +116,8 @@
                 position: sticky;
                 top: 0;
                 padding-bottom: 6px;
-                border-bottom: 1px solid #474747;
+                // border-bottom: 1px solid #474747;
+                border-bottom: 0.5px solid rgba(22, 24, 35, 0.12);
                 background: $color-background-3;
 
                 .mainDescriptionDate {
