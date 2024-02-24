@@ -38,7 +38,7 @@
 
             p {
                 text-align: center;
-                font-size: 11px;
+                font-size: 10px;
                 line-height: 10px;
             }
 
@@ -71,12 +71,15 @@
             @include flex-center;
             width: 100%;
             margin: 0 auto;
-            margin-bottom: 3px;
+            padding: 1px 0;
             @include font('Poppins', 12px, $color-calendar-white, 600, normal, 21px);
 
             &:not(:first-child) {
-                padding-bottom: 2px;
                 border-bottom: 1px dotted $color-calendar-border;
+            }
+
+            &:nth-child(2) {
+                padding: 2px 0 0;
             }
 
             .calendarWeekTitle {
@@ -86,6 +89,7 @@
                 cursor: default;
                 height: 21px;
                 width: 49px;
+                line-height: 24px;
 
                 &:first-child {
                     color: $color-red-1;
@@ -101,11 +105,15 @@
                 position: relative;
 
                 .dateText {
-                    @include font('Rubik', 13px, $color-calendar-text-2, 600, normal, 21px);
+                    @include font('Rubik', 14px, $color-calendar-text-2, 600, normal, 21px);
+                    height: 21px;
+                    padding-top: 1px;
                 }
 
                 .dateTextThisMonth {
-                    @include font('Rubik', 13px, $color-calendar-text-1, 600, normal, 21px);
+                    @include font('Rubik', 14px, $color-calendar-text-1, 700, normal, 21px);
+                    height: 21px;
+                    padding-top: 1px;
                 }
 
                 .dateTimeIndexHidden {
@@ -121,8 +129,8 @@
 
                     div:first-child {
                         text-decoration: underline;
-                        text-underline-offset: 2px;
-                        line-height: 11px;
+                        text-underline-offset: 3px;
+                        line-height: 14px;
                     }
                 }
 
@@ -137,14 +145,20 @@
                 .todayDate {
                     border-radius: 3px;
                     width: 21px;
-                    height: 100%;
+                    height: 21px;
                     text-align: center;
                     background: $color-calendar-green-1;
                     color: $color-black;
                     font-weight: 700;
                     cursor: pointer;
-                    box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 9px, rgba(0, 0, 0, 0.22) 0px 6px 9px;
+                    box-shadow: 0 3px 9px 0 rgba(21, 94, 46, 0.3), 0 6px 18px 0 rgba(21, 94, 46, 0.2);
                 }
+            }
+        }
+
+        .calendarWeek .calendarDay:nth-child(1) {
+            .dateTextThisMonth {
+                color: $color-red-1;
             }
         }
 

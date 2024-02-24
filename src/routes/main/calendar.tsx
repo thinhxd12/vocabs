@@ -179,11 +179,11 @@ const About: Component<{}> = (props) => {
                                   {Math.max(date().time1, date().time2)}
                                 </div>
                               </Show>
-                              <div
-                                class={
-                                  date().month === todayDate().getMonth()
-                                    ? "dateTextThisMonth"
-                                    : "dateText"
+
+                              <Show
+                                when={date().month === todayDate().getMonth()}
+                                fallback={
+                                  <div class="dateText">{date().date}</div>
                                 }
                               >
                                 <Show
@@ -191,16 +191,18 @@ const About: Component<{}> = (props) => {
                                     date().month === todayDate().getMonth() &&
                                     date().date === todayDate().getDate()
                                   }
-                                  fallback={date().date}
+                                  fallback={
+                                    <div class="dateTextThisMonth">
+                                      {date().date}
+                                    </div>
+                                  }
                                 >
-                                  <div
-                                    class="todayDate"
-                                    onClick={() => setShowTodayReset(true)}
-                                  >
+                                  <div class="dateTextThisMonth todayDate">
                                     {date().date}
                                   </div>
                                 </Show>
-                              </div>
+                              </Show>
+                              
                               <Show when={"time1" in date()}>
                                 <Show
                                   when={date().date === todayDate().getDate()}
