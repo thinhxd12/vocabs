@@ -16,25 +16,23 @@ import {
   deleteVocabulary,
   getBookmarkText,
   getSearchText,
-  checkVocabulary,
   setBookmark,
-  archiveVocabulary,
   getCalendarTodayData,
   getVocabularyFromRange,
   submitTodayProgress,
+  checkVocabulary,
+  archiveVocabulary,
   getMemoriesLength,
-  textCors,
-  textCorsServer,
 } from "~/api/api";
 import { createStore } from "solid-js/store";
 import {
-  OcTrash2,
   OcChevronleft2,
   OcStar2,
   OcStarfill2,
   OcChevronright2,
   OcX2,
   OcCopy2,
+  OcAlertfill2,
 } from "solid-icons/oc";
 import Definition from "~/components/definition";
 import "/public/styles/vocabulary.scss";
@@ -45,7 +43,6 @@ import Translation from "~/components/translation";
 import Edit from "~/components/edit";
 import { createIntervalCounter } from "@solid-primitives/timer";
 import { useGlobalContext } from "~/globalcontext/store";
-import { createAudio } from "@solid-primitives/audio";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 
 export const route = {
@@ -55,10 +52,12 @@ export const route = {
 } satisfies RouteDefinition;
 
 let timerRef: NodeJS.Timeout;
+let audioRef: HTMLAudioElement;
+
 const [currentText, setCurrentText] = createSignal<VocabularyType>();
 const [showDefinitions, setShowDefinitions] = createSignal(false);
 
-const Vocabulary: Component<{}> = (props) => {
+const Vocabulary: Component<{}> = () => {
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
 
@@ -130,7 +129,7 @@ const Vocabulary: Component<{}> = (props) => {
   const archiveVocabularyAction = useAction(archiveVocabulary);
   const getMemoriesLengthAction = useAction(getMemoriesLength);
 
-  const handleRenderText = async (text: VocabularyType, count?: number) => {
+  const handleRenderText = async (text: VocabularyType) => {
     setCurrentText(text);
     setShowDefinitions(true);
     setSearchTerm("");
@@ -287,8 +286,6 @@ const Vocabulary: Component<{}> = (props) => {
   };
 
   const {
-    totalMemories,
-    setTotalMemories,
     bottomIndex,
     setBottomIndex,
     bottomActive,
@@ -299,6 +296,7 @@ const Vocabulary: Component<{}> = (props) => {
     setCounter,
     wordList,
     setWordList,
+    setTotalMemories,
   } = useGlobalContext();
 
   createEffect(
@@ -347,10 +345,6 @@ const Vocabulary: Component<{}> = (props) => {
   const [delay, setDelay] = createSignal<number | false>(false);
   const countDownTimer = createIntervalCounter(delay);
   const [timerCounter, setTimerCounter] = createSignal<number>(7);
-  const [audioSource, setAudioSource] = createSignal<string>("");
-  const [playing, setPlaying] = createSignal(false);
-  const [volume, setVolume] = createSignal(1);
-  const [audio, { seek }] = createAudio(audioSource, playing, volume);
 
   createEffect(
     on(countDownTimer, () => {
@@ -359,8 +353,7 @@ const Vocabulary: Component<{}> = (props) => {
       } else {
         stopTimer();
         showDesktopNotification();
-        setAudioSource("/sounds/09_Autumn_Mvt_3_Allegro.mp3");
-        setPlaying(true);
+        audioRef.play();
       }
     })
   );
@@ -387,9 +380,9 @@ const Vocabulary: Component<{}> = (props) => {
       body: `${letter}${newProgress}`,
     });
 
-    notification.onclose = (event) => {
+    notification.onclose = () => {
       setBottomActive(true);
-      setPlaying(false);
+      audioRef.pause();
     };
   };
 
@@ -416,6 +409,11 @@ const Vocabulary: Component<{}> = (props) => {
       <Title>Übermensch</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
+      <audio
+        src="/sounds/09_Autumn_Mvt_3_Allegro.mp3"
+        hidden
+        ref={audioRef}
+      ></audio>
       <Motion.div
         class="vocabularyContainer"
         animate={{ opacity: [0, 1] }}
@@ -500,16 +498,16 @@ const Vocabulary: Component<{}> = (props) => {
                     </button>
                     <Show when={i + 1 !== deleteBtnIndex()}>
                       <button
-                        class="itemDeleteBtn"
+                        class="button button--primary"
                         onClick={() => setDeleteBtnIndex(i + 1)}
                       ></button>
                     </Show>
                     <Show when={i + 1 === deleteBtnIndex()}>
                       <button
-                        class="itemDeleteBtn"
+                        class="button button--primary"
                         onClick={() => handleDeleteVocabulary(data().text)}
                       >
-                        <OcTrash2 size={12} />
+                        <OcAlertfill2 size={12} color="#ca140c" />
                       </button>
                     </Show>
                   </div>
@@ -519,15 +517,14 @@ const Vocabulary: Component<{}> = (props) => {
                 <div class="quoteContainer">
                   <div class="quoteHeader">
                     <div class="quoteHeaderLeft">
-                      <button class="quoteBtn" onclick={() => getQuote(-1)}>
+                      <button
+                        class="button button--quote"
+                        onclick={() => getQuote(-1)}
+                      >
                         <OcChevronleft2 size={17} />
                       </button>
                       <button
-                        class={
-                          currentQuote.check
-                            ? "quoteBtn quoteBtnActive"
-                            : "quoteBtn"
-                        }
+                        class="button button--quote"
                         onclick={() => checkQuote(!currentQuote.check)}
                       >
                         {currentQuote.check ? (
@@ -536,22 +533,25 @@ const Vocabulary: Component<{}> = (props) => {
                           <OcStar2 size={17} />
                         )}
                       </button>
-                      <button class="quoteBtn" onclick={() => getQuote(1)}>
+                      <button
+                        class="button button--quote"
+                        onclick={() => getQuote(1)}
+                      >
                         <OcChevronright2 size={17} />
                       </button>
                       <button
-                        class="quoteBtn"
+                        class="button button--quote"
                         onclick={() => copyQuoteToClipboard(currentQuote.value)}
                       >
-                        <OcCopy2 size={17} />
+                        <OcCopy2 size={14} />
                       </button>
                     </div>
                     <div class="quoteHeaderRight">
                       <button
-                        class="quoteBtnClose"
+                        class="button button--close"
                         onClick={() => setShowQuotes(false)}
                       >
-                        <OcX2 size={12} />
+                        <OcX2 size={15} />
                       </button>
                     </div>
                   </div>
@@ -560,10 +560,7 @@ const Vocabulary: Component<{}> = (props) => {
                       when={getBookmarkTextResult.result}
                       fallback={<p>loading...</p>}
                     >
-                      <span class="quoteDropCap">
-                        {currentQuote.value.slice(0, 1)}
-                      </span>
-                      <span>{currentQuote.value.slice(1)}</span>
+                      <p class="quotePassage">{currentQuote.value}</p>
                     </Show>
                   </div>
                 </div>
@@ -605,50 +602,6 @@ const Vocabulary: Component<{}> = (props) => {
                   </Motion>
                 </Show>
               </Presence>
-              {/* Translation */}
-              {/* <Presence>
-                <Show when={showTranslate()}>
-                  <Motion
-                    initial={{
-                      opacity: 0,
-                      y: -30,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: 30,
-                    }}
-                    transition={{ duration: 0.3, easing: "ease-in-out" }}
-                  >
-                    <Show when={!isMobile()}>
-                      <div class="newTranslateContainer">
-                        <img
-                          src="/images/main/input-left-corner.png"
-                          class="myInputLeftOrnament"
-                        />
-                        <input
-                          class="newTranslateInput"
-                          value={translateTerm()}
-                          onInput={(e) => setTranslateTerm(e.target.value)}
-                          onKeyDown={onKeyDownTrans}
-                        />
-                        <img
-                          src="/images/main/input-right-corner.png"
-                          class="myInputRightOrnament"
-                        />
-                      </div>
-                    </Show>
-                    <Translation
-                      item={translateText()!}
-                      text={translateTerm()}
-                      onClose={handleCloseTranslation}
-                    />
-                  </Motion>
-                </Show>
-              </Presence> */}
             </div>
           </div>
 

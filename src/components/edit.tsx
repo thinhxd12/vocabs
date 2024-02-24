@@ -12,7 +12,6 @@ import "/public/styles/toast.scss";
 import { OcChevrondown2, OcChevronup2, OcX2 } from "solid-icons/oc";
 import { VocabularyType } from "~/types";
 import { action, useSubmission } from "@solidjs/router";
-import { Motion, Presence } from "solid-motionone";
 import { createStore } from "solid-js/store";
 import Definition from "./definition";
 import {
@@ -125,13 +124,15 @@ const Edit: Component<{
     on(
       () => editActionResult.result,
       () => {
-        if (submittedForm() && editActionResult.result?.message === "success") {
-          popSuccess();
-        } else if (
-          editActionResult.result?.message !== "success" &&
-          editActionResult.result?.message !== undefined
-        )
-          popError(editActionResult.result?.message!);
+        if (submittedForm()) {
+          if (editActionResult.result?.message === "success") {
+            popSuccess();
+          } else if (
+            editActionResult.result?.message !== "success" &&
+            editActionResult.result?.message !== undefined
+          )
+            popError(editActionResult.result?.message!);
+        }
       }
     )
   );
@@ -142,7 +143,7 @@ const Edit: Component<{
         <div class="editHeaderLeft"></div>
         <div class="editHeaderRight">
           <button
-            class="editBtn"
+            class="button button--primary"
             onClick={() => setShowHandyEdit(!showHandyEdit())}
           >
             <Show
@@ -152,75 +153,75 @@ const Edit: Component<{
               <OcChevronup2 size={12} />
             </Show>
           </button>
-          <button class="editBtn" onclick={props.onClose}>
-            <OcX2 size={12} />
+          <button class="button button--close" onclick={props.onClose}>
+            <OcX2 size={15} />
           </button>
         </div>
       </div>
       <div class="editBody">
-        <Presence>
-          <Show when={showHandyEdit()}>
-            <Motion.div
-              class="handyEditContainer"
-              initial={{ scaleY: 0 }}
-              animate={{ scaleY: 1 }}
-              exit={{ scaleY: 0 }}
-              transition={{ duration: 0.3, easing: "ease-in-out" }}
-            >
-              <form action={handleSubmitDefinition} method="post">
-                <div class="editInputGroup">
-                  <input
-                    class="editInputItem"
-                    placeholder="Image"
-                    name="image"
-                    autocomplete="off"
-                  />
-                </div>
-                <div class="editInputGroup">
-                  <input
-                    class="editInputItem"
-                    placeholder="Definition"
-                    autocomplete="off"
-                    name="definition"
-                  />
-                </div>
-                <div class="editInputGroup">
-                  <input
-                    class="editInputItem"
-                    placeholder="Example"
-                    autocomplete="off"
-                    name="example"
-                  />
-                </div>
-                <div class="editInputGroup">
-                  <input
-                    class="editInputItem"
-                    placeholder="Synonym"
-                    autocomplete="off"
-                    name="synonym"
-                  />
-                </div>
-                <div class="editInputGroup">
-                  <textarea
-                    class="editInputItem editInputItemResult"
-                    value={handyEditResult()}
-                  />
-                </div>
-                <button type="submit" class="editSubmitBtn">
-                  Submit
-                </button>
-              </form>
-            </Motion.div>
-          </Show>
-        </Presence>
+        <Show when={showHandyEdit()}>
+          <div class="handyEditContainer">
+            <form action={handleSubmitDefinition} method="post">
+              <div class="editInputGroup">
+                <input
+                  class="editInputItem"
+                  placeholder="Image"
+                  name="image"
+                  autocomplete="off"
+                />
+              </div>
+              <div class="editInputGroup">
+                <input
+                  class="editInputItem"
+                  placeholder="Definition"
+                  autocomplete="off"
+                  name="definition"
+                />
+              </div>
+              <div class="editInputGroup">
+                <input
+                  class="editInputItem"
+                  placeholder="Example"
+                  autocomplete="off"
+                  name="example"
+                />
+              </div>
+              <div class="editInputGroup">
+                <input
+                  class="editInputItem"
+                  placeholder="Synonym"
+                  autocomplete="off"
+                  name="synonym"
+                />
+              </div>
+              <div class="editInputGroup">
+                <textarea
+                  class="editInputItem editInputItemResult"
+                  value={handyEditResult()}
+                />
+              </div>
+              <button type="submit" class="button button--submit">
+                Submit
+              </button>
+            </form>
+          </div>
+        </Show>
 
         <form action={editVocabularyItem} method="post" class="editForm">
-          <div class="editInputGroup">
+          <div class="newTranslateContainer">
+            <img
+              src="/images/main/input-left-corner.png"
+              class="myInputLeftOrnament"
+            />
             <input
-              class="editInput"
+              class="newTranslateInput"
               name="text"
               autocomplete="off"
               value={props.item?.text}
+            />
+            <img
+              src="/images/main/input-right-corner.png"
+              class="myInputRightOrnament"
             />
           </div>
           <div class="editInputGroup">
@@ -273,7 +274,7 @@ const Edit: Component<{
           </div>
           <button
             type="submit"
-            class="editSubmitBtn"
+            class="button button--submit"
             onClick={() => setSubmittedForm(true)}
           >
             Submit

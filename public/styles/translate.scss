@@ -4,7 +4,6 @@
     @include baseBody($color-calendar-bg);
     width: 360px;
     padding-top: 0;
-    margin-bottom: 3px;
 
     .translateBody {
         .translateInput {
@@ -109,7 +108,7 @@
         border: 0;
         outline: 0;
         text-align: center;
-        @include font('Roslindale', 15px, $color-white, 500, normal, 27px);
+        @include font('Roslindale', 15px, $color-white, 500, normal, 12px);
     }
 
     .translateBtn {

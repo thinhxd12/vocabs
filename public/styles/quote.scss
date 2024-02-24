@@ -21,19 +21,11 @@
             height: 100%;
             @include flex;
             padding: 0 3px;
-
-            .quoteBtn {
-                @include baseButton(36px);
-            }
         }
 
         .quoteHeaderRight {
             @include flex;
             padding: 1px;
-
-            .quoteBtnClose {
-                @include baseButton(28px);
-            }
         }
     }
 
@@ -41,29 +33,16 @@
         font-size: 14px;
         line-height: 1.1rem;
         padding: 6px 9px;
-        min-height: 63px;
+        min-height: 80px;
 
-        .quoteDropCap {
-            @include font("Fraktur", 50px, $color-white, normal, normal, 50px);
-            background: $color-black;
-            text-align: center;
+        .quotePassage::first-letter {
+            @include font("NYTCheltenham", 60px, $color-white, normal, normal, 60px);
             float: left;
-            padding: 0 4px;
-            @include flex-center;
-            margin-right: 3px;
-            height: 50px;
-        }
-
-        .quoteMark {
-            font-size: 32px;
-            font-weight: 700;
-            line-height: 1rem;
-            display: inline-block;
-            height: 1rem;
-        }
-
-        .quoteLoading {
-            @include flex-center;
+            margin-right: 6px;
+            background: $color-black;
+            padding: 0 6px;
+            margin-top: 4px;
+            text-align: center;
         }
     }
 }

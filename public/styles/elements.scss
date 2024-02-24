@@ -1,0 +1,82 @@
+@import "./mixins.scss";
+
+.button {
+    margin-left: 1px;
+    border-radius: 3px;
+    outline: 0;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    @include flex-center();
+    font-family: "Rubik";
+    font-size: 10px;
+    background-image: url('/images/main/input-left-corner.png'),
+        url('/images/main/input-right-corner.png');
+    background-position: left top,
+        right top;
+    background-repeat: no-repeat,
+        no-repeat;
+    background-size: auto 100%,
+        auto 100%;
+
+    &:disabled {
+        opacity: 0.3;
+    }
+
+    &--primary {
+        background-color: $color-background-1;
+        color: #ececec;
+        width: 28px;
+        height: 15px;
+
+        &:hover {
+            color: $color-white;
+        }
+    }
+
+    &--success {
+        background-color: $color-background-1;
+        color: #ececec;
+        width: 28px;
+        height: 15px;
+
+        &:hover {
+            color: $color-red-2;
+        }
+    }
+
+    &--submit {
+        background-color: $color-background-1;
+        color: #ececec;
+        width: 42px;
+        height: 22px;
+        margin-top: 3px;
+
+        &:hover {
+            color: $color-white;
+        }
+    }
+
+    &--quote {
+        background-color: $color-background-1;
+        color: #ececec;
+        width: 36px;
+        height: 18px;
+
+        &:hover {
+            color: $color-white;
+        }
+    }
+
+    &--close {
+        background-color: $color-background-1;
+        color: #ececec;
+        width: 28px;
+        height: 15px;
+
+        &:hover {
+            color: $color-white;
+            background-color: $color-red-2;
+        }
+    }
+}

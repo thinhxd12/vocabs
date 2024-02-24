@@ -8,6 +8,7 @@ import {
   Switch,
   createEffect,
   createSignal,
+  on,
   onMount,
 } from "solid-js";
 import "/public/styles/edit.scss";
@@ -125,21 +126,32 @@ const Translation: Component<{
   //----------------------TOAST----------------------
   const popSuccess = () => toast.success("Success", { duration: 3000 });
   const popError = (msg: string) => toast.error(msg, { duration: 3000 });
+  const [submittedForm, setSubmittedForm] = createSignal<boolean>(false);
 
-  createEffect(() => {
-    if (insertActionResult.result?.message === "success") {
-      popSuccess();
-    } else if (insertActionResult.result?.message !== undefined)
-      popError(insertActionResult.result?.message!);
-  });
+  createEffect(
+    on(
+      () => insertActionResult.result,
+      () => {
+        if (submittedForm()) {
+          if (insertActionResult.result?.message === "success") {
+            popSuccess();
+          } else if (
+            insertActionResult.result?.message !== "success" &&
+            insertActionResult.result?.message !== undefined
+          )
+            popError(insertActionResult.result?.message!);
+        }
+      }
+    )
+  );
 
   return (
     <div class="edit" tabIndex={1}>
       <div class="editHeader">
         <div class="editHeaderLeft"></div>
         <div class="editHeaderRight">
-          <button class="editBtn" onclick={props.onClose}>
-            <OcX2 size={12} />
+          <button class="button button--close" onclick={props.onClose}>
+            <OcX2 size={15} />
           </button>
         </div>
       </div>
@@ -220,7 +232,11 @@ const Translation: Component<{
               value={240}
             />
           </div>
-          <button type="submit" class="editSubmitBtn">
+          <button
+            type="submit"
+            class="button button--submit"
+            onClick={() => setSubmittedForm(true)}
+          >
             Submit
           </button>
         </form>

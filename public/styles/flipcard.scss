@@ -129,29 +129,32 @@
                 padding-left: 12px;
 
                 .turnBoxItemMeaning {
-                    @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
                     letter-spacing: 1px;
                     text-align: left;
                     white-space: break-spaces;
                     cursor: default;
 
                     .turnBoxItemMeaningClass {
-                        margin-left: -9px;
-                        margin-bottom: 3px;
+                        @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
+                        margin: 5px 0 5px -9px;
                     }
 
                     .turnBoxItemMeaningText {
-                        margin-bottom: 3px;
+                        @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
+                        margin-bottom: 4px;
+                        position: relative;
+                        text-indent: 19px;
 
                         &::before {
-                            content: '';
+                            content: "";
                             display: inline-block;
-                            margin-right: 3px;
                             width: 15px;
                             height: 15px;
                             background: url('/images/main/clover1.png');
                             background-size: contain;
-                            vertical-align: middle;
+                            position: absolute;
+                            top: 1px;
+                            left: 0;
                         }
                     }
                 }

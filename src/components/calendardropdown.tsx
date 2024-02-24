@@ -16,10 +16,10 @@ const CalendarDropdown: Component<{
         </div>
         <div class="calendarDropdownHeaderRight">
           <button
-            class="calendarDropdownBtn"
+            class="button button--close"
             onclick={() => props.onClose(false)}
           >
-            <OcX2 size={12} />
+            <OcX2 size={15} />
           </button>
         </div>
       </div>

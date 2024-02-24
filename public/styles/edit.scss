@@ -15,10 +15,9 @@
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
-        border-bottom: 1px solid #343434;
+        border-bottom: 1px solid $color-border;
+        background: #f7f7f7;
         height: 25px;
-        padding: 3px;
-        background: $color-white;
 
         .editHeaderLeft {
             .editHeaderText {
@@ -29,11 +28,8 @@
         }
 
         .editHeaderRight {
+            padding: 1px;
             @include flex;
-
-            .editBtn {
-                @include baseButton(28px);
-            }
         }
     }
 
@@ -45,10 +41,12 @@
 
         .editForm {
             @include baseBody($color-white);
-            margin-bottom: 3px;
+            padding: 0 0 3px 0;
         }
 
         .editInputGroup {
+            padding: 0 3px;
+
             .editInput {
                 @include font("Roslindale", 13px, $color-black, 500, normal, 15px);
                 width: 100%;
@@ -80,11 +78,6 @@
                     display: none;
                 }
             }
-        }
-
-        .editSubmitBtn {
-            @include baseButton(42px);
-            font-size: 10px;
         }
     }
 }

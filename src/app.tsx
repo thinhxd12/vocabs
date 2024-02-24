@@ -4,7 +4,7 @@ import { FileRoutes } from "@solidjs/start";
 import { Suspense } from "solid-js";
 import "./app.scss";
 import "/public/styles/fonts.scss";
-
+import "/public/styles/elements.scss";
 
 export default function App() {
   return (

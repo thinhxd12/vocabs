@@ -288,8 +288,8 @@ const About: Component<{}> = (props) => {
                         </select>
                       </div>
                     </div>
-                    <button class="calendarSubmitBtn" type="submit">
-                      submit
+                    <button class="button button--submit" type="submit">
+                      Submit
                     </button>
                   </form>
                 </CalendarDropdown>
@@ -336,8 +336,8 @@ const About: Component<{}> = (props) => {
                         />
                       </div>
                     </div>
-                    <button class="calendarSubmitBtn" type="submit">
-                      submit
+                    <button class="button button--submit" type="submit">
+                      Submit
                     </button>
                   </form>
                 </CalendarDropdown>
@@ -403,8 +403,8 @@ const About: Component<{}> = (props) => {
                         />
                       </div>
                     </div>
-                    <button class="calendarSubmitBtn" type="submit">
-                      submit
+                    <button class="button button--submit" type="submit">
+                      Submit
                     </button>
                   </form>
                 </CalendarDropdown>
@@ -437,8 +437,8 @@ const About: Component<{}> = (props) => {
                         </select>
                       </div>
                     </div>
-                    <button class="calendarSubmitBtn" type="submit">
-                      submit
+                    <button class="button button--submit" type="submit">
+                      Submit
                     </button>
                   </form>
                 </CalendarDropdown>

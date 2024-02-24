@@ -167,7 +167,7 @@
         overflow-x: hidden;
         background: $color-black;
         position: relative;
-        margin-top: 6px;
+        margin-top: 1px;
 
         &::-webkit-scrollbar {
             display: none;
@@ -206,15 +206,6 @@
                     color: $color-calendar-green-1;
                     margin-left: 3px;
                     border-left: 3px solid $color-calendar-green-1;
-                }
-            }
-
-            .itemDeleteBtn {
-                @include baseButton(28px);
-                display: inline-flex;
-
-                &:hover {
-                    color: $color-red-3;
                 }
             }
 

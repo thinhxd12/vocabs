@@ -1,21 +1,24 @@
-import { Component, createEffect, createSignal, on, onCleanup } from "solid-js";
+import {
+  Component,
+  createEffect,
+  createMemo,
+  createSignal,
+  onCleanup,
+} from "solid-js";
 import { VocabularyType } from "~/types";
 import "/public/styles/flipcard.scss";
 import { Motion } from "solid-motionone";
-import { createAudio, makeAudioPlayer } from "@solid-primitives/audio";
-
-const [playing, setPlaying] = createSignal(false);
 
 const FlipCard: Component<{
   item: VocabularyType;
 }> = (props) => {
-  const [audioSource, setAudioSource] = createSignal<string>(props.item?.sound);
+  const currenText = createMemo(() => props.item);
+  const [audioSource, setAudioSource] = createSignal<string>("");
   const [turnBoxClass, setTurnBoxClass] = createSignal<string>("");
-  const [audio, { seek }] = createAudio(audioSource, playing);
 
   const renderMeaning = () => {
-    if (props.item) {
-      let cardMeaning = props.item?.meaning.replace(
+    if (currenText()?.meaning) {
+      let cardMeaning = currenText().meaning.replace(
         /\s\-(.+?)\-/g,
         `<p class="turnBoxItemMeaningClass">【 $1 】</p><p class="turnBoxItemMeaningText">`
       );
@@ -24,6 +27,7 @@ const FlipCard: Component<{
         "</p>";
       return cardMeaning;
     }
+    return "";
   };
 
   const createNumberArray = (num: number) => {
@@ -37,52 +41,44 @@ const FlipCard: Component<{
   const [renderNumber, setRenderNumber] = createSignal<number>(3);
   const [numbArray, setNumbArray] = createSignal<number[]>([3, 6, 9]);
 
-  createEffect(
-    on(
-      () => props.item?.text,
-      () => {
-        if (props.item?.sound) {
-          setAudioSource(props.item.sound);
-          setPlaying(true);
-        }
-
-        if (props.item?.number > 1) {
-          setRenderNumber(props.item.number);
-          setNumbArray(createNumberArray(props.item.number));
-          const timer1 = setTimeout(() => {
-            setRenderNumber(renderNumber() - 1);
-            setNumbArray(createNumberArray(renderNumber()));
-            setPlaying(false);
-          }, 2500);
-          onCleanup(() => {
-            clearTimeout(timer1);
-          });
-        }
-        if (props.item?.meaning) {
-          const timer2 = setTimeout(() => {
-            setTurnBoxClass(" turnBoxHover");
-            const meaningTTS = props.item?.meaning
-              .replace(/\s\-(.+?)\-/g, "+")
-              .replace(/\-/g, "+");
-            const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${meaningTTS}`;
-            setAudioSource(soundUrl);
-            setPlaying(true);
-          }, 3500);
-
-          const timer3 = setTimeout(() => {
-            setTurnBoxClass("");
-          }, 5500);
-          onCleanup(() => {
-            clearTimeout(timer2);
-            clearTimeout(timer3);
-          });
-        }
-      }
-    )
-  );
+  createEffect(() => {
+    const currentSound = currenText()?.sound;
+    if (currentSound) {
+      setAudioSource(currentSound);
+    }
+    if (currenText()?.number > 1) {
+      setRenderNumber(currenText().number);
+      setNumbArray(createNumberArray(currenText()?.number));
+      const timer1 = setTimeout(() => {
+        setRenderNumber(renderNumber() - 1);
+        setNumbArray(createNumberArray(renderNumber()));
+      }, 2500);
+      onCleanup(() => {
+        clearTimeout(timer1);
+      });
+    }
+    if (currenText()?.meaning) {
+      const timer2 = setTimeout(() => {
+        setTurnBoxClass(" turnBoxHover");
+        const meaningTTS = currenText()
+          .meaning.replace(/\s\-(.+?)\-/g, "+")
+          .replace(/\-/g, "+");
+        const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${meaningTTS}`;
+        setAudioSource(soundUrl);
+      }, 3500);
+      const timer3 = setTimeout(() => {
+        setTurnBoxClass("");
+      }, 5500);
+      onCleanup(() => {
+        clearTimeout(timer2);
+        clearTimeout(timer3);
+      });
+    }
+  });
 
   return (
     <>
+      <audio src={audioSource()} hidden autoplay></audio>
       <div class="flipCardLeftContent">
         <div class="numberFlipContainer">
           <div class="numberFlipBackground">
@@ -174,9 +170,9 @@ const FlipCard: Component<{
         <div class={`turnBoxContainer${turnBoxClass()}`}>
           <div class="turnBoxFace turnBoxFaceNum1">
             <div class="turnBoxContent1">
-              <p class="turnBoxItemClass">{props.item?.class}</p>
-              <p class="turnBoxItemText">{props.item?.text}</p>
-              <p class="turnBoxItemPhonetic">{props.item?.phonetic}</p>
+              <p class="turnBoxItemClass">{currenText()?.class}</p>
+              <p class="turnBoxItemText">{currenText()?.text}</p>
+              <p class="turnBoxItemPhonetic">{currenText()?.phonetic}</p>
               <p class="turnBoxItemDate">05/07/22</p>
             </div>
           </div>

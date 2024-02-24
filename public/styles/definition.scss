@@ -46,10 +46,6 @@
         .definitionHeaderRight {
             @include flex;
             padding: 1px;
-
-            .definitionBtn {
-                @include baseButton(28px);
-            }
         }
     }
 
@@ -74,13 +70,29 @@
             }
 
 
+            // .num {
+            //     @include font("Fraktur", 12px, $color-black, normal, normal, 15px);
+            //     position: absolute;
+            //     top: 3px;
+            //     left: 3px;
+            //     letter-spacing: 0.1em;
+            //     height: 15px;
+
+            //     span:nth-child(2) {
+            //         font-size: 15px;
+            //         line-height: 15px;
+            //         margin-left: 1px;
+            //     }
+            // }
+
             .num {
                 @include font("Fraktur", 12px, $color-black, normal, normal, 15px);
-                position: absolute;
-                top: 3px;
-                left: 3px;
+                // position: absolute;
+                // top: 3px;
+                // left: 3px;
                 letter-spacing: 0.1em;
                 height: 15px;
+                float: left;
 
                 span:nth-child(2) {
                     font-size: 15px;
@@ -93,13 +105,13 @@
             .dsense_h {
                 @include font('NYTImperial', 12px, $color-black, 500, italic, 15px);
                 display: block;
-                text-indent: 9px;
+                text-indent: 3px;
             }
 
             .def {
                 @include font('NYTCheltenham', 13px, $color-black, 700, normal, 15px);
                 display: block;
-                text-indent: 12px;
+                text-indent: 3px;
 
                 &::first-letter {
                     text-transform: uppercase;
