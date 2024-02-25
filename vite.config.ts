@@ -22,7 +22,10 @@ export default defineConfig({
             prerender: {
                 crawlLinks: true
             },
-            preset: "cloudflare",
+            preset: "cloudflare-pages",
+            rollupConfig: {
+                external: ["node:async_hooks"]
+            }
         }
     }
 });
