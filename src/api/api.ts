@@ -235,10 +235,10 @@ async function fetchGetText(url: string) {
 
 //get data definition from oxfox america
 export const getTextDataAmerica = async (text: string) => {
-    "use server";
+    // "use server";
     // const url = `https://www.oxfordlearnersdictionaries.com/definition/american_english/${text}`;
-    const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-    // const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+    // const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+    const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
     const result: VocabularyType = {
         text: "",
         sound: "",
