@@ -10,21 +10,3 @@
 
 [functions]
   node_bundler = "esbuild"
-
-[[redirects]]
-  from = "/cors/*"
-  to = "https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=:splat"
-  status = 200
-  force = true
-  
-[[redirects]]
-  from = "/cors-cambridge/*"
-  to = "https://dictionary.cambridge.org/dictionary/english/:splat"
-  status = 302
-  force = true
-
-[[headers]]
-    for = "/cors/*"
-    [headers.values]
-        Access-Control-Allow-Origin = "*"
-

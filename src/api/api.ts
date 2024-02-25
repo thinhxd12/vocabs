@@ -237,8 +237,7 @@ async function fetchGetText(url: string) {
 export const getTextDataAmerica = async (text: string) => {
     // "use server";
     // const url = `https://www.oxfordlearnersdictionaries.com/definition/american_english/${text}`;
-    const url = `/cors/${text}`;
-    // const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+    const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
     const result: VocabularyType = {
         text: "",
         sound: "",
@@ -253,7 +252,6 @@ export const getTextDataAmerica = async (text: string) => {
     try {
         const response = await fetch(url);
         const pageImgHtml = await response.text();
-        console.log(pageImgHtml);
         
         const doc = parse(pageImgHtml);
 
@@ -378,8 +376,7 @@ export const getTextDataEnglish = async (text: string) => {
 
 //get data definition from cambridge
 export const getTextDataCambridge = async (text: string) => {
-    const url = `/cors-cambridge/${text}`;
-    // const url = DEFAULT_CORS_PROXY + `https://dictionary.cambridge.org/dictionary/english/${text}`;
+    const url = DEFAULT_CORS_PROXY + `https://dictionary.cambridge.org/dictionary/english/${text}`;
     const result: VocabularyType = {
         text: "",
         sound: "",
