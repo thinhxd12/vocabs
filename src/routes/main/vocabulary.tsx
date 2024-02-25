@@ -9,7 +9,7 @@ import {
   onMount,
 } from "solid-js";
 import { RouteDefinition, useAction, useSubmission } from "@solidjs/router";
-import { getUser } from "~/api";
+import { getUser, logout } from "~/api";
 import { BookmarkType, VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
@@ -33,6 +33,9 @@ import {
   OcX2,
   OcCopy2,
   OcAlertfill2,
+  OcSignout2,
+  OcClock2,
+  OcHourglass2,
 } from "solid-icons/oc";
 import Definition from "~/components/definition";
 import "/public/styles/vocabulary.scss";
@@ -297,6 +300,7 @@ const Vocabulary: Component<{}> = () => {
     wordList,
     setWordList,
     setTotalMemories,
+    showMenubar,
   } = useGlobalContext();
 
   createEffect(
@@ -403,6 +407,7 @@ const Vocabulary: Component<{}> = () => {
   };
 
   // -------------------MOBILE END-------------------- //
+  const logoutAction = useAction(logout);
 
   return (
     <MetaProvider>
@@ -557,7 +562,9 @@ const Vocabulary: Component<{}> = () => {
                   </div>
                   <div
                     class={
-                      currentQuote.check ? "quoteBody quoteBody--bookmark" : "quoteBody"
+                      currentQuote.check
+                        ? "quoteBody quoteBody--bookmark"
+                        : "quoteBody"
                     }
                   >
                     <Show
@@ -609,52 +616,81 @@ const Vocabulary: Component<{}> = () => {
             </div>
           </div>
 
-          <div class="vocabularyBtnContainer">
-            <button class="vocabularyBtn" onClick={() => getQuote(0)}>
-              Π
-            </button>
-            <button class="vocabularyBtn">&#x39D;</button>
-            <button class="vocabularyBtn">&#x395;</button>
-            <button
-              class={
-                getCalendarTodayDataResult.result &&
-                getCalendarTodayDataResult.result.time1 > 0
-                  ? "vocabularyBtnActive"
-                  : "vocabularyBtn"
-              }
-              onClick={() => handleSetDailyWord(1)}
-            >
-              <span>&#x391;</span>
-              <small>{getCalendarTodayDataResult.result?.time1}</small>
-            </button>
-            <button
-              class={
-                getCalendarTodayDataResult.result &&
-                getCalendarTodayDataResult.result.time2 > 0
-                  ? "vocabularyBtnActive"
-                  : "vocabularyBtn"
-              }
-              onClick={() => handleSetDailyWord(2)}
-            >
-              <span>&#x392;</span>
-              <small>{getCalendarTodayDataResult.result?.time2}</small>
-            </button>
-            <button class="vocabularyBtn" onClick={startTimer}>
-              &#x3A7;
-            </button>
-            <button class="vocabularyBtn">Σ</button>
-            <button
-              class="vocabularyBtn"
-              onClick={() => setShowTranslate(true)}
-            >
-              Ξ
-            </button>
-            <Show when={delay()}>
-              <button class="vocabularyBtn timerBtn" onClick={stopTimer}>
-                {timerCounter()}m
-              </button>
+          <Presence>
+            <Show when={showMenubar()}>
+              <Motion.div
+                class="menubar"
+                initial={{
+                  opacity: 0,
+                  y: 50,
+                }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  y: 50,
+                }}
+                transition={{ duration: 0.3, easing: "ease-in-out" }}
+              >
+                <div class="menubarContent">
+                  <button
+                    class={
+                      getCalendarTodayDataResult.result &&
+                      getCalendarTodayDataResult.result.time1 > 0
+                        ? "menuBtn menuBtn--wordlist"
+                        : "menuBtn"
+                    }
+                    onClick={() => handleSetDailyWord(1)}
+                  >
+                    <div>
+                      <span>&#x391;</span>
+                      <small>{getCalendarTodayDataResult.result?.time1}</small>
+                    </div>
+                  </button>
+                  <button
+                    class={
+                      getCalendarTodayDataResult.result &&
+                      getCalendarTodayDataResult.result.time2 > 0
+                        ? "menuBtn menuBtn--wordlist"
+                        : "menuBtn"
+                    }
+                    onClick={() => handleSetDailyWord(2)}
+                  >
+                    <div>
+                      <span>&#x392;</span>
+                      <small>{getCalendarTodayDataResult.result?.time2}</small>
+                    </div>
+                  </button>
+                  <Show when={delay()}>
+                    <button class="menuBtn menuBtn--timer" onClick={stopTimer}>
+                      <OcHourglass2 size={11} />
+                      <span>{timerCounter()}</span>
+                    </button>
+                  </Show>
+                  <button class="menuBtn" onClick={startTimer}>
+                    &#x3A7;
+                  </button>
+                  <button
+                    class="menuBtn"
+                    onClick={() => setShowTranslate(true)}
+                  >
+                    Ξ
+                  </button>
+                  <button class="menuBtn" onClick={() => getQuote(0)}>
+                    Π
+                  </button>
+                  <button
+                    class="menuBtn menuBtn--signout"
+                    onClick={() => logoutAction()}
+                  >
+                    <OcSignout2 size={12} />
+                  </button>
+                </div>
+              </Motion.div>
             </Show>
-          </div>
+          </Presence>
         </div>
         {/* Edit */}
         <Presence>

@@ -1,46 +1,48 @@
-import { A, useAction } from "@solidjs/router";
+import { A } from "@solidjs/router";
 import { Component, Show } from "solid-js";
-import { logout } from "~/api";
 import "/public/styles/bottom.scss";
 import { useGlobalContext } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
 
 const Bottom: Component<{}> = () => {
-  const logoutAction = useAction(logout);
-
   const {
     bottomIndex,
     bottomActive,
     setBottomActive,
     bottomLooping,
     totalMemories,
+    showMenubar,
+    setShowMenubar,
   } = useGlobalContext();
 
   return (
     <div class="bottom">
       <A
         href="/main/vocabulary"
-        activeClass="mainFooterBtnActive"
-        class="mainFooterBtn"
+        activeClass="mainFooterBtn--active"
+        class="mainFooterBtn mainFooterBtn--1"
       >
         Übermensch
       </A>
       <A
         href="/main/calendar"
-        activeClass="mainFooterBtnActive"
-        class="mainFooterBtn"
+        activeClass="mainFooterBtn--active"
+        class="mainFooterBtn mainFooterBtn--2"
       >
         Amor fati
       </A>
-      <button class="mainFooterCenterBtn" onClick={() => logoutAction()}>
+      <button
+        class="mainFooterCenterBtn"
+        onClick={() => setShowMenubar(!showMenubar())}
+      >
         <Show when={totalMemories()} fallback={229}>
           {totalMemories()}
         </Show>
       </button>
       <A
         href="/main/weather"
-        activeClass="mainFooterBtnActive"
-        class="mainFooterBtn"
+        activeClass="mainFooterBtn--active"
+        class="mainFooterBtn mainFooterBtn--3"
       >
         Caelus
       </A>

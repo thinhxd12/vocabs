@@ -20,6 +20,8 @@ interface ContextProps {
   setBottomActive: Setter<boolean>;
   bottomLooping: Accessor<boolean>;
   setBottomLooping: Setter<boolean>;
+  showMenubar: Accessor<boolean>;
+  setShowMenubar: Setter<boolean>;
   counter: Accessor<number>;
   setCounter: Setter<number>;
   wordList: Accessor<VocabularyType[]>;
@@ -30,6 +32,7 @@ const GlobalContext = createContext<ContextProps>();
 
 export function GlobalContextProvider(props: { children: JSX.Element }) {
   const [bottomIndex, setBottomIndex] = createSignal<number>(0);
+  const [showMenubar, setShowMenubar] = createSignal(false);
   const [bottomActive, setBottomActive] = createSignal(false);
   const [bottomLooping, setBottomLooping] = createSignal(false);
   const [counter, setCounter] = createSignal<number>(0);
@@ -58,6 +61,8 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
         setCounter,
         wordList,
         setWordList,
+        showMenubar,
+        setShowMenubar,
       }}
     >
       {props.children}

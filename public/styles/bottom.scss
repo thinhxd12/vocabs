@@ -11,14 +11,14 @@
     @include flex;
 
     .mainFooterCenterBtn {
-        @include font("Roslindale", 12px, #7c7b7a, 600, normal, 30px);
         height: 30px;
         width: 30px;
-        text-align: center;
-        cursor: default;
+        cursor: pointer;
         background: none;
         outline: none;
         border: none;
+        text-align: center;
+        @include font("Roslindale", 12px, #7c7b7a, 600, normal, 30px);
     }
 
     .mainFooterBtn {
@@ -34,17 +34,25 @@
         overflow: hidden;
         transition: color 0.1s;
 
-        &:first-child {
-            max-width: 90px;
-        }
-
         &:hover {
             color: $color-white;
         }
-    }
 
-    .mainFooterBtnActive {
-        color: $color-white !important;
+        &--1 {
+            width: 90px;
+        }
+
+        &--2 {
+            width: 75px;
+        }
+
+        &--3 {
+            width: 75px;
+        }
+
+        &--active {
+            color: $color-white !important;
+        }
     }
 
     .mainFooterCornerBtn {
