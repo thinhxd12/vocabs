@@ -3,3 +3,10 @@
   command = "npm run build"
   edge_functions = ".netlify/edge-functions"
   autoLaunch = false
+
+[[edge_functions]]
+  path = "/_sever"
+  function = "server"
+
+[functions]
+  node_bundler = "esbuild"
