@@ -13,6 +13,12 @@
 
 [[redirects]]
   from = "/cors-america/*"
-  to = "https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=:splat"
+  to = "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez"
+  status = 301
+  force = true
+  
+[[redirects]]
+  from = "/cors-cambridge/*"
+  to = "https://dictionary.cambridge.org/dictionary/english/:splat"
   status = 302
   force = true

@@ -253,6 +253,8 @@ export const getTextDataAmerica = async (text: string) => {
     try {
         const response = await fetch(url);
         const pageImgHtml = await response.text();
+        console.log(pageImgHtml);
+        
         const doc = parse(pageImgHtml);
 
         result.sound = getElAttribute(
@@ -376,7 +378,8 @@ export const getTextDataEnglish = async (text: string) => {
 
 //get data definition from cambridge
 export const getTextDataCambridge = async (text: string) => {
-    const url = DEFAULT_CORS_PROXY + `https://dictionary.cambridge.org/dictionary/english/${text}`;
+    const url = `/cors-cambridge/${text}`;
+    // const url = DEFAULT_CORS_PROXY + `https://dictionary.cambridge.org/dictionary/english/${text}`;
     const result: VocabularyType = {
         text: "",
         sound: "",
