@@ -12,9 +12,9 @@
   node_bundler = "esbuild"
 
 [[redirects]]
-  from = "/cors-america/*"
-  to = "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez"
-  status = 301
+  from = "/cors/*"
+  to = "https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=:splat"
+  status = 200
   force = true
   
 [[redirects]]
@@ -22,3 +22,9 @@
   to = "https://dictionary.cambridge.org/dictionary/english/:splat"
   status = 302
   force = true
+
+[[headers]]
+    for = "/cors/*"
+    [headers.values]
+        Access-Control-Allow-Origin = "*"
+
