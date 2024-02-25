@@ -197,12 +197,15 @@ const About: Component<{}> = (props) => {
                                     </div>
                                   }
                                 >
-                                  <div class="dateTextThisMonth todayDate">
+                                  <div
+                                    class="dateTextThisMonth todayDate"
+                                    onClick={() => setShowTodayReset(true)}
+                                  >
                                     {date().date}
                                   </div>
                                 </Show>
                               </Show>
-                              
+
                               <Show when={"time1" in date()}>
                                 <Show
                                   when={date().date === todayDate().getDate()}

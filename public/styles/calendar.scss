@@ -160,6 +160,15 @@
             .dateTextThisMonth {
                 color: $color-red-1;
             }
+
+            .todayDate {
+                background: $color-red-1;
+                color: $color-white;
+            }
+
+            .dateTimeIndexToday {
+                color: $color-red-1;
+            }
         }
 
         .calendarDayLoading {

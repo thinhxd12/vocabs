@@ -3,7 +3,6 @@ import { Component, Show } from "solid-js";
 import { logout } from "~/api";
 import "/public/styles/bottom.scss";
 import { useGlobalContext } from "~/globalcontext/store";
-import { OcEllipsis2 } from "solid-icons/oc";
 import { Motion, Presence } from "solid-motionone";
 
 const Bottom: Component<{}> = () => {
@@ -98,11 +97,6 @@ const Bottom: Component<{}> = () => {
           }
           name="inputWordRow"
           value={bottomIndex()}
-        />
-        <OcEllipsis2
-          size={12}
-          class="wordListDot"
-          color={bottomIndex() > 0 ? "#38E07B" : "#000"}
         />
       </div>
     </div>

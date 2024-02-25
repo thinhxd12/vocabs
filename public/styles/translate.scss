@@ -108,7 +108,7 @@
         border: 0;
         outline: 0;
         text-align: center;
-        @include font('Roslindale', 15px, $color-white, 500, normal, 12px);
+        @include font('Roslindale', 15px, $color-white, 500, normal, 27px);
     }
 
     .translateBtn {

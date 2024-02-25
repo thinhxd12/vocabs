@@ -1,6 +1,20 @@
-import { defineConfig } from "@solidjs/start/config";
+// import { defineConfig } from "@solidjs/start/config";
 import preload from "vite-plugin-preload";
 
+// export default defineConfig({
+//     plugins: [preload()],
+//     start: {
+//         server: {
+//             prerender: {
+//                 crawlLinks: true
+//             },
+//             preset: "netlify-edge",
+//         },
+//     },
+// });
+
+
+import { defineConfig } from "@solidjs/start/config";
 export default defineConfig({
     plugins: [preload()],
     start: {
@@ -8,7 +22,10 @@ export default defineConfig({
             prerender: {
                 crawlLinks: true
             },
-            preset: "netlify-edge",
-        },
-    },
+            preset: "cloudflare_module",
+            rollupConfig: {
+                external: ["__STATIC_CONTENT_MANIFEST", "node:async_hooks"]
+            }
+        }
+    }
 });

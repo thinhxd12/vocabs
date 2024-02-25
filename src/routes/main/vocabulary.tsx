@@ -555,7 +555,11 @@ const Vocabulary: Component<{}> = () => {
                       </button>
                     </div>
                   </div>
-                  <div class="quoteBody">
+                  <div
+                    class={
+                      currentQuote.check ? "quoteBody quoteBody--bookmark" : "quoteBody"
+                    }
+                  >
                     <Show
                       when={getBookmarkTextResult.result}
                       fallback={<p>loading...</p>}
