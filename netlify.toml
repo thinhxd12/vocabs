@@ -5,7 +5,7 @@
   autoLaunch = false
 
 [[edge_functions]]
-  path = "/_sever"
+  path = "/*"
   function = "server"
 
 [functions]
