@@ -15,6 +15,8 @@ export const route = {
 
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginOrRegister);
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+
   return (
     <MetaProvider>
       <Title>vocabs3</Title>
@@ -33,6 +35,7 @@ export default function Login(props: RouteSectionProps) {
               <OcArrowright2 size={12} />
             </button>
           </div>
+          <p class="loginAlert">{supabaseUrl}</p>
           <Show when={loggingIn.result}>
             <p class="loginAlert" role="alert" id="error-message">
               {loggingIn.result!.message}
