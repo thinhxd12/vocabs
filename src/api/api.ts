@@ -237,7 +237,7 @@ async function fetchGetText(url: string) {
 export const getTextDataAmerica = async (text: string) => {
     // "use server";
     // const url = `https://www.oxfordlearnersdictionaries.com/definition/american_english/${text}`;
-    const url = `/cors-proxy/https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+    const url = `/cors-america/${text}`;
     // const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
     const result: VocabularyType = {
         text: "",

@@ -12,7 +12,7 @@
   node_bundler = "esbuild"
 
 [[redirects]]
-  from = "/cors-proxy/*"
-  to = ":splat"
+  from = "/cors-america/*"
+  to = "https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=:splat"
   status = 200
   force = true
