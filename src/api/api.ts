@@ -237,8 +237,8 @@ async function fetchGetText(url: string) {
 export const getTextDataAmerica = async (text: string) => {
     // "use server";
     // const url = `https://www.oxfordlearnersdictionaries.com/definition/american_english/${text}`;
-    // const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-    const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+    const url = `/cors-proxy/https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+    // const url = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
     const result: VocabularyType = {
         text: "",
         sound: "",
@@ -799,35 +799,3 @@ const cleanDataMinutely = (data: MinutelyType[]) => {
         return newItem;
     });
 };
-
-// export const textCors = async () => {
-//     // "use server";
-//     // const url = `https://www.oxfordlearnersdictionaries.com/definition/american_english/${text}`;
-//     const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=hello`;
-//     try {
-//         const response = await fetch(url);
-//         const pageImgHtml = await response.text();
-//         return pageImgHtml;
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-
-// export const textCorsServer = async () => {
-//     "use server";
-//     // const url = `https://www.oxfordlearnersdictionaries.com/definition/american_english/${text}`;
-//     const url = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=hello`;
-//     try {
-//         const response = await fetch(url, { redirect: "manual" });
-//         if (response.status === 302) {
-//             const newLocation = response.headers.get("location");
-//             // console.log(newLocation);
-
-//             const newRes = await fetch(`${newLocation}`);
-//             const pageImgHtml = await newRes.text();
-//             return pageImgHtml;
-//         }
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
