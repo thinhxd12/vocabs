@@ -227,8 +227,6 @@
 
     .menubar {
         width: 360px;
-        height: 30px;
-        background: $color-background-1;
         position: absolute;
         bottom: 0;
 
@@ -236,60 +234,67 @@
             width: 100%;
             height: 100%;
             @include flex-center;
+        }
 
-            .menuBtn {
-                width: 54px;
-                height: 21px;
-                border-radius: 3px;
-                border: 0.5px solid;
-                border-color: #252525;
-                outline: 0;
-                cursor: pointer;
-                color: #f4f4f4;
-                transition: 0.1s;
-                background: none;
-                margin: 1.5px;
-                @include font(sans-serif, 14px, #ffffff80, 700, normal, 16px);
-                box-shadow: 1px 1px 12px #121212;
-                @include flex-center;
+    }
 
-                span {
-                    font-size: 12px;
-                }
+    .menuBtn {
+        width: 45px;
+        height: 21px;
+        border-radius: 3px;
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+        transition: 0.1s;
+        margin: 0 0.75px 1.5px;
+        background: $color-background-1;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+        @include font("Roslindale", 12px, #7c7b7a, 700, normal, 21px);
 
-                small {
-                    font-size: 9px;
-                }
+        &--wordlist {
+            small {
+                font-size: 9px;
+                color: #ffffff80;
+            }
+        }
 
-                &--wordlist {
-                    color: $color-calendar-green-1;
+        &--active {
+            color: $color-calendar-green-1 !important;
 
-                    &:hover {
-                        color: $color-calendar-green-1 !important;
-                        text-shadow: 0px 0px 6px $color-calendar-green-1 !important;
-                    }
-                }
-
-                &--timer {
-                    span {
-                        font-size: 11px;
-                        line-height: 12px;
-                        margin-top: 1px;
-                    }
-                }
-
-                &--signout {
-                    width: 21px;
-                }
-
-                &:hover {
-                    background: $color-background-1;
-                    border-color: $color-border;
-                    color: $color-white;
-                    text-shadow: 0px 0px 6px #f4f4f4;
-                }
+            small {
+                color: $color-calendar-green-1 !important;
             }
 
+            &:hover {
+                color: $color-calendar-green-1 !important;
+                text-shadow: 0px 0px 6px $color-calendar-green-1 !important;
+            }
+        }
+
+
+        &--timer {
+            width: 21px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            margin: 1.5px;
+            border: 0.5px solid $color-border;
+            @include flex-center;
+
+            small {
+                @include font("Basier", 9px, #7c7b7a, 500, normal, 12px);
+                margin-top: 3px;
+                vertical-align: baseline;
+            }
+        }
+
+        &:hover {
+            color: $color-white;
+            text-shadow: 0px 0px 6px #f4f4f4;
+
+            small {
+                color: $color-white;
+            }
         }
     }
 

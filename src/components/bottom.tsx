@@ -33,6 +33,7 @@ const Bottom: Component<{}> = () => {
       </A>
       <button
         class="mainFooterCenterBtn"
+        onMouseOver={() => setShowMenubar(true)}
         onClick={() => setShowMenubar(!showMenubar())}
       >
         <Show when={totalMemories()} fallback={229}>
@@ -44,7 +45,7 @@ const Bottom: Component<{}> = () => {
         activeClass="mainFooterBtn--active"
         class="mainFooterBtn mainFooterBtn--3"
       >
-        Caelus
+        Mea culpa
       </A>
 
       <div

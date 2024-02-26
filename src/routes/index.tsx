@@ -18,7 +18,7 @@ export default function Login(props: RouteSectionProps) {
 
   return (
     <MetaProvider>
-      <Title>vocabs3</Title>
+      <Title>thinhvocabs3</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <main class="login">

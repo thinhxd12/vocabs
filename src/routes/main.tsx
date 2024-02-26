@@ -13,6 +13,7 @@ import { URL_IMAGE_MAIN_PAGE } from "~/utils";
 import "/public/styles/main.scss";
 import { GlobalContextProvider, useGlobalContext } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
+import { OcArrowright2 } from "solid-icons/oc";
 
 export const route = {
   load: () => getUser(),
@@ -100,11 +101,34 @@ const MainLayout = (props: RouteSectionProps) => {
             </Show>
           </Presence>
           <div class="mainImageBottomBar">
-            <button onClick={handleGetNextImage} class="mainImageRoundBtn">
-              &#x395;
-            </button>
             <button onClick={changeToggle} class="mainImageRoundBtn">
-              III
+              <svg
+                width="18"
+                height="18"
+                version="1.1"
+                viewBox="0 0 20 20"
+                x="0px"
+                y="0px"
+                role="presentation"
+                aria-hidden="true"
+                class="ScIconSVG-sc-1q25cff-1 jpczqG"
+                fill="#fff"
+              >
+                <g>
+                  <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h7V3H4zM16 3h-3v14h3a2 2 0 002-2V5a2 2 0 00-2-2z"></path>
+                </g>
+              </svg>
+            </button>
+            <button onClick={handleGetNextImage} class="mainImageRoundBtn">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="15"
+                height="15"
+                viewBox="0 0 52 52"
+                fill="#fff"
+              >
+                <path d="M14 43.7V8.3c0-1 1.3-1.7 2.2-.9l21.2 17.3c.8.6.8 1.9 0 2.5L16.2 44.7c-.9.7-2.2.1-2.2-1" />
+              </svg>
             </button>
           </div>
         </Motion.div>

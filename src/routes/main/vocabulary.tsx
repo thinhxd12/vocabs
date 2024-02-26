@@ -36,6 +36,8 @@ import {
   OcSignout2,
   OcClock2,
   OcHourglass2,
+  OcBook2,
+  OcBookmark2,
 } from "solid-icons/oc";
 import Definition from "~/components/definition";
 import "/public/styles/vocabulary.scss";
@@ -56,6 +58,7 @@ export const route = {
 
 let timerRef: NodeJS.Timeout;
 let audioRef: HTMLAudioElement;
+let intervalCountdown: NodeJS.Timeout;
 
 const [currentText, setCurrentText] = createSignal<VocabularyType>();
 const [showDefinitions, setShowDefinitions] = createSignal(false);
@@ -269,7 +272,7 @@ const Vocabulary: Component<{}> = () => {
         handleSetDailyWord(todayIndex());
         //start timmer countdown
         if (getCalendarTodayDataResult.result) {
-          getCalendarTodayDataResult.result.time2 < 9 && startTimer();
+          getCalendarTodayDataResult.result.time2 < 9 && startCountdown();
         }
       }
     }, 7500);
@@ -301,6 +304,7 @@ const Vocabulary: Component<{}> = () => {
     setWordList,
     setTotalMemories,
     showMenubar,
+    setShowMenubar,
   } = useGlobalContext();
 
   createEffect(
@@ -346,48 +350,48 @@ const Vocabulary: Component<{}> = () => {
 
   // -------------------AUTOPLAY END-------------------- //
   // -------------------TIMMER START-------------------- //
-  const [delay, setDelay] = createSignal<number | false>(false);
-  const countDownTimer = createIntervalCounter(delay);
-  const [timerCounter, setTimerCounter] = createSignal<number>(7);
-
-  createEffect(
-    on(countDownTimer, () => {
-      if (timerCounter() > 1) {
-        setTimerCounter(timerCounter() - 1);
-      } else {
-        stopTimer();
-        showDesktopNotification();
-        audioRef.play();
-      }
-    })
-  );
-
-  const startTimer = () => {
-    setDelay(60000);
-  };
-
-  const stopTimer = () => {
-    setDelay(false);
-    setTimerCounter(7);
-  };
-
   const showDesktopNotification = () => {
     const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
-    const letter = todayIndex() === 1 ? "A" : "B";
+    const letter = todayIndex() === 1 ? "I" : "II";
     const newProgress =
       todayIndex() === 1
         ? getCalendarTodayDataResult.result!.time1 + 1
         : getCalendarTodayDataResult.result!.time2 + 1;
+
     const notification = new Notification("Start Focusing", {
       icon: img,
       requireInteraction: true,
-      body: `${letter}${newProgress}`,
+      body: `${letter}-${newProgress}`,
     });
 
     notification.onclose = () => {
       setBottomActive(true);
       audioRef.pause();
     };
+  };
+
+  const [minutes, setMinutes] = createSignal(6);
+  const [isRunning, setIsRunning] = createSignal(false);
+
+  const startCountdown = () => {
+    setIsRunning(true);
+    intervalCountdown = setInterval(() => {
+      setMinutes((prev) => {
+        if (prev === 1) {
+          clearInterval(intervalCountdown);
+          setIsRunning(false);
+          showDesktopNotification();
+          audioRef.play();
+          return 6;
+        }
+        return prev - 1;
+      });
+    }, 60000);
+  };
+
+  const stopCountdown = () => {
+    setIsRunning(false);
+    clearInterval(intervalCountdown);
   };
 
   // -------------------TIMMER END-------------------- //
@@ -622,15 +626,15 @@ const Vocabulary: Component<{}> = () => {
                 class="menubar"
                 initial={{
                   opacity: 0,
-                  y: 50,
+                  bottom: "-27px",
                 }}
                 animate={{
                   opacity: 1,
-                  y: 0,
+                  bottom: 0,
                 }}
                 exit={{
                   opacity: 0,
-                  y: 50,
+                  bottom: "-27px",
                 }}
                 transition={{ duration: 0.3, easing: "ease-in-out" }}
               >
@@ -639,56 +643,91 @@ const Vocabulary: Component<{}> = () => {
                     class={
                       getCalendarTodayDataResult.result &&
                       getCalendarTodayDataResult.result.time1 > 0
-                        ? "menuBtn menuBtn--wordlist"
-                        : "menuBtn"
+                        ? "menuBtn menuBtn--wordlist menuBtn--active"
+                        : "menuBtn menuBtn--wordlist"
                     }
-                    onClick={() => handleSetDailyWord(1)}
+                    onClick={() => {
+                      handleSetDailyWord(1);
+                      setShowMenubar(false);
+                    }}
                   >
-                    <div>
-                      <span>&#x391;</span>
-                      <small>{getCalendarTodayDataResult.result?.time1}</small>
-                    </div>
+                    <span>I</span>
+                    <small>{getCalendarTodayDataResult.result?.time1}</small>
                   </button>
                   <button
                     class={
                       getCalendarTodayDataResult.result &&
                       getCalendarTodayDataResult.result.time2 > 0
-                        ? "menuBtn menuBtn--wordlist"
-                        : "menuBtn"
+                        ? "menuBtn menuBtn--wordlist menuBtn--active"
+                        : "menuBtn menuBtn--wordlist"
                     }
-                    onClick={() => handleSetDailyWord(2)}
+                    onClick={() => {
+                      handleSetDailyWord(2);
+                      setShowMenubar(false);
+                    }}
                   >
-                    <div>
-                      <span>&#x392;</span>
-                      <small>{getCalendarTodayDataResult.result?.time2}</small>
-                    </div>
+                    <span>II</span>
+                    <small>{getCalendarTodayDataResult.result?.time2}</small>
                   </button>
-                  <Show when={delay()}>
-                    <button class="menuBtn menuBtn--timer" onClick={stopTimer}>
-                      <OcHourglass2 size={11} />
-                      <span>{timerCounter()}</span>
-                    </button>
-                  </Show>
-                  <button class="menuBtn" onClick={startTimer}>
-                    &#x3A7;
+
+                  <button
+                    class="menuBtn"
+                    onClick={() => {
+                      startCountdown();
+                      setShowMenubar(false);
+                    }}
+                  >
+                    X
+                  </button>
+
+                  <button
+                    class="menuBtn"
+                    onClick={() => {
+                      setShowTranslate(true);
+                      setShowMenubar(false);
+                    }}
+                  >
+                    T
                   </button>
                   <button
                     class="menuBtn"
-                    onClick={() => setShowTranslate(true)}
+                    onClick={() => {
+                      getQuote(0);
+                      setShowMenubar(false);
+                    }}
                   >
-                    Ξ
+                    Q
                   </button>
-                  <button class="menuBtn" onClick={() => getQuote(0)}>
-                    Π
-                  </button>
-                  <button
-                    class="menuBtn menuBtn--signout"
-                    onClick={() => logoutAction()}
-                  >
-                    <OcSignout2 size={12} />
+                  <button class="menuBtn" onClick={() => logoutAction()}>
+                    E
                   </button>
                 </div>
               </Motion.div>
+            </Show>
+          </Presence>
+
+          <Presence>
+            <Show when={isRunning()}>
+              <Motion.button
+                class="menuBtn menuBtn--timer"
+                onClick={stopCountdown}
+                initial={{
+                  opacity: 0,
+                  bottom: "-27px",
+                }}
+                animate={{
+                  opacity: 1,
+                  bottom: 0,
+                }}
+                exit={{
+                  opacity: 0,
+                  bottom: "-27px",
+                }}
+                transition={{ duration: 0.3, easing: "ease-in-out" }}
+              >
+                <OcHourglass2 size={11} />
+                <small>{minutes()}</small>
+              </Motion.button>
             </Show>
           </Presence>
         </div>

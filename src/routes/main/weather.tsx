@@ -245,7 +245,7 @@ const Weather: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <TitleName>Caelus</TitleName>
+      <TitleName>Mea culpa</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <Motion.div
