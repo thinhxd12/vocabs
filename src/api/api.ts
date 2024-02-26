@@ -1,39 +1,9 @@
-import { action, cache, redirect, useAction } from "@solidjs/router";
-import { BookmarkType, CurrentlyType, HistoryType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyType } from "~/types";
+import { action, redirect } from "@solidjs/router";
+import { CurrentlyType, HistoryType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyType } from "~/types";
 import { supabase } from "./supabase";
 import { DEFAULT_CORS_PROXY, DEVIATION_NUMB, PRECIP_NUMB, getElAttribute, getElText, mapTables } from "~/utils";
 import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
-
-// const baseUrl = "https://script.google.com/macros/s/AKfycbyB0wM1O9rKwvLENWzUBE92oCTt_dbRjkNaFJKqhzi3c_UDA3kLdE9j0BzEyZHmCYVo/exec";
-const baseUrl = "https://script.google.com/macros/s/AKfycbyyx7SmjI3iSF4uFVTtfVDYxN_5xL7jntJvnKVlaSNgXS8fWDdP_6iz7DgGogEtiXGR/exec";
-
-const getBookmarkUrl = (path: string) => `${baseUrl}?action=${path}`;
-const setBookmarkUrl = (path: string) => `${baseUrl}?action=${path}`;
-
-async function fetchAPIsheet(path: string) {
-    const url = path.startsWith("getBookmark") ? getBookmarkUrl(path) : setBookmarkUrl(path);
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data as BookmarkType;
-    } catch (error) {
-        console.error(error);
-    }
-}
-
-export const getBookmarkText = action(async (id: number) => {
-    "use server";
-    return fetchAPIsheet(`getBookmark&num=${id}`);
-}, "getBookmarkText");
-
-export const setBookmark = action(async (check: boolean) => {
-    "use server";
-    return fetchAPIsheet(`setBookmark&check=${check}`);
-}, "setBookmark");
 
 export const getSearchText = action(async (text: string) => {
     "use server";
@@ -252,7 +222,7 @@ export const getTextDataAmerica = async (text: string) => {
     try {
         const response = await fetch(url);
         const pageImgHtml = await response.text();
-        
+
         const doc = parse(pageImgHtml);
 
         result.sound = getElAttribute(

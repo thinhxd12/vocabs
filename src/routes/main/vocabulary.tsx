@@ -10,13 +10,11 @@ import {
 } from "solid-js";
 import { RouteDefinition, useAction, useSubmission } from "@solidjs/router";
 import { getUser, logout } from "~/api";
-import { BookmarkType, VocabularyType } from "~/types";
+import { VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
   deleteVocabulary,
-  getBookmarkText,
   getSearchText,
-  setBookmark,
   getCalendarTodayData,
   getVocabularyFromRange,
   submitTodayProgress,
@@ -24,31 +22,16 @@ import {
   archiveVocabulary,
   getMemoriesLength,
 } from "~/api/api";
-import { createStore } from "solid-js/store";
-import {
-  OcChevronleft2,
-  OcStar2,
-  OcStarfill2,
-  OcChevronright2,
-  OcX2,
-  OcCopy2,
-  OcAlertfill2,
-  OcSignout2,
-  OcClock2,
-  OcHourglass2,
-  OcBook2,
-  OcBookmark2,
-} from "solid-icons/oc";
+import { OcAlertfill2, OcHourglass2 } from "solid-icons/oc";
 import Definition from "~/components/definition";
 import "/public/styles/vocabulary.scss";
-import "/public/styles/quote.scss";
 import FlipCard from "~/components/flipcard";
 import { Motion, Presence } from "solid-motionone";
 import Translation from "~/components/translation";
 import Edit from "~/components/edit";
-import { createIntervalCounter } from "@solid-primitives/timer";
 import { useGlobalContext } from "~/globalcontext/store";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
+import Bookmark from "~/components/bookmark";
 
 export const route = {
   load: () => {
@@ -162,35 +145,9 @@ const Vocabulary: Component<{}> = () => {
     setTranslateTerm("");
   };
 
-  // -------------------QUOTE START-------------------- //
-  const [currentQuote, setCurrentQuote] = createStore<BookmarkType>({
-    check: false,
-    value: "",
-  });
-  const [showQuotes, setShowQuotes] = createSignal(false);
-  const getBookmarkAction = useAction(getBookmarkText);
-  const getBookmarkTextResult = useSubmission(getBookmarkText);
-  const setBookmarkAction = useAction(setBookmark);
-
-  const getQuote = async (numb: number) => {
-    setShowQuotes(true);
-    const result = await getBookmarkAction(numb);
-    setCurrentQuote(result!);
-  };
-
-  const checkQuote = (check: boolean) => {
-    setCurrentQuote("check", check);
-    setBookmarkAction(check);
-  };
-
-  const copyQuoteToClipboard = async (text: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-    } catch (err) {
-      console.error("Failed to copy text: ", err);
-    }
-  };
-  // -------------------QUOTE END-------------------- //
+  // -------------------BOOKMARK START-------------------- //
+  const [showBookmark, setShowBookmark] = createSignal<boolean>(false);
+  // -------------------BOOKMARK END-------------------- //
 
   // -------------------TRANSLATE START-------------------- //
   const [translateTerm, setTranslateTerm] = createSignal<string>("");
@@ -522,63 +479,9 @@ const Vocabulary: Component<{}> = () => {
                   </div>
                 )}
               </Index>
-              <Show when={showQuotes()}>
-                <div class="quoteContainer">
-                  <div class="quoteHeader">
-                    <div class="quoteHeaderLeft">
-                      <button
-                        class="button button--quote"
-                        onclick={() => getQuote(-1)}
-                      >
-                        <OcChevronleft2 size={17} />
-                      </button>
-                      <button
-                        class="button button--quote"
-                        onclick={() => checkQuote(!currentQuote.check)}
-                      >
-                        {currentQuote.check ? (
-                          <OcStarfill2 size={17} color="#ffc107" />
-                        ) : (
-                          <OcStar2 size={17} />
-                        )}
-                      </button>
-                      <button
-                        class="button button--quote"
-                        onclick={() => getQuote(1)}
-                      >
-                        <OcChevronright2 size={17} />
-                      </button>
-                      <button
-                        class="button button--quote"
-                        onclick={() => copyQuoteToClipboard(currentQuote.value)}
-                      >
-                        <OcCopy2 size={14} />
-                      </button>
-                    </div>
-                    <div class="quoteHeaderRight">
-                      <button
-                        class="button button--close"
-                        onClick={() => setShowQuotes(false)}
-                      >
-                        <OcX2 size={15} />
-                      </button>
-                    </div>
-                  </div>
-                  <div
-                    class={
-                      currentQuote.check
-                        ? "quoteBody quoteBody--bookmark"
-                        : "quoteBody"
-                    }
-                  >
-                    <Show
-                      when={getBookmarkTextResult.result}
-                      fallback={<p>loading...</p>}
-                    >
-                      <p class="quotePassage">{currentQuote.value}</p>
-                    </Show>
-                  </div>
-                </div>
+
+              <Show when={showBookmark()}>
+                <Bookmark onClose={() => setShowBookmark(false)} />
               </Show>
 
               {/* Definition */}
@@ -692,7 +595,8 @@ const Vocabulary: Component<{}> = () => {
                   <button
                     class="menuBtn"
                     onClick={() => {
-                      getQuote(0);
+                      // getQuote(0);
+                      setShowBookmark(true);
                       setShowMenubar(false);
                     }}
                   >

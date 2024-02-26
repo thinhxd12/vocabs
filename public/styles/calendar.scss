@@ -124,13 +124,13 @@
 
                 .dateTimeIndex {
                     @include flex-center-column;
-                    @include font('Rubik', 8px, $color-calendar-text-2, 600, normal, 11px);
+                    @include font('Rubik', 8px, $color-calendar-text-2, 600, normal, 9px);
                     margin-left: 2px;
 
                     div:first-child {
                         text-decoration: underline;
-                        text-underline-offset: 3px;
-                        line-height: 14px;
+                        text-underline-offset: 2px;
+                        line-height: 12px;
                     }
                 }
 
@@ -222,7 +222,7 @@
                 width: 120px;
                 height: 18px;
                 padding: 0 12px;
-                @include font('Rubik', 10px, $color-black, 400, normal, 18px);
+                @include font('Rubik', 10px, $color-black, 500, normal, 18px);
                 cursor: default;
             }
         }

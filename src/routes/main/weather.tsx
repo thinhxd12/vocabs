@@ -245,15 +245,17 @@ const Weather: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <TitleName>Mea culpa</TitleName>
+      <TitleName>Cealus</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <Motion.div
         class="weather"
-        style={{
-          "background-image": `url(/images/darksky/background/${getWeatherDataResult.result?.currentData.icon}.jpg)`,
+        animate={{
+          opacity: [0, 1],
+          backgroundImage: getWeatherDataResult.result
+            ? `url(/images/darksky/background/${getWeatherDataResult.result?.currentData.icon}.jpg)`
+            : "unset",
         }}
-        animate={{ opacity: [0, 1] }}
         transition={{ duration: 0.6 }}
       >
         <select

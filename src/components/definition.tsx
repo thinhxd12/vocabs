@@ -20,10 +20,15 @@ const Definition: Component<{
   count?: number;
 }> = (props) => {
   const currenText = createMemo(() => props.item);
+  const [audioSource, setAudioSource] = createSignal<string>("");
+  const handlePlaySound = () => {
+    setAudioSource(currenText().sound);
+    audioRef.play();
+  };
 
   return (
     <>
-      <audio src={currenText().sound} hidden ref={audioRef}></audio>
+      <audio src={audioSource()} hidden ref={audioRef}></audio>
       <div class="definition">
         <div class="definitionHeader">
           <div class="definitionHeaderLeft">
@@ -43,10 +48,7 @@ const Definition: Component<{
             </Show>
           </div>
           <div class="definitionHeaderRight">
-            <button
-              class="button button--primary"
-              onclick={() => audioRef.play()}
-            >
+            <button class="button button--primary" onclick={handlePlaySound}>
               <OcUnmute2 size={12} />
             </button>
             <Show when={!props.onCheck}>
