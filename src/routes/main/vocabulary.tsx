@@ -373,6 +373,10 @@ const Vocabulary: Component<{}> = () => {
   // -------------------MOBILE END-------------------- //
   const logoutAction = useAction(logout);
 
+  // const testFunc = async () => {
+  //   const resp = await getTextDataDictionary("shovel");
+  // };
+
   return (
     <MetaProvider>
       <Title>Übermensch</Title>
@@ -524,6 +528,8 @@ const Vocabulary: Component<{}> = () => {
                 </Show>
               </Presence>
             </div>
+
+            {/* <button onClick={testFunc}>Click</button> */}
           </div>
 
           <Presence>

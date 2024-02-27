@@ -421,6 +421,62 @@ export const getTextDataCambridge = async (text: string) => {
     }
 };
 
+export const getTextDataCollins = async (text: string) => {
+    const url = `https://www.collinsdictionary.com/dictionary/english/${text}`;
+    const result: VocabularyType = {
+        text: "",
+        sound: "",
+        class: "",
+        definitions: [],
+        phonetic: "",
+        meaning: "",
+        number: 240,
+    };
+    const newText = text.length > 4 ? text.slice(0, -2) : text;
+    const regText = new RegExp(`(${newText}\\w*)`, "gi");
+
+    try {
+        const response = await fetch(url);
+        const pageImgHtml = await response.text();
+        const doc = parse(pageImgHtml);
+
+        result.sound = "";
+        result.text = getElText(doc, ".orth", text);
+        result.class = getElText(doc, "div.american .hom .pos", "");
+        const defArr: string[] = [];
+        const body = doc.querySelector(".content.dictionary.american");
+        const exampleDoc = doc.querySelector(".cB.cB-e");
+        if (body) {
+            body.querySelectorAll(".hom").forEach((item, index) => {
+                if (index < 3) {
+                    let def = "";
+                    const head = getElText(item, ".pos", "");
+                    if (head !== "") def += `<span class="dsense_h">${head}</span>`;
+                    let defin = getElText(item, "div.def", "");
+                    const exampleObj = exampleDoc?.querySelector(`span.cit:nth-child(${index + 2})`);
+
+                    let quote = getElText(exampleObj, '.quote', "");
+                    if (quote !== "") {
+                        quote = quote.replace(regText, `<b>$1</b>`);
+                    }
+                    let author = getElText(exampleObj, '.credits .author', "");
+                    author = author !== "" ? `<span class="author">${author} </span>` : "";
+                    let title = getElText(exampleObj, '.credits .title', "");
+                    title = title !== "" ? `<span class="title">${title} </span>` : "";
+                    let year = getElText(exampleObj, '.credits .year', "");
+                    year = year !== "" ? `<span class="year">${year}</span>` : "";
+                    def += `<span class="def">${defin}</span><span class="x">${quote}</span><span class="credits">${author}${title}${year}</span>`;
+                    defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
+                }
+            })
+        }
+        result.definitions = defArr;
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
 //find sound from oed
 export const getOedSoundURL = async (text: string) => {
     const baseUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;

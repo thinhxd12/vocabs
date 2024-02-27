@@ -250,7 +250,7 @@
         transition: 0.1s;
         background: $color-background-1;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-        @include font("Roslindale", 12px, #7c7b7a, 700, normal, 21px);
+        @include font("Roslindale", 14px, #7c7b7a, 700, normal, 21px);
         @include flex-center;
 
         &--wordlist {

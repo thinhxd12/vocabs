@@ -23,6 +23,7 @@ import {
   getOedSoundURL,
   getTextDataAmerica,
   getTextDataCambridge,
+  getTextDataCollins,
   getTextDataEnglish,
   getTranslate,
   insertVocabularyItem,
@@ -109,7 +110,7 @@ const Translation: Component<{
       setTransInput("");
       await Promise.all([
         getTextDataAmerica(translateTerm()),
-        getTextDataEnglish(translateTerm()),
+        getTextDataCollins(translateTerm()),
         getTextDataCambridge(translateTerm()),
         getTranslate(translateTerm()),
       ]).then((data) => {

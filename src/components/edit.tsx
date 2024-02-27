@@ -18,6 +18,7 @@ import {
   editVocabularyItem,
   getTextDataAmerica,
   getTextDataCambridge,
+  getTextDataCollins,
   getTextDataEnglish,
 } from "~/api/api";
 import toast, { Toaster } from "solid-toast";
@@ -43,7 +44,7 @@ const Edit: Component<{
     });
     Promise.all([
       getTextDataAmerica(props.item.text),
-      getTextDataEnglish(props.item.text),
+      getTextDataCollins(props.item.text),
       getTextDataCambridge(props.item.text),
     ]).then((data) => {
       setDefinitionData({

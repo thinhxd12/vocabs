@@ -171,6 +171,22 @@
                     flex-grow: 1;
                 }
             }
+
+            .credits {
+                display: block;
+                margin-left: 32px;
+
+                .author {
+                    font-weight: 600;
+                    font-size: 13px;
+                    font-variant: small-caps;
+                }
+
+                .title {
+                    font-size: 13px;
+                    text-transform: uppercase;
+                }
+            }
         }
     }
 }
