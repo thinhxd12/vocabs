@@ -22,16 +22,19 @@ import {
   archiveVocabulary,
   getMemoriesLength,
 } from "~/api/api";
-import { OcAlertfill2, OcHourglass2 } from "solid-icons/oc";
-import Definition from "~/components/definition";
-import "/public/styles/vocabulary.scss";
-import FlipCard from "~/components/flipcard";
 import { Motion, Presence } from "solid-motionone";
-import Translation from "~/components/translation";
-import Edit from "~/components/edit";
 import { useGlobalContext } from "~/globalcontext/store";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
+import "/public/styles/vocabulary.scss";
+import FlipCard from "~/components/flipcard";
+import Definition from "~/components/definition";
+import Translation from "~/components/translation";
+import Edit from "~/components/edit";
 import Bookmark from "~/components/bookmark";
+import { OcAlertfill2, OcHourglass2 } from "solid-icons/oc";
+import { BsJournalBookmarkFill, BsTranslate } from "solid-icons/bs";
+import { BiSolidExit } from "solid-icons/bi";
+import { TbClockHour2 } from "solid-icons/tb";
 
 export const route = {
   load: () => {
@@ -529,7 +532,7 @@ const Vocabulary: Component<{}> = () => {
                 class="menubar"
                 initial={{
                   opacity: 0,
-                  bottom: "-27px",
+                  bottom: "-150px",
                 }}
                 animate={{
                   opacity: 1,
@@ -537,7 +540,7 @@ const Vocabulary: Component<{}> = () => {
                 }}
                 exit={{
                   opacity: 0,
-                  bottom: "-27px",
+                  bottom: "-150px",
                 }}
                 transition={{ duration: 0.3, easing: "ease-in-out" }}
               >
@@ -580,7 +583,7 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    X
+                    <TbClockHour2 size={17} />
                   </button>
 
                   <button
@@ -590,20 +593,19 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    T
+                    <BsTranslate size={16} />
                   </button>
                   <button
                     class="menuBtn"
                     onClick={() => {
-                      // getQuote(0);
                       setShowBookmark(true);
                       setShowMenubar(false);
                     }}
                   >
-                    Q
+                    <BsJournalBookmarkFill size={15} />
                   </button>
                   <button class="menuBtn" onClick={() => logoutAction()}>
-                    E
+                    <BiSolidExit size={16} />
                   </button>
                 </div>
               </Motion.div>

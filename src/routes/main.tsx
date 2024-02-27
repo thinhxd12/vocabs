@@ -3,17 +3,26 @@ import {
   type RouteDefinition,
   RouteSectionProps,
 } from "@solidjs/router";
-import { Show, createSignal, onMount } from "solid-js";
+import { Match, Show, Switch, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getUser } from "~/api";
-import { getDataImage, getMemoriesLength } from "~/api/api";
+import { getDataImage } from "~/api/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
-import { URL_IMAGE_MAIN_PAGE } from "~/utils";
 import "/public/styles/main.scss";
-import { GlobalContextProvider, useGlobalContext } from "~/globalcontext/store";
+import { GlobalContextProvider } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
-import { OcArrowright2 } from "solid-icons/oc";
+import {
+  BsDice1,
+  BsDice2,
+  BsDice3,
+  BsDice4,
+  BsDice5,
+  BsDice6,
+  BsLayoutSidebarReverse,
+  BsLayoutThreeColumns,
+} from "solid-icons/bs";
+import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 
 export const route = {
   load: () => getUser(),
@@ -59,12 +68,16 @@ const MainLayout = (props: RouteSectionProps) => {
   });
 
   const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
+  const [dice, setDice] = createSignal<number>(1);
+
   const changeToggle = () => {
     setToggleMainPage(!toggleMainPage());
   };
 
   const handleGetNextImage = () => {
     getNextImageData(imageObj.nextImageUrl!);
+    const randomNumber = Math.floor(Math.random() * 6) + 1;
+    setDice(randomNumber);
   };
 
   return (
@@ -102,33 +115,34 @@ const MainLayout = (props: RouteSectionProps) => {
           </Presence>
           <div class="mainImageBottomBar">
             <button onClick={changeToggle} class="mainImageRoundBtn">
-              <svg
-                width="18"
-                height="18"
-                version="1.1"
-                viewBox="0 0 20 20"
-                x="0px"
-                y="0px"
-                role="presentation"
-                aria-hidden="true"
-                class="ScIconSVG-sc-1q25cff-1 jpczqG"
-                fill="#fff"
+              <Show
+                when={toggleMainPage()}
+                fallback={<VsLayoutCentered size={17} />}
               >
-                <g>
-                  <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h7V3H4zM16 3h-3v14h3a2 2 0 002-2V5a2 2 0 00-2-2z"></path>
-                </g>
-              </svg>
+                <VsLayoutActivitybarRight size={17} />
+              </Show>
             </button>
             <button onClick={handleGetNextImage} class="mainImageRoundBtn">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="15"
-                height="15"
-                viewBox="0 0 52 52"
-                fill="#fff"
-              >
-                <path d="M14 43.7V8.3c0-1 1.3-1.7 2.2-.9l21.2 17.3c.8.6.8 1.9 0 2.5L16.2 44.7c-.9.7-2.2.1-2.2-1" />
-              </svg>
+              <Switch>
+                <Match when={dice() === 1}>
+                  <BsDice1 size={15} />
+                </Match>
+                <Match when={dice() === 2}>
+                  <BsDice2 size={15} />
+                </Match>
+                <Match when={dice() === 3}>
+                  <BsDice3 size={15} />
+                </Match>
+                <Match when={dice() === 4}>
+                  <BsDice4 size={15} />
+                </Match>
+                <Match when={dice() === 5}>
+                  <BsDice5 size={15} />
+                </Match>
+                <Match when={dice() === 6}>
+                  <BsDice6 size={15} />
+                </Match>
+              </Switch>
             </button>
           </div>
         </Motion.div>
