@@ -25,6 +25,7 @@ import {
   getTextDataCambridge,
   getTextDataCollins,
   getTextDataEnglish,
+  getTextDataWebster,
   getTranslate,
   insertVocabularyItem,
 } from "~/api/api";
@@ -35,24 +36,10 @@ const Translation: Component<{
   onClose: Setter<boolean>;
 }> = (props) => {
   const insertActionResult = useSubmission(insertVocabularyItem);
-  const [translateTerm, setTranslateTerm] = createSignal<string>("");
+  const [translateTerm, setTranslateTerm] = createSignal<string>(
+    props.translateText
+  );
   const [translateData, setTranslateData] = createSignal<TranslateType>();
-
-  //----------------------------DONE NO EDIT--------------
-  const [definitionValue, setDefinitionValue] = createStore<{
-    type: string;
-    example: string;
-    sound: string;
-  }>({
-    type: "",
-    example: "",
-    sound: "",
-  });
-
-  onMount(() => {
-    setTranslateTerm(props.translateText);
-  });
-
   const mockData = {
     text: "",
     sound: "",
@@ -62,28 +49,8 @@ const Translation: Component<{
     meaning: "",
     number: 240,
   };
-
-  //select definitions
-  const [definitionData, setDefinitionData] = createStore<{
-    america: VocabularyType;
-    english: VocabularyType;
-    cambridge: VocabularyType;
-  }>({
-    america: mockData,
-    english: mockData,
-    cambridge: mockData,
-  });
-  const [visible, setVisible] = createSignal([true, true, true]);
-
-  const handleCheck = async (index: number, data: VocabularyType) => {
-    setVisible(visible().map((item, i) => i === index));
-    setDefinitionValue({
-      type: data.class,
-      example: JSON.stringify(data.definitions),
-      sound:
-        definitionData.america.sound || (await getOedSoundURL(translateTerm())),
-    });
-  };
+  const [definitionData, setDefinitionData] =
+    createSignal<VocabularyType>(mockData);
 
   //--------------------------TRANSLATION-----------------
 
@@ -106,20 +73,13 @@ const Translation: Component<{
 
   const handleTranslate = async () => {
     if (translateTerm() !== "") {
-      setVisible([true, true, true]);
       setTransInput("");
       await Promise.all([
-        getTextDataAmerica(translateTerm()),
-        getTextDataCollins(translateTerm()),
-        getTextDataCambridge(translateTerm()),
+        getTextDataWebster(translateTerm()),
         getTranslate(translateTerm()),
       ]).then((data) => {
-        setDefinitionData({
-          america: data[0],
-          english: data[1],
-          cambridge: data[2],
-        });
-        setTranslateData(data[3]);
+        if (data[0]) setDefinitionData(data[0]);
+        setTranslateData(data[1]);
       });
     }
   };
@@ -189,7 +149,7 @@ const Translation: Component<{
               class="editInputItem"
               name="sound"
               autocomplete="off"
-              value={definitionValue.sound}
+              value={definitionData().sound}
             />
           </div>
           <div class="editInputGroup">
@@ -197,14 +157,20 @@ const Translation: Component<{
               class="editInputItem"
               name="class"
               autocomplete="off"
-              value={definitionValue.type}
+              value={definitionData().class}
             />
           </div>
           <div class="editInputGroup">
             <textarea
               name="definitions"
               class="editInputItem editInputItemResult"
-              value={definitionValue.example}
+              value={JSON.stringify(definitionData().definitions)}
+              onChange={(e) =>
+                setDefinitionData({
+                  ...definitionData(),
+                  definitions: JSON.parse(e.currentTarget.value),
+                })
+              }
             />
           </div>
           <div class="editInputGroup">
@@ -212,7 +178,9 @@ const Translation: Component<{
               class="editInputItem"
               name="phonetic"
               autocomplete="off"
-              value={translateData()?.wordTranscription}
+              value={
+                definitionData().phonetic || translateData()?.wordTranscription
+              }
             />
           </div>
           <div class="editInputGroup">
@@ -320,23 +288,8 @@ const Translation: Component<{
           </div>
         </Show>
 
-        <Show when={visible()[0]}>
-          <Definition
-            item={definitionData.america}
-            onCheck={() => handleCheck(0, definitionData.america)}
-          />
-        </Show>
-        <Show when={visible()[1]}>
-          <Definition
-            item={definitionData.english}
-            onCheck={() => handleCheck(1, definitionData.english)}
-          />
-        </Show>
-        <Show when={visible()[2]}>
-          <Definition
-            item={definitionData.cambridge}
-            onCheck={() => handleCheck(2, definitionData.cambridge)}
-          />
+        <Show when={definitionData().text}>
+          <Definition item={definitionData()} />
         </Show>
       </div>
       <Toaster

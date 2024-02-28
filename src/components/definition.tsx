@@ -7,7 +7,7 @@ import {
   createSignal,
 } from "solid-js";
 import { VocabularyType } from "~/types";
-import { OcX2, OcUnmute2, OcCheck2 } from "solid-icons/oc";
+import { OcX2, OcUnmute2 } from "solid-icons/oc";
 import "/public/styles/definition.scss";
 
 let audioRef: HTMLAudioElement;
@@ -15,8 +15,6 @@ let audioRef: HTMLAudioElement;
 const Definition: Component<{
   item: VocabularyType;
   onClose?: Setter<boolean>;
-  onCheck?: Setter<boolean>;
-  check?: boolean;
   count?: number;
 }> = (props) => {
   const currenText = createMemo(() => props.item);
@@ -36,14 +34,14 @@ const Definition: Component<{
               when={props.count}
               fallback={
                 <p class="definitionHeaderText">
-                  Definitions of <b>{currenText().text}</b>{" "}
-                  <i>{currenText().class}</i>
+                  Definitions of <b>{currenText()?.text}</b>{" "}
+                  <i>{currenText()?.class}</i>
                 </p>
               }
             >
               <p class="definitionHeaderText">
                 <span>{props.count}.</span> <b>{currenText().text}</b>{" "}
-                <i>{currenText().class}</i>
+                <i>{currenText()?.class}</i>
               </p>
             </Show>
           </div>
@@ -51,23 +49,18 @@ const Definition: Component<{
             <button class="button button--primary" onclick={handlePlaySound}>
               <OcUnmute2 size={12} />
             </button>
-            <Show when={!props.onCheck}>
+            <Show when={props.onClose}>
               <button class="button button--close" onclick={props.onClose}>
                 <OcX2 size={15} />
-              </button>
-            </Show>
-            <Show when={props.onCheck}>
-              <button class="button button--success" onclick={props.onCheck}>
-                <OcCheck2 size={13} />
               </button>
             </Show>
           </div>
         </div>
         <div class="definitionBody">
           <Show
-            when={currenText().definitions.length > 1}
+            when={currenText()?.definitions.length > 1}
             fallback={
-              <Index each={currenText().definitions}>
+              <Index each={currenText()?.definitions}>
                 {(m, i) => {
                   return (
                     <div class="sn-gs">
@@ -78,7 +71,7 @@ const Definition: Component<{
               </Index>
             }
           >
-            <Index each={currenText().definitions}>
+            <Index each={currenText()?.definitions}>
               {(m, i) => {
                 return (
                   <div class="sn-gs">

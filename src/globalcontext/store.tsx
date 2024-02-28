@@ -24,6 +24,8 @@ interface ContextProps {
   setShowMenubar: Setter<boolean>;
   counter: Accessor<number>;
   setCounter: Setter<number>;
+  wordListType: Accessor<1 | 2>;
+  setWordListType: Setter<1 | 2>;
   wordList: Accessor<VocabularyType[]>;
   setWordList: Setter<VocabularyType[]>;
 }
@@ -36,6 +38,7 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
   const [bottomActive, setBottomActive] = createSignal(false);
   const [bottomLooping, setBottomLooping] = createSignal(false);
   const [counter, setCounter] = createSignal<number>(0);
+  const [wordListType, setWordListType] = createSignal<1 | 2>(1);
   const [wordList, setWordList] = createSignal<VocabularyType[]>([]);
   const [totalMemories, setTotalMemories] = createSignal<number>(0);
 
@@ -63,6 +66,8 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
         setWordList,
         showMenubar,
         setShowMenubar,
+        wordListType,
+        setWordListType,
       }}
     >
       {props.children}

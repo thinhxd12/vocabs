@@ -82,13 +82,13 @@
                 }
             }
 
-            .dsense_h {
+            .websHead {
                 @include font('NYTImperial', 12px, $color-black, 500, italic, 15px);
                 display: block;
                 text-indent: 3px;
             }
 
-            .def {
+            .websDef {
                 @include font('NYTCheltenham', 13px, $color-black, 700, normal, 15px);
                 display: block;
                 text-indent: 3px;
@@ -98,8 +98,65 @@
                 }
             }
 
+            .websDefUp {
+                @include font('Rubik', 12px, $color-black, 500, normal, 15px);
+                text-transform: uppercase
+            }
 
-            .x {
+            .websThumb {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                margin-bottom: 3px;
+
+                .websImg {
+                    display: block;
+                    width: 168px;
+                    min-height: 96px;
+                    object-fit: cover;
+                    object-position: left 21%;
+                    border-radius: 3px;
+                    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+
+                    &:hover {
+                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+                    }
+                }
+            }
+
+            .websSyn {
+                b {
+                    font-weight: 600;
+                    font-size: 13px;
+                    line-height: 18px;
+                    text-transform: uppercase;
+                }
+
+                small {
+                    color: #727272;
+                    font-weight: 300;
+                    text-transform: lowercase;
+                }
+            }
+
+            .websCredits {
+                display: block;
+                text-align: right;
+
+                .websAuthor {
+                    font-weight: 600;
+                    font-size: 13px;
+                    font-variant: small-caps;
+                }
+
+                .websTitle {
+                    font-size: 13px;
+                    text-transform: uppercase;
+                }
+            }
+
+
+            .websX {
                 @include font('NYTImperial', 12px, $color-black, 500, italic, 18px);
                 display: block;
                 position: relative;
@@ -120,71 +177,6 @@
                 b {
                     font-weight: 700;
                     color: $color-red-1;
-                }
-            }
-
-            .xr-gs {
-                font-weight: 600;
-                font-size: 13px;
-                line-height: 18px;
-                display: block;
-                text-transform: uppercase;
-                margin-left: 3px;
-
-                small {
-                    color: #727272;
-                    font-weight: 300;
-                    text-transform: lowercase;
-                }
-            }
-
-            .thumb_img {
-                display: flex;
-                align-items: flex-start;
-                justify-content: space-between;
-                flex-direction: row-reverse;
-
-                &:not(:last-child) {
-                    padding-bottom: 4px;
-                    margin-bottom: 4px;
-                    border-bottom: 1px solid #dbdbdb;
-                }
-
-                .thumb {
-                    display: block;
-                    width: 168px;
-                    min-height: 96px;
-                    object-fit: cover;
-                    object-position: left 21%;
-                    border-radius: 3px;
-                    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
-
-                    &:hover {
-                        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-                    }
-                }
-
-                >span {
-                    padding-right: 3px;
-                    display: block;
-                    width: calc(100% - 168px);
-                    flex-grow: 1;
-                }
-            }
-
-            .credits {
-                display: block;
-                margin-left: 32px;
-
-                .author {
-                    font-weight: 600;
-                    font-size: 13px;
-                    font-variant: small-caps;
-                }
-
-                .title {
-                    font-size: 13px;
-                    text-transform: uppercase;
                 }
             }
         }

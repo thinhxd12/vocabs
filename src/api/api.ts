@@ -188,18 +188,9 @@ async function fetchGetText(url: string) {
     try {
         let response = await fetch(url);
         let text = await response.text();
-        try {
-            if (text === null) {
-                return { error: "Not found" };
-            }
-            return text;
-        } catch (e) {
-            console.error(`Received from API: ${text}`);
-            console.error(e);
-            return { error: e };
-        }
+        return text;
     } catch (error) {
-        return { error };
+        return "";
     }
 }
 
@@ -441,35 +432,173 @@ export const getTextDataCollins = async (text: string) => {
         const doc = parse(pageImgHtml);
 
         result.sound = "";
-        result.text = getElText(doc, ".orth", text);
-        result.class = getElText(doc, "div.american .hom .pos", "");
         const defArr: string[] = [];
-        const body = doc.querySelector(".content.dictionary.american");
+        const img = getElAttribute(doc, ".imageImg", "src");
+        const body = doc.querySelector(".content.definitions.dictionary.american");
+        result.text = getElText(body, ".orth", text);
+        result.class = getElText(body, ".dictionary.american .hom .pos", "");
         const exampleDoc = doc.querySelector(".cB.cB-e");
         if (body) {
             body.querySelectorAll(".hom").forEach((item, index) => {
                 if (index < 3) {
                     let def = "";
+                    let quote = "";
+                    let credits = "";
                     const head = getElText(item, ".pos", "");
                     if (head !== "") def += `<span class="dsense_h">${head}</span>`;
                     let defin = getElText(item, "div.def", "");
-                    const exampleObj = exampleDoc?.querySelector(`span.cit:nth-child(${index + 2})`);
-
-                    let quote = getElText(exampleObj, '.quote', "");
-                    if (quote !== "") {
-                        quote = quote.replace(regText, `<b>$1</b>`);
+                    if (exampleDoc) {
+                        const exampleObj = exampleDoc?.querySelector(`span.cit:nth-child(${index + 2})`);
+                        quote = getElText(exampleObj, '.quote', "");
+                        if (quote !== "") {
+                            quote = quote.replace(regText, `<b>$1</b>`);
+                        }
+                        quote = quote !== "" ? `<span class="x">${quote}</span>` : "";
+                        let author = getElText(exampleObj, '.credits .author', "");
+                        author = author !== "" ? `<span class="author">${author} </span>` : "";
+                        let title = getElText(exampleObj, '.credits .title', "");
+                        title = title !== "" ? `<span class="title">${title} </span>` : "";
+                        let year = getElText(exampleObj, '.credits .year', "");
+                        year = year !== "" ? `<span class="year">${year}</span>` : "";
+                        if (title !== "") credits = `<span class="credits">${author}${title}${year}</span>`;
                     }
-                    let author = getElText(exampleObj, '.credits .author', "");
-                    author = author !== "" ? `<span class="author">${author} </span>` : "";
-                    let title = getElText(exampleObj, '.credits .title', "");
-                    title = title !== "" ? `<span class="title">${title} </span>` : "";
-                    let year = getElText(exampleObj, '.credits .year', "");
-                    year = year !== "" ? `<span class="year">${year}</span>` : "";
-                    def += `<span class="def">${defin}</span><span class="x">${quote}</span><span class="credits">${author}${title}${year}</span>`;
+                    if (img !== "" && index === 0) {
+                        def += `<span class="thumb_img"><img class="thumb" src="https://www.collinsdictionary.com${img}"/><span><span class="def">${defin}</span>${quote}${credits}</span>`;
+                    }
+                    else def += `<span class="def">${defin}</span>${quote}${credits}`;
                     defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
                 }
             })
         }
+        result.definitions = defArr;
+        return result;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+//get data definition from webster
+export const getTextDataWebster = async (text: string) => {
+    const url = DEFAULT_CORS_PROXY + `https://www.merriam-webster.com/dictionary/${text}`;
+    const cambrideUrl = DEFAULT_CORS_PROXY + `https://dictionary.cambridge.org/dictionary/english/${text}`;
+    const oxfordUrl = DEFAULT_CORS_PROXY + `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+
+    const result: VocabularyType = {
+        text: "",
+        sound: "",
+        class: "",
+        definitions: [],
+        phonetic: "",
+        meaning: "",
+        number: 240,
+    };
+    const newText = text.length > 4 ? text.slice(0, -2) : text;
+    const regText = new RegExp(`(${newText}\\w*)`, "gi");
+
+    try {
+        const data = await Promise.all([
+            fetchGetText(url),
+            fetchGetText(cambrideUrl),
+            fetchGetText(oxfordUrl),
+        ])
+        const doc = parse(data[0]);
+        const docCa = parse(data[1]);
+        const docOx = parse(data[2]);
+
+        result.sound = getElAttribute(
+            docOx,
+            ".audio_play_button,.pron-us",
+            "data-src-mp3"
+        ) || (await getOedSoundURL(text))
+        const defArr: string[] = [];
+        result.text = getElText(doc, "h1.hword", text);
+        result.class = getElAttribute(doc, ".important-blue-link", "href").replace("/dictionary/", "");
+        result.phonetic = getElText(doc, ".prons-entries-list-inline a", "");
+
+        let exampleArr: any = [];
+        const exampleContent = doc.querySelector(".on-web-container");
+        if (exampleContent) {
+            const headers = exampleContent.querySelectorAll(".function-label-header");
+            if (headers.length > 0) {
+                headers.forEach((a, b) => {
+                    let item = { class: "", ex: "" };
+                    item.class = a.text.toLowerCase();
+                    const exa = a.nextElementSibling;
+                    let quote = getElText(exa, ".t", "");
+                    if (quote !== "") {
+                        quote = quote.replace(regText, `<b>$1</b>`);
+                    }
+                    quote = quote !== "" ? `<span class="websX">${quote}</span>` : "";
+                    let aut = getElText(exa, ".auth", "").replace("—", "").split(", ");
+                    item.ex = quote + `<span class="websCredits"><span class="websAuthor">${aut[0]} </span><span class="websTitle">${aut[1]} </span><span class="websYear">${aut[2]}</span></span>`
+                    exampleArr.push(item);
+                })
+            } else {
+                let item = { class: "", ex: "" };
+                const head = getElText(doc, ".entry-word-section-container .parts-of-speech", "");
+                item.class = head.toLowerCase().split(' ').shift();
+                const exa = exampleContent.querySelector(".sub-content-thread");
+                let quote = getElText(exa, ".t", "");
+                if (quote !== "") {
+                    quote = quote.replace(regText, `<b>$1</b>`);
+                }
+                quote = quote !== "" ? `<span class="websX">${quote}</span>` : "";
+                let aut = getElText(exa, ".auth", "").replace("—", "").split(", ");
+                item.ex = quote + `<span class="websCredits"><span class="websAuthor">${aut[0]} </span><span class="websTitle">${aut[1]} </span><span class="websYear">${aut[2]}</span></span>`
+                exampleArr.push(item);
+            }
+
+        }
+
+        const entryHeader = doc.querySelectorAll(".entry-word-section-container");
+        entryHeader.forEach((item, index) => {
+            let def = "";
+            let fisrtDef = "";
+            const head = getElText(item, ".entry-header-content .parts-of-speech", "").split(' ').shift();
+            def += head !== "" ? `<span class="websHead">${head}</span>` : "";
+
+            //find only First Definition
+            const firstItem = item.querySelector(".vg-sseq-entry-item");
+
+            if (firstItem) {
+                firstItem.querySelectorAll(".sb-entry .sense").forEach((m, n) => {
+                    let letter = getElText(m, ".letter", "");
+                    let dtText = getElText(m, ".dtText", "");
+                    dtText = dtText.replace(/\s\:\s(.+)/g, `<span class="websDefUp"> : $1</span>`);
+                    fisrtDef += `<span class="websDef">${letter}${dtText}</span>`;
+                })
+            }
+
+            if (index === 0) {
+                const img = docCa.querySelector(".dimg");
+                if (img) {
+                    const imgUrl = getElAttribute(img, "amp-img", "src");
+                    def += `<span class="websThumb"><span>${fisrtDef}</span><img class="websImg" src="https://dictionary.cambridge.org${imgUrl}"/></span>`
+                }
+                else def += fisrtDef;
+            }
+            else def += fisrtDef;
+
+            //add Example
+            let examp = exampleArr.find((o: any) => o.class === head);
+            if (examp) def += examp.ex;
+
+            //add Synonym if index === 0
+            if (index === 0) {
+                const syn = doc.querySelector(".synonyms_list");
+                let synDom = "";
+                if (syn) {
+                    let listItems = syn.querySelectorAll('ul li');
+                    for (let i = 0; i < 3; i++) {
+                        if (listItems[i]) {
+                            synDom += i < 2 ? listItems[i].textContent + ", " : listItems[i].textContent
+                        }
+                    }
+                    def += `<span class="websSyn"><b>Synonym : </b><small>${synDom}</small></span>`
+                }
+            }
+            defArr.push(def.replace(/[\n\r]+|\s{2,}/g, " ").trim());
+        })
         result.definitions = defArr;
         return result;
     } catch (error) {

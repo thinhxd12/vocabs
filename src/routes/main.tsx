@@ -68,7 +68,7 @@ const MainLayout = (props: RouteSectionProps) => {
   });
 
   const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
-  const [dice, setDice] = createSignal<number>(1);
+  const [dice, setDice] = createSignal<number>(3);
 
   const changeToggle = () => {
     setToggleMainPage(!toggleMainPage());

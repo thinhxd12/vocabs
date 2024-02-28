@@ -12,15 +12,8 @@ import "/public/styles/toast.scss";
 import { OcChevrondown2, OcChevronup2, OcX2 } from "solid-icons/oc";
 import { VocabularyType } from "~/types";
 import { action, useSubmission } from "@solidjs/router";
-import { createStore } from "solid-js/store";
 import Definition from "./definition";
-import {
-  editVocabularyItem,
-  getTextDataAmerica,
-  getTextDataCambridge,
-  getTextDataCollins,
-  getTextDataEnglish,
-} from "~/api/api";
+import { editVocabularyItem, getTextDataWebster } from "~/api/api";
 import toast, { Toaster } from "solid-toast";
 
 const Edit: Component<{
@@ -29,32 +22,6 @@ const Edit: Component<{
 }> = (props) => {
   const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
   const editActionResult = useSubmission(editVocabularyItem);
-  const [definitionValue, setDefinitionValue] = createStore<{
-    type: string;
-    example: string;
-  }>({
-    type: "",
-    example: "",
-  });
-
-  onMount(() => {
-    setDefinitionValue({
-      type: props.item.class,
-      example: JSON.stringify(props.item.definitions),
-    });
-    Promise.all([
-      getTextDataAmerica(props.item.text),
-      getTextDataCollins(props.item.text),
-      getTextDataCambridge(props.item.text),
-    ]).then((data) => {
-      setDefinitionData({
-        america: data[0],
-        english: data[1],
-        cambridge: data[2],
-      });
-    });
-  });
-
   const mockData = {
     text: "",
     sound: "",
@@ -64,58 +31,23 @@ const Edit: Component<{
     meaning: "",
     number: 240,
   };
+  const [definitionData, setDefinitionData] =
+    createSignal<VocabularyType>(mockData);
 
-  //select definitions
-  const [definitionData, setDefinitionData] = createStore<{
-    america: VocabularyType;
-    english: VocabularyType;
-    cambridge: VocabularyType;
-  }>({
-    america: mockData,
-    english: mockData,
-    cambridge: mockData,
-  });
-  const [visible, setVisible] = createSignal([true, true, true]);
-
-  const handleCheck = (index: number, data: VocabularyType) => {
-    setVisible(visible().map((item, i) => i === index));
-    setDefinitionValue({
-      type: data.class,
-      example: JSON.stringify(data.definitions),
-    });
+  const getAndSetDefinitionData = async (text: string) => {
+    const data = await getTextDataWebster(text);
+    if (data) setDefinitionData(data);
   };
 
-  const [handyEditResult, setHandyEditResult] = createSignal<string>("");
-  const handleSubmitDefinition = action(async (formData: FormData) => {
-    const newText =
-      props.item.text.length > 4
-        ? props.item.text.slice(0, -2)
-        : props.item.text;
-    const regText = new RegExp(`(${newText}\\w*)`, "gi");
-    let res = "";
-    const image = String(formData.get("image"));
-    const definition = String(formData.get("definition"));
-    const example = String(formData.get("example"));
-    const synonym = String(formData.get("synonym"));
-
-    if (image !== "")
-      res += `<span class=\"thumb_img\"><img class=\"thumb\" src=\"${image}\"/><span><span class=\"def\">${definition}</span>${
-        example !== ""
-          ? `<span class=\"x\">${example.replace(regText, `<b>$1</b>`)}</span>`
-          : ""
-      }</span></span>`;
-    else
-      res += `<span class=\"def\">${definition}</span>${
-        example !== ""
-          ? `<span class=\"x\">${example.replace(regText, `<b>$1</b>`)}</span>`
-          : ""
-      }`;
-    if (synonym !== "")
-      res += `<span class=\"xr-gs\">synonym <small>${synonym}</small></span>`;
-
-    setHandyEditResult(JSON.stringify(res));
+  onMount(() => {
+    getAndSetDefinitionData(props.item.text);
   });
 
+  const handyType1 =
+    '<span class="websHead">adjective</span><span class="websDef">a: a content<span class="websDefUp"> : a similar</span></span><span class="websDef">b: b content</span><span class="websX">definition</span><span class="websCredits"><span class="websAuthor">Author </span><span class="websTitle">Title </span><span class="websYear">28 Feb. 2024</span></span><span class="websSyn"><b>Synonym : </b><small>a, b, c</small></span>';
+
+  const handyType2 =
+    '<span class="websHead">noun</span><span class="websThumb"><span><span class="websDef">: something</span><span class="websDef">a: a content</span><span class="websDef">b: b content</span></span><img class="websImg" src="abc"/></span><span class="websX">example</span><span class="websCredits"><span class="websAuthor">Author </span><span class="websTitle">Title </span><span class="websYear">28 Feb. 2024</span></span>';
   //----------------------TOAST----------------------
   const popSuccess = () => toast.success("Success", { duration: 3000 });
   const popError = (msg: string) => toast.error(msg, { duration: 3000 });
@@ -162,49 +94,18 @@ const Edit: Component<{
       <div class="editBody">
         <Show when={showHandyEdit()}>
           <div class="handyEditContainer">
-            <form action={handleSubmitDefinition} method="post">
-              <div class="editInputGroup">
-                <input
-                  class="editInputItem"
-                  placeholder="Image"
-                  name="image"
-                  autocomplete="off"
-                />
-              </div>
-              <div class="editInputGroup">
-                <input
-                  class="editInputItem"
-                  placeholder="Definition"
-                  autocomplete="off"
-                  name="definition"
-                />
-              </div>
-              <div class="editInputGroup">
-                <input
-                  class="editInputItem"
-                  placeholder="Example"
-                  autocomplete="off"
-                  name="example"
-                />
-              </div>
-              <div class="editInputGroup">
-                <input
-                  class="editInputItem"
-                  placeholder="Synonym"
-                  autocomplete="off"
-                  name="synonym"
-                />
-              </div>
-              <div class="editInputGroup">
-                <textarea
-                  class="editInputItem editInputItemResult"
-                  value={handyEditResult()}
-                />
-              </div>
-              <button type="submit" class="button button--submit">
-                Submit
-              </button>
-            </form>
+            <div class="editInputGroup">
+              <textarea
+                class="editInputItem editInputItemResult"
+                value={JSON.stringify(handyType1)}
+              />
+            </div>
+            <div class="editInputGroup">
+              <textarea
+                class="editInputItem editInputItemResult"
+                value={JSON.stringify(handyType2)}
+              />
+            </div>
           </div>
         </Show>
 
@@ -238,14 +139,20 @@ const Edit: Component<{
               class="editInputItem"
               name="class"
               autocomplete="off"
-              value={definitionValue.type}
+              value={definitionData().class}
             />
           </div>
           <div class="editInputGroup">
             <textarea
               name="definitions"
               class="editInputItem editInputItemResult"
-              value={definitionValue.example}
+              value={JSON.stringify(definitionData().definitions)}
+              onChange={(e) =>
+                setDefinitionData({
+                  ...definitionData(),
+                  definitions: JSON.parse(e.currentTarget.value),
+                })
+              }
             />
           </div>
           <div class="editInputGroup">
@@ -253,7 +160,7 @@ const Edit: Component<{
               class="editInputItem"
               name="phonetic"
               autocomplete="off"
-              value={props.item?.phonetic}
+              value={definitionData().phonetic || props.item?.phonetic}
             />
           </div>
           <div class="editInputGroup">
@@ -282,23 +189,8 @@ const Edit: Component<{
           </button>
         </form>
 
-        <Show when={visible()[0]}>
-          <Definition
-            item={definitionData.america}
-            onCheck={() => handleCheck(0, definitionData.america)}
-          />
-        </Show>
-        <Show when={visible()[1]}>
-          <Definition
-            item={definitionData.english}
-            onCheck={() => handleCheck(1, definitionData.english)}
-          />
-        </Show>
-        <Show when={visible()[2]}>
-          <Definition
-            item={definitionData.cambridge}
-            onCheck={() => handleCheck(2, definitionData.cambridge)}
-          />
+        <Show when={definitionData().text}>
+          <Definition item={definitionData()} />
         </Show>
       </div>
       <Toaster

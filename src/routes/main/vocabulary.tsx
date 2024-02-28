@@ -21,6 +21,7 @@ import {
   checkVocabulary,
   archiveVocabulary,
   getMemoriesLength,
+  getTextDataWebster,
 } from "~/api/api";
 import { Motion, Presence } from "solid-motionone";
 import { useGlobalContext } from "~/globalcontext/store";
@@ -215,11 +216,11 @@ const Vocabulary: Component<{}> = () => {
     setBottomLooping(true);
     if (counter() === 0) {
       const newProgress =
-        todayIndex() === 1
+        wordListType() === 1
           ? getCalendarTodayDataResult.result!.time1 + 1
           : getCalendarTodayDataResult.result!.time2 + 1;
 
-      await submitTodayProgressAction(todayIndex(), newProgress);
+      await submitTodayProgressAction(wordListType(), newProgress);
       await getCalendarTodayDataAction();
     }
     handleAutoplay();
@@ -229,7 +230,7 @@ const Vocabulary: Component<{}> = () => {
       } else {
         stopAutoplay();
         //get wordlist to update lastest changed
-        handleSetDailyWord(todayIndex());
+        handleSetDailyWord(wordListType());
         //start timmer countdown
         if (getCalendarTodayDataResult.result) {
           getCalendarTodayDataResult.result.time2 < 9 && startCountdown();
@@ -265,6 +266,8 @@ const Vocabulary: Component<{}> = () => {
     setTotalMemories,
     showMenubar,
     setShowMenubar,
+    wordListType,
+    setWordListType,
   } = useGlobalContext();
 
   createEffect(
@@ -277,13 +280,11 @@ const Vocabulary: Component<{}> = () => {
     })
   );
 
-  const [todayIndex, setTodayIndex] = createSignal<number>(0);
-
   const handleSetDailyWord = async (id: number) => {
     switch (id) {
       case 1:
         //get 50 word
-        setTodayIndex(1);
+        setWordListType(1);
         const start1 = getCalendarTodayDataResult.result!.index1;
         const data1 = await getVocabularyFromRangeAction(start1, start1 + 49);
         if (data1) {
@@ -294,7 +295,7 @@ const Vocabulary: Component<{}> = () => {
         break;
       case 2:
         //get 59word
-        setTodayIndex(2);
+        setWordListType(2);
         const start2 = getCalendarTodayDataResult.result!.index2;
         const data2 = await getVocabularyFromRangeAction(start2, start2 + 49);
         if (data2) {
@@ -312,9 +313,9 @@ const Vocabulary: Component<{}> = () => {
   // -------------------TIMMER START-------------------- //
   const showDesktopNotification = () => {
     const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
-    const letter = todayIndex() === 1 ? "I" : "II";
+    const letter = wordListType() === 1 ? "I" : "II";
     const newProgress =
-      todayIndex() === 1
+      wordListType() === 1
         ? getCalendarTodayDataResult.result!.time1 + 1
         : getCalendarTodayDataResult.result!.time2 + 1;
 
@@ -372,10 +373,6 @@ const Vocabulary: Component<{}> = () => {
 
   // -------------------MOBILE END-------------------- //
   const logoutAction = useAction(logout);
-
-  // const testFunc = async () => {
-  //   const resp = await getTextDataDictionary("shovel");
-  // };
 
   return (
     <MetaProvider>
@@ -528,8 +525,6 @@ const Vocabulary: Component<{}> = () => {
                 </Show>
               </Presence>
             </div>
-
-            {/* <button onClick={testFunc}>Click</button> */}
           </div>
 
           <Presence>
