@@ -529,8 +529,13 @@ export const getTextDataWebster = async (text: string) => {
                         quote = quote.replace(regText, `<b>$1</b>`);
                     }
                     quote = quote !== "" ? `<span class="websX">${quote}</span>` : "";
-                    let aut = getElText(exa, ".auth", "").replace("—", "").split(", ");
-                    item.ex = quote + `<span class="websCredits"><span class="websAuthor">${aut[0]} </span><span class="websTitle">${aut[1]} </span><span class="websYear">${aut[2]}</span></span>`
+                    let cred = getElText(exa, ".auth", "").replace("—", "").split(", ");
+                    const aut = cred[cred.length - 3] ? `<span class="websAuthor">${cred[cred.length - 3]} </span>` : "";
+                    const til = cred[cred.length - 2] ? `<span class="websTitle">${cred[cred.length - 2]} </span>` : "";
+                    const yea = cred[cred.length - 1] ? `<span class="websYear">${cred[cred.length - 1]}</span>` : "";
+                    if (aut || til || yea) {
+                        item.ex = quote + `<span class="websCredits">${aut}${til}${yea}</span>`;
+                    } else item.ex = quote;
                     exampleArr.push(item);
                 })
             } else {
@@ -543,8 +548,13 @@ export const getTextDataWebster = async (text: string) => {
                     quote = quote.replace(regText, `<b>$1</b>`);
                 }
                 quote = quote !== "" ? `<span class="websX">${quote}</span>` : "";
-                let aut = getElText(exa, ".auth", "").replace("—", "").split(", ");
-                item.ex = quote + `<span class="websCredits"><span class="websAuthor">${aut[0]} </span><span class="websTitle">${aut[1]} </span><span class="websYear">${aut[2]}</span></span>`
+                let cred = getElText(exa, ".auth", "").replace("—", "").split(", ");
+                const aut = cred[cred.length - 3] ? `<span class="websAuthor">${cred[cred.length - 3]} </span>` : "";
+                const til = cred[cred.length - 2] ? `<span class="websTitle">${cred[cred.length - 2]} </span>` : "";
+                const yea = cred[cred.length - 1] ? `<span class="websYear">${cred[cred.length - 1]}</span>` : "";
+                if (aut || til || yea) {
+                    item.ex = quote + `<span class="websCredits">${aut}${til}${yea}</span>`;
+                } else item.ex = quote;
                 exampleArr.push(item);
             }
 
