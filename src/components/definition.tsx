@@ -7,7 +7,7 @@ import {
   createSignal,
 } from "solid-js";
 import { VocabularyType } from "~/types";
-import { OcX2, OcUnmute2 } from "solid-icons/oc";
+import { OcX2, OcUnmute2, OcCheck2 } from "solid-icons/oc";
 import "/public/styles/definition.scss";
 
 let audioRef: HTMLAudioElement;
@@ -15,6 +15,7 @@ let audioRef: HTMLAudioElement;
 const Definition: Component<{
   item: VocabularyType;
   onClose?: Setter<boolean>;
+  onCheck?: Setter<boolean>;
   count?: number;
 }> = (props) => {
   const currenText = createMemo(() => props.item);
@@ -52,6 +53,11 @@ const Definition: Component<{
             <Show when={props.onClose}>
               <button class="button button--close" onclick={props.onClose}>
                 <OcX2 size={15} />
+              </button>
+            </Show>
+            <Show when={props.onCheck}>
+              <button class="button button--success" onclick={props.onCheck}>
+                <OcCheck2 size={13} />
               </button>
             </Show>
           </div>

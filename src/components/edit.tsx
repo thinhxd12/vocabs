@@ -15,6 +15,7 @@ import { useSubmission } from "@solidjs/router";
 import Definition from "./definition";
 import { editVocabularyItem, getTextDataWebster } from "~/api/api";
 import toast, { Toaster } from "solid-toast";
+import { createStore } from "solid-js/store";
 
 const Edit: Component<{
   item: VocabularyType;
@@ -34,9 +35,27 @@ const Edit: Component<{
   const [definitionData, setDefinitionData] =
     createSignal<VocabularyType>(mockData);
 
+  const [definitionValue, setDefinitionValue] = createStore<{
+    type: string;
+    example: string;
+    phonetic: string;
+  }>({
+    type: props.item.class,
+    example: JSON.stringify(props.item.definitions),
+    phonetic: props.item.phonetic,
+  });
+
   const getAndSetDefinitionData = async (text: string) => {
     const data = await getTextDataWebster(text);
     if (data) setDefinitionData(data);
+  };
+
+  const handleCheck = () => {
+    setDefinitionValue({
+      type: definitionData().class,
+      example: JSON.stringify(definitionData().definitions),
+      phonetic: definitionData().phonetic,
+    });
   };
 
   onMount(() => {
@@ -139,14 +158,14 @@ const Edit: Component<{
               class="editInputItem"
               name="class"
               autocomplete="off"
-              value={definitionData().class}
+              value={definitionValue.type}
             />
           </div>
           <div class="editInputGroup">
             <textarea
               name="definitions"
               class="editInputItem editInputItemResult"
-              value={JSON.stringify(definitionData().definitions)}
+              value={definitionValue.example}
               onChange={(e) =>
                 setDefinitionData({
                   ...definitionData(),
@@ -160,7 +179,7 @@ const Edit: Component<{
               class="editInputItem"
               name="phonetic"
               autocomplete="off"
-              value={definitionData().phonetic || props.item?.phonetic}
+              value={definitionValue.phonetic}
             />
           </div>
           <div class="editInputGroup">
@@ -190,7 +209,7 @@ const Edit: Component<{
         </form>
 
         <Show when={definitionData().text}>
-          <Definition item={definitionData()} />
+          <Definition item={definitionData()} onCheck={handleCheck} />
         </Show>
       </div>
       <Toaster
