@@ -11,7 +11,7 @@ import "/public/styles/edit.scss";
 import "/public/styles/toast.scss";
 import { OcChevrondown2, OcChevronup2, OcX2 } from "solid-icons/oc";
 import { VocabularyType } from "~/types";
-import { action, useSubmission } from "@solidjs/router";
+import { useSubmission } from "@solidjs/router";
 import Definition from "./definition";
 import { editVocabularyItem, getTextDataWebster } from "~/api/api";
 import toast, { Toaster } from "solid-toast";

@@ -9,7 +9,6 @@ import {
   createEffect,
   createSignal,
   on,
-  onMount,
 } from "solid-js";
 import "/public/styles/edit.scss";
 import "/public/styles/translate.scss";
@@ -17,14 +16,8 @@ import "/public/styles/toast.scss";
 import { OcX2 } from "solid-icons/oc";
 import { TranslateType, VocabularyType } from "~/types";
 import { useSubmission } from "@solidjs/router";
-import { createStore } from "solid-js/store";
 import Definition from "./definition";
 import {
-  getOedSoundURL,
-  getTextDataAmerica,
-  getTextDataCambridge,
-  getTextDataCollins,
-  getTextDataEnglish,
   getTextDataWebster,
   getTranslate,
   insertVocabularyItem,
