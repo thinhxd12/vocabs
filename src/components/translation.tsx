@@ -74,13 +74,16 @@ const Translation: Component<{
   const handleTranslate = async () => {
     if (translateTerm() !== "") {
       setTransInput("");
-      await Promise.all([
-        getTextDataWebster(translateTerm()),
-        getTranslate(translateTerm()),
-      ]).then((data) => {
-        if (data[0]) setDefinitionData(data[0]);
-        setTranslateData(data[1]);
-      });
+      const data = await getTranslate(translateTerm());
+      if (data) setTranslateData(data);
+    }
+  };
+
+  const handleFindDefinition = async () => {
+    if (translateTerm() !== "") {
+      setTransInput("");
+      const data = await getTextDataWebster(translateTerm());
+      if (data) setDefinitionData(data);
     }
   };
 
@@ -129,7 +132,7 @@ const Translation: Component<{
             onInput={(e) => setTranslateTerm(e.target.value)}
             onKeyDown={onKeyDownTranslate}
           />
-          <button class="translateBtn" onClick={handleTranslate}>
+          <button class="translateBtn" onClick={handleFindDefinition}>
             <img src="/images/main/center.png" />
           </button>
           <img
