@@ -113,38 +113,6 @@ const MainLayout = (props: RouteSectionProps) => {
               </Motion.div>
             </Show>
           </Presence>
-          <div class="mainImageBottomBar">
-            <button onClick={changeToggle} class="mainImageRoundBtn">
-              <Show
-                when={toggleMainPage()}
-                fallback={<VsLayoutCentered size={17} />}
-              >
-                <VsLayoutActivitybarRight size={17} />
-              </Show>
-            </button>
-            <button onClick={handleGetNextImage} class="mainImageRoundBtn">
-              <Switch>
-                <Match when={dice() === 1}>
-                  <BsDice1 size={15} />
-                </Match>
-                <Match when={dice() === 2}>
-                  <BsDice2 size={15} />
-                </Match>
-                <Match when={dice() === 3}>
-                  <BsDice3 size={15} />
-                </Match>
-                <Match when={dice() === 4}>
-                  <BsDice4 size={15} />
-                </Match>
-                <Match when={dice() === 5}>
-                  <BsDice5 size={15} />
-                </Match>
-                <Match when={dice() === 6}>
-                  <BsDice6 size={15} />
-                </Match>
-              </Switch>
-            </button>
-          </div>
         </Motion.div>
 
         <div class="mainImageContent">
@@ -206,6 +174,38 @@ const MainLayout = (props: RouteSectionProps) => {
               </Motion.div>
             </Show>
           </Presence>
+          <div class="mainImageBottomBar">
+            <button onClick={changeToggle} class="mainImageRoundBtn">
+              <Show
+                when={toggleMainPage()}
+                fallback={<VsLayoutCentered size={17} />}
+              >
+                <VsLayoutActivitybarRight size={17} />
+              </Show>
+            </button>
+            <button onClick={handleGetNextImage} class="mainImageRoundBtn">
+              <Switch>
+                <Match when={dice() === 1}>
+                  <BsDice1 size={15} />
+                </Match>
+                <Match when={dice() === 2}>
+                  <BsDice2 size={15} />
+                </Match>
+                <Match when={dice() === 3}>
+                  <BsDice3 size={15} />
+                </Match>
+                <Match when={dice() === 4}>
+                  <BsDice4 size={15} />
+                </Match>
+                <Match when={dice() === 5}>
+                  <BsDice5 size={15} />
+                </Match>
+                <Match when={dice() === 6}>
+                  <BsDice6 size={15} />
+                </Match>
+              </Switch>
+            </button>
+          </div>
         </Motion.div>
       </div>
     </div>
