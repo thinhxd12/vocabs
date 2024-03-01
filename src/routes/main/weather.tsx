@@ -33,6 +33,7 @@ const Weather: Component<{}> = (props) => {
       geo: "-25.4443488,-49.1900307",
     },
   ];
+  const supabaseURL = import.meta.env.VITE_SUPABASE_URL;
 
   const getWeatherDataAction = useAction(getWeatherData);
   const getWeatherDataResult = useSubmission(getWeatherData);
@@ -253,7 +254,7 @@ const Weather: Component<{}> = (props) => {
         animate={{
           opacity: [0, 1],
           backgroundImage: getWeatherDataResult.result
-            ? `url(/images/darksky/background/${getWeatherDataResult.result?.currentData.icon}.jpg)`
+            ? `url(${supabaseURL}/storage/v1/object/public/weather/backgrounds/${getWeatherDataResult.result?.currentData.icon}.jpg)`
             : "unset",
         }}
         transition={{ duration: 0.6 }}
@@ -272,7 +273,7 @@ const Weather: Component<{}> = (props) => {
           <div class="weatherContent">
             <img
               class="weatherImg"
-              src={`/images/darksky/${
+              src={`${supabaseURL}/storage/v1/object/public/weather/icons/${
                 getWeatherDataResult.result!.currentData.icon
               }.svg`}
             />
