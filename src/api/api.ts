@@ -206,6 +206,7 @@ export const getTextDataAmerica = async (text: string) => {
         definitions: [],
         phonetic: "",
         meaning: "",
+        created_at: "",
         number: 240,
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
@@ -276,6 +277,7 @@ export const getTextDataEnglish = async (text: string) => {
         definitions: [],
         phonetic: "",
         meaning: "",
+        created_at: "",
         number: 240,
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
@@ -346,6 +348,7 @@ export const getTextDataCambridge = async (text: string) => {
         phonetic: "",
         meaning: "",
         number: 240,
+        created_at: "",
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
@@ -421,6 +424,7 @@ export const getTextDataCollins = async (text: string) => {
         definitions: [],
         phonetic: "",
         meaning: "",
+        created_at: "",
         number: 240,
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
@@ -491,6 +495,7 @@ export const getTextDataWebster = async (text: string) => {
         phonetic: "",
         meaning: "",
         number: 240,
+        created_at: "",
     };
     const newText = text.length > 4 ? text.slice(0, -2) : text;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
@@ -827,14 +832,14 @@ export const checkVocabulary = action(async (text: string) => {
 }, "checkVocabulary");
 
 //archive vocabulary
-export const archiveVocabulary = action(async (text: string) => {
+export const archiveVocabulary = action(async (text: string, date: string) => {
     "use server";
     const { error } = await supabase
-        .rpc('archiveitem', { word: text })
+        .rpc('archiveitem', { word: text, start: date })
     if (error) return error;
 }, "archiveVocabulary");
 
-//archive vocabulary
+//get 50 word
 export const getVocabularyFromRange = action(async (start: number, end: number) => {
     "use server";
     const { data, error } = await supabase

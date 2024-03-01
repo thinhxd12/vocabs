@@ -23,7 +23,7 @@ const Edit: Component<{
 }> = (props) => {
   const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
   const editActionResult = useSubmission(editVocabularyItem);
-  const mockData = {
+  const mockData: VocabularyType = {
     text: "",
     sound: "",
     class: "",
@@ -31,6 +31,7 @@ const Edit: Component<{
     phonetic: "",
     meaning: "",
     number: 240,
+    created_at: "",
   };
   const [definitionData, setDefinitionData] =
     createSignal<VocabularyType>(mockData);

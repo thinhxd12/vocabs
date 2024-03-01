@@ -6,6 +6,7 @@ export interface VocabularyType {
   phonetic: string;
   meaning: string;
   number: number;
+  created_at: string;
 }
 
 export interface BookmarkType {

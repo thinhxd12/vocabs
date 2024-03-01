@@ -21,7 +21,6 @@ import {
   checkVocabulary,
   archiveVocabulary,
   getMemoriesLength,
-  getTextDataWebster,
 } from "~/api/api";
 import { Motion, Presence } from "solid-motionone";
 import { useGlobalContext } from "~/globalcontext/store";
@@ -133,7 +132,7 @@ const Vocabulary: Component<{}> = () => {
     if (text.number > 1) {
       checkVocabularyAction(text.text);
     } else {
-      await archiveVocabularyAction(text.text);
+      await archiveVocabularyAction(text.text, text.created_at);
       deleteVocabularyAction(text.text);
       const count = await getMemoriesLengthAction();
       setTotalMemories(count);

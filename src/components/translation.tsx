@@ -33,7 +33,7 @@ const Translation: Component<{
     props.translateText
   );
   const [translateData, setTranslateData] = createSignal<TranslateType>();
-  const mockData = {
+  const mockData: VocabularyType = {
     text: "",
     sound: "",
     class: "",
@@ -41,6 +41,7 @@ const Translation: Component<{
     phonetic: "",
     meaning: "",
     number: 240,
+    created_at: "",
   };
   const [definitionData, setDefinitionData] =
     createSignal<VocabularyType>(mockData);
