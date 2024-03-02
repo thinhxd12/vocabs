@@ -23,6 +23,7 @@ import {
   insertVocabularyItem,
 } from "~/api/api";
 import toast, { Toaster } from "solid-toast";
+import useClickOutside from "solid-click-outside";
 
 const Translation: Component<{
   translateText: string;
@@ -103,8 +104,15 @@ const Translation: Component<{
     )
   );
 
+  //outside click close
+  const [target, setTarget] = createSignal<HTMLElement | undefined>();
+
+  useClickOutside(target, () => {
+    props.onClose(false);
+  });
+
   return (
-    <div class="edit" tabIndex={1}>
+    <div class="edit" tabIndex={1} ref={setTarget}>
       <div class="editHeader">
         <div class="editHeaderLeft"></div>
         <div class="editHeaderRight">

@@ -9,13 +9,14 @@ import {
 } from "solid-js";
 import "/public/styles/edit.scss";
 import "/public/styles/toast.scss";
-import { OcChevrondown2, OcChevronup2, OcX2 } from "solid-icons/oc";
+import { OcChevronup2, OcX2 } from "solid-icons/oc";
 import { VocabularyType } from "~/types";
 import { useSubmission } from "@solidjs/router";
 import Definition from "./definition";
 import { editVocabularyItem, getTextDataWebster } from "~/api/api";
 import toast, { Toaster } from "solid-toast";
 import { createStore } from "solid-js/store";
+import useClickOutside from "solid-click-outside";
 
 const Edit: Component<{
   item: VocabularyType;
@@ -64,10 +65,10 @@ const Edit: Component<{
   });
 
   const handyType1 =
-    '<span class="websHead">adjective</span><span class="websDef">a: a content<span class="websDefUp"> : a similar</span></span><span class="websDef">b: b content</span><span class="websX">definition</span><span class="websCredits"><span class="websAuthor">Author </span><span class="websTitle">Title </span><span class="websYear">28 Feb. 2024</span></span><span class="websSyn"><b>Synonym : </b><small>a, b, c</small></span>';
+    '<span class="websHead">adjective</span><span class="websDef">a: a content<span class="websDefUp"> : a similar</span></span><span class="websX">definition</span><span class="websCredits"><span class="websAuthor">Author </span><span class="websTitle">Title </span><span class="websYear">28 Feb. 2024</span></span><span class="websSyn"><b>Synonym : </b><small>a, b, c</small></span>';
 
   const handyType2 =
-    '<span class="websHead">noun</span><span class="websThumb"><span><span class="websDef">: something</span><span class="websDef">a: a content</span><span class="websDef">b: b content</span></span><img class="websImg" src="abc"/></span><span class="websX">example</span><span class="websCredits"><span class="websAuthor">Author </span><span class="websTitle">Title </span><span class="websYear">28 Feb. 2024</span></span>';
+    '<span class="websHead">noun</span><span class="websThumb"><span><span class="websDef">: something</span><span class="websDef">a: a content</span></span><img class="websImg" src="abc"/></span><span class="websX">example</span><span class="websCredits"><span class="websAuthor">Author </span><span class="websTitle">Title </span><span class="websYear">28 Feb. 2024</span></span>';
   //----------------------TOAST----------------------
   const popSuccess = () => toast.success("Success", { duration: 3000 });
   const popError = (msg: string) => toast.error(msg, { duration: 3000 });
@@ -90,21 +91,24 @@ const Edit: Component<{
     )
   );
 
+  const handleShowHandyEdit = () => {
+    setShowHandyEdit(!showHandyEdit());
+  };
+
+  //outside click close
+  const [target, setTarget] = createSignal<HTMLElement | undefined>();
+
+  useClickOutside(target, () => {
+    props.onClose(false);
+  });
+
   return (
-    <div class="edit" tabIndex={1}>
+    <div class="edit" tabIndex={1} ref={setTarget}>
       <div class="editHeader">
         <div class="editHeaderLeft"></div>
         <div class="editHeaderRight">
-          <button
-            class="button button--primary"
-            onClick={() => setShowHandyEdit(!showHandyEdit())}
-          >
-            <Show
-              when={showHandyEdit()}
-              fallback={<OcChevrondown2 size={12} />}
-            >
-              <OcChevronup2 size={12} />
-            </Show>
+          <button class="button button--primary" onClick={handleShowHandyEdit}>
+            <OcChevronup2 size={12} />
           </button>
           <button class="button button--close" onclick={props.onClose}>
             <OcX2 size={15} />

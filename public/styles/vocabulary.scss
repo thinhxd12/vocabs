@@ -173,6 +173,15 @@
         }
 
         .searchContainer {
+            .searchResult {
+                width: 100%;
+                position: sticky;
+                top: 0;
+                left: 0;
+                background-color: $color-black;
+                z-index: 1001;
+            }
+
             .my-item {
                 @include flex;
                 justify-content: space-between;

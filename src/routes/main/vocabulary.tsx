@@ -52,6 +52,7 @@ const [showDefinitions, setShowDefinitions] = createSignal(false);
 const Vocabulary: Component<{}> = () => {
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
+  const [showSearchResult, setShowSearchResult] = createSignal<boolean>(false);
 
   const [searchInputColor, setSearchInputColor] =
     createSignal<string>("#957c3e");
@@ -67,7 +68,9 @@ const Vocabulary: Component<{}> = () => {
   });
 
   createEffect(() => {
-    if (searchResult().length > 0) setSearchInputColor("#957c3e");
+    if (searchResult().length > 0) {
+      setSearchInputColor("#957c3e");
+    }
   });
 
   //call sever action search text
@@ -126,6 +129,7 @@ const Vocabulary: Component<{}> = () => {
     setShowDefinitions(true);
     setSearchTerm("");
     setSearchResult([]);
+    setShowSearchResult(false);
 
     // handlecheck function
 
@@ -446,42 +450,44 @@ const Vocabulary: Component<{}> = () => {
 
           <div class="vocabularyContent">
             <div class="searchContainer">
-              {/* Search result */}
-              <Index each={searchResult()}>
-                {(data, i) => (
-                  <div class="my-item">
-                    <span
-                      class="itemText"
-                      onclick={() => handleRenderText(data())}
-                    >
-                      <span>
-                        <small>{i + 1}</small>
-                        <span>{data().text}</span>
-                      </span>
-                    </span>
-                    <button
-                      class="itemNumb"
-                      onClick={() => handleEditVocabulary(data())}
-                    >
-                      {data().number}
-                    </button>
-                    <Show when={i + 1 !== deleteBtnIndex()}>
-                      <button
-                        class="button button--primary"
-                        onClick={() => setDeleteBtnIndex(i + 1)}
-                      ></button>
-                    </Show>
-                    <Show when={i + 1 === deleteBtnIndex()}>
-                      <button
-                        class="button button--primary"
-                        onClick={() => handleDeleteVocabulary(data().text)}
+
+              <div class="searchResult">
+                <Index each={searchResult()}>
+                  {(data, i) => (
+                    <div class="my-item">
+                      <span
+                        class="itemText"
+                        onclick={() => handleRenderText(data())}
                       >
-                        <OcAlertfill2 size={12} color="#ca140c" />
+                        <span>
+                          <small>{i + 1}</small>
+                          <span>{data().text}</span>
+                        </span>
+                      </span>
+                      <button
+                        class="itemNumb"
+                        onClick={() => handleEditVocabulary(data())}
+                      >
+                        {data().number}
                       </button>
-                    </Show>
-                  </div>
-                )}
-              </Index>
+                      <Show when={i + 1 !== deleteBtnIndex()}>
+                        <button
+                          class="button button--primary"
+                          onClick={() => setDeleteBtnIndex(i + 1)}
+                        ></button>
+                      </Show>
+                      <Show when={i + 1 === deleteBtnIndex()}>
+                        <button
+                          class="button button--primary"
+                          onClick={() => handleDeleteVocabulary(data().text)}
+                        >
+                          <OcAlertfill2 size={12} color="#ca140c" />
+                        </button>
+                      </Show>
+                    </div>
+                  )}
+                </Index>
+              </div>
 
               <Show when={showBookmark()}>
                 <Bookmark onClose={() => setShowBookmark(false)} />
@@ -657,6 +663,7 @@ const Vocabulary: Component<{}> = () => {
             </Motion.div>
           </Show>
         </Presence>
+
         {/* Translation */}
         <Presence>
           <Show when={showTranslate()}>
