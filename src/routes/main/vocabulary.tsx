@@ -46,13 +46,10 @@ let timerRef: NodeJS.Timeout;
 let audioRef: HTMLAudioElement;
 let intervalCountdown: NodeJS.Timeout;
 
-const [currentText, setCurrentText] = createSignal<VocabularyType>();
-const [showDefinitions, setShowDefinitions] = createSignal(false);
-
 const Vocabulary: Component<{}> = () => {
+  const [currentText, setCurrentText] = createSignal<VocabularyType>();
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
-  const [showSearchResult, setShowSearchResult] = createSignal<boolean>(false);
 
   const [searchInputColor, setSearchInputColor] =
     createSignal<string>("#957c3e");
@@ -94,7 +91,6 @@ const Vocabulary: Component<{}> = () => {
     const keyDown = event.key;
     if (keyDown.match(/^[a-z\-]$/)) {
       setSearchTerm(searchTerm() + keyDown);
-      showDefinitions() && setShowDefinitions(false);
       if (searchTerm().length > 2) {
         trigger(searchTerm());
       }
@@ -116,7 +112,6 @@ const Vocabulary: Component<{}> = () => {
       event.preventDefault();
       setSearchTerm("");
       setSearchResult([]);
-      showDefinitions() && setShowDefinitions(false);
     }
   };
 
@@ -126,10 +121,8 @@ const Vocabulary: Component<{}> = () => {
 
   const handleRenderText = async (text: VocabularyType) => {
     setCurrentText(text);
-    setShowDefinitions(true);
     setSearchTerm("");
     setSearchResult([]);
-    setShowSearchResult(false);
 
     // handlecheck function
 
@@ -141,10 +134,6 @@ const Vocabulary: Component<{}> = () => {
       const count = await getMemoriesLengthAction();
       setTotalMemories(count);
     }
-  };
-
-  const handleCloseDefinition = () => {
-    setShowDefinitions(false);
   };
 
   const handleCloseTranslation = () => {
@@ -448,88 +437,62 @@ const Vocabulary: Component<{}> = () => {
             </div>
           </Show>
 
-          <div class="vocabularyContent">
-            <div class="searchContainer">
-
-              <div class="searchResult">
-                <Index each={searchResult()}>
-                  {(data, i) => (
-                    <div class="my-item">
-                      <span
-                        class="itemText"
-                        onclick={() => handleRenderText(data())}
-                      >
-                        <span>
-                          <small>{i + 1}</small>
-                          <span>{data().text}</span>
-                        </span>
-                      </span>
-                      <button
-                        class="itemNumb"
-                        onClick={() => handleEditVocabulary(data())}
-                      >
-                        {data().number}
-                      </button>
-                      <Show when={i + 1 !== deleteBtnIndex()}>
-                        <button
-                          class="button button--primary"
-                          onClick={() => setDeleteBtnIndex(i + 1)}
-                        ></button>
-                      </Show>
-                      <Show when={i + 1 === deleteBtnIndex()}>
-                        <button
-                          class="button button--primary"
-                          onClick={() => handleDeleteVocabulary(data().text)}
-                        >
-                          <OcAlertfill2 size={12} color="#ca140c" />
-                        </button>
-                      </Show>
-                    </div>
-                  )}
-                </Index>
-              </div>
-
-              <Show when={showBookmark()}>
-                <Bookmark onClose={() => setShowBookmark(false)} />
-              </Show>
-
-              {/* Definition */}
-              <Presence>
-                <Show when={showDefinitions()}>
-                  <Motion
-                    initial={{
-                      opacity: 0,
-                      y: -30,
-                    }}
-                    animate={{
-                      opacity: 1,
-                      y: 0,
-                    }}
-                    exit={{
-                      opacity: 0,
-                      y: 30,
-                    }}
-                    transition={{ duration: 0.3, easing: "ease-in-out" }}
+          <div class="searchContainer">
+            <Index each={searchResult()}>
+              {(data, i) => (
+                <div class="my-item">
+                  <span
+                    class="itemText"
+                    onclick={() => handleRenderText(data())}
                   >
-                    <Show
-                      when={bottomLooping()}
-                      fallback={
-                        <Definition
-                          item={currentText()!}
-                          onClose={handleCloseDefinition}
-                        />
-                      }
+                    <span>
+                      <small>{i + 1}</small>
+                      <span>{data().text}</span>
+                    </span>
+                  </span>
+                  <button
+                    class="itemNumb"
+                    onClick={() => handleEditVocabulary(data())}
+                  >
+                    {data().number}
+                  </button>
+                  <Show when={i + 1 !== deleteBtnIndex()}>
+                    <button
+                      class="button button--primary"
+                      onClick={() => setDeleteBtnIndex(i + 1)}
+                    ></button>
+                  </Show>
+                  <Show when={i + 1 === deleteBtnIndex()}>
+                    <button
+                      class="button button--primary"
+                      onClick={() => handleDeleteVocabulary(data().text)}
                     >
-                      <Definition
-                        item={currentText()!}
-                        onClose={handleCloseDefinition}
-                        count={bottomIndex() + counter() - 1}
-                      />
-                    </Show>
-                  </Motion>
-                </Show>
-              </Presence>
-            </div>
+                      <OcAlertfill2 size={12} color="#ca140c" />
+                    </button>
+                  </Show>
+                </div>
+              )}
+            </Index>
+          </div>
+
+          <div class="vocabularyContent">
+            {/* Bookmark */}
+            <Show when={showBookmark()}>
+              <Bookmark onClose={() => setShowBookmark(false)} />
+            </Show>
+
+            {/* Definition */}
+            <Show when={currentText()?.text}>
+              <Show
+                when={bottomLooping()}
+                fallback={<Definition item={currentText()!} />}
+              >
+                <Definition
+                  item={currentText()!}
+                  count={bottomIndex() + counter() - 1}
+                />
+              </Show>
+            </Show>
           </div>
 
           <Presence>
