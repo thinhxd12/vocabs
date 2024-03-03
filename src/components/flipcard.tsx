@@ -1,5 +1,6 @@
 import {
   Component,
+  Show,
   createEffect,
   createMemo,
   createSignal,
@@ -83,7 +84,22 @@ const FlipCard: Component<{
         <div class="numberFlipContainer">
           <div class="numberFlipBackground">
             <div class="numberFlipContent">
-              {props.item?.number > 1 ? (
+              <Show
+                when={props.item?.number > 1}
+                fallback={
+                  <div class="flipImage">
+                    <Motion.div
+                      class="flipImageList"
+                      initial={{ y: -22 }}
+                      animate={{ y: 24, transition: { delay: 2.5 } }}
+                      transition={{ duration: 0.6, easing: "ease-in-out" }}
+                    >
+                      <img src="/images/main/cup.png" />
+                      <span class="number">1</span>
+                    </Motion.div>
+                  </div>
+                }
+              >
                 <div class="numbersContentBackground">
                   <div class="numbersContent">
                     {renderNumber() >= 100 && (
@@ -149,19 +165,7 @@ const FlipCard: Component<{
                     </Motion.div>
                   </div>
                 </div>
-              ) : (
-                <div class="flipImage">
-                  <Motion.div
-                    class="flipImageList"
-                    initial={{ y: -22 }}
-                    animate={{ y: 24, transition: { delay: 2.5 } }}
-                    transition={{ duration: 0.6, easing: "ease-in-out" }}
-                  >
-                    <img src="/images/main/cup.png" />
-                    <span class="number">1</span>
-                  </Motion.div>
-                </div>
-              )}
+              </Show>
             </div>
           </div>
         </div>

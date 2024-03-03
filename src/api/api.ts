@@ -514,7 +514,7 @@ export const getTextDataWebster = async (text: string) => {
             docOx,
             ".audio_play_button,.pron-us",
             "data-src-mp3"
-        ) || (await getOedSoundURL(text))
+        ) || (await getOedSoundURL(text));
         const defArr: string[] = [];
         result.text = getElText(doc, "h1.hword", text);
         result.class = getElAttribute(doc, ".important-blue-link", "href").replace("/dictionary/", "");
@@ -627,17 +627,21 @@ export const getOedSoundURL = async (text: string) => {
     const response = await fetch(baseUrl);
     const pageImgHtml = await response.text();
     const pageDoc = parse(pageImgHtml);
-    const newUrl = "https://www.oed.com" + pageDoc.querySelector("h3.resultTitle a")?.getAttribute("href");
-    const link = newUrl.replace(/\?.+/g, "?tab=factsheet&tl=true#39853451");
-    const nextResponse = await fetch(link);
-    const nextPageHtml = await nextResponse.text();
-    const nextPageDoc = parse(nextPageHtml);
-    const mp3 = nextPageDoc
-        .querySelector(".regional-pronunciation:last-child")
-        ?.querySelector(".pronunciation-play-button")
-        ?.getAttribute("data-src-mp3");
-    const altMp3 = `https://ssl.gstatic.com/dictionary/static/sounds/20220808/${text}--_us_1.mp3`;
-    return mp3 || altMp3;
+    const urlParam = pageDoc.querySelector("h3.resultTitle a")?.getAttribute("href");
+    if (urlParam) {
+        const newUrl = "https://www.oed.com" + urlParam;
+        const link = newUrl.replace(/\?.+/g, "?tab=factsheet&tl=true#39853451");
+        const nextResponse = await fetch(link);
+        const nextPageHtml = await nextResponse.text();
+        const nextPageDoc = parse(nextPageHtml);
+        const mp3 = nextPageDoc
+            .querySelector(".regional-pronunciation:last-child")
+            ?.querySelector(".pronunciation-play-button")
+            ?.getAttribute("data-src-mp3");
+        const altMp3 = `https://ssl.gstatic.com/dictionary/static/sounds/20220808/${text}--_us_1.mp3`;
+        return mp3 || altMp3;
+    }
+    return "";
 };
 
 //delete vocabulary
@@ -831,13 +835,58 @@ export const checkVocabulary = action(async (text: string) => {
     if (error) return error;
 }, "checkVocabulary");
 
-//archive vocabulary
-export const archiveVocabulary = action(async (text: string, date: string) => {
+//archiver ------------------------------------ start
+export const archiveVocabulary = async (word: string, time: string) => {
     "use server";
     const { error } = await supabase
-        .rpc('archiveitem', { word: text, start: date })
+        .from(mapTables.memories)
+        .insert({
+            text: word,
+            started_at: time
+        })
     if (error) return error;
-}, "archiveVocabulary");
+};
+
+export const getSmallestWordNumberFromRange = async (text: string) => {
+    "use server";
+    const { data, error } = await supabase
+        .from(mapTables.vocabulary)
+        .select()
+        .neq('text', text)
+        .order('created_at', { ascending: true })
+        .range(2000, 9999)
+    if (data) {
+        const sortedArr = data.sort((a, b) => a.number - b.number);
+        return sortedArr[0];
+    }
+};
+
+export const updateArchiveWord = async (data: VocabularyType, time: string) => {
+    "use server";
+    const { error } = await supabase
+        .from(mapTables.vocabulary)
+        .update({
+            text: data.text,
+            sound: data.sound,
+            class: data.class,
+            definitions: data.definitions,
+            phonetic: data.phonetic,
+            meaning: data.meaning,
+            number: data.number,
+        })
+        .eq('created_at', time);
+}
+
+export const deleteSmallestWordNumberFromRange = async (time: string) => {
+    "use server";
+    const { error } = await supabase
+        .from(mapTables.vocabulary)
+        .delete()
+        .eq('created_at', time);
+}
+//archiver ------------------------------------ end
+
+
 
 //get 50 word
 export const getVocabularyFromRange = action(async (start: number, end: number) => {
@@ -969,3 +1018,21 @@ const cleanDataMinutely = (data: MinutelyType[]) => {
         return newItem;
     });
 };
+
+// =====Insert data============
+// export const insertData = async () => {
+//     "use server";
+//     for (let i = 0; i < dataUp.length; i++) {
+//         const row = dataUp[i]
+//         const { error } = await supabase
+//             .from(mapTables.memories)
+//             .insert([row])
+
+//         if (error) console.log('Error:', error)
+//         else console.log(`Row ${i} inserted`)
+//     }
+//     // const { data, error } = await supabase
+//     //     .from(mapTables.memories)
+//     //     .select()
+//     // return data;
+// }

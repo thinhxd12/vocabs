@@ -21,6 +21,9 @@ import {
   checkVocabulary,
   archiveVocabulary,
   getMemoriesLength,
+  getSmallestWordNumberFromRange,
+  updateArchiveWord,
+  deleteSmallestWordNumberFromRange,
 } from "~/api/api";
 import { Motion, Presence } from "solid-motionone";
 import { useGlobalContext } from "~/globalcontext/store";
@@ -116,7 +119,7 @@ const Vocabulary: Component<{}> = () => {
   };
 
   const checkVocabularyAction = useAction(checkVocabulary);
-  const archiveVocabularyAction = useAction(archiveVocabulary);
+  // const archiveVocabularyAction = useAction(archiveVocabulary);
   const getMemoriesLengthAction = useAction(getMemoriesLength);
 
   const handleRenderText = async (text: VocabularyType) => {
@@ -129,10 +132,15 @@ const Vocabulary: Component<{}> = () => {
     if (text.number > 1) {
       checkVocabularyAction(text.text);
     } else {
-      await archiveVocabularyAction(text.text, text.created_at);
-      deleteVocabularyAction(text.text);
-      const count = await getMemoriesLengthAction();
-      setTotalMemories(count);
+      await archiveVocabulary(text.text, text.created_at);
+      const data = await getSmallestWordNumberFromRange(text.text);
+
+      if (data) {
+        await deleteSmallestWordNumberFromRange(data.created_at);
+        await updateArchiveWord(data, text.created_at);
+        const count = await getMemoriesLengthAction();
+        setTotalMemories(count);
+      }
     }
   };
 

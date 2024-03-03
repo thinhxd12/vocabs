@@ -60,9 +60,6 @@ const Translation: Component<{
   > = (event) => {
     event.stopPropagation();
     const keyDown = event.key;
-    if (keyDown === " ") {
-      setTranslateTerm("");
-    }
     if (keyDown === "Enter") handleTranslate();
   };
 
