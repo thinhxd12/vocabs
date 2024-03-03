@@ -201,13 +201,13 @@
             }
 
             &--text {
-                @include font("NYTCheltenham", 18px, #fff9d6, 700, normal, 16px);
+                @include font("NYTCheltenham", 18px, #fff9d6, 700, normal, 18px);
                 text-transform: uppercase;
                 text-shadow: 0 3px 5px $color-black;
                 cursor: pointer;
                 transform: scale(0.8);
                 transition: all 0.1s;
-
+                animation: scaleAnimation 0.2s;
 
                 &:hover {
                     transform: scale(1);
@@ -330,4 +330,18 @@
     left: 0;
     background-color: $color-background-3;
     z-index: 1001;
+}
+
+@keyframes scaleAnimation {
+    0% {
+        transform: scale(0.8);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(0.8);
+    }
 }

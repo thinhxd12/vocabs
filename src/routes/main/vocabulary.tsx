@@ -85,7 +85,7 @@ const Vocabulary: Component<{}> = () => {
         setTranslateTerm(str);
       } else setSearchResult(res);
     }
-  }, 300);
+  }, 600);
 
   const onKeyDownDiv: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (
     event
@@ -453,6 +453,9 @@ const Vocabulary: Component<{}> = () => {
                   <div
                     class="my-item--text"
                     onclick={() => handleRenderText(data())}
+                    style={{
+                      "animation-delay": `${i * 200}ms`,
+                    }}
                   >
                     <span>{data().text}</span>
                   </div>
