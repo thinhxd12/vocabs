@@ -204,6 +204,13 @@ const Edit: Component<{
               value={props.item?.number}
             />
           </div>
+          <input
+            type="text"
+            name="created_at"
+            autocomplete="off"
+            value={props.item?.created_at}
+            style={{ display: "none" }}
+          />
           <button
             type="submit"
             class="button button--submit"

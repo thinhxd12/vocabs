@@ -181,9 +181,8 @@
         height: calc(100vh - 253px);
         width: 360px;
         z-index: 999;
-        background-color: rgba(0, 0, 0, 0.72);
-        backdrop-filter: blur(15px) saturate(180%);
         overflow-y: scroll;
+        background: $color-background-3;
 
 
         &::-webkit-scrollbar {
@@ -196,12 +195,11 @@
             height: 45px;
             position: relative;
 
-
             &--background {
                 width: 360px;
-                height: 27px;
+                height: 21px;
                 position: absolute;
-                top: 9px;
+                top: 12px;
                 left: 0;
                 z-index: 0;
                 background: rgba(255, 255, 255, 0.25);

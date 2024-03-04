@@ -34,10 +34,11 @@ import Definition from "~/components/definition";
 import Translation from "~/components/translation";
 import Edit from "~/components/edit";
 import Bookmark from "~/components/bookmark";
-import { OcAlertfill2, OcHourglass2 } from "solid-icons/oc";
+import { OcHourglass2 } from "solid-icons/oc";
 import { BsJournalBookmarkFill, BsTranslate } from "solid-icons/bs";
 import { BiSolidExit } from "solid-icons/bi";
 import { TbClockHour2 } from "solid-icons/tb";
+import { IoTrashBin } from "solid-icons/io";
 
 export const route = {
   load: () => {
@@ -483,7 +484,7 @@ const Vocabulary: Component<{}> = () => {
                           class="button button--square"
                           onClick={() => handleDeleteVocabulary(data().text)}
                         >
-                          <OcAlertfill2 size={10} color="#ca140c" />
+                          <IoTrashBin size={11} color="#ca140c" />
                         </button>
                       </Show>
                     </div>

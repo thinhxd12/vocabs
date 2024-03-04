@@ -662,9 +662,11 @@ export const editVocabularyItem = action(async (formData: FormData) => {
     const phoneticT = String(formData.get("phonetic"));
     const meaningT = String(formData.get("meaning"));
     const numberT = Number(formData.get("number"));
+    const createT = String(formData.get("created_at"));
     const { error } = await supabase
         .from(mapTables.vocabulary)
         .update({
+            text: textT,
             sound: soundT,
             class: classT,
             definitions: definitionsT,
@@ -672,7 +674,7 @@ export const editVocabularyItem = action(async (formData: FormData) => {
             meaning: meaningT,
             number: numberT
         })
-        .eq("text", textT)
+        .eq('created_at', createT);
     if (error) return { message: error.message };
     return { message: "success" } as PostgrestError
 });
