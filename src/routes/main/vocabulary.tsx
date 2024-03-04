@@ -445,7 +445,7 @@ const Vocabulary: Component<{}> = () => {
             </div>
           </Show>
 
-          <Show when={searchTerm().length > 2}>
+          <Show when={searchResult().length > 0}>
             <div class="searchContainer">
               <Index each={searchResult()}>
                 {(data, i) => (
