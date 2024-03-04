@@ -85,7 +85,7 @@ const Vocabulary: Component<{}> = () => {
         setTranslateTerm(str);
       } else setSearchResult(res);
     }
-  }, 600);
+  }, 450);
 
   const onKeyDownDiv: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (
     event
@@ -119,7 +119,6 @@ const Vocabulary: Component<{}> = () => {
   };
 
   const checkVocabularyAction = useAction(checkVocabulary);
-  // const archiveVocabularyAction = useAction(archiveVocabulary);
   const getMemoriesLengthAction = useAction(getMemoriesLength);
 
   const handleRenderText = async (text: VocabularyType) => {
@@ -449,15 +448,21 @@ const Vocabulary: Component<{}> = () => {
             <Index each={searchResult()}>
               {(data, i) => (
                 <div class="my-item">
-                  <div class="my-item--num">{i + 1}</div>
+                  <div class="my-item--background"></div>
+                  <div class="my-item--num">
+                    <p>{i + 1}</p>
+                  </div>
                   <div
                     class="my-item--text"
                     onclick={() => handleRenderText(data())}
-                    style={{
-                      "animation-delay": `${i * 200}ms`,
-                    }}
                   >
-                    <span>{data().text}</span>
+                    <p
+                      style={{
+                        "animation-delay": `${i * 200}ms`,
+                      }}
+                    >
+                      {data().text}
+                    </p>
                   </div>
                   <div class="my-item--buttons">
                     <button
@@ -468,16 +473,16 @@ const Vocabulary: Component<{}> = () => {
                     </button>
                     <Show when={i + 1 !== deleteBtnIndex()}>
                       <button
-                        class="button button--primary"
+                        class="button button--square"
                         onClick={() => setDeleteBtnIndex(i + 1)}
                       ></button>
                     </Show>
                     <Show when={i + 1 === deleteBtnIndex()}>
                       <button
-                        class="button button--primary"
+                        class="button button--square"
                         onClick={() => handleDeleteVocabulary(data().text)}
                       >
-                        <OcAlertfill2 size={12} color="#ca140c" />
+                        <OcAlertfill2 size={10} color="#ca140c" />
                       </button>
                     </Show>
                   </div>

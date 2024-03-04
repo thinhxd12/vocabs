@@ -34,6 +34,17 @@
         }
     }
 
+    &--square {
+        background-color: $color-background-1;
+        color: #ececec;
+        width: 18px;
+        height: 15px;
+
+        &:hover {
+            color: $color-white;
+        }
+    }
+
     &--success {
         background-color: $color-background-1;
         color: #ececec;
