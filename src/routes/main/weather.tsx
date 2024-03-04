@@ -254,7 +254,7 @@ const Weather: Component<{}> = (props) => {
         animate={{
           opacity: [0, 1],
           backgroundImage: getWeatherDataResult.result
-            ? `url(${supabaseURL}/storage/v1/object/public/weather/backgrounds/${getWeatherDataResult.result?.currentData.icon}.jpg)`
+            ? `url(/images/darksky/backgrounds/${getWeatherDataResult.result?.currentData.icon}.jpg)`
             : "unset",
         }}
         transition={{ duration: 0.6 }}
@@ -273,7 +273,7 @@ const Weather: Component<{}> = (props) => {
           <div class="weatherContent">
             <img
               class="weatherImg"
-              src={`${supabaseURL}/storage/v1/object/public/weather/icons/${
+              src={`/images/darksky/icons/${
                 getWeatherDataResult.result!.currentData.icon
               }.svg`}
             />

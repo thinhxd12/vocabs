@@ -444,52 +444,54 @@ const Vocabulary: Component<{}> = () => {
             </div>
           </Show>
 
-          <div class="searchContainer">
-            <Index each={searchResult()}>
-              {(data, i) => (
-                <div class="my-item">
-                  <div class="my-item--background"></div>
-                  <div class="my-item--num">
-                    <p>{i + 1}</p>
-                  </div>
-                  <div
-                    class="my-item--text"
-                    onclick={() => handleRenderText(data())}
-                  >
-                    <p
-                      style={{
-                        "animation-delay": `${i * 200}ms`,
-                      }}
+          <Show when={searchTerm().length > 2}>
+            <div class="searchContainer">
+              <Index each={searchResult()}>
+                {(data, i) => (
+                  <div class="my-item">
+                    <div class="my-item--background"></div>
+                    <div class="my-item--num">
+                      <p>{i + 1}</p>
+                    </div>
+                    <div
+                      class="my-item--text"
+                      onclick={() => handleRenderText(data())}
                     >
-                      {data().text}
-                    </p>
-                  </div>
-                  <div class="my-item--buttons">
-                    <button
-                      class="itemNumb"
-                      onClick={() => handleEditVocabulary(data())}
-                    >
-                      {data().number}
-                    </button>
-                    <Show when={i + 1 !== deleteBtnIndex()}>
-                      <button
-                        class="button button--square"
-                        onClick={() => setDeleteBtnIndex(i + 1)}
-                      ></button>
-                    </Show>
-                    <Show when={i + 1 === deleteBtnIndex()}>
-                      <button
-                        class="button button--square"
-                        onClick={() => handleDeleteVocabulary(data().text)}
+                      <p
+                        style={{
+                          "animation-delay": `${i * 200}ms`,
+                        }}
                       >
-                        <OcAlertfill2 size={10} color="#ca140c" />
+                        {data().text}
+                      </p>
+                    </div>
+                    <div class="my-item--buttons">
+                      <button
+                        class="itemNumb"
+                        onClick={() => handleEditVocabulary(data())}
+                      >
+                        {data().number}
                       </button>
-                    </Show>
+                      <Show when={i + 1 !== deleteBtnIndex()}>
+                        <button
+                          class="button button--square"
+                          onClick={() => setDeleteBtnIndex(i + 1)}
+                        ></button>
+                      </Show>
+                      <Show when={i + 1 === deleteBtnIndex()}>
+                        <button
+                          class="button button--square"
+                          onClick={() => handleDeleteVocabulary(data().text)}
+                        >
+                          <OcAlertfill2 size={10} color="#ca140c" />
+                        </button>
+                      </Show>
+                    </div>
                   </div>
-                </div>
-              )}
-            </Index>
-          </div>
+                )}
+              </Index>
+            </div>
+          </Show>
 
           <div class="vocabularyContent">
             {/* Bookmark */}
