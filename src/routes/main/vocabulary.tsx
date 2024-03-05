@@ -449,8 +449,18 @@ const Vocabulary: Component<{}> = () => {
             <div class="searchContainer">
               <Index each={searchResult()}>
                 {(data, i) => (
-                  <div class="my-item">
-                    <div class="my-item--background"></div>
+                  <div
+                    class="my-item"
+                    style={{
+                      "animation-delay": `${i * 600}ms`,
+                    }}
+                  >
+                    <div
+                      class="my-item--background"
+                      style={{
+                        "animation-delay": `${i * 600}ms`,
+                      }}
+                    ></div>
                     <div class="my-item--num">
                       <p>{i + 1}</p>
                     </div>
@@ -460,7 +470,7 @@ const Vocabulary: Component<{}> = () => {
                     >
                       <p
                         style={{
-                          "animation-delay": `${i * 200}ms`,
+                          "animation-delay": `${i * 600}ms`,
                         }}
                       >
                         {data().text}
