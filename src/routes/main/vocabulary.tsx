@@ -335,6 +335,7 @@ const Vocabulary: Component<{}> = () => {
   const [isRunning, setIsRunning] = createSignal(false);
 
   const startCountdown = () => {
+    clearInterval(intervalCountdown);
     setIsRunning(true);
     intervalCountdown = setInterval(() => {
       setMinutes((prev) => {
@@ -447,60 +448,62 @@ const Vocabulary: Component<{}> = () => {
 
           <Show when={searchResult().length > 0}>
             <div class="searchContainer">
-              <Index each={searchResult()}>
-                {(data, i) => (
-                  <div
-                    class="my-item"
-                    style={{
-                      "animation-delay": `${i * 600}ms`,
-                    }}
-                  >
+              <div>
+                <Index each={searchResult()}>
+                  {(data, i) => (
                     <div
-                      class="my-item--background"
+                      class="my-item"
                       style={{
                         "animation-delay": `${i * 600}ms`,
                       }}
-                    ></div>
-                    <div class="my-item--num">
-                      <p>{i + 1}</p>
-                    </div>
-                    <div
-                      class="my-item--text"
-                      onclick={() => handleRenderText(data())}
                     >
-                      <p
+                      <div
+                        class="my-item--background"
                         style={{
                           "animation-delay": `${i * 600}ms`,
                         }}
+                      ></div>
+                      <div class="my-item--num">
+                        <p>{i + 1}</p>
+                      </div>
+                      <div
+                        class="my-item--text"
+                        onclick={() => handleRenderText(data())}
                       >
-                        {data().text}
-                      </p>
-                    </div>
-                    <div class="my-item--buttons">
-                      <button
-                        class="itemNumb"
-                        onClick={() => handleEditVocabulary(data())}
-                      >
-                        {data().number}
-                      </button>
-                      <Show when={i + 1 !== deleteBtnIndex()}>
-                        <button
-                          class="button button--square"
-                          onClick={() => setDeleteBtnIndex(i + 1)}
-                        ></button>
-                      </Show>
-                      <Show when={i + 1 === deleteBtnIndex()}>
-                        <button
-                          class="button button--square"
-                          onClick={() => handleDeleteVocabulary(data().text)}
+                        <p
+                          style={{
+                            "animation-delay": `${i * 600}ms`,
+                          }}
                         >
-                          <IoTrashBin size={11} color="#ca140c" />
+                          {data().text}
+                        </p>
+                      </div>
+                      <div class="my-item--buttons">
+                        <button
+                          class="itemNumb"
+                          onClick={() => handleEditVocabulary(data())}
+                        >
+                          {data().number}
                         </button>
-                      </Show>
+                        <Show when={i + 1 !== deleteBtnIndex()}>
+                          <button
+                            class="button button--square"
+                            onClick={() => setDeleteBtnIndex(i + 1)}
+                          ></button>
+                        </Show>
+                        <Show when={i + 1 === deleteBtnIndex()}>
+                          <button
+                            class="button button--square"
+                            onClick={() => handleDeleteVocabulary(data().text)}
+                          >
+                            <IoTrashBin size={11} color="#ca140c" />
+                          </button>
+                        </Show>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </Index>
+                  )}
+                </Index>
+              </div>
             </div>
           </Show>
 

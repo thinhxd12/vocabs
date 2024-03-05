@@ -182,7 +182,8 @@
         width: 360px;
         z-index: 999;
         overflow-y: scroll;
-        background: $color-background-3;
+        background: $color-black;
+        @include flex-center;
 
 
         &::-webkit-scrollbar {
@@ -192,13 +193,13 @@
         .my-item {
             @include flex;
             overflow: visible;
-            height: 25px;
+            height: 21px;
             position: relative;
             animation: myItemAnimation 0.6s ease-in-out;
 
             &--background {
                 width: 360px;
-                height: 25px;
+                height: 21px;
                 position: absolute;
                 top: 0px;
                 left: 0;
@@ -210,11 +211,11 @@
             }
 
             &:hover {
-                height: 45px;
+                height: 57px;
             }
 
             &:hover .my-item--background {
-                top: 10px;
+                top: 18px;
             }
 
             &:hover .my-item--text p {
@@ -224,7 +225,7 @@
             &--num {
                 font-size: 8px;
                 width: 45px;
-                height: 27px;
+                height: 21px;
                 z-index: 1;
                 @include flex-center;
             }
@@ -236,7 +237,7 @@
                 z-index: 3;
 
                 p {
-                    @include font("NYTCheltenham", 45px, $color-calendar-bg, 700, normal, 27px);
+                    @include font("NYTCheltenham", 45px, $color-calendar-bg, 700, normal);
                     text-transform: uppercase;
                     text-shadow: 0 3px 5px $color-black;
                     transform: scale(0.35);
@@ -249,7 +250,7 @@
                 @include flex;
                 justify-content: flex-end;
                 width: 45px;
-                height: 27px;
+                height: 21px;
                 padding-right: 3px;
                 z-index: 1;
             }
@@ -368,19 +369,19 @@
 
 @keyframes myItemAnimation {
     0% {
-        height: 25px;
+        height: 21px;
     }
 
     25% {
-        height: 45px;
+        height: 57px;
     }
 
     75% {
-        height: 45px;
+        height: 57px;
     }
 
     100% {
-        height: 25px;
+        height: 21px;
     }
 }
 
@@ -408,11 +409,11 @@
     }
 
     25% {
-        top: 10px;
+        top: 18px;
     }
 
     75% {
-        top: 10px;
+        top: 18px;
     }
 
     100% {
