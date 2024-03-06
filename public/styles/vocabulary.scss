@@ -238,6 +238,11 @@
             }
         }
 
+        .my-item--hover .my-item--text p {
+            transform: scale(2.7);
+            text-shadow: 0 3px 5px $color-black;
+        }
+
     }
 
     .itemNumb {
