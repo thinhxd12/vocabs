@@ -107,10 +107,10 @@ const Vocabulary: Component<{}> = () => {
         setSelectedItemIndex(Number(keyDown));
         setTimeout(() => {
           setSelectedItemIndex(0);
-        }, 500);
+        }, 600);
         setTimeout(() => {
           handleRenderText(searchResult()[Number(keyDown) - 1]);
-        }, 1000);
+        }, 1200);
       }
     }
     if (keyDown === "Backspace") {
@@ -466,7 +466,6 @@ const Vocabulary: Component<{}> = () => {
                           : "my-item"
                       }
                     >
-                      <div class="my-item--background"></div>
                       <div class="my-item--num">
                         <p>{i + 1}</p>
                       </div>
