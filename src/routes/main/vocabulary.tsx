@@ -88,6 +88,8 @@ const Vocabulary: Component<{}> = () => {
     }
   }, 450);
 
+  const [selectedItemIndex, setSelectedItemIndex] = createSignal<number>(0);
+
   const onKeyDownDiv: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (
     event
   ) => {
@@ -102,7 +104,13 @@ const Vocabulary: Component<{}> = () => {
     if (keyDown?.match(/^[1-9]$/)) {
       const keyDonwNumber = Number(keyDown);
       if (searchResult().length > 0 && keyDonwNumber <= searchResult().length) {
-        handleRenderText(searchResult()[Number(keyDown) - 1]);
+        setSelectedItemIndex(Number(keyDown));
+        setTimeout(() => {
+          setSelectedItemIndex(0);
+        }, 500);
+        setTimeout(() => {
+          handleRenderText(searchResult()[Number(keyDown) - 1]);
+        }, 1000);
       }
     }
     if (keyDown === "Backspace") {
@@ -452,17 +460,13 @@ const Vocabulary: Component<{}> = () => {
                 <Index each={searchResult()}>
                   {(data, i) => (
                     <div
-                      class="my-item"
-                      style={{
-                        "animation-delay": `${i * 600}ms`,
-                      }}
+                      class={
+                        i + 1 === selectedItemIndex()
+                          ? "my-item my-item--hover"
+                          : "my-item"
+                      }
                     >
-                      <div
-                        class="my-item--background"
-                        style={{
-                          "animation-delay": `${i * 600}ms`,
-                        }}
-                      ></div>
+                      <div class="my-item--background"></div>
                       <div class="my-item--num">
                         <p>{i + 1}</p>
                       </div>
@@ -470,13 +474,7 @@ const Vocabulary: Component<{}> = () => {
                         class="my-item--text"
                         onclick={() => handleRenderText(data())}
                       >
-                        <p
-                          style={{
-                            "animation-delay": `${i * 600}ms`,
-                          }}
-                        >
-                          {data().text}
-                        </p>
+                        <p>{data().text}</p>
                       </div>
                       <div class="my-item--buttons">
                         <button
