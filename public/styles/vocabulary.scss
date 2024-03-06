@@ -221,6 +221,11 @@
                     text-shadow: 0 2px 3px $color-black;
                     transition: all 0.1s;
                 }
+
+                &:hover p {
+                    transform: scale(2.7);
+                    text-shadow: 0 3px 5px $color-black;
+                }
             }
 
             &--buttons {
@@ -233,11 +238,6 @@
             }
         }
 
-        .my-item:hover .my-item--text p,
-        .my-item--hover .my-item--text p {
-            transform: scale(2.7);
-            text-shadow: 0 3px 5px $color-black;
-        }
     }
 
     .itemNumb {

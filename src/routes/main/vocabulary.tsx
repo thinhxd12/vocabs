@@ -107,10 +107,10 @@ const Vocabulary: Component<{}> = () => {
         setSelectedItemIndex(Number(keyDown));
         setTimeout(() => {
           setSelectedItemIndex(0);
-        }, 600);
+        }, 500);
         setTimeout(() => {
           handleRenderText(searchResult()[Number(keyDown) - 1]);
-        }, 1200);
+        }, 1000);
       }
     }
     if (keyDown === "Backspace") {
