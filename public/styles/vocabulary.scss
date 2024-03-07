@@ -191,6 +191,7 @@
 
         .my-item {
             @include flex;
+            justify-content: space-between;
             overflow: visible;
             height: 24px;
             width: 360px;
@@ -203,16 +204,19 @@
 
             &--num {
                 font-size: 8px;
-                width: 45px;
-                height: 24px;
+                line-height: 8px;
+                width: 12px;
+                vertical-align: baseline;
                 z-index: 1;
+                margin-top: 6px;
                 @include flex-center;
+                color: $color-white;
             }
 
             &--text {
                 cursor: pointer;
-                width: 270px;
                 @include flex-center;
+                flex-grow: 1;
                 z-index: 3;
 
                 p {
@@ -228,15 +232,6 @@
                 }
 
             }
-
-            &--buttons {
-                @include flex;
-                justify-content: flex-end;
-                width: 45px;
-                height: 24px;
-                padding-right: 3px;
-                z-index: 101;
-            }
         }
 
         .my-item--hover .my-item--text p {
@@ -246,18 +241,30 @@
 
     }
 
-    .itemNumb {
-        font-size: 8px;
-        margin-right: 3px;
-        line-height: 12px;
+    .my-item--buttons {
+        @include flex;
+        width: 30px;
+        height: 24px;
+        padding: 0 3px;
+        z-index: 101;
+    }
+
+    .my-item--buttons-start {
+        justify-content: flex-start;
+        cursor: pointer;
+    }
+
+    .my-item--buttons-end {
+        justify-content: flex-end;
+    }
+
+    .my-item--editbutton {
         cursor: pointer;
         background: transparent;
-        border: 1px solid $color-border;
+        border: none;
         outline: none;
-        height: 13px;
-        min-width: 13px;
-        padding: 2px;
-        border-radius: 3px;
+        height: 14px;
+        width: 15px;
         overflow: hidden;
         @include flex-center;
     }

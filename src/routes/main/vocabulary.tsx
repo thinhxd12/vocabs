@@ -35,10 +35,15 @@ import Translation from "~/components/translation";
 import Edit from "~/components/edit";
 import Bookmark from "~/components/bookmark";
 import { OcHourglass2 } from "solid-icons/oc";
-import { BsJournalBookmarkFill, BsTranslate } from "solid-icons/bs";
+import {
+  BsJournalBookmarkFill,
+  BsTranslate,
+  BsTrash3Fill,
+} from "solid-icons/bs";
 import { BiSolidExit } from "solid-icons/bi";
 import { TbClockHour2 } from "solid-icons/tb";
 import { IoTrashBin } from "solid-icons/io";
+import { FaSolidFeather } from "solid-icons/fa";
 
 export const route = {
   load: () => {
@@ -84,7 +89,10 @@ const Vocabulary: Component<{}> = () => {
         setSearchResult([]);
         setSearchInputColor("#ca140c");
         setTranslateTerm(str);
-      } else setSearchResult(res);
+      } else {
+        deleteBtnIndex() !== 0 && setDeleteBtnIndex(0);
+        setSearchResult(res);
+      }
     }
   }, 450);
 
@@ -184,7 +192,6 @@ const Vocabulary: Component<{}> = () => {
   // -------------------TRANSLATE END-------------------- //
   // -------------------DELETE START-------------------- //
   const [deleteBtnIndex, setDeleteBtnIndex] = createSignal<number>(0);
-
   const deleteVocabularyAction = useAction(deleteVocabulary);
   const handleDeleteVocabulary = (text: string) => {
     deleteVocabularyAction(text);
@@ -471,8 +478,16 @@ const Vocabulary: Component<{}> = () => {
                           : "my-item"
                       }
                     >
-                      <div class="my-item--num">
-                        <p>{i + 1}</p>
+                      <div
+                        class="my-item--buttons my-item--buttons-start"
+                        onClick={() => handleEditVocabulary(data())}
+                      >
+                        <div class="my-item--num">
+                          <p>{i + 1}</p>
+                        </div>
+                        <button class="my-item--editbutton">
+                          <FaSolidFeather size={12} color="#ffffff" />
+                        </button>
                       </div>
                       <div
                         class="my-item--text"
@@ -480,13 +495,7 @@ const Vocabulary: Component<{}> = () => {
                       >
                         <p>{data().text}</p>
                       </div>
-                      <div class="my-item--buttons">
-                        <button
-                          class="itemNumb"
-                          onClick={() => handleEditVocabulary(data())}
-                        >
-                          {data().number}
-                        </button>
+                      <div class="my-item--buttons my-item--buttons-end">
                         <Show when={i + 1 !== deleteBtnIndex()}>
                           <button
                             class="button button--square"
@@ -498,7 +507,7 @@ const Vocabulary: Component<{}> = () => {
                             class="button button--square"
                             onClick={() => handleDeleteVocabulary(data().text)}
                           >
-                            <IoTrashBin size={11} color="#ca140c" />
+                            <BsTrash3Fill size={12} color="#ca140c" />
                           </button>
                         </Show>
                       </div>
