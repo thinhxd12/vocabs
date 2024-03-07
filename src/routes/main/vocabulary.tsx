@@ -207,6 +207,11 @@ const Vocabulary: Component<{}> = () => {
     setSearchTerm("");
     setSearchResult([]);
   };
+
+  const handleEditFromDefinition = () => {
+    setEditText(currentText());
+    setShowEdit(true);
+  };
   // -------------------EDIT END-------------------- //
   // -------------------AUTOPLAY START-------------------- //
   const getCalendarTodayDataAction = useAction(getCalendarTodayData);
@@ -514,10 +519,16 @@ const Vocabulary: Component<{}> = () => {
             <Show when={currentText()?.text}>
               <Show
                 when={bottomLooping()}
-                fallback={<Definition item={currentText()!} />}
+                fallback={
+                  <Definition
+                    item={currentText()!}
+                    onEdit={handleEditFromDefinition}
+                  />
+                }
               >
                 <Definition
                   item={currentText()!}
+                  onEdit={handleEditFromDefinition}
                   count={bottomIndex() + counter() - 1}
                 />
               </Show>

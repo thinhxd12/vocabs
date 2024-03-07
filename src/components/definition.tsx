@@ -7,14 +7,15 @@ import {
   createSignal,
 } from "solid-js";
 import { VocabularyType } from "~/types";
-import { OcX2, OcUnmute2, OcCheck2 } from "solid-icons/oc";
 import "/public/styles/definition.scss";
+import { OcUnmute2, OcCheck2 } from "solid-icons/oc";
+import { FaSolidFeather } from "solid-icons/fa";
 
 let audioRef: HTMLAudioElement;
 
 const Definition: Component<{
   item: VocabularyType;
-  onClose?: Setter<boolean>;
+  onEdit?: Setter<boolean>;
   onCheck?: Setter<boolean>;
   count?: number;
 }> = (props) => {
@@ -50,9 +51,9 @@ const Definition: Component<{
             <button class="button button--primary" onclick={handlePlaySound}>
               <OcUnmute2 size={12} />
             </button>
-            <Show when={props.onClose}>
-              <button class="button button--close" onclick={props.onClose}>
-                <OcX2 size={15} />
+            <Show when={props.onEdit}>
+              <button class="button button--primary" onclick={props.onEdit}>
+                <FaSolidFeather size={12} />
               </button>
             </Show>
             <Show when={props.onCheck}>
