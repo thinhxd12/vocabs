@@ -148,7 +148,7 @@ const Vocabulary: Component<{}> = () => {
     if (text.number > 1) {
       checkVocabularyAction(text.text);
     } else {
-      await archiveVocabulary(text.text, text.created_at);
+      await archiveVocabulary(text.text);
       const data = await getSmallestWordNumberFromRange(text.text);
 
       if (data) {

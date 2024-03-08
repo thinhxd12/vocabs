@@ -8,8 +8,8 @@ import {
 } from "solid-js";
 import { VocabularyType } from "~/types";
 import "/public/styles/definition.scss";
-import { OcUnmute2, OcCheck2 } from "solid-icons/oc";
-import { FaSolidFeather } from "solid-icons/fa";
+import { FaSolidCheck, FaSolidFeather } from "solid-icons/fa";
+import { BsSoundwave } from "solid-icons/bs";
 
 let audioRef: HTMLAudioElement;
 
@@ -49,7 +49,7 @@ const Definition: Component<{
           </div>
           <div class="definitionHeaderRight">
             <button class="button button--primary" onclick={handlePlaySound}>
-              <OcUnmute2 size={12} />
+              <BsSoundwave size={15} />
             </button>
             <Show when={props.onEdit}>
               <button class="button button--primary" onclick={props.onEdit}>
@@ -58,7 +58,7 @@ const Definition: Component<{
             </Show>
             <Show when={props.onCheck}>
               <button class="button button--success" onclick={props.onCheck}>
-                <OcCheck2 size={13} />
+                <FaSolidCheck size={13} />
               </button>
             </Show>
           </div>

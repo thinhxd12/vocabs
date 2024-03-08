@@ -838,13 +838,12 @@ export const checkVocabulary = action(async (text: string) => {
 }, "checkVocabulary");
 
 //archiver ------------------------------------ start
-export const archiveVocabulary = async (word: string, time: string) => {
+export const archiveVocabulary = async (word: string) => {
     "use server";
     const { error } = await supabase
         .from(mapTables.memories)
         .insert({
-            text: word,
-            started_at: time
+            text: word
         })
     if (error) return error;
 };

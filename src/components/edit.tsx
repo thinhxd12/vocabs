@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 import "/public/styles/edit.scss";
 import "/public/styles/toast.scss";
-import { OcChevronup2, OcX2 } from "solid-icons/oc";
+import { OcX2 } from "solid-icons/oc";
 import { VocabularyType } from "~/types";
 import { useSubmission } from "@solidjs/router";
 import Definition from "./definition";
@@ -17,6 +17,7 @@ import { editVocabularyItem, getTextDataWebster } from "~/api/api";
 import toast, { Toaster } from "solid-toast";
 import { createStore } from "solid-js/store";
 import useClickOutside from "solid-click-outside";
+import { FaSolidExpand } from "solid-icons/fa";
 
 const Edit: Component<{
   item: VocabularyType;
@@ -108,7 +109,7 @@ const Edit: Component<{
         <div class="editHeaderLeft"></div>
         <div class="editHeaderRight">
           <button class="button button--primary" onClick={handleShowHandyEdit}>
-            <OcChevronup2 size={12} />
+            <FaSolidExpand size={12} />
           </button>
           <button class="button button--close" onclick={props.onClose}>
             <OcX2 size={15} />
