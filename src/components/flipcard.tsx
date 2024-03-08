@@ -15,17 +15,16 @@ const FlipCard: Component<{
 }> = (props) => {
   const currenText = createMemo(() => props.item);
   const [audioSource, setAudioSource] = createSignal<string>("");
-  const [turnBoxClass, setTurnBoxClass] = createSignal<string>("");
+  const [hover, setHover] = createSignal<boolean>(false);
 
   const renderMeaning = () => {
     if (currenText()?.meaning) {
       let cardMeaning = currenText().meaning.replace(
         /\s\-(.+?)\-/g,
-        `<p class="turnBoxItemMeaningClass">【 $1 】</p><p class="turnBoxItemMeaningText">`
+        `<p class="cubeMeaningClass">【 $1 】</p><p class="cubeMeaningText">`
       );
       cardMeaning =
-        cardMeaning.replace(/\-/g, `</p><p class="turnBoxItemMeaningText">`) +
-        "</p>";
+        cardMeaning.replace(/\-/g, `</p><p class="cubeMeaningText">`) + "</p>";
       return cardMeaning;
     }
     return "";
@@ -60,7 +59,7 @@ const FlipCard: Component<{
     }
     if (currenText()?.meaning) {
       const timer2 = setTimeout(() => {
-        setTurnBoxClass(" turnBoxHover");
+        setHover(true);
         const meaningTTS = currenText()
           .meaning.replace(/\s\-(.+?)\-/g, "+")
           .replace(/\-/g, "+");
@@ -68,7 +67,7 @@ const FlipCard: Component<{
         setAudioSource(soundUrl);
       }, 3500);
       const timer3 = setTimeout(() => {
-        setTurnBoxClass("");
+        setHover(false);
       }, 5500);
       onCleanup(() => {
         clearTimeout(timer2);
@@ -171,20 +170,22 @@ const FlipCard: Component<{
         </div>
       </div>
       <div class="flipCardRightContent">
-        <div class={`turnBoxContainer${turnBoxClass()}`}>
-          <div class="turnBoxFace turnBoxFaceNum1">
-            <div class="turnBoxContent1">
-              <p class="turnBoxItemClass">{currenText()?.class}</p>
-              <p class="turnBoxItemText">{currenText()?.text}</p>
-              <p class="turnBoxItemPhonetic">{currenText()?.phonetic}</p>
-              <p class="turnBoxItemDate">05/07/22</p>
+        <div class={hover() ? "cube cube--hover" : "cube"}>
+          <div class="cube--front">
+            <div class="cube--content--front">
+              <p class="cube--class">{currenText()?.class}</p>
+              <p class="cube--text">{currenText()?.text}</p>
+              <p class="cube--phonetic">{currenText()?.phonetic}</p>
+              <p class="cube--date">05/07/22</p>
             </div>
           </div>
-          <div class="turnBoxFace turnBoxFaceNum2">
-            <div class="turnBoxContent2">
-              <div class="turnBoxItemMeaning" innerHTML={renderMeaning()}></div>
+          <div class="cube--bottom">
+            <div class="cube--content--bottom">
+              <div class="cube--meaning" innerHTML={renderMeaning()}></div>
             </div>
           </div>
+          <div class="cube--back"></div>
+          <div class="cube--top"></div>
         </div>
       </div>
     </>

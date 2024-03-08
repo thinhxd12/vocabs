@@ -76,140 +76,113 @@
 }
 
 .flipCardRightContent {
-    height: 100%;
+    perspective: 1000px;
+    height: 186px;
     width: 294px;
+}
 
-    .turnBoxContainer {
+.cube {
+    position: relative;
+    height: 170px;
+    width: 269px;
+    transform-style: preserve-3d;
+    transform: translate(13px, 8px);
+    transition: all 300ms linear 0ms;
+
+    &--front {
         width: 100%;
         height: 100%;
-        transition: all 200ms linear 0ms;
-        perspective: 600px;
-        position: relative;
-        overflow: hidden;
+        position: absolute;
+        background: $color-black;
+        transform: translate3d(0, 0, 85px);
+    }
 
-        .turnBoxFace {
-            transform-origin: 50% 50%;
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            color: $color-white;
-            transition: all 500ms ease 0ms;
+    &--bottom {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: $color-background-3;
+        transform: translate3d(0, 50%, 0)rotateX(-90deg)rotateY(0)rotateZ(0);
+    }
 
-            .turnBoxContent1 {
-                width: 100%;
-                height: 100%;
-                @include flex-center-column;
-                position: relative;
+    &--back {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: $color-background-2;
+        transform: translate3d(0, 0, -50%)rotateX(0)rotateY(180deg)rotateZ(0);
+    }
 
-                .turnBoxItemClass {
-                    @include font("SF-Pro", 9px, $color-white, normal, normal, 9px);
-                }
+    &--top {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: $color-background-1;
+        transform: translate3d(0, -50%, 0)rotateX(90deg)rotateY(0)rotateZ(0);
+    }
 
-                .turnBoxItemText {
-                    @include font("Roslindale", 33px, $color-white, 600, normal, 36px);
-                    letter-spacing: 1.5px;
-                    padding: 3px 0;
-                }
+    &--content--front {
+        width: 100%;
+        height: 100%;
+        @include flex-center-column;
+    }
 
-                .turnBoxItemPhonetic {
-                    @include font("SF-Pro", 20px, $color-red-3, bold, normal, 27px);
-                }
+    &--content--bottom {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: flex-start;
+        padding: 54px 0 0 12px;
+    }
 
-                .turnBoxItemDate {
-                    display: none;
-                }
+    &--class {
+        @include font("SF-Pro", 9px, $color-white, normal, normal, 9px);
+    }
+
+    &--text {
+        @include font("Roslindale", 33px, $color-white, 600, normal, 36px);
+        letter-spacing: 1.5px;
+        padding: 3px 0;
+    }
+
+    &--phonetic {
+        @include font("SF-Pro", 20px, $color-red-3, bold, normal, 27px);
+    }
+
+    &--date {
+        display: none;
+    }
+
+    &--meaning {
+        .cubeMeaningClass {
+            @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
+            margin: 5px 0 5px -9px;
+        }
+
+        .cubeMeaningText {
+            @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
+            margin-bottom: 4px;
+            position: relative;
+            text-indent: 19px;
+
+            &::before {
+                content: "";
+                display: inline-block;
+                width: 15px;
+                height: 15px;
+                background: url('/images/main/clover1.png');
+                background-size: contain;
+                position: absolute;
+                top: 1px;
+                left: 0;
             }
-
-            .turnBoxContent2 {
-                width: 100%;
-                height: 100%;
-                display: flex;
-                align-items: flex-start;
-                padding: 54px 0 0 12px;
-
-                .turnBoxItemMeaning {
-                    letter-spacing: 1px;
-                    text-align: left;
-                    white-space: break-spaces;
-                    cursor: default;
-
-                    .turnBoxItemMeaningClass {
-                        @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
-                        margin: 5px 0 5px -9px;
-                    }
-
-                    .turnBoxItemMeaningText {
-                        @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
-                        margin-bottom: 4px;
-                        position: relative;
-                        text-indent: 19px;
-
-                        &::before {
-                            content: "";
-                            display: inline-block;
-                            width: 15px;
-                            height: 15px;
-                            background: url('/images/main/clover1.png');
-                            background-size: contain;
-                            position: absolute;
-                            top: 1px;
-                            left: 0;
-                        }
-                    }
-                }
-
-                .turnBoxSign {
-                    position: absolute;
-                    bottom: 0px;
-                    right: 3px;
-                }
-            }
-        }
-
-        .turnBoxItemProgress {
-            position: absolute;
-            top: 12px;
-            right: 15px;
-            @include font('Roslindale', 15px, $color-red-3, 500, normal);
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            z-index: 99;
-        }
-
-        .turnBoxFaceNum1 {
-            transform: rotateX(0deg) translate3d(0px, 0px, 0px);
-            z-index: 20;
-            opacity: 1;
-        }
-
-        .turnBoxFaceNum2 {
-            transform: rotateX(90deg) translate3d(0px, -93px, 93px);
-            z-index: 10;
-            opacity: 0;
-        }
-
-        .turnBoxFaceNum3 {
-            transform: rotateX(-90deg) translate3d(0px, 93px, -93px);
-            z-index: 10;
-            opacity: 0;
         }
     }
 
-    .turnBoxContainer:hover .turnBoxFaceNum1,
-    .turnBoxHover .turnBoxFaceNum1 {
-        transform: rotateX(-90deg) translate3d(0px, 93px, 93px);
-        z-index: 10;
-        opacity: 0;
-    }
 
-    .turnBoxContainer:hover .turnBoxFaceNum2,
-    .turnBoxHover .turnBoxFaceNum2 {
-        transform: rotateX(0deg) translate3d(0px, 0px, 0px);
-        z-index: 20;
-        opacity: 1;
-    }
+}
 
+.cube:hover,
+.cube--hover {
+    transform: translate(13px, 8px) rotateX(90deg);
 }
