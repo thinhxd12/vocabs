@@ -12,13 +12,22 @@
 
     .mainFooterCenterBtn {
         height: 30px;
-        width: 30px;
+        width: 33px;
+        padding-right: 3px;
         cursor: default;
         background: none;
         outline: none;
         border: none;
         text-align: center;
         @include font("Roslindale", 12px, #7c7b7a, 600, normal, 30px);
+    }
+
+    .bottom-center-index {
+        @include flex-center-column;
+        @include font("basier", 8px, $color-black, 600, normal, 10px);
+        width: 6px;
+        height: 30px;
+        background: $color-border;
     }
 
     .mainFooterBtn {
@@ -47,7 +56,7 @@
         }
 
         &--3 {
-            width: 75px;
+            width: 66px;
         }
 
         &--active {
