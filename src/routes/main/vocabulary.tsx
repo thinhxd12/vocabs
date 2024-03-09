@@ -143,7 +143,7 @@ const Vocabulary: Component<{}> = () => {
     setSearchTerm("");
     setSearchResult([]);
 
-    // handlecheck function
+    // handlecheck cope
 
     if (text.number > 1) {
       checkVocabularyAction(text.text);
@@ -426,7 +426,7 @@ const Vocabulary: Component<{}> = () => {
             fallback={
               <>
                 <div class="newInputContainer">
-                  <div class="newInputContain">
+                  <div class="newInputContent">
                     <div class="newInputBackground">
                       <Motion.p
                         animate={{ color: searchInputColor() }}

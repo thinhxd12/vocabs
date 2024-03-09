@@ -76,17 +76,18 @@
 }
 
 .flipCardRightContent {
-    perspective: 1000px;
     height: 186px;
     width: 294px;
+    perspective: 890px;
+    position: relative;
 }
 
 .cube {
     position: relative;
     height: 170px;
-    width: 269px;
+    width: 268px;
     transform-style: preserve-3d;
-    transform: translate(13px, 8px);
+    transform: translate(15px, 7px);
     transition: all 300ms linear 0ms;
 
     &--front {
@@ -94,6 +95,7 @@
         height: 100%;
         position: absolute;
         background: $color-black;
+        backface-visibility: hidden;
         transform: translate3d(0, 0, 85px);
     }
 
@@ -143,6 +145,7 @@
         @include font("Roslindale", 33px, $color-white, 600, normal, 36px);
         letter-spacing: 1.5px;
         padding: 3px 0;
+        -webkit-font-smoothing: subpixel-antialiased;
     }
 
     &--phonetic {
@@ -184,5 +187,5 @@
 
 .cube:hover,
 .cube--hover {
-    transform: translate(13px, 8px) rotateX(90deg);
+    transform: translate(15px, 7px) rotateX(90deg);
 }

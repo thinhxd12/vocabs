@@ -110,49 +110,29 @@
     }
 
     .newInputContainer {
-        width: 100%;
-        height: 36px;
+        @include flex-center;
         border-top: 0.5px solid $color-vintage-2;
         border-bottom: 0.5px solid $color-vintage-2;
-        @include flex-center;
+        position: relative;
 
-        .newInputContain {
+        .newInputContent {
             width: 100%;
-            height: 28px;
-            overflow: hidden;
+            height: 36px;
             @include flex-center;
-            position: relative;
 
             .newInputBackground {
-                background-color: $color-vintage-background;
-                width: 350px;
-                height: 28px;
+                width: 360px;
+                height: 36px;
+                position: absolute;
+                background: url("/images/main/inputbackground.jpg");
+                background-size: cover;
+                top: 0;
+                left: 0;
                 @include flex-center;
 
                 p {
                     @include font("NYTCheltenham", 16px, $color-vintage-1, 700, normal, 16px);
                     text-transform: uppercase;
-                }
-
-                &::before,
-                &::after {
-                    content: "";
-                    position: absolute;
-                    width: 28px;
-                    height: 28px;
-                    background-color: $color-vintage-background;
-                }
-
-                &::before {
-                    transform: rotate(45deg);
-                    left: -4px;
-                    top: 0px;
-                }
-
-                &::after {
-                    transform: rotate(-45deg);
-                    right: -4px;
-                    top: 0px;
                 }
 
             }
@@ -161,7 +141,7 @@
 
 
     .vocabularyContent {
-        height: calc(100vh - 253px);
+        height: calc(100vh - 255px);
         width: 360px;
         overflow-y: scroll;
         overflow-x: hidden;
@@ -176,9 +156,9 @@
 
     .searchContainer {
         position: absolute;
-        top: 222px;
+        top: 224px;
         left: 0;
-        height: calc(100vh - 253px);
+        height: calc(100vh - 255px);
         width: 360px;
         z-index: 999;
         overflow-y: scroll;
