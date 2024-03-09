@@ -20,6 +20,11 @@ const Bottom: Component<{}> = () => {
 
   return (
     <div class="bottom">
+      <div class="bottom-center-index">
+        <span>{getCalendarTodayDataResult.result?.time1}</span>
+        <OcDotfill2 size={4} />
+        <span>{getCalendarTodayDataResult.result?.time2}</span>
+      </div>
       <A
         href="/main/vocabulary"
         activeClass="mainFooterBtn--active"
@@ -42,11 +47,7 @@ const Bottom: Component<{}> = () => {
           {totalMemories()}
         </Show>
       </button>
-      <span class="bottom-center-index">
-        <span>{getCalendarTodayDataResult.result?.time1}</span>
-        <OcDotfill2 size={4} />
-        <span>{getCalendarTodayDataResult.result?.time2}</span>
-      </span>
+
       <A
         href="/main/weather"
         activeClass="mainFooterBtn--active"
