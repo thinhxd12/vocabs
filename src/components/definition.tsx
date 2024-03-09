@@ -15,7 +15,7 @@ let audioRef: HTMLAudioElement;
 
 const Definition: Component<{
   item: VocabularyType;
-  onEdit?: Setter<boolean>;
+  onEdit?: (text: VocabularyType) => void;
   onCheck?: Setter<boolean>;
   count?: number;
 }> = (props) => {
@@ -52,7 +52,10 @@ const Definition: Component<{
               <BsSoundwave size={15} />
             </button>
             <Show when={props.onEdit}>
-              <button class="button button--primary" onclick={props.onEdit}>
+              <button
+                class="button button--primary"
+                onclick={() => props.onEdit!(props.item)}
+              >
                 <FaSolidFeather size={12} />
               </button>
             </Show>

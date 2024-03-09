@@ -44,6 +44,7 @@ import { BiSolidExit } from "solid-icons/bi";
 import { TbClockHour2 } from "solid-icons/tb";
 import { IoTrashBin } from "solid-icons/io";
 import { FaSolidFeather } from "solid-icons/fa";
+import { createStore } from "solid-js/store";
 
 export const route = {
   load: () => {
@@ -215,8 +216,8 @@ const Vocabulary: Component<{}> = () => {
     setSearchResult([]);
   };
 
-  const handleEditFromDefinition = () => {
-    setEditText(currentText());
+  const handleEditFromDefinition = (text: VocabularyType) => {
+    setEditText({ ...text, number: text.number - 1 });
     setShowEdit(true);
   };
   // -------------------EDIT END-------------------- //
