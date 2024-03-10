@@ -36,14 +36,12 @@ const Definition: Component<{
               when={props.count}
               fallback={
                 <p class="definitionHeaderText">
-                  Definitions of <b>{currenText()?.text}</b>{" "}
-                  <i>{currenText()?.class}</i>
+                  Definitions of <b>{currenText()?.text}</b>
                 </p>
               }
             >
               <p class="definitionHeaderText">
-                <span>{props.count}.</span> <b>{currenText().text}</b>{" "}
-                <i>{currenText()?.class}</i>
+                <span>{props.count}.</span> <b>{currenText().text}</b>
               </p>
             </Show>
           </div>

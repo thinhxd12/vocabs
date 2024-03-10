@@ -42,9 +42,7 @@ import {
 } from "solid-icons/bs";
 import { BiSolidExit } from "solid-icons/bi";
 import { TbClockHour2 } from "solid-icons/tb";
-import { IoTrashBin } from "solid-icons/io";
 import { FaSolidFeather } from "solid-icons/fa";
-import { createStore } from "solid-js/store";
 
 export const route = {
   load: () => {
