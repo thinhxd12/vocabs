@@ -2,22 +2,11 @@ import {
   useAction,
   type RouteDefinition,
   RouteSectionProps,
-  useSubmission,
 } from "@solidjs/router";
-import {
-  Match,
-  Show,
-  Switch,
-  createSignal,
-  onMount,
-} from "solid-js";
+import { Match, Show, Switch, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getUser } from "~/api";
-import {
-  getDataImage,
-  getImageFromUnsplash,
-  getUnsplashImage,
-} from "~/api/api";
+import { getDataImage, getUnsplashImage } from "~/api/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import "/public/styles/main.scss";
@@ -75,13 +64,7 @@ const MainLayout = (props: RouteSectionProps) => {
     setInterval(() => {
       getWakeup();
     }, 840000);
-    // getUnspashData();
   });
-
-  const getUnspashData = async () => {
-    const data = await getUnsplashImage();
-    console.log(data);
-  };
 
   const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
   const [dice, setDice] = createSignal<number>(3);
@@ -98,10 +81,6 @@ const MainLayout = (props: RouteSectionProps) => {
 
   const handleGetUnsplashImage = async () => {
     const data = await getUnsplashImage();
-    const quote = await (
-      await fetch("https://api.quotable.io/quotes/random")
-    ).json();
-
     setImageObj({
       image: data[0].urls.regular,
       date: new Date(data[0].created_at).toLocaleString([], {
@@ -112,7 +91,11 @@ const MainLayout = (props: RouteSectionProps) => {
       authorImg: data[0].user.profile_image.medium,
       authorName: data[0].user.name,
       authorYear: "",
-      content: `<p>"${quote[0].content}"</p><p class="descBodyAuthor">${quote[0].author}</p>`,
+    });
+    const bookmarkUrl = import.meta.env.VITE_BOOKMARK;
+    const quote = await (await fetch(bookmarkUrl + `getRandomBookmark`)).json();
+    setImageObj({
+      content: `<p>"${quote.value}"</p>`,
     });
   };
 
