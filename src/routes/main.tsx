@@ -2,11 +2,22 @@ import {
   useAction,
   type RouteDefinition,
   RouteSectionProps,
+  useSubmission,
 } from "@solidjs/router";
-import { Match, Show, Switch, createSignal, onMount } from "solid-js";
+import {
+  Match,
+  Show,
+  Switch,
+  createSignal,
+  onMount,
+} from "solid-js";
 import { createStore } from "solid-js/store";
 import { getUser } from "~/api";
-import { getDataImage } from "~/api/api";
+import {
+  getDataImage,
+  getImageFromUnsplash,
+  getUnsplashImage,
+} from "~/api/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import "/public/styles/main.scss";
@@ -19,10 +30,9 @@ import {
   BsDice4,
   BsDice5,
   BsDice6,
-  BsLayoutSidebarReverse,
-  BsLayoutThreeColumns,
 } from "solid-icons/bs";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
+import { RiMediaImageFill } from "solid-icons/ri";
 
 export const route = {
   load: () => getUser(),
@@ -65,7 +75,13 @@ const MainLayout = (props: RouteSectionProps) => {
     setInterval(() => {
       getWakeup();
     }, 840000);
+    // getUnspashData();
   });
+
+  const getUnspashData = async () => {
+    const data = await getUnsplashImage();
+    console.log(data);
+  };
 
   const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
   const [dice, setDice] = createSignal<number>(3);
@@ -78,6 +94,26 @@ const MainLayout = (props: RouteSectionProps) => {
     getNextImageData(imageObj.nextImageUrl!);
     const randomNumber = Math.floor(Math.random() * 6) + 1;
     setDice(randomNumber);
+  };
+
+  const handleGetUnsplashImage = async () => {
+    const data = await getUnsplashImage();
+    const quote = await (
+      await fetch("https://api.quotable.io/quotes/random")
+    ).json();
+
+    setImageObj({
+      image: data[0].urls.regular,
+      date: new Date(data[0].created_at).toLocaleString([], {
+        dateStyle: "long",
+      }),
+      title: data[0].description || data[0].alt_description,
+      attr: data[0].exif.name,
+      authorImg: data[0].user.profile_image.medium,
+      authorName: data[0].user.name,
+      authorYear: "",
+      content: `<p>"${quote[0].content}"</p><p class="descBodyAuthor">${quote[0].author}</p>`,
+    });
   };
 
   return (
@@ -204,6 +240,9 @@ const MainLayout = (props: RouteSectionProps) => {
                   <BsDice6 size={15} />
                 </Match>
               </Switch>
+            </button>
+            <button class="mainImageRoundBtn" onClick={handleGetUnsplashImage}>
+              <RiMediaImageFill size={19} />
             </button>
           </div>
         </Motion.div>

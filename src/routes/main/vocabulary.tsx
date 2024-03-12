@@ -35,13 +35,8 @@ import Translation from "~/components/translation";
 import Edit from "~/components/edit";
 import Bookmark from "~/components/bookmark";
 import { OcHourglass2 } from "solid-icons/oc";
-import {
-  BsJournalBookmarkFill,
-  BsTranslate,
-  BsTrash3Fill,
-} from "solid-icons/bs";
-import { BiSolidExit } from "solid-icons/bi";
-import { TbClockHour2 } from "solid-icons/tb";
+import { BsTranslate, BsTrash3Fill } from "solid-icons/bs";
+import { RiBusinessBookmark3Fill } from "solid-icons/ri";
 import { FaSolidFeather } from "solid-icons/fa";
 
 export const route = {
@@ -600,7 +595,7 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    <TbClockHour2 size={17} />
+                    <OcHourglass2 size={15} />
                   </button>
 
                   <button
@@ -610,7 +605,7 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    <BsTranslate size={16} />
+                    <BsTranslate size={15} />
                   </button>
                   <button
                     class="menuBtn"
@@ -619,10 +614,10 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    <BsJournalBookmarkFill size={15} />
+                    <RiBusinessBookmark3Fill size={15} />
                   </button>
                   <button class="menuBtn" onClick={() => logoutAction()}>
-                    <BiSolidExit size={16} />
+                    E
                   </button>
                 </div>
               </Motion.div>

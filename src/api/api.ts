@@ -743,6 +743,13 @@ export const getImageFromUnsplash = action(async () => {
     return data[0].urls.regular;
 });
 
+export const getUnsplashImage = async () => {
+    const apiKey = "EAEQdLT0Wze4Lhf_Xn2O-IAuow2Z-Rh2sHIEu7pTXms";
+    const response = await fetch(`https://api.unsplash.com/photos/random?&count=1&client_id=${apiKey}`);
+    const data = await response.json();
+    return data;
+}
+
 //reset today schedule
 export const submitTodayReset = action(async (formData: FormData) => {
     "use server";

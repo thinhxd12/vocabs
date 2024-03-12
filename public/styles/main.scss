@@ -89,6 +89,10 @@
                 }
 
                 .mainDescriptionTitle {
+                    &::first-letter {
+                        text-transform: uppercase;
+                    }
+
                     @include font('Roslindale', 25px, $color-white, 600, normal, 32px);
                 }
 
@@ -134,6 +138,12 @@
                     @include font('basier', 12px, #989da7, 400, normal, 16px);
                     margin-bottom: 3px;
                     text-indent: 9px;
+                }
+
+                .descBodyAuthor {
+                    text-align: right;
+                    font-weight: 600;
+                    margin-top: 3px;
                 }
             }
         }
