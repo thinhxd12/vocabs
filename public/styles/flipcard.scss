@@ -105,6 +105,8 @@
         position: absolute;
         background: $color-background-3;
         transform: translate3d(0, 50%, 0)rotateX(-90deg)rotateY(0)rotateZ(0);
+        background-image: url("/images/main/paper.jpeg");
+        background-size: cover;
     }
 
     &--back {
@@ -158,12 +160,12 @@
 
     &--meaning {
         .cubeMeaningClass {
-            @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
+            @include font('Roslindale', 14px, $color-black, 500, normal, 15px);
             margin: 5px 0 5px -9px;
         }
 
         .cubeMeaningText {
-            @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
+            @include font('Roslindale', 14px, $color-black, 500, normal, 15px);
             margin-bottom: 4px;
             position: relative;
             text-indent: 19px;

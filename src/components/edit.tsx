@@ -66,10 +66,10 @@ const Edit: Component<{
   });
 
   const handyType1 =
-    '<span class="websHead">adjective</span><span class="websDef">a: a content<span class="websDefUp"> : a similar</span></span><span class="websX">definition</span><span class="websCredits"><span class="websAuthor">Author </span><span class="websTitle">Title </span><span class="websYear">28 Feb. 2024</span></span><span class="websSyn"><b>Synonym : </b><small>a, b, c</small></span>';
+    '<span class="websHead">adjective</span><span class="websDef">DEFINITION<span class="websDefUp">DEFINITION UPPERCASE</span></span><span class="websX">EXAMPLE</span><span class="websCredits"><span class="websAuthor">AUTHOR </span><span class="websTitle">TITLE </span><span class="websYear">YEAR</span></span><span class="websSyn"><b>Synonym : </b><small>a, b, c</small></span>';
 
   const handyType2 =
-    '<span class="websHead">noun</span><span class="websThumb"><span><span class="websDef">: something</span><span class="websDef">a: a content</span></span><img class="websImg" src="abc"/></span><span class="websX">example</span><span class="websCredits"><span class="websAuthor">Author </span><span class="websTitle">Title </span><span class="websYear">28 Feb. 2024</span></span>';
+    '<span class="websHead">noun</span><span class="websThumb"><span><span class="websDef">DEFINITION</span></span><img class="websImg" src="abc"/></span><span class="websX">EXAMPLE</span><span class="websCredits"><span class="websAuthor">AUTHOR </span><span class="websTitle">TITLE </span><span class="websYear">YEAR</span></span>';
   //----------------------TOAST----------------------
   const popSuccess = () => toast.success("Success", { duration: 3000 });
   const popError = (msg: string) => toast.error(msg, { duration: 3000 });
@@ -121,13 +121,13 @@ const Edit: Component<{
           <div class="handyEditContainer">
             <div class="editInputGroup">
               <textarea
-                class="editInputItem editInputItemResult"
+                class="editInputItem editInputItemResult editInputHandy"
                 value={JSON.stringify(handyType1)}
               />
             </div>
             <div class="editInputGroup">
               <textarea
-                class="editInputItem editInputItemResult"
+                class="editInputItem editInputItemResult editInputHandy"
                 value={JSON.stringify(handyType2)}
               />
             </div>
