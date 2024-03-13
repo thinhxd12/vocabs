@@ -179,12 +179,12 @@ const FlipCard: Component<{
               <p class="cube--date">05/07/22</p>
             </div>
           </div>
-          <div class="cube--bottom">
-            <div class="cube--content--bottom">
+          <div class="cube--bottom"></div>
+          <div class="cube--back">
+            <div class="cube--content--back">
               <div class="cube--meaning" innerHTML={renderMeaning()}></div>
             </div>
           </div>
-          <div class="cube--back"></div>
           <div class="cube--top"></div>
         </div>
       </div>
