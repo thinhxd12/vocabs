@@ -109,6 +109,10 @@
                 justify-content: space-between;
                 margin-bottom: 3px;
 
+                &>span {
+                    padding-right: 3px;
+                }
+
                 .websImg {
                     display: block;
                     width: 168px;

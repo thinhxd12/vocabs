@@ -7,19 +7,19 @@
     .numberFlipContainer {
         width: 60px;
         height: 100%;
-        float: right;
+        margin-left: auto;
         border-left: 3px solid $color-white;
         border-right: 3px solid $color-white;
 
         .numberFlipBackground {
-            width: 100%;
+            width: 50px;
             height: 100%;
-            border-left: 2px solid $color-black;
-            border-right: 2px solid $color-black;
+            margin: 0 auto;
             @include flex-center;
             background-image: url("/public/images/main/flagfabric.png");
             background-size: cover;
             position: relative;
+            animation: moveBg 30s linear infinite;
 
             .numberFlipContent {
                 width: 46px;
@@ -148,6 +148,10 @@
         letter-spacing: 1.5px;
         padding: 3px 0;
         -webkit-font-smoothing: subpixel-antialiased;
+        width: 100%;
+        word-break: break-word;
+        hyphens: auto;
+        text-align: center;
     }
 
     &--phonetic {
@@ -190,4 +194,18 @@
 .cube:hover,
 .cube--hover {
     transform: translate(15px, 7px) rotateX(180deg);
+}
+
+@keyframes moveBg {
+    0% {
+        background-position-x: 0;
+    }
+
+    50% {
+        background-position-x: right;
+    }
+
+    100% {
+        background-position-x: 0;
+    }
 }

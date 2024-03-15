@@ -163,7 +163,7 @@
         z-index: 999;
         overflow-y: scroll;
         background: $color-black;
-        padding-top: 15px;
+        padding-top: 18px;
 
         &::-webkit-scrollbar {
             display: none;
@@ -282,6 +282,8 @@
 
     &--wordlist {
         display: block;
+        text-align: left;
+        padding-left: 15px;
 
         small {
             font-size: 9px;

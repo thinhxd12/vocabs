@@ -35,9 +35,9 @@ import Translation from "~/components/translation";
 import Edit from "~/components/edit";
 import Bookmark from "~/components/bookmark";
 import { OcHourglass2 } from "solid-icons/oc";
-import { BsTranslate, BsTrash3Fill } from "solid-icons/bs";
-import { RiBusinessBookmark3Fill } from "solid-icons/ri";
+import { BsHourglassTop, BsTranslate, BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
+import { BiRegularBookBookmark } from "solid-icons/bi";
 
 export const route = {
   load: () => {
@@ -109,10 +109,10 @@ const Vocabulary: Component<{}> = () => {
         setSelectedItemIndex(Number(keyDown));
         setTimeout(() => {
           setSelectedItemIndex(0);
-        }, 500);
+        }, 300);
         setTimeout(() => {
           handleRenderText(searchResult()[Number(keyDown) - 1]);
-        }, 1000);
+        }, 600);
       }
     }
     if (keyDown === "Backspace") {
@@ -137,7 +137,7 @@ const Vocabulary: Component<{}> = () => {
     setSearchTerm("");
     setSearchResult([]);
 
-    // handlecheck cope
+    // handlecheck
 
     if (text.number > 1) {
       checkVocabularyAction(text.text);
@@ -595,7 +595,7 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    <OcHourglass2 size={15} />
+                    <BsHourglassTop size={16} />
                   </button>
 
                   <button
@@ -614,9 +614,12 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    <RiBusinessBookmark3Fill size={15} />
+                    <BiRegularBookBookmark size={17} />
                   </button>
-                  <button class="menuBtn" onClick={() => logoutAction()}>
+                  <button
+                    class="menuBtn"
+                    onClick={() => logoutAction()}
+                  >
                     E
                   </button>
                 </div>

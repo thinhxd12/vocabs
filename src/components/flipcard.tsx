@@ -174,7 +174,14 @@ const FlipCard: Component<{
           <div class="cube--front">
             <div class="cube--content--front">
               <p class="cube--class">{currenText()?.class}</p>
-              <p class="cube--text">{currenText()?.text}</p>
+              <Motion.p
+                class="cube--text"
+                animate={{
+                  fontSize: currenText()?.text.length > 14 ? "27px" : "33px",
+                }}
+              >
+                {currenText()?.text}
+              </Motion.p>
               <p class="cube--phonetic">{currenText()?.phonetic}</p>
               <p class="cube--date">05/07/22</p>
             </div>
