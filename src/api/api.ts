@@ -119,8 +119,8 @@ export const getDataImage = action(async (url: string) => {
     "use server";
     try {
         const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+        if (response.status !== 200) {
+            return undefined;
         }
         const pageImgHtml = await response.text();
         const doc = parse(pageImgHtml);

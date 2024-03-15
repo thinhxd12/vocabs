@@ -3,7 +3,7 @@ import {
   type RouteDefinition,
   RouteSectionProps,
 } from "@solidjs/router";
-import { Match, Show, Switch, createSignal, onMount } from "solid-js";
+import { Show, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getUser } from "~/api";
 import { getDataImage, getUnsplashImage } from "~/api/api";
@@ -12,16 +12,8 @@ import { ImageType } from "~/types";
 import "/public/styles/main.scss";
 import { GlobalContextProvider } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
-import {
-  BsDice1,
-  BsDice2,
-  BsDice3,
-  BsDice4,
-  BsDice5,
-  BsDice6,
-} from "solid-icons/bs";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
-import { RiMediaImageFill } from "solid-icons/ri";
+import { FaRegularCircle, FaRegularCircleDot } from "solid-icons/fa";
 
 export const route = {
   load: () => getUser(),
@@ -48,7 +40,9 @@ const MainLayout = (props: RouteSectionProps) => {
 
   const getNextImageData = async (url: string) => {
     const result = await getDataImageAction(url);
-    setImageObj(result!);
+    if (result) {
+      setImageObj(result);
+    } else handleGetUnsplashImage();
   };
 
   //Wakeup sever render after 14 minutes
@@ -67,7 +61,7 @@ const MainLayout = (props: RouteSectionProps) => {
   });
 
   const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
-  const [dice, setDice] = createSignal<number>(3);
+  const [toggleButton, setToggleButton] = createSignal<boolean>(false);
 
   const changeToggle = () => {
     setToggleMainPage(!toggleMainPage());
@@ -75,8 +69,10 @@ const MainLayout = (props: RouteSectionProps) => {
 
   const handleGetNextImage = () => {
     getNextImageData(imageObj.nextImageUrl!);
-    const randomNumber = Math.floor(Math.random() * 6) + 1;
-    setDice(randomNumber);
+    setToggleButton(!toggleButton());
+    setTimeout(() => {
+      setToggleButton(!toggleButton());
+    }, 300);
   };
 
   const handleGetUnsplashImage = async () => {
@@ -203,29 +199,12 @@ const MainLayout = (props: RouteSectionProps) => {
               </Show>
             </button>
             <button onClick={handleGetNextImage} class="mainImageRoundBtn">
-              <Switch>
-                <Match when={dice() === 1}>
-                  <BsDice1 size={15} />
-                </Match>
-                <Match when={dice() === 2}>
-                  <BsDice2 size={15} />
-                </Match>
-                <Match when={dice() === 3}>
-                  <BsDice3 size={15} />
-                </Match>
-                <Match when={dice() === 4}>
-                  <BsDice4 size={15} />
-                </Match>
-                <Match when={dice() === 5}>
-                  <BsDice5 size={15} />
-                </Match>
-                <Match when={dice() === 6}>
-                  <BsDice6 size={15} />
-                </Match>
-              </Switch>
-            </button>
-            <button class="mainImageRoundBtn" onClick={handleGetUnsplashImage}>
-              <RiMediaImageFill size={19} />
+              <Show
+                when={toggleButton()}
+                fallback={<FaRegularCircle size={15} />}
+              >
+                <FaRegularCircleDot size={15} />
+              </Show>
             </button>
           </div>
         </Motion.div>

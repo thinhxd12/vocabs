@@ -30,8 +30,10 @@ export default function Login(props: RouteSectionProps) {
           />
           <div class="loginItem">
             <input name="password" type="password" class="loginInput" />
+          </div>
+          <div class="loginItem">
             <button type="submit" class="loginBtn">
-              <OcArrowright2 size={12} />
+              <img src="/images/main/center.png" />
             </button>
           </div>
           <Show when={loggingIn.result}>
