@@ -10,22 +10,37 @@
         margin-left: auto;
         border-left: 3px solid $color-white;
         border-right: 3px solid $color-white;
+        position: relative;
+        @include flex-center;
 
         .numberFlipBackground {
+            position: absolute;
+            top: 0;
+            left: 2px;
             width: 50px;
-            height: 100%;
+            height: 390px;
             margin: 0 auto;
-            @include flex-center;
-            background-image: url("/public/images/main/flagfabric.png");
-            background-size: cover;
-            position: relative;
-            animation: moveBg 30s linear infinite;
-
-            .numberFlipContent {
-                width: 46px;
-                height: 46px;
-            }
+            background-image: url("/public/images/main/flagfabricver.png");
+            background-size: 200px 390px;
+            background-repeat: repeat-y;
+            animation: moveBg 21s linear infinite;
         }
+
+        .numberFlipContent {
+            width: 46px;
+            height: 46px;
+            z-index: 999;
+        }
+    }
+}
+
+@keyframes moveBg {
+    0% {
+        transform: translateY(-195px);
+    }
+
+    100% {
+        transform: translateY(0);
     }
 }
 
@@ -194,18 +209,4 @@
 .cube:hover,
 .cube--hover {
     transform: translate(15px, 7px) rotateX(180deg);
-}
-
-@keyframes moveBg {
-    0% {
-        background-position-x: 0;
-    }
-
-    50% {
-        background-position-x: right;
-    }
-
-    100% {
-        background-position-x: 0;
-    }
 }

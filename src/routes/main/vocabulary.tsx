@@ -616,10 +616,7 @@ const Vocabulary: Component<{}> = () => {
                   >
                     <BiRegularBookBookmark size={17} />
                   </button>
-                  <button
-                    class="menuBtn"
-                    onClick={() => logoutAction()}
-                  >
+                  <button class="menuBtn" onClick={() => logoutAction()}>
                     E
                   </button>
                 </div>
