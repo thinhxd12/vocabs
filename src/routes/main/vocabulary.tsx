@@ -127,6 +127,9 @@ const Vocabulary: Component<{}> = () => {
       setSearchTerm("");
       setSearchResult([]);
     }
+
+    if (keyDown === "Enter" && searchResult().length === 0)
+      setShowTranslate(true);
   };
 
   const checkVocabularyAction = useAction(checkVocabulary);

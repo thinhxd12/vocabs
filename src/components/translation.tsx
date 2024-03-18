@@ -9,6 +9,7 @@ import {
   createEffect,
   createSignal,
   on,
+  onMount,
 } from "solid-js";
 import "/public/styles/edit.scss";
 import "/public/styles/translate.scss";
@@ -78,6 +79,11 @@ const Translation: Component<{
       if (data) setDefinitionData(data);
     }
   };
+
+  onMount(() => {
+    handleTranslate();
+    handleFindDefinition();
+  });
 
   //----------------------TOAST----------------------
   const popSuccess = () => toast.success("Success", { duration: 3000 });
