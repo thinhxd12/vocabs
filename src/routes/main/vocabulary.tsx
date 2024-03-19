@@ -132,9 +132,7 @@ const Vocabulary: Component<{}> = () => {
       setShowTranslate(true);
   };
 
-  const checkVocabularyAction = useAction(checkVocabulary);
   const getMemoriesLengthAction = useAction(getMemoriesLength);
-
   const handleRenderText = async (text: VocabularyType) => {
     setCurrentText(text);
     setSearchTerm("");
@@ -143,7 +141,7 @@ const Vocabulary: Component<{}> = () => {
     // handlecheck
 
     if (text.number > 1) {
-      checkVocabularyAction(text.text);
+      checkVocabulary(text.number - 1, text.created_at);
     } else {
       await archiveVocabulary(text.text);
       const data = await getSmallestWordNumberFromRange(text.text);
@@ -151,6 +149,10 @@ const Vocabulary: Component<{}> = () => {
       if (data) {
         await deleteSmallestWordNumberFromRange(data.created_at);
         await updateArchiveWord(data, text.created_at);
+        const count = await getMemoriesLengthAction();
+        setTotalMemories(count);
+      } else {
+        deleteVocabulary(text.created_at);
         const count = await getMemoriesLengthAction();
         setTotalMemories(count);
       }
@@ -189,9 +191,8 @@ const Vocabulary: Component<{}> = () => {
   // -------------------TRANSLATE END-------------------- //
   // -------------------DELETE START-------------------- //
   const [deleteBtnIndex, setDeleteBtnIndex] = createSignal<number>(0);
-  const deleteVocabularyAction = useAction(deleteVocabulary);
-  const handleDeleteVocabulary = (text: string) => {
-    deleteVocabularyAction(text);
+  const handleDeleteVocabulary = (time: string) => {
+    deleteVocabulary(time);
     setSearchTerm("");
     setDeleteBtnIndex(0);
     setSearchResult([]);
@@ -502,7 +503,9 @@ const Vocabulary: Component<{}> = () => {
                         <Show when={i + 1 === deleteBtnIndex()}>
                           <button
                             class="button button--square"
-                            onClick={() => handleDeleteVocabulary(data().text)}
+                            onClick={() =>
+                              handleDeleteVocabulary(data().created_at)
+                            }
                           >
                             <BsTrash3Fill size={12} color="#ca140c" />
                           </button>

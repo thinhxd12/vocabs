@@ -645,12 +645,13 @@ export const getOedSoundURL = async (text: string) => {
 };
 
 //delete vocabulary
-export const deleteVocabulary = action(async (text: string) => {
+export const deleteVocabulary = async (time: string) => {
     "use server";
     const { error } = await supabase
-        .rpc('deleteitem', { word: text })
-    if (error) return error;
-});
+        .from(mapTables.vocabulary)
+        .delete()
+        .eq('created_at', time);
+}
 
 //edit vocabulary
 export const editVocabularyItem = action(async (formData: FormData) => {
@@ -836,13 +837,16 @@ export const submitNewMonth = action(async (formData: FormData) => {
     throw redirect("/main/vocabulary");
 }, "startMonth");
 
-//handle vocabulary
-export const checkVocabulary = action(async (text: string) => {
+//handle check vocabulary
+export const checkVocabulary = async (numb: number, time: string) => {
     "use server";
     const { error } = await supabase
-        .rpc('checkitem', { word: text })
-    if (error) return error;
-}, "checkVocabulary");
+        .from(mapTables.vocabulary)
+        .update({
+            number: numb,
+        })
+        .eq('created_at', time);
+}
 
 //archiver ------------------------------------ start
 export const archiveVocabulary = async (word: string) => {
