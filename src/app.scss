@@ -24,3 +24,7 @@ a {
 img {
     -webkit-user-drag: none;
 }
+
+textarea::-webkit-scrollbar{
+    display: none;
+}

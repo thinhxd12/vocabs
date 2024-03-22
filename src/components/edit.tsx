@@ -11,13 +11,13 @@ import "/public/styles/edit.scss";
 import "/public/styles/toast.scss";
 import { OcX2 } from "solid-icons/oc";
 import { VocabularyType } from "~/types";
-import { useSubmission } from "@solidjs/router";
+import { action, useSubmission } from "@solidjs/router";
 import Definition from "./definition";
 import { editVocabularyItem, getTextDataWebster } from "~/api/api";
 import toast, { Toaster } from "solid-toast";
 import { createStore } from "solid-js/store";
 import useClickOutside from "solid-click-outside";
-import { FaSolidExpand } from "solid-icons/fa";
+import { FaRegularImage, FaSolidExpand } from "solid-icons/fa";
 
 const Edit: Component<{
   item: VocabularyType;
@@ -65,11 +65,6 @@ const Edit: Component<{
     getAndSetDefinitionData(props.item.text);
   });
 
-  const handyType1 =
-    '<span class="websHead">adjective</span><span class="websDef">DEFINITION<span class="websDefUp">DEFINITION UPPERCASE</span></span><span class="websX">EXAMPLE</span><span class="websCredits"><span class="websAuthor">AUTHOR </span><span class="websTitle">TITLE </span><span class="websYear">YEAR</span></span><span class="websSyn"><b>Synonym : </b><small>a, b, c</small></span>';
-
-  const handyType2 =
-    '<span class="websHead">noun</span><span class="websThumb"><span><span class="websDef">DEFINITION</span></span><img class="websImg" src="abc"/></span><span class="websX">EXAMPLE</span><span class="websCredits"><span class="websAuthor">AUTHOR </span><span class="websTitle">TITLE </span><span class="websYear">YEAR</span></span>';
   //----------------------TOAST----------------------
   const popSuccess = () => toast.success("Success", { duration: 3000 });
   const popError = (msg: string) => toast.error(msg, { duration: 3000 });
@@ -103,6 +98,79 @@ const Edit: Component<{
     props.onClose(false);
   });
 
+  //handy edit
+
+  const [handyResult, setHandyResult] = createSignal<string>("");
+
+  const handleHandyEdit = action(async (formData: FormData) => {
+    const header = String(formData.get("editItem--header"));
+    const def1 = String(formData.get("editItem--def1"));
+    const def1up = String(formData.get("editItem--def1up"));
+    const def2 = String(formData.get("editItem--def2"));
+    const def2up = String(formData.get("editItem--def2up"));
+    const def3 = String(formData.get("editItem--def3"));
+    const def3up = String(formData.get("editItem--def3up"));
+    const img = String(formData.get("editItem--img"));
+    let x = String(formData.get("editItem--x"));
+    const author = String(formData.get("editItem--author"));
+    const title = String(formData.get("editItem--title"));
+    const year = String(formData.get("editItem--year"));
+    const newText =
+      props.item?.text.length > 4
+        ? props.item?.text.slice(0, -2)
+        : props.item?.text;
+    const regText = new RegExp(`(${newText}\\w*)`, "gi");
+    x = x.replace(regText, `<b>$1</b>`);
+
+    const resultArr = [header, def1, def2, def3, img, x];
+
+    let result = resultArr
+      .map((item, index) => {
+        switch (index) {
+          case 0:
+            if (img !== "" && header !== "")
+              return `<span class="websHead">${item}</span><span class="websThumb"><span>`;
+            else if (img !== "" && header === "")
+              return `<span class="websThumb"><span>`;
+          case 1:
+            if (item !== "")
+              return `<span class="websDef">${item}${
+                def1up && `<span class="websDefUp">${def1up}</span>`
+              }</span>`;
+          case 2:
+            if (item !== "")
+              return `<span class="websDef">${item}${
+                def2up && `<span class="websDefUp">${def2up}</span>`
+              }</span>`;
+          case 3:
+            if (item !== "")
+              return `<span class="websDef">${item}${
+                def3up && `<span class="websDefUp">${def3up}</span>`
+              }</span>`;
+          case 4:
+            if (item !== "")
+              return `</span><img class="websImg" src="${item}"/></span>`;
+          case 5:
+            if (item !== "") return `<span class="websX">${item}</span>`;
+          default:
+            break;
+        }
+      })
+      .join("");
+
+    let creditArr = [author, title, year];
+    let hasNonNull = creditArr.some((element) => element);
+
+    if (hasNonNull) {
+      result += `<span class="websCredits">`;
+      if (author !== "") result += `<span class="websAuthor">${author} </span>`;
+      if (title !== "") result += `<span class="websTitle">${title} </span>`;
+      if (year !== "") result += `<span class="websYear">${year}</span>`;
+      result += `</span>`;
+    }
+    setHandyResult(result);
+  });
+
   return (
     <div class="edit" tabIndex={1} ref={setTarget}>
       <div class="editHeader">
@@ -119,16 +187,91 @@ const Edit: Component<{
       <div class="editBody">
         <Show when={showHandyEdit()}>
           <div class="handyEditContainer">
-            <div class="editInputGroup">
-              <textarea
-                class="editInputItem editInputItemResult editInputHandy"
-                value={JSON.stringify(handyType1)}
+            <form class="editItemForm" action={handleHandyEdit} method="post">
+              <input
+                class="editItem--header"
+                autocomplete="off"
+                name="editItem--header"
               />
-            </div>
+              <div class="editItem--thumb">
+                <div>
+                  <input type="submit" style="display: none;" />
+                  <div class="editItem--defs">
+                    <input
+                      class="editItem--def"
+                      autocomplete="off"
+                      name="editItem--def1"
+                    />
+                    <input
+                      class="editItem--def"
+                      autocomplete="off"
+                      name="editItem--def1up"
+                    />
+                  </div>
+                  <div class="editItem--defs">
+                    <input
+                      class="editItem--def"
+                      autocomplete="off"
+                      name="editItem--def2"
+                    />
+                    <input
+                      class="editItem--def"
+                      autocomplete="off"
+                      name="editItem--def2up"
+                    />
+                  </div>
+                  <div class="editItem--defs">
+                    <input
+                      class="editItem--def"
+                      autocomplete="off"
+                      name="editItem--def3"
+                    />
+                    <input
+                      class="editItem--def"
+                      autocomplete="off"
+                      name="editItem--def3up"
+                    />
+                  </div>
+                </div>
+                <div class="editItem--img">
+                  <textarea
+                    class="editItem--textarea"
+                    autocomplete="off"
+                    name="editItem--img"
+                  />
+                  <FaRegularImage class="editItem--imgbg" color="#ffffff" />
+                </div>
+              </div>
+              <div class="editItem--xs">
+                <img src="/images/main/clover1.png" width={15} height={15} />
+                <input
+                  class="editItem--def"
+                  autocomplete="off"
+                  name="editItem--x"
+                />
+              </div>
+              <span class="editItem--credit">
+                <input
+                  class="editItem--def"
+                  autocomplete="off"
+                  name="editItem--author"
+                />
+                <input
+                  class="editItem--def"
+                  autocomplete="off"
+                  name="editItem--title"
+                />
+                <input
+                  class="editItem--def"
+                  autocomplete="off"
+                  name="editItem--year"
+                />
+              </span>
+            </form>
             <div class="editInputGroup">
               <textarea
                 class="editInputItem editInputItemResult editInputHandy"
-                value={JSON.stringify(handyType2)}
+                value={JSON.stringify(handyResult()).slice(1, -1)}
               />
             </div>
           </div>
