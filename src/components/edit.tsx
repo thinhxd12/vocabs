@@ -104,16 +104,16 @@ const Edit: Component<{
 
   const handleHandyEdit = action(async (formData: FormData) => {
     const header = String(formData.get("editItem--header"));
-    const def1 = String(formData.get("editItem--def1"));
-    const def1up = String(formData.get("editItem--def1up"));
-    const def2 = String(formData.get("editItem--def2"));
-    const def2up = String(formData.get("editItem--def2up"));
-    const def3 = String(formData.get("editItem--def3"));
-    const def3up = String(formData.get("editItem--def3up"));
+    const def1 = String(formData.get("editItem--def1")).toLowerCase();
+    const def1up = String(formData.get("editItem--def1up")).toLowerCase();
+    const def2 = String(formData.get("editItem--def2")).toLowerCase();
+    const def2up = String(formData.get("editItem--def2up")).toLowerCase();
+    const def3 = String(formData.get("editItem--def3")).toLowerCase();
+    const def3up = String(formData.get("editItem--def3up")).toLowerCase();
     const img = String(formData.get("editItem--img"));
     let x = String(formData.get("editItem--x"));
     const author = String(formData.get("editItem--author"));
-    const title = String(formData.get("editItem--title"));
+    const title = String(formData.get("editItem--title")).toUpperCase();
     const year = String(formData.get("editItem--year"));
     const newText =
       props.item?.text.length > 4
