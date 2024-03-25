@@ -95,12 +95,12 @@ const Definition: Component<{
                           )}
                           {item().example[0].title && (
                             <span class="websTitle">
-                              {item().example[0].title}-
+                              {item().example[0].title}
                             </span>
                           )}
                           {item().example[0].year && (
                             <span class="websYear">
-                              {item().example[0].year}
+                              -{item().example[0].year}
                             </span>
                           )}
                         </span>
