@@ -100,7 +100,8 @@
 
             .websDefUp {
                 @include font('Rubik', 12px, $color-black, 500, normal, 15px);
-                text-transform: uppercase
+                text-transform: uppercase;
+                display: inline-block;
             }
 
             .websThumb {

@@ -1,12 +1,34 @@
 export interface VocabularyType {
-  text: string;
-  sound: string;
-  class: string;
-  definitions: string[] | [];
-  phonetic: string;
-  meaning: string;
+  word: string;
+  audio: string;
+  phonetics: string;
   number: number;
   created_at: string;
+  translations: VocabularyTranslationType[];
+  definitions: VocabularyDefinitionType[];
+}
+
+export interface VocabularyTranslationType {
+  partOfSpeech: string;
+  translations: string[];
+}
+
+export interface VocabularyDefinitionType {
+  partOfSpeech: string;
+  definitions: DefinitionType[];
+  synonyms: string;
+  example: ExampleType[];
+}
+export interface DefinitionType {
+  definition: { sense: string; similar: string }[];
+  image: string;
+}
+
+export interface ExampleType {
+  sentence: string;
+  author: string;
+  title: string;
+  year: string;
 }
 
 export interface BookmarkType {

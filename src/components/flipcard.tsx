@@ -1,5 +1,6 @@
 import {
   Component,
+  Index,
   Show,
   createEffect,
   createMemo,
@@ -16,19 +17,7 @@ const FlipCard: Component<{
   const currenText = createMemo(() => props.item);
   const [audioSource, setAudioSource] = createSignal<string>("");
   const [hover, setHover] = createSignal<boolean>(false);
-
-  const renderMeaning = () => {
-    if (currenText()?.meaning) {
-      let cardMeaning = currenText().meaning.replace(
-        /\s\-(.+?)\-/g,
-        `<p class="cubeMeaningClass">【 $1 】</p><p class="cubeMeaningText">`
-      );
-      cardMeaning =
-        cardMeaning.replace(/\-/g, `</p><p class="cubeMeaningText">`) + "</p>";
-      return cardMeaning;
-    }
-    return "";
-  };
+  const [partOfSpeechs, setPartOfSpeechs] = createSignal<string>("");
 
   const createNumberArray = (num: number) => {
     let arr = Array.from(String(num), Number);
@@ -42,7 +31,17 @@ const FlipCard: Component<{
   const [numbArray, setNumbArray] = createSignal<number[]>([3, 6, 9]);
 
   createEffect(() => {
-    const currentSound = currenText()?.sound;
+    let currentSound = currenText()?.audio;
+    let translations = currenText()
+      ?.translations.map((item) => item.translations.join("-"))
+      .join("-");
+
+    let partOfSpeech = currenText()
+      ?.translations.map((item) => item.partOfSpeech)
+      .join("-");
+
+    setPartOfSpeechs(partOfSpeech);
+
     if (currentSound) {
       setAudioSource(currentSound);
     }
@@ -57,13 +56,10 @@ const FlipCard: Component<{
         clearTimeout(timer1);
       });
     }
-    if (currenText()?.meaning) {
+    if (translations) {
       const timer2 = setTimeout(() => {
         setHover(true);
-        const meaningTTS = currenText()
-          .meaning.replace(/\s\-(.+?)\-/g, "+")
-          .replace(/\-/g, "+");
-        const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${meaningTTS}`;
+        const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${translations}`;
         setAudioSource(soundUrl);
       }, 3500);
       const timer3 = setTimeout(() => {
@@ -172,23 +168,39 @@ const FlipCard: Component<{
         <div class={hover() ? "cube cube--hover" : "cube"}>
           <div class="cube--front">
             <div class="cube--content--front">
-              <p class="cube--class">{currenText()?.class}</p>
+              <p class="cube--class">{partOfSpeechs()}</p>
               <Motion.p
                 class="cube--text"
                 animate={{
-                  fontSize: currenText()?.text.length > 14 ? "27px" : "33px",
+                  fontSize: currenText()?.word.length > 14 ? "27px" : "33px",
                 }}
               >
-                {currenText()?.text}
+                {currenText()?.word}
               </Motion.p>
-              <p class="cube--phonetic">{currenText()?.phonetic}</p>
+              <p class="cube--phonetic">{currenText()?.phonetics}</p>
               <p class="cube--date">05/07/22</p>
             </div>
           </div>
           <div class="cube--bottom"></div>
           <div class="cube--back">
             <div class="cube--content--back">
-              <div class="cube--meaning" innerHTML={renderMeaning()}></div>
+              <div class="cube--meaning">
+                <Index
+                  each={currenText()?.translations}
+                  fallback={<p class="cubeMeaningText">No items</p>}
+                >
+                  {(item, index) => (
+                    <>
+                      <p class="cubeMeaningClass">
+                        【 {item().partOfSpeech} 】
+                      </p>
+                      <Index each={item().translations}>
+                        {(m) => <p class="cubeMeaningText">{m()}</p>}
+                      </Index>
+                    </>
+                  )}
+                </Index>
+              </div>
             </div>
           </div>
           <div class="cube--top"></div>

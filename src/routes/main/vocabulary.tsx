@@ -14,7 +14,6 @@ import { VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
   deleteVocabulary,
-  getSearchText,
   getCalendarTodayData,
   getVocabularyFromRange,
   submitTodayProgress,
@@ -24,6 +23,7 @@ import {
   getSmallestWordNumberFromRange,
   updateArchiveWord,
   deleteSmallestWordNumberFromRange,
+  searchText,
 } from "~/api/api";
 import { Motion, Presence } from "solid-motionone";
 import { useGlobalContext } from "~/globalcontext/store";
@@ -73,11 +73,9 @@ const Vocabulary: Component<{}> = () => {
     }
   });
 
-  //call sever action search text
-  const getSearchTextAction = useAction(getSearchText);
-
+  //search text
   const trigger = debounce(async (str: string) => {
-    const res = await getSearchTextAction(str);
+    const res = await searchText(str);
     if (res) {
       if (res.length === 0) {
         setSearchResult([]);
@@ -143,8 +141,8 @@ const Vocabulary: Component<{}> = () => {
     if (text.number > 1) {
       checkVocabulary(text.number - 1, text.created_at);
     } else {
-      await archiveVocabulary(text.text);
-      const data = await getSmallestWordNumberFromRange(text.text);
+      await archiveVocabulary(text.word);
+      const data = await getSmallestWordNumberFromRange(text.word);
 
       if (data) {
         await deleteSmallestWordNumberFromRange(data.created_at);
@@ -491,7 +489,7 @@ const Vocabulary: Component<{}> = () => {
                         class="my-item--text"
                         onclick={() => handleRenderText(data())}
                       >
-                        <p>{data().text}</p>
+                        <p>{data().word}</p>
                       </div>
                       <div class="my-item--buttons my-item--buttons-end">
                         <Show when={i + 1 !== deleteBtnIndex()}>
@@ -525,7 +523,7 @@ const Vocabulary: Component<{}> = () => {
             </Show>
 
             {/* Definition */}
-            <Show when={currentText()?.text}>
+            <Show when={currentText()?.word}>
               <Show
                 when={bottomLooping()}
                 fallback={

@@ -36,13 +36,12 @@ const Translation: Component<{
   );
   const [translateData, setTranslateData] = createSignal<TranslateType>();
   const mockData: VocabularyType = {
-    text: "",
-    sound: "",
-    class: "",
-    definitions: [],
-    phonetic: "",
-    meaning: "",
+    word: "",
+    audio: "",
+    phonetics: "",
     number: 240,
+    translations: [],
+    definitions: [],
     created_at: "",
   };
   const [definitionData, setDefinitionData] =
@@ -148,31 +147,23 @@ const Translation: Component<{
         <form action={insertVocabularyItem} method="post" class="editForm">
           <input
             style={{ display: "none" }}
-            name="text"
+            name="word"
             autocomplete="off"
             value={translateTerm()}
           />
           <div class="editInputGroup">
             <input
               class="editInputItem"
-              name="sound"
+              name="audio"
               autocomplete="off"
-              value={definitionData().sound}
-            />
-          </div>
-          <div class="editInputGroup">
-            <input
-              class="editInputItem"
-              name="class"
-              autocomplete="off"
-              value={definitionData().class}
+              value={definitionData().audio}
             />
           </div>
           <div class="editInputGroup">
             <textarea
               name="definitions"
               class="editInputItem editInputItemResult"
-              value={JSON.stringify(definitionData().definitions)}
+              value={JSON.stringify(definitionData().definitions, null, " ")}
               onChange={(e) =>
                 setDefinitionData({
                   ...definitionData(),
@@ -184,10 +175,10 @@ const Translation: Component<{
           <div class="editInputGroup">
             <input
               class="editInputItem"
-              name="phonetic"
+              name="phonetics"
               autocomplete="off"
               value={
-                definitionData().phonetic || translateData()?.wordTranscription
+                definitionData().phonetics || translateData()?.wordTranscription
               }
             />
           </div>
@@ -198,15 +189,6 @@ const Translation: Component<{
               autocomplete="off"
               value={transInput()}
               onInput={(e) => setTransInput(e.target.value)}
-            />
-          </div>
-          <div class="editInputGroup">
-            <input
-              type="number"
-              class="editInputItem"
-              name="number"
-              autocomplete="off"
-              value={240}
             />
           </div>
           <button
@@ -296,7 +278,7 @@ const Translation: Component<{
           </div>
         </Show>
 
-        <Show when={definitionData().text}>
+        <Show when={definitionData().word}>
           <Definition item={definitionData()} />
         </Show>
       </div>

@@ -10,7 +10,7 @@ import {
 import "/public/styles/edit.scss";
 import "/public/styles/toast.scss";
 import { OcX2 } from "solid-icons/oc";
-import { VocabularyType } from "~/types";
+import { VocabularyDefinitionType, VocabularyType } from "~/types";
 import { action, useSubmission } from "@solidjs/router";
 import Definition from "./definition";
 import { editVocabularyItem, getTextDataWebster } from "~/api/api";
@@ -25,44 +25,35 @@ const Edit: Component<{
 }> = (props) => {
   const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
   const editActionResult = useSubmission(editVocabularyItem);
-  const mockData: VocabularyType = {
-    text: "",
-    sound: "",
-    class: "",
-    definitions: [],
-    phonetic: "",
-    meaning: "",
-    number: 240,
-    created_at: "",
-  };
-  const [definitionData, setDefinitionData] =
-    createSignal<VocabularyType>(mockData);
-
-  const [definitionValue, setDefinitionValue] = createStore<{
-    type: string;
-    example: string;
-    phonetic: string;
-  }>({
-    type: props.item.class,
-    example: JSON.stringify(props.item.definitions),
-    phonetic: props.item.phonetic,
-  });
+  const [definitionData, setDefinitionData] = createStore<VocabularyType>(
+    props.item
+  );
+  const [definitionDataRender, setDefinitionRender] =
+    createSignal<VocabularyType>(props.item);
+  const [translationString, setTranslationString] = createSignal<string>("");
 
   const getAndSetDefinitionData = async (text: string) => {
     const data = await getTextDataWebster(text);
-    if (data) setDefinitionData(data);
+    if (data) setDefinitionRender(data);
   };
 
   const handleCheck = () => {
-    setDefinitionValue({
-      type: definitionData().class,
-      example: JSON.stringify(definitionData().definitions),
-      phonetic: definitionData().phonetic,
+    setDefinitionData({
+      definitions: definitionDataRender().definitions,
+      phonetics: definitionDataRender().phonetics,
     });
   };
 
   onMount(() => {
-    getAndSetDefinitionData(props.item.text);
+    getAndSetDefinitionData(props.item.word);
+    let str = props.item.translations
+      .map((item) => {
+        let part = item.partOfSpeech;
+        let mean = item.translations.join("-");
+        return " -" + part + "-" + mean;
+      })
+      .join("");
+    setTranslationString(str);
   });
 
   //----------------------TOAST----------------------
@@ -100,7 +91,8 @@ const Edit: Component<{
 
   //handy edit
 
-  const [handyResult, setHandyResult] = createSignal<string>("");
+  const [handyResult, setHandyResult] =
+    createSignal<VocabularyDefinitionType>();
 
   const handleHandyEdit = action(async (formData: FormData) => {
     const header = String(formData.get("editItem--header"));
@@ -115,60 +107,46 @@ const Edit: Component<{
     const author = String(formData.get("editItem--author"));
     const title = String(formData.get("editItem--title")).toUpperCase();
     const year = String(formData.get("editItem--year"));
+    const syn = String(formData.get("editItem--syn"));
     const newText =
-      props.item?.text.length > 4
-        ? props.item?.text.slice(0, -2)
-        : props.item?.text;
+      props.item?.word.length > 4
+        ? props.item?.word.slice(0, -2)
+        : props.item?.word;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
     x = x.replace(regText, `<b>$1</b>`);
 
-    const resultArr = [header, def1, def2, def3, img, x];
-
-    let result = resultArr
-      .map((item, index) => {
-        switch (index) {
-          case 0:
-            if (img !== "" && header !== "")
-              return `<span class="websHead">${item}</span><span class="websThumb"><span>`;
-            else if (img !== "" && header === "")
-              return `<span class="websThumb"><span>`;
-          case 1:
-            if (item !== "")
-              return `<span class="websDef">${item}${
-                def1up && `<span class="websDefUp">${def1up}</span>`
-              }</span>`;
-          case 2:
-            if (item !== "")
-              return `<span class="websDef">${item}${
-                def2up && `<span class="websDefUp">${def2up}</span>`
-              }</span>`;
-          case 3:
-            if (item !== "")
-              return `<span class="websDef">${item}${
-                def3up && `<span class="websDefUp">${def3up}</span>`
-              }</span>`;
-          case 4:
-            if (item !== "")
-              return `</span><img class="websImg" src="${item}"/></span>`;
-          case 5:
-            if (item !== "") return `<span class="websX">${item}</span>`;
-          default:
-            break;
-        }
-      })
-      .join("");
-
-    let creditArr = [author, title, year];
-    let hasNonNull = creditArr.some((element) => element);
-
-    if (hasNonNull) {
-      result += `<span class="websCredits">`;
-      if (author !== "") result += `<span class="websAuthor">${author} </span>`;
-      if (title !== "") result += `<span class="websTitle">${title} </span>`;
-      if (year !== "") result += `<span class="websYear">${year}</span>`;
-      result += `</span>`;
-    }
-    setHandyResult(result);
+    let resultObj: VocabularyDefinitionType = {
+      example: [
+        {
+          year: year,
+          title: title,
+          author: author,
+          sentence: x,
+        },
+      ],
+      synonyms: syn,
+      definitions: [
+        {
+          image: img,
+          definition: [
+            {
+              sense: def1,
+              similar: def1up,
+            },
+            {
+              sense: def2,
+              similar: def2up,
+            },
+            {
+              sense: def3,
+              similar: def3up,
+            },
+          ],
+        },
+      ],
+      partOfSpeech: header,
+    };
+    setHandyResult(resultObj);
   });
 
   return (
@@ -177,7 +155,7 @@ const Edit: Component<{
         <div class="editHeaderLeft"></div>
         <div class="editHeaderRight">
           <button class="button button--primary" onClick={handleShowHandyEdit}>
-            <FaSolidExpand size={12} />
+            <FaSolidExpand size={13} />
           </button>
           <button class="button button--close" onclick={props.onClose}>
             <OcX2 size={15} />
@@ -267,11 +245,16 @@ const Edit: Component<{
                   name="editItem--year"
                 />
               </span>
+              <input
+                class="editItem--def"
+                autocomplete="off"
+                name="editItem--syn"
+              />
             </form>
             <div class="editInputGroup">
               <textarea
                 class="editInputItem editInputItemResult editInputHandy"
-                value={JSON.stringify(handyResult()).slice(1, -1)}
+                value={JSON.stringify(handyResult(), null, " ")}
               />
             </div>
           </div>
@@ -285,9 +268,9 @@ const Edit: Component<{
             />
             <input
               class="newTranslateInput"
-              name="text"
+              name="word"
               autocomplete="off"
-              value={props.item?.text}
+              value={props.item?.word}
             />
             <img
               src="/images/main/input-right-corner.png"
@@ -297,27 +280,27 @@ const Edit: Component<{
           <div class="editInputGroup">
             <input
               class="editInputItem"
-              name="sound"
+              name="audio"
               autocomplete="off"
-              value={props.item?.sound}
+              value={props.item?.audio}
             />
           </div>
           <div class="editInputGroup">
             <input
               class="editInputItem"
-              name="class"
+              name="phonetics"
               autocomplete="off"
-              value={definitionValue.type}
+              value={definitionData.phonetics}
             />
           </div>
           <div class="editInputGroup">
             <textarea
               name="definitions"
               class="editInputItem editInputItemResult"
-              value={definitionValue.example}
+              value={JSON.stringify(definitionData.definitions, null, " ")}
               onChange={(e) =>
-                setDefinitionData({
-                  ...definitionData(),
+                setDefinitionRender({
+                  ...definitionDataRender(),
                   definitions: JSON.parse(e.currentTarget.value),
                 })
               }
@@ -326,17 +309,9 @@ const Edit: Component<{
           <div class="editInputGroup">
             <input
               class="editInputItem"
-              name="phonetic"
-              autocomplete="off"
-              value={definitionValue.phonetic}
-            />
-          </div>
-          <div class="editInputGroup">
-            <input
-              class="editInputItem"
               name="meaning"
               autocomplete="off"
-              value={props.item?.meaning}
+              value={translationString()}
             />
           </div>
           <div class="editInputGroup">
@@ -364,8 +339,8 @@ const Edit: Component<{
           </button>
         </form>
 
-        <Show when={definitionData().text}>
-          <Definition item={definitionData()} onCheck={handleCheck} />
+        <Show when={definitionDataRender().word}>
+          <Definition item={definitionDataRender()} onCheck={handleCheck} />
         </Show>
       </div>
       <Toaster

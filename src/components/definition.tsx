@@ -1,17 +1,8 @@
-import {
-  Component,
-  Index,
-  Setter,
-  Show,
-  createMemo,
-  createSignal,
-} from "solid-js";
+import { Component, Index, Setter, Show, createMemo } from "solid-js";
 import { VocabularyType } from "~/types";
 import "/public/styles/definition.scss";
 import { FaSolidCheck, FaSolidFeather } from "solid-icons/fa";
 import { BsSoundwave } from "solid-icons/bs";
-
-let audioRef: HTMLAudioElement;
 
 const Definition: Component<{
   item: VocabularyType;
@@ -20,15 +11,9 @@ const Definition: Component<{
   count?: number;
 }> = (props) => {
   const currenText = createMemo(() => props.item);
-  const [audioSource, setAudioSource] = createSignal<string>("");
-  const handlePlaySound = () => {
-    setAudioSource(currenText().sound);
-    audioRef.play();
-  };
 
   return (
     <>
-      <audio src={audioSource()} hidden ref={audioRef}></audio>
       <div class="definition">
         <div class="definitionHeader">
           <div class="definitionHeaderLeft">
@@ -36,17 +21,17 @@ const Definition: Component<{
               when={props.count}
               fallback={
                 <p class="definitionHeaderText">
-                  Definitions of <b>{currenText()?.text}</b>
+                  Definitions of <b>{currenText()?.word}</b>
                 </p>
               }
             >
               <p class="definitionHeaderText">
-                <span>{props.count}.</span> <b>{currenText().text}</b>
+                <span>{props.count}.</span> <b>{currenText().word}</b>
               </p>
             </Show>
           </div>
           <div class="definitionHeaderRight">
-            <button class="button button--primary" onclick={handlePlaySound}>
+            <button class="button button--primary">
               <BsSoundwave size={15} />
             </button>
             <Show when={props.onEdit}>
@@ -65,33 +50,73 @@ const Definition: Component<{
           </div>
         </div>
         <div class="definitionBody">
-          <Show
-            when={currenText()?.definitions.length > 1}
-            fallback={
-              <Index each={currenText()?.definitions}>
-                {(m, i) => {
-                  return (
-                    <div class="sn-gs">
-                      <div innerHTML={m()} class="sn-g" />
-                    </div>
-                  );
-                }}
-              </Index>
-            }
-          >
-            <Index each={currenText()?.definitions}>
-              {(m, i) => {
-                return (
-                  <div class="sn-gs">
-                    <div class="sn-g">
-                      <div class="num">{1 + i}:</div>
-                      <div innerHTML={m()} />
-                    </div>
+          <Index each={currenText()?.definitions}>
+            {(item, index) => {
+              return (
+                <div class="sn-gs">
+                  <div class="sn-g">
+                    {currenText()?.definitions.length > 1 && (
+                      <div class="num">{1 + index}:</div>
+                    )}
+                    <span class="websHead">{item().partOfSpeech}</span>
+                    <Index each={item().definitions}>
+                      {(m, n) => (
+                        <div class="websThumb">
+                          <div>
+                            <Index each={m().definition}>
+                              {(x, y) => (
+                                <span class="websDef">
+                                  {x().sense}
+                                  {x().similar && (
+                                    <span class="websDefUp">
+                                      {" "}
+                                      : {x().similar}
+                                    </span>
+                                  )}
+                                </span>
+                              )}
+                            </Index>
+                          </div>
+                          {m().image && <img class="websImg" src={m().image} />}
+                        </div>
+                      )}
+                    </Index>
+                    {item().example[0] && (
+                      <>
+                        <span
+                          class="websX"
+                          innerHTML={item().example[0].sentence}
+                        />
+                        <span class="websCredits">
+                          {item().example[0].author && (
+                            <span class="websAuthor">
+                              {item().example[0].author}-
+                            </span>
+                          )}
+                          {item().example[0].title && (
+                            <span class="websTitle">
+                              {item().example[0].title}-
+                            </span>
+                          )}
+                          {item().example[0].year && (
+                            <span class="websYear">
+                              {item().example[0].year}
+                            </span>
+                          )}
+                        </span>
+                      </>
+                    )}
+                    {item().synonyms && (
+                      <span class="websSyn">
+                        <b>Synonym: </b>
+                        <small>{item().synonyms}</small>
+                      </span>
+                    )}
                   </div>
-                );
-              }}
-            </Index>
-          </Show>
+                </div>
+              );
+            }}
+          </Index>
         </div>
       </div>
     </>
