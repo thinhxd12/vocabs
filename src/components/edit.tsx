@@ -115,6 +115,11 @@ const Edit: Component<{
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
     x = x.replace(regText, `<b>$1</b>`);
 
+    let defArr = [];
+    def1 && defArr.push({ sense: def1, similar: def1up });
+    def2 && defArr.push({ sense: def2, similar: def2up });
+    def3 && defArr.push({ sense: def3, similar: def3up });
+
     let resultObj: VocabularyDefinitionType = {
       example: [
         {
@@ -128,24 +133,12 @@ const Edit: Component<{
       definitions: [
         {
           image: img,
-          definition: [
-            {
-              sense: def1,
-              similar: def1up,
-            },
-            {
-              sense: def2,
-              similar: def2up,
-            },
-            {
-              sense: def3,
-              similar: def3up,
-            },
-          ],
+          definition: defArr,
         },
       ],
       partOfSpeech: header,
     };
+
     setHandyResult(resultObj);
   });
 
