@@ -85,15 +85,6 @@ export const getThisWeekData = action(async () => {
     if (data) return data[0].index1;
 });
 
-// export const getCalendarTodayData = action(async () => {
-//     "use server";
-//     const { data, error } = await supabase
-//         .from(mapTables.schedule)
-//         .select()
-//         .eq('date', new Date().toISOString());
-//     if (data) return data[0] as ScheduleType;
-// });
-
 export const getCalendarTodayData = async () => {
     "use server";
     const { data, error } = await supabase
