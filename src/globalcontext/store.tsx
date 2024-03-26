@@ -9,7 +9,7 @@ import {
   onMount,
 } from "solid-js";
 import { getMemoriesLength } from "~/api/api";
-import { VocabularyType } from "~/types";
+import { ScheduleType, VocabularyType } from "~/types";
 
 interface ContextProps {
   totalMemories: Accessor<number>;
@@ -28,6 +28,8 @@ interface ContextProps {
   setWordListType: Setter<1 | 2>;
   wordList: Accessor<VocabularyType[]>;
   setWordList: Setter<VocabularyType[]>;
+  todayData: Accessor<ScheduleType>;
+  setTodayData: Setter<ScheduleType>;
 }
 
 const GlobalContext = createContext<ContextProps>();
@@ -41,6 +43,13 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
   const [wordListType, setWordListType] = createSignal<1 | 2>(1);
   const [wordList, setWordList] = createSignal<VocabularyType[]>([]);
   const [totalMemories, setTotalMemories] = createSignal<number>(0);
+  const [todayData, setTodayData] = createSignal<ScheduleType>({
+    date: "",
+    index1: 0,
+    index2: 0,
+    time1: 0,
+    time2: 0,
+  });
 
   const getMemoriesLengthAction = useAction(getMemoriesLength);
 
@@ -68,6 +77,8 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
         setShowMenubar,
         wordListType,
         setWordListType,
+        todayData,
+        setTodayData,
       }}
     >
       {props.children}

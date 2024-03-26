@@ -8,7 +8,7 @@ import {
   on,
   onMount,
 } from "solid-js";
-import { RouteDefinition, useAction, useSubmission } from "@solidjs/router";
+import { RouteDefinition, useAction } from "@solidjs/router";
 import { getUser, logout } from "~/api";
 import { VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
@@ -64,7 +64,7 @@ const Vocabulary: Component<{}> = () => {
         navigator.userAgent
       )
     );
-    await getCalendarTodayDataAction();
+    getCalendarTodayDataAction();
   });
 
   createEffect(() => {
@@ -217,9 +217,11 @@ const Vocabulary: Component<{}> = () => {
   };
   // -------------------EDIT END-------------------- //
   // -------------------AUTOPLAY START-------------------- //
-  const getCalendarTodayDataAction = useAction(getCalendarTodayData);
-  const getCalendarTodayDataResult = useSubmission(getCalendarTodayData);
   const getVocabularyFromRangeAction = useAction(getVocabularyFromRange);
+  const getCalendarTodayDataAction = async () => {
+    const data = await getCalendarTodayData();
+    if (data) setTodayData(data);
+  };
 
   const handleAutoplay = () => {
     handleRenderText(wordList()[counter()]);
@@ -232,12 +234,10 @@ const Vocabulary: Component<{}> = () => {
     setBottomLooping(true);
     if (counter() === 0) {
       const newProgress =
-        wordListType() === 1
-          ? getCalendarTodayDataResult.result!.time1 + 1
-          : getCalendarTodayDataResult.result!.time2 + 1;
+        wordListType() === 1 ? todayData().time1 + 1 : todayData().time2 + 1;
 
       await submitTodayProgressAction(wordListType(), newProgress);
-      await getCalendarTodayDataAction();
+      getCalendarTodayDataAction();
     }
     handleAutoplay();
     timerRef = setInterval(() => {
@@ -248,9 +248,7 @@ const Vocabulary: Component<{}> = () => {
         //get wordlist to update lastest changed
         handleSetDailyWord(wordListType());
         //start timmer countdown
-        if (getCalendarTodayDataResult.result) {
-          getCalendarTodayDataResult.result.time2 < 9 && startCountdown();
-        }
+        if (todayData().time2 < 9) startCountdown();
       }
     }, 7500);
   };
@@ -284,6 +282,8 @@ const Vocabulary: Component<{}> = () => {
     setShowMenubar,
     wordListType,
     setWordListType,
+    todayData,
+    setTodayData,
   } = useGlobalContext();
 
   createEffect(
@@ -301,23 +301,27 @@ const Vocabulary: Component<{}> = () => {
       case 1:
         //get 50 word
         setWordListType(1);
-        const start1 = getCalendarTodayDataResult.result!.index1;
-        const data1 = await getVocabularyFromRangeAction(start1, start1 + 49);
+        const data1 = await getVocabularyFromRangeAction(
+          todayData().index1,
+          todayData().index1 + 49
+        );
         if (data1) {
           setWordList(data1);
         }
-        setBottomIndex(getCalendarTodayDataResult.result!.index1 + 1);
+        setBottomIndex(todayData().index1 + 1);
         stopAutoplay();
         break;
       case 2:
         //get 59word
         setWordListType(2);
-        const start2 = getCalendarTodayDataResult.result!.index2;
-        const data2 = await getVocabularyFromRangeAction(start2, start2 + 49);
+        const data2 = await getVocabularyFromRangeAction(
+          todayData().index2,
+          todayData().index2 + 49
+        );
         if (data2) {
           setWordList(data2);
         }
-        setBottomIndex(getCalendarTodayDataResult.result!.index2 + 1);
+        setBottomIndex(todayData().index2 + 1);
         stopAutoplay();
         break;
       default:
@@ -331,9 +335,7 @@ const Vocabulary: Component<{}> = () => {
     const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
     const letter = wordListType() === 1 ? "I" : "II";
     const newProgress =
-      wordListType() === 1
-        ? getCalendarTodayDataResult.result!.time1 + 1
-        : getCalendarTodayDataResult.result!.time2 + 1;
+      wordListType() === 1 ? todayData().time1 + 1 : todayData().time2 + 1;
 
     const notification = new Notification("Start Focusing", {
       icon: img,
@@ -563,8 +565,7 @@ const Vocabulary: Component<{}> = () => {
                 <div class="menubarContent">
                   <button
                     class={
-                      getCalendarTodayDataResult.result &&
-                      getCalendarTodayDataResult.result.time1 > 0
+                      todayData().time1 > 0
                         ? "menuBtn menuBtn--wordlist menuBtn--active"
                         : "menuBtn menuBtn--wordlist"
                     }
@@ -574,12 +575,11 @@ const Vocabulary: Component<{}> = () => {
                     }}
                   >
                     <span>I</span>
-                    <small>{getCalendarTodayDataResult.result?.time1}</small>
+                    <small>{todayData().time1}</small>
                   </button>
                   <button
                     class={
-                      getCalendarTodayDataResult.result &&
-                      getCalendarTodayDataResult.result.time2 > 0
+                      todayData().time2 > 0
                         ? "menuBtn menuBtn--wordlist menuBtn--active"
                         : "menuBtn menuBtn--wordlist"
                     }
@@ -589,7 +589,7 @@ const Vocabulary: Component<{}> = () => {
                     }}
                   >
                     <span>II</span>
-                    <small>{getCalendarTodayDataResult.result?.time2}</small>
+                    <small>{todayData().time2}</small>
                   </button>
 
                   <button

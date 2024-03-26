@@ -1,10 +1,9 @@
-import { A, useSubmission } from "@solidjs/router";
+import { A } from "@solidjs/router";
 import { Component, Show } from "solid-js";
 import "/public/styles/bottom.scss";
 import { useGlobalContext } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
 import { OcDotfill2 } from "solid-icons/oc";
-import { getCalendarTodayData } from "~/api/api";
 
 const Bottom: Component<{}> = () => {
   const {
@@ -15,15 +14,15 @@ const Bottom: Component<{}> = () => {
     totalMemories,
     showMenubar,
     setShowMenubar,
+    todayData,
   } = useGlobalContext();
-  const getCalendarTodayDataResult = useSubmission(getCalendarTodayData);
 
   return (
     <div class="bottom">
       <div class="bottom-center-index">
-        <span>{getCalendarTodayDataResult.result?.time1}</span>
+        <span>{todayData().time1}</span>
         <OcDotfill2 size={4} />
-        <span>{getCalendarTodayDataResult.result?.time2}</span>
+        <span>{todayData().time2}</span>
       </div>
       <A
         href="/main/vocabulary"

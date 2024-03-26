@@ -143,11 +143,13 @@ const About: Component<{}> = (props) => {
             // }}
           >
             <div class="calendarImageContent">
-              <p onClick={handleShowSetNewMonth}>
+              <p class="setNewMonth" onClick={handleShowSetNewMonth}>
                 {todayDate().toLocaleString("default", { month: "long" })}
               </p>
-              <p onClick={handleShowSetNewWeek}>{todayDate().getFullYear()}</p>
-              <p onClick={handleShowSetNewHistory}>
+              <p class="setNewWeek" onClick={handleShowSetNewWeek}>
+                {todayDate().getFullYear()}
+              </p>
+              <p class="setNewHistory" onClick={handleShowSetNewHistory}>
                 {weekIndex() + 1} &#183; {weekIndex() + 200}
               </p>
             </div>
