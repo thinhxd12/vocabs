@@ -11,7 +11,6 @@ const Definition: Component<{
   count?: number;
 }> = (props) => {
   const currenText = createMemo(() => props.item);
-
   return (
     <>
       <div class="definition">
@@ -55,9 +54,9 @@ const Definition: Component<{
               return (
                 <div class="sn-gs">
                   <div class="sn-g">
-                    {currenText()?.definitions.length > 1 && (
+                    <Show when={currenText()?.definitions.length > 1}>
                       <div class="num">{1 + index}:</div>
-                    )}
+                    </Show>
                     <span class="websHead">{item().partOfSpeech}</span>
                     <Index each={item().definitions}>
                       {(m, n) => (
@@ -69,49 +68,58 @@ const Definition: Component<{
                                   {x().sense}
                                   {x().similar && (
                                     <span class="websDefUp">
-                                      {" "}
-                                      : {x().similar}
+                                      {" : " + x().similar}
                                     </span>
                                   )}
                                 </span>
                               )}
                             </Index>
                           </div>
-                          {m().image && <img class="websImg" src={m().image} />}
+
+                          <Show when={m().image}>
+                            <img
+                              class="websImg"
+                              loading="lazy"
+                              src={m().image}
+                              onerror={(e) => {
+                                e.currentTarget.src = "/images/main/5small.jpg";
+                              }}
+                            />
+                          </Show>
                         </div>
                       )}
                     </Index>
-                    {item().example[0] && (
-                      <>
-                        <span
-                          class="websX"
-                          innerHTML={item().example[0].sentence}
-                        />
-                        <span class="websCredits">
-                          {item().example[0].author && (
-                            <span class="websAuthor">
-                              {item().example[0].author}-
-                            </span>
-                          )}
-                          {item().example[0].title && (
-                            <span class="websTitle">
-                              {item().example[0].title}
-                            </span>
-                          )}
-                          {item().example[0].year && (
-                            <span class="websYear">
-                              -{item().example[0].year}
-                            </span>
-                          )}
-                        </span>
-                      </>
-                    )}
-                    {item().synonyms && (
+
+                    <Show when={item().example[0]}>
+                      <span
+                        class="websX"
+                        innerHTML={item().example[0].sentence}
+                      />
+                      <span class="websCredits">
+                        {item().example[0].author && (
+                          <span class="websAuthor">
+                            {item().example[0].author}-
+                          </span>
+                        )}
+                        {item().example[0].title && (
+                          <span class="websTitle">
+                            {item().example[0].title}
+                          </span>
+                        )}
+                        {item().example[0].year && (
+                          <span class="websYear">
+                            -{item().example[0].year}
+                          </span>
+                        )}
+                      </span>
+                    </Show>
+
+                    <Show when={item().synonyms}>
                       <span class="websSyn">
                         <b>Synonym: </b>
                         <small>{item().synonyms}</small>
                       </span>
-                    )}
+                    </Show>
                   </div>
                 </div>
               );
