@@ -231,11 +231,10 @@ const Vocabulary: Component<{}> = () => {
   const submitTodayProgressAction = useAction(submitTodayProgress);
 
   const startAutoplay = async () => {
+    const newProgress =
+      wordListType() === 1 ? todayData().time1 + 1 : todayData().time2 + 1;
     setBottomLooping(true);
     if (counter() === 0) {
-      const newProgress =
-        wordListType() === 1 ? todayData().time1 + 1 : todayData().time2 + 1;
-
       await submitTodayProgressAction(wordListType(), newProgress);
       getCalendarTodayDataAction();
     }
@@ -248,7 +247,7 @@ const Vocabulary: Component<{}> = () => {
         //get wordlist to update lastest changed
         handleSetDailyWord(wordListType());
         //start timmer countdown
-        if (todayData().time2 < 9) startCountdown();
+        if (newProgress < 9) startCountdown();
       }
     }, 7500);
   };
@@ -445,17 +444,6 @@ const Vocabulary: Component<{}> = () => {
               />
               <div class="myInputCenterContent">
                 <input class="myInput" onInput={onInputSearch} />
-                <div class="myInputTransContent">
-                  <input
-                    class="myInput"
-                    value={translateTerm()}
-                    onInput={(e) => setTranslateTerm(e.target.value)}
-                    onKeyDown={onKeyDownTrans}
-                  />
-                  <button class="myInputBtn" onClick={handleTranslate}>
-                    <img src="/images/main/center.png" />
-                  </button>
-                </div>
               </div>
               <img
                 src="/images/main/input-right-corner.png"

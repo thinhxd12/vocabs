@@ -33,7 +33,9 @@ export default function Login(props: RouteSectionProps) {
           </div>
           <div class="loginItem">
             <button type="submit" class="loginBtn">
-              <img src="/images/main/center.png" />
+              <img src="/images/main/input-left-corner.png" />
+              <span>E</span>
+              <img src="/images/main/input-right-corner.png" />
             </button>
           </div>
           <Show when={loggingIn.result}>

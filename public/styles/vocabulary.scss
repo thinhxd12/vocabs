@@ -25,13 +25,13 @@
     .myInputContainer {
         position: relative;
         width: 100%;
-        height: 27px;
+        height: 38px;
         margin-bottom: 1px;
         background: $color-background-2;
 
         .myInputLeftOrnament {
             z-index: inherit;
-            height: 27px;
+            height: 100%;
             position: absolute;
             left: 0;
             top: 0;
@@ -40,7 +40,7 @@
 
         .myInputRightOrnament {
             z-index: inherit;
-            height: 27px;
+            height: 100%;
             position: absolute;
             right: 0;
             top: 0;
@@ -51,61 +51,20 @@
             @include flex;
             position: absolute;
             width: 100%;
-            height: 27px;
+            height: 38px;
             top: 0;
             left: 0;
             z-index: 72;
 
-            .myInputText {
-                width: 100%;
-                padding: 0 9px;
-                height: 27px;
-                @include font('Roslindale', 14px, $color-white, 600, normal, 27px);
-                text-align: center;
-                transition: 0.3s;
-            }
-
             .myInput {
-                height: 27px;
-                width: 50%;
-                padding: 0 9px;
+                height: 38px;
+                width: 100%;
+                padding: 0 18px;
                 background: none;
                 border: 0;
                 outline: 0;
-                @include font('basier', 12px, $color-white, 400, normal, 27px);
+                @include font('basier', 14px, $color-white, 400, normal, 16px);
             }
-
-            .myInputTransContent {
-                width: 50%;
-                @include flex;
-                justify-content: space-between;
-                transition: 0.3s;
-
-                .myInput {
-                    flex-grow: 1;
-                }
-
-                .myInputBtn {
-                    cursor: pointer;
-                    transition: opacity 0.3s ease;
-                    margin-right: 3px;
-                    opacity: 0;
-                    z-index: 36;
-                    background-color: transparent;
-                    border: none;
-                    outline: none;
-
-                    img {
-                        height: 18px;
-                        margin-top: 3px;
-                    }
-                }
-
-                &:hover .myInputBtn {
-                    opacity: 1;
-                }
-            }
-
         }
     }
 
