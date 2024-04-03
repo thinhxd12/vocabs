@@ -197,9 +197,6 @@ async function fetchGetText(url: string) {
 export const getTextDataWebster = async (text: string) => {
     const url =
         DEFAULT_CORS_PROXY + `https://www.merriam-webster.com/dictionary/${text}`;
-    const cambrideUrl =
-        DEFAULT_CORS_PROXY +
-        `https://dictionary.cambridge.org/dictionary/english/${text}`;
     const oxfordUrl =
         DEFAULT_CORS_PROXY +
         `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
@@ -220,12 +217,10 @@ export const getTextDataWebster = async (text: string) => {
     try {
         const data = await Promise.all([
             fetchGetText(url),
-            fetchGetText(cambrideUrl),
             fetchGetText(oxfordUrl),
         ]);
         const doc = parse(data[0]);
-        const docCa = parse(data[1]);
-        const docOx = parse(data[2]);
+        const docOx = parse(data[1]);
 
         result.audio =
             getElAttribute(docOx, ".audio_play_button,.pron-us", "data-src-mp3") ||
@@ -320,14 +315,6 @@ export const getTextDataWebster = async (text: string) => {
 
             //find only First Definition
             const firstItem = item.querySelector(".vg-sseq-entry-item");
-
-            //add Image
-            const img = docCa.querySelector(".dimg");
-            if (index === 0 && img) {
-                itemDef.image =
-                    "https://dictionary.cambridge.org" +
-                    getElAttribute(img, "amp-img", "src");
-            }
 
             if (firstItem) {
                 firstItem.querySelectorAll(".sb-entry .sense").forEach((m, n) => {

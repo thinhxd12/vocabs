@@ -54,10 +54,12 @@ const Definition: Component<{
               return (
                 <div class="sn-gs">
                   <div class="sn-g">
-                    <Show when={currenText()?.definitions.length > 1}>
-                      <div class="num">{1 + index}:</div>
-                    </Show>
-                    <span class="websHead">{item().partOfSpeech}</span>
+                    <div class="websHead">
+                      <Show when={currenText()?.definitions.length > 1}>
+                        <span class="websHeadNum">{1 + index}:</span>
+                      </Show>
+                      <span class="websHeadContent">{item().partOfSpeech}</span>
+                    </div>
                     <Index each={item().definitions}>
                       {(m, n) => (
                         <div class="websThumb">
