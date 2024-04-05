@@ -18,7 +18,8 @@
         outline: none;
         border: none;
         text-align: center;
-        @include font("Roslindale", 12px, #7c7b7a, 600, normal, 30px);
+        @include font("Roslindale", 12px, #7c7b7a, 600, normal, 27px);
+        padding-top: 3px;
     }
 
     .bottom-center-index {
@@ -29,6 +30,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        align-items: center;
         padding: 4px 0;
     }
 
@@ -39,11 +41,12 @@
         border: 0;
         outline: 0;
         cursor: pointer;
-        @include font('Roslindale', 12px, #7c7b7a, 500, normal, 30px);
+        @include font('Roslindale', 12px, #7c7b7a, 500, normal, 27px);
         letter-spacing: 0.3px;
         text-align: center;
         overflow: hidden;
         transition: color 0.1s;
+        padding-top: 3px;
 
         &:hover {
             color: $color-white;
