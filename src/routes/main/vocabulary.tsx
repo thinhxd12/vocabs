@@ -35,9 +35,12 @@ import Translation from "~/components/translation";
 import Edit from "~/components/edit";
 import Bookmark from "~/components/bookmark";
 import { OcHourglass2 } from "solid-icons/oc";
-import { BsHourglassTop, BsTranslate, BsTrash3Fill } from "solid-icons/bs";
+import {
+  BsSoundwave,
+  BsTrash3Fill,
+} from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
-import { BiRegularBookBookmark } from "solid-icons/bi";
+import { ImBooks } from "solid-icons/im";
 
 export const route = {
   load: () => {
@@ -579,26 +582,6 @@ const Vocabulary: Component<{}> = () => {
                     <span>II</span>
                     <small>{todayData().time2}</small>
                   </button>
-
-                  <button
-                    class="menuBtn"
-                    onClick={() => {
-                      startCountdown();
-                      setShowMenubar(false);
-                    }}
-                  >
-                    <BsHourglassTop size={16} />
-                  </button>
-
-                  <button
-                    class="menuBtn"
-                    onClick={() => {
-                      setShowTranslate(true);
-                      setShowMenubar(false);
-                    }}
-                  >
-                    <BsTranslate size={15} />
-                  </button>
                   <button
                     class="menuBtn"
                     onClick={() => {
@@ -606,7 +589,25 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    <BiRegularBookBookmark size={17} />
+                    <ImBooks size={18} />
+                  </button>
+                  <button
+                    class="menuBtn"
+                    onClick={() => {
+                      setShowTranslate(true);
+                      setShowMenubar(false);
+                    }}
+                  >
+                    <BsSoundwave size={18} />
+                  </button>
+                  <button
+                    class="menuBtn"
+                    onClick={() => {
+                      startCountdown();
+                      setShowMenubar(false);
+                    }}
+                  >
+                    T
                   </button>
                   <button class="menuBtn" onClick={() => logoutAction()}>
                     E

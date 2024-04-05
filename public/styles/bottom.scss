@@ -22,11 +22,14 @@
     }
 
     .bottom-center-index {
-        @include flex-center-column;
-        @include font("basier", 8px, $color-black, 600, normal, 10px);
+        @include font("basier", 9px, $color-black, 600, normal, 9px);
         width: 6px;
         height: 30px;
         background: $color-border;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        padding: 4px 0;
     }
 
     .mainFooterBtn {

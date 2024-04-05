@@ -226,9 +226,8 @@
 
 .menuBtn {
     width: 45px;
-    height: 24px;
-    border-radius: 6px;
-    margin-bottom: 1px;
+    height: 21px;
+    border-radius: 3px;
     border: 0;
     outline: 0;
     cursor: pointer;
@@ -238,6 +237,18 @@
     @include font("Roslindale", 14px, #7c7b7a, 700, normal, 21px);
     @include flex-center;
     box-shadow: 0px 3px 6px #00000099;
+    background-image: url('/images/main/input-left-corner.png'),
+        url('/images/main/input-right-corner.png');
+    background-position: left top,
+        right top;
+    background-repeat: no-repeat,
+        no-repeat;
+    background-size: auto 100%,
+        auto 100%;
+
+    &:not(:last-child) {
+        margin-bottom: 2px;
+    }
 
     &--wordlist {
         display: block;
@@ -274,6 +285,7 @@
         margin: 1.5px;
         border: 0.5px solid $color-border;
         @include flex-center;
+        background-image: none;
 
         small {
             @include font("Basier", 9px, #7c7b7a, 500, normal, 12px);
