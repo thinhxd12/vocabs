@@ -35,10 +35,7 @@ import Translation from "~/components/translation";
 import Edit from "~/components/edit";
 import Bookmark from "~/components/bookmark";
 import { OcHourglass2 } from "solid-icons/oc";
-import {
-  BsSoundwave,
-  BsTrash3Fill,
-} from "solid-icons/bs";
+import { BsSoundwave, BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { ImBooks } from "solid-icons/im";
 
@@ -250,7 +247,7 @@ const Vocabulary: Component<{}> = () => {
         //get wordlist to update lastest changed
         handleSetDailyWord(wordListType());
         //start timmer countdown
-        if (newProgress < 9) startCountdown();
+        if (newProgress <= 9) startCountdown();
       }
     }, 7500);
   };
