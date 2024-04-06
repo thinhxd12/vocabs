@@ -6,47 +6,12 @@
     padding: 0;
 
     .definitionHeader {
-        position: sticky;
+        position: absolute;
         top: 0;
-        left: 0;
-        width: 100%;
+        right: 0;
+        z-index: 99;
         display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        border-bottom: 1px solid $color-border;
-        background: #e9e9e9;
-        z-index: 27;
-        height: 25px;
-
-        .definitionHeaderLeft {
-            height: 100%;
-            @include flex;
-            padding: 0 6px;
-
-            .definitionHeaderText {
-                span {
-                    @include font('Fraktur', 14px, $color-black, normal, normal, 14px);
-                }
-
-                b {
-                    @include font('NYTCheltenham', 16px, $color-black, 700, normal);
-                }
-
-                i {
-                    @include font('NYTCheltenham', 11px, #727272, 500, italic);
-                }
-            }
-
-            .definitionHeaderIndex {
-                @include font('NYTCheltenham', 13px, $color-black, 500, normal, 21px);
-            }
-
-        }
-
-        .definitionHeaderRight {
-            @include flex;
-            padding: 1px;
-        }
+        margin: 1px;
     }
 
 

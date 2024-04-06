@@ -247,7 +247,7 @@ const Vocabulary: Component<{}> = () => {
         //get wordlist to update lastest changed
         handleSetDailyWord(wordListType());
         //start timmer countdown
-        if (newProgress <= 9) startCountdown();
+        if (newProgress < 9) startCountdown();
       }
     }, 7500);
   };

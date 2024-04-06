@@ -2,7 +2,6 @@ import { Component, Index, Setter, Show, createMemo } from "solid-js";
 import { VocabularyType } from "~/types";
 import "/public/styles/definition.scss";
 import { FaSolidCheck, FaSolidFeather } from "solid-icons/fa";
-import { BsSoundwave } from "solid-icons/bs";
 
 const Definition: Component<{
   item: VocabularyType;
@@ -15,38 +14,22 @@ const Definition: Component<{
     <>
       <div class="definition">
         <div class="definitionHeader">
-          <div class="definitionHeaderLeft">
-            <Show
-              when={props.count}
-              fallback={
-                <p class="definitionHeaderText">
-                  Definitions of <b>{currenText()?.word}</b>
-                </p>
-              }
+          <Show when={props.onEdit}>
+            <button
+              class="button button--primary"
+              onclick={() => props.onEdit!(props.item)}
             >
-              <p class="definitionHeaderText">
-                <span>{props.count}.</span> <b>{currenText().word}</b>
-              </p>
-            </Show>
-          </div>
-          <div class="definitionHeaderRight">
-            <button class="button button--primary">
-              <BsSoundwave size={15} />
+              <FaSolidFeather size={12} />
             </button>
-            <Show when={props.onEdit}>
-              <button
-                class="button button--primary"
-                onclick={() => props.onEdit!(props.item)}
-              >
-                <FaSolidFeather size={12} />
-              </button>
-            </Show>
-            <Show when={props.onCheck}>
-              <button class="button button--success" onclick={props.onCheck}>
-                <FaSolidCheck size={13} />
-              </button>
-            </Show>
-          </div>
+          </Show>
+          <Show when={props.count}>
+            <button class="button button--primary">{props.count}</button>
+          </Show>
+          <Show when={props.onCheck}>
+            <button class="button button--success" onclick={props.onCheck}>
+              <FaSolidCheck size={13} />
+            </button>
+          </Show>
         </div>
         <div class="definitionBody">
           <Index each={currenText()?.definitions}>
