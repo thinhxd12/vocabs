@@ -246,8 +246,15 @@ const Vocabulary: Component<{}> = () => {
         stopAutoplay();
         //get wordlist to update lastest changed
         handleSetDailyWord(wordListType());
+        handleCountDown();
       }
     }, 7500);
+  };
+
+  const handleCountDown = () => {
+    const progress =
+      wordListType() === 1 ? todayData().time1 : todayData().time2;
+    if (progress < 9) startCountdown();
   };
 
   const pauseAutoplay = () => {
@@ -261,9 +268,6 @@ const Vocabulary: Component<{}> = () => {
     //bottom button input background
     setBottomLooping(false);
     setBottomActive(false);
-    const progress =
-      wordListType() === 1 ? todayData().time1 : todayData().time2;
-    if (progress < 9) startCountdown();
   };
 
   const {
