@@ -14,6 +14,9 @@ const Definition: Component<{
     <>
       <div class="definition">
         <div class="definitionHeader">
+          <Show when={props.count}>
+            <button class="button button--primary">{props.count}</button>
+          </Show>
           <Show when={props.onEdit}>
             <button
               class="button button--primary"
@@ -21,9 +24,6 @@ const Definition: Component<{
             >
               <FaSolidFeather size={12} />
             </button>
-          </Show>
-          <Show when={props.count}>
-            <button class="button button--primary">{props.count}</button>
           </Show>
           <Show when={props.onCheck}>
             <button class="button button--success" onclick={props.onCheck}>
