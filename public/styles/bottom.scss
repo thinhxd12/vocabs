@@ -13,13 +13,13 @@
     .mainFooterCenterBtn {
         height: 30px;
         width: 30px;
-        cursor: default;
+        cursor: pointer;
         background: none;
         outline: none;
         border: none;
         text-align: center;
-        @include font("Roslindale", 12px, #7c7b7a, 600, normal, 27px);
-        padding-top: 3px;
+        @include font("Roslindale", 13px, #7c7b7a, 600, normal, 26px);
+        padding-top: 6px;
     }
 
     .bottom-center-index {
@@ -40,13 +40,12 @@
         height: 100%;
         border: 0;
         outline: 0;
-        cursor: pointer;
         @include font('Roslindale', 12px, #7c7b7a, 500, normal, 27px);
         letter-spacing: 0.3px;
         text-align: center;
         overflow: hidden;
         transition: color 0.1s;
-        padding-top: 3px;
+        padding-top: 6px;
 
         &:hover {
             color: $color-white;

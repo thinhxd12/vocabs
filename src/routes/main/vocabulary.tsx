@@ -35,9 +35,10 @@ import Translation from "~/components/translation";
 import Edit from "~/components/edit";
 import Bookmark from "~/components/bookmark";
 import { OcHourglass2 } from "solid-icons/oc";
-import { BsSoundwave, BsTrash3Fill } from "solid-icons/bs";
+import { BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { ImBooks } from "solid-icons/im";
+import { TbDelta } from "solid-icons/tb";
 
 export const route = {
   load: () => {
@@ -600,7 +601,7 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    <BsSoundwave size={18} />
+                    <TbDelta size={16} />
                   </button>
                   <button
                     class="menuBtn"

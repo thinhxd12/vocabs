@@ -1,7 +1,7 @@
 import { Component, Index, Setter, Show, createMemo } from "solid-js";
 import { VocabularyType } from "~/types";
 import "/public/styles/definition.scss";
-import { FaSolidCheck, FaSolidFeather } from "solid-icons/fa";
+import { FaSolidCheck } from "solid-icons/fa";
 
 const Definition: Component<{
   item: VocabularyType;
@@ -22,7 +22,7 @@ const Definition: Component<{
               class="button button--primary"
               onclick={() => props.onEdit!(props.item)}
             >
-              <FaSolidFeather size={12} />
+              <img src="/images/main/laurel.png" height={15} />
             </button>
           </Show>
           <Show when={props.onCheck}>

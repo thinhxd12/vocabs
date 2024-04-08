@@ -7,7 +7,8 @@
     border: none;
     cursor: pointer;
     transition: 0.3s ease;
-    @include flex-center();
+    @include flex-center;
+    overflow: hidden;
     font-family: "Rubik";
     font-size: 10px;
     background-image: url('/images/main/input-left-corner.png'),
@@ -18,7 +19,6 @@
         no-repeat;
     background-size: auto 100%,
         auto 100%;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 
     &:disabled {
         opacity: 0.3;
