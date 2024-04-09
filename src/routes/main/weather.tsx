@@ -19,7 +19,8 @@ type WeatherGeoType = {
 
 const Weather: Component<{}> = (props) => {
   const WEATHER_GEOS: WeatherGeoType[] = [
-    { name: "Thủ Thừa", geo: "10.6011534,106.4018563" },
+    { name: "Thu Thua", geo: "10.6011534,106.4018563" },
+    { name: "Tân An", geo: "10.5364717,106.4099039" },
     {
       name: "Roma",
       geo: "41.8933203,12.4829321",
@@ -33,7 +34,6 @@ const Weather: Component<{}> = (props) => {
       geo: "-25.4443488,-49.1900307",
     },
   ];
-  const supabaseURL = import.meta.env.VITE_SUPABASE_URL;
 
   const getWeatherDataAction = useAction(getWeatherData);
   const getWeatherDataResult = useSubmission(getWeatherData);
@@ -174,76 +174,6 @@ const Weather: Component<{}> = (props) => {
     },
   };
 
-  const makePrediction = (data: FixMinutelyType[]): string => {
-    let lightRainIndex = data.findIndex(
-      (item) => item.intensity >= 0.1 && item.probability >= PRECIP_NUMB
-    );
-    let medRainIndex = data.findIndex(
-      (item) => item.intensity >= 0.5 && item.probability >= PRECIP_NUMB
-    );
-    let heavyRainIndex = data.findIndex(
-      (item) => item.intensity >= 1 && item.probability >= PRECIP_NUMB
-    );
-    let endRainIndex = data.findLastIndex(
-      (item) =>
-        item.intensity >= 0.09 &&
-        item.intensity < 0.1 &&
-        item.probability >= PRECIP_NUMB
-    );
-    let mainItem = { type: "", start: 0, end: 0 };
-    endRainIndex >= 0
-      ? (mainItem.end = data[endRainIndex].diffTime)
-      : (mainItem.end = -1);
-    switch (true) {
-      case lightRainIndex == -1:
-        mainItem.type = "No rain";
-        break;
-      case lightRainIndex >= 0:
-        mainItem.type = "Light rain";
-        break;
-      case medRainIndex >= 0:
-        mainItem.type = "Rain";
-        break;
-      case heavyRainIndex >= 0:
-        mainItem.type = "Heavy rain";
-        break;
-      default:
-        break;
-    }
-    lightRainIndex >= 0
-      ? (mainItem.start = data[lightRainIndex].diffTime)
-      : (mainItem.start = -1);
-
-    function makeText(start: number, end: number) {
-      switch (true) {
-        case start == 0 && end < 0:
-          return `for the hour.`;
-        case start > 0:
-          return `starting in ${start} min.`;
-        case end > 0:
-          return `stopping in ${end} min.`;
-        default:
-          break;
-      }
-    }
-
-    function createText() {
-      switch (mainItem.type) {
-        case "No rain":
-          return `Next hour: No rain anywhere in the area.`;
-        case "Light rain":
-          return `Light rain ${makeText(mainItem.start, mainItem.end)}`;
-        case "Rain":
-          return `Rain ${makeText(mainItem.start, mainItem.end)}`;
-        case "Heavy rain":
-          return `Heavy rain ${makeText(mainItem.start, mainItem.end)}`;
-        default:
-          return "";
-      }
-    }
-    return createText();
-  };
-
   return (
     <MetaProvider>
       <TitleName>Cealus</TitleName>
@@ -327,7 +257,7 @@ const Weather: Component<{}> = (props) => {
             />
           </div>
           <p class="weatherPredict">
-            {makePrediction(getWeatherDataResult.result!.minuteData)}
+            {getWeatherDataResult.result!.prediction}
           </p>
           <RSS />
         </Show>

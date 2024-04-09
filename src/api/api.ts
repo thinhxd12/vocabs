@@ -1,5 +1,5 @@
 import { action, redirect } from "@solidjs/router";
-import { CurrentlyType, ExampleType, HistoryType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType } from "~/types";
+import { CurrentlyType, ExampleType, FixMinutelyType, HistoryType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType } from "~/types";
 import { supabase } from "./supabase";
 import { DEFAULT_CORS_PROXY, DEVIATION_NUMB, PRECIP_NUMB, getElAttribute, getElText, mapTables } from "~/utils";
 import parse from "node-html-parser";
@@ -688,13 +688,15 @@ export const getWeatherData = action(async (geo: string) => {
         const data = await response.json();
         const currentData = cleanDataCurrently(data.currently, data.offset);
         const minuteData = cleanDataMinutely(data.minutely.data);
-        return { currentData: currentData, minuteData: minuteData };
+        const predict = makePrediction(minuteData);
+        return { currentData: currentData, minuteData: minuteData, prediction: predict };
     } catch (error) {
         console.error(error);
     }
 }, "getWeatherData");
 
 const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
+    "use server";
     const time = new Date(data.time * 1000);
     let hours = time.getUTCHours() + offset;
     let minutes = time.getMinutes();
@@ -774,6 +776,7 @@ const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
 };
 
 const cleanDataMinutely = (data: MinutelyType[]) => {
+    "use server";
     return data.map((item, index) => {
         let newItem = { diffTime: 0, intensity: 0, probability: 0 };
         const newIntensity =
@@ -785,6 +788,77 @@ const cleanDataMinutely = (data: MinutelyType[]) => {
         newItem.probability = item.precipProbability;
         return newItem;
     });
+};
+
+const makePrediction = (data: FixMinutelyType[]): string => {
+    "use server";
+    let lightRainIndex = data.findIndex(
+        (item) => item.intensity >= 0.1 && item.probability >= PRECIP_NUMB
+    );
+    let medRainIndex = data.findIndex(
+        (item) => item.intensity >= 0.5 && item.probability >= PRECIP_NUMB
+    );
+    let heavyRainIndex = data.findIndex(
+        (item) => item.intensity >= 1 && item.probability >= PRECIP_NUMB
+    );
+    let endRainIndex = data.findLastIndex(
+        (item) =>
+            item.intensity >= 0.09 &&
+            item.intensity < 0.1 &&
+            item.probability >= PRECIP_NUMB
+    );
+    let mainItem = { type: "", start: 0, end: 0 };
+    endRainIndex >= 0
+        ? (mainItem.end = data[endRainIndex].diffTime)
+        : (mainItem.end = -1);
+    switch (true) {
+        case lightRainIndex == -1:
+            mainItem.type = "No rain";
+            break;
+        case lightRainIndex >= 0:
+            mainItem.type = "Light rain";
+            break;
+        case medRainIndex >= 0:
+            mainItem.type = "Rain";
+            break;
+        case heavyRainIndex >= 0:
+            mainItem.type = "Heavy rain";
+            break;
+        default:
+            break;
+    }
+    lightRainIndex >= 0
+        ? (mainItem.start = data[lightRainIndex].diffTime)
+        : (mainItem.start = -1);
+
+    function makeText(start: number, end: number) {
+        switch (true) {
+            case start == 0 && end < 0:
+                return `for the hour.`;
+            case start > 0:
+                return `starting in ${start} min.`;
+            case end > 0:
+                return `stopping in ${end} min.`;
+            default:
+                break;
+        }
+    }
+
+    function createText() {
+        switch (mainItem.type) {
+            case "No rain":
+                return `Next hour: No rain anywhere in the area.`;
+            case "Light rain":
+                return `Light rain ${makeText(mainItem.start, mainItem.end)}`;
+            case "Rain":
+                return `Rain ${makeText(mainItem.start, mainItem.end)}`;
+            case "Heavy rain":
+                return `Heavy rain ${makeText(mainItem.start, mainItem.end)}`;
+            default:
+                return "";
+        }
+    }
+    return createText();
 };
 
 // =====Insert data============
