@@ -14,6 +14,8 @@ const Bottom: Component<{}> = () => {
     showMenubar,
     setShowMenubar,
     todayData,
+    counter,
+    wordList,
   } = useGlobalContext();
 
   return (
@@ -108,13 +110,15 @@ const Bottom: Component<{}> = () => {
             />
           </Show>
         </Presence>
-        <input
+        <div
           class={
             bottomLooping() ? "inputWordRow inputWordRowActive" : "inputWordRow"
           }
-          name="inputWordRow"
-          value={bottomIndex()}
-        />
+        >
+          <Show when={wordList().length > 0}>
+            {bottomIndex() + counter() - 1}
+          </Show>
+        </div>
       </div>
     </div>
   );

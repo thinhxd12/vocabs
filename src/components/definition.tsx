@@ -7,16 +7,12 @@ const Definition: Component<{
   item: VocabularyType;
   onEdit?: (text: VocabularyType) => void;
   onCheck?: Setter<boolean>;
-  count?: number;
 }> = (props) => {
   const currenText = createMemo(() => props.item);
   return (
     <>
       <div class="definition">
         <div class="definitionHeader">
-          <Show when={props.count}>
-            <button class="button button--primary">{props.count}</button>
-          </Show>
           <Show when={props.onEdit}>
             <button
               class="button button--primary"

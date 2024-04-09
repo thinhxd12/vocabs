@@ -117,11 +117,10 @@
             width: 27px;
             height: 12px;
             box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.6), 0px 0px 5px 0px rgba(0, 0, 0, 0.6) inset;
-            border: 0;
             @include font(sans-serif, 8px, #ececec, 600, normal, 12px);
+            padding-top: 1px;
             background: none;
-            display: inline-block;
-            border-radius: 3px;
+            border-radius: 2px;
             z-index: 99;
         }
 

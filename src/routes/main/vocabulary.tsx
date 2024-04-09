@@ -171,22 +171,6 @@ const Vocabulary: Component<{}> = () => {
   const [translateTerm, setTranslateTerm] = createSignal<string>("");
   const [showTranslate, setShowTranslate] = createSignal(false);
 
-  const onKeyDownTrans: JSX.EventHandlerUnion<
-    HTMLInputElement,
-    KeyboardEvent
-  > = (event) => {
-    event.stopPropagation();
-    const keyDown = event.key;
-    if (keyDown === " ") {
-      setTranslateTerm("");
-      setShowTranslate(false);
-    }
-    if (keyDown === "Enter") setShowTranslate(true);
-  };
-
-  const handleTranslate = () => {
-    setShowTranslate(true);
-  };
   // -------------------TRANSLATE END-------------------- //
   // -------------------DELETE START-------------------- //
   const [deleteBtnIndex, setDeleteBtnIndex] = createSignal<number>(0);
@@ -389,9 +373,10 @@ const Vocabulary: Component<{}> = () => {
     InputEvent
   > = async (event) => {
     event.stopPropagation();
-    const inputValue = event.currentTarget.value;
+    const inputValue = event.target.value;
+    setSearchTerm(inputValue);
     if (inputValue.length > 2) {
-      trigger(inputValue);
+      trigger(searchTerm());
     }
   };
 
@@ -400,7 +385,7 @@ const Vocabulary: Component<{}> = () => {
 
   return (
     <MetaProvider>
-      <Title>{currentText()?.word}</Title>
+      <Title>{currentText()?.word || "Übermensch"}</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio
@@ -449,7 +434,11 @@ const Vocabulary: Component<{}> = () => {
                 class="myInputLeftOrnament"
               />
               <div class="myInputCenterContent">
-                <input class="myInput" onInput={onInputSearch} />
+                <input
+                  class="myInput"
+                  value={searchTerm()}
+                  onInput={onInputSearch}
+                />
               </div>
               <img
                 src="/images/main/input-right-corner.png"
@@ -520,21 +509,10 @@ const Vocabulary: Component<{}> = () => {
 
             {/* Definition */}
             <Show when={currentText()?.word}>
-              <Show
-                when={bottomLooping()}
-                fallback={
-                  <Definition
-                    item={currentText()!}
-                    onEdit={handleEditFromDefinition}
-                  />
-                }
-              >
-                <Definition
-                  item={currentText()!}
-                  onEdit={handleEditFromDefinition}
-                  count={bottomIndex() + counter() - 1}
-                />
-              </Show>
+              <Definition
+                item={currentText()!}
+                onEdit={handleEditFromDefinition}
+              />
             </Show>
           </div>
 
