@@ -10,6 +10,41 @@
     background-color: $color-background-1;
     @include flex;
 
+    .mainFooterLeftIndex {
+
+        width: 6px;
+        height: 30px;
+        background: $color-border;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .indexIndex {
+            @include flex-center-column;
+            width: 6px;
+            height: 18px;
+
+            span {
+                @include font("basier", 9px, $color-black, 600, normal, 9px);
+                text-align: center;
+            }
+        }
+
+        .indexDay {
+            width: 6px;
+            height: 12px;
+            background-color: $color-black;
+            @include flex-center;
+
+            span {
+                @include font("basier", 7px, #575757, 600, normal, 6px);
+                height: 6px;
+                transform: rotateZ(-90deg);
+            }
+
+        }
+    }
+
     .mainFooterCenterBtn {
         height: 30px;
         width: 30px;
@@ -18,20 +53,8 @@
         outline: none;
         border: none;
         text-align: center;
-        @include font("Roslindale", 13px, #7c7b7a, 600, normal, 26px);
-        padding-top: 6px;
-    }
-
-    .bottom-center-index {
-        @include font("basier", 9px, $color-black, 600, normal, 9px);
-        width: 6px;
-        height: 30px;
-        background: $color-border;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        align-items: center;
-        padding: 4px 0;
+        @include font("Roslindale", 13px, #7c7b7a, 600, normal, 27px);
+        padding-top: 3px;
     }
 
     .mainFooterBtn {
@@ -45,7 +68,7 @@
         text-align: center;
         overflow: hidden;
         transition: color 0.1s;
-        padding-top: 6px;
+        padding-top: 4px;
 
         &:hover {
             color: $color-white;

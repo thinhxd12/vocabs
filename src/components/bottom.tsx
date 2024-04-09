@@ -18,9 +18,18 @@ const Bottom: Component<{}> = () => {
 
   return (
     <div class="bottom">
-      <div class="bottom-center-index">
-        <span>{todayData().time1}</span>
-        <span>{todayData().time2}</span>
+      <div class="mainFooterLeftIndex">
+        <div class="indexIndex">
+          <span>{todayData().time1}</span>
+          <span>{todayData().time2}</span>
+        </div>
+        <div class="indexDay">
+          <span>
+            {new Date()
+              .toLocaleString("default", { weekday: "long" })
+              .slice(0, 2)}
+          </span>
+        </div>
       </div>
       <A
         href="/main/vocabulary"
