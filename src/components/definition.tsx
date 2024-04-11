@@ -18,7 +18,7 @@ const Definition: Component<{
               class="button button--primary"
               onclick={() => props.onEdit!(props.item)}
             >
-              <img src="/images/main/laurel.png" height={15} />
+              <img src="/images/main/laurel.png" height={14} />
             </button>
           </Show>
           <Show when={props.onCheck}>
@@ -58,14 +58,16 @@ const Definition: Component<{
                           </div>
 
                           <Show when={m().image}>
-                            <img
-                              class="websImg"
-                              loading="lazy"
-                              src={m().image}
-                              onerror={(e) => {
-                                e.currentTarget.src = "/images/main/5small.jpg";
-                              }}
-                            />
+                            <div class="websImg">
+                              <img
+                                src={m().image}
+                                onerror={(e) => {
+                                  e.currentTarget.src =
+                                    "/images/main/5small.jpg";
+                                }}
+                              />
+                              <span>{currenText()?.word}</span>
+                            </div>
                           </Show>
                         </div>
                       )}
