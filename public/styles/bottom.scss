@@ -112,18 +112,18 @@
             position: absolute;
             bottom: 0;
             right: 0;
-            text-align: center;
             box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.6), 0px 0px 5px 0px rgba(0, 0, 0, 0.6) inset;
-            @include font("basier", 9px, #ececec, 500, normal, 12px);
             padding: 0px 3px;
             background: none;
             border-radius: 2px;
             z-index: 99;
+            @include font("basier", 9px, #ececec, 500, normal, 12px);
+            text-align: center;
         }
 
         .inputWordRowActive {
-            background-color: $color-background-1;
-            box-shadow: 0px 0px 3px $color-background-1,
+            background: $color-background-1;
+            box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.6);
         }
     }
 

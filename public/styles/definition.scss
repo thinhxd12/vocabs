@@ -70,28 +70,28 @@
                 justify-content: space-between;
                 margin-bottom: 3px;
 
-                &>div {
+                .websDefs {
                     padding-right: 3px;
                 }
 
                 .websImg {
                     background: $color-black;
-                    padding: 10px 10px 7px 10px;
                     position: relative;
 
                     img {
-                        padding: 3px;
+                        margin: 9px 9px 6px;
                         object-fit: cover;
                         object-position: top;
-                        width: 168px;
+                        width: 172px;
                         max-height: 210px;
                         border: 1px solid $color-white;
+                        overflow: hidden;
                     }
 
                     span {
                         position: absolute;
-                        left: 10px;
-                        bottom: 9px;
+                        left: 9px;
+                        bottom: 7px;
                         @include font("NYTImperial", 13px, $color-white, 600, normal, 15px);
                         text-transform: uppercase;
                         background-color: $color-black;

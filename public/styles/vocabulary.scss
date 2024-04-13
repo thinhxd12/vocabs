@@ -286,9 +286,10 @@
         border: 0.5px solid $color-border;
         @include flex-center;
         background-image: none;
+        color: $color-white;
 
         small {
-            @include font("Basier", 9px, #7c7b7a, 500, normal, 12px);
+            @include font("Basier", 9px, $color-white, 500, normal, 12px);
             margin-top: 3px;
             vertical-align: baseline;
         }

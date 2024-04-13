@@ -18,7 +18,7 @@ const Definition: Component<{
               class="button button--primary"
               onclick={() => props.onEdit!(props.item)}
             >
-              <img src="/images/main/laurel.png" height={14} />
+              <img src="/images/main/laurel.png" height={13} />
             </button>
           </Show>
           <Show when={props.onCheck}>
@@ -35,14 +35,14 @@ const Definition: Component<{
                   <div class="sn-g">
                     <div class="websHead">
                       <Show when={currenText()?.definitions.length > 1}>
-                        <span class="websHeadNum">{1 + index}:</span>
+                        <span class="websHeadNum">{1 + index}.</span>
                       </Show>
                       <span class="websHeadContent">{item().partOfSpeech}</span>
                     </div>
                     <Index each={item().definitions}>
                       {(m, n) => (
                         <div class="websThumb">
-                          <div>
+                          <div class="websDefs">
                             <Index each={m().definition}>
                               {(x, y) => (
                                 <span class="websDef">
