@@ -230,16 +230,18 @@ const Vocabulary: Component<{}> = () => {
       } else {
         stopAutoplay();
         //get wordlist to update lastest changed
-        handleSetDailyWord(wordListType());
-        handleCountDown();
+        handleEternalRecurrence();
       }
     }, 7500);
   };
 
-  const handleCountDown = () => {
+  const handleEternalRecurrence = () => {
     const progress =
       wordListType() === 1 ? todayData().time1 : todayData().time2;
-    if (progress < 9) startCountdown();
+    if (progress < 9) {
+      startCountdown();
+      handleSetDailyWord(wordListType());
+    }
   };
 
   const pauseAutoplay = () => {
@@ -298,7 +300,7 @@ const Vocabulary: Component<{}> = () => {
           setWordList(data1);
         }
         setBottomIndex(todayData().index1 + 1);
-        stopAutoplay();
+        // stopAutoplay();
         break;
       case 2:
         //get 59word
@@ -311,7 +313,7 @@ const Vocabulary: Component<{}> = () => {
           setWordList(data2);
         }
         setBottomIndex(todayData().index2 + 1);
-        stopAutoplay();
+        // stopAutoplay();
         break;
       default:
         break;
