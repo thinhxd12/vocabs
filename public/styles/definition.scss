@@ -79,10 +79,8 @@
                     position: relative;
 
                     img {
-                        margin: 9px 9px 6px;
-                        object-fit: cover;
-                        object-position: top;
-                        width: 172px;
+                        margin: 9px 9px 5px;
+                        max-width: 210px;
                         max-height: 210px;
                         border: 1px solid $color-white;
                         overflow: hidden;
@@ -90,12 +88,13 @@
 
                     span {
                         position: absolute;
-                        left: 9px;
-                        bottom: 7px;
-                        @include font("NYTImperial", 13px, $color-white, 600, normal, 15px);
-                        text-transform: uppercase;
+                        left: 8px;
+                        bottom: 8px;
+                        @include font("Roslindale", 13px, $color-white, 600, normal, 15px);
+                        text-transform: capitalize;
                         background-color: $color-black;
                         padding-right: 3px;
+                        font-variant: small-caps;
                     }
                 }
             }
