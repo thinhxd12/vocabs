@@ -34,9 +34,6 @@ const Definition: Component<{
                 <div class="sn-gs">
                   <div class="sn-g">
                     <div class="websHead">
-                      <Show when={currenText()?.definitions.length > 1}>
-                        <span class="websHeadNum">{1 + index}.</span>
-                      </Show>
                       <span class="websHeadContent">{item().partOfSpeech}</span>
                     </div>
                     <Index each={item().definitions}>
@@ -48,9 +45,12 @@ const Definition: Component<{
                                 <span class="websDef">
                                   {x().sense}
                                   {x().similar && (
-                                    <span class="websDefUp">
-                                      {" : " + x().similar}
-                                    </span>
+                                    <>
+                                      <span> : </span>
+                                      <span class="websDefUp">
+                                        {x().similar}
+                                      </span>
+                                    </>
                                   )}
                                 </span>
                               )}
@@ -99,7 +99,7 @@ const Definition: Component<{
 
                     <Show when={item().synonyms}>
                       <span class="websSyn">
-                        <b>Synonym: </b>
+                        <b>Synonym </b>
                         <small>{item().synonyms}</small>
                       </span>
                     </Show>
