@@ -85,12 +85,13 @@ export const getThisWeekData = action(async () => {
     if (data) return data[0].index1;
 });
 
+//get today data
 export const getCalendarTodayData = async () => {
     "use server";
     const { data, error } = await supabase
         .from(mapTables.schedule)
         .select()
-        .eq('date', new Date().toISOString());
+        .eq('date', new Date().toISOString().split('T')[0]);
     if (data) return data[0] as ScheduleType;
 };
 
@@ -519,19 +520,19 @@ export const submitTodayReset = action(async (formData: FormData) => {
             time1: todayIndex1,
             time2: todayIndex2,
         })
-        .eq('date', new Date().toISOString());
+        .eq('date', new Date().toISOString().split('T')[0]);
     if (error) return { message: error.message };
     throw redirect("/main/vocabulary");
 }, "todayReset");
 
-//reset today schedule
+//edit today schedule
 export const submitTodayProgress = action(async (type: number, numb: number) => {
     "use server";
     const updateObj = type === 1 ? { time1: numb } : { time2: numb }
     const { error } = await supabase
         .from(mapTables.schedule)
         .update(updateObj)
-        .eq('date', new Date().toISOString());
+        .eq('date', new Date().toISOString().split('T')[0]);
     if (error) console.error(error);
 }, "todaySubmitProgress");
 
