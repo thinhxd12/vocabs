@@ -71,13 +71,13 @@
                 }
 
                 &::first-letter {
-                    @include font('SF-Pro', 13px, $color-white, 600, normal, 15px);
+                    @include font('SF-Pro', 12px, $color-white, 600, normal, 15px);
                     text-transform: uppercase;
                 }
             }
 
             .websDefUp {
-                @include font('SF-Pro', 14px, $color-white, 600, normal, 17px);
+                @include font('SF-Pro', 13px, $color-white, 600, normal, 17px);
                 text-transform: uppercase;
                 display: inline-block;
             }
