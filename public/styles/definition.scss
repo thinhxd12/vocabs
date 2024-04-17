@@ -25,7 +25,7 @@
             .sn-g {
                 background: $color-vintage-background;
                 overflow: hidden;
-                padding-bottom: 4px;
+                padding-bottom: 6px;
                 box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px, rgba(0, 0, 0, 0.12) 0px 1px 2px;
 
                 &:not(:last-child) {
@@ -37,9 +37,9 @@
                     position: absolute;
                     right: 9px;
                     bottom: 1px;
-                    width: 90px;
+                    width: 72px;
                     height: 3px;
-                    background: #715710;
+                    background: $color-black;
                     border-radius: 3px;
                 }
             }
