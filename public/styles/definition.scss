@@ -19,21 +19,33 @@
             position: relative;
 
             &:not(:last-child) {
-                margin-bottom: 8px;
+                margin-bottom: 9px;
             }
 
             .sn-g {
                 background: $color-vintage-background;
                 overflow: hidden;
+                padding-bottom: 4px;
                 box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px, rgba(0, 0, 0, 0.12) 0px 1px 2px;
 
                 &:not(:last-child) {
                     margin-bottom: 8px;
                 }
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    right: 9px;
+                    bottom: 1px;
+                    width: 90px;
+                    height: 3px;
+                    background: #715710;
+                    border-radius: 3px;
+                }
             }
 
             .websHead {
-                padding: 3px 3px 0 3px;
+                padding: 6px 3px 1px 3px;
 
                 .websHeadNum {
                     @include font("Fraktur", 12px, $color-black, normal, normal, 15px);
@@ -43,14 +55,15 @@
                 }
 
                 .websHeadContent {
-                    @include font('SF-Pro', 16px, $color-black, 600, normal, 15px);
+                    @include font('SF-Pro', 16px, $color-black, 600, normal, 1px);
                     vertical-align: baseline;
                     text-transform: uppercase;
+                    margin-left: 12px;
                 }
             }
 
             .websDef {
-                @include font('NYTCheltenham', 13px, $color-white, 400, normal, 15px);
+                @include font('NYTCheltenham', 13px, $color-white, 400, normal, 17px);
                 display: block;
 
                 &:not(:last-child) {
@@ -58,13 +71,13 @@
                 }
 
                 &::first-letter {
-                    @include font('SF-Pro', 15px, $color-white, 600, normal, 15px);
+                    @include font('SF-Pro', 13px, $color-white, 600, normal, 15px);
                     text-transform: uppercase;
                 }
             }
 
             .websDefUp {
-                @include font('Roslindale', 15px, $color-white, 600, normal, 15px);
+                @include font('SF-Pro', 14px, $color-white, 600, normal, 17px);
                 text-transform: uppercase;
                 display: inline-block;
             }
@@ -74,6 +87,7 @@
                 align-items: flex-start;
                 justify-content: space-between;
                 background-color: $color-black;
+                margin-bottom: 1px;
 
                 .websDefs {
                     padding: 6px 0 6px 6px;
@@ -94,7 +108,7 @@
                     span {
                         position: absolute;
                         left: 6px;
-                        bottom: 6px;
+                        bottom: 8px;
                         @include font("Roslindale", 13px, $color-white, 600, normal, 15px);
                         text-transform: capitalize;
                         background-color: $color-black;
@@ -105,10 +119,10 @@
             }
 
             .websSyn {
-                padding-left: 6px;
+                padding-left: 5px;
 
                 b {
-                    @include font('SF-Pro', 12px, $color-black, 600, normal, 15px);
+                    @include font('NYTImperial', 12px, $color-black, 600, normal, 12px);
                     text-transform: uppercase;
                 }
 
@@ -122,7 +136,7 @@
             .websCredits {
                 display: block;
                 text-align: right;
-                padding-right: 3px;
+                padding: 0 6px 0 0;
 
                 .websAuthor {
                     font-weight: 600;
@@ -143,7 +157,7 @@
                 position: relative;
                 text-indent: 24px;
                 padding: 0 3px 0 6px;
-                margin: 3px 0;
+                margin-top: 2px;
 
                 &::before {
                     content: '';
