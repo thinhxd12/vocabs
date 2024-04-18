@@ -23,7 +23,8 @@
             }
 
             .sn-g {
-                background: $color-vintage-background;
+                // background: $color-vintage-background;
+                background: $color-black;
                 overflow: hidden;
                 padding-bottom: 6px;
                 box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px, rgba(0, 0, 0, 0.12) 0px 1px 2px;
@@ -46,6 +47,7 @@
 
             .websHead {
                 padding: 6px 3px 1px 3px;
+                background: $color-vintage-background;
 
                 .websHeadNum {
                     @include font("Fraktur", 12px, $color-black, normal, normal, 15px);
@@ -63,7 +65,7 @@
             }
 
             .websDef {
-                @include font('NYTCheltenham', 13px, $color-white, 400, normal, 17px);
+                @include font('Poppins', 11px, $color-white, 400, normal, 15px);
                 display: block;
 
                 &:not(:last-child) {
@@ -77,7 +79,7 @@
             }
 
             .websDefUp {
-                @include font('SF-Pro', 13px, $color-white, 600, normal, 17px);
+                @include font('Poppins', 13px, $color-white, 600, normal, 17px);
                 text-transform: uppercase;
                 display: inline-block;
             }
@@ -158,6 +160,8 @@
                 text-indent: 24px;
                 padding: 0 3px 0 6px;
                 margin-top: 2px;
+                background: $color-vintage-background;
+
 
                 &::before {
                     content: '';
