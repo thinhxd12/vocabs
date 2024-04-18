@@ -31,79 +31,70 @@ const Definition: Component<{
           <Index each={currenText()?.definitions}>
             {(item, index) => {
               return (
-                <div class="sn-gs">
-                  <div class="sn-g">
-                    <div class="websHead">
-                      <span class="websHeadContent">{item().partOfSpeech}</span>
-                    </div>
-                    <Index each={item().definitions}>
-                      {(m, n) => (
-                        <div class="websThumb">
-                          <div class="websDefs">
-                            <Index each={m().definition}>
-                              {(x, y) => (
-                                <span class="websDef">
-                                  {x().sense}
-                                  {x().similar && (
-                                    <>
-                                      <span> : </span>
-                                      <span class="websDefUp">
-                                        {x().similar}
-                                      </span>
-                                    </>
-                                  )}
-                                </span>
-                              )}
-                            </Index>
-                          </div>
-
-                          <Show when={m().image}>
-                            <div class="websImg">
-                              <img
-                                src={m().image}
-                                onerror={(e) => {
-                                  e.currentTarget.src =
-                                    "/images/main/5small.jpg";
-                                }}
-                              />
-                              <span>{currenText()?.word}</span>
-                            </div>
-                          </Show>
-                        </div>
-                      )}
-                    </Index>
-
-                    <Show when={item().example[0]}>
-                      <span
-                        class="websX"
-                        innerHTML={item().example[0].sentence}
-                      />
-                      <span class="websCredits">
-                        {item().example[0].author && (
-                          <span class="websAuthor">
-                            {item().example[0].author}-
-                          </span>
-                        )}
-                        {item().example[0].title && (
-                          <span class="websTitle">
-                            {item().example[0].title}
-                          </span>
-                        )}
-                        {item().example[0].year && (
-                          <span class="websYear">
-                            -{item().example[0].year}
-                          </span>
-                        )}
-                      </span>
-                    </Show>
-
-                    <Show when={item().synonyms}>
-                      <span class="websSyn">
-                        <b>Synonym </b>
-                        <small>{item().synonyms}</small>
-                      </span>
-                    </Show>
+                <div class="websEntry">
+                  <div class="websHead">
+                    <span class="websHeadContent">{item().partOfSpeech}</span>
                   </div>
+                  <Index each={item().definitions}>
+                    {(m, n) => (
+                      <div
+                        class={m().image ? "websSenseHasImage" : "websSense"}
+                      >
+                        <Show when={m().image}>
+                          <img
+                            class="websImg"
+                            src={m().image}
+                            onerror={(e) => {
+                              e.currentTarget.src = "/images/main/5small.jpg";
+                            }}
+                          />
+                          <div class="websImgOverlay"></div>
+                        </Show>
+                        <div class="websDefs">
+                          <Index each={m().definition}>
+                            {(x, y) => (
+                              <>
+                                <p class="websDef">
+                                  {x().sense}
+                                  <Show when={x().similar}>
+                                    <span> : </span>
+                                    <span class="websDefUp">{x().similar}</span>
+                                  </Show>
+                                </p>
+                              </>
+                            )}
+                          </Index>
+                        </div>
+                      </div>
+                    )}
+                  </Index>
+
+                  <Show when={item().example[0]}>
+                    <span
+                      class="websX"
+                      innerHTML={item().example[0].sentence}
+                    />
+                    <span class="websCredits">
+                      {item().example[0].author && (
+                        <span class="websAuthor">
+                          {item().example[0].author}-
+                        </span>
+                      )}
+                      {item().example[0].title && (
+                        <span class="websTitle">{item().example[0].title}</span>
+                      )}
+                      {item().example[0].year && (
+                        <span class="websYear">-{item().example[0].year}</span>
+                      )}
+                    </span>
+                  </Show>
+
+                  <Show when={item().synonyms}>
+                    <p class="websSyn">
+                      <b>Synonym </b>
+                      <small>{item().synonyms}</small>
+                    </p>
+                  </Show>
                 </div>
               );
             }}

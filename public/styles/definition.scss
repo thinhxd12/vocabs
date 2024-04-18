@@ -15,170 +15,159 @@
 
 
     .definitionBody {
-        .sn-gs {
-            position: relative;
+        .websEntry {
+            background: $color-black;
+            overflow: hidden;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px, rgba(0, 0, 0, 0.12) 0px 1px 2px;
 
             &:not(:last-child) {
-                margin-bottom: 9px;
+                margin-bottom: 8px;
+            }
+        }
+
+        .websHead {
+            padding: 6px 3px 1px 3px;
+            background: $color-vintage-background;
+
+            .websHeadNum {
+                @include font("Fraktur", 12px, $color-black, normal, normal, 15px);
+                letter-spacing: 0.1em;
+                margin-right: 2px;
+                vertical-align: baseline;
             }
 
-            .sn-g {
-                // background: $color-vintage-background;
-                background: $color-black;
-                overflow: hidden;
-                padding-bottom: 6px;
-                box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px, rgba(0, 0, 0, 0.12) 0px 1px 2px;
-
-                &:not(:last-child) {
-                    margin-bottom: 8px;
-                }
-
-                &::before {
-                    content: "";
-                    position: absolute;
-                    right: 9px;
-                    bottom: 1px;
-                    width: 72px;
-                    height: 3px;
-                    background: $color-black;
-                    border-radius: 3px;
-                }
-            }
-
-            .websHead {
-                padding: 6px 3px 1px 3px;
-                background: $color-vintage-background;
-
-                .websHeadNum {
-                    @include font("Fraktur", 12px, $color-black, normal, normal, 15px);
-                    letter-spacing: 0.1em;
-                    margin-right: 2px;
-                    vertical-align: baseline;
-                }
-
-                .websHeadContent {
-                    @include font('SF-Pro', 16px, $color-black, 600, normal, 1px);
-                    vertical-align: baseline;
-                    text-transform: uppercase;
-                    margin-left: 12px;
-                }
-            }
-
-            .websDef {
-                @include font('Poppins', 11px, $color-white, 400, normal, 15px);
-                display: block;
-
-                &:not(:last-child) {
-                    margin-bottom: 2px;
-                }
-
-                &::first-letter {
-                    @include font('SF-Pro', 12px, $color-white, 600, normal, 15px);
-                    text-transform: uppercase;
-                }
-            }
-
-            .websDefUp {
-                @include font('Poppins', 13px, $color-white, 600, normal, 17px);
+            .websHeadContent {
+                @include font('SF-Pro', 16px, $color-black, 600, normal, 1px);
+                vertical-align: baseline;
                 text-transform: uppercase;
-                display: inline-block;
+                margin-left: 9px;
+            }
+        }
+
+        .websSense {
+            width: 100%;
+            background: $color-vintage-background;
+            margin-bottom: 1px;
+
+            .websDefs {
+                background: $color-black;
+                position: initial;
+                width: 100%;
+                padding: 5px 6px 2px;
+            }
+        }
+
+        .websSenseHasImage {
+            width: 100%;
+            height: 172px;
+            overflow: hidden;
+            margin-bottom: 1px;
+            position: relative;
+
+            .websImg {
+                object-fit: cover;
+                object-position: right 36%;
+                width: 100%;
+                max-height: 172px;
+                z-index: 2;
             }
 
-            .websThumb {
-                display: flex;
-                align-items: flex-start;
-                justify-content: space-between;
-                background-color: $color-black;
-                margin-bottom: 1px;
-
-                .websDefs {
-                    padding: 6px 0 6px 6px;
-                }
-
-                .websImg {
-                    background: $color-black;
-                    position: relative;
-
-                    img {
-                        margin: 9px 6px 6px;
-                        max-width: 210px;
-                        max-height: 210px;
-                        border: 1px solid $color-white;
-                        overflow: hidden;
-                    }
-
-                    span {
-                        position: absolute;
-                        left: 6px;
-                        bottom: 8px;
-                        @include font("Roslindale", 13px, $color-white, 600, normal, 15px);
-                        text-transform: capitalize;
-                        background-color: $color-black;
-                        padding-right: 3px;
-                        font-variant: small-caps;
-                    }
-                }
+            .websImgOverlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: 3;
+                background-image: linear-gradient(to left, rgba(0, 0, 0, 0.03) 0, rgba(0, 0, 0, 0.45) 60%, rgba(0, 0, 0, 0.72) 100%);
             }
 
-            .websSyn {
-                padding-left: 5px;
+            .websDefs {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 5;
+                padding: 6px 3px 6px 6px;
+            }
+        }
 
-                b {
-                    @include font('NYTImperial', 12px, $color-black, 600, normal, 12px);
-                    text-transform: uppercase;
-                }
 
-                small {
-                    color: #727272;
-                    font-weight: 300;
-                    text-transform: lowercase;
-                }
+
+        .websDef {
+            @include font('Poppins', 11px, $color-white, 400, normal, 17px);
+
+            &:not(:last-child) {
+                margin-bottom: 2px;
             }
 
-            .websCredits {
+            &::first-letter {
+                @include font('SF-Pro', 12px, $color-white, 600, normal, 17px);
+                text-transform: uppercase;
+            }
+        }
+
+        .websDefUp {
+            @include font('Poppins', 13px, $color-white, 600, normal, 17px);
+            text-transform: uppercase;
+        }
+
+        .websX {
+            @include font('NYTImperial', 12px, $color-black, 500, italic, 18px);
+            display: block;
+            position: relative;
+            text-indent: 24px;
+            padding: 3px 3px 0 6px;
+            background: $color-vintage-background;
+
+            &::before {
+                content: '';
                 display: block;
-                text-align: right;
-                padding: 0 6px 0 0;
-
-                .websAuthor {
-                    font-weight: 600;
-                    font-size: 13px;
-                    font-variant: small-caps;
-                }
-
-                .websTitle {
-                    font-size: 13px;
-                    text-transform: uppercase;
-                }
+                position: absolute;
+                left: 13px;
+                top: 4px;
+                width: 15px;
+                height: 15px;
+                background: url('/images/main/clover1.png');
+                background-size: cover;
             }
 
+            b {
+                font-weight: 700;
+                color: $color-red-1;
+            }
+        }
 
-            .websX {
-                @include font('NYTImperial', 12px, $color-black, 500, italic, 18px);
-                display: block;
-                position: relative;
-                text-indent: 24px;
-                padding: 0 3px 0 6px;
-                margin-top: 2px;
-                background: $color-vintage-background;
+        .websSyn {
+            padding-left: 5px;
+            background: $color-vintage-background;
 
+            b {
+                @include font('NYTImperial', 12px, $color-black, 600, normal, 12px);
+                text-transform: uppercase;
+            }
 
-                &::before {
-                    content: '';
-                    display: block;
-                    position: absolute;
-                    left: 13px;
-                    top: 1px;
-                    width: 15px;
-                    height: 15px;
-                    background: url('/images/main/clover1.png');
-                    background-size: cover;
-                }
+            small {
+                color: #727272;
+                font-weight: 300;
+                text-transform: lowercase;
+            }
+        }
 
-                b {
-                    font-weight: 700;
-                    color: $color-red-1;
-                }
+        .websCredits {
+            display: block;
+            text-align: right;
+            padding: 0 6px 0 0;
+            background: $color-vintage-background;
+
+            .websAuthor {
+                font-weight: 600;
+                font-size: 13px;
+                font-variant: small-caps;
+            }
+
+            .websTitle {
+                font-size: 13px;
+                text-transform: uppercase;
             }
         }
     }
