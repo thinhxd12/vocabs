@@ -55,26 +55,15 @@
                 overflow: hidden;
 
                 img {
-                    width: 11px;
-                    transition: 0.9s;
+                    transition: 1.2s ease-in-out;
                     opacity: 0.3;
-                }
-
-                span {
-                    @include font("Roslindale", 15px, #a59885, 700, normal, 16px);
-                    text-transform: uppercase;
-                    position: absolute;
-                    left: 7.5px;
-                    bottom: 3.5px;
-                    opacity: 0;
-                    transition: 0.9s;
+                    transform: rotate(180deg);
                 }
 
                 &:hover {
-
-                    span,
                     img {
                         opacity: 1;
+                        transform: rotate(-360deg);
                     }
                 }
             }

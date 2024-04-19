@@ -13,7 +13,7 @@ import "/public/styles/main.scss";
 import { GlobalContextProvider } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
-import { FaRegularCircle, FaRegularCircleDot } from "solid-icons/fa";
+import { TbRefresh } from "solid-icons/tb";
 
 export const route = {
   load: () => getUser(),
@@ -61,7 +61,6 @@ const MainLayout = (props: RouteSectionProps) => {
   });
 
   const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
-  const [toggleButton, setToggleButton] = createSignal<boolean>(false);
 
   const changeToggle = () => {
     setToggleMainPage(!toggleMainPage());
@@ -69,10 +68,6 @@ const MainLayout = (props: RouteSectionProps) => {
 
   const handleGetNextImage = () => {
     getNextImageData(imageObj.nextImageUrl!);
-    setToggleButton(!toggleButton());
-    setTimeout(() => {
-      setToggleButton(!toggleButton());
-    }, 300);
   };
 
   const handleGetUnsplashImage = async () => {
@@ -199,12 +194,7 @@ const MainLayout = (props: RouteSectionProps) => {
               </Show>
             </button>
             <button onClick={handleGetNextImage} class="mainImageRoundBtn">
-              <Show
-                when={toggleButton()}
-                fallback={<FaRegularCircle size={15} />}
-              >
-                <FaRegularCircleDot size={15} />
-              </Show>
+              <TbRefresh size={17} />
             </button>
           </div>
         </Motion.div>

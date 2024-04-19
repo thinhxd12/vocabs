@@ -287,13 +287,6 @@
         overflow: hidden;
         color: $color-calendar-black;
 
-
-        small {
-            @include font("Basier", 9px, $color-white, 500, normal, 12px);
-            margin-top: 3px;
-            vertical-align: baseline;
-        }
-
         svg {
             z-index: 101;
         }

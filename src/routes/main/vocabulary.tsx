@@ -48,6 +48,8 @@ export const route = {
 let timerRef: NodeJS.Timeout;
 let audioRef: HTMLAudioElement;
 let intervalCountdown: NodeJS.Timeout;
+const [minutes, setMinutes] = createSignal(11);
+const [isRunning, setIsRunning] = createSignal(false);
 
 const Vocabulary: Component<{}> = () => {
   const [currentText, setCurrentText] = createSignal<VocabularyType>();
@@ -65,7 +67,6 @@ const Vocabulary: Component<{}> = () => {
       )
     );
     getCalendarTodayDataAction();
-    stopCountdown();
   });
 
   createEffect(() => {
@@ -340,20 +341,17 @@ const Vocabulary: Component<{}> = () => {
     };
   };
 
-  const [minutes, setMinutes] = createSignal(12);
-  const [isRunning, setIsRunning] = createSignal(false);
-
   const startCountdown = () => {
     clearInterval(intervalCountdown);
     setIsRunning(true);
     intervalCountdown = setInterval(() => {
       setMinutes((prev) => {
-        if (prev === 1) {
+        if (prev === 0) {
           clearInterval(intervalCountdown);
           setIsRunning(false);
           showDesktopNotification();
           audioRef.play();
-          return 12;
+          return 11;
         }
         return prev - 1;
       });
@@ -363,7 +361,7 @@ const Vocabulary: Component<{}> = () => {
   const stopCountdown = () => {
     setIsRunning(false);
     clearInterval(intervalCountdown);
-    setMinutes(12);
+    setMinutes(11);
   };
 
   // -------------------TIMMER END-------------------- //
@@ -622,7 +620,6 @@ const Vocabulary: Component<{}> = () => {
                 transition={{ duration: 0.3, easing: "ease-in-out" }}
               >
                 <OcHourglass2 size={11} />
-                {/* <small>{minutes()}</small> */}
                 <Motion.div
                   class="menuBtn--timer--overlay"
                   animate={{ height: `${(1 - minutes() / 12) * 100}%` }}
