@@ -35,10 +35,9 @@ import Translation from "~/components/translation";
 import Edit from "~/components/edit";
 import Bookmark from "~/components/bookmark";
 import { OcHourglass2 } from "solid-icons/oc";
-import { BsTrash3Fill } from "solid-icons/bs";
+import { BsTranslate, BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { ImBooks } from "solid-icons/im";
-import { TbDelta } from "solid-icons/tb";
 
 export const route = {
   load: () => {
@@ -66,6 +65,7 @@ const Vocabulary: Component<{}> = () => {
       )
     );
     getCalendarTodayDataAction();
+    stopCountdown();
   });
 
   createEffect(() => {
@@ -340,7 +340,7 @@ const Vocabulary: Component<{}> = () => {
     };
   };
 
-  const [minutes, setMinutes] = createSignal(6);
+  const [minutes, setMinutes] = createSignal(12);
   const [isRunning, setIsRunning] = createSignal(false);
 
   const startCountdown = () => {
@@ -353,16 +353,17 @@ const Vocabulary: Component<{}> = () => {
           setIsRunning(false);
           showDesktopNotification();
           audioRef.play();
-          return 6;
+          return 12;
         }
         return prev - 1;
       });
-    }, 60000);
+    }, 30000);
   };
 
   const stopCountdown = () => {
     setIsRunning(false);
     clearInterval(intervalCountdown);
+    setMinutes(12);
   };
 
   // -------------------TIMMER END-------------------- //
@@ -382,8 +383,9 @@ const Vocabulary: Component<{}> = () => {
     }
   };
 
-  // -------------------MOBILE END-------------------- //
+  // -------------------LOGOUT-------------------- //
   const logoutAction = useAction(logout);
+  // -------------------LOGOUT-------------------- //
 
   return (
     <MetaProvider>
@@ -581,7 +583,7 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    <TbDelta size={16} />
+                    <BsTranslate size={15} />
                   </button>
                   <button
                     class="menuBtn"
@@ -611,7 +613,7 @@ const Vocabulary: Component<{}> = () => {
                 }}
                 animate={{
                   opacity: 1,
-                  bottom: 0,
+                  bottom: "1px",
                 }}
                 exit={{
                   opacity: 0,
@@ -620,7 +622,11 @@ const Vocabulary: Component<{}> = () => {
                 transition={{ duration: 0.3, easing: "ease-in-out" }}
               >
                 <OcHourglass2 size={11} />
-                <small>{minutes()}</small>
+                {/* <small>{minutes()}</small> */}
+                <Motion.div
+                  class="menuBtn--timer--overlay"
+                  animate={{ height: `${(1 - minutes() / 12) * 100}%` }}
+                ></Motion.div>
               </Motion.button>
             </Show>
           </Presence>

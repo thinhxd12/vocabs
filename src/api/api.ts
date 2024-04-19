@@ -4,6 +4,7 @@ import { supabase } from "./supabase";
 import { DEFAULT_CORS_PROXY, DEVIATION_NUMB, PRECIP_NUMB, getElAttribute, getElText, mapTables } from "~/utils";
 import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
+import { format } from "date-fns";
 
 export const searchText = async (text: string) => {
     "use server";
@@ -91,7 +92,7 @@ export const getCalendarTodayData = async () => {
     const { data, error } = await supabase
         .from(mapTables.schedule)
         .select()
-        .eq('date', new Date().toISOString().split('T')[0]);
+        .eq('date', format(new Date(), "yyyy-MM-dd"));
     if (data) return data[0] as ScheduleType;
 };
 
@@ -520,7 +521,7 @@ export const submitTodayReset = action(async (formData: FormData) => {
             time1: todayIndex1,
             time2: todayIndex2,
         })
-        .eq('date', new Date().toISOString().split('T')[0]);
+        .eq('date', format(new Date(), "yyyy-MM-dd"));
     if (error) return { message: error.message };
     throw redirect("/main/vocabulary");
 }, "todayReset");
@@ -532,7 +533,7 @@ export const submitTodayProgress = action(async (type: number, numb: number) => 
     const { error } = await supabase
         .from(mapTables.schedule)
         .update(updateObj)
-        .eq('date', new Date().toISOString().split('T')[0]);
+        .eq('date', format(new Date(), "yyyy-MM-dd"));
     if (error) console.error(error);
 }, "todaySubmitProgress");
 

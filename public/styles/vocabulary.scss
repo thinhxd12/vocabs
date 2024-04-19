@@ -280,19 +280,37 @@
         height: 21px;
         border-radius: 3px;
         position: absolute;
-        bottom: 0;
-        right: 0;
-        margin: 1.5px;
-        border: 0.5px solid $color-border;
+        right: 1px;
+        border: 1px solid $color-border;
         @include flex-center;
         background-image: none;
-        color: $color-white;
+        overflow: hidden;
+        color: $color-calendar-black;
+
 
         small {
             @include font("Basier", 9px, $color-white, 500, normal, 12px);
             margin-top: 3px;
             vertical-align: baseline;
         }
+
+        svg {
+            z-index: 101;
+        }
+
+        &:hover {
+            color: $color-calendar-black !important;
+        }
+    }
+
+    &--timer--overlay {
+        width: 21px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background: #7c7b7a;
+        transition: all 0.3s ease-in-out;
+        z-index: 99;
     }
 
     &:hover {
