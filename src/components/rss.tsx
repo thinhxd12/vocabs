@@ -3,6 +3,7 @@ import "/public/styles/rss.scss";
 import { DEFAULT_CORS_PROXY } from "~/utils";
 import { FeedEntry, extract } from "@extractus/feed-extractor";
 import { OcArrowup2 } from "solid-icons/oc";
+import { differenceInDays, differenceInHours } from "date-fns";
 
 let divRef: HTMLDivElement;
 
@@ -121,17 +122,12 @@ const RSS: Component<{}> = (props) => {
     setShowRss(true);
   };
 
-  const countTime = (time: Date): string => {
-    const dt1 = new Date(time);
-    const dt2 = new Date();
-    const diff = dt2.getTime() - dt1.getTime();
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    let diffRes = hours + 1 + " hours ago";
-    if (hours >= 24) {
-      const days = Math.floor(hours / 24);
-      diffRes = days + " day ago";
-    }
-    return diffRes;
+  const countTime = (time: Date) => {
+    const hours = differenceInHours(new Date(), new Date(time)) + 1;
+    const days = differenceInDays(new Date(), new Date(time));
+    return days > 0
+      ? days + " days " + (hours % 24) + " hours ago"
+      : hours + " hours ago";
   };
 
   const RssItem = ({ item }: { item: FeedEntry }) => (

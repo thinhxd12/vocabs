@@ -3,6 +3,7 @@ import { Component, Show } from "solid-js";
 import "/public/styles/bottom.scss";
 import { useGlobalContext } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
+import { format } from "date-fns";
 
 const Bottom: Component<{}> = () => {
   const {
@@ -26,11 +27,7 @@ const Bottom: Component<{}> = () => {
           <span>{todayData().time2}</span>
         </div>
         <div class="indexDay">
-          <span>
-            {new Date()
-              .toLocaleString("default", { weekday: "long" })
-              .slice(0, 2)}
-          </span>
+          <span>{format(new Date(), "eeeeee")}</span>
         </div>
       </div>
       <A

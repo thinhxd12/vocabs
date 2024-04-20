@@ -14,6 +14,7 @@ import { GlobalContextProvider } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
+import { format } from "date-fns";
 
 export const route = {
   load: () => getUser(),
@@ -74,9 +75,7 @@ const MainLayout = (props: RouteSectionProps) => {
     const data = await getUnsplashImage();
     setImageObj({
       image: data[0].urls.regular,
-      date: new Date(data[0].created_at).toLocaleString([], {
-        dateStyle: "long",
-      }),
+      date: format(new Date(data[0].created_at), "PP"),
       title: data[0].description || data[0].alt_description,
       attr: data[0].exif.name,
       authorImg: data[0].user.profile_image.medium,

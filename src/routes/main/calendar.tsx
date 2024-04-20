@@ -19,6 +19,7 @@ import HistoryCard from "~/components/historycard";
 import CalendarDropdown from "~/components/calendardropdown";
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
+import { format } from "date-fns";
 
 export const route = {
   load: () => {
@@ -30,7 +31,7 @@ let ref: HTMLDivElement;
 const About: Component<{}> = (props) => {
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();
   const getCalendarHistoryDataAction = useAction(getCalendarHistoryData);
-  const [todayDate, setTodayDate] = createSignal<Date>(new Date());
+  const [todayDate] = createSignal<Date>(new Date());
   const [weekIndex, setWeekIndex] = createSignal<number>(0);
 
   const getImageFromUnsplashAction = useAction(getImageFromUnsplash);
@@ -134,9 +135,10 @@ const About: Component<{}> = (props) => {
           <div
             class="calendarImage"
             style={{
-              "background-image": `url('/images/main/${
-                todayDate().getMonth() + 1
-              }.jpg')`,
+              "background-image": `url('/images/main/${format(
+                todayDate(),
+                "M"
+              )}.jpg')`,
             }}
             // style={{
             //   "background-image": `url(${getImageFromUnsplashResult.result})`,
@@ -144,10 +146,10 @@ const About: Component<{}> = (props) => {
           >
             <div class="calendarImageContent">
               <p class="setNewMonth" onClick={handleShowSetNewMonth}>
-                {todayDate().toLocaleString("default", { month: "long" })}
+                {format(todayDate(), "MMMM")}
               </p>
               <p class="setNewWeek" onClick={handleShowSetNewWeek}>
-                {todayDate().getFullYear()}
+                {format(todayDate(), "yyyy")}
               </p>
               <p class="setNewHistory" onClick={handleShowSetNewHistory}>
                 {weekIndex() + 1} &#183; {weekIndex() + 200}

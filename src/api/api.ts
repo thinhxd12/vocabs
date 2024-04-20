@@ -92,7 +92,7 @@ export const getCalendarTodayData = async () => {
     const { data, error } = await supabase
         .from(mapTables.schedule)
         .select()
-        .eq('date', format(new Date(), "yyyy-MM-dd"));
+        .eq('date', format(new Date().toISOString(), "yyyy-MM-dd"));
     if (data) return data[0] as ScheduleType;
 };
 
@@ -521,7 +521,7 @@ export const submitTodayReset = action(async (formData: FormData) => {
             time1: todayIndex1,
             time2: todayIndex2,
         })
-        .eq('date', format(new Date(), "yyyy-MM-dd"));
+        .eq('date', format(new Date().toISOString(), "yyyy-MM-dd"));
     if (error) return { message: error.message };
     throw redirect("/main/vocabulary");
 }, "todayReset");
@@ -533,7 +533,7 @@ export const submitTodayProgress = action(async (type: number, numb: number) => 
     const { error } = await supabase
         .from(mapTables.schedule)
         .update(updateObj)
-        .eq('date', format(new Date(), "yyyy-MM-dd"));
+        .eq('date', format(new Date().toISOString(), "yyyy-MM-dd"));
     if (error) console.error(error);
 }, "todaySubmitProgress");
 
@@ -569,7 +569,7 @@ export const submitNewWeek = action(async (formData: FormData) => {
         let { error } = await supabase
             .from(mapTables.schedule)
             .insert([{
-                date: (new Date(new Date(startDay).getTime() + i * 86400000)).toISOString().split('T')[0],
+                date: format((new Date(new Date(startDay).getTime() + i * 86400000)).toISOString(), "yyyy-MM-dd"),
                 index1: i % 2 == 0 ? startIndex : startIndex + 50,
                 index2: i % 2 == 0 ? startIndex + 100 : startIndex + 150,
                 time1: 0,
@@ -699,16 +699,8 @@ export const getWeatherData = action(async (geo: string) => {
 
 const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
     "use server";
-    const time = new Date(data.time * 1000);
-    let hours = time.getUTCHours() + offset;
-    let minutes = time.getMinutes();
-
-    // Convert the hours to 12-hour format
-    let hoursText = hours % 12;
-    hoursText = hoursText ? hoursText : 12; // the hour '0' should be '12'
-    const minutesText = minutes < 10 ? "0" + minutes : minutes;
-    const period = hours >= 12 ? "PM" : "AM";
-    const timeText = `${hoursText}:${minutesText} ${period}`;
+    const timeText = format(new Date(data.time * 1000).toISOString(), "h:mm a");
+    const hours = Number(format(new Date(data.time * 1000).toISOString(), "h"));
 
     // 95% = DEVIATION_NUMB* standard deviation occur
     let newPrecipIntensity = (
