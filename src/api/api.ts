@@ -699,8 +699,11 @@ export const getWeatherData = action(async (geo: string) => {
 
 const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
     "use server";
-    const timeText = format(new Date(data.time * 1000).toISOString(), "h:mm a");
-    const hours = Number(format(new Date(data.time * 1000).toISOString(), "h"));
+    const time = new Date(data.time * 1000);
+    time.setHours(time.getHours() + offset);
+
+    const timeText = format(time, "h:mm a");
+    const hours = Number(format(time, "HH"));
 
     // 95% = DEVIATION_NUMB* standard deviation occur
     let newPrecipIntensity = (
