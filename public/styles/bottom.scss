@@ -5,15 +5,14 @@
     position: absolute;
     bottom: 0;
     z-index: 360;
-    height: 31px;
+    height: 34px;
     border-top: 1px solid $color-border;
     background-color: $color-background-1;
     @include flex;
 
     .mainFooterLeftIndex {
-
         width: 6px;
-        height: 30px;
+        height: 33px;
         background: $color-border;
         display: flex;
         flex-direction: column;
@@ -22,17 +21,17 @@
         .indexIndex {
             @include flex-center-column;
             width: 6px;
-            height: 18px;
+            height: 20px;
 
             span {
-                @include font("basier", 9px, $color-black, 600, normal, 9px);
+                @include font("basier", 9px, $color-black, 600, normal, 10px);
                 text-align: center;
             }
         }
 
         .indexDay {
             width: 6px;
-            height: 12px;
+            height: 13px;
             background-color: $color-black;
             @include flex-center;
 
@@ -46,7 +45,7 @@
     }
 
     .mainFooterCenterBtn {
-        height: 30px;
+        height: 33px;
         width: 30px;
         cursor: pointer;
         background: none;
@@ -54,7 +53,7 @@
         border: none;
         text-align: center;
         @include font("Roslindale", 13px, #7c7b7a, 600, normal, 27px);
-        padding-top: 3px;
+        padding-top: 4px;
     }
 
     .mainFooterBtn {
@@ -68,7 +67,7 @@
         text-align: center;
         overflow: hidden;
         transition: color 0.1s;
-        padding-top: 4px;
+        padding-top: 6px;
 
         &:hover {
             color: $color-white;

@@ -61,8 +61,11 @@
             width: 100%;
             height: 172px;
             overflow: hidden;
-            margin-bottom: 1px;
             position: relative;
+
+            &:not(:last-of-type) {
+                margin-bottom: 1px;
+            }
 
             .websImg {
                 object-fit: cover;
