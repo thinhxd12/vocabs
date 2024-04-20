@@ -355,7 +355,7 @@ const Vocabulary: Component<{}> = () => {
         }
         return prev - 1;
       });
-    }, 30000);
+    }, 60000);
   };
 
   const stopCountdown = () => {
