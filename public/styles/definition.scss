@@ -142,11 +142,12 @@
             background: $color-vintage-background;
 
             b {
-                @include font('NYTImperial', 12px, $color-black, 600, normal, 12px);
+                @include font('Poppins', 12px, $color-black, 600, normal, 12px);
                 text-transform: uppercase;
             }
 
             small {
+                @include font('Poppins', 9px, #282828, 400, normal, 12px);
                 color: #727272;
                 font-weight: 300;
                 text-transform: lowercase;
@@ -158,9 +159,9 @@
             text-align: right;
             padding: 0 6px 0 0;
             background: $color-vintage-background;
+            font-weight: 600;
 
             .websAuthor {
-                font-weight: 600;
                 font-size: 13px;
                 font-variant: small-caps;
             }
