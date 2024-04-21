@@ -61,7 +61,7 @@ const FlipCard: Component<{
         setHover(true);
         const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${translations}`;
         setAudioSource(soundUrl);
-      }, 3500);
+      }, 3000);
       const timer3 = setTimeout(() => {
         setHover(false);
       }, 5500);
@@ -165,45 +165,35 @@ const FlipCard: Component<{
         </div>
       </div>
       <div class="flipCardRightContent">
-        <div class={hover() ? "cube cube--hover" : "cube"}>
-          <div class="cube--front">
-            <div class="cube--content--front">
-              <p class="cube--class">{partOfSpeechs()}</p>
-              <Motion.p
-                class="cube--text"
-                animate={{
-                  fontSize: currenText()?.word.length > 14 ? "27px" : "33px",
-                }}
-              >
-                {currenText()?.word}
-              </Motion.p>
-              <p class="cube--phonetic">{currenText()?.phonetics}</p>
-              <p class="cube--date">05/07/22</p>
-            </div>
+        <div class={hover() ? "cardContent cardContent--hover" : "cardContent"}>
+          <div class="cardTop">
+            <Index
+              each={currenText()?.translations}
+              fallback={<p class="cardTop--text">No items</p>}
+            >
+              {(item, index) => (
+                <>
+                  <p class="cardTop--class">【 {item().partOfSpeech} 】</p>
+                  <Index each={item().translations}>
+                    {(m) => <p class="cardTop--text">{m()}</p>}
+                  </Index>
+                </>
+              )}
+            </Index>
           </div>
-          <div class="cube--bottom"></div>
-          <div class="cube--back">
-            <div class="cube--content--back">
-              <div class="cube--meaning">
-                <Index
-                  each={currenText()?.translations}
-                  fallback={<p class="cubeMeaningText">No items</p>}
-                >
-                  {(item, index) => (
-                    <>
-                      <p class="cubeMeaningClass">
-                        【 {item().partOfSpeech} 】
-                      </p>
-                      <Index each={item().translations}>
-                        {(m) => <p class="cubeMeaningText">{m()}</p>}
-                      </Index>
-                    </>
-                  )}
-                </Index>
-              </div>
-            </div>
+          <div class="cardBottom">
+            <p class="cardBottom--class">{partOfSpeechs()}</p>
+            <Motion.p
+              class="cardBottom--text"
+              animate={{
+                fontSize: currenText()?.word.length > 14 ? "27px" : "33px",
+              }}
+            >
+              {currenText()?.word}
+            </Motion.p>
+            <p class="cardBottom--phonetic">{currenText()?.phonetics}</p>
+            <p class="cardBottom--date">05/07/22</p>
           </div>
-          <div class="cube--top"></div>
         </div>
       </div>
     </>
