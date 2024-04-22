@@ -178,6 +178,10 @@
                 padding-top: 2px;
                 color: $color-white;
             }
+
+            &:last-of-type:hover {
+                transform: rotate(180deg);
+            }
         }
     }
 }

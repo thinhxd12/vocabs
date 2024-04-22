@@ -38,6 +38,7 @@ import { OcHourglass2 } from "solid-icons/oc";
 import { BsTranslate, BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { ImBooks } from "solid-icons/im";
+import { BiSolidHourglassTop } from "solid-icons/bi";
 
 export const route = {
   load: () => {
@@ -590,7 +591,7 @@ const Vocabulary: Component<{}> = () => {
                       setShowMenubar(false);
                     }}
                   >
-                    T
+                    <BiSolidHourglassTop size={16} />
                   </button>
                   <button class="menuBtn" onClick={() => logoutAction()}>
                     E
