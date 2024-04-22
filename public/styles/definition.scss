@@ -114,7 +114,7 @@
             @include font('NYTImperial', 12px, $color-black, 500, italic, 18px);
             display: block;
             position: relative;
-            text-indent: 24px;
+            text-indent: 23px;
             padding: 3px 3px 0 6px;
             background: $color-vintage-background;
 
@@ -122,10 +122,10 @@
                 content: '';
                 display: block;
                 position: absolute;
-                left: 13px;
-                top: 4px;
-                width: 15px;
-                height: 15px;
+                left: 15px;
+                top: 6px;
+                width: 12px;
+                height: 12px;
                 background: url('/images/main/clover1.png');
                 background-size: cover;
             }

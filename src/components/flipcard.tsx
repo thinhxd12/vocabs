@@ -182,7 +182,7 @@ const FlipCard: Component<{
             </Index>
           </div>
           <div class="cardBottom">
-            <p class="cardBottom--class">{partOfSpeechs()}</p>
+            <p class="cardBottom--phonetic">{currenText()?.phonetics}</p>
             <Motion.p
               class="cardBottom--text"
               animate={{
@@ -191,7 +191,7 @@ const FlipCard: Component<{
             >
               {currenText()?.word}
             </Motion.p>
-            <p class="cardBottom--phonetic">{currenText()?.phonetics}</p>
+            <p class="cardBottom--class">【 {partOfSpeechs()} 】</p>
             <p class="cardBottom--date">05/07/22</p>
           </div>
         </div>
