@@ -16,9 +16,10 @@
 
     .definitionBody {
         .websEntry {
-            background: $color-black;
+            background: $color-vintage-background;
             overflow: hidden;
-            box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px, rgba(0, 0, 0, 0.12) 0px 1px 2px;
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px, rgba(0, 0, 0, 0.15) 0px 1px 2px;
+            padding-bottom: 2px;
 
             &:not(:last-child) {
                 margin-bottom: 8px;
@@ -114,7 +115,7 @@
             @include font('NYTImperial', 12px, $color-black, 500, italic, 18px);
             display: block;
             position: relative;
-            text-indent: 23px;
+            text-indent: 24px;
             padding: 3px 3px 0 6px;
             background: $color-vintage-background;
 
@@ -156,7 +157,7 @@
         .websCredits {
             display: block;
             text-align: right;
-            padding: 0 6px 0 0;
+            padding: 0 3px 0 0;
             background: $color-vintage-background;
             font-weight: 600;
 

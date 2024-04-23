@@ -77,14 +77,14 @@ const Definition: Component<{
                     <span class="websCredits">
                       {item().example[0].author && (
                         <span class="websAuthor">
-                          {item().example[0].author}-
+                          {item().example[0].author} - 
                         </span>
                       )}
                       {item().example[0].title && (
                         <span class="websTitle">{item().example[0].title}</span>
                       )}
                       {item().example[0].year && (
-                        <span class="websYear">-{item().example[0].year}</span>
+                        <span class="websYear"> - {item().example[0].year}</span>
                       )}
                     </span>
                   </Show>
