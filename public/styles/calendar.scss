@@ -168,6 +168,12 @@
 
             .dateTimeIndexToday {
                 color: $color-red-1;
+                color: 1;
+            }
+
+            .dateTimeIndex {
+                color: $color-red-1;
+                opacity: 0.6;
             }
         }
 

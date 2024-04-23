@@ -23,8 +23,22 @@ const Bottom: Component<{}> = () => {
     <div class="bottom">
       <div class="mainFooterLeftIndex">
         <div class="indexIndex">
-          <span>{todayData().time1}</span>
-          <span>{todayData().time2}</span>
+          <Show
+            when={todayData().date}
+            fallback={
+              <>
+                <span>
+                  <small>N</small>
+                </span>
+                <span>
+                  <small>N</small>
+                </span>
+              </>
+            }
+          >
+            <span>{todayData().time1}</span>
+            <span>{todayData().time2}</span>
+          </Show>
         </div>
         <div class="indexDay">
           <span>{format(new Date(), "eeeeee")}</span>
