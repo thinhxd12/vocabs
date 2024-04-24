@@ -19,7 +19,7 @@
             background: $color-vintage-background;
             overflow: hidden;
             box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 3px, rgba(0, 0, 0, 0.15) 0px 0px 2px;
-            padding-bottom: 2px;
+            // padding-bottom: 2px;
 
             &:not(:last-child) {
                 margin-bottom: 8px;
@@ -138,16 +138,17 @@
         }
 
         .websSyn {
-            padding-left: 5px;
+            padding-left: 6px;
             background: $color-vintage-background;
+            margin-top: -2px;
 
             b {
-                @include font('Poppins', 12px, $color-black, 600, normal, 12px);
+                @include font('Poppins', 12px, $color-black, 600, normal, 15px);
                 text-transform: uppercase;
             }
 
             small {
-                @include font('Poppins', 9px, #282828, 400, normal, 12px);
+                @include font('Poppins', 9px, #282828, 400, normal, 15px);
                 color: #727272;
                 font-weight: 300;
                 text-transform: lowercase;
@@ -157,18 +158,22 @@
         .websCredits {
             display: block;
             text-align: right;
-            padding: 0 3px 0 0;
+            padding-right: 3px;
             background: $color-vintage-background;
-            font-weight: 600;
+            margin-bottom: 2px;
 
             .websAuthor {
-                font-size: 13px;
                 font-variant: small-caps;
+                @include font('NYTImperial', 13px, $color-black, 600, normal, 14px);
             }
 
             .websTitle {
-                font-size: 13px;
                 text-transform: uppercase;
+                @include font('NYTImperial', 13px, $color-black, 600, normal, 14px);
+            }
+
+            .websYear {
+                @include font('NYTImperial', 12px, $color-black, 600, normal, 14px);
             }
         }
     }
