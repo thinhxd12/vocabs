@@ -197,6 +197,7 @@ async function fetchGetText(url: string) {
 }
 
 export const getTextDataWebster = async (text: string) => {
+    "use server";
     const url =
         DEFAULT_CORS_PROXY + `https://www.merriam-webster.com/dictionary/${text}`;
     const oxfordUrl =
