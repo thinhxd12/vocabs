@@ -61,7 +61,7 @@ const MainLayout = (props: RouteSectionProps) => {
     }, 840000);
   });
 
-  const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
+  const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(true);
 
   const changeToggle = () => {
     setToggleMainPage(!toggleMainPage());
