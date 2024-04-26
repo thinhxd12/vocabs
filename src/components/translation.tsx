@@ -76,16 +76,16 @@ const Translation: Component<{
     if (translateTerm() !== "") {
       setTransInput("");
       const data = await getTextDataWebster(translateTerm());
-      // if (data) setDefinitionData(data);
-      if (data) {
-        if (data.audio !== "") {
-          setDefinitionData(data);
-        }
-         else {
-          const sound = await getOedSoundURL(data.word);
-          setDefinitionData({ ...data, audio: sound });
-        }
-      }
+      if (data) setDefinitionData(data);
+      // if (data) {
+      //   if (data.audio !== "") {
+      //     setDefinitionData(data);
+      //   }
+      //    else {
+      //     const sound = await getOedSoundURL(data.word);
+      //     setDefinitionData({ ...data, audio: sound });
+      //   }
+      // }
     }
   };
 
