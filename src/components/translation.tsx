@@ -19,6 +19,7 @@ import { TranslateType, VocabularyType } from "~/types";
 import { useSubmission } from "@solidjs/router";
 import Definition from "./definition";
 import {
+  getOedSoundURL,
   getTextDataWebster,
   getTranslate,
   insertVocabularyItem,
@@ -75,7 +76,15 @@ const Translation: Component<{
     if (translateTerm() !== "") {
       setTransInput("");
       const data = await getTextDataWebster(translateTerm());
-      if (data) setDefinitionData(data);
+      // if (data) setDefinitionData(data);
+      if (data) {
+        if (data.audio) {
+          setDefinitionData(data);
+        } else {
+          const sound = await getOedSoundURL(data.word);
+          setDefinitionData({ ...data, audio: sound });
+        }
+      }
     }
   };
 
