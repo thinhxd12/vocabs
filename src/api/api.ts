@@ -225,7 +225,7 @@ export const getTextDataWebster = async (text: string) => {
         const doc = parse(data[0]);
         const docOx = parse(data[1]);
         
-        result.audio = getElAttribute(docOx, ".audio_play_button,.pron-us", "data-src-mp3");
+        result.audio = await getElAttribute(docOx, ".audio_play_button,.pron-us", "data-src-mp3");
         result.word = getElText(doc, "h1.hword", text);
         result.phonetics = getElText(doc, ".prons-entries-list-inline a", "");
 
