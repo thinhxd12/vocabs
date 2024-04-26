@@ -80,10 +80,11 @@ const Translation: Component<{
       if (data) {
         if (data.audio) {
           setDefinitionData(data);
-        } else {
-          const sound = await getOedSoundURL(data.word);
-          setDefinitionData({ ...data, audio: sound });
         }
+        //  else {
+        //   const sound = await getOedSoundURL(data.word);
+        //   setDefinitionData({ ...data, audio: sound });
+        // }
       }
     }
   };
