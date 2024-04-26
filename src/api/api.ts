@@ -220,12 +220,14 @@ export const getTextDataWebster = async (text: string) => {
     try {
         const data = await Promise.all([
             fetchGetText(url),
-            fetchGetText(oxfordUrl),
+            // fetchGetText(oxfordUrl),
         ]);
         const doc = parse(data[0]);
-        const docOx = parse(data[1]);
+        // const docOx = parse(data[1]);
 
-        result.audio = getElAttribute(docOx, ".audio_play_button,.pron-us", "data-src-mp3");
+        // result.audio = getElAttribute(docOx, ".audio_play_button,.pron-us", "data-src-mp3");
+        result.audio = await getOedSoundURL(text);
+
         result.word = getElText(doc, "h1.hword", text);
         result.phonetics = getElText(doc, ".prons-entries-list-inline a", "");
 
