@@ -7,7 +7,7 @@ import { Show } from "solid-js";
 import { loginOrRegister, getUser } from "~/api";
 import "/public/styles/login.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-import { Bs9Circle } from "solid-icons/bs";
+import { Bs3Circle } from "solid-icons/bs";
 export const route = {
   load: () => getUser(),
 } satisfies RouteDefinition;
@@ -32,7 +32,7 @@ export default function Login(props: RouteSectionProps) {
           </div>
           <div class="loginItem">
             <button type="submit" class="loginBtn">
-              <Bs9Circle size={18} color="#a59885" />
+              <Bs3Circle size={18} color="#545454" />
             </button>
           </div>
           <Show when={loggingIn.result}>

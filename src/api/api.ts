@@ -200,9 +200,6 @@ export const getTextDataWebster = async (text: string) => {
     "use server";
     const url =
         DEFAULT_CORS_PROXY + `https://www.merriam-webster.com/dictionary/${text}`;
-    const oxfordUrl =
-        DEFAULT_CORS_PROXY +
-        `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
 
     const result: VocabularyType = {
         word: "",
@@ -218,15 +215,6 @@ export const getTextDataWebster = async (text: string) => {
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
 
     try {
-        // const data = await Promise.all([
-        //     fetchGetText(url),
-        //     // fetchGetText(oxfordUrl),
-        // ]);
-        // const doc = parse(data[0]);
-        // const docOx = parse(data[1]);
-
-        // result.audio = getElAttribute(docOx, ".audio_play_button,.pron-us", "data-src-mp3");
-        // result.audio = await getOedSoundURL(text);
         const data = await fetchGetText(url);
         const doc = parse(data);
         result.word = getElText(doc, "h1.hword", text);
@@ -363,20 +351,10 @@ export const getTextDataWebster = async (text: string) => {
 
 //find sound from oed
 export const getOedSoundURL = async (text: string) => {
-    // "use server";
-    // let resultUrl = "";
     const oxfordUrl =
         DEFAULT_CORS_PROXY +
         `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
-
-
-
-
     const oedUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
-    // const response = await fetch(baseUrl);
-    // const pageImgHtml = await response.text();
-    // const pageDoc = parse(pageImgHtml);
-    // const pageDoc = fetchGetText(baseUrl);
 
     const data = await Promise.all([
         fetchGetText(oxfordUrl),
@@ -387,7 +365,7 @@ export const getOedSoundURL = async (text: string) => {
 
     const oxfordResultUrl = getElAttribute(docOxf, ".audio_play_button,.pron-us", "data-src-mp3");
 
-    if (oxfordResultUrl === "") {
+    if (!oxfordResultUrl) {
         const urlParam = getElAttribute(docOed, ".viewEntry", "href");
         if (urlParam) {
             const newUrl = "https://www.oed.com" + urlParam;
@@ -404,12 +382,6 @@ export const getOedSoundURL = async (text: string) => {
         }
     }
     return oxfordResultUrl;
-    // const pageData = await fetchGetText(baseUrl);
-    // const pageDoc = parse(pageData);
-
-
-
-    return "";
 };
 
 //delete vocabulary

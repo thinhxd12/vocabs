@@ -88,7 +88,7 @@
         }
 
         .websDefUp {
-            @include font('Poppins', 13px, $color-white, 600, normal, 15px);
+            @include font('Poppins', 12px, $color-white, 600, normal, 15px);
             text-transform: uppercase;
         }
 
