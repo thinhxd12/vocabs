@@ -225,9 +225,11 @@ export const getTextDataWebster = async (text: string) => {
         const doc = parse(data[0]);
         const docOx = parse(data[1]);
 
-        result.audio =
-            getElAttribute(docOx, ".audio_play_button,.pron-us", "data-src-mp3") ||
-            (await getOedSoundURL(text));
+        let sound = getElAttribute(docOx, ".audio_play_button,.pron-us", "data-src-mp3");
+        if (sound) {
+            result.audio = sound;
+        }
+        else result.audio = await getOedSoundURL(text);
 
         result.word = getElText(doc, "h1.hword", text);
         result.phonetics = getElText(doc, ".prons-entries-list-inline a", "");
@@ -363,11 +365,12 @@ export const getTextDataWebster = async (text: string) => {
 
 //find sound from oed
 export const getOedSoundURL = async (text: string) => {
+    "use server";
     const baseUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
     const response = await fetch(baseUrl);
     const pageImgHtml = await response.text();
     const pageDoc = parse(pageImgHtml);
-    const urlParam = pageDoc.querySelector("h3.resultTitle a")?.getAttribute("href");
+    const urlParam = getElAttribute(pageDoc, ".viewEntry", "href");
     if (urlParam) {
         const newUrl = "https://www.oed.com" + urlParam;
         const link = newUrl.replace(/\?.+/g, "?tab=factsheet&tl=true#39853451");
