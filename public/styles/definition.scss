@@ -18,29 +18,17 @@
         .websEntry {
             background: $color-vintage-background;
             overflow: hidden;
-            box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 3px, rgba(0, 0, 0, 0.15) 0px 0px 2px;
-
-            &:not(:last-child) {
-                margin-bottom: 8px;
-            }
         }
 
         .websHead {
-            padding: 6px 3px 1px 3px;
             background: $color-vintage-background;
-
-            .websHeadNum {
-                @include font("Fraktur", 12px, $color-black, normal, normal, 15px);
-                letter-spacing: 0.1em;
-                margin-right: 2px;
-                vertical-align: baseline;
-            }
+            padding: 9px 0 0;
 
             .websHeadContent {
-                @include font('SF-Pro', 16px, $color-black, 600, normal, 1px);
+                @include font("Poppins", 18px, $color-black, 600, normal, 16px);
                 vertical-align: baseline;
                 text-transform: uppercase;
-                margin-left: 9px;
+                padding-left: 15px;
             }
         }
 
