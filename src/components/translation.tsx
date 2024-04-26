@@ -78,12 +78,14 @@ const Translation: Component<{
       const data = await getTextDataWebster(translateTerm());
       // if (data) setDefinitionData(data);
       if (data) {
-        if (data.audio) {
-          setDefinitionData(data);
-        } else {
-          const sound = await getOedSoundURL(translateTerm());
-          setDefinitionData({ ...data, audio: sound });
-        }
+        // if (data.audio) {
+        //   setDefinitionData(data);
+        // } else {
+        //   const sound = await getOedSoundURL(translateTerm());
+        //   setDefinitionData({ ...data, audio: sound });
+        // }
+        const sound = await getOedSoundURL(translateTerm());
+        setDefinitionData({ ...data, audio: sound });
       }
     }
   };

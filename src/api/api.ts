@@ -363,7 +363,8 @@ export const getTextDataWebster = async (text: string) => {
 
 //find sound from oed
 export const getOedSoundURL = async (text: string) => {
-    "use server";
+    // "use server";
+    // let resultUrl = "";
     const oxfordUrl =
         DEFAULT_CORS_PROXY +
         `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
@@ -371,29 +372,43 @@ export const getOedSoundURL = async (text: string) => {
 
 
 
-    const baseUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
+    const oedUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
     // const response = await fetch(baseUrl);
     // const pageImgHtml = await response.text();
     // const pageDoc = parse(pageImgHtml);
     // const pageDoc = fetchGetText(baseUrl);
 
-    const pageData = await fetchGetText(baseUrl);
-    const pageDoc = parse(pageData);
-    const urlParam = getElAttribute(pageDoc, ".viewEntry", "href");
+    const data = await Promise.all([
+        fetchGetText(oxfordUrl),
+        fetchGetText(oedUrl),
+    ]);
+    const docOxf = parse(data[0]);
+    const docOed = parse(data[1]);
 
-    if (urlParam) {
-        const newUrl = "https://www.oed.com" + urlParam;
-        const link = newUrl.replace(/\?.+/g, "?tab=factsheet&tl=true#39853451");
-        const nextResponse = await fetch(link);
-        const nextPageHtml = await nextResponse.text();
-        const nextPageDoc = parse(nextPageHtml);
-        const mp3 = nextPageDoc
-            .querySelector(".regional-pronunciation:last-child")
-            ?.querySelector(".pronunciation-play-button")
-            ?.getAttribute("data-src-mp3");
-        const altMp3 = `https://ssl.gstatic.com/dictionary/static/sounds/20220808/${text}--_us_1.mp3`;
-        return mp3 || altMp3;
+    const oxfordResultUrl = getElAttribute(docOxf, ".audio_play_button,.pron-us", "data-src-mp3");
+
+    if (oxfordResultUrl === "") {
+        const urlParam = getElAttribute(docOed, ".viewEntry", "href");
+        if (urlParam) {
+            const newUrl = "https://www.oed.com" + urlParam;
+            const link = newUrl.replace(/\?.+/g, "?tab=factsheet&tl=true#39853451");
+            const nextResponse = await fetch(link);
+            const nextPageHtml = await nextResponse.text();
+            const nextPageDoc = parse(nextPageHtml);
+            const mp3 = nextPageDoc
+                .querySelector(".regional-pronunciation:last-child")
+                ?.querySelector(".pronunciation-play-button")
+                ?.getAttribute("data-src-mp3");
+            const altMp3 = `https://ssl.gstatic.com/dictionary/static/sounds/20220808/${text}--_us_1.mp3`;
+            return mp3 || altMp3;
+        }
     }
+    return oxfordResultUrl;
+    // const pageData = await fetchGetText(baseUrl);
+    // const pageDoc = parse(pageData);
+
+
+
     return "";
 };
 
