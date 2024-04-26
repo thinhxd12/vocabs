@@ -365,8 +365,8 @@ export const getTextDataWebster = async (text: string) => {
 
 //find sound from oed
 export const getOedSoundURL = async (text: string) => {
-    // "use server";
-    const baseUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
+    "use server";
+    const baseUrl = DEFAULT_CORS_PROXY + `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
     const response = await fetch(baseUrl);
     const pageImgHtml = await response.text();
     const pageDoc = parse(pageImgHtml);
@@ -374,7 +374,7 @@ export const getOedSoundURL = async (text: string) => {
     if (urlParam) {
         const newUrl = "https://www.oed.com" + urlParam;
         const link = newUrl.replace(/\?.+/g, "?tab=factsheet&tl=true#39853451");
-        const nextResponse = await fetch(link);
+        const nextResponse = await fetch(DEFAULT_CORS_PROXY + link);
         const nextPageHtml = await nextResponse.text();
         const nextPageDoc = parse(nextPageHtml);
         const mp3 = nextPageDoc
