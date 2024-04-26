@@ -218,16 +218,17 @@ export const getTextDataWebster = async (text: string) => {
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
 
     try {
-        const data = await Promise.all([
-            fetchGetText(url),
-            // fetchGetText(oxfordUrl),
-        ]);
-        const doc = parse(data[0]);
+        // const data = await Promise.all([
+        //     fetchGetText(url),
+        //     // fetchGetText(oxfordUrl),
+        // ]);
+        // const doc = parse(data[0]);
         // const docOx = parse(data[1]);
 
         // result.audio = getElAttribute(docOx, ".audio_play_button,.pron-us", "data-src-mp3");
-        result.audio = await getOedSoundURL(text);
-
+        // result.audio = await getOedSoundURL(text);
+        const data = await fetchGetText(url);
+        const doc = parse(data);
         result.word = getElText(doc, "h1.hword", text);
         result.phonetics = getElText(doc, ".prons-entries-list-inline a", "");
 
@@ -362,11 +363,22 @@ export const getTextDataWebster = async (text: string) => {
 
 //find sound from oed
 export const getOedSoundURL = async (text: string) => {
-    // "use server";
+    "use server";
+    const oxfordUrl =
+        DEFAULT_CORS_PROXY +
+        `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
+
+
+
+
     const baseUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
-    const response = await fetch(baseUrl);
-    const pageImgHtml = await response.text();
-    const pageDoc = parse(pageImgHtml);
+    // const response = await fetch(baseUrl);
+    // const pageImgHtml = await response.text();
+    // const pageDoc = parse(pageImgHtml);
+    // const pageDoc = fetchGetText(baseUrl);
+
+    const pageData = await fetchGetText(baseUrl);
+    const pageDoc = parse(pageData);
     const urlParam = getElAttribute(pageDoc, ".viewEntry", "href");
 
     if (urlParam) {
