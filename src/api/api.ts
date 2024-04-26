@@ -365,7 +365,7 @@ export const getTextDataWebster = async (text: string) => {
 
 //find sound from oed
 export const getOedSoundURL = async (text: string) => {
-    "use server";
+    // "use server";
     const baseUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
     const response = await fetch(baseUrl);
     const pageImgHtml = await response.text();
