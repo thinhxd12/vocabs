@@ -78,13 +78,13 @@ const Translation: Component<{
       const data = await getTextDataWebster(translateTerm());
       // if (data) setDefinitionData(data);
       if (data) {
-        if (data.audio) {
+        if (data.audio !== "") {
           setDefinitionData(data);
         }
-        //  else {
-        //   const sound = await getOedSoundURL(data.word);
-        //   setDefinitionData({ ...data, audio: sound });
-        // }
+         else {
+          const sound = await getOedSoundURL(data.word);
+          setDefinitionData({ ...data, audio: sound });
+        }
       }
     }
   };

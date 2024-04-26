@@ -643,7 +643,7 @@ const Vocabulary: Component<{}> = () => {
               exit={{
                 opacity: 0,
               }}
-              transition={{ duration: 0.3, easing: "ease-in-out" }}
+              transition={{ duration: 0.2, easing: "ease-in-out" }}
             >
               <Edit item={editText()!} onClose={handleCloseEdit} />
             </Motion.div>
@@ -664,7 +664,7 @@ const Vocabulary: Component<{}> = () => {
               exit={{
                 opacity: 0,
               }}
-              transition={{ duration: 0.3, easing: "ease-in-out" }}
+              transition={{ duration: 0.2, easing: "ease-in-out" }}
             >
               <Translation
                 translateText={translateTerm()}
