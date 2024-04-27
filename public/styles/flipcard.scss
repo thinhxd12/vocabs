@@ -98,17 +98,18 @@
 .flipCardRightContent {
     height: 186px;
     width: 294px;
+    overflow: hidden;
 }
 
 .cardContent {
-    width: 100%;
-    height: 200%;
-    transition: all .2s ease-in-out;
-    transform: translateY(-186px);
+    width: 300%;
+    height: 100%;
+    transition: all .15s ease;
+    display: flex;
 
     .cardTop {
         width: 100%;
-        height: 50%;
+        height: 100%;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
@@ -148,7 +149,7 @@
 
     .cardBottom {
         width: 100%;
-        height: 50%;
+        height: 100%;
         @include flex-center-column;
 
         &--class {
@@ -181,6 +182,10 @@
 }
 
 .cardContent:hover,
-.cardContent--hover {
-    transform: translateY(0);
+.cardContent--hover-1 {
+    transform: translateX(-294px);
+}
+
+.cardContent--hover-2 {
+    transform: translateX(-588px);
 }

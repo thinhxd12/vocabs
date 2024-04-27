@@ -16,8 +16,8 @@ const FlipCard: Component<{
 }> = (props) => {
   const currenText = createMemo(() => props.item);
   const [audioSource, setAudioSource] = createSignal<string>("");
-  const [hover, setHover] = createSignal<boolean>(false);
   const [partOfSpeechs, setPartOfSpeechs] = createSignal<string>("");
+  const [hoverClass, setHoverClass] = createSignal<string>("");
 
   const createNumberArray = (num: number) => {
     let arr = Array.from(String(num), Number);
@@ -47,6 +47,7 @@ const FlipCard: Component<{
     }
     if (currenText()?.number > 1) {
       setRenderNumber(currenText().number);
+      setHoverClass("");
       setNumbArray(createNumberArray(currenText()?.number));
       const timer1 = setTimeout(() => {
         setRenderNumber(renderNumber() - 1);
@@ -58,12 +59,12 @@ const FlipCard: Component<{
     }
     if (translations) {
       const timer2 = setTimeout(() => {
-        setHover(true);
+        setHoverClass(" cardContent--hover-1");
         const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${translations}`;
         setAudioSource(soundUrl);
       }, 3000);
       const timer3 = setTimeout(() => {
-        setHover(false);
+        setHoverClass(" cardContent--hover-2");
       }, 5500);
       onCleanup(() => {
         clearTimeout(timer2);
@@ -168,9 +169,13 @@ const FlipCard: Component<{
       </div>
       <div class="flipCardRightContent">
         <Show when={currenText()} fallback={<div class="cardContent"></div>}>
-          <div
-            class={hover() ? "cardContent cardContent--hover" : "cardContent"}
-          >
+          <div class={"cardContent" + hoverClass()}>
+            <div class="cardBottom">
+              <p class="cardBottom--phonetic">{currenText()?.phonetics}</p>
+              <p class="cardBottom--text">{currenText()?.word}</p>
+              <p class="cardBottom--class">【 {partOfSpeechs()} 】</p>
+              <p class="cardBottom--date">05/07/22</p>
+            </div>
             <div class="cardTop">
               <Index
                 each={currenText()?.translations}
@@ -190,7 +195,6 @@ const FlipCard: Component<{
               <p class="cardBottom--phonetic">{currenText()?.phonetics}</p>
               <p class="cardBottom--text">{currenText()?.word}</p>
               <p class="cardBottom--class">【 {partOfSpeechs()} 】</p>
-              <p class="cardBottom--date">05/07/22</p>
             </div>
           </div>
         </Show>
