@@ -86,17 +86,14 @@ const Bottom: Component<{}> = () => {
               <Motion.img
                 initial={{
                   opacity: 0,
-                  y: -30,
                 }}
                 animate={{
                   opacity: 1,
-                  y: 0,
                 }}
                 exit={{
                   opacity: 0,
-                  y: 30,
                 }}
-                transition={{ duration: 0.3, easing: "ease-in-out" }}
+                transition={{ duration: 0.9, easing: "ease" }}
                 src="/images/main/sunset.jpg"
                 class="mainFooterCornerBtnImage"
               />
@@ -105,17 +102,14 @@ const Bottom: Component<{}> = () => {
             <Motion.img
               initial={{
                 opacity: 0,
-                y: -30,
               }}
               animate={{
                 opacity: 1,
-                y: 0,
               }}
               exit={{
                 opacity: 0,
-                y: 30,
               }}
-              transition={{ duration: 0.3, easing: "ease-in-out" }}
+              transition={{ duration: 0.9, easing: "ease" }}
               src="/images/main/sunrise.jpg"
               class="mainFooterCornerBtnImage"
             />

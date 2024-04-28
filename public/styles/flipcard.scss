@@ -152,25 +152,25 @@
         height: 100%;
         @include flex-center-column;
 
+        &--phonetic {
+            @include font("SF-Pro", 12px, $color-red-3, 600, normal, 12px);
+            padding-bottom: 6px;
+        }
+
         &--class {
-            margin-top: 3px;
-            @include font("SF-Pro", 9px, $color-white, normal, normal, 9px);
-            margin-bottom: 21px;
+            margin-top: 12px;
+            @include font("SF-Pro", 9px, $color-white, normal, normal, 12px);
+            margin-bottom: 6px;
         }
 
         &--text {
-            @include font("Roslindale", 33px, $color-white, 600, normal, 42px);
+            @include font("Roslindale", 32px, $color-white, 600, normal, 24px);
             letter-spacing: 1.5px;
             -webkit-font-smoothing: subpixel-antialiased;
             width: 100%;
             word-break: break-word;
             hyphens: auto;
             text-align: center;
-            margin-top: -6px;
-        }
-
-        &--phonetic {
-            @include font("SF-Pro", 20px, $color-red-3, 600, normal, 27px);
         }
 
         &--date {
