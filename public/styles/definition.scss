@@ -94,7 +94,6 @@
 
         .websX {
             @include font('NYTImperial', 12px, $color-black, 500, italic, 18px);
-            display: block;
             position: relative;
             text-indent: 24px;
             padding: 3px 3px 0 6px;
@@ -137,8 +136,9 @@
         }
 
         .websCredits {
-            display: block;
-            text-align: right;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
             padding-right: 3px;
             background: $color-vintage-background;
             margin-bottom: 2px;
