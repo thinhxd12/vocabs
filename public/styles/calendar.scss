@@ -148,7 +148,7 @@
                     height: 21px;
                     text-align: center;
                     background: $color-calendar-green-1;
-                    color: $color-black;
+                    color: $color-calendar-white;
                     font-weight: 700;
                     cursor: pointer;
                     box-shadow: 0 3px 9px 0 rgba(21, 94, 46, 0.3), 0 6px 18px 0 rgba(21, 94, 46, 0.2);
@@ -163,7 +163,7 @@
 
             .todayDate {
                 background: $color-red-1;
-                color: $color-white;
+                color: $color-calendar-white !important;
             }
 
             .dateTimeIndexToday {
