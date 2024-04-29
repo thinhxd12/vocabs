@@ -53,17 +53,17 @@ const Definition: Component<{
                         <div class="websDefs">
                           <Index each={m().definition}>
                             {(x, y) => (
-                              <>
-                                <div>
-                                  <p innerHTML={x().sense} class="websDef" />
-                                  <Show when={x().similar}>
-                                    <span
-                                      class="websDefUp"
-                                      innerHTML={": " + x().similar}
-                                    />
-                                  </Show>
-                                </div>
-                              </>
+                              <p
+                                class="websDef"
+                                innerHTML={
+                                  x().similar
+                                    ? x().sense +
+                                      `<span class="websDefUp">${
+                                        " : " + x().similar
+                                      }</span>`
+                                    : x().sense
+                                }
+                              />
                             )}
                           </Index>
                         </div>

@@ -55,15 +55,15 @@
                 svg {
                     transition: 1.2s ease-in-out;
                     opacity: 0.3;
-                    transform: rotate(180deg);
+                    transform: rotate(360deg);
                 }
 
                 &:hover {
 
                     img,
                     svg {
-                        opacity: 1;
-                        transform: rotate(-360deg);
+                        opacity: 0.81;
+                        transform: rotate(0deg);
                     }
                 }
             }

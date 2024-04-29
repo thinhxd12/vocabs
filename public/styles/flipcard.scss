@@ -16,15 +16,14 @@
 
         .numberFlipBackground {
             position: absolute;
-            top: 0;
+            top: -72px;
             left: 2px;
             width: 50px;
-            height: 390px;
+            height: 300px;
             margin: 0 auto;
             background-image: url("/public/images/main/flagfabricver.png");
-            background-size: 200px 390px;
-            background-repeat: repeat-y;
-            animation: moveBg 12s linear infinite;
+            background-size: cover;
+            background-position-y: bottom;
         }
 
         .numberFlipContent {
@@ -34,21 +33,6 @@
         }
     }
 }
-
-@keyframes moveBg {
-    0% {
-        transform: translateY(-195px);
-    }
-
-    50% {
-        transform: translateY(0);
-    }
-
-    100% {
-        transform: translateY(-195px);
-    }
-}
-
 
 .numbersContentBackground {
     width: 100%;
