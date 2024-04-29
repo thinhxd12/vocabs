@@ -313,7 +313,7 @@ export const getTextDataWebster = async (text: string) => {
                     let upText = /\s\:\s(.+)/g.exec(dtText);
                     dtText = dtText.replace(/\s\:\s(.+)/g, ``);
                     itemDef.definition.push({
-                        sense: letter + " " + dtText,
+                        sense: letter !== "" ? letter + " " + dtText : "&emsp;" + dtText,
                         similar: upText ? upText[1] : "",
                     });
                 });

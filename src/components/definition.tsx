@@ -54,13 +54,15 @@ const Definition: Component<{
                           <Index each={m().definition}>
                             {(x, y) => (
                               <>
-                                <p class="websDef">
-                                  {x().sense}
+                                <div>
+                                  <p innerHTML={x().sense} class="websDef" />
                                   <Show when={x().similar}>
-                                    <span> : </span>
-                                    <span class="websDefUp">{x().similar}</span>
+                                    <span
+                                      class="websDefUp"
+                                      innerHTML={": " + x().similar}
+                                    />
                                   </Show>
-                                </p>
+                                </div>
                               </>
                             )}
                           </Index>
@@ -70,10 +72,7 @@ const Definition: Component<{
                   </Index>
 
                   <Show when={item().example[0]}>
-                    <p
-                      class="websX"
-                      innerHTML={item().example[0].sentence}
-                    />
+                    <p class="websX" innerHTML={item().example[0].sentence} />
                     <div class="websCredits">
                       <Show when={item().example[0].author}>
                         <div class="websAuthor">{item().example[0].author}</div>
