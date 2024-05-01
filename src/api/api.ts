@@ -19,6 +19,22 @@ export const searchText = async (text: string) => {
     }
 };
 
+export const searchMemoriesText = async (text: string) => {
+    "use server";
+    try {
+        const { data, error } = await supabase
+            .from(mapTables.memories)
+            .select()
+            .textSearch("word", text)
+
+        if (data) {
+            if (data.length > 0) return { message: `Memorized "${data[0].word.toUpperCase()}"` };
+        }
+    } catch (error) {
+        console.error(error);
+    }
+};
+
 const chunk = (array: any[], size: number) =>
     array.reduce((acc, _, i) => {
         if (i % size === 0) acc.push(array.slice(i, i + size));

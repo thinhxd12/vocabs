@@ -23,6 +23,7 @@ import {
   getTextDataWebster,
   getTranslate,
   insertVocabularyItem,
+  searchMemoriesText,
 } from "~/api/api";
 import toast, { Toaster } from "solid-toast";
 import useClickOutside from "solid-click-outside";
@@ -75,6 +76,10 @@ const Translation: Component<{
   const handleFindDefinition = async () => {
     if (translateTerm() !== "") {
       setTransInput("");
+      const checkMemories = await searchMemoriesText(translateTerm());
+      if (checkMemories) {
+        popCheckMemories(checkMemories.message);
+      }
       const data = await getTextDataWebster(translateTerm());
       if (data) {
         const sound = await getOedSoundURL(translateTerm());
@@ -83,15 +88,17 @@ const Translation: Component<{
     }
   };
 
+  //----------------------TOAST----------------------
+  const popCheckMemories = (msg: string) =>
+    toast.error(msg, { duration: 6000 });
+  const popSuccess = () => toast.success("Success", { duration: 3000 });
+  const popError = (msg: string) => toast.error(msg, { duration: 3000 });
+  const [submittedForm, setSubmittedForm] = createSignal<boolean>(false);
+
   onMount(() => {
     handleTranslate();
     handleFindDefinition();
   });
-
-  //----------------------TOAST----------------------
-  const popSuccess = () => toast.success("Success", { duration: 3000 });
-  const popError = (msg: string) => toast.error(msg, { duration: 3000 });
-  const [submittedForm, setSubmittedForm] = createSignal<boolean>(false);
 
   createEffect(
     on(
