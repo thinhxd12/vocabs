@@ -233,9 +233,7 @@
     cursor: pointer;
     transition: 0.1s;
     background: $color-background-1;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
     @include font("Roslindale", 14px, #7c7b7a, 700, normal, 21px);
-    @include flex-center;
     box-shadow: 0px 3px 6px #00000099;
     background-image: url('/images/main/input-left-corner.png'),
         url('/images/main/input-right-corner.png');
@@ -258,6 +256,7 @@
         small {
             font-size: 9px;
             color: #ffffff80;
+            margin-left: 1px;
         }
     }
 

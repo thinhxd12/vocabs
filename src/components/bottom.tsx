@@ -94,7 +94,7 @@ const Bottom: Component<{}> = () => {
                   opacity: 0,
                 }}
                 transition={{ duration: 0.6, easing: "ease" }}
-                src="/images/main/sunset.jpg"
+                src="/images/main/sunrise.jpg"
                 class="mainFooterCornerBtnImage"
               />
             }
@@ -110,7 +110,7 @@ const Bottom: Component<{}> = () => {
                 opacity: 0,
               }}
               transition={{ duration: 0.6, easing: "ease" }}
-              src="/images/main/sunrise.jpg"
+              src="/images/main/sunset.jpg"
               class="mainFooterCornerBtnImage"
             />
           </Show>
