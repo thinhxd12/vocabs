@@ -39,6 +39,7 @@ import { BsTranslate, BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { ImBooks } from "solid-icons/im";
 import { BiSolidHourglassTop } from "solid-icons/bi";
+import { format } from "date-fns";
 
 export const route = {
   load: () => {
@@ -67,7 +68,7 @@ const Vocabulary: Component<{}> = () => {
         navigator.userAgent
       )
     );
-    getCalendarTodayDataAction();
+    handleGetCalendarTodayData();
   });
 
   createEffect(() => {
@@ -205,8 +206,9 @@ const Vocabulary: Component<{}> = () => {
   // -------------------EDIT END-------------------- //
   // -------------------AUTOPLAY START-------------------- //
   const getVocabularyFromRangeAction = useAction(getVocabularyFromRange);
-  const getCalendarTodayDataAction = async () => {
-    const data = await getCalendarTodayData();
+  const handleGetCalendarTodayData = async () => {
+    let date = format(new Date(), "yyyy-MM-dd");
+    const data = await getCalendarTodayData(date);
     if (data) setTodayData(data);
   };
 
@@ -223,7 +225,7 @@ const Vocabulary: Component<{}> = () => {
     setBottomLooping(true);
     if (counter() === 0) {
       await submitTodayProgressAction(wordListType(), newProgress);
-      getCalendarTodayDataAction();
+      handleGetCalendarTodayData();
     }
     handleAutoplay();
     timerRef = setInterval(() => {

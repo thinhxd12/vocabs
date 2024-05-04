@@ -103,12 +103,12 @@ export const getThisWeekData = action(async () => {
 });
 
 //get today data
-export const getCalendarTodayData = async () => {
+export const getCalendarTodayData = async (date: string) => {
     "use server";
     const { data, error } = await supabase
         .from(mapTables.schedule)
         .select()
-        .eq('date', format(new Date().toISOString(), "yyyy-MM-dd"));
+        .eq('date', date);
     if (data) return data[0] as ScheduleType;
 };
 
