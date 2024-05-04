@@ -413,7 +413,7 @@ const Vocabulary: Component<{}> = () => {
           </div>
 
           <Show
-            when={isMobile()}
+            when={!isMobile()}
             fallback={
               <>
                 <div class="newInputContainer">
@@ -446,6 +446,14 @@ const Vocabulary: Component<{}> = () => {
               <img
                 src="/images/main/input-right-corner.png"
                 class="myInputRightOrnament"
+              />
+              <img
+                src="/images/main/center.png"
+                class="myInputButton"
+                onClick={() => {
+                  setSearchResult([]);
+                  setSearchTerm("");
+                }}
               />
             </div>
           </Show>

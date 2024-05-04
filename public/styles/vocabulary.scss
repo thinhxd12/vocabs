@@ -66,6 +66,16 @@
                 @include font('basier', 14px, $color-white, 400, normal, 16px);
             }
         }
+
+        .myInputButton {
+            z-index: inherit;
+            height: 28px;
+            position: absolute;
+            right: 8px;
+            top: 5px;
+            z-index: 101;
+            cursor: pointer;
+        }
     }
 
     .newInputContainer {
