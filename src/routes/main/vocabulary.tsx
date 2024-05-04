@@ -413,7 +413,7 @@ const Vocabulary: Component<{}> = () => {
           </div>
 
           <Show
-            when={!isMobile()}
+            when={isMobile()}
             fallback={
               <>
                 <div class="newInputContainer">
