@@ -46,15 +46,15 @@
 
         .websSenseHasImage {
             width: 100%;
-            height: 193px;
+            height: 197px;
             overflow: hidden;
             position: relative;
 
             .websImg {
                 object-fit: cover;
-                object-position: center 12%;
+                object-position: center;
                 width: 100%;
-                height: 193px;
+                height: 197px;
                 z-index: 2;
             }
 
@@ -65,7 +65,7 @@
                 right: 0;
                 bottom: 0;
                 z-index: 3;
-                background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.3) 30%, rgba(0, 0, 0, 0.03) 100%);
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.03) 100%);
             }
 
             .websDefs {
@@ -74,7 +74,8 @@
                 bottom: 0;
                 left: 0;
                 z-index: 5;
-                padding: 3px 3px 3px 6px;
+                padding: 4px 3px 1.5px 6px;
+                background-color: rgba(0, 0, 0, 0.54);
             }
         }
 
