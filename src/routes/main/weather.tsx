@@ -1,10 +1,16 @@
 import { MetaProvider, Title as TitleName, Meta } from "@solidjs/meta";
-import { Component, Index, Show, createEffect, on, onMount } from "solid-js";
+import {
+  Component,
+  Index,
+  Show,
+  createSignal,
+  onMount,
+} from "solid-js";
 import "/public/styles/weather.scss";
-import { useAction, useSubmission } from "@solidjs/router";
 import { getWeatherData } from "~/api/api";
-import { FixMinutelyType } from "~/types";
-import { PRECIP_NUMB } from "~/utils";
+import {
+  WeatherDataType,
+} from "~/types";
 import { OcArrowup2 } from "solid-icons/oc";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
@@ -35,52 +41,35 @@ const Weather: Component<{}> = (props) => {
     },
   ];
 
-  const getWeatherDataAction = useAction(getWeatherData);
-  const getWeatherDataResult = useSubmission(getWeatherData);
+  const mockWeatherData: WeatherDataType = {
+    currentData: {
+      timeText: "",
+      icon: "",
+      summary: "",
+      humidity: 0,
+      temperature: 0,
+      apparentTemperature: 0,
+      uvIndex: 0,
+      windSpeed: 0,
+      windBearing: 0,
+    },
+    minuteData: [],
+    prediction: "",
+  };
+  const [weatherData, setweatherData] =
+    createSignal<WeatherDataType>(mockWeatherData);
+
   const [chartData, setChartData] = createStore();
 
-  onMount(() => {
-    getWeatherDataAction(WEATHER_GEOS[0].geo);
+  const handleGetWeatherData = async (geo: string) => {
+    const data = await getWeatherData(geo);
+    if (data) setweatherData(data);
+  };
+
+  onMount(async () => {
+    handleGetWeatherData(WEATHER_GEOS[0].geo);
     Chart.register(Title, Tooltip, Legend, Colors, Filler);
   });
-
-  createEffect(
-    on(
-      () => getWeatherDataResult.result?.minuteData,
-      () => {
-        const minutelyData = getWeatherDataResult.result?.minuteData;
-        if (minutelyData) {
-          const labels = minutelyData.map((item) => item.diffTime);
-          setChartData({
-            labels,
-            datasets: [
-              {
-                label: "",
-                data: minutelyData.map((item) => item.intensity),
-                borderColor: "#009bff",
-                backgroundColor: "#52a0c1bf",
-                yAxisID: "y",
-                fill: true,
-                tension: 0.1,
-                pointRadius: 0,
-                borderWidth: 1,
-              },
-              {
-                label: "",
-                data: minutelyData.map((item) => item.intensity),
-                borderColor: "#f90000",
-                yAxisID: "y1",
-                fill: false,
-                tension: 0.1,
-                pointRadius: 0,
-                borderWidth: 1,
-              },
-            ],
-          });
-        }
-      }
-    )
-  );
 
   const chartOptions = {
     responsive: true,
@@ -179,19 +168,20 @@ const Weather: Component<{}> = (props) => {
       <TitleName>Cealus</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
+
       <Motion.div
         class="weather"
         animate={{
           opacity: [0, 1],
-          backgroundImage: getWeatherDataResult.result
-            ? `url(/images/darksky/backgrounds/${getWeatherDataResult.result?.currentData.icon}.jpg)`
-            : "unset",
+          backgroundImage: `url(/images/darksky/backgrounds/${
+            weatherData().currentData.icon
+          }.jpg)`,
         }}
         transition={{ duration: 0.6 }}
       >
         <select
           class="weatherGeos"
-          onchange={(e) => getWeatherDataAction(e.currentTarget.value)}
+          onchange={(e) => handleGetWeatherData(e.currentTarget.value)}
         >
           <Index each={WEATHER_GEOS}>
             {(item, index) => (
@@ -199,52 +189,47 @@ const Weather: Component<{}> = (props) => {
             )}
           </Index>
         </select>
-        <Show when={getWeatherDataResult.result}>
+        <Show when={weatherData().prediction}>
           <div class="weatherContent">
             <img
               class="weatherImg"
               src={`/images/darksky/icons/${
-                getWeatherDataResult.result!.currentData.icon
+                weatherData().currentData.icon
               }.svg`}
             />
             <div class="weatherContentText">
               <p class="weatherContentTemp">
-                {Math.round(
-                  getWeatherDataResult.result!.currentData.temperature
-                )}
-                °
+                {Math.round(weatherData().currentData.temperature)}°
               </p>
               <p class="weatherContentInfo">
                 Feels{" "}
-                {Math.round(
-                  getWeatherDataResult.result!.currentData.apparentTemperature
-                )}
+                {Math.round(weatherData().currentData.apparentTemperature)}
                 °C
               </p>
               <p class="weatherContentInfo">
-                UV {getWeatherDataResult.result!.currentData.uvIndex}
+                Humidity {weatherData().currentData.humidity * 100} %
+              </p>
+              <p class="weatherContentInfo">
+                UV {weatherData().currentData.uvIndex}
               </p>
               <div class="weatherContentWind">
                 <span>
-                  Wind{" "}
-                  {Math.round(
-                    getWeatherDataResult.result!.currentData.windSpeed
-                  )}
+                  Wind {Math.round(weatherData().currentData.windSpeed)}
                   km/h
                 </span>
                 <OcArrowup2
                   size={12}
                   style={{
                     transform: `rotate(${
-                      getWeatherDataResult.result!.currentData.windBearing
+                      weatherData().currentData.windBearing
                     }deg)`,
                   }}
                 />
               </div>
               <p class="weatherContentInfo">
-                {getWeatherDataResult.result!.currentData.timeText}
+                {weatherData().currentData.timeText}
                 {" - "}
-                {getWeatherDataResult.result!.currentData.summary}
+                {weatherData().currentData.summary}
               </p>
             </div>
           </div>
@@ -256,9 +241,7 @@ const Weather: Component<{}> = (props) => {
               height={180}
             />
           </div>
-          <p class="weatherPredict">
-            {getWeatherDataResult.result!.prediction}
-          </p>
+          <p class="weatherPredict">{weatherData().prediction}</p>
           <RSS />
         </Show>
       </Motion.div>

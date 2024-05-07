@@ -315,11 +315,12 @@
     }
 
     .calendarQuote {
-        margin-top: 3px;
         background: url("/images/main/grunge-image-tree.webp");
         background-size: cover;
         background-position: left 0 bottom 27%;
         padding: 6px;
+        height: calc(100% - 495px);
+        min-height: 96px;
         @include font("NYTCheltenham", 12px, $color-black, 700, normal, 14px);
         cursor: default;
     }

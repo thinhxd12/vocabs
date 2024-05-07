@@ -1,5 +1,5 @@
 import { action, redirect } from "@solidjs/router";
-import { CurrentlyType, ExampleType, FixMinutelyType, HistoryType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType } from "~/types";
+import { CurrentlyType, ExampleType, FixCurrentlyType, FixMinutelyType, HistoryType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, WeatherDataType } from "~/types";
 import { supabase } from "./supabase";
 import { DEFAULT_CORS_PROXY, DEVIATION_NUMB, PRECIP_NUMB, getElAttribute, getElText, mapTables } from "~/utils";
 import parse from "node-html-parser";
@@ -696,7 +696,8 @@ export const getMemoriesLength = action(async () => {
 
 
 //get weather data
-export const getWeatherData = action(async (geo: string) => {
+
+export const getWeatherData = async (geo: string) => {
     "use server";
     const WEATHER_KEY = "gnunh5vxMIu0kLZG";
     const time = Math.round(Date.now() / 1000);
@@ -707,11 +708,11 @@ export const getWeatherData = action(async (geo: string) => {
         const currentData = cleanDataCurrently(data.currently, data.offset);
         const minuteData = cleanDataMinutely(data.minutely.data);
         const predict = makePrediction(minuteData);
-        return { currentData: currentData, minuteData: minuteData, prediction: predict };
+        return { currentData: currentData, minuteData: minuteData, prediction: predict } as WeatherDataType;
     } catch (error) {
         console.error(error);
     }
-}, "getWeatherData");
+};
 
 const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
     "use server";
@@ -721,71 +722,76 @@ const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
     const timeText = format(time, "h:mm a");
     const hours = Number(format(time, "HH"));
 
+    let result: FixCurrentlyType = {
+        timeText: timeText,
+        icon: data.icon,
+        summary: "",
+        humidity: data.humidity,
+        temperature: data.temperature,
+        apparentTemperature: data.apparentTemperature,
+        uvIndex: data.uvIndex,
+        windSpeed: data.windSpeed,
+        windBearing: data.windBearing,
+    }
+
     // 95% = DEVIATION_NUMB* standard deviation occur
+    let isDayTime = hours > 5 && hours < 18;
     let newPrecipIntensity = (
         data.precipIntensity -
         DEVIATION_NUMB * data.precipIntensityError
-    ).toFixed(3);
+    ) || 0;
 
-    let newItem = {
-        icon: data.icon,
-        summary: data.summary,
-        timeText: timeText,
-        isDayTime: hours > 5 && hours < 18,
-        precipIntensity:
-            Number(newPrecipIntensity) > 0 ? Number(newPrecipIntensity) : 0,
-    };
     switch (true) {
-        case newItem.precipIntensity >= 0.1 &&
-            newItem.precipIntensity < 0.5 &&
+        case newPrecipIntensity >= 0.1 &&
+            newPrecipIntensity < 0.5 &&
             data.cloudCover >= 0.875 &&
             data.precipProbability >= PRECIP_NUMB:
-            newItem.icon = "overcast-rain";
-            newItem.summary = "Overcast Light Rain";
+            result.icon = "overcast-rain";
+            result.summary = "Overcast Light Rain";
             break;
-        case newItem.precipIntensity >= 0.1 &&
-            newItem.precipIntensity < 0.5 &&
+        case newPrecipIntensity >= 0.1 &&
+            newPrecipIntensity < 0.5 &&
             data.precipProbability >= PRECIP_NUMB:
-            newItem.icon = "drizzle";
-            newItem.summary = "Light Rain";
+            result.icon = "drizzle";
+            result.summary = "Light Rain";
             break;
-        case newItem.precipIntensity >= 1 &&
+        case newPrecipIntensity >= 1 &&
             data.precipProbability >= PRECIP_NUMB:
-            newItem.icon = "overcast-rain";
-            newItem.summary = "Heavy Rain";
+            result.icon = "overcast-rain";
+            result.summary = "Heavy Rain";
             break;
         case data.cloudCover <= 0.375:
-            newItem.isDayTime
-                ? (newItem.icon = "clear-day")
-                : (newItem.icon = "clear-night");
-            newItem.summary = "Clear";
+            isDayTime
+                ? (result.icon = "clear-day")
+                : (result.icon = "clear-night");
+            result.summary = "Clear";
             break;
         case data.cloudCover <= 0.875:
-            newItem.isDayTime
-                ? (newItem.icon = "partly-cloudy-day")
-                : (newItem.icon = "partly-cloudy-night");
-            newItem.summary = "Partly Cloudy";
+            isDayTime
+                ? (result.icon = "partly-cloudy-day")
+                : (result.icon = "partly-cloudy-night");
+            result.summary = "Partly Cloudy";
             break;
         case data.cloudCover <= 0.95:
-            newItem.icon = "cloudy";
-            newItem.summary = "Cloudy";
+            result.icon = "cloudy";
+            result.summary = "Cloudy";
             break;
         case data.cloudCover <= 1 &&
-            newItem.precipIntensity >= 0.5 &&
+            newPrecipIntensity >= 0.5 &&
             data.precipProbability >= PRECIP_NUMB:
-            newItem.icon = "overcast-rain";
-            newItem.summary = "Overcast";
+            result.icon = "overcast-rain";
+            result.summary = "Overcast";
             break;
         case data.cloudCover <= 1:
-            newItem.isDayTime
-                ? (newItem.icon = "overcast")
-                : (newItem.icon = "overcast-night");
-            newItem.summary = "Overcast";
+            isDayTime
+                ? (result.icon = "overcast")
+                : (result.icon = "overcast-night");
+            result.summary = "Overcast";
             break;
         default:
             break;
     }
-    return { ...data, ...newItem };
+    return result;
 };
 
 const cleanDataMinutely = (data: MinutelyType[]) => {
@@ -799,7 +805,7 @@ const cleanDataMinutely = (data: MinutelyType[]) => {
             newIntensity > 0 ? newIntensity.toFixed(3) : 0
         );
         newItem.probability = item.precipProbability;
-        return newItem;
+        return newItem as FixMinutelyType;
     });
 };
 

@@ -115,6 +115,18 @@ export interface CurrentlyType {
   isDayTime?: boolean;
 }
 
+export interface FixCurrentlyType {
+  timeText: string;
+  icon: string;
+  summary: string;
+  temperature: number;
+  humidity: number;
+  apparentTemperature: number;
+  uvIndex: number;
+  windSpeed: number;
+  windBearing: number;
+}
+
 export interface MinutelyType {
   time: number;
   precipIntensity: number;
@@ -150,4 +162,10 @@ export interface HourlyType {
   uvIndex: number;
   visibility: number;
   ozone: number;
+}
+
+export interface WeatherDataType {
+  currentData: FixCurrentlyType;
+  minuteData: FixMinutelyType[];
+  prediction: string;
 }
