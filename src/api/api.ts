@@ -703,7 +703,7 @@ export const getWeatherData = async (geo: string) => {
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const dayTime = data.daily.data[0].sunriseTime > data.currently.time && data.currently.time < data.daily.data[0].sunsetTime;
+        const dayTime = data.daily.data[0].sunriseTime < data.currently.time && data.currently.time < data.daily.data[0].sunsetTime;
         const currentData = cleanDataCurrently(data.currently, data.offset, dayTime);
         const minuteData = cleanDataMinutely(data.minutely.data);
         const predict = makePrediction(minuteData);
@@ -723,7 +723,7 @@ const cleanDataCurrently = (data: CurrentlyType, offset: number, dayTime: boolea
         timeText: timeText,
         icon: data.icon,
         summary: "",
-        humidity: Math.round(data.humidity*100),
+        humidity: Math.round(data.humidity * 100),
         temperature: data.temperature,
         apparentTemperature: data.apparentTemperature,
         uvIndex: data.uvIndex,
