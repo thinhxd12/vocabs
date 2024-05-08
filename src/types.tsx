@@ -125,6 +125,7 @@ export interface FixCurrentlyType {
   uvIndex: number;
   windSpeed: number;
   windBearing: number;
+  isDayTime: boolean;
 }
 
 export interface MinutelyType {

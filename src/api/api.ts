@@ -732,10 +732,10 @@ const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
         uvIndex: data.uvIndex,
         windSpeed: data.windSpeed,
         windBearing: data.windBearing,
+        isDayTime: hours > 5 && hours < 18,
     }
 
     // 95% = DEVIATION_NUMB* standard deviation occur
-    let isDayTime = hours > 5 && hours < 18;
     let newPrecipIntensity = (
         data.precipIntensity -
         DEVIATION_NUMB * data.precipIntensityError
@@ -761,13 +761,13 @@ const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
             result.summary = "Heavy Rain";
             break;
         case data.cloudCover <= 0.375:
-            isDayTime
+            result.isDayTime
                 ? (result.icon = "clear-day")
                 : (result.icon = "clear-night");
             result.summary = "Clear";
             break;
         case data.cloudCover <= 0.875:
-            isDayTime
+            result.isDayTime
                 ? (result.icon = "partly-cloudy-day")
                 : (result.icon = "partly-cloudy-night");
             result.summary = "Partly Cloudy";
@@ -783,7 +783,7 @@ const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
             result.summary = "Overcast";
             break;
         case data.cloudCover <= 1:
-            isDayTime
+            result.isDayTime
                 ? (result.icon = "overcast")
                 : (result.icon = "overcast-night");
             result.summary = "Overcast";

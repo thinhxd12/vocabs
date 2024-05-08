@@ -32,9 +32,7 @@ const Definition: Component<{
             {(item, index) => {
               return (
                 <div class="websEntry">
-                  <div class="websHead">
-                    <span class="websHeadContent">{item().partOfSpeech}</span>
-                  </div>
+                  <p class="websHead">{item().partOfSpeech}</p>
                   <Index each={item().definitions}>
                     {(m, n) => (
                       <div

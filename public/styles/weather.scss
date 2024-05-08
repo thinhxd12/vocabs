@@ -40,23 +40,40 @@
         }
 
         .weatherContentInfo {
-            &:last-child {
-                font-size: 10px
-            }
-
-            @include font('Rubik', 9px, $color-black, 400, normal, 9px);
+            @include font('Rubik', 10px, $color-black, 400, normal, 12px);
         }
 
         .weatherContentWind {
-            @include font('Rubik', 9px, $color-black, 400, normal, 9px);
-            height: 10px;
             @include flex;
-            margin-bottom: 2px;
+            height: 10px;
+
+            p {
+                @include font('Rubik', 10px, $color-black, 400, normal, 12px);
+                margin-right: 3px;
+            }
+        }
+    }
+
+    .weatherContentNight {
+
+        .weatherContentInfo,
+        .weatherContentTemp,
+        .weatherContentWind p {
+            color: $color-background-4;
+        }
+
+        svg {
+            fill: $color-background-4;
         }
     }
 
     .weatherPredict {
-        @include font('Rubik', 12px, $color-black, 600, normal, 15px);
+        @include font('Rubik', 12px, $color-black, 500, normal, 15px);
+        text-align: center;
+    }
+
+    .weatherPredictNight {
+        @include font('Rubik', 12px, $color-white, 500, normal, 15px);
         text-align: center;
     }
 }

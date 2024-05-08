@@ -13,7 +13,6 @@
         display: flex;
     }
 
-
     .definitionBody {
         .websEntry {
             background: $color-vintage-background;
@@ -22,14 +21,13 @@
 
         .websHead {
             background: $color-vintage-background;
-            padding: 9px 0 0;
-
-            .websHeadContent {
-                @include font("Poppins", 18px, $color-black, 600, normal, 16px);
-                vertical-align: baseline;
-                text-transform: uppercase;
-                padding-left: 15px;
-            }
+            @include font("Poppins", 18px, $color-black, 600, normal, 16px);
+            width: 120px;
+            margin-left: auto;
+            margin-right: 45px;
+            padding-top: 5px;
+            text-align: center;
+            text-transform: uppercase;
         }
 
         .websSense {

@@ -1,22 +1,14 @@
 import { MetaProvider, Title as TitleName, Meta } from "@solidjs/meta";
-import {
-  Component,
-  Index,
-  Show,
-  createSignal,
-  onMount,
-} from "solid-js";
+import { Component, Index, Show, createSignal, onMount } from "solid-js";
 import "/public/styles/weather.scss";
 import { getWeatherData } from "~/api/api";
-import {
-  WeatherDataType,
-} from "~/types";
-import { OcArrowup2 } from "solid-icons/oc";
+import { WeatherDataType } from "~/types";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
 import { Motion } from "solid-motionone";
 import { createStore } from "solid-js/store";
 import RSS from "~/components/rss";
+import { FaSolidArrowUpLong } from "solid-icons/fa";
 
 type WeatherGeoType = {
   name: string;
@@ -52,6 +44,7 @@ const Weather: Component<{}> = (props) => {
       uvIndex: 0,
       windSpeed: 0,
       windBearing: 0,
+      isDayTime: true,
     },
     minuteData: [],
     prediction: "",
@@ -190,7 +183,13 @@ const Weather: Component<{}> = (props) => {
           </Index>
         </select>
         <Show when={weatherData().prediction}>
-          <div class="weatherContent">
+          <div
+            class={
+              weatherData().currentData.isDayTime
+                ? "weatherContent"
+                : "weatherContent weatherContentNight"
+            }
+          >
             <img
               class="weatherImg"
               src={`/images/darksky/icons/${
@@ -213,11 +212,11 @@ const Weather: Component<{}> = (props) => {
                 UV {weatherData().currentData.uvIndex}
               </p>
               <div class="weatherContentWind">
-                <span>
+                <p>
                   Wind {Math.round(weatherData().currentData.windSpeed)}
                   km/h
-                </span>
-                <OcArrowup2
+                </p>
+                <FaSolidArrowUpLong
                   size={12}
                   style={{
                     transform: `rotate(${
@@ -241,7 +240,15 @@ const Weather: Component<{}> = (props) => {
               height={180}
             />
           </div>
-          <p class="weatherPredict">{weatherData().prediction}</p>
+          <p
+            class={
+              weatherData().currentData.isDayTime
+                ? "weatherPredict"
+                : "weatherPredictNight"
+            }
+          >
+            {weatherData().prediction}
+          </p>
           <RSS />
         </Show>
       </Motion.div>
