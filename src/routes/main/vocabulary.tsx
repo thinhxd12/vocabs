@@ -244,7 +244,6 @@ const Vocabulary: Component<{}> = () => {
       wordListType() === 1 ? todayData().time1 : todayData().time2;
     if (progress < 9) {
       startCountdown();
-      handleSetDailyWord(wordListType());
     }
   };
 
@@ -352,6 +351,7 @@ const Vocabulary: Component<{}> = () => {
         if (prev === 1) {
           clearInterval(intervalCountdown);
           setIsRunning(false);
+          handleSetDailyWord(wordListType());
           showDesktopNotification();
           audioRef.play();
           return 6;
