@@ -27,6 +27,10 @@
         }
     }
 
+    .weatherGeosNight {
+        color: $color-background-4;
+    }
+
     .weatherContent {
         width: 100%;
         @include flex-center;
@@ -46,6 +50,7 @@
         .weatherContentWind {
             @include flex;
             height: 10px;
+            margin: 2px 0;
 
             p {
                 @include font('Rubik', 10px, $color-black, 400, normal, 12px);

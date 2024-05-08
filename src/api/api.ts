@@ -672,8 +672,6 @@ export const deleteSmallestWordNumberFromRange = async (time: string) => {
 }
 //archiver ------------------------------------ end
 
-
-
 //get 50 word
 export const getVocabularyFromRange = action(async (start: number, end: number) => {
     "use server";
@@ -701,11 +699,12 @@ export const getWeatherData = async (geo: string) => {
     "use server";
     const WEATHER_KEY = "gnunh5vxMIu0kLZG";
     const time = Math.round(Date.now() / 1000);
-    const url = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo},${time}?exclude=daily&units=ca`
+    const url = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo},${time}?&units=ca`
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const currentData = cleanDataCurrently(data.currently, data.offset);
+        const dayTime = data.daily.data[0].sunriseTime > data.currently.time && data.currently.time < data.daily.data[0].sunsetTime;
+        const currentData = cleanDataCurrently(data.currently, data.offset, dayTime);
         const minuteData = cleanDataMinutely(data.minutely.data);
         const predict = makePrediction(minuteData);
         return { currentData: currentData, minuteData: minuteData, prediction: predict } as WeatherDataType;
@@ -714,25 +713,23 @@ export const getWeatherData = async (geo: string) => {
     }
 };
 
-const cleanDataCurrently = (data: CurrentlyType, offset: number) => {
+const cleanDataCurrently = (data: CurrentlyType, offset: number, dayTime: boolean) => {
     "use server";
     const time = new Date(data.time * 1000);
     time.setHours(time.getHours() + offset);
-
     const timeText = format(time, "h:mm a");
-    const hours = Number(format(time, "HH"));
 
     let result: FixCurrentlyType = {
         timeText: timeText,
         icon: data.icon,
         summary: "",
-        humidity: data.humidity,
+        humidity: Math.round(data.humidity*100),
         temperature: data.temperature,
         apparentTemperature: data.apparentTemperature,
         uvIndex: data.uvIndex,
         windSpeed: data.windSpeed,
         windBearing: data.windBearing,
-        isDayTime: hours > 5 && hours < 18,
+        isDayTime: dayTime,
     }
 
     // 95% = DEVIATION_NUMB* standard deviation occur

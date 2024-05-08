@@ -6,7 +6,6 @@ import { WeatherDataType } from "~/types";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
 import { Motion } from "solid-motionone";
-import { createStore } from "solid-js/store";
 import RSS from "~/components/rss";
 import { FaSolidArrowUpLong } from "solid-icons/fa";
 
@@ -18,7 +17,6 @@ type WeatherGeoType = {
 const Weather: Component<{}> = (props) => {
   const WEATHER_GEOS: WeatherGeoType[] = [
     { name: "Thu Thua", geo: "10.6011534,106.4018563" },
-    { name: "Tân An", geo: "10.5364717,106.4099039" },
     {
       name: "Roma",
       geo: "41.8933203,12.4829321",
@@ -28,8 +26,12 @@ const Weather: Component<{}> = (props) => {
       geo: "10.0364216,105.7875219",
     },
     {
-      name: "Pinhais",
-      geo: "-25.4443488,-49.1900307",
+      name: "Tokyo",
+      geo: "35.6821936,139.762221",
+    },
+    {
+      name: "Garden Grove",
+      geo: "33.7746292,-117.9463717",
     },
   ];
 
@@ -52,16 +54,47 @@ const Weather: Component<{}> = (props) => {
   const [weatherData, setweatherData] =
     createSignal<WeatherDataType>(mockWeatherData);
 
-  const [chartData, setChartData] = createStore();
-
   const handleGetWeatherData = async (geo: string) => {
     const data = await getWeatherData(geo);
-    if (data) setweatherData(data);
+    if (data) {
+      setweatherData(data);
+      setChartData({
+        labels: data.minuteData.map((item) => item.diffTime),
+        datasets: [
+          {
+            label: "",
+            data: data.minuteData.map((item) => item.intensity),
+            borderColor: "#009bff",
+            backgroundColor: "#52a0c1bf",
+            yAxisID: "y",
+            fill: true,
+            tension: 0.1,
+            pointRadius: 0,
+            borderWidth: 1,
+          },
+          {
+            label: "",
+            data: data.minuteData.map((item) => item.probability),
+            borderColor: "#f90000",
+            yAxisID: "y1",
+            fill: false,
+            tension: 0.3,
+            pointRadius: 0,
+            borderWidth: 1.5,
+          },
+        ],
+      });
+    }
   };
 
   onMount(async () => {
     handleGetWeatherData(WEATHER_GEOS[0].geo);
     Chart.register(Title, Tooltip, Legend, Colors, Filler);
+  });
+
+  const [chartData, setChartData] = createSignal({
+    labels: [0],
+    datasets: [{}],
   });
 
   const chartOptions = {
@@ -173,7 +206,11 @@ const Weather: Component<{}> = (props) => {
         transition={{ duration: 0.6 }}
       >
         <select
-          class="weatherGeos"
+          class={
+            weatherData().currentData.isDayTime
+              ? "weatherGeos"
+              : "weatherGeos weatherGeosNight"
+          }
           onchange={(e) => handleGetWeatherData(e.currentTarget.value)}
         >
           <Index each={WEATHER_GEOS}>
@@ -206,7 +243,7 @@ const Weather: Component<{}> = (props) => {
                 °C
               </p>
               <p class="weatherContentInfo">
-                Humidity {weatherData().currentData.humidity * 100} %
+                Humidity {weatherData().currentData.humidity} %
               </p>
               <p class="weatherContentInfo">
                 UV {weatherData().currentData.uvIndex}
@@ -234,7 +271,7 @@ const Weather: Component<{}> = (props) => {
           </div>
           <div class="weatherChart">
             <Line
-              data={chartData}
+              data={chartData()}
               options={chartOptions}
               width={360}
               height={180}
