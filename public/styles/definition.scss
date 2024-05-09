@@ -21,11 +21,11 @@
 
         .websHead {
             background: $color-vintage-background;
-            @include font("Poppins", 18px, $color-black, 600, normal, 16px);
+            @include font("Poppins", 18px, $color-black, 600, normal, 12px);
             width: 120px;
             margin-left: auto;
             margin-right: 45px;
-            padding-top: 5px;
+            padding-top: 8px;
             text-align: center;
             text-transform: uppercase;
         }
@@ -38,7 +38,7 @@
                 background: $color-black;
                 position: initial;
                 width: 100%;
-                padding: 0px 3px 1px 6px;
+                padding: 3px 3px 1px 6px;
             }
         }
 
@@ -72,40 +72,28 @@
                 bottom: 0;
                 left: 0;
                 z-index: 5;
-                padding: 1px 3px 2px 6px;
+                padding: 2px 3px 1px 6px;
                 background-color: rgba(0, 0, 0, 0.54);
             }
         }
 
         .websDef {
-            @include font('NYTImperial', 12px, $color-calendar-bg, 400, normal, 16px);
+            @include font('Poppins', 11px, $color-calendar-bg, 400, normal, 16px);
         }
 
         .websDefUp,
         .websDef::first-letter {
-            @include font('NYTCheltenham', 12px, $color-white, 700, normal, 16px);
+            @include font('Poppins', 12px, $color-white, 600, normal, 16px);
             text-transform: uppercase;
         }
 
         .websX {
-            @include font('Poppins', 12px, $color-black, 400, normal, 16px);
+            @include font('NYTImperial', 12px, $color-black, 400, normal, 18px);
 
             position: relative;
             text-indent: 24px;
-            padding: 3px 3px 0 6px;
+            padding: 0px 3px 0 6px;
             background: $color-vintage-background;
-
-            &::before {
-                content: '';
-                display: block;
-                position: absolute;
-                left: 15px;
-                top: 4px;
-                width: 12px;
-                height: 12px;
-                background: url('/images/main/clover1.png');
-                background-size: cover;
-            }
 
             b {
                 font-weight: 600;
@@ -118,12 +106,12 @@
             padding: 1px 0 0 6px;
 
             b {
-                @include font('Poppins', 12px, $color-black, 600, normal, 15px);
+                @include font('Poppins', 12px, $color-black, 600, normal, 16px);
                 text-transform: uppercase;
             }
 
             small {
-                @include font('Poppins', 9px, #282828, 400, normal, 15px);
+                @include font('Poppins', 10px, #282828, 400, normal, 16px);
                 color: #727272;
                 font-weight: 300;
                 text-transform: lowercase;
@@ -139,16 +127,16 @@
 
             .websAuthor {
                 font-variant: small-caps;
-                @include font('Poppins', 13px, $color-black, 600, normal, 16px);
+                @include font('NYTImperial', 13px, $color-black, 600, normal, 16px);
             }
 
             .websTitle {
                 text-transform: uppercase;
-                @include font('Poppins', 13px, $color-black, 600, normal, 16px);
+                @include font('NYTImperial', 13px, $color-black, 600, normal, 16px);
             }
 
             .websYear {
-                @include font('Poppins', 12px, $color-black, 600, normal, 16px);
+                @include font('NYTImperial', 12px, $color-black, 600, normal, 16px);
             }
         }
     }

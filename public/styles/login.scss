@@ -70,7 +70,7 @@
         }
 
         .loginAlert {
-            @include font("SF-Display", 12px, $color-red-2, 400, normal, 21px);
+            @include font("basier", 12px, $color-red-2, 400, normal, 21px);
             text-align: center;
             margin-top: 6px;
         }

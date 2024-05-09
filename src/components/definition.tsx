@@ -57,7 +57,7 @@ const Definition: Component<{
                                   x().similar
                                     ? x().sense +
                                       `<span class="websDefUp">${
-                                        " " + x().similar
+                                        " : " + x().similar
                                       }</span>`
                                     : x().sense
                                 }
