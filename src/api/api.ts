@@ -235,134 +235,186 @@ export const getTextDataWebster = async (text: string) => {
         result.word = getElText(doc, "h1.hword", text);
         result.phonetics = getElText(doc, ".prons-entries-list-inline a", "");
 
-        const exampleContent = doc.querySelector(".on-web-container");
-        if (exampleContent) {
-            const headers = exampleContent.querySelectorAll(
-                ".function-label-header"
-            );
-            if (headers.length > 0) {
-                headers.forEach((a, b) => {
-                    let item = {
-                        partOfSpeech: "",
-                        definitions: [],
-                        example: [
-                            { sentence: "", author: "", title: "", year: "" },
-                        ] as ExampleType[],
-                        synonyms: "",
-                    } as VocabularyDefinitionType;
+        const firstHead = getElText(doc, ".entry-header-content .parts-of-speech", "");
+        firstHead.split(" ").shift();
 
-                    item.partOfSpeech = a.text.toLowerCase();
-                    const exa = a.nextElementSibling;
-                    let quote = getElText(exa, ".t", "");
+        //find examples
+        let examplesArray = [] as { partOfSpeech: string; example: ExampleType[] }[];
+        const examplesContent = doc.querySelector(".on-web-container");
+        if (examplesContent) {
+            const header = getElText(examplesContent, ".function-label-header", "");
+            if (header) {
+                examplesContent.querySelectorAll(".function-label-header").forEach((element, index) => {
+                    let resultItem = {
+                        partOfSpeech: element.textContent.toLowerCase().split(" ").shift() || "",
+                        example: [] as ExampleType[],
+                    };
+                    const example = element.nextElementSibling;
+                    let exampleItem = {
+                        sentence: "",
+                        author: "",
+                        title: "",
+                        year: "",
+                    } as ExampleType;
+                    let quote = getElText(example, ".t", "");
                     if (quote !== "") {
                         quote = quote.replace(regText, `<b>$1</b>`);
                     }
-                    item.example[0].sentence = quote !== "" ? quote : "";
-                    let cred = getElText(exa, ".auth", "").replace("—", "").split(", ");
-                    item.example[0].author = cred[cred.length - 3]
+                    exampleItem.sentence = quote !== "" ? quote : "";
+                    let cred = getElText(example, ".auth", "").replace("—", "").split(", ");
+                    exampleItem.author = cred[cred.length - 3]
                         ? cred[cred.length - 3]
                         : "";
-                    item.example[0].title = cred[cred.length - 2]
+                    exampleItem.title = cred[cred.length - 2]
                         ? cred[cred.length - 2]
                         : "";
-                    item.example[0].year = cred[cred.length - 1]
+                    exampleItem.year = cred[cred.length - 1]
                         ? cred[cred.length - 1]
                         : "";
-                    result.definitions.push(item);
-                });
-            } else {
-                let item = {
+                    resultItem.example.push(exampleItem);
+                    examplesArray.push(resultItem);
+                })
+            }
+            else {
+                let resultItem = {
                     partOfSpeech: "",
-                    definitions: [],
-                    example: [
-                        { sentence: "", author: "", title: "", year: "" },
-                    ] as ExampleType[],
-                    synonyms: "",
-                } as VocabularyDefinitionType;
-                const head = getElText(
-                    doc,
-                    ".entry-word-section-container .parts-of-speech",
-                    ""
-                );
-                item.partOfSpeech = head.toLowerCase().split(" ").shift();
-                const exa = exampleContent.querySelector(".sub-content-thread");
-                let quote = getElText(exa, ".t", "");
+                    example: [] as ExampleType[],
+                };
+                resultItem.partOfSpeech = firstHead;
+
+                const example = examplesContent.querySelector(".sub-content-thread");
+                let exampleItem = {
+                    sentence: "",
+                    author: "",
+                    title: "",
+                    year: "",
+                } as ExampleType;
+                let quote = getElText(example, ".t", "");
                 if (quote !== "") {
                     quote = quote.replace(regText, `<b>$1</b>`);
                 }
-                item.example[0].sentence = quote !== "" ? quote : "";
-                let cred = getElText(exa, ".auth", "").replace("—", "").split(", ");
-                item.example[0].author = cred[cred.length - 3]
+                exampleItem.sentence = quote !== "" ? quote : "";
+                let cred = getElText(example, ".auth", "").replace("—", "").split(", ");
+                exampleItem.author = cred[cred.length - 3]
                     ? cred[cred.length - 3]
                     : "";
-                item.example[0].title = cred[cred.length - 2]
+                exampleItem.title = cred[cred.length - 2]
                     ? cred[cred.length - 2]
                     : "";
-                item.example[0].year = cred[cred.length - 1]
+                exampleItem.year = cred[cred.length - 1]
                     ? cred[cred.length - 1]
                     : "";
-                result.definitions.push(item);
+                resultItem.example.push(exampleItem);
+                examplesArray.push(resultItem);
             }
         }
-        const entryHeader = doc.querySelectorAll(".entry-word-section-container");
-        entryHeader.forEach((item, index) => {
-            let itemDef = {
-                definition: [] as { sense: string; similar: string }[],
-                image: "",
-            };
 
-            const head = getElText(
-                item,
-                ".entry-header-content .parts-of-speech",
-                ""
-            )
-                .split(" ")
-                .shift();
-
-            //find only First Definition
-            const firstItem = item.querySelector(".vg-sseq-entry-item");
-
-            if (firstItem) {
-                firstItem.querySelectorAll(".sb-entry .sense").forEach((m, n) => {
-                    let letter = getElText(m, ".letter", "");
-                    let dtText = getElText(m, ".dtText", "");
-                    let upText = /\s\:\s(.+)/g.exec(dtText);
-                    dtText = dtText.replace(/\s\:\s(.+)/g, ``);
-                    itemDef.definition.push({
-                        sense: letter !== "" ? letter + " " + dtText : "&emsp;" + dtText,
-                        similar: upText ? upText[1] : "",
-                    });
-                });
-            }
-
-            result.definitions.map((item) => {
-                if (item.partOfSpeech === head) {
-                    item.definitions.push(itemDef);
-                }
-            });
-
-            if (index === 0) {
-                const syn = doc.querySelector(".synonyms_list");
-                let synDom = "";
-                if (syn) {
-                    let listItems = syn.querySelectorAll("ul li");
+        //find synonyms
+        let synonymsArray = [] as { partOfSpeech: string; synonyms: string }[];
+        const synonymsContent = doc.querySelector("#synonyms");
+        if (synonymsContent) {
+            const header = getElText(synonymsContent, ".function-label", "");
+            if (header) {
+                synonymsContent.querySelectorAll(".function-label").forEach((element, index) => {
+                    let resultItem = {
+                        partOfSpeech: element.textContent.toLowerCase().split(" ").shift() || "",
+                        synonyms: "",
+                    }
+                    const synItem = synonymsContent.querySelectorAll("ul")[index];
+                    let listItems = synItem.querySelectorAll("li");
                     for (let i = 0; i < 3; i++) {
                         if (listItems[i]) {
-                            synDom +=
+                            resultItem.synonyms +=
                                 i < 2
                                     ? listItems[i].textContent + ", "
                                     : listItems[i].textContent;
                         }
                     }
-                    result.definitions[0].synonyms = synDom;
-                }
+                    synonymsArray.push(resultItem);
+                });
             }
+            else {
+                let resultItem = {
+                    partOfSpeech: "",
+                    synonyms: "",
+                }
+                resultItem.partOfSpeech = firstHead;
+                const listItems = synonymsContent.querySelectorAll("ul li");
+                for (let i = 0; i < 3; i++) {
+                    if (listItems[i]) {
+                        resultItem.synonyms +=
+                            i < 2
+                                ? listItems[i].textContent + ", "
+                                : listItems[i].textContent;
+                    }
+                }
+                synonymsArray.push(resultItem);
+            }
+        }
+
+        result.definitions = handleGetDefinitions(data).map((item: any) => {
+            return {
+                partOfSpeech: item.partOfSpeech,
+                definitions: item.definitions,
+                synonyms: synonymsArray.find(ele => ele.partOfSpeech === item.partOfSpeech)?.synonyms || "",
+                example: examplesArray.find(ele => ele.partOfSpeech === item.partOfSpeech)?.example || []
+            } as VocabularyDefinitionType
         });
+
         return result;
     } catch (error) {
         console.error(error);
     }
 };
+
+const handleGetDefinitions = (data: string) => {
+    const doc = parse(data);
+    const result = [] as any;
+    let resultFinal = [] as any;
+
+    const entryHeader = doc.querySelectorAll(".entry-word-section-container");
+    entryHeader.forEach((item, index) => {
+        let definitionItem = {
+            definitions: [{
+                definition: [] as { sense: string; similar: string }[],
+                image: "",
+            }],
+            partOfSpeech: "",
+        }
+
+        const head = getElText(item, ".entry-header-content .parts-of-speech", "");
+        definitionItem.partOfSpeech = head.split(" ").shift();
+
+        //find only First Definition
+        const firstItem = item.querySelector(".vg-sseq-entry-item");
+
+        if (firstItem) {
+            firstItem.querySelectorAll(".sb-entry .sense").forEach((m, n) => {
+                let letter = getElText(m, ".letter", "");
+                let dtText = getElText(m, ".dtText", "");
+                let upText = getElText(m, ".text-uppercase", "");
+                dtText = dtText.replace(upText, "");
+                definitionItem.definitions[0].definition.push({
+                    sense: letter !== "" ? letter + " " + dtText : "&emsp;" + dtText,
+                    similar: upText
+                });
+            });
+        }
+        result.push(definitionItem)
+    });
+    resultFinal = result.reduce((acc: any, d: any) => {
+        const found = acc.find((a: any) => a.partOfSpeech === d.partOfSpeech);
+        if (!found) {
+            acc.push(d);
+        }
+        else {
+            found.definitions.push(d.definitions[0])
+        }
+        return acc;
+    }, []);
+    return resultFinal;
+}
+
 
 //find sound from oed
 export const getOedSoundURL = async (text: string) => {

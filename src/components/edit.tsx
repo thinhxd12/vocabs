@@ -118,7 +118,7 @@ const Edit: Component<{
     let defArr = [];
     def1 && defArr.push({ sense: def1, similar: def1up });
     def2 && defArr.push({ sense: def2, similar: def2up });
-    def3 && defArr.push({ sense: def3, similar: def3up });
+    def3 && defArr.push({ sense: "&emsp;" + def3, similar: def3up });
 
     let resultObj: VocabularyDefinitionType = {
       example: [
