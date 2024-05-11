@@ -18,14 +18,12 @@ interface ContextProps {
   setBottomIndex: Setter<number>;
   bottomActive: Accessor<boolean>;
   setBottomActive: Setter<boolean>;
-  bottomLooping: Accessor<boolean>;
-  setBottomLooping: Setter<boolean>;
   showMenubar: Accessor<boolean>;
   setShowMenubar: Setter<boolean>;
   counter: Accessor<number>;
   setCounter: Setter<number>;
-  wordListType: Accessor<1 | 2>;
-  setWordListType: Setter<1 | 2>;
+  wordListType: Accessor<0 | 1 | 2>;
+  setWordListType: Setter<0 | 1 | 2>;
   wordList: Accessor<VocabularyType[]>;
   setWordList: Setter<VocabularyType[]>;
   todayData: Accessor<ScheduleType>;
@@ -38,9 +36,8 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
   const [bottomIndex, setBottomIndex] = createSignal<number>(0);
   const [showMenubar, setShowMenubar] = createSignal(false);
   const [bottomActive, setBottomActive] = createSignal(false);
-  const [bottomLooping, setBottomLooping] = createSignal(false);
   const [counter, setCounter] = createSignal<number>(0);
-  const [wordListType, setWordListType] = createSignal<1 | 2>(1);
+  const [wordListType, setWordListType] = createSignal<0 | 1 | 2>(0);
   const [wordList, setWordList] = createSignal<VocabularyType[]>([]);
   const [totalMemories, setTotalMemories] = createSignal<number>(0);
   const [todayData, setTodayData] = createSignal<ScheduleType>({
@@ -67,8 +64,6 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
         setBottomIndex,
         bottomActive,
         setBottomActive,
-        bottomLooping,
-        setBottomLooping,
         counter,
         setCounter,
         wordList,

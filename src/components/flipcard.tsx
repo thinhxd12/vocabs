@@ -75,7 +75,7 @@ const FlipCard: Component<{
 
   return (
     <>
-      <audio src={audioSource()} hidden autoplay></audio>
+      <audio src={audioSource()} autoplay hidden></audio>
       <div class="flipCardLeftContent">
         <div class="numberFlipContainer">
           <div class="numberFlipBackground"></div>

@@ -7,15 +7,12 @@ import { format } from "date-fns";
 
 const Bottom: Component<{}> = () => {
   const {
-    bottomIndex,
     bottomActive,
     setBottomActive,
-    bottomLooping,
     totalMemories,
     showMenubar,
     setShowMenubar,
     todayData,
-    counter,
     wordList,
   } = useGlobalContext();
 
@@ -49,21 +46,25 @@ const Bottom: Component<{}> = () => {
         activeClass="mainFooterBtn--active"
         class="mainFooterBtn mainFooterBtn--1"
       >
-        Übermensch
+        <small>【God from the machine】</small>
+        <span>Deus ex machina</span>
       </A>
       <A
         href="/main/calendar"
         activeClass="mainFooterBtn--active"
         class="mainFooterBtn mainFooterBtn--2"
       >
-        Amor fati
+        <small>【Money does not stink】</small>
+        <span>Pecunia non olet</span>
       </A>
+
       <button
         class="mainFooterCenterBtn"
         onClick={() => setShowMenubar(!showMenubar())}
       >
-        <Show when={totalMemories()} fallback={229}>
-          {totalMemories()}
+        <Show when={totalMemories()}>
+          <span>{Math.floor(totalMemories() / 100)}</span>
+          <small>{totalMemories() % 100}</small>
         </Show>
       </button>
 
@@ -72,17 +73,43 @@ const Bottom: Component<{}> = () => {
         activeClass="mainFooterBtn--active"
         class="mainFooterBtn mainFooterBtn--3"
       >
-        Cealus
+        <small>【Danger is sweet】</small>
+        <span>Dulce periculum</span>
       </A>
 
-      <div
-        class="mainFooterCornerBtn"
-        onClick={() => setBottomActive(!bottomActive())}
+      <Show
+        when={wordList().length > 0}
+        fallback={
+          <div class="mainFooterBtn mainFooterBtn--4">
+            <small>【Remember you have todie】</small>
+            <span>Memento mori</span>
+          </div>
+        }
       >
-        <Presence>
-          <Show
-            when={bottomActive()}
-            fallback={
+        <div
+          class="mainFooterCornerBtn"
+          onClick={() => setBottomActive(!bottomActive())}
+        >
+          <Presence>
+            <Show
+              when={bottomActive()}
+              fallback={
+                <Motion.img
+                  initial={{
+                    opacity: 0,
+                  }}
+                  animate={{
+                    opacity: 1,
+                  }}
+                  exit={{
+                    opacity: 0,
+                  }}
+                  transition={{ duration: 0.3, easing: "ease" }}
+                  src="/images/main/sunrise.jpg"
+                  class="mainFooterCornerBtnImage"
+                />
+              }
+            >
               <Motion.img
                 initial={{
                   opacity: 0,
@@ -93,38 +120,14 @@ const Bottom: Component<{}> = () => {
                 exit={{
                   opacity: 0,
                 }}
-                transition={{ duration: 0.6, easing: "ease" }}
-                src="/images/main/sunrise.jpg"
+                transition={{ duration: 0.3, easing: "ease" }}
+                src="/images/main/sunset.jpg"
                 class="mainFooterCornerBtnImage"
               />
-            }
-          >
-            <Motion.img
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              transition={{ duration: 0.6, easing: "ease" }}
-              src="/images/main/sunset.jpg"
-              class="mainFooterCornerBtnImage"
-            />
-          </Show>
-        </Presence>
-        <div
-          class={
-            bottomLooping() ? "inputWordRow inputWordRowActive" : "inputWordRow"
-          }
-        >
-          <Show when={wordList().length > 0}>
-            {bottomIndex() + counter() - 1}
-          </Show>
+            </Show>
+          </Presence>
         </div>
-      </div>
+      </Show>
     </div>
   );
 };

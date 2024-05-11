@@ -222,7 +222,6 @@ const Vocabulary: Component<{}> = () => {
   const startAutoplay = async () => {
     const newProgress =
       wordListType() === 1 ? todayData().time1 + 1 : todayData().time2 + 1;
-    setBottomLooping(true);
     if (counter() === 0) {
       await submitTodayProgressAction(wordListType(), newProgress);
       handleGetCalendarTodayData();
@@ -244,6 +243,9 @@ const Vocabulary: Component<{}> = () => {
       wordListType() === 1 ? todayData().time1 : todayData().time2;
     if (progress < 9) {
       startCountdown();
+    } else {
+      setWordList([]);
+      setWordListType(0);
     }
   };
 
@@ -256,17 +258,13 @@ const Vocabulary: Component<{}> = () => {
     //wordlist index
     setCounter(0);
     //bottom button input background
-    setBottomLooping(false);
     setBottomActive(false);
   };
 
   const {
-    bottomIndex,
     setBottomIndex,
     bottomActive,
     setBottomActive,
-    bottomLooping,
-    setBottomLooping,
     counter,
     setCounter,
     wordList,
@@ -550,7 +548,7 @@ const Vocabulary: Component<{}> = () => {
                 <div class="menubarContent">
                   <button
                     class={
-                      todayData().time1 > 0
+                      wordListType() === 1
                         ? "menuBtn menuBtn--wordlist menuBtn--active"
                         : "menuBtn menuBtn--wordlist"
                     }
@@ -564,7 +562,7 @@ const Vocabulary: Component<{}> = () => {
                   </button>
                   <button
                     class={
-                      todayData().time2 > 0
+                      wordListType() === 2
                         ? "menuBtn menuBtn--wordlist menuBtn--active"
                         : "menuBtn menuBtn--wordlist"
                     }
