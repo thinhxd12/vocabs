@@ -750,7 +750,7 @@ export const getWeatherData = async (geo: string) => {
     "use server";
     const WEATHER_KEY = "gnunh5vxMIu0kLZG";
     const time = Math.round(Date.now() / 1000);
-    const url = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo},${time}?&units=ca`
+    const url = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo}?units=ca`
     try {
         const response = await fetch(url);
         const data = await response.json();

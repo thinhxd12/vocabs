@@ -46,7 +46,7 @@ const Bottom: Component<{}> = () => {
         activeClass="mainFooterBtn--active"
         class="mainFooterBtn mainFooterBtn--1"
       >
-        <small>【God from the machine】</small>
+        <small>God from the machine</small>
         <span>Deus ex machina</span>
       </A>
       <A
@@ -54,7 +54,7 @@ const Bottom: Component<{}> = () => {
         activeClass="mainFooterBtn--active"
         class="mainFooterBtn mainFooterBtn--2"
       >
-        <small>【Money does not stink】</small>
+        <small>Money does not stink</small>
         <span>Pecunia non olet</span>
       </A>
 
@@ -73,7 +73,7 @@ const Bottom: Component<{}> = () => {
         activeClass="mainFooterBtn--active"
         class="mainFooterBtn mainFooterBtn--3"
       >
-        <small>【Danger is sweet】</small>
+        <small>Danger is sweet</small>
         <span>Dulce periculum</span>
       </A>
 
@@ -81,7 +81,7 @@ const Bottom: Component<{}> = () => {
         when={wordList().length > 0}
         fallback={
           <div class="mainFooterBtn mainFooterBtn--4">
-            <small>【Remember you have todie】</small>
+            <small>Remember you have todie</small>
             <span>Memento mori</span>
           </div>
         }

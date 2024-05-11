@@ -16,7 +16,7 @@ type WeatherGeoType = {
 
 const Weather: Component<{}> = (props) => {
   const WEATHER_GEOS: WeatherGeoType[] = [
-    { name: "Thu Thua", geo: "10.6011534,106.4018563" },
+    { name: "Thu Thua", geo: "10.588468,106.400650" },
     {
       name: "Roma",
       geo: "41.8933203,12.4829321",
