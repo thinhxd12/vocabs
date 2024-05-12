@@ -373,7 +373,7 @@ const About: Component<{}> = (props) => {
                   >
                     <input
                       name="monthId"
-                      value={historyData()!.pop()!.id}
+                      value={historyData()!.pop()!.created_at}
                       style={{ display: "none" }}
                     />
                     <div class="calendarDropdownFormContent">

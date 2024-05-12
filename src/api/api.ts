@@ -116,7 +116,7 @@ export const getCalendarTodayData = async (date: string) => {
 export const getCalendarHistoryData = action(async () => {
     "use server";
     try {
-        const { data, error } = await supabase.from(mapTables.history).select().order("id");
+        const { data, error } = await supabase.from(mapTables.history).select().order('created_at');
         return data as HistoryType[];
     } catch (error) {
         console.error(error);
@@ -619,7 +619,7 @@ export const submitNewHistory = action(async (formData: FormData) => {
                 index: indexWeek, from_date: fromDate, to_date: toDate
             }
         })
-        .eq('id', monthId);
+        .eq('created_at', monthId);
     if (error) return { message: error.message };
     throw redirect("/main/vocabulary");
 }, "submitNewHistoryMonth");

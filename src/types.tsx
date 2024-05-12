@@ -60,7 +60,7 @@ export interface CalendarScheduleType {
 }
 
 export interface HistoryType {
-  id: number;
+  created_at: string;
   week1: HistoryItemContentType;
   week2: HistoryItemContentType;
   week3: HistoryItemContentType;
