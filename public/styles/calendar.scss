@@ -319,7 +319,7 @@
         background-size: cover;
         background-position: left 0 bottom 27%;
         padding: 6px;
-        height: calc(100% - 495px);
+        height: calc(100vh - 529px);
         min-height: 96px;
         @include font("NYTCheltenham", 12px, $color-black, 700, normal, 14px);
         cursor: default;

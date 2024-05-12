@@ -116,7 +116,7 @@ export const getCalendarTodayData = async (date: string) => {
 export const getCalendarHistoryData = action(async () => {
     "use server";
     try {
-        const { data, error } = await supabase.from(mapTables.history).select();
+        const { data, error } = await supabase.from(mapTables.history).select().order("id");
         return data as HistoryType[];
     } catch (error) {
         console.error(error);
@@ -622,7 +622,7 @@ export const submitNewHistory = action(async (formData: FormData) => {
         .eq('id', monthId);
     if (error) return { message: error.message };
     throw redirect("/main/vocabulary");
-}, "newHistory");
+}, "submitNewHistoryMonth");
 
 export const submitNewWeek = action(async (formData: FormData) => {
     "use server";
@@ -650,15 +650,16 @@ export const submitNewWeek = action(async (formData: FormData) => {
 export const submitNewMonth = action(async (formData: FormData) => {
     "use server";
     const startMonthIndex = Number(formData.get("startMonthIndex"));
+    const insertData = {
+        week1: { index: startMonthIndex, from_date: "", to_date: "" },
+        week2: { index: startMonthIndex + 200, from_date: "", to_date: "" },
+        week3: { index: startMonthIndex + 400, from_date: "", to_date: "" },
+        week4: { index: startMonthIndex + 600, from_date: "", to_date: "" },
+        week5: { index: startMonthIndex + 800, from_date: "", to_date: "" },
+    }
     let { error } = await supabase
         .from(mapTables.history)
-        .insert([{
-            week1: { index: startMonthIndex, from_date: "", to_date: "" },
-            week2: { index: startMonthIndex + 200, from_date: "", to_date: "" },
-            week3: { index: startMonthIndex + 400, from_date: "", to_date: "" },
-            week4: { index: startMonthIndex + 600, from_date: "", to_date: "" },
-            week5: { index: startMonthIndex + 800, from_date: "", to_date: "" },
-        }])
+        .insert([insertData])
     if (error) console.error(error);
     throw redirect("/main/vocabulary");
 }, "startMonth");

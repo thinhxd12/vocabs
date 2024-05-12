@@ -81,7 +81,7 @@ const Bottom: Component<{}> = () => {
         when={wordList().length > 0}
         fallback={
           <div class="mainFooterBtn mainFooterBtn--4">
-            <small>Remember you have todie</small>
+            <small>Remember you have to die</small>
             <span>Memento mori</span>
           </div>
         }
