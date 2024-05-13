@@ -123,7 +123,7 @@ const About: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <Title>Amor fati</Title>
+      <Title>schedule</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <Motion.div

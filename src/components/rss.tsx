@@ -2,10 +2,7 @@ import { Component, Index, Show, createSignal } from "solid-js";
 import "/public/styles/rss.scss";
 import { DEFAULT_CORS_PROXY } from "~/utils";
 import { FeedEntry, extract } from "@extractus/feed-extractor";
-import { OcArrowup2 } from "solid-icons/oc";
 import { differenceInDays, differenceInHours } from "date-fns";
-
-let divRef: HTMLDivElement;
 
 const RSS: Component<{}> = (props) => {
   const rssSource = [
@@ -144,12 +141,9 @@ const RSS: Component<{}> = (props) => {
       </div>
     </div>
   );
-  const scrollToTop = () => {
-    divRef.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
 
   return (
-    <div class="rss" ref={divRef}>
+    <div class="rss">
       <div class="rssTop">
         <Index each={rssSource}>
           {(data, index) => {
@@ -176,9 +170,6 @@ const RSS: Component<{}> = (props) => {
             </Index>
           )}
         </div>
-        <button onClick={scrollToTop} class="rssToTopBtn">
-          <OcArrowup2 size={12} />
-        </button>
       </Show>
     </div>
   );

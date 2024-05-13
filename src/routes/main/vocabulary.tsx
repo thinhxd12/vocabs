@@ -388,7 +388,7 @@ const Vocabulary: Component<{}> = () => {
 
   return (
     <MetaProvider>
-      <Title>{currentText()?.word || "Übermensch"}</Title>
+      <Title>{currentText()?.word || "main"}</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio

@@ -10,16 +10,37 @@
     outline: none;
     background-size: cover;
     background-position: top left;
-    animation: moveBg 300s linear infinite;
+    animation: moveBg 450s linear infinite;
 
     &::-webkit-scrollbar {
         display: none;
+    }
+
+    .weatherContentNight {
+
+        .weatherGeos,
+        .weatherPredict {
+            color: $color-background-4;
+        }
+
+        .weatherContentMain {
+
+            p,
+            .weatherContentWind p {
+                color: $color-background-4;
+            }
+
+            svg {
+                fill: $color-background-4;
+            }
+        }
     }
 
     .weatherGeos {
         background: none;
         outline: none;
         border: none;
+        height: 20px;
         @include font('Rubik', 12px, $color-black, 400, normal, 12px);
 
         option {
@@ -27,11 +48,7 @@
         }
     }
 
-    .weatherGeosNight {
-        color: $color-background-4;
-    }
-
-    .weatherContent {
+    .weatherContentMain {
         width: 100%;
         @include flex-center;
 
@@ -59,26 +76,8 @@
         }
     }
 
-    .weatherContentNight {
-
-        .weatherContentInfo,
-        .weatherContentTemp,
-        .weatherContentWind p {
-            color: $color-background-4;
-        }
-
-        svg {
-            fill: $color-background-4;
-        }
-    }
-
     .weatherPredict {
         @include font('Rubik', 12px, $color-black, 500, normal, 15px);
-        text-align: center;
-    }
-
-    .weatherPredictNight {
-        @include font('Rubik', 12px, $color-white, 500, normal, 15px);
         text-align: center;
     }
 }

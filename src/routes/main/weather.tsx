@@ -1,5 +1,5 @@
 import { MetaProvider, Title as TitleName, Meta } from "@solidjs/meta";
-import { Component, Index, Show, createSignal, onMount } from "solid-js";
+import { Component, Index, createSignal, onMount } from "solid-js";
 import "/public/styles/weather.scss";
 import { getWeatherData } from "~/api/api";
 import { WeatherDataType } from "~/types";
@@ -194,7 +194,7 @@ const Weather: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <TitleName>Cealus</TitleName>
+      <TitleName>weather</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
 
@@ -208,28 +208,24 @@ const Weather: Component<{}> = (props) => {
         }}
         transition={{ duration: 0.6 }}
       >
-        <select
+        <div
           class={
             weatherData().currentData.isDayTime
-              ? "weatherGeos"
-              : "weatherGeos weatherGeosNight"
+              ? "weatherContentDay"
+              : "weatherContentNight"
           }
-          onchange={(e) => handleGetWeatherData(e.currentTarget.value)}
         >
-          <Index each={WEATHER_GEOS}>
-            {(item, index) => (
-              <option value={item().geo}> {item().name}</option>
-            )}
-          </Index>
-        </select>
-        <Show when={weatherData().prediction}>
-          <div
-            class={
-              weatherData().currentData.isDayTime
-                ? "weatherContent"
-                : "weatherContent weatherContentNight"
-            }
+          <select
+            class="weatherGeos"
+            onchange={(e) => handleGetWeatherData(e.currentTarget.value)}
           >
+            <Index each={WEATHER_GEOS}>
+              {(item, index) => (
+                <option value={item().geo}> {item().name}</option>
+              )}
+            </Index>
+          </select>
+          <div class="weatherContentMain">
             <img
               class="weatherImg"
               src={`/images/darksky/icons/${
@@ -272,6 +268,7 @@ const Weather: Component<{}> = (props) => {
               </p>
             </div>
           </div>
+          <p class="weatherPredict">{weatherData().prediction}</p>
           <div class="weatherChart">
             <Line
               data={chartData()}
@@ -280,17 +277,8 @@ const Weather: Component<{}> = (props) => {
               height={180}
             />
           </div>
-          <p
-            class={
-              weatherData().currentData.isDayTime
-                ? "weatherPredict"
-                : "weatherPredictNight"
-            }
-          >
-            {weatherData().prediction}
-          </p>
-          <RSS />
-        </Show>
+        </div>
+        <RSS />
       </Motion.div>
     </MetaProvider>
   );
