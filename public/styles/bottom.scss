@@ -46,14 +46,14 @@
 
     .mainFooterCenterBtn {
         height: 33px;
-        width: 18px;
+        width: 16px;
         display: block;
         cursor: pointer;
         background: none;
         outline: none;
         border: none;
-        border-left: 1px solid $color-border;
-        border-right: 1px solid $color-border;
+        border-left: 1px solid #34343472;
+        border-right: 1px solid #34343472;
         transition: all 0.1s;
         display: flex;
         flex-direction: column;
@@ -105,7 +105,7 @@
         }
 
         &--1 {
-            width: 84px;
+            width: 85px;
         }
 
         &--2 {
@@ -113,13 +113,21 @@
         }
 
         &--3 {
-            width: 78px;
+            width: 79px;
         }
 
         &--4 {
             min-width: 90px;
             max-width: 90px;
             cursor: default;
+
+            &:hover {
+
+                span,
+                small {
+                    color: #7c7b7a;
+                }
+            }
         }
     }
 
