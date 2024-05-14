@@ -16,7 +16,6 @@ const FlipCard: Component<{
   item: VocabularyType;
 }> = (props) => {
   const currenText = createMemo(() => props.item);
-  const [audioSource, setAudioSource] = createSignal<string>("");
   const [partOfSpeechs, setPartOfSpeechs] = createSignal<string>("");
   const [hoverClass, setHoverClass] = createSignal<string>("");
 
@@ -46,7 +45,6 @@ const FlipCard: Component<{
     setPartOfSpeechs(partOfSpeech);
 
     if (currentSound) {
-      // setAudioSource(currentSound);
       setAudioSrc(currentSound);
     }
     if (currenText()?.number > 1) {
@@ -65,7 +63,6 @@ const FlipCard: Component<{
       const timer2 = setTimeout(() => {
         setHoverClass(" cardContent--hover-1");
         const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${translations}`;
-        // setAudioSource(soundUrl);
         setAudioSrc(soundUrl);
       }, 3000);
       const timer3 = setTimeout(() => {

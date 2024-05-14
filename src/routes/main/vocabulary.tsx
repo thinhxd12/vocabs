@@ -142,23 +142,23 @@ const Vocabulary: Component<{}> = () => {
 
     // handlecheck
 
-    // if (text.number > 1) {
-    //   checkVocabulary(text.number - 1, text.created_at);
-    // } else {
-    //   await archiveVocabulary(text.word);
-    //   const data = await getSmallestWordNumberFromRange(text.word);
+    if (text.number > 1) {
+      checkVocabulary(text.number - 1, text.created_at);
+    } else {
+      await archiveVocabulary(text.word);
+      const data = await getSmallestWordNumberFromRange(text.word);
 
-    //   if (data) {
-    //     await deleteSmallestWordNumberFromRange(data.created_at);
-    //     await updateArchiveWord(data, text.created_at);
-    //     const count = await getMemoriesLengthAction();
-    //     setTotalMemories(count);
-    //   } else {
-    //     deleteVocabulary(text.created_at);
-    //     const count = await getMemoriesLengthAction();
-    //     setTotalMemories(count);
-    //   }
-    // }
+      if (data) {
+        await deleteSmallestWordNumberFromRange(data.created_at);
+        await updateArchiveWord(data, text.created_at);
+        const count = await getMemoriesLengthAction();
+        setTotalMemories(count);
+      } else {
+        deleteVocabulary(text.created_at);
+        const count = await getMemoriesLengthAction();
+        setTotalMemories(count);
+      }
+    }
   };
 
   const handleCloseTranslation = () => {
@@ -339,6 +339,7 @@ const Vocabulary: Component<{}> = () => {
 
     notification.onclose = () => {
       setBottomActive(true);
+      setAudioSrc("");
       audioRef.pause();
     };
   };
@@ -353,6 +354,7 @@ const Vocabulary: Component<{}> = () => {
           setIsRunning(false);
           handleSetDailyWord(wordListType());
           showDesktopNotification();
+          setAudioSrc("/sounds/09_Autumn_Mvt_3_Allegro.mp3");
           audioRef.play();
           return 6;
         }
@@ -393,16 +395,11 @@ const Vocabulary: Component<{}> = () => {
       <Title>{currentText()?.word || "main"}</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      {/* <audio
-        src="/sounds/09_Autumn_Mvt_3_Allegro.mp3"
+      <audio
         hidden
         ref={audioRef}
-      ></audio> */}
-      {/* <audio src={audioSrc()} autoplay hidden></audio> */}
-      <audio
-        ref={audioRef}
         src={audioSrc()}
-        oncanplaythrough={() => audioRef.play()}
+        onloadeddata={() => audioRef.play()}
       ></audio>
       <Motion.div
         class="vocabularyContainer"
