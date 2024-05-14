@@ -142,23 +142,23 @@ const Vocabulary: Component<{}> = () => {
 
     // handlecheck
 
-    if (text.number > 1) {
-      checkVocabulary(text.number - 1, text.created_at);
-    } else {
-      await archiveVocabulary(text.word);
-      const data = await getSmallestWordNumberFromRange(text.word);
+    // if (text.number > 1) {
+    //   checkVocabulary(text.number - 1, text.created_at);
+    // } else {
+    //   await archiveVocabulary(text.word);
+    //   const data = await getSmallestWordNumberFromRange(text.word);
 
-      if (data) {
-        await deleteSmallestWordNumberFromRange(data.created_at);
-        await updateArchiveWord(data, text.created_at);
-        const count = await getMemoriesLengthAction();
-        setTotalMemories(count);
-      } else {
-        deleteVocabulary(text.created_at);
-        const count = await getMemoriesLengthAction();
-        setTotalMemories(count);
-      }
-    }
+    //   if (data) {
+    //     await deleteSmallestWordNumberFromRange(data.created_at);
+    //     await updateArchiveWord(data, text.created_at);
+    //     const count = await getMemoriesLengthAction();
+    //     setTotalMemories(count);
+    //   } else {
+    //     deleteVocabulary(text.created_at);
+    //     const count = await getMemoriesLengthAction();
+    //     setTotalMemories(count);
+    //   }
+    // }
   };
 
   const handleCloseTranslation = () => {
@@ -276,6 +276,8 @@ const Vocabulary: Component<{}> = () => {
     setWordListType,
     todayData,
     setTodayData,
+    audioSrc,
+    setAudioSrc,
   } = useGlobalContext();
 
   createEffect(
@@ -391,11 +393,12 @@ const Vocabulary: Component<{}> = () => {
       <Title>{currentText()?.word || "main"}</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <audio
+      {/* <audio
         src="/sounds/09_Autumn_Mvt_3_Allegro.mp3"
         hidden
         ref={audioRef}
-      ></audio>
+      ></audio> */}
+      <audio src={audioSrc()} autoplay hidden></audio>
       <Motion.div
         class="vocabularyContainer"
         animate={{ opacity: [0, 1] }}

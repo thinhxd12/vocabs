@@ -10,6 +10,7 @@ import {
 import { VocabularyType } from "~/types";
 import "/public/styles/flipcard.scss";
 import { Motion } from "solid-motionone";
+import { useGlobalContext } from "~/globalcontext/store";
 
 const FlipCard: Component<{
   item: VocabularyType;
@@ -30,6 +31,8 @@ const FlipCard: Component<{
   const [renderNumber, setRenderNumber] = createSignal<number>(3);
   const [numbArray, setNumbArray] = createSignal<number[]>([3, 6, 9]);
 
+  const { audioSrc, setAudioSrc } = useGlobalContext();
+
   createEffect(() => {
     let currentSound = currenText()?.audio;
     let translations = currenText()
@@ -43,7 +46,8 @@ const FlipCard: Component<{
     setPartOfSpeechs(partOfSpeech);
 
     if (currentSound) {
-      setAudioSource(currentSound);
+      // setAudioSource(currentSound);
+      setAudioSrc(currentSound);
     }
     if (currenText()?.number > 1) {
       setRenderNumber(currenText().number);
@@ -61,7 +65,8 @@ const FlipCard: Component<{
       const timer2 = setTimeout(() => {
         setHoverClass(" cardContent--hover-1");
         const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${translations}`;
-        setAudioSource(soundUrl);
+        // setAudioSource(soundUrl);
+        setAudioSrc(soundUrl);
       }, 3000);
       const timer3 = setTimeout(() => {
         setHoverClass(" cardContent--hover-2");
@@ -75,7 +80,7 @@ const FlipCard: Component<{
 
   return (
     <>
-      <audio src={audioSource()} autoplay hidden></audio>
+      {/* <audio src={audioSource()} autoplay hidden></audio> */}
       <div class="flipCardLeftContent">
         <div class="numberFlipContainer">
           <div class="numberFlipBackground"></div>

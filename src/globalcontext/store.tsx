@@ -28,6 +28,8 @@ interface ContextProps {
   setWordList: Setter<VocabularyType[]>;
   todayData: Accessor<ScheduleType>;
   setTodayData: Setter<ScheduleType>;
+  audioSrc: Accessor<string>;
+  setAudioSrc: Setter<string>;
 }
 
 const GlobalContext = createContext<ContextProps>();
@@ -47,6 +49,7 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
     time1: 0,
     time2: 0,
   });
+  const [audioSrc, setAudioSrc] = createSignal<string>("");
 
   const getMemoriesLengthAction = useAction(getMemoriesLength);
 
@@ -74,6 +77,8 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
         setWordListType,
         todayData,
         setTodayData,
+        audioSrc,
+        setAudioSrc,
       }}
     >
       {props.children}
