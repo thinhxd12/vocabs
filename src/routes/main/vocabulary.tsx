@@ -398,7 +398,7 @@ const Vocabulary: Component<{}> = () => {
         hidden
         ref={audioRef}
       ></audio> */}
-      <audio src={audioSrc()} autoplay hidden></audio>
+      {/* <audio src={audioSrc()} autoplay hidden></audio> */}
       <Motion.div
         class="vocabularyContainer"
         animate={{ opacity: [0, 1] }}

@@ -1,3 +1,4 @@
+import { createAudio } from "@solid-primitives/audio";
 import { useAction } from "@solidjs/router";
 import {
   Accessor,
@@ -49,7 +50,11 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
     time1: 0,
     time2: 0,
   });
+
   const [audioSrc, setAudioSrc] = createSignal<string>("");
+  const [playing, setPlaying] = createSignal(true);
+  const [volume, setVolume] = createSignal(1);
+  const [audio, controls] = createAudio(audioSrc, playing, volume);
 
   const getMemoriesLengthAction = useAction(getMemoriesLength);
 
