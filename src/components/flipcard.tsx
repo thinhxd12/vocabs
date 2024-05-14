@@ -183,7 +183,7 @@ const FlipCard: Component<{
               >
                 {(item, index) => (
                   <>
-                    <p class="cardTop--class">【 {item().partOfSpeech} 】</p>
+                    <p class="cardTop--class">{item().partOfSpeech}</p>
                     <Index each={item().translations}>
                       {(m) => <p class="cardTop--text">{m()}</p>}
                     </Index>

@@ -268,7 +268,6 @@ const Weather: Component<{}> = (props) => {
               </p>
             </div>
           </div>
-          <p class="weatherPredict">{weatherData().prediction}</p>
           <div class="weatherChart">
             <Line
               data={chartData()}
@@ -277,6 +276,7 @@ const Weather: Component<{}> = (props) => {
               height={180}
             />
           </div>
+          <p class="weatherPredict">{weatherData().prediction}</p>
         </div>
         <RSS />
       </Motion.div>
