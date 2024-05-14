@@ -100,15 +100,15 @@
         justify-content: center;
 
         &--class {
-            @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
+            @include font('Roslindale', 12px, $color-white, 500, normal, 15px);
             width: 100%;
             text-align: left;
-            padding-left: 18px;
-            margin-bottom: 5px;
+            padding-left: 38px;
+            margin-bottom: 2px;
         }
 
         &--text {
-            @include font('Roslindale', 14px, $color-white, 500, normal, 15px);
+            @include font('Roslindale', 13px, $color-white, 500, normal, 15px);
             margin-bottom: 4px;
             position: relative;
             text-indent: 18px;
