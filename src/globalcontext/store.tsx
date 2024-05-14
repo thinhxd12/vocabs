@@ -52,9 +52,9 @@ export function GlobalContextProvider(props: { children: JSX.Element }) {
   });
 
   const [audioSrc, setAudioSrc] = createSignal<string>("");
-  const [playing, setPlaying] = createSignal(true);
-  const [volume, setVolume] = createSignal(1);
-  const [audio, controls] = createAudio(audioSrc, playing, volume);
+  // const [playing, setPlaying] = createSignal(true);
+  // const [volume, setVolume] = createSignal(1);
+  // const [audio, controls] = createAudio(audioSrc, playing, volume);
 
   const getMemoriesLengthAction = useAction(getMemoriesLength);
 
