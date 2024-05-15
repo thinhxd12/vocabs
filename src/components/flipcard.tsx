@@ -15,6 +15,10 @@ import { useGlobalContext } from "~/globalcontext/store";
 const FlipCard: Component<{
   item: VocabularyType;
 }> = (props) => {
+  let timeoutId1: NodeJS.Timeout;
+  let timeoutId2: NodeJS.Timeout;
+  let timeoutId3: NodeJS.Timeout;
+
   const currenText = createMemo(() => props.item);
   const [partOfSpeechs, setPartOfSpeechs] = createSignal<string>("");
   const [hoverClass, setHoverClass] = createSignal<string>("");
@@ -33,6 +37,10 @@ const FlipCard: Component<{
   const { audioSrc, setAudioSrc } = useGlobalContext();
 
   createEffect(() => {
+    clearTimeout(timeoutId1);
+    clearTimeout(timeoutId2);
+    clearTimeout(timeoutId3);
+
     let currentSound = currenText()?.audio;
     let translations = currenText()
       ?.translations.map((item) => item.translations.join(", "))
@@ -51,33 +59,26 @@ const FlipCard: Component<{
       setRenderNumber(currenText().number);
       setHoverClass("");
       setNumbArray(createNumberArray(currenText()?.number));
-      const timer1 = setTimeout(() => {
+      timeoutId1 = setTimeout(() => {
         setRenderNumber(renderNumber() - 1);
         setNumbArray(createNumberArray(renderNumber()));
       }, 2500);
-      onCleanup(() => {
-        clearTimeout(timer1);
-      });
     }
     if (translations) {
-      const timer2 = setTimeout(() => {
+      timeoutId2 = setTimeout(() => {
         setHoverClass(" cardContent--hover-1");
         const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${translations}`;
         setAudioSrc(soundUrl);
       }, 3000);
-      const timer3 = setTimeout(() => {
+      timeoutId3 = setTimeout(() => {
         setHoverClass(" cardContent--hover-2");
+        setAudioSrc("");
       }, 5500);
-      onCleanup(() => {
-        clearTimeout(timer2);
-        clearTimeout(timer3);
-      });
     }
   });
 
   return (
     <>
-      {/* <audio src={audioSource()} autoplay hidden></audio> */}
       <div class="flipCardLeftContent">
         <div class="numberFlipContainer">
           <div class="numberFlipBackground"></div>
