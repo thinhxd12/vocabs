@@ -9,8 +9,8 @@
     position: inherit;
     outline: none;
     background-size: cover;
-    background-position: top left;
-    animation: moveBg 450s linear infinite;
+    background-position: center;
+    // animation: moveBg 450s linear infinite;
 
     &::-webkit-scrollbar {
         display: none;
@@ -53,7 +53,8 @@
         @include flex-center;
 
         .weatherImg {
-            width: 135px;
+            width: 120px;
+            margin-right: 25px;
         }
 
         .weatherContentTemp {

@@ -213,6 +213,7 @@ const Vocabulary: Component<{}> = () => {
   };
 
   const handleAutoplay = () => {
+    setAudioSrc("");
     handleRenderText(wordList()[counter()]);
     setCounter(counter() + 1);
   };

@@ -1,8 +1,8 @@
 import { MetaProvider, Title as TitleName, Meta } from "@solidjs/meta";
-import { Component, Index, createSignal, onMount } from "solid-js";
+import { Component, Index, JSX, createSignal, onMount } from "solid-js";
 import "/public/styles/weather.scss";
 import { getWeatherData } from "~/api/api";
-import { WeatherDataType } from "~/types";
+import { FixCurrentlyType, WeatherDataType } from "~/types";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
 import { Motion } from "solid-motionone";
@@ -13,6 +13,8 @@ type WeatherGeoType = {
   name: string;
   geo: string;
 };
+
+let weatherContent: HTMLDivElement;
 
 const Weather: Component<{}> = (props) => {
   const WEATHER_GEOS: WeatherGeoType[] = [
@@ -36,6 +38,10 @@ const Weather: Component<{}> = (props) => {
       name: "GardenGrove",
       geo: "33.7746292,-117.9463717",
     },
+    {
+      name: "Heliskiing",
+      geo: "59.4373017,-136.2290385",
+    },
   ];
 
   const mockWeatherData: WeatherDataType = {
@@ -54,6 +60,36 @@ const Weather: Component<{}> = (props) => {
     minuteData: [],
     prediction: "",
   };
+  const weatherCode = {
+    "0d": "/sounds/weather/forest.m4a",
+    "0n": "/sounds/weather/night.m4a",
+    "1d": "/sounds/weather/forest.m4a",
+    "1n": "/sounds/weather/night.m4a",
+    "2d": "/sounds/weather/wind.m4a",
+    "2n": "/sounds/weather/wind.m4a",
+    "3d": "/sounds/weather/wind.m4a",
+    "3n": "/sounds/weather/wind.m4a",
+    "4d": "/sounds/weather/wind.m4a",
+    "4n": "/sounds/weather/wind.m4a",
+    "95d": "/sounds/weather/thunderstorm.m4a",
+    "95n": "/sounds/weather/thunderstorm.m4a",
+    "61d": "/sounds/weather/rain_light_2.m4a",
+    "61n": "/sounds/weather/rain_light_2.m4a",
+    "63d": "/sounds/weather/rain_light.m4a",
+    "63n": "/sounds/weather/rain_light.m4a",
+    "65d": "/sounds/weather/rain.m4a",
+    "65n": "/sounds/weather/rain.m4a",
+    "71d": "/sounds/weather/snow.m4a",
+    "71n": "/sounds/weather/snow.m4a",
+    "73d": "/sounds/weather/snow.m4a",
+    "73n": "/sounds/weather/snow.m4a",
+    "75d": "/sounds/weather/snow.m4a",
+    "75n": "/sounds/weather/snow.m4a",
+    "66d": "/sounds/weather/rain_freezing.m4a",
+    "66n": "/sounds/weather/rain_freezing.m4a",
+  };
+  const [audioSrc, setAudioSrc] = createSignal<string>("");
+
   const [weatherData, setweatherData] =
     createSignal<WeatherDataType>(mockWeatherData);
 
@@ -87,6 +123,9 @@ const Weather: Component<{}> = (props) => {
           },
         ],
       });
+      setAudioSrc(
+        weatherCode[data.currentData.icon as keyof typeof weatherCode]
+      );
     }
   };
 
@@ -197,14 +236,14 @@ const Weather: Component<{}> = (props) => {
       <TitleName>weather</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-
+      <audio hidden src={audioSrc()} autoplay loop></audio>
       <Motion.div
         class="weather"
         animate={{
           opacity: [0, 1],
-          backgroundImage: `url(/images/darksky/backgrounds/${
-            weatherData().currentData.icon
-          }.jpg)`,
+          backgroundImage: weatherData().currentData.isDayTime
+            ? `url(/images/openmeteo/depth/2/image.jpg)`
+            : `url(/images/openmeteo/depth/6/image.jpg)`,
         }}
         transition={{ duration: 0.6 }}
       >
@@ -214,6 +253,7 @@ const Weather: Component<{}> = (props) => {
               ? "weatherContentDay"
               : "weatherContentNight"
           }
+          ref={weatherContent}
         >
           <select
             class="weatherGeos"
@@ -228,7 +268,7 @@ const Weather: Component<{}> = (props) => {
           <div class="weatherContentMain">
             <img
               class="weatherImg"
-              src={`/images/darksky/icons/${
+              src={`/images/openmeteo/icons/${
                 weatherData().currentData.icon
               }.svg`}
             />

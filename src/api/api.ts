@@ -1,7 +1,7 @@
 import { action, redirect } from "@solidjs/router";
-import { CurrentlyType, ExampleType, FixCurrentlyType, FixMinutelyType, HistoryType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, WeatherDataType } from "~/types";
+import { CurrentlyType, ExampleType, FixCurrentlyType, FixMinutelyType, HistoryType, HourlyType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, WeatherDataType } from "~/types";
 import { supabase } from "./supabase";
-import { DEFAULT_CORS_PROXY, DEVIATION_NUMB, PRECIP_NUMB, getElAttribute, getElText, mapTables } from "~/utils";
+import { ACCUMULATION, DEFAULT_CORS_PROXY, DEVIATION_NUMB, PRECIPITATION_PROBABILITY, getElAttribute, getElText, mapTables } from "~/utils";
 import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
 import { format } from "date-fns";
@@ -750,15 +750,15 @@ export const getMemoriesLength = action(async () => {
 export const getWeatherData = async (geo: string) => {
     "use server";
     const WEATHER_KEY = "gnunh5vxMIu0kLZG";
-    const time = Math.round(Date.now() / 1000);
-    const url = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo}?units=ca`
+    // const time = Math.round(Date.now() / 1000);
+    const url = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo}?units=ca&version=2`
     try {
         const response = await fetch(url);
         const data = await response.json();
-        const dayTime = data.daily.data[0].sunriseTime < data.currently.time && data.currently.time < data.daily.data[0].sunsetTime;
+        const dayTime = data.daily.data[0].dawnTime < data.currently.time && data.currently.time < data.daily.data[0].duskTime;
         const currentData = cleanDataCurrently(data.currently, data.offset, dayTime);
         const minuteData = cleanDataMinutely(data.minutely.data);
-        const predict = makePrediction(minuteData);
+        const predict = makePrediction(minuteData, data.minutely.summary);
         return { currentData: currentData, minuteData: minuteData, prediction: predict } as WeatherDataType;
     } catch (error) {
         console.error(error);
@@ -766,14 +766,13 @@ export const getWeatherData = async (geo: string) => {
 };
 
 const cleanDataCurrently = (data: CurrentlyType, offset: number, dayTime: boolean) => {
-    "use server";
+
     const time = new Date(data.time * 1000);
     time.setHours(time.getHours() + offset);
     const timeText = format(time, "h:mm a");
-
     let result: FixCurrentlyType = {
         timeText: timeText,
-        icon: data.icon,
+        icon: "",
         summary: "",
         humidity: Math.round(data.humidity * 100),
         temperature: data.temperature,
@@ -783,68 +782,92 @@ const cleanDataCurrently = (data: CurrentlyType, offset: number, dayTime: boolea
         windBearing: data.windBearing,
         isDayTime: dayTime,
     }
-
-    // 95% = DEVIATION_NUMB* standard deviation occur
-    let newPrecipIntensity = (
+    //68% occurent = DEVIATION_NUMB * standard deviation occur
+    const newPrecipIntensity = (
         data.precipIntensity -
         DEVIATION_NUMB * data.precipIntensityError
     ) || 0;
 
     switch (true) {
-        case newPrecipIntensity >= 0.1 &&
-            newPrecipIntensity < 0.5 &&
-            data.cloudCover >= 0.875 &&
-            data.precipProbability >= PRECIP_NUMB:
-            result.icon = "overcast-rain";
-            result.summary = "Overcast Light Rain";
-            break;
-        case newPrecipIntensity >= 0.1 &&
-            newPrecipIntensity < 0.5 &&
-            data.precipProbability >= PRECIP_NUMB:
-            result.icon = "drizzle";
-            result.summary = "Light Rain";
-            break;
-        case newPrecipIntensity >= 1 &&
-            data.precipProbability >= PRECIP_NUMB:
-            result.icon = "overcast-rain";
-            result.summary = "Heavy Rain";
-            break;
-        case data.cloudCover <= 0.375:
-            result.isDayTime
-                ? (result.icon = "clear-day")
-                : (result.icon = "clear-night");
+        case data.cloudCover <= 1 / 8:
+            result.icon = "0" + (dayTime ? 'd' : 'n');
             result.summary = "Clear";
             break;
-        case data.cloudCover <= 0.875:
-            result.isDayTime
-                ? (result.icon = "partly-cloudy-day")
-                : (result.icon = "partly-cloudy-night");
-            result.summary = "Partly Cloudy";
+        case data.cloudCover <= 3 / 8:
+            result.icon = "1" + (dayTime ? 'd' : 'n');
+            result.summary = "Mostly clear";
             break;
-        case data.cloudCover <= 0.95:
-            result.icon = "cloudy";
-            result.summary = "Cloudy";
-            break;
-        case data.cloudCover <= 1 &&
-            newPrecipIntensity >= 0.5 &&
-            data.precipProbability >= PRECIP_NUMB:
-            result.icon = "overcast-rain";
-            result.summary = "Overcast";
+        case data.cloudCover <= 7 / 8:
+            result.icon = "2" + (dayTime ? 'd' : 'n');
+            result.summary = "Partly cloudy";
             break;
         case data.cloudCover <= 1:
-            result.isDayTime
-                ? (result.icon = "overcast")
-                : (result.icon = "overcast-night");
+            result.icon = "3" + (dayTime ? 'd' : 'n');
+            result.summary = "Mostly cloudy";
+            break;
+        case data.cloudCover === 1:
+            result.icon = "4" + (dayTime ? 'd' : 'n');
             result.summary = "Overcast";
             break;
         default:
             break;
     }
+
+    if (data.precipType === 'rain') {
+        switch (true) {
+            case data.nearestStormBearing > 0 && data.nearestStormDistance <= 8:
+                result.icon = "95" + (dayTime ? 'd' : 'n');
+                result.summary = "Thunderstorm";
+                break;
+            case newPrecipIntensity >= 0.1 &&
+                newPrecipIntensity < 0.5 &&
+                data.precipProbability >= PRECIPITATION_PROBABILITY:
+                result.icon = "61" + (dayTime ? 'd' : 'n');
+                result.summary = "Light rain";
+                break;
+            case newPrecipIntensity >= 0.6 &&
+                newPrecipIntensity < 1 &&
+                data.precipProbability >= PRECIPITATION_PROBABILITY:
+                result.icon = "63" + (dayTime ? 'd' : 'n');
+                result.summary = "Moderate rain";
+                break;
+            case newPrecipIntensity >= 1 &&
+                data.precipProbability >= PRECIPITATION_PROBABILITY:
+                result.icon = "65" + (dayTime ? 'd' : 'n');
+                result.summary = "Heavy rain";
+                break;
+        }
+    }
+    else if (data.precipType === 'snow') {
+        switch (true) {
+            case data.visibility >= 1 &&
+                data.precipProbability >= PRECIPITATION_PROBABILITY:
+                result.icon = "71" + (dayTime ? 'd' : 'n');
+                result.summary = "Light snow";
+                break;
+            case data.visibility >= 0.5 &&
+                data.visibility < 1 &&
+                data.precipProbability >= PRECIPITATION_PROBABILITY:
+                result.icon = "73" + (dayTime ? 'd' : 'n');
+                result.summary = "Moderate snow";
+                break;
+            case newPrecipIntensity < 0.5 &&
+                data.precipProbability >= PRECIPITATION_PROBABILITY:
+                result.icon = "75" + (dayTime ? 'd' : 'n');
+                result.summary = "Heavy snow";
+                break;
+        }
+    }
+    else if (data.precipType === 'sleet') {
+        if (data.precipProbability >= PRECIPITATION_PROBABILITY) {
+            result.icon = "66" + (dayTime ? 'd' : 'n');
+            result.summary = "Sleet";
+        }
+    }
     return result;
 };
 
 const cleanDataMinutely = (data: MinutelyType[]) => {
-    "use server";
     return data.map((item, index) => {
         let newItem = { diffTime: 0, intensity: 0, probability: 0 };
         const newIntensity =
@@ -858,22 +881,22 @@ const cleanDataMinutely = (data: MinutelyType[]) => {
     });
 };
 
-const makePrediction = (data: FixMinutelyType[]): string => {
-    "use server";
+const makePrediction = (data: FixMinutelyType[], summary: string): string => {
+
     let lightRainIndex = data.findIndex(
-        (item) => item.intensity >= 0.1 && item.probability >= PRECIP_NUMB
+        (item) => item.intensity >= 0.1 && item.probability >= PRECIPITATION_PROBABILITY
     );
     let medRainIndex = data.findIndex(
-        (item) => item.intensity >= 0.5 && item.probability >= PRECIP_NUMB
+        (item) => item.intensity >= 0.5 && item.probability >= PRECIPITATION_PROBABILITY
     );
     let heavyRainIndex = data.findIndex(
-        (item) => item.intensity >= 1 && item.probability >= PRECIP_NUMB
+        (item) => item.intensity >= 1 && item.probability >= PRECIPITATION_PROBABILITY
     );
     let endRainIndex = data.findLastIndex(
         (item) =>
             item.intensity >= 0.09 &&
             item.intensity < 0.1 &&
-            item.probability >= PRECIP_NUMB
+            item.probability >= PRECIPITATION_PROBABILITY
     );
     let mainItem = { type: "", start: 0, end: 0 };
     endRainIndex >= 0

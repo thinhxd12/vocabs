@@ -24,5 +24,6 @@ export const mapTables = {
   memories: "memories",
 };
 
-export const PRECIP_NUMB = 0.8;
-export const DEVIATION_NUMB = 1.2;
+export const PRECIPITATION_PROBABILITY = 0.68;
+export const ACCUMULATION = 0.03;
+export const DEVIATION_NUMB = 1;

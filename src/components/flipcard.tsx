@@ -72,7 +72,6 @@ const FlipCard: Component<{
       }, 3000);
       timeoutId3 = setTimeout(() => {
         setHoverClass(" cardContent--hover-2");
-        setAudioSrc("");
       }, 5500);
     }
   });
