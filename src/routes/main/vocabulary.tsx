@@ -401,6 +401,7 @@ const Vocabulary: Component<{}> = () => {
         ref={audioRef}
         src={audioSrc()}
         onloadeddata={() => audioRef.play()}
+        onended={() => setAudioSrc("")}
       ></audio>
       <Motion.div
         class="vocabularyContainer"

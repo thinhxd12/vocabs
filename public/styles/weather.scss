@@ -32,18 +32,18 @@
 
         .weatherGeos,
         .weatherPredict {
-            color: $color-background-4;
+            color: $color-calendar-white;
         }
 
         .weatherContentMain {
 
             p,
             .weatherContentWind p {
-                color: $color-background-4;
+                color: $color-calendar-white;
             }
 
             svg {
-                fill: $color-background-4;
+                fill: $color-calendar-white;
             }
         }
     }
@@ -70,7 +70,7 @@
         }
 
         .weatherContentTemp {
-            @include font('Rubik', 66px, $color-black, 400, normal, 50px);
+            @include font('Rubik', 54px, $color-black, 400, normal, 50px);
         }
 
         .weatherContentInfo {

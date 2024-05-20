@@ -179,7 +179,7 @@ const Weather: Component<{}> = (props) => {
     datasets: [{}],
   });
 
-  const chartOptions = {
+  const chartOptionsDay = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -266,6 +266,98 @@ const Weather: Component<{}> = (props) => {
             size: 9,
           },
           color: "black",
+        },
+      },
+    },
+  };
+
+  const chartOptionsNight = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index" as const,
+      intersect: false,
+    },
+    stacked: false,
+    plugins: {
+      title: {
+        display: false,
+      },
+      legend: { display: false },
+    },
+    scales: {
+      x: {
+        border: {
+          display: false,
+        },
+        grid: {
+          display: true,
+          drawOnChartArea: false,
+          drawTicks: true,
+        },
+        ticks: {
+          stepSize: 0.2,
+          callback: function (value: any, index: any) {
+            return value == 0 ? "" : value % 10 === 0 ? value + "min" : null;
+          },
+          font: {
+            size: 9,
+          },
+          color: "#f4f4f4",
+        },
+      },
+      y: {
+        type: "linear" as const,
+        display: true,
+        position: "left" as const,
+        min: 0,
+        max: 1.5,
+        border: { dash: [1, 1] },
+        grid: {
+          drawTicks: false,
+          color: ["black", "#ae0000", "#ae0000"],
+        },
+        ticks: {
+          stepSize: 0.5,
+          callback: function (value: any, index: any) {
+            switch (value) {
+              case 0:
+                return "LIGHT";
+              case 0.5:
+                return "MED";
+              case 1:
+                return "HEAVY";
+              default:
+                null;
+            }
+          },
+          font: {
+            size: 9,
+          },
+          color: "#f4f4f4",
+        },
+      },
+      y1: {
+        min: 0,
+        max: 1,
+        type: "linear" as const,
+        display: true,
+        position: "right" as const,
+        grid: {
+          display: true,
+          drawOnChartArea: false,
+          tickLength: 3,
+          tickWidth: 1,
+        },
+        ticks: {
+          stepSize: 0.2,
+          callback: function (value: any, index: any) {
+            return value == 0 ? "0" : value * 100 + "%";
+          },
+          font: {
+            size: 9,
+          },
+          color: "#f4f4f4",
         },
       },
     },
@@ -378,8 +470,8 @@ const Weather: Component<{}> = (props) => {
       rainChance: 0.3,
       rainLimit: 3,
       dropletsRate: 50,
-      dropletsSize: [2, 4],
-      dropletsCleaningRadiusMultiplier: 0.43,
+      dropletsSize: [2, 3],
+      dropletsCleaningRadiusMultiplier: 0.3,
       raining: true,
       globalTimeScale: 1,
       trailRate: 1,
@@ -1012,7 +1104,11 @@ const Weather: Component<{}> = (props) => {
             <div class="weatherChart">
               <Line
                 data={chartData()}
-                options={chartOptions}
+                options={
+                  weatherData().currentData.isDayTime
+                    ? chartOptionsDay
+                    : chartOptionsNight
+                }
                 width={360}
                 height={180}
               />
