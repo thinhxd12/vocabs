@@ -8,9 +8,21 @@
     overflow-y: scroll;
     position: inherit;
     outline: none;
-    background-size: cover;
-    background-position: center;
-    // animation: moveBg 450s linear infinite;
+    position: relative;
+
+    .weatherBackground {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 9;
+    }
+
+    .weatherMain {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 99;
+    }
 
     &::-webkit-scrollbar {
         display: none;
