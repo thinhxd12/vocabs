@@ -112,42 +112,52 @@ const Weather: Component<{}> = (props) => {
         case "Light rain":
         case "Light Freezing Rain":
         case "Light Showers":
-          setupWeather("drizzle", data.currentData.isDayTime);
           setAudioSrc("/sounds/weather/rain_light_2.m4a");
+          setupWeather("drizzle", data.currentData.isDayTime);
           break;
         case "Moderate rain":
         case "Freezing Rain":
         case "Showers":
-          setupWeather("rain", data.currentData.isDayTime);
           setAudioSrc("/sounds/weather/rain_light.m4a");
+          setupWeather("rain", data.currentData.isDayTime);
           break;
         case "Heavy rain":
         case "Heavy Showers":
-          setupWeather("storm", data.currentData.isDayTime);
           setAudioSrc("/sounds/weather/rain.m4a");
+          setupWeather("storm", data.currentData.isDayTime);
           break;
         case "Thunderstorm":
         case "Light Thunderstorms With Hail":
-          setupWeather("storm", data.currentData.isDayTime);
           setAudioSrc("/sounds/weather/thunderstorm.m4a");
+          setupWeather("storm", data.currentData.isDayTime);
           break;
         case "Partly Cloudy":
         case "Mostly Cloudy":
           setAudioSrc("/sounds/weather/wind.m4a");
+          setupWeather("sunny", data.currentData.isDayTime);
+          break;
         case "Sunny":
           setAudioSrc("/sounds/weather/forest.m4a");
+          setupWeather("sunny", data.currentData.isDayTime);
+          break;
         case "Clear":
           setAudioSrc("/sounds/weather/night.m4a");
+          setupWeather("sunny", data.currentData.isDayTime);
+          break;
         case "Light Snow":
         case "Snow":
         case "Heavy Snow":
           setAudioSrc("/sounds/weather/snow.m4a");
+          setupWeather("sunny", data.currentData.isDayTime);
+          break;
         case "Light Freezing Rain":
         case "Freezing Rain":
           setAudioSrc("/sounds/weather/rain_freezing.m4a");
-        default:
           setupWeather("sunny", data.currentData.isDayTime);
+          break;
+        default:
           setAudioSrc("/sounds/weather/forest.m4a");
+          setupWeather("sunny", data.currentData.isDayTime);
           break;
       }
     }
@@ -155,7 +165,7 @@ const Weather: Component<{}> = (props) => {
 
   onMount(async () => {
     let canvasWidth = 360;
-    let canvasHeight = window.innerHeight - 58;
+    let canvasHeight = window.innerHeight - 34;
     dpi = window.devicePixelRatio;
 
     canvas.width = canvasWidth;
@@ -197,7 +207,7 @@ const Weather: Component<{}> = (props) => {
         ticks: {
           stepSize: 0.2,
           callback: function (value: any, index: any) {
-            return value == 0 ? "" : value % 10 === 0 ? value + "min" : null;
+            return value == 0 ? "" : value % 10 === 0 ? value + "m" : null;
           },
           font: {
             size: 9,
@@ -221,7 +231,7 @@ const Weather: Component<{}> = (props) => {
           callback: function (value: any, index: any) {
             switch (value) {
               case 0:
-                return "LGT";
+                return "LIGHT";
               case 0.5:
                 return "MED";
               case 1:
@@ -232,6 +242,7 @@ const Weather: Component<{}> = (props) => {
           },
           font: {
             size: 9,
+            weight: "bold",
           },
           color: "black",
         },
@@ -249,9 +260,9 @@ const Weather: Component<{}> = (props) => {
           tickWidth: 1,
         },
         ticks: {
-          stepSize: 0.2,
+          stepSize: 0.25,
           callback: function (value: any, index: any) {
-            return value == 0 ? "0" : value * 100 + "%";
+            return value == 0 ? "0 (%)" : value * 100;
           },
           font: {
             size: 9,

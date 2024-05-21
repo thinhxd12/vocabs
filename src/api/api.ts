@@ -765,6 +765,108 @@ export const getMemoriesLength = action(async () => {
 //     }
 // };
 
+// const cleanDataCurrentlyOld = (data: CurrentlyType, offset: number, dayTime: boolean) => {
+
+//     const time = new Date(data.time * 1000);
+//     time.setHours(time.getHours() + offset);
+//     const timeText = format(time, "h:mm a");
+//     let result: FixCurrentlyType = {
+//         timeText: timeText,
+//         icon: "",
+//         summary: "",
+//         humidity: Math.round(data.humidity * 100),
+//         temperature: data.temperature,
+//         apparentTemperature: data.apparentTemperature,
+//         uvIndex: data.uvIndex,
+//         windSpeed: data.windSpeed,
+//         windBearing: data.windBearing,
+//         isDayTime: dayTime,
+//     }
+//     //68% occurent = DEVIATION_NUMB * standard deviation occur
+//     const newPrecipIntensity = (
+//         data.precipIntensity -
+//         DEVIATION_NUMB * data.precipIntensityError
+//     ) || 0;
+
+//     switch (true) {
+//         case data.cloudCover <= 1 / 8:
+//             result.icon = "0" + (dayTime ? 'd' : 'n');
+//             result.summary = "Clear";
+//             break;
+//         case data.cloudCover <= 3 / 8:
+//             result.icon = "1" + (dayTime ? 'd' : 'n');
+//             result.summary = "Mostly clear";
+//             break;
+//         case data.cloudCover <= 7 / 8:
+//             result.icon = "2" + (dayTime ? 'd' : 'n');
+//             result.summary = "Partly cloudy";
+//             break;
+//         case data.cloudCover <= 1:
+//             result.icon = "3" + (dayTime ? 'd' : 'n');
+//             result.summary = "Mostly cloudy";
+//             break;
+//         case data.cloudCover === 1:
+//             result.icon = "4" + (dayTime ? 'd' : 'n');
+//             result.summary = "Overcast";
+//             break;
+//         default:
+//             break;
+//     }
+
+//     if (data.precipType === 'rain') {
+//         switch (true) {
+//             case data.nearestStormBearing > 0 && data.nearestStormDistance <= 8:
+//                 result.icon = "95" + (dayTime ? 'd' : 'n');
+//                 result.summary = "Thunderstorm";
+//                 break;
+//             case newPrecipIntensity >= 0.1 &&
+//                 newPrecipIntensity < 0.5 &&
+//                 data.precipProbability >= PRECIPITATION_PROBABILITY:
+//                 result.icon = "61" + (dayTime ? 'd' : 'n');
+//                 result.summary = "Light rain";
+//                 break;
+//             case newPrecipIntensity >= 0.6 &&
+//                 newPrecipIntensity < 1 &&
+//                 data.precipProbability >= PRECIPITATION_PROBABILITY:
+//                 result.icon = "63" + (dayTime ? 'd' : 'n');
+//                 result.summary = "Moderate rain";
+//                 break;
+//             case newPrecipIntensity >= 1 &&
+//                 data.precipProbability >= PRECIPITATION_PROBABILITY:
+//                 result.icon = "65" + (dayTime ? 'd' : 'n');
+//                 result.summary = "Heavy rain";
+//                 break;
+//         }
+//     }
+//     else if (data.precipType === 'snow') {
+//         switch (true) {
+//             case data.visibility >= 1 &&
+//                 data.precipProbability >= PRECIPITATION_PROBABILITY:
+//                 result.icon = "71" + (dayTime ? 'd' : 'n');
+//                 result.summary = "Light snow";
+//                 break;
+//             case data.visibility >= 0.5 &&
+//                 data.visibility < 1 &&
+//                 data.precipProbability >= PRECIPITATION_PROBABILITY:
+//                 result.icon = "73" + (dayTime ? 'd' : 'n');
+//                 result.summary = "Moderate snow";
+//                 break;
+//             case newPrecipIntensity < 0.5 &&
+//                 data.precipProbability >= PRECIPITATION_PROBABILITY:
+//                 result.icon = "75" + (dayTime ? 'd' : 'n');
+//                 result.summary = "Heavy snow";
+//                 break;
+//         }
+//     }
+//     else if (data.precipType === 'sleet') {
+//         if (data.precipProbability >= PRECIPITATION_PROBABILITY) {
+//             result.icon = "66" + (dayTime ? 'd' : 'n');
+//             result.summary = "Sleet";
+//         }
+//     }
+//     return result;
+// };
+
 export const getWeatherData = async (geo: string) => {
     "use server";
     const WEATHER_KEY = "gnunh5vxMIu0kLZG";
@@ -780,7 +882,6 @@ export const getWeatherData = async (geo: string) => {
     const currentlyData = cleanDataCurrently(data[0], offsetTime);
 
     return { currentData: currentlyData, minuteData: minuteData, prediction: makePrediction(minuteData) } as WeatherDataType;
-
 };
 
 const fetchGetJSON = async (url: string) => {
@@ -793,107 +894,7 @@ const fetchGetJSON = async (url: string) => {
     }
 }
 
-const cleanDataCurrentlyOld = (data: CurrentlyType, offset: number, dayTime: boolean) => {
 
-    const time = new Date(data.time * 1000);
-    time.setHours(time.getHours() + offset);
-    const timeText = format(time, "h:mm a");
-    let result: FixCurrentlyType = {
-        timeText: timeText,
-        icon: "",
-        summary: "",
-        humidity: Math.round(data.humidity * 100),
-        temperature: data.temperature,
-        apparentTemperature: data.apparentTemperature,
-        uvIndex: data.uvIndex,
-        windSpeed: data.windSpeed,
-        windBearing: data.windBearing,
-        isDayTime: dayTime,
-    }
-    //68% occurent = DEVIATION_NUMB * standard deviation occur
-    const newPrecipIntensity = (
-        data.precipIntensity -
-        DEVIATION_NUMB * data.precipIntensityError
-    ) || 0;
-
-    switch (true) {
-        case data.cloudCover <= 1 / 8:
-            result.icon = "0" + (dayTime ? 'd' : 'n');
-            result.summary = "Clear";
-            break;
-        case data.cloudCover <= 3 / 8:
-            result.icon = "1" + (dayTime ? 'd' : 'n');
-            result.summary = "Mostly clear";
-            break;
-        case data.cloudCover <= 7 / 8:
-            result.icon = "2" + (dayTime ? 'd' : 'n');
-            result.summary = "Partly cloudy";
-            break;
-        case data.cloudCover <= 1:
-            result.icon = "3" + (dayTime ? 'd' : 'n');
-            result.summary = "Mostly cloudy";
-            break;
-        case data.cloudCover === 1:
-            result.icon = "4" + (dayTime ? 'd' : 'n');
-            result.summary = "Overcast";
-            break;
-        default:
-            break;
-    }
-
-    if (data.precipType === 'rain') {
-        switch (true) {
-            case data.nearestStormBearing > 0 && data.nearestStormDistance <= 8:
-                result.icon = "95" + (dayTime ? 'd' : 'n');
-                result.summary = "Thunderstorm";
-                break;
-            case newPrecipIntensity >= 0.1 &&
-                newPrecipIntensity < 0.5 &&
-                data.precipProbability >= PRECIPITATION_PROBABILITY:
-                result.icon = "61" + (dayTime ? 'd' : 'n');
-                result.summary = "Light rain";
-                break;
-            case newPrecipIntensity >= 0.6 &&
-                newPrecipIntensity < 1 &&
-                data.precipProbability >= PRECIPITATION_PROBABILITY:
-                result.icon = "63" + (dayTime ? 'd' : 'n');
-                result.summary = "Moderate rain";
-                break;
-            case newPrecipIntensity >= 1 &&
-                data.precipProbability >= PRECIPITATION_PROBABILITY:
-                result.icon = "65" + (dayTime ? 'd' : 'n');
-                result.summary = "Heavy rain";
-                break;
-        }
-    }
-    else if (data.precipType === 'snow') {
-        switch (true) {
-            case data.visibility >= 1 &&
-                data.precipProbability >= PRECIPITATION_PROBABILITY:
-                result.icon = "71" + (dayTime ? 'd' : 'n');
-                result.summary = "Light snow";
-                break;
-            case data.visibility >= 0.5 &&
-                data.visibility < 1 &&
-                data.precipProbability >= PRECIPITATION_PROBABILITY:
-                result.icon = "73" + (dayTime ? 'd' : 'n');
-                result.summary = "Moderate snow";
-                break;
-            case newPrecipIntensity < 0.5 &&
-                data.precipProbability >= PRECIPITATION_PROBABILITY:
-                result.icon = "75" + (dayTime ? 'd' : 'n');
-                result.summary = "Heavy snow";
-                break;
-        }
-    }
-    else if (data.precipType === 'sleet') {
-        if (data.precipProbability >= PRECIPITATION_PROBABILITY) {
-            result.icon = "66" + (dayTime ? 'd' : 'n');
-            result.summary = "Sleet";
-        }
-    }
-    return result;
-};
 
 const cleanDataCurrently = (data: any, offset: number) => {
     const time = new Date(data.current.time);

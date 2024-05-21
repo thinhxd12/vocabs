@@ -159,6 +159,7 @@ const RSS: Component<{}> = (props) => {
             );
           }}
         </Index>
+        <button class="rssBtnDelete" onClick={() => setRssEntries([])}>E</button>
       </div>
       <Show when={showRss()}>
         <div class="rssBody">

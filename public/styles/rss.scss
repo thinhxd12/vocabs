@@ -1,20 +1,23 @@
 @import "./mixins.scss";
 
 .rss {
-  height: calc(100vh - 384px);
+  height: calc(100vh - 351px);
   overflow-y: scroll;
+  margin-left: 20px;
+  margin-top: 3px;
 
   &::-webkit-scrollbar {
     display: none;
   }
 
   .rssTop {
-    width: 360px;
+    width: 320px;
     height: 25px;
     overflow: hidden;
     @include flex-center;
     position: fixed;
     bottom: 34px;
+    left: calc(-160px + 50vw);
     z-index: 999;
     background-color: $color-calendar-bg;
 
@@ -37,6 +40,26 @@
         transform: scale(1.1);
       }
     }
+
+    .rssBtnDelete {
+      width: 21px;
+      height: 21px;
+      border-radius: 3px;
+      border: 0;
+      outline: 0;
+      cursor: pointer;
+      transition: 0.1s;
+      background: $color-background-1;
+      @include font("Roslindale", 14px, #7c7b7a, 700, normal, 21px);
+      background-image: url('/images/main/input-left-corner.png'),
+        url('/images/main/input-right-corner.png');
+      background-position: left top,
+        right top;
+      background-repeat: no-repeat,
+        no-repeat;
+      background-size: auto 100%,
+        auto 100%;
+    }
   }
 
   .rssBody {
@@ -48,7 +71,7 @@
       align-items: flex-start;
       padding: 3px 6px;
       margin-bottom: 2px;
-      width: 360px;
+      width: 320px;
 
       .rssItemImg {
         display: block;
@@ -62,18 +85,16 @@
 
       .rssItemContent {
         .rssItemDate {
-          font-style: italic;
-          line-height: 15px;
-          margin-top: 3px;
+          @include font("NYTImperial", 10px, $color-black, 500, italic, 14px);
         }
 
         .rssItemTitle {
-          @include font('NYTCheltenham', 15px, #121212, 700, normal, 18px);
+          @include font('NYTCheltenham', 13px, #121212, 700, normal, 14px);
           margin-bottom: 3px;
         }
 
         .rssItemDescription {
-          color: #5A5A5A;
+          @include font("NYTImperial", 11px, #5A5A5A, 500, normal, 14px);
         }
       }
     }
