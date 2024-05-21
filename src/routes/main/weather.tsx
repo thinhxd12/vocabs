@@ -1,11 +1,10 @@
 import { MetaProvider, Title as TitleName, Meta } from "@solidjs/meta";
-import { Component, Index, JSX, Show, createSignal, onMount } from "solid-js";
+import { Component, Index, Show, createSignal, onMount } from "solid-js";
 import "/public/styles/weather.scss";
 import { getWeatherData } from "~/api/api";
-import { FixCurrentlyType, WeatherDataType } from "~/types";
+import { WeatherDataType } from "~/types";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
-import { Motion } from "solid-motionone";
 import RSS from "~/components/rss";
 import { FaSolidArrowUpLong } from "solid-icons/fa";
 import {
@@ -50,10 +49,6 @@ const Weather: Component<{}> = (props) => {
       geo: "35.6821936,139.762221",
     },
     {
-      name: "GardenGrove",
-      geo: "33.7746292,-117.9463717",
-    },
-    {
       name: "Heliskiing",
       geo: "59.4373017,-136.2290385",
     },
@@ -75,34 +70,7 @@ const Weather: Component<{}> = (props) => {
     minuteData: [],
     prediction: "",
   };
-  const weatherCode = {
-    "0d": "/sounds/weather/forest.m4a",
-    "0n": "/sounds/weather/night.m4a",
-    "1d": "/sounds/weather/forest.m4a",
-    "1n": "/sounds/weather/night.m4a",
-    "2d": "/sounds/weather/wind.m4a",
-    "2n": "/sounds/weather/wind.m4a",
-    "3d": "/sounds/weather/wind.m4a",
-    "3n": "/sounds/weather/wind.m4a",
-    "4d": "/sounds/weather/wind.m4a",
-    "4n": "/sounds/weather/wind.m4a",
-    "95d": "/sounds/weather/thunderstorm.m4a",
-    "95n": "/sounds/weather/thunderstorm.m4a",
-    "61d": "/sounds/weather/rain_light_2.m4a",
-    "61n": "/sounds/weather/rain_light_2.m4a",
-    "63d": "/sounds/weather/rain_light.m4a",
-    "63n": "/sounds/weather/rain_light.m4a",
-    "65d": "/sounds/weather/rain.m4a",
-    "65n": "/sounds/weather/rain.m4a",
-    "71d": "/sounds/weather/snow.m4a",
-    "71n": "/sounds/weather/snow.m4a",
-    "73d": "/sounds/weather/snow.m4a",
-    "73n": "/sounds/weather/snow.m4a",
-    "75d": "/sounds/weather/snow.m4a",
-    "75n": "/sounds/weather/snow.m4a",
-    "66d": "/sounds/weather/rain_freezing.m4a",
-    "66n": "/sounds/weather/rain_freezing.m4a",
-  };
+
   const [audioSrc, setAudioSrc] = createSignal<string>("");
 
   const [weatherData, setweatherData] =
@@ -110,6 +78,7 @@ const Weather: Component<{}> = (props) => {
 
   const handleGetWeatherData = async (geo: string) => {
     const data = await getWeatherData(geo);
+
     if (data) {
       setweatherData(data);
       setChartData({
@@ -138,25 +107,47 @@ const Weather: Component<{}> = (props) => {
           },
         ],
       });
-      setAudioSrc(
-        weatherCode[data.currentData.icon as keyof typeof weatherCode]
-      );
 
       switch (data.currentData.summary) {
         case "Light rain":
+        case "Light Freezing Rain":
+        case "Light Showers":
           setupWeather("drizzle", data.currentData.isDayTime);
+          setAudioSrc("/sounds/weather/rain_light_2.m4a");
           break;
         case "Moderate rain":
+        case "Freezing Rain":
+        case "Showers":
           setupWeather("rain", data.currentData.isDayTime);
+          setAudioSrc("/sounds/weather/rain_light.m4a");
           break;
         case "Heavy rain":
+        case "Heavy Showers":
           setupWeather("storm", data.currentData.isDayTime);
+          setAudioSrc("/sounds/weather/rain.m4a");
           break;
         case "Thunderstorm":
+        case "Light Thunderstorms With Hail":
           setupWeather("storm", data.currentData.isDayTime);
+          setAudioSrc("/sounds/weather/thunderstorm.m4a");
           break;
+        case "Partly Cloudy":
+        case "Mostly Cloudy":
+          setAudioSrc("/sounds/weather/wind.m4a");
+        case "Sunny":
+          setAudioSrc("/sounds/weather/forest.m4a");
+        case "Clear":
+          setAudioSrc("/sounds/weather/night.m4a");
+        case "Light Snow":
+        case "Snow":
+        case "Heavy Snow":
+          setAudioSrc("/sounds/weather/snow.m4a");
+        case "Light Freezing Rain":
+        case "Freezing Rain":
+          setAudioSrc("/sounds/weather/rain_freezing.m4a");
         default:
           setupWeather("sunny", data.currentData.isDayTime);
+          setAudioSrc("/sounds/weather/forest.m4a");
           break;
       }
     }
@@ -179,7 +170,7 @@ const Weather: Component<{}> = (props) => {
     datasets: [{}],
   });
 
-  const chartOptionsDay = {
+  const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -230,11 +221,11 @@ const Weather: Component<{}> = (props) => {
           callback: function (value: any, index: any) {
             switch (value) {
               case 0:
-                return "LIGHT";
+                return "LGT";
               case 0.5:
                 return "MED";
               case 1:
-                return "HEAVY";
+                return "HVY";
               default:
                 null;
             }
@@ -266,98 +257,6 @@ const Weather: Component<{}> = (props) => {
             size: 9,
           },
           color: "black",
-        },
-      },
-    },
-  };
-
-  const chartOptionsNight = {
-    responsive: true,
-    maintainAspectRatio: false,
-    interaction: {
-      mode: "index" as const,
-      intersect: false,
-    },
-    stacked: false,
-    plugins: {
-      title: {
-        display: false,
-      },
-      legend: { display: false },
-    },
-    scales: {
-      x: {
-        border: {
-          display: false,
-        },
-        grid: {
-          display: true,
-          drawOnChartArea: false,
-          drawTicks: true,
-        },
-        ticks: {
-          stepSize: 0.2,
-          callback: function (value: any, index: any) {
-            return value == 0 ? "" : value % 10 === 0 ? value + "min" : null;
-          },
-          font: {
-            size: 9,
-          },
-          color: "#f4f4f4",
-        },
-      },
-      y: {
-        type: "linear" as const,
-        display: true,
-        position: "left" as const,
-        min: 0,
-        max: 1.5,
-        border: { dash: [1, 1] },
-        grid: {
-          drawTicks: false,
-          color: ["black", "#ae0000", "#ae0000"],
-        },
-        ticks: {
-          stepSize: 0.5,
-          callback: function (value: any, index: any) {
-            switch (value) {
-              case 0:
-                return "LIGHT";
-              case 0.5:
-                return "MED";
-              case 1:
-                return "HEAVY";
-              default:
-                null;
-            }
-          },
-          font: {
-            size: 9,
-          },
-          color: "#f4f4f4",
-        },
-      },
-      y1: {
-        min: 0,
-        max: 1,
-        type: "linear" as const,
-        display: true,
-        position: "right" as const,
-        grid: {
-          display: true,
-          drawOnChartArea: false,
-          tickLength: 3,
-          tickWidth: 1,
-        },
-        ticks: {
-          stepSize: 0.2,
-          callback: function (value: any, index: any) {
-            return value == 0 ? "0" : value * 100 + "%";
-          },
-          font: {
-            size: 9,
-          },
-          color: "#f4f4f4",
         },
       },
     },
@@ -1058,12 +957,7 @@ const Weather: Component<{}> = (props) => {
             </select>
             <Show when={weatherData().minuteData.length > 0}>
               <div class="weatherContentMain">
-                <img
-                  class="weatherImg"
-                  src={`/images/openmeteo/icons/${
-                    weatherData().currentData.icon
-                  }.svg`}
-                />
+                <img class="weatherImg" src={weatherData().currentData.icon} />
                 <div class="weatherContentText">
                   <p class="weatherContentTemp">
                     {Math.round(weatherData().currentData.temperature)}°
@@ -1076,9 +970,11 @@ const Weather: Component<{}> = (props) => {
                   <p class="weatherContentInfo">
                     Humidity {weatherData().currentData.humidity} %
                   </p>
-                  <p class="weatherContentInfo">
-                    UV {weatherData().currentData.uvIndex}
-                  </p>
+                  <Show when={weatherData().currentData.uvIndex > 0}>
+                    <p class="weatherContentInfo">
+                      UV {weatherData().currentData.uvIndex}
+                    </p>
+                  </Show>
                   <div class="weatherContentWind">
                     <p>
                       Wind {Math.round(weatherData().currentData.windSpeed)}
@@ -1102,20 +998,18 @@ const Weather: Component<{}> = (props) => {
               </div>
             </Show>
             <div class="weatherChart">
-              <Line
-                data={chartData()}
-                options={
-                  weatherData().currentData.isDayTime
-                    ? chartOptionsDay
-                    : chartOptionsNight
-                }
-                width={360}
-                height={180}
-              />
+              <div>
+                <Line
+                  data={chartData()}
+                  options={chartOptions}
+                  width={300}
+                  height={150}
+                />
+              </div>
+              <p class="weatherPredict">{weatherData().prediction}</p>
             </div>
-            <p class="weatherPredict">{weatherData().prediction}</p>
+            <RSS />
           </div>
-          <RSS />
         </div>
       </div>
     </MetaProvider>

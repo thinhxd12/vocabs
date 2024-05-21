@@ -1,7 +1,7 @@
 import { action, redirect } from "@solidjs/router";
-import { CurrentlyType, ExampleType, FixCurrentlyType, FixMinutelyType, HistoryType, HourlyType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, WeatherDataType } from "~/types";
+import { CurrentlyType, ExampleType, FixCurrentlyType, FixMinutelyType, HistoryType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, WeatherDataType } from "~/types";
 import { supabase } from "./supabase";
-import { ACCUMULATION, DEFAULT_CORS_PROXY, DEVIATION_NUMB, PRECIPITATION_PROBABILITY, getElAttribute, getElText, mapTables } from "~/utils";
+import { DEFAULT_CORS_PROXY, DEVIATION_NUMB, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
 import { format } from "date-fns";
@@ -747,25 +747,53 @@ export const getMemoriesLength = action(async () => {
 
 //get weather data
 
+// export const getWeatherDataOld = async (geo: string) => {
+//     "use server";
+//     const WEATHER_KEY = "gnunh5vxMIu0kLZG";
+//     // const time = Math.round(Date.now() / 1000);
+//     const url = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo}?units=ca&version=2`
+//     try {
+//         const response = await fetch(url);
+//         const data = await response.json();
+//         const dayTime = data.daily.data[0].dawnTime < data.currently.time && data.currently.time < data.daily.data[0].duskTime;
+//         const currentData = cleanDataCurrently(data.currently, data.offset, dayTime);
+//         const minuteData = cleanDataMinutely(data.minutely.data);
+//         const predict = makePrediction(minuteData, data.minutely.summary);
+//         return { currentData: currentData, minuteData: minuteData, prediction: predict } as WeatherDataType;
+//     } catch (error) {
+//         console.error(error);
+//     }
+// };
+
 export const getWeatherData = async (geo: string) => {
     "use server";
     const WEATHER_KEY = "gnunh5vxMIu0kLZG";
-    // const time = Math.round(Date.now() / 1000);
-    const url = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo}?units=ca&version=2`
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        const dayTime = data.daily.data[0].dawnTime < data.currently.time && data.currently.time < data.daily.data[0].duskTime;
-        const currentData = cleanDataCurrently(data.currently, data.offset, dayTime);
-        const minuteData = cleanDataMinutely(data.minutely.data);
-        const predict = makePrediction(minuteData, data.minutely.summary);
-        return { currentData: currentData, minuteData: minuteData, prediction: predict } as WeatherDataType;
-    } catch (error) {
-        console.error(error);
-    }
+    const geos = geo.split(",");
+    const urlMeteo = `https://api.open-meteo.com/v1/forecast?latitude=${geos[0]}&longitude=${geos[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&forecast_minutely_15=1&models=best_match`;
+    const urlPirate = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo}?exclude=currently,daily,hourly?units=ca&version=2`
+
+    let dataMeteo = fetchGetJSON(urlMeteo);
+    let dataPirate = fetchGetJSON(urlPirate);
+    let data = await Promise.all([dataMeteo, dataPirate]);
+    const offsetTime = data[1].offset;
+    const minuteData = cleanDataMinutely(data[1].minutely.data);
+    const currentlyData = cleanDataCurrently(data[0], offsetTime);
+
+    return { currentData: currentlyData, minuteData: minuteData, prediction: makePrediction(minuteData) } as WeatherDataType;
+
 };
 
-const cleanDataCurrently = (data: CurrentlyType, offset: number, dayTime: boolean) => {
+const fetchGetJSON = async (url: string) => {
+    try {
+        let response = await fetch(url);
+        let res = await response.json();
+        return res;
+    } catch (error) {
+        return "";
+    }
+}
+
+const cleanDataCurrentlyOld = (data: CurrentlyType, offset: number, dayTime: boolean) => {
 
     const time = new Date(data.time * 1000);
     time.setHours(time.getHours() + offset);
@@ -867,6 +895,24 @@ const cleanDataCurrently = (data: CurrentlyType, offset: number, dayTime: boolea
     return result;
 };
 
+const cleanDataCurrently = (data: any, offset: number) => {
+    const time = new Date(data.current.time);
+    time.setHours(time.getHours() + offset);
+    const timeText = format(time, "h:mm a");
+    return {
+        timeText: timeText,
+        icon: data.current.is_day ? "/images/openmeteo/icons/day/" + WMOCODE[data.current.weather_code as keyof typeof WMOCODE].day.image : "/images/openmeteo/icons/night/" + WMOCODE[data.current.weather_code as keyof typeof WMOCODE].night.image,
+        summary: data.current.is_day ? WMOCODE[data.current.weather_code as keyof typeof WMOCODE].day.description : WMOCODE[data.current.weather_code as keyof typeof WMOCODE].night.description,
+        humidity: Math.round(data.current.relative_humidity_2m),
+        temperature: data.current.temperature_2m,
+        apparentTemperature: data.current.apparent_temperature,
+        uvIndex: 0,
+        windSpeed: data.current.wind_speed_10m,
+        windBearing: data.current.wind_direction_10m,
+        isDayTime: data.current.is_day,
+    } as FixCurrentlyType;
+}
+
 const cleanDataMinutely = (data: MinutelyType[]) => {
     return data.map((item, index) => {
         let newItem = { diffTime: 0, intensity: 0, probability: 0 };
@@ -881,7 +927,7 @@ const cleanDataMinutely = (data: MinutelyType[]) => {
     });
 };
 
-const makePrediction = (data: FixMinutelyType[], summary: string): string => {
+const makePrediction = (data: FixMinutelyType[]): string => {
 
     let lightRainIndex = data.findIndex(
         (item) => item.intensity >= 0.1 && item.probability >= PRECIPITATION_PROBABILITY
