@@ -1,10 +1,11 @@
 import { action, redirect } from "@solidjs/router";
-import { CurrentlyType, ExampleType, FixCurrentlyType, FixMinutelyType, HistoryType, ImageType, MinutelyType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, WeatherDataType } from "~/types";
+import { CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, } from "~/types";
 import { supabase } from "./supabase";
-import { DEFAULT_CORS_PROXY, DEVIATION_NUMB, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
+import { DEFAULT_CORS_PROXY, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
 import { format } from "date-fns";
+import { createSignal } from "solid-js";
 
 export const searchText = async (text: string) => {
     "use server";
@@ -867,22 +868,22 @@ export const getMemoriesLength = action(async () => {
 //     return result;
 // };
 
-export const getWeatherData = async (geo: string) => {
-    "use server";
-    const WEATHER_KEY = "gnunh5vxMIu0kLZG";
-    const geos = geo.split(",");
-    const urlMeteo = `https://api.open-meteo.com/v1/forecast?latitude=${geos[0]}&longitude=${geos[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&forecast_minutely_15=1&models=best_match`;
-    const urlPirate = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo}?exclude=currently,daily,hourly?units=ca&version=2`
+// export const getWeatherData = async (geo: string) => {
+//     "use server";
+//     const WEATHER_KEY = "gnunh5vxMIu0kLZG";
+//     const geos = geo.split(",");
+//     const urlMeteo = `https://api.open-meteo.com/v1/forecast?latitude=${geos[0]}&longitude=${geos[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&forecast_minutely_15=1&models=best_match`;
+//     const urlPirate = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geo}?exclude=currently,daily,hourly?units=ca&version=2`
 
-    let dataMeteo = fetchGetJSON(urlMeteo);
-    let dataPirate = fetchGetJSON(urlPirate);
-    let data = await Promise.all([dataMeteo, dataPirate]);
-    const offsetTime = data[1].offset;
-    const minuteData = cleanDataMinutely(data[1].minutely.data);
-    const currentlyData = cleanDataCurrently(data[0], offsetTime);
+//     let dataMeteo = fetchGetJSON(urlMeteo);
+//     let dataPirate = fetchGetJSON(urlPirate);
+//     let data = await Promise.all([dataMeteo, dataPirate]);
+//     const offsetTime = data[1].offset;
+//     const minuteData = cleanDataMinutely(data[1].minutely.data);
+//     const currentlyData = cleanDataCurrently(data[0], offsetTime);
 
-    return { currentData: currentlyData, minuteData: minuteData, prediction: makePrediction(minuteData) } as WeatherDataType;
-};
+//     return { currentData: currentlyData, minuteData: minuteData, prediction: makePrediction(minuteData) } as WeatherDataType;
+// };
 
 const fetchGetJSON = async (url: string) => {
     try {
@@ -894,42 +895,47 @@ const fetchGetJSON = async (url: string) => {
     }
 }
 
+export const getCurrentWeatherData = async (geostr: string) => {
+    const geos = geostr.split(",");
+    const URL = `https://api.open-meteo.com/v1/forecast?latitude=${geos[0]}&longitude=${geos[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&forecast_minutely_15=1&timezone=auto&models=best_match`;
+    const data = await fetchGetJSON(URL);
+    return cleanDataCurrently(data);
+}
 
-
-const cleanDataCurrently = (data: any, offset: number) => {
-    const time = new Date(data.current.time);
-    time.setHours(time.getHours() + offset);
-    const timeText = format(time, "h:mm a");
+const cleanDataCurrently = (data: any) => {
     return {
-        timeText: timeText,
+        time: data.current.time,
         icon: data.current.is_day ? "/images/openmeteo/icons/day/" + WMOCODE[data.current.weather_code as keyof typeof WMOCODE].day.image : "/images/openmeteo/icons/night/" + WMOCODE[data.current.weather_code as keyof typeof WMOCODE].night.image,
         summary: data.current.is_day ? WMOCODE[data.current.weather_code as keyof typeof WMOCODE].day.description : WMOCODE[data.current.weather_code as keyof typeof WMOCODE].night.description,
         humidity: Math.round(data.current.relative_humidity_2m),
         temperature: data.current.temperature_2m,
         apparentTemperature: data.current.apparent_temperature,
-        uvIndex: 0,
         windSpeed: data.current.wind_speed_10m,
         windBearing: data.current.wind_direction_10m,
         isDayTime: data.current.is_day,
-    } as FixCurrentlyType;
+    } as CurrentlyWeatherType;
 }
 
-const cleanDataMinutely = (data: MinutelyType[]) => {
-    return data.map((item, index) => {
-        let newItem = { diffTime: 0, intensity: 0, probability: 0 };
-        const newIntensity =
-            item.precipIntensity - DEVIATION_NUMB * item.precipIntensityError;
-        newItem.diffTime = (item.time - data[0].time) / 60;
-        newItem.intensity = Number(
-            newIntensity > 0 ? newIntensity.toFixed(3) : 0
-        );
-        newItem.probability = item.precipProbability;
-        return newItem as FixMinutelyType;
-    });
-};
+const [minutelyData, setMinutelyData] = createSignal<FixMinutelyTWeatherType[]>([]);
 
-const makePrediction = (data: FixMinutelyType[]): string => {
+export const getMinutelyWeatherData = async (geostr: string) => {
+    const WEATHER_KEY = import.meta.env.VITE_PIRATE_KEY;
+    const URL = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geostr}?&units=ca?exclude=currently,daily,hourly`
+    const data = await fetchGetJSON(URL);
+    const zerotime = data.minutely.data[0].time;
+    const result = data.minutely.data.map((item: MinutelyWeatherType) => {
+        return {
+            diffTime: (item.time - zerotime) / 60,
+            intensity: parseFloat(item.precipIntensity.toFixed(3)),
+            probability: item.precipProbability
+        }
+    })
+    setMinutelyData(result);
+    return result as FixMinutelyTWeatherType[];
+}
 
+export const makePrediction = (): string => {
+    let data = minutelyData();
     let lightRainIndex = data.findIndex(
         (item) => item.intensity >= 0.1 && item.probability >= PRECIPITATION_PROBABILITY
     );

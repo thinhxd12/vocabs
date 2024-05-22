@@ -260,27 +260,27 @@ const Drop = {
     shrink: 0,
 };
 
-const defaultOptions = {
-    minR: 10,
-    maxR: 40,
-    maxDrops: 900,
-    rainChance: 0.3,
-    rainLimit: 3,
-    dropletsRate: 50,
-    dropletsSize: [2, 4],
-    dropletsCleaningRadiusMultiplier: 0.43,
-    raining: true,
-    globalTimeScale: 1,
-    trailRate: 1,
-    autoShrink: true,
-    spawnArea: [-0.1, 0.95],
-    trailScaleRange: [0.2, 0.5],
-    collisionRadius: 0.65,
-    collisionRadiusIncrease: 0.01,
-    dropFallMultiplier: 1,
-    collisionBoostMultiplier: 0.05,
-    collisionBoost: 1,
-};
+// const defaultOptions = {
+//     minR: 10,
+//     maxR: 40,
+//     maxDrops: 900,
+//     rainChance: 0.3,
+//     rainLimit: 3,
+//     dropletsRate: 50,
+//     dropletsSize: [2, 4],
+//     dropletsCleaningRadiusMultiplier: 0.43,
+//     raining: true,
+//     globalTimeScale: 1,
+//     trailRate: 1,
+//     autoShrink: true,
+//     spawnArea: [-0.1, 0.95],
+//     trailScaleRange: [0.2, 0.5],
+//     collisionRadius: 0.65,
+//     collisionRadiusIncrease: 0.01,
+//     dropFallMultiplier: 1,
+//     collisionBoostMultiplier: 0.05,
+//     collisionBoost: 1,
+// };
 
 export class Raindrops {
     constructor(
@@ -296,7 +296,7 @@ export class Raindrops {
         this.scale = scale;
         this.dropAlpha = dropAlpha;
         this.dropColor = dropColor;
-        this.options = { ...defaultOptions, ...options };
+        this.options = options;
         this.canvas = null;
         this.ctx = null;
         this.dropletsPixelDensity = 1;
@@ -716,6 +716,17 @@ export class Raindrops {
 }
 
 ////-----------------------RainRenderer-------------------------
+const defaultOptionsRenderer = {
+    renderShadow: false,
+    minRefraction: 256,
+    maxRefraction: 512,
+    brightness: 1,
+    alphaMultiply: 20,
+    alphaSubtract: 5,
+    parallaxBg: 5,
+    parallaxFg: 20
+}
+
 export class RainRenderer {
     constructor(
         canvas: HTMLCanvasElement,
@@ -731,16 +742,9 @@ export class RainRenderer {
         this.imageFg = imageFg;
         this.imageBg = imageBg;
         this.options = {
-            renderShadow: false,
-            minRefraction: 256,
-            maxRefraction: 512,
-            brightness: 1,
-            alphaMultiply: 20,
-            alphaSubtract: 5,
-            parallaxBg: 5,
-            parallaxFg: 20,
+            ...defaultOptionsRenderer,
             ...options
-        }
+        };
         this.parallaxX = 0;
         this.parallaxY = 0;
         this.init();

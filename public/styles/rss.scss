@@ -3,7 +3,7 @@
 .rss {
   height: calc(100vh - 351px);
   overflow-y: scroll;
-  margin-left: 20px;
+  margin-left: 15px;
   margin-top: 3px;
 
   &::-webkit-scrollbar {
@@ -11,13 +11,13 @@
   }
 
   .rssTop {
-    width: 320px;
+    width: 330px;
     height: 25px;
     overflow: hidden;
     @include flex-center;
     position: fixed;
     bottom: 34px;
-    left: calc(-160px + 50vw);
+    left: calc(-165px + 50vw);
     z-index: 999;
     background-color: $color-calendar-bg;
 
@@ -50,7 +50,7 @@
       cursor: pointer;
       transition: 0.1s;
       background: $color-background-1;
-      @include font("Roslindale", 14px, #7c7b7a, 700, normal, 21px);
+      @include font("Roslindale", 14px, $color-white, 700, normal, 21px);
       background-image: url('/images/main/input-left-corner.png'),
         url('/images/main/input-right-corner.png');
       background-position: left top,
@@ -71,7 +71,7 @@
       align-items: flex-start;
       padding: 3px 6px;
       margin-bottom: 2px;
-      width: 320px;
+      width: 330px;
 
       .rssItemImg {
         display: block;

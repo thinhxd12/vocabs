@@ -1,8 +1,6 @@
 import { MetaProvider, Title as TitleName, Meta } from "@solidjs/meta";
 import { Component, Index, Show, createSignal, onMount } from "solid-js";
 import "/public/styles/weather.scss";
-import { getWeatherData } from "~/api/api";
-import { WeatherDataType } from "~/types";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
 import RSS from "~/components/rss";
@@ -10,20 +8,16 @@ import { FaSolidArrowUpLong } from "solid-icons/fa";
 import {
   RainRenderer,
   Raindrops,
-  activeTextureGL,
-  chance,
   createCanvas,
-  createProgramGL,
-  createTextureGL,
-  createUniformGL,
-  getContextGL,
-  getShader,
   loadImage,
-  random,
-  setRectangleGL,
-  times,
-  updateTextureGL,
 } from "~/api/weatherServices";
+import { CurrentlyWeatherType } from "~/types";
+import {
+  getCurrentWeatherData,
+  getMinutelyWeatherData,
+  makePrediction,
+} from "~/api/api";
+import { format } from "date-fns";
 
 type WeatherGeoType = {
   name: string;
@@ -56,113 +50,99 @@ const Weather: Component<{}> = (props) => {
     },
   ];
 
-  const mockWeatherData: WeatherDataType = {
-    currentData: {
-      timeText: "",
-      icon: "",
-      summary: "",
-      humidity: 0,
-      temperature: 0,
-      apparentTemperature: 0,
-      uvIndex: 0,
-      windSpeed: 0,
-      windBearing: 0,
-      isDayTime: true,
-    },
-    minuteData: [],
-    prediction: "",
-  };
-
   const [audioSrc, setAudioSrc] = createSignal<string>("");
 
-  const [weatherData, setweatherData] =
-    createSignal<WeatherDataType>(mockWeatherData);
+  const [currentData, setCurrentData] = createSignal<
+    CurrentlyWeatherType | undefined
+  >();
+
+  const [textPrediction, setTextPrediction] = createSignal<string>("");
 
   const handleGetWeatherData = async (geo: string) => {
-    const data = await getWeatherData(geo);
-
-    if (data) {
-      setweatherData(data);
-      setChartData({
-        labels: data.minuteData.map((item) => item.diffTime),
-        datasets: [
-          {
-            label: "",
-            data: data.minuteData.map((item) => item.intensity),
-            borderColor: "#009bff",
-            backgroundColor: "#52a0c1bf",
-            yAxisID: "y",
-            fill: true,
-            tension: 0.1,
-            pointRadius: 0,
-            borderWidth: 1,
-          },
-          {
-            label: "",
-            data: data.minuteData.map((item) => item.probability),
-            borderColor: "#f90000",
-            yAxisID: "y1",
-            fill: false,
-            tension: 0.3,
-            pointRadius: 0,
-            borderWidth: 1.5,
-          },
-        ],
-      });
-
-      switch (data.currentData.summary) {
-        case "Light rain":
-        case "Light Freezing Rain":
-        case "Light Showers":
-          setAudioSrc("/sounds/weather/rain_light_2.m4a");
-          setupWeather("drizzle", data.currentData.isDayTime);
-          break;
-        case "Moderate rain":
-        case "Freezing Rain":
-        case "Showers":
-          setAudioSrc("/sounds/weather/rain_light.m4a");
-          setupWeather("rain", data.currentData.isDayTime);
-          break;
-        case "Heavy rain":
-        case "Heavy Showers":
-          setAudioSrc("/sounds/weather/rain.m4a");
-          setupWeather("storm", data.currentData.isDayTime);
-          break;
-        case "Thunderstorm":
-        case "Light Thunderstorms With Hail":
-          setAudioSrc("/sounds/weather/thunderstorm.m4a");
-          setupWeather("storm", data.currentData.isDayTime);
-          break;
-        case "Partly Cloudy":
-        case "Mostly Cloudy":
-          setAudioSrc("/sounds/weather/wind.m4a");
-          setupWeather("sunny", data.currentData.isDayTime);
-          break;
-        case "Sunny":
-          setAudioSrc("/sounds/weather/forest.m4a");
-          setupWeather("sunny", data.currentData.isDayTime);
-          break;
-        case "Clear":
-          setAudioSrc("/sounds/weather/night.m4a");
-          setupWeather("sunny", data.currentData.isDayTime);
-          break;
-        case "Light Snow":
-        case "Snow":
-        case "Heavy Snow":
-          setAudioSrc("/sounds/weather/snow.m4a");
-          setupWeather("sunny", data.currentData.isDayTime);
-          break;
-        case "Light Freezing Rain":
-        case "Freezing Rain":
-          setAudioSrc("/sounds/weather/rain_freezing.m4a");
-          setupWeather("sunny", data.currentData.isDayTime);
-          break;
-        default:
-          setAudioSrc("/sounds/weather/forest.m4a");
-          setupWeather("sunny", data.currentData.isDayTime);
-          break;
-      }
+    const curdata = await getCurrentWeatherData(geo);
+    setCurrentData(curdata);
+    switch (curdata.summary) {
+      case "Light rain":
+      case "Light Freezing Rain":
+      case "Light Showers":
+        setAudioSrc("/sounds/weather/rain_light_2.m4a");
+        setupWeather("drizzle", curdata.isDayTime);
+        break;
+      case "Moderate rain":
+      case "Freezing Rain":
+      case "Showers":
+        setAudioSrc("/sounds/weather/rain_light.m4a");
+        setupWeather("rain", curdata.isDayTime);
+        break;
+      case "Heavy rain":
+      case "Heavy Showers":
+        setAudioSrc("/sounds/weather/rain.m4a");
+        setupWeather("storm", curdata.isDayTime);
+        break;
+      case "Thunderstorm":
+      case "Light Thunderstorms With Hail":
+        setAudioSrc("/sounds/weather/thunderstorm.m4a");
+        setupWeather("storm", curdata.isDayTime);
+        break;
+      case "Partly Cloudy":
+      case "Mostly Cloudy":
+        setAudioSrc("/sounds/weather/wind.m4a");
+        setupWeather("sunny", curdata.isDayTime);
+        break;
+      case "Sunny":
+        setAudioSrc("/sounds/weather/forest.m4a");
+        setupWeather("sunny", curdata.isDayTime);
+        break;
+      case "Clear":
+        setAudioSrc("/sounds/weather/night.m4a");
+        setupWeather("sunny", curdata.isDayTime);
+        break;
+      case "Light Snow":
+      case "Snow":
+      case "Heavy Snow":
+        setAudioSrc("/sounds/weather/snow.m4a");
+        setupWeather("sunny", curdata.isDayTime);
+        break;
+      case "Light Freezing Rain":
+      case "Freezing Rain":
+        setAudioSrc("/sounds/weather/rain_freezing.m4a");
+        setupWeather("sunny", curdata.isDayTime);
+        break;
+      default:
+        setAudioSrc("/sounds/weather/forest.m4a");
+        setupWeather("sunny", curdata.isDayTime);
+        break;
     }
+
+    const minutelydata = await getMinutelyWeatherData(geo);
+    setChartData({
+      labels: minutelydata.map((item) => item.diffTime),
+      datasets: [
+        {
+          label: "",
+          data: minutelydata.map((item) => item.intensity),
+          borderColor: "#009bff",
+          backgroundColor: "#52a0c1bf",
+          yAxisID: "y",
+          fill: true,
+          tension: 0.1,
+          pointRadius: 0,
+          borderWidth: 1,
+        },
+        {
+          label: "",
+          data: minutelydata.map((item) => item.probability),
+          borderColor: "#f90000",
+          yAxisID: "y1",
+          fill: false,
+          tension: 0.3,
+          pointRadius: 0,
+          borderWidth: 1.5,
+        },
+      ],
+    });
+
+    setTextPrediction(makePrediction());
   };
 
   onMount(async () => {
@@ -199,6 +179,9 @@ const Weather: Component<{}> = (props) => {
           display: true,
           drawOnChartArea: false,
           drawTicks: true,
+          tickLength: 2,
+          tickWidth: 1,
+          tickColor: "black",
         },
         ticks: {
           stepSize: 0.2,
@@ -315,12 +298,15 @@ const Weather: Component<{}> = (props) => {
       textureNightBg,
     ]);
 
-    let dpi = window.devicePixelRatio;
-    let canvasWidth = 360 * dpi;
-    let canvasHeight = (window.innerHeight - 34) * dpi;
+    const dpi = window.devicePixelRatio;
 
-    canvas.width = canvasWidth;
-    canvas.height = canvasHeight;
+    let canvasWidth = 360;
+    let canvasHeight = window.innerHeight - 34;
+
+    canvas.width = Math.floor(canvasWidth * dpi);
+    canvas.height = Math.floor(canvasHeight * dpi);
+    canvas.style.width = canvasWidth + "px";
+    canvas.style.height = canvasHeight + "px";
 
     raindrops = new Raindrops(
       canvasWidth,
@@ -356,13 +342,30 @@ const Weather: Component<{}> = (props) => {
   };
 
   const setupWeather = async (type: string, isDay: boolean) => {
+    const defaultOptions = {
+      minR: 10,
+      maxR: 40,
+      maxDrops: 900,
+      rainChance: 0.3,
+      rainLimit: 3,
+      dropletsRate: 50,
+      dropletsSize: [2, 4],
+      dropletsCleaningRadiusMultiplier: 0.43,
+      raining: true,
+      globalTimeScale: 1,
+      trailRate: 1,
+      autoShrink: true,
+      spawnArea: [-0.1, 0.95],
+      trailScaleRange: [0.2, 0.5],
+      collisionRadius: 0.65,
+      collisionRadiusIncrease: 0.01,
+      dropFallMultiplier: 1,
+      collisionBoostMultiplier: 0.05,
+      collisionBoost: 1,
+    };
+
     const weatherTypes = {
       rain: {
-        rainLimit: 2,
-        trailRate: 1,
-        trailScaleRange: [0.2, 0.45],
-        collisionRadius: 0.45,
-        dropletsCleaningRadiusMultiplier: 0.28,
         rainChance: 0.35,
         dropletsRate: 50,
         raining: true,
@@ -412,6 +415,13 @@ const Weather: Component<{}> = (props) => {
       textureNightBg,
     ]);
 
+    raindrops.options = {
+      ...defaultOptions,
+      ...weatherTypes[type as keyof typeof weatherTypes],
+    };
+
+    raindrops.clearDrops();
+
     if (isDay) {
       generateTextures(imagesData[0], imagesData[1]);
       renderer.updateTextures();
@@ -419,13 +429,6 @@ const Weather: Component<{}> = (props) => {
       generateTextures(imagesData[2], imagesData[3]);
       renderer.updateTextures();
     }
-
-    raindrops.options = Object.assign(
-      raindrops.options,
-      weatherTypes[type as keyof typeof weatherTypes]
-    );
-
-    raindrops.clearDrops();
   };
 
   return (
@@ -436,80 +439,72 @@ const Weather: Component<{}> = (props) => {
       <audio hidden src={audioSrc()} autoplay loop></audio>
       <div class="weather">
         <canvas ref={canvas} class="weatherBackground" />
-        <div class="weatherMain">
-          <div
-            class={
-              weatherData().currentData.isDayTime
-                ? "weatherContentDay"
-                : "weatherContentNight"
-            }
-          >
-            <select
-              class="weatherGeos"
-              onchange={(e) => handleGetWeatherData(e.currentTarget.value)}
+        <Show when={currentData()}>
+          <div class="weatherMain">
+            <div
+              class={
+                currentData()!.isDayTime
+                  ? "weatherContentDay"
+                  : "weatherContentNight"
+              }
             >
-              <Index each={WEATHER_GEOS}>
-                {(item, index) => (
-                  <option value={item().geo}> {item().name}</option>
-                )}
-              </Index>
-            </select>
-            <Show when={weatherData().minuteData.length > 0}>
+              <select
+                class="weatherGeos"
+                onchange={(e) => handleGetWeatherData(e.currentTarget.value)}
+              >
+                <Index each={WEATHER_GEOS}>
+                  {(item, index) => (
+                    <option value={item().geo}> {item().name}</option>
+                  )}
+                </Index>
+              </select>
               <div class="weatherContentMain">
-                <img class="weatherImg" src={weatherData().currentData.icon} />
+                <img class="weatherImg" src={currentData()!.icon} />
                 <div class="weatherContentText">
                   <p class="weatherContentTemp">
-                    {Math.round(weatherData().currentData.temperature)}°
+                    {Math.round(currentData()!.temperature)}°
                   </p>
                   <p class="weatherContentInfo">
-                    Feels{" "}
-                    {Math.round(weatherData().currentData.apparentTemperature)}
+                    Feels {Math.round(currentData()!.apparentTemperature)}
                     °C
                   </p>
                   <p class="weatherContentInfo">
-                    Humidity {weatherData().currentData.humidity} %
+                    Humidity {currentData()!.humidity} %
                   </p>
-                  <Show when={weatherData().currentData.uvIndex > 0}>
-                    <p class="weatherContentInfo">
-                      UV {weatherData().currentData.uvIndex}
-                    </p>
-                  </Show>
                   <div class="weatherContentWind">
                     <p>
-                      Wind {Math.round(weatherData().currentData.windSpeed)}
+                      Wind {Math.round(currentData()!.windSpeed)}
                       km/h
                     </p>
                     <FaSolidArrowUpLong
                       size={12}
                       style={{
-                        transform: `rotate(${
-                          weatherData().currentData.windBearing
-                        }deg)`,
+                        transform: `rotate(${currentData()!.windBearing}deg)`,
                       }}
                     />
                   </div>
                   <p class="weatherContentInfo">
-                    {weatherData().currentData.timeText}
+                    {format(new Date(currentData()!.time), "h:mm a")}
                     {" - "}
-                    {weatherData().currentData.summary}
+                    {currentData()!.summary}
                   </p>
                 </div>
               </div>
-            </Show>
-            <div class="weatherChart">
-              <div>
-                <Line
-                  data={chartData()}
-                  options={chartOptions}
-                  width={300}
-                  height={150}
-                />
+              <div class="weatherChart">
+                <div>
+                  <Line
+                    data={chartData()}
+                    options={chartOptions}
+                    width={330}
+                    height={150}
+                  />
+                </div>
+                <p class="weatherPredict">{textPrediction()}</p>
               </div>
-              <p class="weatherPredict">{weatherData().prediction}</p>
+              <RSS />
             </div>
-            <RSS />
           </div>
-        </div>
+        </Show>
       </div>
     </MetaProvider>
   );

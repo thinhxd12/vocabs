@@ -90,45 +90,19 @@ export interface TranslateType {
   wordTranscription: string;
 }
 
-export interface CurrentlyType {
-  time: number;
-  summary: string;
-  icon: string;
-  nearestStormDistance: number;
-  nearestStormBearing: number;
-  precipIntensity: number;
-  precipProbability: number;
-  precipIntensityError: number;
-  precipType: string;
-  temperature: number;
-  apparentTemperature: number;
-  dewPoint: number;
-  humidity: number;
-  pressure: number;
-  windSpeed: number;
-  windGust: number;
-  windBearing: number;
-  cloudCover: number;
-  uvIndex: number;
-  visibility: number;
-  ozone: number;
-  isDayTime?: boolean;
-}
-
-export interface FixCurrentlyType {
-  timeText: string;
+export interface CurrentlyWeatherType {
+  time: string;
   icon: string;
   summary: string;
-  temperature: number;
   humidity: number;
+  temperature: number;
   apparentTemperature: number;
-  uvIndex: number;
   windSpeed: number;
   windBearing: number;
   isDayTime: boolean;
 }
 
-export interface MinutelyType {
+export interface MinutelyWeatherType {
   time: number;
   precipIntensity: number;
   precipProbability: number;
@@ -136,37 +110,8 @@ export interface MinutelyType {
   precipType: string;
 }
 
-export interface FixMinutelyType {
+export interface FixMinutelyTWeatherType {
   diffTime: number;
   intensity: number;
   probability: number;
-}
-
-export interface HourlyType {
-  time: number;
-  icon: string;
-  summary: string;
-  precipIntensity: number;
-  precipProbability: number;
-  precipIntensityError: number;
-  precipAccumulation: number;
-  precipType: string;
-  temperature: number;
-  apparentTemperature: number;
-  dewPoint: number;
-  humidity: number;
-  pressure: number;
-  windSpeed: number;
-  windGust: number;
-  windBearing: number;
-  cloudCover: number;
-  uvIndex: number;
-  visibility: number;
-  ozone: number;
-}
-
-export interface WeatherDataType {
-  currentData: FixCurrentlyType;
-  minuteData: FixMinutelyType[];
-  prediction: string;
 }
