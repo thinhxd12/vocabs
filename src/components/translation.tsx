@@ -11,9 +11,6 @@ import {
   on,
   onMount,
 } from "solid-js";
-import "/public/styles/edit.scss";
-import "/public/styles/translate.scss";
-import "/public/styles/toast.scss";
 import { OcX2 } from "solid-icons/oc";
 import { TranslateType, VocabularyType } from "~/types";
 import { useSubmission } from "@solidjs/router";
@@ -24,9 +21,12 @@ import {
   getTranslate,
   insertVocabularyItem,
   searchMemoriesText,
-} from "~/api/api";
+} from "~/lib/api";
 import toast, { Toaster } from "solid-toast";
 import useClickOutside from "solid-click-outside";
+import styles from "./translation.module.scss";
+import buttons from "../assets/styles/buttons.module.scss";
+import forms from "../assets/styles/form.module.scss";
 
 const Translation: Component<{
   translateText: string;
@@ -125,55 +125,59 @@ const Translation: Component<{
   });
 
   return (
-    <div class="edit" tabIndex={1} ref={setTarget}>
-      <div class="editHeader">
-        <div class="editHeaderLeft"></div>
-        <div class="editHeaderRight">
-          <button class="button button--close" onclick={props.onClose}>
+    <div class={styles.translation} tabIndex={1} ref={setTarget}>
+      <div class={styles.translationHeader}>
+        <div class={styles.translationHeaderLeft}></div>
+        <div class={styles.translationHeaderRight}>
+          <button class={buttons.buttonClose} onclick={props.onClose}>
             <OcX2 size={15} />
           </button>
         </div>
       </div>
-      <div class="editBody">
-        <div class="newTranslateContainer">
+      <div class={styles.translationBody}>
+        <div class={styles.searchContent}>
           <img
             src="/images/main/input-left-corner.png"
-            class="myInputLeftOrnament"
+            class={styles.searchLeftOrnament}
           />
           <input
-            class="newTranslateInput"
+            class={styles.searchInput}
             autocomplete="off"
             value={translateTerm()}
             onInput={(e) => setTranslateTerm(e.target.value)}
             onKeyDown={onKeyDownTranslate}
           />
-          <button class="translateBtn" onClick={handleFindDefinition}>
+          <button class={styles.searchButton} onClick={handleFindDefinition}>
             <img src="/images/main/center.png" />
           </button>
           <img
             src="/images/main/input-right-corner.png"
-            class="myInputRightOrnament"
+            class={styles.searchRightOrnament}
           />
         </div>
-        <form action={insertVocabularyItem} method="post" class="editForm">
+        <form
+          action={insertVocabularyItem}
+          method="post"
+          class={forms.formBody}
+        >
           <input
             style={{ display: "none" }}
             name="word"
             autocomplete="off"
             value={translateTerm()}
           />
-          <div class="editInputGroup">
+          <div class={forms.formInputGroup}>
             <input
-              class="editInputItem"
+              class={forms.formInput}
               name="audio"
               autocomplete="off"
               value={definitionData().audio}
             />
           </div>
-          <div class="editInputGroup">
+          <div class={forms.formInputGroup}>
             <textarea
               name="definitions"
-              class="editInputItem editInputItemResult"
+              class={forms.formTextarea}
               value={JSON.stringify(definitionData().definitions, null, " ")}
               onChange={(e) =>
                 setDefinitionData({
@@ -183,9 +187,9 @@ const Translation: Component<{
               }
             />
           </div>
-          <div class="editInputGroup">
+          <div class={forms.formInputGroup}>
             <input
-              class="editInputItem"
+              class={forms.formInput}
               name="phonetics"
               autocomplete="off"
               value={
@@ -193,9 +197,9 @@ const Translation: Component<{
               }
             />
           </div>
-          <div class="editInputGroup">
+          <div class={forms.formInputGroup}>
             <input
-              class="editInputItem"
+              class={forms.formInput}
               name="meaning"
               autocomplete="off"
               value={transInput()}
@@ -204,7 +208,7 @@ const Translation: Component<{
           </div>
           <button
             type="submit"
-            class="button button--submit"
+            class={buttons.buttonSubmit}
             onClick={() => setSubmittedForm(true)}
           >
             Submit
@@ -212,10 +216,10 @@ const Translation: Component<{
         </form>
 
         <Show when={translateData()}>
-          <div class="translate">
-            <div class="translateBody">
+          <div class={styles.translationResult}>
+            <div class={styles.translationResultBody}>
               <p
-                class="translateTranslation"
+                class={styles.translationMainResult}
                 onClick={() =>
                   handleSetTransInput(
                     "-" + translateData()!.translation.toLowerCase()
@@ -224,12 +228,12 @@ const Translation: Component<{
               >
                 {translateData()!.translation}
               </p>
-              <div class="translateContent">
+              <div class={styles.translationResultContent}>
                 <Index each={Object.keys(translateData()!.translations)}>
                   {(item, index) => {
                     let key = item() as string;
                     return (
-                      <div class="translateContentItem">
+                      <div class={styles.translationResultItem}>
                         <p
                           onClick={() =>
                             handleSetTransInput(" -" + item().toLowerCase())
@@ -237,11 +241,11 @@ const Translation: Component<{
                         >
                           {item()}
                         </p>
-                        <div class="translateContentItemText">
+                        <div class={styles.translationResultItemText}>
                           <Index each={translateData()!.translations[key]}>
                             {(m, n) => {
                               return (
-                                <div class="translateContentItemRow">
+                                <div class={styles.translationResultItemRow}>
                                   <span
                                     onClick={() =>
                                       handleSetTransInput(
@@ -254,24 +258,42 @@ const Translation: Component<{
                                   <span>{m().synonyms.join(", ")}</span>
                                   <Switch>
                                     <Match when={m().frequency === 3}>
-                                      <span class="frequencyContainer">
-                                        <span class="frequencyDot"></span>
-                                        <span class="frequencyDot"></span>
-                                        <span class="frequencyDot"></span>
+                                      <span class={styles.frequencyContainer}>
+                                        <span
+                                          class={styles.frequencyDot}
+                                        ></span>
+                                        <span
+                                          class={styles.frequencyDot}
+                                        ></span>
+                                        <span
+                                          class={styles.frequencyDot}
+                                        ></span>
                                       </span>
                                     </Match>
                                     <Match when={m().frequency === 2}>
-                                      <span class="frequencyContainer">
-                                        <span class="frequencyDot"></span>
-                                        <span class="frequencyDot"></span>
-                                        <span class="frequencyClear"></span>
+                                      <span class={styles.frequencyContainer}>
+                                        <span
+                                          class={styles.frequencyDot}
+                                        ></span>
+                                        <span
+                                          class={styles.frequencyDot}
+                                        ></span>
+                                        <span
+                                          class={styles.frequencyClear}
+                                        ></span>
                                       </span>
                                     </Match>
                                     <Match when={m().frequency === 1}>
-                                      <span class="frequencyContainer">
-                                        <span class="frequencyDot"></span>
-                                        <span class="frequencyClear"></span>
-                                        <span class="frequencyClear"></span>
+                                      <span class={styles.frequencyContainer}>
+                                        <span
+                                          class={styles.frequencyDot}
+                                        ></span>
+                                        <span
+                                          class={styles.frequencyClear}
+                                        ></span>
+                                        <span
+                                          class={styles.frequencyClear}
+                                        ></span>
                                       </span>
                                     </Match>
                                   </Switch>
@@ -295,8 +317,8 @@ const Translation: Component<{
       </div>
       <Toaster
         position="top-center"
-        containerClassName="toast-container"
-        toastOptions={{ className: "toast-content" }}
+        containerClassName={styles.toastContainer}
+        toastOptions={{ className: `${styles.toastContent}` }}
       />
     </div>
   );

@@ -1,4 +1,4 @@
-@import "./mixins.scss";
+@import "../assets/styles/mixins.scss";
 
 .bottom {
     width: 100%;
@@ -88,15 +88,14 @@
 
         span {
             @include font('Roslindale', 9px, #7c7b7a, 600, normal, 9px);
-            text-align: cent er;
+            text-align: center;
         }
 
         small {
             @include font('Roslindale', 6px, #7c7b7a, 400, normal, 6px);
         }
 
-        &:hover,
-        &--active {
+        &:hover {
 
             span,
             small {
@@ -104,29 +103,68 @@
             }
         }
 
-        &--1 {
-            width: 85px;
+        // &--1 {
+        //     width: 85px;
+        // }
+
+        // &--2 {
+        //     width: 84px;
+        // }
+
+        // &--3 {
+        //     width: 79px;
+        // }
+
+        // &--4 {
+        //     min-width: 90px;
+        //     max-width: 90px;
+        //     cursor: default;
+
+        //     &:hover {
+
+        //         span,
+        //         small {
+        //             color: #7c7b7a;
+        //         }
+        //     }
+        // }
+    }
+
+    .mainFooterBtnActive {
+        @extend .mainFooterBtn;
+
+        span,
+        small {
+            color: $color-white;
         }
+    }
 
-        &--2 {
-            width: 84px;
-        }
+    .mainFooterBtn1 {
+        @extend .mainFooterBtn;
+        width: 85px;
+    }
 
-        &--3 {
-            width: 79px;
-        }
+    .mainFooterBtn2 {
+        @extend .mainFooterBtn;
+        width: 84px;
+    }
 
-        &--4 {
-            min-width: 90px;
-            max-width: 90px;
-            cursor: default;
+    .mainFooterBtn3 {
+        @extend .mainFooterBtn;
+        width: 79px;
+    }
 
-            &:hover {
+    .mainFooterBtn4 {
+        @extend .mainFooterBtn;
+        min-width: 90px;
+        max-width: 90px;
+        cursor: default;
 
-                span,
-                small {
-                    color: #7c7b7a;
-                }
+        &:hover {
+
+            span,
+            small {
+                color: #7c7b7a;
             }
         }
     }

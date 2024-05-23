@@ -1,6 +1,6 @@
 import { Component, Index, Show, createSignal, onMount } from "solid-js";
 import { RouteDefinition, useAction, useSubmission } from "@solidjs/router";
-import { getUser } from "~/api";
+import { getUser } from "~/lib";
 import {
   getCalendarHistoryData,
   getCalendarScheduleData,
@@ -10,24 +10,26 @@ import {
   submitNewMonth,
   submitNewWeek,
   submitTodayReset,
-} from "~/api/api";
+} from "~/lib/api";
 
 import { HistoryType } from "~/types";
-import "/public/styles/calendar.scss";
 import { createSlider } from "solid-slider";
 import HistoryCard from "~/components/historycard";
 import CalendarDropdown from "~/components/calendardropdown";
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { format } from "date-fns";
+import forms from "../../assets/styles/form.module.scss";
+import buttons from "../../assets/styles/buttons.module.scss";
+import styles from "./calendar.module.scss";
 
 export const route = {
   load: () => {
     getUser();
   },
 } satisfies RouteDefinition;
-let ref: HTMLDivElement;
 
+let ref: HTMLDivElement;
 const About: Component<{}> = (props) => {
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();
   const getCalendarHistoryDataAction = useAction(getCalendarHistoryData);
@@ -48,15 +50,19 @@ const About: Component<{}> = (props) => {
   const [slider, { current, next, prev, moveTo }] = createSlider(options);
 
   onMount(async () => {
-    //get image calendar
+    //******get image calendar
     // getImageFromUnsplashAction();
-    //get calendar history
+
+    //******get calendar history
     await getCalendarHistoryDataFromStorage();
-    // set slider
+
+    //******set slider
     slider(ref);
-    //get calendar schedule
+
+    //******get calendar schedule
     getCalendarScheduleDataAction();
-    //get calendarImageContent
+
+    //******get calendarImageContent
     getThisWeekDataFromStorage();
   });
 
@@ -84,14 +90,14 @@ const About: Component<{}> = (props) => {
         <Index each={Array.from(Array(5).keys())}>
           {(item, n) => {
             return (
-              <div class="calendarWeek">
-                <div class="calendarDayLoading">11</div>
-                <div class="calendarDayLoading">12</div>
-                <div class="calendarDayLoading">13</div>
-                <div class="calendarDayLoading">14</div>
-                <div class="calendarDayLoading">15</div>
-                <div class="calendarDayLoading">16</div>
-                <div class="calendarDayLoading">17</div>
+              <div class={styles.calendarWeek}>
+                <div class={styles.calendarDayLoading}>11</div>
+                <div class={styles.calendarDayLoading}>12</div>
+                <div class={styles.calendarDayLoading}>13</div>
+                <div class={styles.calendarDayLoading}>14</div>
+                <div class={styles.calendarDayLoading}>15</div>
+                <div class={styles.calendarDayLoading}>16</div>
+                <div class={styles.calendarDayLoading}>17</div>
               </div>
             );
           }}
@@ -127,13 +133,13 @@ const About: Component<{}> = (props) => {
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <Motion.div
-        class="calendar"
+        class={styles.calendar}
         animate={{ opacity: [0, 1] }}
         transition={{ duration: 0.6 }}
       >
-        <div class="calendarCard">
+        <div class={styles.calendarCard}>
           <div
-            class="calendarImage"
+            class={styles.calendarImage}
             style={{
               "background-image": `url('/images/main/${format(
                 todayDate(),
@@ -144,27 +150,27 @@ const About: Component<{}> = (props) => {
             //   "background-image": `url(${getImageFromUnsplashResult.result})`,
             // }}
           >
-            <div class="calendarImageContent">
-              <p class="setNewMonth" onClick={handleShowSetNewMonth}>
+            <div class={styles.calendarImageContent}>
+              <p class={styles.setNewMonth} onClick={handleShowSetNewMonth}>
                 {format(todayDate(), "MMMM")}
               </p>
-              <p class="setNewWeek" onClick={handleShowSetNewWeek}>
+              <p class={styles.setNewWeek} onClick={handleShowSetNewWeek}>
                 {format(todayDate(), "yyyy")}
               </p>
-              <p class="setNewHistory" onClick={handleShowSetNewHistory}>
+              <p class={styles.setNewHistory} onClick={handleShowSetNewHistory}>
                 {weekIndex() + 1} &#183; {weekIndex() + 200}
               </p>
             </div>
           </div>
-          <div class="calendarDates">
-            <div class="calendarWeek">
-              <div class="calendarWeekTitle">Sun</div>
-              <div class="calendarWeekTitle">Mon</div>
-              <div class="calendarWeekTitle">Tue</div>
-              <div class="calendarWeekTitle">Wed</div>
-              <div class="calendarWeekTitle">Thu</div>
-              <div class="calendarWeekTitle">Fri</div>
-              <div class="calendarWeekTitle">Sat</div>
+          <div class={styles.calendarDates}>
+            <div class={styles.calendarWeek}>
+              <div class={styles.calendarWeekTitle}>Sun</div>
+              <div class={styles.calendarWeekTitle}>Mon</div>
+              <div class={styles.calendarWeekTitle}>Tue</div>
+              <div class={styles.calendarWeekTitle}>Wed</div>
+              <div class={styles.calendarWeekTitle}>Thu</div>
+              <div class={styles.calendarWeekTitle}>Fri</div>
+              <div class={styles.calendarWeekTitle}>Sat</div>
             </div>
             <Show
               when={calendarScheduleDataResult.result}
@@ -173,13 +179,13 @@ const About: Component<{}> = (props) => {
               <Index each={calendarScheduleDataResult.result}>
                 {(data, i) => {
                   return (
-                    <div class="calendarWeek">
+                    <div class={styles.calendarWeek}>
                       <Index each={data()}>
                         {(date, n) => {
                           return (
-                            <div class="calendarDay">
+                            <div class={styles.calendarDay}>
                               <Show when={"time1" in date()}>
-                                <div class="dateTimeIndexHidden">
+                                <div class={styles.dateTimeIndexHidden}>
                                   {Math.max(date().time1, date().time2)}
                                 </div>
                               </Show>
@@ -187,7 +193,9 @@ const About: Component<{}> = (props) => {
                               <Show
                                 when={date().month === todayDate().getMonth()}
                                 fallback={
-                                  <div class="dateText">{date().date}</div>
+                                  <div class={styles.dateText}>
+                                    {date().date}
+                                  </div>
                                 }
                               >
                                 <Show
@@ -196,13 +204,13 @@ const About: Component<{}> = (props) => {
                                     date().date === todayDate().getDate()
                                   }
                                   fallback={
-                                    <div class="dateTextThisMonth">
+                                    <div class={styles.dateTextThisMonth}>
                                       {date().date}
                                     </div>
                                   }
                                 >
                                   <div
-                                    class="dateTextThisMonth todayDate"
+                                    class={`${styles.dateTextThisMonth} ${styles.todayDate}`}
                                     onClick={() => setShowTodayReset(true)}
                                   >
                                     {date().date}
@@ -217,8 +225,8 @@ const About: Component<{}> = (props) => {
                                     <div
                                       class={
                                         date().time1 > 0
-                                          ? "dateTimeIndex dateTimeIndexDone"
-                                          : "dateTimeIndex"
+                                          ? `${styles.dateTimeIndex} ${styles.dateTimeIndexDone}`
+                                          : styles.dateTimeIndex
                                       }
                                     >
                                       <div>{date().time1}</div>
@@ -226,7 +234,9 @@ const About: Component<{}> = (props) => {
                                     </div>
                                   }
                                 >
-                                  <div class="dateTimeIndex dateTimeIndexToday">
+                                  <div
+                                    class={`${styles.dateTimeIndex} ${styles.dateTimeIndexToday}`}
+                                  >
                                     <div>{date().time1}</div>
                                     <div>{date().time2}</div>
                                   </div>
@@ -245,7 +255,7 @@ const About: Component<{}> = (props) => {
         </div>
 
         <Show when={historyData()}>
-          <div class="calendarHistory" ref={ref}>
+          <div class={styles.calendarHistory} ref={ref}>
             <Index each={historyData()}>
               {(data, i) => {
                 return <HistoryCard item={data()} />;
@@ -254,7 +264,7 @@ const About: Component<{}> = (props) => {
           </div>
         </Show>
 
-        <div class="calendarDropdownContainer">
+        <div class={styles.calendarDropdownContainer}>
           {/* new week */}
           <Presence>
             <Show when={showNewWeek()}>
@@ -269,21 +279,24 @@ const About: Component<{}> = (props) => {
                   header="Set new schedule!"
                 >
                   <form
-                    class="calendarDropdownForm"
+                    class={forms.formBody}
                     action={submitNewWeek}
                     method="post"
                   >
-                    <div class="calendarDropdownFormContent">
-                      <div class="calendarInputGroup">
+                    <div class={forms.calendarFormGroupContainer}>
+                      <div class={forms.calendarFormInputGroup}>
                         <input
-                          class="calendarInputDate"
+                          class={forms.calendarFormInput}
                           name="startDay"
                           autocomplete="off"
                           type="date"
                         />
                       </div>
-                      <div class="calendarInputGroup">
-                        <select class="calendarSelect" name="startIndex">
+                      <div class={forms.calendarFormInputGroup}>
+                        <select
+                          class={forms.calendarFormSelect}
+                          name="startIndex"
+                        >
                           <option value="0">1 - 200</option>
                           <option value="200">201 - 400</option>
                           <option value="400">401 - 600</option>
@@ -297,7 +310,7 @@ const About: Component<{}> = (props) => {
                         </select>
                       </div>
                     </div>
-                    <button class="button button--submit" type="submit">
+                    <button class={buttons.buttonSubmit} type="submit">
                       Submit
                     </button>
                   </form>
@@ -319,14 +332,14 @@ const About: Component<{}> = (props) => {
                   header="Reset today schedule!"
                 >
                   <form
-                    class="calendarDropdownForm"
+                    class={forms.formBody}
                     action={submitTodayReset}
                     method="post"
                   >
-                    <div class="calendarDropdownFormContent">
-                      <div class="calendarInputGroup">
+                    <div class={forms.calendarFormGroupContainer}>
+                      <div class={forms.calendarFormInputGroup}>
                         <input
-                          class="calendarInput"
+                          class={forms.calendarFormInput}
                           name="todayIndex1"
                           autocomplete="off"
                           type="number"
@@ -334,9 +347,9 @@ const About: Component<{}> = (props) => {
                           min={0}
                         />
                       </div>
-                      <div class="calendarInputGroup">
+                      <div class={forms.calendarFormInputGroup}>
                         <input
-                          class="calendarInput"
+                          class={forms.calendarFormInput}
                           name="todayIndex2"
                           autocomplete="off"
                           type="number"
@@ -345,7 +358,7 @@ const About: Component<{}> = (props) => {
                         />
                       </div>
                     </div>
-                    <button class="button button--submit" type="submit">
+                    <button class={buttons.buttonSubmit} type="submit">
                       Submit
                     </button>
                   </form>
@@ -364,10 +377,10 @@ const About: Component<{}> = (props) => {
               >
                 <CalendarDropdown
                   onClose={setShowNewHistory}
-                  header="Set new history item!"
+                  header="Set new history row!"
                 >
                   <form
-                    class="calendarDropdownForm"
+                    class={forms.formBody}
                     action={submitNewHistory}
                     method="post"
                   >
@@ -376,10 +389,10 @@ const About: Component<{}> = (props) => {
                       value={historyData()!.pop()!.created_at}
                       style={{ display: "none" }}
                     />
-                    <div class="calendarDropdownFormContent">
-                      <div class="calendarInputGroup">
+                    <div class={forms.calendarFormGroupContainer}>
+                      <div class={forms.calendarFormInputGroup}>
                         <select
-                          class="calendarSelect"
+                          class={forms.calendarFormSelect}
                           name="indexWeek"
                           value={weekIndex() + 1}
                         >
@@ -395,24 +408,24 @@ const About: Component<{}> = (props) => {
                           <option value="1801">1801 - 2000</option>
                         </select>
                       </div>
-                      <div class="calendarInputGroup">
+                      <div class={forms.calendarFormInputGroup}>
                         <input
-                          class="calendarInputDate"
+                          class={forms.calendarFormInputDate}
                           name="fromDate"
                           autocomplete="off"
                           type="date"
                         />
                       </div>
-                      <div class="calendarInputGroup">
+                      <div class={forms.calendarFormInputGroup}>
                         <input
-                          class="calendarInputDate"
+                          class={forms.calendarFormInput}
                           name="toDate"
                           autocomplete="off"
                           type="date"
                         />
                       </div>
                     </div>
-                    <button class="button button--submit" type="submit">
+                    <button class={buttons.buttonSubmit} type="submit">
                       Submit
                     </button>
                   </form>
@@ -431,22 +444,25 @@ const About: Component<{}> = (props) => {
               >
                 <CalendarDropdown
                   onClose={setShowNewMonth}
-                  header="Set new history month!"
+                  header="Set new history slide!"
                 >
                   <form
-                    class="calendarDropdownForm"
+                    class={styles.calendarDropdownForm}
                     action={submitNewMonth}
                     method="post"
                   >
-                    <div class="calendarDropdownFormContent">
-                      <div class="calendarInputGroup">
-                        <select class="calendarSelect" name="startMonthIndex">
+                    <div class={forms.calendarFormGroupContainer}>
+                      <div class={forms.calendarFormInputGroup}>
+                        <select
+                          class={forms.calendarFormSelect}
+                          name="startMonthIndex"
+                        >
                           <option value="1">1 - 1000</option>
                           <option value="1001">1001 - 2000</option>
                         </select>
                       </div>
                     </div>
-                    <button class="button button--submit" type="submit">
+                    <button class={buttons.buttonSubmit} type="submit">
                       Submit
                     </button>
                   </form>
@@ -455,7 +471,7 @@ const About: Component<{}> = (props) => {
             </Show>
           </Presence>
         </div>
-        <div class="calendarQuote">
+        <div class={styles.calendarQuote}>
           The tree that is supposed to grow to a proud height can dispense with
           bad weather and storms. Whether misfortune and external resistance,
           some kinds of hatred, jealousy, stubbornness, mistrust, hardness,

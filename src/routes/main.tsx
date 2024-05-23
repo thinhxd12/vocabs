@@ -5,16 +5,17 @@ import {
 } from "@solidjs/router";
 import { Show, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
-import { getUser } from "~/api";
-import { getDataImage, getUnsplashImage } from "~/api/api";
+import { getUser } from "~/lib";
+import { getDataImage, getUnsplashImage } from "~/lib/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
-import "/public/styles/main.scss";
 import { GlobalContextProvider } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
 import { format } from "date-fns";
+import styles from "./main.module.scss";
+
 
 export const route = {
   load: () => getUser(),
@@ -91,9 +92,9 @@ const MainLayout = (props: RouteSectionProps) => {
 
   return (
     <div>
-      <div class="main">
+      <div class={styles.main}>
         <Motion.div
-          class="mainImageContainer"
+          class={styles.mainImageContainer}
           animate={{
             maxWidth: toggleMainPage() ? "calc(50vw - 180px)" : "unset",
           }}
@@ -102,7 +103,7 @@ const MainLayout = (props: RouteSectionProps) => {
           <Presence>
             <Show when={!toggleMainPage()}>
               <Motion.div
-                class="mainImageContentAnimation"
+                class={styles.mainImageContentAnimation}
                 initial={{
                   opacity: 0,
                   x: "-100%",
@@ -117,14 +118,14 @@ const MainLayout = (props: RouteSectionProps) => {
                 }}
                 transition={{ duration: 0.6, easing: "ease" }}
               >
-                <img class="mainImage" src={imageObj.image} />
-                <img class="mainImageBlurred" src={imageObj.image} />
+                <img class={styles.mainImage} src={imageObj.image} />
+                <img class={styles.mainImageBlurred} src={imageObj.image} />
               </Motion.div>
             </Show>
           </Presence>
         </Motion.div>
 
-        <div class="mainImageContent">
+        <div class={styles.mainImageContent}>
           <GlobalContextProvider>
             {props.children}
             <Bottom />
@@ -132,7 +133,7 @@ const MainLayout = (props: RouteSectionProps) => {
         </div>
 
         <Motion.div
-          class="mainDescriptionContainter"
+          class={styles.mainDescriptionContainter}
           animate={{
             width: toggleMainPage() ? "calc(50vw - 180px)" : "300px",
             background: toggleMainPage() ? "#000" : "#121212",
@@ -142,7 +143,7 @@ const MainLayout = (props: RouteSectionProps) => {
           <Presence>
             <Show when={!toggleMainPage()}>
               <Motion.div
-                class="mainDescriptionContent"
+                class={styles.mainDescriptionContent}
                 initial={{
                   opacity: 0,
                   x: "-100%",
@@ -157,34 +158,34 @@ const MainLayout = (props: RouteSectionProps) => {
                 }}
                 transition={{ duration: 0.6, easing: "ease" }}
               >
-                <div class="mainDescriptionHeader">
-                  <p class="mainDescriptionDate">{imageObj.date}</p>
-                  <h3 class="mainDescriptionTitle">{imageObj.title}</h3>
-                  <p class="mainDescriptionAttribute">{imageObj.attr}</p>
-                  <div class="mainDescriptionAuthors">
+                <div class={styles.mainDescriptionHeader}>
+                  <p class={styles.mainDescriptionDate}>{imageObj.date}</p>
+                  <h3 class={styles.mainDescriptionTitle}>{imageObj.title}</h3>
+                  <p class={styles.mainDescriptionAttribute}>{imageObj.attr}</p>
+                  <div class={styles.mainDescriptionAuthors}>
                     <img
-                      class="mainDescriptionAuthorImage"
+                      class={styles.mainDescriptionAuthorImage}
                       src={imageObj.authorImg}
                     />
-                    <div class="mainDescriptionAuthor">
-                      <p class="mainDescriptionAuthorName">
+                    <div class={styles.mainDescriptionAuthor}>
+                      <p class={styles.mainDescriptionAuthorName}>
                         {imageObj.authorName}
                       </p>
-                      <p class="mainDescriptionAuthorYear">
+                      <p class={styles.mainDescriptionAuthorYear}>
                         {imageObj.authorYear}
                       </p>
                     </div>
                   </div>
                 </div>
                 <div
-                  class="mainDescriptionBody"
+                  class={styles.mainDescriptionBody}
                   innerHTML={imageObj.content}
                 ></div>
               </Motion.div>
             </Show>
           </Presence>
-          <div class="mainImageBottomBar">
-            <button onClick={changeToggle} class="mainImageRoundBtn">
+          <div class={styles.mainImageBottomBar}>
+            <button onClick={changeToggle} class={styles.mainImageRoundBtn}>
               <Show
                 when={toggleMainPage()}
                 fallback={<VsLayoutCentered size={17} />}
@@ -192,7 +193,10 @@ const MainLayout = (props: RouteSectionProps) => {
                 <VsLayoutActivitybarRight size={17} />
               </Show>
             </button>
-            <button onClick={handleGetNextImage} class="mainImageRoundBtn">
+            <button
+              onClick={handleGetNextImage}
+              class={styles.mainImageRoundBtn}
+            >
               <TbRefresh size={17} />
             </button>
           </div>

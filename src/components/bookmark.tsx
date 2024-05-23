@@ -5,7 +5,8 @@ import {
   createResource,
   createSignal,
 } from "solid-js";
-import "/public/styles/quote.scss";
+import styles from "./bookmark.module.scss";
+import buttons from "../assets/styles/buttons.module.scss";
 import {
   OcChevronleft2,
   OcChevronright2,
@@ -55,14 +56,17 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   };
 
   return (
-    <div class="quoteContainer">
-      <div class="quoteHeader">
-        <div class="quoteHeaderLeft">
-          <button class="button button--quote" onclick={() => getBookMark(-1)}>
+    <div class={styles.bookmarkContainer}>
+      <div class={styles.bookmarkHeader}>
+        <div class={styles.bookmarkHeaderLeft}>
+          <button
+            class={buttons.buttonBookmark}
+            onclick={() => getBookMark(-1)}
+          >
             <OcChevronleft2 size={17} />
           </button>
           <button
-            class="button button--quote"
+            class={buttons.buttonBookmark}
             onclick={() => checkBookMark(!bookmarkItem().check)}
           >
             <Show
@@ -79,18 +83,18 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
               <OcStar2 size={17} />
             </Show>
           </button>
-          <button class="button button--quote" onclick={() => getBookMark(1)}>
+          <button class={buttons.buttonBookmark} onclick={() => getBookMark(1)}>
             <OcChevronright2 size={17} />
           </button>
           <button
-            class="button button--quote"
+            class={buttons.buttonBookmark}
             onclick={() => copyBookMarkToClipboard(bookmarkItem().value)}
           >
             <OcCopy2 size={14} />
           </button>
         </div>
-        <div class="quoteHeaderRight">
-          <button class="button button--close" onclick={props.onClose}>
+        <div class={styles.bookmarkHeaderRight}>
+          <button class={buttons.buttonClose} onclick={props.onClose}>
             <OcX2 size={15} />
           </button>
         </div>
@@ -102,15 +106,15 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
           <div
             class={
               bookmarkItem().check
-                ? "quoteBody quoteBody--bookmark"
-                : "quoteBody"
+                ? styles.bookmarkBodyChecked
+                : styles.bookmarkBody
             }
           >
-            <p class="quotePassage">{bookmarkItem().value}</p>
+            <p class={styles.bookmarkPassage}>{bookmarkItem().value}</p>
           </div>
         }
       >
-        <p class="quoteLoading">loading...</p>
+        <p class={styles.bookmarkLoading}>loading...</p>
       </Show>
     </div>
   );

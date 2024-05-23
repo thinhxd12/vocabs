@@ -1,9 +1,9 @@
 import { A } from "@solidjs/router";
 import { Component, Show } from "solid-js";
-import "/public/styles/bottom.scss";
 import { useGlobalContext } from "~/globalcontext/store";
 import { Motion, Presence } from "solid-motionone";
 import { format } from "date-fns";
+import styles from "./bottom.module.scss";
 
 const Bottom: Component<{}> = () => {
   const {
@@ -17,9 +17,9 @@ const Bottom: Component<{}> = () => {
   } = useGlobalContext();
 
   return (
-    <div class="bottom">
-      <div class="mainFooterLeftIndex">
-        <div class="indexIndex">
+    <div class={styles.bottom}>
+      <div class={styles.mainFooterLeftIndex}>
+        <div class={styles.indexIndex}>
           <Show
             when={todayData().date}
             fallback={
@@ -37,29 +37,29 @@ const Bottom: Component<{}> = () => {
             <span>{todayData().time2}</span>
           </Show>
         </div>
-        <div class="indexDay">
+        <div class={styles.indexDay}>
           <span>{format(new Date(), "eeeeee")}</span>
         </div>
       </div>
       <A
         href="/main/vocabulary"
-        activeClass="mainFooterBtn--active"
-        class="mainFooterBtn mainFooterBtn--1"
+        activeClass={styles.mainFooterBtnActive}
+        class={styles.mainFooterBtn1}
       >
         <small>God from the machine</small>
         <span>Deus ex machina</span>
       </A>
       <A
         href="/main/calendar"
-        activeClass="mainFooterBtn--active"
-        class="mainFooterBtn mainFooterBtn--2"
+        activeClass={styles.mainFooterBtnActive}
+        class={styles.mainFooterBtn2}
       >
         <small>Money does not stink</small>
         <span>Pecunia non olet</span>
       </A>
 
       <button
-        class="mainFooterCenterBtn"
+        class={styles.mainFooterCenterBtn}
         onClick={() => setShowMenubar(!showMenubar())}
       >
         <Show when={totalMemories()}>
@@ -70,8 +70,8 @@ const Bottom: Component<{}> = () => {
 
       <A
         href="/main/weather"
-        activeClass="mainFooterBtn--active"
-        class="mainFooterBtn mainFooterBtn--3"
+        activeClass={styles.mainFooterBtnActive}
+        class={styles.mainFooterBtn3}
       >
         <small>Danger is sweet</small>
         <span>Dulce periculum</span>
@@ -80,14 +80,14 @@ const Bottom: Component<{}> = () => {
       <Show
         when={wordList().length > 0}
         fallback={
-          <div class="mainFooterBtn mainFooterBtn--4">
+          <div class={styles.mainFooterBtn4}>
             <small>Remember you have to die</small>
             <span>Memento mori</span>
           </div>
         }
       >
         <div
-          class="mainFooterCornerBtn"
+          class={styles.mainFooterCornerBtn}
           onClick={() => setBottomActive(!bottomActive())}
         >
           <Presence>
@@ -106,7 +106,7 @@ const Bottom: Component<{}> = () => {
                   }}
                   transition={{ duration: 0.3, easing: "ease" }}
                   src="/images/main/sunrise.jpg"
-                  class="mainFooterCornerBtnImage"
+                  class={styles.mainFooterCornerBtnImage}
                 />
               }
             >
@@ -122,7 +122,7 @@ const Bottom: Component<{}> = () => {
                 }}
                 transition={{ duration: 0.3, easing: "ease" }}
                 src="/images/main/sunset.jpg"
-                class="mainFooterCornerBtnImage"
+                class={styles.mainFooterCornerBtnImage}
               />
             </Show>
           </Presence>

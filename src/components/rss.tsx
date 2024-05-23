@@ -1,7 +1,6 @@
-import { Component, Index, Show, createSignal } from "solid-js";
-import "/public/styles/rss.scss";
+import { Component, Index, Show, createSignal, onMount } from "solid-js";
 import { DEFAULT_CORS_PROXY } from "~/utils";
-import { FeedEntry, extract } from "@extractus/feed-extractor";
+// import { FeedEntry, extract } from "@extractus/feed-extractor";
 import { differenceInDays, differenceInHours } from "date-fns";
 
 const RSS: Component<{}> = (props) => {
@@ -108,43 +107,43 @@ const RSS: Component<{}> = (props) => {
     },
   ];
 
-  const [showRss, setShowRss] = createSignal<boolean>(false);
-  const [rssEntries, setRssEntries] = createSignal<FeedEntry[]>([]);
+  onMount(() => {});
 
-  const handleFetchRss = async (id: number) => {
-    setShowRss(false);
-    const baseUrl = DEFAULT_CORS_PROXY + rssSource[id].link;
-    const result = await extract(baseUrl, rssSource[id].options);
-    if (result.entries) setRssEntries(result.entries);
-    setShowRss(true);
-  };
+  // const [showRss, setShowRss] = createSignal<boolean>(false);
+  // const [rssEntries, setRssEntries] = createSignal<FeedEntry[]>([]);
 
-  const countTime = (time: Date) => {
-    const hours = differenceInHours(new Date(), new Date(time)) + 1;
-    const days = differenceInDays(new Date(), new Date(time));
-    return days > 0
-      ? days + " days " + (hours % 24) + " hours ago"
-      : hours + " hours ago";
-  };
+  // const handleFetchRss = async (id: number) => {
+  //   const baseUrl = DEFAULT_CORS_PROXY + rssSource[id].link;
+  //   const result = await extract(baseUrl, rssSource[id].options);
+  //   if (result.entries) setRssEntries(result.entries);
+  // };
 
-  const RssItem = ({ item }: { item: FeedEntry }) => (
-    <div class="rssItem">
-      <Show when={item.mediaUrl}>
-        <img alt="..." src={item.mediaUrl} class="rssItemImg" />
-      </Show>
-      <div class="rssItemContent">
-        <p class="rssItemDate">{countTime(item.published!)}</p>
-        <a href={item.link} target="_blank" rel="noreferrer">
-          <p class="rssItemTitle">{item.title}</p>
-        </a>
-        <p class="rssItemDescription">{item.description}</p>
-      </div>
-    </div>
-  );
+  // const countTime = (time: string) => {
+  //   const hours = differenceInHours(new Date(), new Date(time)) + 1;
+  //   const days = differenceInDays(new Date(), new Date(time));
+  //   return days > 0
+  //     ? days + " days " + (hours % 24) + " hours ago"
+  //     : hours + " hours ago";
+  // };
+
+  // const RssItem = ({ item }: { item: FeedEntry }) => (
+  //   <div class="rssItem">
+  //     {/* <Show when={item.mediaUrl}>
+  //       <img alt="..." src={item.mediaUrl} class="rssItemImg" />
+  //     </Show> */}
+  //     <div class="rssItemContent">
+  //       <p class="rssItemDate">{countTime(item.published!)}</p>
+  //       <a href={item.link} target="_blank" rel="noreferrer">
+  //         <p class="rssItemTitle">{item.title}</p>
+  //       </a>
+  //       <p class="rssItemDescription">{item.description}</p>
+  //     </div>
+  //   </div>
+  // );
 
   return (
     <div class="rss">
-      <div class="rssTop">
+      {/* <div class="rssTop">
         <Index each={rssSource}>
           {(data, index) => {
             return (
@@ -159,9 +158,11 @@ const RSS: Component<{}> = (props) => {
             );
           }}
         </Index>
-        <button class="rssBtnDelete" onClick={() => setRssEntries([])}>E</button>
+        <button class="rssBtnDelete" onClick={() => setRssEntries([])}>
+          E
+        </button>
       </div>
-      <Show when={showRss()}>
+      <Show when={rssEntries().length > 0}>
         <div class="rssBody">
           {rssEntries().length > 0 && (
             <Index each={rssEntries()}>
@@ -171,7 +172,7 @@ const RSS: Component<{}> = (props) => {
             </Index>
           )}
         </div>
-      </Show>
+      </Show> */}
     </div>
   );
 };

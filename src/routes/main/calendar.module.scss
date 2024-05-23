@@ -1,4 +1,4 @@
-@import "./mixins.scss";
+@import "../../assets/styles/mixins.scss";
 
 .calendar {
     min-width: 360px;
@@ -185,134 +185,11 @@
         }
     }
 
-    .historyCard {
-        width: 100%;
-        height: 100px;
-        overflow: hidden;
-        padding: 0 6px;
-
-        .historyCardItem {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-
-            &:not(:last-child) {
-                margin-bottom: 2px;
-            }
-
-            .historyCardItemDesc {
-                background: $color-calendar-black;
-                width: 90px;
-                height: 18px;
-                padding: 0 6px;
-                position: relative;
-                cursor: default;
-                @include font('Rubik', 10px, $color-white, 500, normal, 18px);
-
-                &::after {
-                    content: '';
-                    width: 6px;
-                    height: 10px;
-                    position: absolute;
-                    left: 99%;
-                    top: 4px;
-                    background: #161616;
-                    clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
-                    z-index: 33;
-                }
-            }
-
-            .historyCardItemFrom,
-            .historyCardItemTo {
-                width: 120px;
-                height: 18px;
-                padding: 0 12px;
-                @include font('Rubik', 10px, $color-black, 500, normal, 18px);
-                cursor: default;
-            }
-        }
-    }
 
     .calendarDropdownContainer {
         overflow: hidden;
     }
 
-    .calendarDropdown {
-        @include baseBody($color-calendar-bg);
-        width: 360px;
-        margin-bottom: 3px;
-
-        .calendarDropdownHeader {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            border-bottom: 1px solid $color-calendar-border;
-            height: 21px;
-            padding: 2px 0 2px 2px;
-
-            .calendarDropdownHeaderLeft {
-                p {
-                    @include font('Rubik', 12px, $color-black, 400, normal, 18px);
-                }
-            }
-
-            .calendarDropdownHeaderRight {
-                @include flex;
-            }
-        }
-
-        .calendarDropdownBody {
-            padding-top: 3px;
-
-            .calendarDropdownFormContent {
-                @include flex;
-                width: 100%;
-
-                .calendarInputGroup {
-                    flex-grow: 1;
-
-                    &:not(:last-child) {
-                        margin-right: 3px;
-                    }
-
-                    .calendarInputDate,
-                    .calendarInput {
-                        border: 1px solid $color-calendar-border;
-                        height: 21px;
-                        border-radius: 3px;
-                        padding: 3px;
-                        outline: 0;
-                        width: 100%;
-                        @include font('Rubik', 11px, $color-black, 400, normal, 18px);
-                    }
-
-                    .calendarSelect {
-                        border: 1px solid $color-calendar-border;
-                        height: 21px;
-                        border-radius: 3px;
-                        padding: 0 3px;
-                        outline: 0;
-                        width: 100%;
-                        @include font('Rubik', 11px, $color-white, 400, normal, 18px);
-                        background: $color-calendar-black;
-                    }
-
-                }
-
-                .calendarFormText {
-                    height: 21px;
-                    background-color: $color-black;
-                    @include font('Rubik', 12px, $color-white, 400, normal, 18px);
-                    padding: 3px;
-                    border-radius: 3px;
-                    margin-right: 3px;
-                    width: 18%;
-                    border: 1px solid $color-calendar-border;
-                    color: $color-white;
-                }
-            }
-        }
-    }
 
     .calendarQuote {
         background: url("/images/main/grunge-image-tree.webp");
@@ -324,39 +201,5 @@
         @include font("NYTCheltenham", 12px, $color-black, 700, normal, 14px);
         cursor: default;
     }
-}
 
-.keen-slider:not([data-keen-slider-disabled]) {
-    align-content: flex-start;
-    display: flex;
-    overflow: hidden;
-    position: relative;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-    -khtml-user-select: none;
-    touch-action: pan-y;
-    -webkit-tap-highlight-color: transparent;
-    width: 100%;
-}
-
-.keen-slider:not([data-keen-slider-disabled]) .keen-slider__slide {
-    position: relative;
-    overflow: hidden;
-    width: 100%;
-    min-height: 100%;
-}
-
-.keen-slider:not([data-keen-slider-disabled])[data-keen-slider-reverse] {
-    flex-direction: row-reverse;
-}
-
-.keen-slider:not([data-keen-slider-disabled])[data-keen-slider-v] {
-    flex-wrap: wrap;
-}
-
-.keen-slider:not([data-keen-slider-disabled])[data-keen-slider-moves] * {
-    pointer-events: none;
 }

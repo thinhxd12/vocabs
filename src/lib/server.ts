@@ -1,9 +1,14 @@
 "use server";
 import { redirect } from "@solidjs/router";
-import { supabase } from "./supabase";
-import { useSession } from "@solidjs/start/server";
-import { getRequestEvent } from "solid-js/web";
+import { useSession } from "vinxi/http";
 import { createSignal } from "solid-js";
+import { createClient } from '@supabase/supabase-js'
+
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
@@ -66,7 +71,9 @@ export async function logout() {
 
 
 function getSession() {
-  return useSession(getRequestEvent()!, { password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace" });
+  return useSession({
+    password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
+  });
 }
 
 export async function getUser() {

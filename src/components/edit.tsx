@@ -7,17 +7,18 @@ import {
   on,
   onMount,
 } from "solid-js";
-import "/public/styles/edit.scss";
-import "/public/styles/toast.scss";
 import { OcX2 } from "solid-icons/oc";
 import { VocabularyDefinitionType, VocabularyType } from "~/types";
 import { action, useSubmission } from "@solidjs/router";
 import Definition from "./definition";
-import { editVocabularyItem, getTextDataWebster } from "~/api/api";
+import { editVocabularyItem, getTextDataWebster } from "~/lib/api";
 import toast, { Toaster } from "solid-toast";
 import { createStore } from "solid-js/store";
 import useClickOutside from "solid-click-outside";
 import { FaRegularImage, FaSolidExpand } from "solid-icons/fa";
+import buttons from "../assets/styles/buttons.module.scss";
+import forms from "../assets/styles/form.module.scss";
+import styles from "./edit.module.scss";
 
 const Edit: Component<{
   item: VocabularyType;
@@ -143,153 +144,157 @@ const Edit: Component<{
   });
 
   return (
-    <div class="edit" tabIndex={1} ref={setTarget}>
-      <div class="editHeader">
-        <div class="editHeaderLeft"></div>
-        <div class="editHeaderRight">
-          <button class="button button--primary" onClick={handleShowHandyEdit}>
+    <div class={styles.edit} tabIndex={1} ref={setTarget}>
+      <div class={styles.editHeader}>
+        <div class={styles.editHeaderLeft}></div>
+        <div class={styles.editHeaderRight}>
+          <button class={buttons.buttonPrimary} onClick={handleShowHandyEdit}>
             <FaSolidExpand size={13} />
           </button>
-          <button class="button button--close" onclick={props.onClose}>
+          <button class={buttons.buttonClose} onclick={props.onClose}>
             <OcX2 size={15} />
           </button>
         </div>
       </div>
-      <div class="editBody">
+      <div class={styles.editBody}>
         <Show when={showHandyEdit()}>
-          <div class="handyEditContainer">
-            <form class="editItemForm" action={handleHandyEdit} method="post">
+          <div class={styles.handyEditContainer}>
+            <form class={forms.formBody} action={handleHandyEdit} method="post">
               <input
-                class="editItem--header"
+                class={styles.editItemHeader}
                 autocomplete="off"
                 name="editItem--header"
               />
-              <div class="editItem--thumb">
+              <div class={styles.editItemThumb}>
                 <div>
                   <input type="submit" style="display: none;" />
-                  <div class="editItem--defs">
+                  <div class={styles.editItemDefs}>
                     <input
-                      class="editItem--def"
+                      class={styles.editItemDef}
                       autocomplete="off"
                       name="editItem--def1"
                     />
                     <input
-                      class="editItem--def"
+                      class={styles.editItemDef}
                       autocomplete="off"
                       name="editItem--def1up"
                     />
                   </div>
-                  <div class="editItem--defs">
+                  <div class={styles.editItemDefs}>
                     <input
-                      class="editItem--def"
+                      class={styles.editItemDef}
                       autocomplete="off"
                       name="editItem--def2"
                     />
                     <input
-                      class="editItem--def"
+                      class={styles.editItemDef}
                       autocomplete="off"
                       name="editItem--def2up"
                     />
                   </div>
-                  <div class="editItem--defs">
+                  <div class={styles.editItemDefs}>
                     <input
-                      class="editItem--def"
+                      class={styles.editItemDef}
                       autocomplete="off"
                       name="editItem--def3"
                     />
                     <input
-                      class="editItem--def"
+                      class={styles.editItemDef}
                       autocomplete="off"
                       name="editItem--def3up"
                     />
                   </div>
                 </div>
-                <div class="editItem--img">
+                <div class={styles.editItemImg}>
                   <textarea
-                    class="editItem--textarea"
+                    class={styles.editItemTextarea}
                     autocomplete="off"
                     name="editItem--img"
                   />
-                  <FaRegularImage class="editItem--imgbg" color="#ffffff" />
+                  <FaRegularImage
+                    class={styles.editItemImgBg}
+                    color="#ffffff"
+                  />
                 </div>
               </div>
-              <div class="editItem--xs">
+              <div class={styles.editItemXs}>
                 <img src="/images/main/clover1.png" width={15} height={15} />
                 <input
-                  class="editItem--def"
+                  class={styles.editItemDef}
                   autocomplete="off"
                   name="editItem--x"
                 />
               </div>
-              <span class="editItem--credit">
+              <span class={styles.editItemCredit}>
                 <input
-                  class="editItem--def"
+                  class={styles.editItemDef}
                   autocomplete="off"
                   name="editItem--author"
                 />
                 <input
-                  class="editItem--def"
+                  class={styles.editItemDef}
                   autocomplete="off"
                   name="editItem--title"
                 />
                 <input
-                  class="editItem--def"
+                  class={styles.editItemDef}
                   autocomplete="off"
                   name="editItem--year"
                 />
               </span>
               <input
-                class="editItem--def"
+                class={styles.editItemDef}
                 autocomplete="off"
                 name="editItem--syn"
               />
             </form>
-            <div class="editInputGroup">
+            <div class={forms.formInputGroup}>
               <textarea
-                class="editInputItem editInputItemResult editInputHandy"
+                class={styles.editInputHandy}
                 value={JSON.stringify(handyResult(), null, " ")}
               />
             </div>
           </div>
         </Show>
 
-        <form action={editVocabularyItem} method="post" class="editForm">
-          <div class="newTranslateContainer">
+        <form action={editVocabularyItem} method="post" class={forms.formBody}>
+          <div class={styles.searchContent}>
             <img
               src="/images/main/input-left-corner.png"
-              class="myInputLeftOrnament"
+              class={styles.searchLeftOrnament}
             />
             <input
-              class="newTranslateInput"
+              class={styles.searchInput}
               name="word"
               autocomplete="off"
               value={props.item?.word}
             />
             <img
               src="/images/main/input-right-corner.png"
-              class="myInputRightOrnament"
+              class={styles.searchRightOrnament}
             />
           </div>
-          <div class="editInputGroup">
+
+          <div class={forms.formInputGroup}>
             <input
-              class="editInputItem"
+              class={forms.formInput}
               name="audio"
               autocomplete="off"
               value={props.item?.audio}
             />
           </div>
-          <div class="editInputGroup">
+          <div class={forms.formInputGroup}>
             <input
-              class="editInputItem"
+              class={forms.formInput}
               name="phonetics"
               autocomplete="off"
               value={definitionData.phonetics}
             />
           </div>
-          <div class="editInputGroup">
+          <div class={forms.formInputGroup}>
             <textarea
               name="definitions"
-              class="editInputItem editInputItemResult"
+              class={forms.formTextarea}
               value={JSON.stringify(definitionData.definitions, null, " ")}
               onChange={(e) =>
                 setDefinitionRender({
@@ -299,18 +304,18 @@ const Edit: Component<{
               }
             />
           </div>
-          <div class="editInputGroup">
+          <div class={forms.formInputGroup}>
             <input
-              class="editInputItem"
+              class={forms.formInput}
               name="meaning"
               autocomplete="off"
               value={translationString()}
             />
           </div>
-          <div class="editInputGroup">
+          <div class={forms.formInputGroup}>
             <input
               type="number"
-              class="editInputItem"
+              class={forms.formInput}
               name="number"
               autocomplete="off"
               value={props.item?.number}
@@ -325,7 +330,7 @@ const Edit: Component<{
           />
           <button
             type="submit"
-            class="button button--submit"
+            class={buttons.buttonSubmit}
             onClick={() => setSubmittedForm(true)}
           >
             Submit
@@ -338,8 +343,8 @@ const Edit: Component<{
       </div>
       <Toaster
         position="top-center"
-        containerClassName="toast-container"
-        toastOptions={{ className: "toast-content" }}
+        containerClassName={styles.toastContainer}
+        toastOptions={{ className: `${styles.toastContent}` }}
       />
     </div>
   );

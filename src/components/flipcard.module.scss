@@ -1,4 +1,4 @@
-@import "./mixins.scss";
+@import "../assets/styles/mixins.scss";
 
 .flipCardLeftContent {
     width: 66px;
@@ -99,7 +99,7 @@
         align-items: flex-start;
         justify-content: center;
 
-        &--class {
+        .cardTopClass {
             @include font("Poppins", 16px, $color-white, 500, normal, 15px);
             width: 100%;
             text-align: left;
@@ -108,7 +108,7 @@
             text-transform: uppercase;
         }
 
-        &--text {
+        .cardTopText {
             @include font('Roslindale', 13px, $color-white, 500, normal, 15px);
             margin-bottom: 4px;
             position: relative;
@@ -137,18 +137,18 @@
         height: 100%;
         @include flex-center-column;
 
-        &--phonetic {
+        .cardBottomPhonetic {
             @include font("SF-Pro", 12px, $color-red-3, 600, normal, 12px);
             padding-bottom: 6px;
         }
 
-        &--class {
+        .cardBottomClass {
             margin-top: 12px;
             @include font("SF-Pro", 9px, $color-white, normal, normal, 12px);
             margin-bottom: 6px;
         }
 
-        &--text {
+        .cardBottomText {
             @include font("Roslindale", 32px, $color-white, 600, normal, 24px);
             letter-spacing: 1.5px;
             -webkit-font-smoothing: subpixel-antialiased;
@@ -158,7 +158,7 @@
             text-align: center;
         }
 
-        &--date {
+        .cardBottomDate {
             display: none;
         }
 
@@ -167,10 +167,10 @@
 }
 
 .cardContent:hover,
-.cardContent--hover-1 {
+.cardContentHover1 {
     transform: translateX(-294px);
 }
 
-.cardContent--hover-2 {
+.cardContentHover2 {
     transform: translateX(-588px);
 }

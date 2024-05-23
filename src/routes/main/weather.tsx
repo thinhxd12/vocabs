@@ -1,6 +1,5 @@
 import { MetaProvider, Title as TitleName, Meta } from "@solidjs/meta";
 import { Component, Index, Show, createSignal, onMount } from "solid-js";
-import "/public/styles/weather.scss";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
 import RSS from "~/components/rss";
@@ -10,14 +9,15 @@ import {
   Raindrops,
   createCanvas,
   loadImage,
-} from "~/api/weatherServices";
+} from "~/lib/weatherServices";
 import { CurrentlyWeatherType } from "~/types";
 import {
   getCurrentWeatherData,
   getMinutelyWeatherData,
   makePrediction,
-} from "~/api/api";
+} from "~/lib/api";
 import { format } from "date-fns";
+import styles from "./weather.module.scss";
 
 type WeatherGeoType = {
   name: string;
@@ -25,6 +25,7 @@ type WeatherGeoType = {
 };
 
 let canvas: HTMLCanvasElement;
+let audio: HTMLAudioElement;
 
 const Weather: Component<{}> = (props) => {
   const WEATHER_GEOS: WeatherGeoType[] = [
@@ -61,20 +62,19 @@ const Weather: Component<{}> = (props) => {
   const handleGetWeatherData = async (geo: string) => {
     const curdata = await getCurrentWeatherData(geo);
     setCurrentData(curdata);
+
     switch (curdata.summary) {
-      case "Light rain":
-      case "Light Freezing Rain":
+      case "Light Rain":
       case "Light Showers":
         setAudioSrc("/sounds/weather/rain_light_2.m4a");
         setupWeather("drizzle", curdata.isDayTime);
         break;
-      case "Moderate rain":
-      case "Freezing Rain":
+      case "Moderate Rain":
       case "Showers":
         setAudioSrc("/sounds/weather/rain_light.m4a");
         setupWeather("rain", curdata.isDayTime);
         break;
-      case "Heavy rain":
+      case "Heavy Rain":
       case "Heavy Showers":
         setAudioSrc("/sounds/weather/rain.m4a");
         setupWeather("storm", curdata.isDayTime);
@@ -106,7 +106,7 @@ const Weather: Component<{}> = (props) => {
       case "Light Freezing Rain":
       case "Freezing Rain":
         setAudioSrc("/sounds/weather/rain_freezing.m4a");
-        setupWeather("sunny", curdata.isDayTime);
+        setupWeather("drizzle", curdata.isDayTime);
         break;
       default:
         setAudioSrc("/sounds/weather/forest.m4a");
@@ -146,9 +146,10 @@ const Weather: Component<{}> = (props) => {
   };
 
   onMount(async () => {
-    handleGetWeatherData(WEATHER_GEOS[0].geo);
-    Chart.register(Title, Tooltip, Legend, Colors, Filler);
     loadTextures();
+    Chart.register(Title, Tooltip, Legend, Colors, Filler);
+    await handleGetWeatherData(WEATHER_GEOS[0].geo);
+    audio.volume = 0.5;
   });
 
   const [chartData, setChartData] = createSignal({
@@ -263,6 +264,66 @@ const Weather: Component<{}> = (props) => {
     height: 64,
   };
 
+  const defaultOptions = {
+    minR: 10,
+    maxR: 40,
+    maxDrops: 900,
+    rainChance: 0.3,
+    rainLimit: 3,
+    dropletsRate: 50,
+    dropletsSize: [2, 4],
+    dropletsCleaningRadiusMultiplier: 0.43,
+    raining: true,
+    globalTimeScale: 1,
+    trailRate: 1,
+    autoShrink: true,
+    spawnArea: [-0.1, 0.95],
+    trailScaleRange: [0.2, 0.5],
+    collisionRadius: 0.65,
+    collisionRadiusIncrease: 0.01,
+    dropFallMultiplier: 1,
+    collisionBoostMultiplier: 0.05,
+    collisionBoost: 1,
+  };
+
+  const weatherTypes = {
+    rain: {
+      rainChance: 0.35,
+      dropletsRate: 50,
+      raining: true,
+    },
+    storm: {
+      maxR: 55,
+      rainChance: 0.4,
+      dropletsRate: 80,
+      dropletsSize: [3, 5.5],
+      trailRate: 2.5,
+      trailScaleRange: [0.25, 0.4],
+    },
+    fallout: {
+      minR: 30,
+      maxR: 60,
+      rainChance: 0.35,
+      dropletsRate: 20,
+      trailRate: 4,
+      collisionRadiusIncrease: 0,
+    },
+    drizzle: {
+      minR: 10,
+      maxR: 40,
+      rainChance: 0.15,
+      rainLimit: 2,
+      dropletsRate: 10,
+      dropletsSize: [3.5, 6],
+    },
+    sunny: {
+      rainChance: 0,
+      rainLimit: 0,
+      droplets: 0,
+      raining: false,
+    },
+  };
+
   let raindrops: Raindrops;
   let renderer: RainRenderer;
 
@@ -342,66 +403,6 @@ const Weather: Component<{}> = (props) => {
   };
 
   const setupWeather = async (type: string, isDay: boolean) => {
-    const defaultOptions = {
-      minR: 10,
-      maxR: 40,
-      maxDrops: 900,
-      rainChance: 0.3,
-      rainLimit: 3,
-      dropletsRate: 50,
-      dropletsSize: [2, 4],
-      dropletsCleaningRadiusMultiplier: 0.43,
-      raining: true,
-      globalTimeScale: 1,
-      trailRate: 1,
-      autoShrink: true,
-      spawnArea: [-0.1, 0.95],
-      trailScaleRange: [0.2, 0.5],
-      collisionRadius: 0.65,
-      collisionRadiusIncrease: 0.01,
-      dropFallMultiplier: 1,
-      collisionBoostMultiplier: 0.05,
-      collisionBoost: 1,
-    };
-
-    const weatherTypes = {
-      rain: {
-        rainChance: 0.35,
-        dropletsRate: 50,
-        raining: true,
-      },
-      storm: {
-        maxR: 55,
-        rainChance: 0.4,
-        dropletsRate: 80,
-        dropletsSize: [3, 5.5],
-        trailRate: 2.5,
-        trailScaleRange: [0.25, 0.4],
-      },
-      fallout: {
-        minR: 30,
-        maxR: 60,
-        rainChance: 0.35,
-        dropletsRate: 20,
-        trailRate: 4,
-        collisionRadiusIncrease: 0,
-      },
-      drizzle: {
-        minR: 10,
-        maxR: 40,
-        rainChance: 0.15,
-        rainLimit: 2,
-        dropletsRate: 10,
-        dropletsSize: [3.5, 6],
-      },
-      sunny: {
-        rainChance: 0,
-        rainLimit: 0,
-        droplets: 0,
-        raining: false,
-      },
-    };
-
     const textureDayFg = loadImage("/images/openmeteo/weather/day-fg.jpg");
     const textureDayBg = loadImage("/images/openmeteo/weather/day-bg.jpg");
 
@@ -436,20 +437,20 @@ const Weather: Component<{}> = (props) => {
       <TitleName>weather</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <audio hidden src={audioSrc()} autoplay loop></audio>
-      <div class="weather">
-        <canvas ref={canvas} class="weatherBackground" />
+      <audio hidden src={audioSrc()} autoplay loop ref={audio}></audio>
+      <div class={styles.weather}>
+        <canvas ref={canvas} class={styles.weatherBackground} />
         <Show when={currentData()}>
-          <div class="weatherMain">
+          <div class={styles.weatherMain}>
             <div
               class={
                 currentData()!.isDayTime
-                  ? "weatherContentDay"
-                  : "weatherContentNight"
+                  ? styles.weatherContentDay
+                  : styles.weatherContentNight
               }
             >
               <select
-                class="weatherGeos"
+                class={styles.weatherGeos}
                 onchange={(e) => handleGetWeatherData(e.currentTarget.value)}
               >
                 <Index each={WEATHER_GEOS}>
@@ -458,20 +459,20 @@ const Weather: Component<{}> = (props) => {
                   )}
                 </Index>
               </select>
-              <div class="weatherContentMain">
-                <img class="weatherImg" src={currentData()!.icon} />
-                <div class="weatherContentText">
-                  <p class="weatherContentTemp">
+              <div class={styles.weatherContentMain}>
+                <img class={styles.weatherImg} src={currentData()!.icon} />
+                <div class={styles.weatherContentText}>
+                  <p class={styles.weatherContentTemp}>
                     {Math.round(currentData()!.temperature)}°
                   </p>
-                  <p class="weatherContentInfo">
+                  <p class={styles.weatherContentInfo}>
                     Feels {Math.round(currentData()!.apparentTemperature)}
                     °C
                   </p>
-                  <p class="weatherContentInfo">
+                  <p class={styles.weatherContentInfo}>
                     Humidity {currentData()!.humidity} %
                   </p>
-                  <div class="weatherContentWind">
+                  <div class={styles.weatherContentWind}>
                     <p>
                       Wind {Math.round(currentData()!.windSpeed)}
                       km/h
@@ -483,14 +484,14 @@ const Weather: Component<{}> = (props) => {
                       }}
                     />
                   </div>
-                  <p class="weatherContentInfo">
+                  <p class={styles.weatherContentInfo}>
                     {format(new Date(currentData()!.time), "h:mm a")}
                     {" - "}
                     {currentData()!.summary}
                   </p>
                 </div>
               </div>
-              <div class="weatherChart">
+              <div class={styles.weatherChart}>
                 <div>
                   <Line
                     data={chartData()}
@@ -499,7 +500,7 @@ const Weather: Component<{}> = (props) => {
                     height={150}
                   />
                 </div>
-                <p class="weatherPredict">{textPrediction()}</p>
+                <p class={styles.weatherPredict}> {textPrediction()}</p>
               </div>
               <RSS />
             </div>

@@ -4,8 +4,8 @@ import {
   RouteDefinition,
 } from "@solidjs/router";
 import { Show } from "solid-js";
-import { loginOrRegister, getUser } from "~/api";
-import "/public/styles/login.scss";
+import { loginOrRegister, getUser } from "~/lib";
+import styles from "./index.module.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 export const route = {
   load: () => getUser(),
@@ -19,23 +19,23 @@ export default function Login(props: RouteSectionProps) {
       <Title>login</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <main class="login">
-        <form action={loginOrRegister} method="post" class="loginForm">
+      <main class={styles.login}>
+        <form action={loginOrRegister} method="post" class={styles.loginForm}>
           <input
             type="hidden"
             name="redirectTo"
             value={props.params.redirectTo ?? "/main/vocabulary"}
           />
-          <div class="loginItem">
-            <input name="password" type="password" class="loginInput" />
+          <div class={styles.loginItem}>
+            <input name="password" type="password" class={styles.loginInput} />
           </div>
-          <div class="loginItem">
-            <button type="submit" class="loginBtn">
+          <div class={styles.loginItem}>
+            <button type="submit" class={styles.loginBtn}>
               <img src="/images/main/laurel.png" width={18} />
             </button>
           </div>
           <Show when={loggingIn.result}>
-            <p class="loginAlert" role="alert" id="error-message">
+            <p class={styles.loginAlert} role="alert" id="error-message">
               {loggingIn.result!.message}
             </p>
           </Show>
