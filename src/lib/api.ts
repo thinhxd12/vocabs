@@ -1,11 +1,15 @@
 import { action, redirect } from "@solidjs/router";
 import { CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, } from "~/types";
-import { supabase } from "./supabase";
 import { DEFAULT_CORS_PROXY, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
-import parse from "node-html-parser";
 import { PostgrestError } from "@supabase/supabase-js";
 import { format } from "date-fns";
 import { createSignal } from "solid-js";
+import { createClient } from '@supabase/supabase-js'
+import { parse } from 'node-html-parser';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export const searchText = async (text: string) => {
     "use server";

@@ -1,0 +1,180 @@
+@import "./mixins.scss";
+
+.button {
+    margin-left: 1px;
+    border-radius: 3px;
+    outline: 0;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    @include flex-center;
+    overflow: hidden;
+    font-family: "Rubik";
+    font-size: 10px;
+    background-color: transparent;
+    background-image: url('/images/main/input-left-corner.png'),
+        url('/images/main/input-right-corner.png');
+    background-position: left top,
+        right top;
+    background-repeat: no-repeat,
+        no-repeat;
+    background-size: auto 100%,
+        auto 100%;
+
+    &:disabled {
+        opacity: 0.3;
+    }
+
+}
+
+.buttonMenu {
+    @extend .button;
+    width: 45px;
+    height: 21px;
+    color: #7c7b7a;
+    transition: color 0.2s;
+    @include font("Roslindale", 14px, #7c7b7a, 700, normal, 21px);
+    background-color: $color-background-1;
+
+    &:hover {
+        color: $color-white;
+        text-shadow: 0px 0px 6px #f4f4f4;
+
+        span,
+        small {
+            color: $color-white;
+        }
+    }
+
+    &:not(:last-child) {
+        margin-bottom: 2px;
+    }
+}
+
+.buttonMenuWordlist {
+    @extend .buttonMenu;
+
+    span {
+        @include font("Roslindale", 14px, #7c7b7a, 700, normal, 21px);
+    }
+
+    small {
+        @include font("Roslindale", 9px, #7c7b7a, 700, normal, 15px);
+        margin-left: 1px;
+        margin-top: 6px;
+    }
+}
+
+.buttonMenuWordlistActive {
+    @extend .buttonMenuWordlist;
+
+    span,
+    small {
+        color: $color-calendar-green-1 !important;
+    }
+
+    &:hover {
+
+        span,
+        small {
+            color: $color-calendar-green-1 !important;
+            text-shadow: 0px 0px 12px $color-calendar-green-1 !important;
+        }
+    }
+}
+
+
+.buttonPrimary {
+    @extend .button;
+    background-color: $color-background-1;
+    color: #ececec;
+    width: 28px;
+    height: 15px;
+
+    &:hover {
+        color: $color-white;
+    }
+}
+
+.buttonSquare {
+    @extend .button;
+    background-color: $color-background-1;
+    color: #ececec;
+    width: 18px;
+    height: 14px;
+
+    &:hover {
+        color: $color-white;
+    }
+}
+
+.buttonSuccess {
+    @extend .button;
+    background-color: $color-background-1;
+    color: #ececec;
+    width: 28px;
+    height: 15px;
+
+    &:hover {
+        color: $color-calendar-green-1;
+    }
+}
+
+.buttonSubmit {
+    @extend .button;
+    background-color: $color-background-1;
+    color: #ececec;
+    width: 42px;
+    height: 22px;
+    margin-top: 3px;
+
+    &:hover {
+        color: $color-white;
+    }
+}
+
+.buttonClose {
+    @extend .button;
+    background-color: $color-background-1;
+    color: #ececec;
+    width: 28px;
+    height: 15px;
+    transition: 0.1s;
+
+    &:hover {
+        color: $color-white;
+        background-color: $color-red-3;
+    }
+}
+
+.buttonTimer {
+    @extend .button;
+    width: 21px;
+    height: 21px;
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    background-image: none;
+    color: $color-calendar-black;
+    border: 1px solid $color-border;
+
+    svg {
+        z-index: 101;
+    }
+
+    &:hover {
+        color: $color-calendar-black !important;
+    }
+}
+
+.buttonBookmark {
+    @extend .button;
+    background-color: $color-background-1;
+    color: #ececec;
+    width: 36px;
+    height: 18px;
+
+    &:hover {
+        color: $color-white;
+    }
+}

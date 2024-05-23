@@ -1,4 +1,4 @@
-@import "./mixins.scss";
+@import "../../assets/styles/mixins.scss";
 
 .weather {
     min-width: 360px;
@@ -103,19 +103,4 @@
         text-align: center;
     }
 
-}
-
-
-@keyframes moveBg {
-    0% {
-        background-position-x: 0;
-    }
-
-    50% {
-        background-position-x: right;
-    }
-
-    100% {
-        background-position-x: 0;
-    }
 }

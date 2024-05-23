@@ -9,7 +9,7 @@ import {
   onMount,
 } from "solid-js";
 import { RouteDefinition, useAction } from "@solidjs/router";
-import { getUser, logout } from "~/api";
+import { getUser, logout } from "~/lib";
 import { VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
@@ -24,11 +24,10 @@ import {
   updateArchiveWord,
   deleteSmallestWordNumberFromRange,
   searchText,
-} from "~/api/api";
+} from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { useGlobalContext } from "~/globalcontext/store";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-import "/public/styles/vocabulary.scss";
 import FlipCard from "~/components/flipcard";
 import Definition from "~/components/definition";
 import Translation from "~/components/translation";
@@ -40,6 +39,8 @@ import { FaSolidFeather } from "solid-icons/fa";
 import { ImBooks } from "solid-icons/im";
 import { BiSolidHourglassTop } from "solid-icons/bi";
 import { format } from "date-fns";
+import styles from "./vocabulary.module.scss";
+import buttons from "../../assets/styles/buttons.module.scss";
 
 export const route = {
   load: () => {
@@ -349,7 +350,7 @@ const Vocabulary: Component<{}> = () => {
     clearInterval(intervalCountdown);
     setIsRunning(true);
     intervalCountdown = setInterval(() => {
-      setMinutes((prev) => {
+      setMinutes((prev: number) => {
         if (prev === 1) {
           clearInterval(intervalCountdown);
           setIsRunning(false);
@@ -378,7 +379,7 @@ const Vocabulary: Component<{}> = () => {
   const onInputSearch: JSX.InputEventHandlerUnion<
     HTMLInputElement,
     InputEvent
-  > = async (event) => {
+  > = async (event: any) => {
     event.stopPropagation();
     const inputValue = event.target.value;
     setSearchTerm(inputValue);
@@ -404,7 +405,7 @@ const Vocabulary: Component<{}> = () => {
         onended={() => setAudioSrc("")}
       ></audio>
       <Motion.div
-        class="vocabularyContainer"
+        class={styles.vocabularyContainer}
         animate={{ opacity: [0, 1] }}
         transition={{ duration: 0.6 }}
       >
@@ -413,9 +414,9 @@ const Vocabulary: Component<{}> = () => {
           tabIndex={0}
           onMouseOver={() => divRef?.focus()}
           onKeyDown={onKeyDownDiv}
-          class="vocabulary"
+          class={styles.vocabulary}
         >
-          <div class="flashCardContainer">
+          <div class={styles.flashCardContainer}>
             <FlipCard item={currentText()!} />
           </div>
 
@@ -423,9 +424,9 @@ const Vocabulary: Component<{}> = () => {
             when={isMobile()}
             fallback={
               <>
-                <div class="newInputContainer">
-                  <div class="newInputContent">
-                    <div class="newInputBackground">
+                <div class={styles.newInputContainer}>
+                  <div class={styles.newInputContent}>
+                    <div class={styles.newInputBackground}>
                       <Motion.p
                         animate={{ color: searchInputColor() }}
                         transition={{ duration: 0.3, easing: "ease" }}
@@ -438,25 +439,25 @@ const Vocabulary: Component<{}> = () => {
               </>
             }
           >
-            <div class="myInputContainer">
+            <div class={styles.myInputContainer}>
               <img
                 src="/images/main/input-left-corner.png"
-                class="myInputLeftOrnament"
+                class={styles.myInputLeftOrnament}
               />
-              <div class="myInputCenterContent">
+              <div class={styles.myInputCenterContent}>
                 <input
-                  class="myInput"
+                  class={styles.myInput}
                   value={searchTerm()}
                   onInput={onInputSearch}
                 />
               </div>
               <img
                 src="/images/main/input-right-corner.png"
-                class="myInputRightOrnament"
+                class={styles.myInputRightOrnament}
               />
               <img
                 src="/images/main/center.png"
-                class="myInputButton"
+                class={styles.myInputButton}
                 onClick={() => {
                   setSearchResult([]);
                   setSearchTerm("");
@@ -466,44 +467,46 @@ const Vocabulary: Component<{}> = () => {
           </Show>
 
           <Show when={searchResult().length > 0}>
-            <div class="searchContainer">
+            <div class={styles.searchContainer}>
               <div>
                 <Index each={searchResult()}>
-                  {(data, i) => (
+                  {(data, i: number) => (
                     <div
                       class={
                         i + 1 === selectedItemIndex()
-                          ? "my-item my-item--hover"
-                          : "my-item"
+                          ? `${styles.myItem} ${styles.myItemHover}`
+                          : styles.myItem
                       }
                     >
                       <div
-                        class="my-item--buttons my-item--buttons-start"
+                        class={`${styles.myItemButton} ${styles.myItemButtonStart}`}
                         onClick={() => handleEditVocabulary(data())}
                       >
-                        <div class="my-item--num">
+                        <div class={styles.myItemNum}>
                           <p>{i + 1}</p>
                         </div>
-                        <button class="my-item--editbutton">
+                        <button class={styles.myItemEditButton}>
                           <FaSolidFeather size={12} color="#ffffff" />
                         </button>
                       </div>
                       <div
-                        class="my-item--text"
+                        class={styles.myItemText}
                         onclick={() => handleRenderText(data())}
                       >
                         <p>{data().word}</p>
                       </div>
-                      <div class="my-item--buttons my-item--buttons-end">
+                      <div
+                        class={`${styles.myItemButton} ${styles.myItemButtonEnd}`}
+                      >
                         <Show when={i + 1 !== deleteBtnIndex()}>
                           <button
-                            class="button button--square"
+                            class={styles.myItemDeleteButton}
                             onClick={() => setDeleteBtnIndex(i + 1)}
                           ></button>
                         </Show>
                         <Show when={i + 1 === deleteBtnIndex()}>
                           <button
-                            class="button button--square"
+                            class={styles.myItemDeleteButton}
                             onClick={() =>
                               handleDeleteVocabulary(data().created_at)
                             }
@@ -519,7 +522,7 @@ const Vocabulary: Component<{}> = () => {
             </div>
           </Show>
 
-          <div class="vocabularyContent">
+          <div class={styles.vocabularyContent}>
             {/* Bookmark */}
             <Show when={showBookmark()}>
               <Bookmark onClose={() => setShowBookmark(false)} />
@@ -537,7 +540,7 @@ const Vocabulary: Component<{}> = () => {
           <Presence>
             <Show when={showMenubar()}>
               <Motion.div
-                class="menubar"
+                class={styles.menubar}
                 initial={{
                   opacity: 0,
                   bottom: "-150px",
@@ -552,12 +555,12 @@ const Vocabulary: Component<{}> = () => {
                 }}
                 transition={{ duration: 0.3, easing: "ease-in-out" }}
               >
-                <div class="menubarContent">
+                <div class={styles.menubarContent}>
                   <button
                     class={
                       wordListType() === 1
-                        ? "menuBtn menuBtn--wordlist menuBtn--active"
-                        : "menuBtn menuBtn--wordlist"
+                        ? `${buttons.buttonMenuWordlist} ${buttons.buttonMenuWordlistActive}`
+                        : buttons.buttonMenuWordlist
                     }
                     onClick={() => {
                       handleSetDailyWord(1);
@@ -570,8 +573,8 @@ const Vocabulary: Component<{}> = () => {
                   <button
                     class={
                       wordListType() === 2
-                        ? "menuBtn menuBtn--wordlist menuBtn--active"
-                        : "menuBtn menuBtn--wordlist"
+                        ? `${buttons.buttonMenuWordlist} ${buttons.buttonMenuWordlistActive}`
+                        : buttons.buttonMenuWordlist
                     }
                     onClick={() => {
                       handleSetDailyWord(2);
@@ -582,7 +585,7 @@ const Vocabulary: Component<{}> = () => {
                     <small>{todayData().time2}</small>
                   </button>
                   <button
-                    class="menuBtn"
+                    class={buttons.buttonMenu}
                     onClick={() => {
                       setShowBookmark(true);
                       setShowMenubar(false);
@@ -591,7 +594,7 @@ const Vocabulary: Component<{}> = () => {
                     <ImBooks size={18} />
                   </button>
                   <button
-                    class="menuBtn"
+                    class={buttons.buttonMenu}
                     onClick={() => {
                       setShowTranslate(true);
                       setShowMenubar(false);
@@ -600,7 +603,7 @@ const Vocabulary: Component<{}> = () => {
                     <BsTranslate size={15} />
                   </button>
                   <button
-                    class="menuBtn"
+                    class={buttons.buttonMenu}
                     onClick={() => {
                       startCountdown();
                       setShowMenubar(false);
@@ -608,7 +611,10 @@ const Vocabulary: Component<{}> = () => {
                   >
                     <BiSolidHourglassTop size={16} />
                   </button>
-                  <button class="menuBtn" onClick={() => logoutAction()}>
+                  <button
+                    class={buttons.buttonMenu}
+                    onClick={() => logoutAction()}
+                  >
                     E
                   </button>
                 </div>
@@ -619,7 +625,7 @@ const Vocabulary: Component<{}> = () => {
           <Presence>
             <Show when={isRunning()}>
               <Motion.button
-                class="menuBtn menuBtn--timer"
+                class={buttons.buttonTimer}
                 onClick={stopCountdown}
                 initial={{
                   opacity: 0,
@@ -637,7 +643,7 @@ const Vocabulary: Component<{}> = () => {
               >
                 <OcHourglass2 size={11} />
                 <Motion.div
-                  class="menuBtn--timer--overlay"
+                  class={styles.buttonTimerOverlay}
                   animate={{ height: `${(1 - minutes() / 6) * 100}%` }}
                 ></Motion.div>
               </Motion.button>
@@ -648,7 +654,7 @@ const Vocabulary: Component<{}> = () => {
         <Presence>
           <Show when={showEdit()}>
             <Motion.div
-              class="editOverlay"
+              class={styles.editOverlay}
               initial={{
                 opacity: 0,
               }}
@@ -669,7 +675,7 @@ const Vocabulary: Component<{}> = () => {
         <Presence>
           <Show when={showTranslate()}>
             <Motion.div
-              class="editOverlay"
+              class={styles.editOverlay}
               initial={{
                 opacity: 0,
               }}

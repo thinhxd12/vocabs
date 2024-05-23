@@ -8,7 +8,7 @@ import {
   JSX,
   onMount,
 } from "solid-js";
-import { getMemoriesLength } from "~/api/api";
+import { getMemoriesLength } from "~/lib/api";
 import { ScheduleType, VocabularyType } from "~/types";
 
 interface ContextProps {

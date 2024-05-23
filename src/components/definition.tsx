@@ -1,7 +1,8 @@
 import { Component, Index, Setter, Show, createMemo } from "solid-js";
 import { VocabularyType } from "~/types";
-import "/public/styles/definition.scss";
 import { FaSolidCheck } from "solid-icons/fa";
+import styles from "./definition.module.scss";
+import buttons from "../assets/styles/buttons.module.scss";
 
 const Definition: Component<{
   item: VocabularyType;
@@ -11,52 +12,56 @@ const Definition: Component<{
   const currenText = createMemo(() => props.item);
   return (
     <>
-      <div class="definition">
-        <div class="definitionHeader">
+      <div class={styles.definition}>
+        <div class={styles.definitionHeader}>
           <Show when={props.onEdit}>
             <button
-              class="button button--primary"
+              class={buttons.buttonPrimary}
               onclick={() => props.onEdit!(props.item)}
             >
               <img src="/images/main/laurel.png" height={13} />
             </button>
           </Show>
           <Show when={props.onCheck}>
-            <button class="button button--success" onclick={props.onCheck}>
+            <button class={buttons.buttonSuccess} onclick={props.onCheck}>
               <FaSolidCheck size={13} />
             </button>
           </Show>
         </div>
-        <div class="definitionBody">
+        <div class={styles.definitionBody}>
           <Index each={currenText()?.definitions}>
             {(item, index) => {
               return (
-                <div class="websEntry">
-                  <p class="websHead">{item().partOfSpeech}</p>
+                <div class={styles.websEntry}>
+                  <p class={styles.websHead}>{item().partOfSpeech}</p>
                   <Index each={item().definitions}>
                     {(m, n) => (
                       <div
-                        class={m().image ? "websSenseHasImage" : "websSense"}
+                        class={
+                          m().image
+                            ? styles.websSenseHasImage
+                            : styles.websSense
+                        }
                       >
                         <Show when={m().image}>
                           <img
-                            class="websImg"
+                            class={styles.websImg}
                             src={m().image}
                             onerror={(e) => {
                               e.currentTarget.src = "/images/main/5small.jpg";
                             }}
                           />
-                          <div class="websImgOverlay"></div>
+                          <div class={styles.websImgOverlay}></div>
                         </Show>
-                        <div class="websDefs">
+                        <div class={styles.websDefs}>
                           <Index each={m().definition}>
                             {(x, y) => (
                               <p
-                                class="websDef"
+                                class={styles.websDef}
                                 innerHTML={
                                   x().similar
                                     ? x().sense +
-                                      `<span class="websDefUp">${
+                                      `<span class=${styles.websDefUp}>${
                                         " : " + x().similar
                                       }</span>`
                                     : x().sense
@@ -70,24 +75,33 @@ const Definition: Component<{
                   </Index>
 
                   <Show when={item().example[0]}>
-                    <p class="websX" innerHTML={item().example[0].sentence} />
-                    <div class="websCredits">
+                    <p
+                      class={styles.websX}
+                      innerHTML={item().example[0].sentence}
+                    />
+                    <div class={styles.websCredits}>
                       <Show when={item().example[0].author}>
-                        <div class="websAuthor">{item().example[0].author}</div>
+                        <div class={styles.websAuthor}>
+                          {item().example[0].author}
+                        </div>
                         <div>&nbsp;-&nbsp;</div>
                       </Show>
                       <Show when={item().example[0].title}>
-                        <div class="websTitle">{item().example[0].title}</div>
+                        <div class={styles.websTitle}>
+                          {item().example[0].title}
+                        </div>
                       </Show>
                       <Show when={item().example[0].year}>
                         <div>&nbsp;-&nbsp;</div>
-                        <div class="websYear">{item().example[0].year}</div>
+                        <div class={styles.websYear}>
+                          {item().example[0].year}
+                        </div>
                       </Show>
                     </div>
                   </Show>
 
                   <Show when={item().synonyms}>
-                    <p class="websSyn">
+                    <p class={styles.websSyn}>
                       <b>Synonym </b>
                       <small>{item().synonyms}</small>
                     </p>

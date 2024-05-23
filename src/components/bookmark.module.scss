@@ -1,11 +1,11 @@
-@import "./mixins.scss";
+@import "../assets/styles/mixins.scss";
 
-.quoteContainer {
+.bookmarkContainer {
     @include baseBody;
     width: 100%;
     padding: 0 !important;
 
-    .quoteHeader {
+    .bookmarkHeader {
         position: sticky;
         top: 0;
         left: 0;
@@ -17,30 +17,30 @@
         background: $color-background-4;
         height: 27px;
 
-        .quoteHeaderLeft {
+        .bookmarkHeaderLeft {
             height: 100%;
             @include flex;
             padding: 0 3px;
         }
 
-        .quoteHeaderRight {
+        .bookmarkHeaderRight {
             @include flex;
             padding: 1px;
         }
     }
 
-    .quoteLoading {
+    .bookmarkLoading {
         font-size: 13px;
         padding: 6px 9px;
     }
 
-    .quoteBody {
+    .bookmarkBody {
         font-size: 13px;
         line-height: 1.1rem;
         padding: 6px 9px;
         min-height: 80px;
 
-        .quotePassage::first-letter {
+        .bookmarkPassage::first-letter {
             @include font("NYTCheltenham", 60px, $color-white, normal, normal, 60px);
             float: left;
             margin-right: 6px;
@@ -51,10 +51,11 @@
             text-transform: uppercase;
             border-radius: 3px;
         }
+    }
 
-        &--bookmark {
-            background: url("/images/main/paper.jpeg");
-            background-size: cover;
-        }
+    .bookmarkBodyChecked {
+        @extend .bookmarkBody;
+        background: url("/images/main/paper.jpeg");
+        background-size: cover;
     }
 }
