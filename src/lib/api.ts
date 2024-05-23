@@ -4,12 +4,9 @@ import { DEFAULT_CORS_PROXY, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute,
 import { PostgrestError } from "@supabase/supabase-js";
 import { format } from "date-fns";
 import { createSignal } from "solid-js";
-import { createClient } from '@supabase/supabase-js'
 import { parse } from 'node-html-parser';
+import { supabase } from "./supbabase";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export const searchText = async (text: string) => {
     "use server";

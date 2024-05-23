@@ -2,13 +2,8 @@
 import { redirect } from "@solidjs/router";
 import { useSession } from "vinxi/http";
 import { createSignal } from "solid-js";
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from "./supbabase";
 
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
