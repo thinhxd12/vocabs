@@ -4,6 +4,7 @@ export default defineConfig({
     server: {
         prerender: {
             routes: ["/", "/about"]
-        }
+        },
+        preset: "netlify-edge",
     }
 });
