@@ -7,7 +7,6 @@ import {
     validatePassword,
     validateUsername
 } from "./newserver";
-import { supabase } from "./supbabase";
 
 export const getUser = cache(async () => {
     "use server";
