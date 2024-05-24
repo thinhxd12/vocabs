@@ -1,7 +1,6 @@
 import { action, redirect } from "@solidjs/router";
 import { CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, } from "~/types";
 import { DEFAULT_CORS_PROXY, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
-import { PostgrestError } from "@supabase/supabase-js";
 import { format } from "date-fns";
 import { createSignal } from "solid-js";
 import { parse } from 'node-html-parser';
@@ -485,7 +484,7 @@ export const editVocabularyItem = action(async (formData: FormData) => {
         })
         .eq('created_at', createT);
     if (error) return { message: error.message };
-    return { message: "success" } as PostgrestError
+    return { message: "success" }
 });
 
 const getTranslation = (str: string) => {
@@ -530,7 +529,7 @@ export const insertVocabularyItem = action(async (formData: FormData) => {
             definitions: definitionsT,
         })
     if (error) return { message: error.message };
-    return { message: "success" } as PostgrestError
+    return { message: "success" }
 });
 
 //get image from unsplash
