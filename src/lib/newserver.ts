@@ -19,7 +19,7 @@ export async function login(password: string) {
     // return user;
     const username = import.meta.env.VITE_LOGIN_EMAIL;
     const { data, error } = await supabase.auth.signInWithPassword({
-        email: username,
+        email: 'thinh@mail.com',
         password: password,
     })
     if (error?.message) throw new Error(error?.message);
