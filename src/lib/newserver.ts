@@ -19,13 +19,13 @@ export async function login(password: string) {
     // if (!user || password !== user.password) throw new Error("Invalid login");
     // return user;
     const username = import.meta.env.VITE_LOGIN_EMAIL;
-    const { data, error } = await supabase.auth.signInWithPassword({
-        email: username,
-        password: password,
-    })
+    // const { data, error } = await supabase.auth.signInWithPassword({
+    //     email: username,
+    //     password: password,
+    // })
     // if (error?.message) throw new Error(error?.message);
-    throw redirect("/main");
-    return data.user;
+    throw redirect("/main/vocabulary");
+    // return data.user;
 }
 
 export async function logout() {
