@@ -1,16 +1,23 @@
 import { action, cache, redirect } from "@solidjs/router";
 import { getSession, login, logout as logoutSession, validatePassword } from "./server";
+import { createSignal } from "solid-js";
+
+
+type UserType = { email: string; password: string; }
+
+const [userInfo, setUserInfo] = createSignal<UserType | undefined>(undefined);
 
 export const getUser = cache(async () => {
   "use server";
   try {
-    const session = await getSession();
-    const userId = session.data.userId;
-    if (!userId) {
+    // const session = await getSession();
+    // const userId = session.data.userId;
+    if (userInfo() === undefined) {
       throw new Error("User not found");
     }
   } catch {
-    await logoutSession();
+    // await logoutSession();
+    setUserInfo(undefined);
     throw redirect("/");
   }
 }, "user");
@@ -23,8 +30,11 @@ export const loginAction = action(async (formData: FormData) => {
 
   try {
     const user = await login(password);
-    const session = await getSession();
-    await session.update(d => (d.userId = user!.email));
+    if (user) {
+      setUserInfo(user);
+    }
+    // const session = await getSession();
+    // await session.update(d => (d.userId = user!.email));
   } catch (err) {
     return err as Error;
   }
@@ -33,6 +43,7 @@ export const loginAction = action(async (formData: FormData) => {
 
 export const logout = action(async () => {
   "use server";
-  await logoutSession();
+  // await logoutSession();
+  setUserInfo(undefined);
   return redirect("/");
 });
