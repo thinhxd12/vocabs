@@ -2,7 +2,6 @@ import { MetaProvider, Title as TitleName, Meta } from "@solidjs/meta";
 import { Component, Index, Show, createSignal, onMount } from "solid-js";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
-import RSS from "~/components/rss";
 import { FaSolidArrowUpLong } from "solid-icons/fa";
 import {
   RainRenderer,
@@ -19,7 +18,7 @@ import {
 import { format } from "date-fns";
 import styles from "./weather.module.scss";
 import { createAsync } from "@solidjs/router";
-import { getUser } from "~/lib/newindex";
+import { getUser } from "~/lib";
 
 type WeatherGeoType = {
   name: string;
@@ -30,6 +29,9 @@ let canvas: HTMLCanvasElement;
 let audio: HTMLAudioElement;
 
 const Weather: Component<{}> = (props) => {
+  // ***************check login**************
+  const user = createAsync(() => getUser(), { deferStream: true });
+  // ***************check login**************
   const WEATHER_GEOS: WeatherGeoType[] = [
     {
       name: "ThuThua",
@@ -504,7 +506,6 @@ const Weather: Component<{}> = (props) => {
                 </div>
                 <p class={styles.weatherPredict}> {textPrediction()}</p>
               </div>
-              <RSS />
             </div>
           </div>
         </Show>

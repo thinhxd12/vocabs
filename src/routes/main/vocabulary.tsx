@@ -8,8 +8,7 @@ import {
   on,
   onMount,
 } from "solid-js";
-import { RouteDefinition, createAsync, useAction } from "@solidjs/router";
-// import { getUser, logout } from "~/lib";
+import { createAsync, useAction } from "@solidjs/router";
 import { VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
@@ -41,11 +40,7 @@ import { BiSolidHourglassTop } from "solid-icons/bi";
 import { format } from "date-fns";
 import styles from "./vocabulary.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
-import { getUser, logout } from "~/lib/newindex";
-
-export const route = {
-  load: () => getUser()
-} satisfies RouteDefinition;
+import { getUser, logout } from "~/lib";
 
 let timerRef: NodeJS.Timeout;
 let audioRef: HTMLAudioElement;
@@ -54,6 +49,9 @@ const [minutes, setMinutes] = createSignal(6);
 const [isRunning, setIsRunning] = createSignal(false);
 
 const Vocabulary: Component<{}> = () => {
+  // ***************check login**************
+  const user = createAsync(() => getUser(), { deferStream: true });
+  // ***************check login**************
   const [currentText, setCurrentText] = createSignal<VocabularyType>();
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");

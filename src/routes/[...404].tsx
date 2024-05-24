@@ -1,7 +1,16 @@
 export default function NotFound() {
   return (
-    <main class="w-full p-4 space-y-2">
-      <h1 class="font-bold text-xl">Page Not Found</h1>
+    <main
+      style={{
+        background: "black",
+        display: "flex",
+        "justify-content": "center",
+        "align-items": "center",
+        width: "100vw",
+        height: "100vh",
+      }}
+    >
+      <h1 style={{ color: "#f90000" }}>Page Not Found</h1>
     </main>
   );
 }

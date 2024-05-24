@@ -43,7 +43,7 @@ const chunk = (array: any[], size: number) =>
         return acc;
     }, []);
 
-export const getCalendarScheduleData = action(async () => {
+export const getCalendarScheduleData = async () => {
     "use server";
     const date = new Date();
     const thisMonth = date.getMonth();
@@ -78,7 +78,7 @@ export const getCalendarScheduleData = action(async () => {
     const { data, error } = await supabase.from(mapTables.schedule).select();
 
     if (data) {
-        const scheduleData = data?.map((item, index) => {
+        const scheduleData = data?.map((item: any, index: number) => {
             const day = new Date(item.date);
             return { ...item, date: day.getDate(), month: day.getMonth() };
         });
@@ -86,13 +86,13 @@ export const getCalendarScheduleData = action(async () => {
         const mergedArray = monthDateArr.map(item => {
             return {
                 ...item,
-                ...scheduleData.find((item2) => item2.date === item.date && item2.month === item.month) // find the item from the second array with the same id
+                ...scheduleData.find((item2: any) => item2.date === item.date && item2.month === item.month) // find the item from the second array with the same id
             };
         });
         const calendarScheduleArr = chunk(mergedArray, 7);
         return calendarScheduleArr;
     }
-}, "calendar-schedule");
+};
 
 //get start index of schedule
 export const getThisWeekData = action(async () => {
@@ -697,7 +697,7 @@ export const getSmallestWordNumberFromRange = async (text: string) => {
         .order('created_at', { ascending: true })
         .range(2000, 9999)
     if (data) {
-        const sortedArr = data.sort((a, b) => a.number - b.number);
+        const sortedArr = data.sort((a: VocabularyType, b: VocabularyType) => a.number - b.number);
         return sortedArr[0];
     }
 };

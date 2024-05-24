@@ -1,89 +1,41 @@
-"use server";
-import { redirect } from "@solidjs/router";
-import { createSignal } from "solid-js";
-// import { supabase } from "./supbabase";
 import { useSession } from "vinxi/http";
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from "./supbabase";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
-
-const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-function validateUsername(username: unknown) {
+export function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
     return `Usernames must be at least 3 characters long`;
   }
 }
 
-function validatePassword(password: unknown) {
+export function validatePassword(password: unknown) {
   if (typeof password !== "string" || password.length < 6) {
     return `Passwords must be at least 6 characters long`;
   }
 }
 
-const [emailSig, setEmailSig] = createSignal<string>("");
-
-async function login(username: string, password: string) {
-  const { data, error } = await supabase.auth.signInWithPassword({
-    email: username,
-    password: password,
-  })
-
-  if (error?.message) throw new Error(error?.message);
-  setEmailSig(username);
-  return { email: username }
-}
-
-async function register(username: string, password: string) {
-  const { data, error } = await supabase.auth.signUp({
-    email: username,
-    password: password,
-  })
-  if (error?.message) throw new Error("User already exists");
-  return { email: username }
-}
-
-export async function loginOrRegister(formData: FormData) {
-  // const username = String(formData.get("username"));
-  const username = import.meta.env.VITE_LOGIN_EMAIL;
-  const password = String(formData.get("password"));
-  let error = validatePassword(password);
-  if (error) return new Error(error);
-
-  try {
-    const user = await login(username, password);
-    //luu mot session value email khi khoi dong route se tim toi email de verify
-    const session = await getSession();
-    await session.update(d => (d.email = user!.email));
-  } catch (err) {
-    return err as Error;
+export async function login(password: string) {
+  const { data, error } = await supabase
+    .from('users')
+    .select()
+    .textSearch("password", password);
+  if (error) throw new Error(error.message);
+  else if (data) {
+    if (data.length > 0) {
+      return data[0] as { email: string, password: string }
+    }
+    else throw new Error("Invalid login");
   }
-  throw redirect("/main/vocabulary");
 }
 
 export async function logout() {
-  const { error } = await supabase.auth.signOut();
-  if (error) throw new Error(error.message);
   const session = await getSession();
-  await session.update((d) => (d.email = undefined));
-  throw redirect("/");
+  await session.update(d => (d.userId = undefined));
 }
 
+export async function register(username: string, password: string) { }
 
-function getSession() {
+export function getSession() {
   return useSession({
     password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
   });
 }
-
-export async function getUser() {
-  const session = await getSession();
-  const userEmail = session.data.email;
-  if (userEmail === undefined) throw redirect("/");
-  if (userEmail === emailSig()) return { email: userEmail };
-}
-
-
-
-

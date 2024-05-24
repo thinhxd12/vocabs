@@ -1,30 +1,12 @@
-import {
-  useSubmission,
-  type RouteSectionProps,
-  RouteDefinition,
-  createAsync,
-  redirect,
-} from "@solidjs/router";
+import { useSubmission, type RouteSectionProps } from "@solidjs/router";
 import { Show, onMount } from "solid-js";
-// import { loginOrRegister, getUser } from "~/lib";
 import styles from "./index.module.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-import { loginAction } from "~/lib/newindex";
-import { getUser } from "~/lib/newindex";
-
-export const route = {
-  load: () => getUser(),
-} satisfies RouteDefinition;
+import { loginAction } from "~/lib";
 
 export default function Login(props: RouteSectionProps) {
-  // const user = createAsync(() => getUserLogin(), { deferStream: true });
-
   const loggingIn = useSubmission(loginAction);
-  // if (user()?.userId !== "") return redirect("/main/vocabulary");
 
-  onMount(() => {
-    // console.log(user());
-  });
   return (
     <MetaProvider>
       <Title>login</Title>

@@ -1,15 +1,15 @@
-import { Component, Index, Show, createSignal, onMount } from "solid-js";
 import {
-  RouteDefinition,
-  createAsync,
-  useAction,
-  useSubmission,
-} from "@solidjs/router";
-// import { getUser } from "~/lib";
+  Component,
+  Index,
+  Show,
+  createResource,
+  createSignal,
+  onMount,
+} from "solid-js";
+import { createAsync, useAction } from "@solidjs/router";
 import {
   getCalendarHistoryData,
   getCalendarScheduleData,
-  getImageFromUnsplash,
   getThisWeekData,
   submitNewHistory,
   submitNewMonth,
@@ -27,26 +27,25 @@ import { format } from "date-fns";
 import forms from "../../assets/styles/form.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
-import { getUser } from "~/lib/newindex";
-
-const route = {
-  load: () => {
-    getUser();
-  },
-} satisfies RouteDefinition;
+import { getUser } from "~/lib";
 
 let ref: HTMLDivElement;
-const About: Component<{}> = (props) => {
+
+const Calendar: Component<{}> = (props) => {
+  // ***************check login**************
+  const user = createAsync(() => getUser(), { deferStream: true });
+  // ***************check login**************
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();
   const getCalendarHistoryDataAction = useAction(getCalendarHistoryData);
   const [todayDate] = createSignal<Date>(new Date());
   const [weekIndex, setWeekIndex] = createSignal<number>(0);
 
-  const getImageFromUnsplashAction = useAction(getImageFromUnsplash);
-  const getImageFromUnsplashResult = useSubmission(getImageFromUnsplash);
-  const getCalendarScheduleDataAction = useAction(getCalendarScheduleData);
-  const calendarScheduleDataResult = useSubmission(getCalendarScheduleData);
   const getThisWeekDataAction = useAction(getThisWeekData);
+
+  const [calendarScheduleData] = createResource(async () => {
+    const response = await getCalendarScheduleData();
+    return response;
+  });
 
   const options = {
     duration: 1000,
@@ -56,17 +55,11 @@ const About: Component<{}> = (props) => {
   const [slider, { current, next, prev, moveTo }] = createSlider(options);
 
   onMount(async () => {
-    //******get image calendar
-    // getImageFromUnsplashAction();
-
     //******get calendar history
     await getCalendarHistoryDataFromStorage();
 
     //******set slider
     slider(ref);
-
-    //******get calendar schedule
-    getCalendarScheduleDataAction();
 
     //******get calendarImageContent
     getThisWeekDataFromStorage();
@@ -152,9 +145,6 @@ const About: Component<{}> = (props) => {
                 "M"
               )}.jpg')`,
             }}
-            // style={{
-            //   "background-image": `url(${getImageFromUnsplashResult.result})`,
-            // }}
           >
             <div class={styles.calendarImageContent}>
               <p class={styles.setNewMonth} onClick={handleShowSetNewMonth}>
@@ -178,11 +168,8 @@ const About: Component<{}> = (props) => {
               <div class={styles.calendarWeekTitle}>Fri</div>
               <div class={styles.calendarWeekTitle}>Sat</div>
             </div>
-            <Show
-              when={calendarScheduleDataResult.result}
-              fallback={<CalendarLoading />}
-            >
-              <Index each={calendarScheduleDataResult.result}>
+            <Show when={calendarScheduleData()} fallback={<CalendarLoading />}>
+              <Index each={calendarScheduleData()}>
                 {(data, i) => {
                   return (
                     <div class={styles.calendarWeek}>
@@ -490,4 +477,4 @@ const About: Component<{}> = (props) => {
   );
 };
 
-export default About;
+export default Calendar;
