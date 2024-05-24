@@ -1,5 +1,6 @@
 import { useSession } from "vinxi/http";
 import { supabase } from "./supbabase";
+import { redirect } from "@solidjs/router";
 
 export function validateUsername(username: unknown) {
     if (typeof username !== "string" || username.length < 3) {
@@ -22,7 +23,8 @@ export async function login(password: string) {
         email: username,
         password: password,
     })
-    if (error?.message) throw new Error(error?.message);
+    // if (error?.message) throw new Error(error?.message);
+    throw redirect("/main");
     return data.user;
 }
 
