@@ -50,7 +50,7 @@ export const loginAction = action(async (formData: FormData) => {
     try {
         const user = await login(password);
         const session = await getSession();
-        // await session.update(d => (d.userId = user!.email));
+        await session.update(d => (d.userId = user!.email));
         // console.log(session.data);
     } catch (err) {
         return err as Error;
@@ -61,5 +61,5 @@ export const loginAction = action(async (formData: FormData) => {
 export const logout = action(async () => {
     "use server";
     await logoutSession();
-    return redirect("/login");
+    return redirect("/");
 });
