@@ -18,6 +18,8 @@ import {
 } from "~/lib/api";
 import { format } from "date-fns";
 import styles from "./weather.module.scss";
+import { createAsync } from "@solidjs/router";
+import { getUser } from "~/lib/newindex";
 
 type WeatherGeoType = {
   name: string;

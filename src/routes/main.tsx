@@ -18,13 +18,11 @@ import { format } from "date-fns";
 import styles from "./main.module.scss";
 import { getUser } from "~/lib/newindex";
 
-// export const route = {
-//   load: () => getUser(),
-// } satisfies RouteDefinition;
+export const route = {
+  load: () => getUser(),
+} satisfies RouteDefinition;
 
 const MainLayout = (props: RouteSectionProps) => {
-  // const user = createAsync(() => getUser(), { deferStream: true });
-
   const getDataImageAction = useAction(getDataImage);
 
   const mockObj = {

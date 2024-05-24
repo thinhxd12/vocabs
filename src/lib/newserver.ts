@@ -1,6 +1,5 @@
 import { useSession } from "vinxi/http";
 import { supabase } from "./supbabase";
-import { redirect } from "@solidjs/router";
 
 export function validateUsername(username: unknown) {
     if (typeof username !== "string" || username.length < 3) {
@@ -15,17 +14,17 @@ export function validatePassword(password: unknown) {
 }
 
 export async function login(password: string) {
-    // const user = await db.user.findUnique({ where: { username } });
-    // if (!user || password !== user.password) throw new Error("Invalid login");
-    // return user;
-    const username = import.meta.env.VITE_LOGIN_EMAIL;
-    // const { data, error } = await supabase.auth.signInWithPassword({
-    //     email: username,
-    //     password: password,
-    // })
-    // if (error?.message) throw new Error(error?.message);
-    throw redirect("/main/vocabulary");
-    // return data.user;
+    const { data, error } = await supabase
+        .from('users')
+        .select()
+        .textSearch('password', password)
+    if (error?.message) throw new Error(error?.message);
+    if (data) {
+        if (data.length > 0) {
+            return data[0];
+        }
+        else throw new Error("Invalid login");
+    }
 }
 
 export async function logout() {
@@ -34,11 +33,6 @@ export async function logout() {
 }
 
 export async function register(username: string, password: string) {
-    // const existingUser = await db.user.findUnique({ where: { username } });
-    // if (existingUser) throw new Error("User already exists");
-    // return db.user.create({
-    //     data: { username: username, password }
-    // });
 }
 
 export function getSession() {

@@ -2,21 +2,29 @@ import {
   useSubmission,
   type RouteSectionProps,
   RouteDefinition,
+  createAsync,
+  redirect,
 } from "@solidjs/router";
-import { Show } from "solid-js";
+import { Show, onMount } from "solid-js";
 // import { loginOrRegister, getUser } from "~/lib";
 import styles from "./index.module.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { loginAction } from "~/lib/newindex";
-// export const route = {
-//   load: () => getUser(),
-// } satisfies RouteDefinition;
+import { getUser } from "~/lib/newindex";
 
-// import { getUser } from "~/lib/newindex";
+export const route = {
+  load: () => getUser(),
+} satisfies RouteDefinition;
 
 export default function Login(props: RouteSectionProps) {
-  const loggingIn = useSubmission(loginAction);
+  // const user = createAsync(() => getUserLogin(), { deferStream: true });
 
+  const loggingIn = useSubmission(loginAction);
+  // if (user()?.userId !== "") return redirect("/main/vocabulary");
+
+  onMount(() => {
+    // console.log(user());
+  });
   return (
     <MetaProvider>
       <Title>login</Title>
@@ -24,11 +32,6 @@ export default function Login(props: RouteSectionProps) {
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <main class={styles.login}>
         <form action={loginAction} method="post" class={styles.loginForm}>
-          <input
-            type="hidden"
-            name="redirectTo"
-            value={props.params.redirectTo ?? "/main/vocabulary"}
-          />
           <div class={styles.loginItem}>
             <input name="password" type="password" class={styles.loginInput} />
           </div>

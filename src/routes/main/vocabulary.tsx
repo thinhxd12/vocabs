@@ -8,7 +8,7 @@ import {
   on,
   onMount,
 } from "solid-js";
-import { RouteDefinition, useAction } from "@solidjs/router";
+import { RouteDefinition, createAsync, useAction } from "@solidjs/router";
 // import { getUser, logout } from "~/lib";
 import { VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
@@ -41,13 +41,11 @@ import { BiSolidHourglassTop } from "solid-icons/bi";
 import { format } from "date-fns";
 import styles from "./vocabulary.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
-import { logout } from "~/lib/newindex";
+import { getUser, logout } from "~/lib/newindex";
 
-// export const route = {
-//   load: () => {
-//     getUser();
-//   },
-// } satisfies RouteDefinition;
+export const route = {
+  load: () => getUser()
+} satisfies RouteDefinition;
 
 let timerRef: NodeJS.Timeout;
 let audioRef: HTMLAudioElement;
