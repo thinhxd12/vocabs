@@ -1,6 +1,6 @@
 import { Component, Index, Show, createSignal, onMount } from "solid-js";
 import { RouteDefinition, useAction, useSubmission } from "@solidjs/router";
-import { getUser } from "~/lib";
+// import { getUser } from "~/lib";
 import {
   getCalendarHistoryData,
   getCalendarScheduleData,
@@ -23,11 +23,11 @@ import forms from "../../assets/styles/form.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 
-export const route = {
-  load: () => {
-    getUser();
-  },
-} satisfies RouteDefinition;
+// export const route = {
+//   load: () => {
+//     getUser();
+//   },
+// } satisfies RouteDefinition;
 
 let ref: HTMLDivElement;
 const About: Component<{}> = (props) => {

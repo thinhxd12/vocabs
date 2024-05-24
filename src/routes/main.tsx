@@ -2,10 +2,11 @@ import {
   useAction,
   type RouteDefinition,
   RouteSectionProps,
+  createAsync,
 } from "@solidjs/router";
 import { Show, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
-import { getUser } from "~/lib";
+// import { getUser } from "~/lib";
 import { getDataImage, getUnsplashImage } from "~/lib/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
@@ -15,13 +16,15 @@ import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
 import { format } from "date-fns";
 import styles from "./main.module.scss";
-
+import { getUser } from "~/lib/newindex";
 
 export const route = {
   load: () => getUser(),
 } satisfies RouteDefinition;
 
 const MainLayout = (props: RouteSectionProps) => {
+  const user = createAsync(() => getUser(), { deferStream: true });
+
   const getDataImageAction = useAction(getDataImage);
 
   const mockObj = {

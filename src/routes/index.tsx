@@ -4,15 +4,18 @@ import {
   RouteDefinition,
 } from "@solidjs/router";
 import { Show } from "solid-js";
-import { loginOrRegister, getUser } from "~/lib";
+// import { loginOrRegister, getUser } from "~/lib";
 import styles from "./index.module.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-export const route = {
-  load: () => getUser(),
-} satisfies RouteDefinition;
+import { loginAction } from "~/lib/newindex";
+// export const route = {
+//   load: () => getUser(),
+// } satisfies RouteDefinition;
+
+// import { getUser } from "~/lib/newindex";
 
 export default function Login(props: RouteSectionProps) {
-  const loggingIn = useSubmission(loginOrRegister);
+  const loggingIn = useSubmission(loginAction);
 
   return (
     <MetaProvider>
@@ -20,7 +23,7 @@ export default function Login(props: RouteSectionProps) {
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <main class={styles.login}>
-        <form action={loginOrRegister} method="post" class={styles.loginForm}>
+        <form action={loginAction} method="post" class={styles.loginForm}>
           <input
             type="hidden"
             name="redirectTo"

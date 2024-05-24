@@ -1,8 +1,8 @@
 "use server";
 import { redirect } from "@solidjs/router";
-import { useSession } from "vinxi/http";
 import { createSignal } from "solid-js";
 import { supabase } from "./supbabase";
+import { useSession } from "vinxi/http";
 
 
 function validateUsername(username: unknown) {
@@ -24,6 +24,7 @@ async function login(username: string, password: string) {
     email: username,
     password: password,
   })
+
   if (error?.message) throw new Error(error?.message);
   setEmailSig(username);
   return { email: username }
