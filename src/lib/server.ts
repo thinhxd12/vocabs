@@ -1,5 +1,6 @@
-import { useSession } from "vinxi/http";
+import { useSession } from "vinxi/server";
 import { supabase } from "./supbabase";
+
 
 export function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
