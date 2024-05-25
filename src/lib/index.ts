@@ -30,8 +30,8 @@ export const loginAction = action(async (formData: FormData) => {
     // if (user) {
     //   sessionStorage.setItem("x_user", JSON.stringify(user))
     // }
-    // const session = await getSession();
-    // await session.update(d => (d.userId = user!.email));
+    const session = await getSession();
+    await session.update(d => (d.userId = user!.email));
   } catch (err) {
     return err as Error;
   }
