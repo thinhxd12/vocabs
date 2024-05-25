@@ -2,16 +2,14 @@ import { action, cache, redirect } from "@solidjs/router";
 import { getSession, login, logout as logoutSession, validatePassword } from "./server";
 
 export const getUser = cache(async () => {
+
   try {
     const session = await getSession();
-    if (session) {
-      const userId = JSON.parse(session).user;
-      if (!userId) {
-        throw new Error("User not found");
-      }
-    }
+    const userId = session.data.userId;
+    if (userId === undefined) throw new Error("User not found");
+    return userId;
   } catch {
-    await logoutSession();
+    // await logoutSession();
     throw redirect("/");
   }
 }, "user");
@@ -23,9 +21,11 @@ export const loginAction = action(async (formData: FormData) => {
 
   try {
     const user = await login(password);
-    if (user) {
-      sessionStorage.setItem("x_user", JSON.stringify(user))
-    }
+    // if (user) {
+    //   sessionStorage.setItem("x_user", JSON.stringify(user))
+    // }
+    const session = await getSession();
+    await session.update(d => (d.userId = user!.email));
   } catch (err) {
     return err as Error;
   }

@@ -1,4 +1,5 @@
 import { supabase } from "./supbabase";
+import { useSession } from "vinxi/http";
 
 
 export function validateUsername(username: unknown) {
@@ -21,21 +22,26 @@ export async function login(password: string) {
   if (error) throw new Error(error.message);
   else if (data) {
     if (data.length > 0) {
-      return { user: data[0].email }
+      return { email: data[0].email }
     }
     else throw new Error("Invalid login");
   }
 }
 
 export async function logout() {
-  sessionStorage.removeItem("x_user");
+  // sessionStorage.removeItem("x_user");
+  const session = await getSession();
+  await session.update(d => (d.userId = undefined));
 }
 
 export async function register(username: string, password: string) { }
 
 export async function getSession() {
-  if (typeof window !== 'undefined') {
-    return sessionStorage.getItem("x_user");
-  }
+  // if (typeof window !== 'undefined') {
+  //   return sessionStorage.getItem("x_user");
+  // }
+  return await useSession({
+    password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
+  });
 }
 

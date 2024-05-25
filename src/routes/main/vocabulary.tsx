@@ -8,7 +8,6 @@ import {
   on,
   onMount,
 } from "solid-js";
-import { createAsync, useAction } from "@solidjs/router";
 import { VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
@@ -41,6 +40,7 @@ import { format } from "date-fns";
 import styles from "./vocabulary.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import { getUser, logout } from "~/lib";
+import { createAsync, type RouteDefinition, useAction } from "@solidjs/router";
 
 let timerRef: NodeJS.Timeout;
 let audioRef: HTMLAudioElement;
@@ -50,7 +50,7 @@ const [isRunning, setIsRunning] = createSignal(false);
 
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
-  const user = createAsync(() => getUser(), { deferStream: true });
+  const user = createAsync(() => getUser());
   // ***************check login**************
   const [currentText, setCurrentText] = createSignal<VocabularyType>();
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
@@ -392,7 +392,7 @@ const Vocabulary: Component<{}> = () => {
   return (
     <MetaProvider>
       <Title>{currentText()?.word || "main"}</Title>
-      <Meta name="author" content="thinhxd12@gmail.com" />
+      <Meta name="author" content={user() || ""} />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio
         hidden

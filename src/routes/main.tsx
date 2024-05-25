@@ -45,7 +45,14 @@ const MainLayout = (props: RouteSectionProps) => {
     return result;
   };
 
+  const [isMobile, setIsMobile] = createSignal(false);
+
   onMount(() => {
+    setIsMobile(
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    );
     getWakeup();
     setInterval(() => {
       getWakeup();
@@ -81,8 +88,8 @@ const MainLayout = (props: RouteSectionProps) => {
   };
 
   return (
-    <div>
-      <div class={styles.main}>
+    <div class={styles.main}>
+      <Show when={!isMobile()}>
         <div class={styles.mainButtons}>
           <button onClick={changeToggle} class={styles.mainButton}>
             <Show
@@ -96,7 +103,6 @@ const MainLayout = (props: RouteSectionProps) => {
             <TbRefresh size={17} />
           </button>
         </div>
-
         <Motion.div
           class={styles.mainLeft}
           animate={{
@@ -110,19 +116,22 @@ const MainLayout = (props: RouteSectionProps) => {
           <img class={styles.mainLeftImage} src={imageObj.image} />
           <img class={styles.mainLeftImageBlurred} src={imageObj.image} />
         </Motion.div>
+      </Show>
 
-        <div class={styles.mainCenter}>
-          <GlobalContextProvider>
-            {props.children}
-            <Bottom />
-          </GlobalContextProvider>
-        </div>
+      <div class={styles.mainCenter}>
+        <GlobalContextProvider>
+          {props.children}
+          <Bottom />
+        </GlobalContextProvider>
+      </div>
 
+      <Show when={!isMobile()}>
         <Motion.div
           class={styles.mainRight}
           animate={{
             width: toggleMainPage() ? "300px" : "calc(50vw - 180px)",
             opacity: toggleMainPage() ? 1 : 0,
+            display: isMobile() ? "none" : "unset",
           }}
           transition={{ duration: 0.3 }}
         >
@@ -140,7 +149,7 @@ const MainLayout = (props: RouteSectionProps) => {
           </div>
           <div class={styles.mainRightBody} innerHTML={imageObj.content} />
         </Motion.div>
-      </div>
+      </Show>
     </div>
   );
 };
