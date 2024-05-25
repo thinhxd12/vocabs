@@ -2,18 +2,21 @@ import { supabase } from "./supbabase";
 import { useSession } from "vinxi/http";
 
 export function validateUsername(username: unknown) {
+  "use server";
   if (typeof username !== "string" || username.length < 3) {
     return `Usernames must be at least 3 characters long`;
   }
 }
 
 export function validatePassword(password: unknown) {
+  "use server";
   if (typeof password !== "string" || password.length < 6) {
     return `Passwords must be at least 6 characters long`;
   }
 }
 
 export async function login(password: string) {
+  "use server";
   const { data, error } = await supabase
     .from('users')
     .select()
@@ -29,6 +32,7 @@ export async function login(password: string) {
 
 export async function logout() {
   // sessionStorage.removeItem("x_user");
+  "use server";
   const session = await getSession();
   await session.update(d => (d.userId = undefined));
 }
