@@ -1,5 +1,5 @@
 {
-  "name": "example-with-auth",
+  "name": "example",
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",

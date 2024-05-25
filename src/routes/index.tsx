@@ -11,13 +11,6 @@ import { loginAction } from "~/lib";
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginAction);
 
-  onMount(() => {
-    const user = sessionStorage.getItem("x_user");
-    if (user) {
-      window.history.back();
-    }
-  });
-
   return (
     <MetaProvider>
       <Title>login</Title>

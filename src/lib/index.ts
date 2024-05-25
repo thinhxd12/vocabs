@@ -2,7 +2,7 @@ import { action, cache, redirect } from "@solidjs/router";
 import { getSession, login, logout as logoutSession, validatePassword } from "./server";
 
 export const getUser = cache(async () => {
-
+  "use server";
   try {
     const session = await getSession();
     const userId = session.data.userId;
@@ -15,6 +15,7 @@ export const getUser = cache(async () => {
 }, "user");
 
 export const loginAction = action(async (formData: FormData) => {
+  "use server";
   const password = String(formData.get("password"));
   let error = validatePassword(password);
   if (error) return new Error(error);
@@ -33,6 +34,7 @@ export const loginAction = action(async (formData: FormData) => {
 }, "loginAction");
 
 export const logout = action(async () => {
+  "use server";
   await logoutSession();
   return redirect("/");
 }, "logout");
