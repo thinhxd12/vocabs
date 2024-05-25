@@ -5,7 +5,7 @@ import { getDataImage, getUnsplashImage } from "~/lib/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import { GlobalContextProvider } from "~/globalcontext/store";
-import { Motion, Presence } from "solid-motionone";
+import { Motion } from "solid-motionone";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
 import { format } from "date-fns";
@@ -52,7 +52,7 @@ const MainLayout = (props: RouteSectionProps) => {
     }, 840000);
   });
 
-  const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(true);
+  const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
 
   const changeToggle = () => {
     setToggleMainPage(!toggleMainPage());
@@ -83,39 +83,35 @@ const MainLayout = (props: RouteSectionProps) => {
   return (
     <div>
       <div class={styles.main}>
-        <Motion.div
-          class={styles.mainImageContainer}
-          animate={{
-            maxWidth: toggleMainPage() ? "calc(50vw - 180px)" : "unset",
-          }}
-          transition={{ duration: 0.6, easing: "ease" }}
-        >
-          <Presence>
-            <Show when={!toggleMainPage()}>
-              <Motion.div
-                class={styles.mainImageContentAnimation}
-                initial={{
-                  opacity: 0,
-                  x: "-100%",
-                }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  x: "-100%",
-                }}
-                transition={{ duration: 0.6, easing: "ease" }}
-              >
-                <img class={styles.mainImage} src={imageObj.image} />
-                <img class={styles.mainImageBlurred} src={imageObj.image} />
-              </Motion.div>
+        <div class={styles.mainButtons}>
+          <button onClick={changeToggle} class={styles.mainButton}>
+            <Show
+              when={toggleMainPage()}
+              fallback={<VsLayoutCentered size={17} />}
+            >
+              <VsLayoutActivitybarRight size={17} />
             </Show>
-          </Presence>
+          </button>
+          <button onClick={handleGetNextImage} class={styles.mainButton}>
+            <TbRefresh size={17} />
+          </button>
+        </div>
+
+        <Motion.div
+          class={styles.mainLeft}
+          animate={{
+            width: toggleMainPage()
+              ? "calc(100vw - 660px)"
+              : "calc(50vw - 180px)",
+            opacity: toggleMainPage() ? 1 : 0,
+          }}
+          transition={{ duration: 0.3 }}
+        >
+          <img class={styles.mainLeftImage} src={imageObj.image} />
+          <img class={styles.mainLeftImageBlurred} src={imageObj.image} />
         </Motion.div>
 
-        <div class={styles.mainImageContent}>
+        <div class={styles.mainCenter}>
           <GlobalContextProvider>
             {props.children}
             <Bottom />
@@ -123,73 +119,26 @@ const MainLayout = (props: RouteSectionProps) => {
         </div>
 
         <Motion.div
-          class={styles.mainDescriptionContainter}
+          class={styles.mainRight}
           animate={{
-            width: toggleMainPage() ? "calc(50vw - 180px)" : "300px",
-            background: toggleMainPage() ? "#000" : "#121212",
+            width: toggleMainPage() ? "300px" : "calc(50vw - 180px)",
+            opacity: toggleMainPage() ? 1 : 0,
           }}
-          transition={{ duration: 0.6, easing: "ease" }}
+          transition={{ duration: 0.3 }}
         >
-          <Presence>
-            <Show when={!toggleMainPage()}>
-              <Motion.div
-                class={styles.mainDescriptionContent}
-                initial={{
-                  opacity: 0,
-                  x: "-100%",
-                }}
-                animate={{
-                  opacity: 1,
-                  x: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  x: "-100%",
-                }}
-                transition={{ duration: 0.6, easing: "ease" }}
-              >
-                <div class={styles.mainDescriptionHeader}>
-                  <p class={styles.mainDescriptionDate}>{imageObj.date}</p>
-                  <h3 class={styles.mainDescriptionTitle}>{imageObj.title}</h3>
-                  <p class={styles.mainDescriptionAttribute}>{imageObj.attr}</p>
-                  <div class={styles.mainDescriptionAuthors}>
-                    <img
-                      class={styles.mainDescriptionAuthorImage}
-                      src={imageObj.authorImg}
-                    />
-                    <div class={styles.mainDescriptionAuthor}>
-                      <p class={styles.mainDescriptionAuthorName}>
-                        {imageObj.authorName}
-                      </p>
-                      <p class={styles.mainDescriptionAuthorYear}>
-                        {imageObj.authorYear}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class={styles.mainDescriptionBody}
-                  innerHTML={imageObj.content}
-                ></div>
-              </Motion.div>
-            </Show>
-          </Presence>
-          <div class={styles.mainImageBottomBar}>
-            <button onClick={changeToggle} class={styles.mainImageRoundBtn}>
-              <Show
-                when={toggleMainPage()}
-                fallback={<VsLayoutCentered size={17} />}
-              >
-                <VsLayoutActivitybarRight size={17} />
-              </Show>
-            </button>
-            <button
-              onClick={handleGetNextImage}
-              class={styles.mainImageRoundBtn}
-            >
-              <TbRefresh size={17} />
-            </button>
+          <div class={styles.mainRightHeader}>
+            <p class={styles.mainRightDate}>{imageObj.date}</p>
+            <h3 class={styles.mainRightTitle}>{imageObj.title}</h3>
+            <p class={styles.mainRightAttribute}>{imageObj.attr}</p>
+            <div class={styles.mainRightAuthors}>
+              <img class={styles.mainRightImage} src={imageObj.authorImg} />
+              <div class={styles.mainRightAuthor}>
+                <p class={styles.mainRightName}>{imageObj.authorName}</p>
+                <p class={styles.mainRightYear}>{imageObj.authorYear}</p>
+              </div>
+            </div>
           </div>
+          <div class={styles.mainRightBody} innerHTML={imageObj.content} />
         </Motion.div>
       </div>
     </div>
