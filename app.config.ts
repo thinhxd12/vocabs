@@ -2,9 +2,9 @@ import { defineConfig } from "@solidjs/start/config";
 
 export default defineConfig({
     server: {
-        // prerender: {
-        //     crawlLinks: true
-        // },
-        preset: "netlify-edge",
+        prerender: {
+            crawlLinks: true
+        },
+        preset: "netlify-builder",
     }
 });
