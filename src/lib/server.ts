@@ -36,9 +36,6 @@ export async function logout() {
 export async function register(username: string, password: string) { }
 
 export async function getSession() {
-  // if (typeof window !== 'undefined') {
-  //   return sessionStorage.getItem("x_user");
-  // }
   return await useSession({
     password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
   });

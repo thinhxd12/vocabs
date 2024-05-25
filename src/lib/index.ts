@@ -1,13 +1,18 @@
 import { action, cache, redirect } from "@solidjs/router";
 import { getSession, login, logout as logoutSession, validatePassword } from "./server";
+import { useSession } from "vinxi/http";
 
 export const getUser = cache(async () => {
   "use server";
   try {
     // const session = await getSession();
-    // const userId = session.data.userId;
-    // if (userId === undefined) throw new Error("User not found");
-    // return userId;
+    const session = await useSession({
+      password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
+    });
+    const userId = session.data.userId;
+    if (userId === undefined) throw new Error("User not found");
+    return userId;
+
   } catch {
     // await logoutSession();
     throw redirect("/");
