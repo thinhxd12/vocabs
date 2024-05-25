@@ -4,10 +4,10 @@ import { getSession, login, logout as logoutSession, validatePassword } from "./
 export const getUser = cache(async () => {
   "use server";
   try {
-    const session = await getSession();
-    const userId = session.data.userId;
-    if (userId === undefined) throw new Error("User not found");
-    return userId;
+    // const session = await getSession();
+    // const userId = session.data.userId;
+    // if (userId === undefined) throw new Error("User not found");
+    // return userId;
   } catch {
     // await logoutSession();
     throw redirect("/");
@@ -25,8 +25,8 @@ export const loginAction = action(async (formData: FormData) => {
     // if (user) {
     //   sessionStorage.setItem("x_user", JSON.stringify(user))
     // }
-    const session = await getSession();
-    await session.update(d => (d.userId = user!.email));
+    // const session = await getSession();
+    // await session.update(d => (d.userId = user!.email));
   } catch (err) {
     return err as Error;
   }
