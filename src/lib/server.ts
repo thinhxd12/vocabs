@@ -1,4 +1,3 @@
-import { useSession } from "vinxi/server";
 import { supabase } from "./supbabase";
 
 
@@ -22,21 +21,21 @@ export async function login(password: string) {
   if (error) throw new Error(error.message);
   else if (data) {
     if (data.length > 0) {
-      return data[0] as { email: string, password: string }
+      return { user: data[0].email }
     }
     else throw new Error("Invalid login");
   }
 }
 
 export async function logout() {
-  const session = await getSession();
-  await session.update(d => (d.userId = undefined));
+  sessionStorage.removeItem("x_user");
 }
 
 export async function register(username: string, password: string) { }
 
-export function getSession() {
-  return useSession({
-    password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
-  });
+export async function getSession() {
+  if (typeof window !== 'undefined') {
+    return sessionStorage.getItem("x_user");
+  }
 }
+
