@@ -1,6 +1,11 @@
-import { supabase } from "./supbabase";
+// import { supabase } from "./supbabase";
 import { useSession } from "vinxi/http";
+import { createClient } from '@supabase/supabase-js'
 
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+
+const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
 export function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {

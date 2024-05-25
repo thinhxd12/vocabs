@@ -5,6 +5,6 @@ export default defineConfig({
         prerender: {
             crawlLinks: true
         },
-        preset: "netlify-builder",
+        preset: "netlify-edge",
     }
 });
