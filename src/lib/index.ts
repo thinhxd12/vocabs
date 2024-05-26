@@ -6,10 +6,10 @@ export const getUser = cache(async () => {
   "use server";
   try {
     // const session = await getSession();
-    const session = await useSession({
-      password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
-    });
-    const userId = session.data.userId;
+    // const session = await useSession({
+    //   password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
+    // });
+    // const userId = session.data.userId;
     // if (userId === undefined) throw new Error("User not found");
   } catch {
     // await logoutSession();
