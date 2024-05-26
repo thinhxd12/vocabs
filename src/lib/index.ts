@@ -26,7 +26,7 @@ export const loginAction = action(async (formData: FormData) => {
     const user = await login(password);
     await session.update(d => (d.userId = user!.email));
   } catch (err) {
-    return err as Error;
+    // return err as Error;
   }
   return redirect("/main/vocabulary");
 }, "login");
