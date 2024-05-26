@@ -102,29 +102,9 @@ $color-vintage-background: #fffeff;
 }
 
 // -------------------RESPONSIVE START-------------------- //
-// @media only screen and (max-width: 960px) {
-//   .mainDescriptionContainter {
-//     display: none !important;
-//   }
-// }
+@media only screen and (max-width: 960px) {}
 
-// @media only screen and (max-width: 650px) {
-
-//   .mainImageContainer,
-//   .mainDescriptionContainter {
-//     display: none !important;
-//   }
-
-//   .main {
-//     @include flex-center();
-//   }
-
-//   .mainImageContent {
-//     border-left: 1px solid $color-border;
-//     border-right: 1px solid $color-border;
-//   }
-
-// }
+@media only screen and (max-width: 650px) {}
 
 // -------------------RESPONSIVE END-------------------- //
 
