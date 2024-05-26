@@ -8,8 +8,7 @@
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
-    "sass": "^1.77.2",
-    "vite-plugin-preload": "^0.4.0"
+    "sass": "^1.77.2"
   },
   "dependencies": {
     "@solid-primitives/scheduled": "^1.4.3",

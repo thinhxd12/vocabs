@@ -10,9 +10,7 @@ export const getUser = cache(async () => {
       password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
     });
     const userId = session.data.userId;
-    if (userId === undefined) throw new Error("User not found");
-    return userId;
-
+    // if (userId === undefined) throw new Error("User not found");
   } catch {
     // await logoutSession();
     throw redirect("/");
