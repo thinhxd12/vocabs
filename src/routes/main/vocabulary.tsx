@@ -39,13 +39,8 @@ import { BiSolidHourglassTop } from "solid-icons/bi";
 import { format } from "date-fns";
 import styles from "./vocabulary.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
-import { checkUser, getUser, logout } from "~/lib";
-import {
-  createAsync,
-  type RouteDefinition,
-  useAction,
-  useSubmission,
-} from "@solidjs/router";
+import { getUser, logout } from "~/lib";
+import { createAsync, useAction } from "@solidjs/router";
 
 let timerRef: NodeJS.Timeout;
 let audioRef: HTMLAudioElement;
@@ -53,15 +48,11 @@ let intervalCountdown: NodeJS.Timeout;
 const [minutes, setMinutes] = createSignal(6);
 const [isRunning, setIsRunning] = createSignal(false);
 
-export const route = {
-  load: () => getUser()
-} satisfies RouteDefinition;
-
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
-  // onMount(() => {
-  //   const user = createAsync(() => getUser(), { deferStream: true });
-  // });
+  onMount(() => {
+    const user = createAsync(() => getUser(), { deferStream: true });
+  });
   // ***************check login**************
 
   const [currentText, setCurrentText] = createSignal<VocabularyType>();
