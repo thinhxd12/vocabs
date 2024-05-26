@@ -359,7 +359,7 @@ const Vocabulary: Component<{}> = () => {
         }
         return prev - 1;
       });
-    }, 60000);
+    }, 2000);
   };
 
   const stopCountdown = () => {
