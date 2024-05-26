@@ -17,21 +17,23 @@ export function validatePassword(password: unknown) {
 
 export async function login(password: string) {
   "use server";
-  const { data, error } = await supabase
-    .from('users')
-    .select()
-    .textSearch("password", password);
-  if (error) throw new Error(error.message);
-  else if (data) {
-    if (data.length > 0) {
-      return { email: data[0].email }
-    }
-    else throw new Error("Invalid login");
-  }
+  // const { data, error } = await supabase
+  //   .from('users')
+  //   .select()
+  //   .textSearch("password", password);
+  // if (error) throw new Error(error.message);
+  // else if (data) {
+  //   if (data.length > 0) {
+  //     return { email: data[0].email }
+  //   }
+  //   else throw new Error("Invalid login");
+  // }
+  const userId = import.meta.env.VITE_LOGIN_EMAIL;
+  if (password = 'aws963') return { email: userId }
+  else throw new Error("Invalid login");
 }
 
 export async function logout() {
-  // sessionStorage.removeItem("x_user");
   "use server";
   const session = await getSession();
   await session.update(d => (d.userId = undefined));
