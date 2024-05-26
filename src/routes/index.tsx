@@ -1,9 +1,5 @@
-import {
-  redirect,
-  useSubmission,
-  type RouteSectionProps,
-} from "@solidjs/router";
-import { Show, onMount } from "solid-js";
+import { useSubmission, type RouteSectionProps } from "@solidjs/router";
+import { Show } from "solid-js";
 import styles from "./index.module.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { loginAction } from "~/lib";

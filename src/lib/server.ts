@@ -1,5 +1,4 @@
 import { supabase } from "./supbabase";
-import { useSession } from "vinxi/http";
 
 export function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
@@ -14,32 +13,20 @@ export function validatePassword(password: unknown) {
 }
 
 export async function login(password: string) {
-  // const { data, error } = await supabase
-  //   .from('users')
-  //   .select()
-  //   .textSearch("password", password);
-  // if (error) throw new Error(error.message);
-  // else if (data) {
-  //   if (data.length > 0) {
-  //     return { email: data[0].email }
-  //   }
-  //   else throw new Error("Invalid login");
-  // }
-  // const userId = import.meta.env.VITE_LOGIN_EMAIL;
-  if (password === 'aws963') return { email: "thinhloggedin" }
-  throw new Error("Invalid login");
+  const email = import.meta.env.VITE_LOGIN_EMAIL;
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: email,
+    password: password,
+  })
+  if (error) throw new Error(error.message);
 }
 
 export async function logout() {
-  const session = await getSession();
-  await session.update(d => (d.userId = undefined));
+  const { error } = await supabase.auth.signOut()
 }
 
 export async function register(username: string, password: string) { }
 
 export async function getSession() {
-  return await useSession({
-    password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
-  });
+  const { data, error } = await supabase.auth.getSession();
 }
-
