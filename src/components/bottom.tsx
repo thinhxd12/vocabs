@@ -58,15 +58,17 @@ const Bottom: Component<{}> = () => {
         <span>Pecunia non olet</span>
       </A>
 
-      <button
+      <div
         class={styles.mainFooterCenterBtn}
         onClick={() => setShowMenubar(!showMenubar())}
       >
-        <Show when={totalMemories()}>
-          <span>{Math.floor(totalMemories() / 100)}</span>
-          <small>{totalMemories() % 100}</small>
-        </Show>
-      </button>
+        <button class={styles.mainCenterBtn}>
+          <Show when={totalMemories()}>
+            <span>{Math.floor(totalMemories() / 100)}</span>
+            <small>{totalMemories() % 100}</small>
+          </Show>
+        </button>
+      </div>
 
       <A
         href="/main/weather"

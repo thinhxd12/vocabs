@@ -45,31 +45,42 @@
     }
 
     .mainFooterCenterBtn {
-        height: 33px;
-        width: 16px;
-        display: block;
+        position: inherit;
+        left: 162px;
+        bottom: 0;
+        width: 36px;
         cursor: pointer;
-        background: none;
-        outline: none;
-        border: none;
-        border-left: 1px solid #34343472;
-        border-right: 1px solid #34343472;
-        transition: all 0.1s;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-end;
-
-        span {
-            @include font("Roslindale", 12px, #7c7b7a, 600, normal, 15px);
-        }
-
-        small {
-            @include font("Roslindale", 10px, #7c7b7a, 600, normal, 14px);
-        }
 
         &:hover {
-            background: $color-border;
+            .mainCenterBtn {
+                background: $color-border;
+            }
+        }
+
+        .mainCenterBtn {
+            height: 33px;
+            width: 16px;
+            margin-left: 8px;
+            display: block;
+            background: none;
+            outline: none;
+            border: none;
+            border-left: 1px solid #34343472;
+            border-right: 1px solid #34343472;
+            transition: all 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            cursor: pointer;
+
+            span {
+                @include font("Roslindale", 12px, #7c7b7a, 600, normal, 15px);
+            }
+
+            small {
+                @include font("Roslindale", 10px, #7c7b7a, 600, normal, 14px);
+            }
         }
     }
 
@@ -102,32 +113,6 @@
                 color: $color-white;
             }
         }
-
-        // &--1 {
-        //     width: 85px;
-        // }
-
-        // &--2 {
-        //     width: 84px;
-        // }
-
-        // &--3 {
-        //     width: 79px;
-        // }
-
-        // &--4 {
-        //     min-width: 90px;
-        //     max-width: 90px;
-        //     cursor: default;
-
-        //     &:hover {
-
-        //         span,
-        //         small {
-        //             color: #7c7b7a;
-        //         }
-        //     }
-        // }
     }
 
     .mainFooterBtnActive {
@@ -146,12 +131,14 @@
 
     .mainFooterBtn2 {
         @extend .mainFooterBtn;
-        width: 84px;
+        width: 90px;
+        padding-right: 8px;
     }
 
     .mainFooterBtn3 {
         @extend .mainFooterBtn;
-        width: 79px;
+        width: 89px;
+        padding-left: 8px;
     }
 
     .mainFooterBtn4 {

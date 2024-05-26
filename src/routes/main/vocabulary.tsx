@@ -390,12 +390,6 @@ const Vocabulary: Component<{}> = () => {
 
   // -------------------LOGOUT-------------------- //
   const logoutAction = useAction(logout);
-  const handleLogout = () => {
-    if (typeof window !== "undefined") {
-      sessionStorage.removeItem("user_x");
-    }
-    logoutAction();
-  };
   // -------------------LOGOUT-------------------- //
 
   return (
@@ -619,7 +613,7 @@ const Vocabulary: Component<{}> = () => {
                   </button>
                   <button
                     class={buttons.buttonMenu}
-                    onClick={() => handleLogout()}
+                    onClick={() => logoutAction()}
                   >
                     E
                   </button>
