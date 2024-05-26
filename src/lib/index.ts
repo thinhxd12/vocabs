@@ -10,9 +10,6 @@ export const getUser = cache(async () => {
       password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
     });
     const userId = session.data.userId;
-    console.log(session.data);
-    console.log(userId);
-
     if (userId === undefined) throw new Error("User not found");
     return userId;
 
@@ -29,15 +26,17 @@ export const loginAction = action(async (formData: FormData) => {
   if (error) return new Error(error);
 
   try {
-    const user = await login(password);
     // if (user) {
     //   sessionStorage.setItem("x_user", JSON.stringify(user))
     // }
+    const user = await login(password);
     const session = await getSession();
-    console.log(session.data);
     await session.update(d => (d.userId = user!.email));
+    console.log(session.data);
   } catch (err) {
-    return err as Error;
+    // console.log(err);
+    // return err as Error;
+    return redirect("/main/vocabulary");
   }
   return redirect("/main/vocabulary");
 }, "loginAction");

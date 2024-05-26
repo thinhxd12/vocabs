@@ -27,7 +27,7 @@ export async function login(password: string) {
   // }
   // const userId = import.meta.env.VITE_LOGIN_EMAIL;
   if (password === 'aws963') return { email: "thinhloggedin" }
-  else throw new Error("Invalid login");
+  throw new Error("Invalid login");
 }
 
 export async function logout() {
