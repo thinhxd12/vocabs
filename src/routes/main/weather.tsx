@@ -30,8 +30,11 @@ let audio: HTMLAudioElement;
 
 const Weather: Component<{}> = (props) => {
   // ***************check login**************
-  const user = createAsync(() => getUser(), { deferStream: true });
+  onMount(() => {
+    const user = createAsync(() => getUser(), { deferStream: true });
+  });
   // ***************check login**************
+  
   const WEATHER_GEOS: WeatherGeoType[] = [
     {
       name: "ThuThua",

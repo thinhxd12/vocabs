@@ -33,8 +33,11 @@ let ref: HTMLDivElement;
 
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
-  const user = createAsync(() => getUser(), { deferStream: true });
+  onMount(() => {
+    const user = createAsync(() => getUser(), { deferStream: true });
+  });
   // ***************check login**************
+  
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();
   const getCalendarHistoryDataAction = useAction(getCalendarHistoryData);
   const [todayDate] = createSignal<Date>(new Date());

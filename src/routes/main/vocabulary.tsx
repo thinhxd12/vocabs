@@ -51,10 +51,10 @@ const [isRunning, setIsRunning] = createSignal(false);
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
   onMount(() => {
-    const user = createAsync(() => getUser());
+    const user = createAsync(() => getUser(), { deferStream: true });
   });
-
   // ***************check login**************
+
   const [currentText, setCurrentText] = createSignal<VocabularyType>();
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");

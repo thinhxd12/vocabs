@@ -1,4 +1,4 @@
-import { useAction, RouteSectionProps } from "@solidjs/router";
+import { useAction, RouteSectionProps, createAsync } from "@solidjs/router";
 import { Show, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getDataImage, getUnsplashImage } from "~/lib/api";
@@ -10,8 +10,15 @@ import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
 import { format } from "date-fns";
 import styles from "./main.module.scss";
+import { getUser } from "~/lib";
 
 const MainLayout = (props: RouteSectionProps) => {
+  // ***************check login**************
+  onMount(() => {
+    const user = createAsync(() => getUser(), { deferStream: true });
+  });
+  // ***************check login**************
+
   const getDataImageAction = useAction(getDataImage);
 
   const mockObj = {
