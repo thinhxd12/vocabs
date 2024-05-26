@@ -5,6 +5,7 @@
     height: 100vh;
     @include flex;
     background: $color-black;
+    @include flex-center;
 
     .mainButtons {
         position: fixed;
@@ -161,5 +162,7 @@
         position: relative;
         box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 39px 0px, rgba(0, 0, 0, 0.81) 0px 0px 12px 0px;
         position: relative;
+        border-left: 0.5px solid #181818;
+        border-right: 0.5px solid #181818;
     }
 }

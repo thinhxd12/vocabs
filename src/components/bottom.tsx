@@ -18,8 +18,8 @@ const Bottom: Component<{}> = () => {
 
   return (
     <div class={styles.bottom}>
-      <div class={styles.mainFooterLeftIndex}>
-        <div class={styles.indexIndex}>
+      <div class={styles.bottomIndex}>
+        <div class={styles.bottomIndexNums}>
           <Show
             when={todayData().date}
             fallback={
@@ -37,32 +37,32 @@ const Bottom: Component<{}> = () => {
             <span>{todayData().time2}</span>
           </Show>
         </div>
-        <div class={styles.indexDay}>
+        <div class={styles.bottomIndexDay}>
           <span>{format(new Date(), "eeeeee")}</span>
         </div>
       </div>
       <A
         href="/main/vocabulary"
-        activeClass={styles.mainFooterBtnActive}
-        class={styles.mainFooterBtn1}
+        activeClass={styles.bottomBtnActive}
+        class={styles.bottomBtn1}
       >
-        <small>God from the machine</small>
-        <span>Deus ex machina</span>
+        <small>Danger is sweet</small>
+        <span>Dulce periculum</span>
       </A>
       <A
         href="/main/calendar"
-        activeClass={styles.mainFooterBtnActive}
-        class={styles.mainFooterBtn2}
+        activeClass={styles.bottomBtnActive}
+        class={styles.bottomBtn2}
       >
         <small>Money does not stink</small>
         <span>Pecunia non olet</span>
       </A>
 
       <div
-        class={styles.mainFooterCenterBtn}
+        class={styles.bottomCenterBox}
         onClick={() => setShowMenubar(!showMenubar())}
       >
-        <button class={styles.mainCenterBtn}>
+        <button class={styles.bottomCenter}>
           <Show when={totalMemories()}>
             <span>{Math.floor(totalMemories() / 100)}</span>
             <small>{totalMemories() % 100}</small>
@@ -72,24 +72,24 @@ const Bottom: Component<{}> = () => {
 
       <A
         href="/main/weather"
-        activeClass={styles.mainFooterBtnActive}
-        class={styles.mainFooterBtn3}
+        activeClass={styles.bottomBtnActive}
+        class={styles.bottomBtn3}
       >
-        <small>Danger is sweet</small>
-        <span>Dulce periculum</span>
+        <small>God from the machine</small>
+        <span>Deus ex machina</span>
       </A>
 
       <Show
         when={wordList().length > 0}
         fallback={
-          <div class={styles.mainFooterBtn4}>
+          <div class={styles.bottomBtn4}>
             <small>Remember you have to die</small>
             <span>Memento mori</span>
           </div>
         }
       >
         <div
-          class={styles.mainFooterCornerBtn}
+          class={styles.bottomImageContent}
           onClick={() => setBottomActive(!bottomActive())}
         >
           <Presence>
@@ -108,7 +108,7 @@ const Bottom: Component<{}> = () => {
                   }}
                   transition={{ duration: 0.3, easing: "ease" }}
                   src="/images/main/sunrise.jpg"
-                  class={styles.mainFooterCornerBtnImage}
+                  class={styles.bottomImage}
                 />
               }
             >
@@ -124,7 +124,7 @@ const Bottom: Component<{}> = () => {
                 }}
                 transition={{ duration: 0.3, easing: "ease" }}
                 src="/images/main/sunset.jpg"
-                class={styles.mainFooterCornerBtnImage}
+                class={styles.bottomImage}
               />
             </Show>
           </Presence>

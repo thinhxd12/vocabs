@@ -14,14 +14,6 @@ const Definition: Component<{
     <>
       <div class={styles.definition}>
         <div class={styles.definitionHeader}>
-          <Show when={props.onEdit}>
-            <button
-              class={buttons.buttonPrimary}
-              onclick={() => props.onEdit!(props.item)}
-            >
-              <img src="/images/main/laurel.png" height={13} />
-            </button>
-          </Show>
           <Show when={props.onCheck}>
             <button class={buttons.buttonSuccess} onclick={props.onCheck}>
               <FaSolidCheck size={13} />
@@ -33,7 +25,12 @@ const Definition: Component<{
             {(item, index) => {
               return (
                 <div class={styles.websEntry}>
-                  <p class={styles.websHead}>{item().partOfSpeech}</p>
+                  <p
+                    class={styles.websHead}
+                    onclick={() => props.onEdit && props.onEdit(props.item)}
+                  >
+                    {item().partOfSpeech}
+                  </p>
                   <Index each={item().definitions}>
                     {(m, n) => (
                       <div
