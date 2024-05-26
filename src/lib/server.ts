@@ -24,14 +24,17 @@ export async function login(password: string) {
 }
 
 export async function logout() {
-  const session = await getSession();
-  await session.update(d => (d.userId = undefined));
+  // const session = await getSession();
+  // await session.update(d => (d.userId = undefined));
+  const { error } = await supabase.auth.signOut()
 }
 
 export async function register(username: string, password: string) { }
 
-export function getSession() {
-  return useSession({
-    password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
-  });
+export async function getSession() {
+  // return useSession({
+  //   password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
+  // });
+  const { data, error } = await supabase.auth.getSession()
+  return data;
 }

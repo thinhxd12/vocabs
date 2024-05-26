@@ -50,7 +50,10 @@ const [isRunning, setIsRunning] = createSignal(false);
 
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
-  const user = createAsync(() => getUser());
+  onMount(() => {
+    const user = createAsync(() => getUser());
+  });
+
   // ***************check login**************
   const [currentText, setCurrentText] = createSignal<VocabularyType>();
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
@@ -359,7 +362,7 @@ const Vocabulary: Component<{}> = () => {
         }
         return prev - 1;
       });
-    }, 2000);
+    }, 60000);
   };
 
   const stopCountdown = () => {
@@ -387,12 +390,18 @@ const Vocabulary: Component<{}> = () => {
 
   // -------------------LOGOUT-------------------- //
   const logoutAction = useAction(logout);
+  const handleLogout = () => {
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("user_x");
+    }
+    logoutAction();
+  };
   // -------------------LOGOUT-------------------- //
 
   return (
     <MetaProvider>
       <Title>{currentText()?.word || "main"}</Title>
-      <Meta name="author" content={user() || ""} />
+      <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio
         hidden
@@ -610,7 +619,7 @@ const Vocabulary: Component<{}> = () => {
                   </button>
                   <button
                     class={buttons.buttonMenu}
-                    onClick={() => logoutAction()}
+                    onClick={() => handleLogout()}
                   >
                     E
                   </button>

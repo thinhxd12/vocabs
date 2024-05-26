@@ -5,11 +5,10 @@ import { supabase } from "./supbabase";
 export const getUser = cache(async () => {
   "use server";
   try {
-    const session = await getSession();
-    const userId = session.data.userId;
-    if (!userId) throw new Error("User not found");
-    console.log(session.data);
-
+    const { data: { user } } = await supabase.auth.getUser()
+    console.log(user.email);
+    if (!user.email) throw new Error("User not found");
+    return "thinhloggedin"
   } catch {
     throw redirect("/");
   }
@@ -22,11 +21,11 @@ export const loginAction = action(async (formData: FormData) => {
   if (error) return new Error(error);
 
   try {
-    const session = await getSession();
     const user = await login(password);
-    await session.update(d => (d.userId = user!.email));
+    // const session = await getSession();
+    // await session.update(d => (d.userId = user!.email));
   } catch (err) {
-    // return err as Error;
+    return err as Error;
   }
   return redirect("/main/vocabulary");
 }, "login");
