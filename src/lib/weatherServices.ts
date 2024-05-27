@@ -747,6 +747,7 @@ export class RainRenderer {
         };
         this.parallaxX = 0;
         this.parallaxY = 0;
+        this.textures = [];
         this.init();
     }
 
@@ -760,7 +761,7 @@ export class RainRenderer {
     height = 0;
     gl: any;
     programWater: any;
-    textures: any;
+    textures: any[];
     parallaxX: number;
     parallaxY: number;
 
@@ -828,10 +829,12 @@ export class RainRenderer {
     }
 
     updateTextures() {
-        this.textures.forEach((texture: any, i: number) => {
-            this.gl.activeTexture(i + 1);
-            this.gl.updateTexture(texture.img);
-        });
+        if (this.textures.length > 0) {
+            this.textures.forEach((texture: any, i: number) => {
+                this.gl.activeTexture(i + 1);
+                this.gl.updateTexture(texture.img);
+            });
+        }
     }
 
     updateTexture() {
