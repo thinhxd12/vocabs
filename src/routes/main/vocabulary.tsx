@@ -330,14 +330,14 @@ const Vocabulary: Component<{}> = () => {
   // -------------------AUTOPLAY END-------------------- //
   // -------------------TIMMER START-------------------- //
   const showDesktopNotification = () => {
-    const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
+    // const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
     const letter = wordListType() === 1 ? "I" : "II";
     const newProgress =
       wordListType() === 1 ? todayData().time1 + 1 : todayData().time2 + 1;
 
     const notification = new Notification("Start Focusing", {
-      icon: img,
-      requireInteraction: true,
+      // icon: img,
+      // requireInteraction: true,
       body: `${letter}-${newProgress}`,
     });
 
@@ -397,6 +397,10 @@ const Vocabulary: Component<{}> = () => {
     sessionStorage.removeItem("user");
   };
   // -------------------LOGOUT-------------------- //
+
+  const test = () => {
+    console.log(132);
+  };
 
   return (
     <MetaProvider>
@@ -529,6 +533,8 @@ const Vocabulary: Component<{}> = () => {
           </Show>
 
           <div class={styles.vocabularyContent}>
+            {/* <button onClick={test}>click</button> */}
+
             {/* Bookmark */}
             <Show when={showBookmark()}>
               <Bookmark onClose={() => setShowBookmark(false)} />

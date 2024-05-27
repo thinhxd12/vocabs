@@ -2,13 +2,13 @@ import { useSubmission, type RouteSectionProps } from "@solidjs/router";
 import { Show } from "solid-js";
 import styles from "./index.module.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-import { getUserLoginSupabase, loginAction } from "~/lib";
+import { getUserLoginId, loginAction } from "~/lib";
 
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginAction);
 
   const handleLogin = async () => {
-    const user = await getUserLoginSupabase();
+    const user = await getUserLoginId();
     if (user) sessionStorage.setItem("user", JSON.stringify(user));
   };
 
