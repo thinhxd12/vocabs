@@ -30,8 +30,16 @@ let audio: HTMLAudioElement;
 
 const Weather: Component<{}> = (props) => {
   // ***************check login**************
-  onMount(() => {
-    const user = createAsync(() => getUser(), { deferStream: true });
+  onMount(async () => {
+    const data = sessionStorage.getItem("user");
+    const userId = (data && JSON.parse(data).userId) || "";
+    createAsync(
+      () =>
+        getUser(userId).then((data) => {
+          if (data) sessionStorage.setItem("user", JSON.stringify(data));
+        }),
+      { deferStream: true }
+    );
   });
   // ***************check login**************
   

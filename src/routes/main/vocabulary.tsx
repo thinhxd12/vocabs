@@ -50,8 +50,16 @@ const [isRunning, setIsRunning] = createSignal(false);
 
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
-  onMount(() => {
-    const user = createAsync(() => getUser(), { deferStream: true });
+  onMount(async () => {
+    const data = sessionStorage.getItem("user");
+    const userId = (data && JSON.parse(data).userId) || "";
+    createAsync(
+      () =>
+        getUser(userId).then((data) => {
+          if (data) sessionStorage.setItem("user", JSON.stringify(data));
+        }),
+      { deferStream: true }
+    );
   });
   // ***************check login**************
 
@@ -390,6 +398,10 @@ const Vocabulary: Component<{}> = () => {
 
   // -------------------LOGOUT-------------------- //
   const logoutAction = useAction(logout);
+  const handleLogout = () => {
+    logoutAction();
+    sessionStorage.removeItem("user");
+  };
   // -------------------LOGOUT-------------------- //
 
   return (
@@ -611,10 +623,7 @@ const Vocabulary: Component<{}> = () => {
                   >
                     <BiSolidHourglassTop size={16} />
                   </button>
-                  <button
-                    class={buttons.buttonMenu}
-                    onClick={() => logoutAction()}
-                  >
+                  <button class={buttons.buttonMenu} onClick={handleLogout}>
                     E
                   </button>
                 </div>

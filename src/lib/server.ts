@@ -1,5 +1,8 @@
+import { createSignal } from "solid-js";
 import { supabase } from "./supbabase";
 import { useSession } from "vinxi/http";
+
+const [user, setUser] = createSignal<{ email: string }>({ email: "" });
 
 export function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
@@ -15,12 +18,13 @@ export function validatePassword(password: unknown) {
 
 export async function login(password: string) {
   const email = import.meta.env.VITE_LOGIN_EMAIL;
-  const { data, error } = await supabase.auth.signInWithPassword({
+  const { data: { user }, error } = await supabase.auth.signInWithPassword({
     email: email,
     password: password,
   })
   if (error) throw new Error(error.message);
-  return { email: email }
+
+  return { user: user.id }
 }
 
 export async function logout() {

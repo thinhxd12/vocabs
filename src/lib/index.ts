@@ -2,18 +2,27 @@ import { action, cache, redirect } from "@solidjs/router";
 import { login, logout as logoutSession, validatePassword } from "./server";
 import { supabase } from "./supbabase";
 
-export const getUser = cache(async () => {
+let userId = "";
+
+export const getUser = cache(async (id?: string) => {
   "use server";
   try {
-    // const { data: { user } } = await supabase.auth.getUser()
-    // if (!user.email) throw new Error("User not found");
-    const { data, error } = await supabase.auth.getSession()
-    const { session } = data;
-    // if (!session) throw new Error("User not found");
+    if (!id) {
+      const { data: { session }, error } = await supabase.auth.getSession()
+      if (!session) throw new Error("User not found");
+      return { userId: session.user.id }
+    }
+    if (id !== userId) throw new Error("User not found");
   } catch {
     throw redirect("/");
   }
 }, "user");
+
+
+export async function getUserLoginSupabase() {
+  "use server";
+  if (userId) return { userId: userId }
+}
 
 export const loginAction = action(async (formData: FormData) => {
   "use server";
@@ -22,7 +31,8 @@ export const loginAction = action(async (formData: FormData) => {
   if (error) return new Error(error);
 
   try {
-    const user = await login(password);
+    const data = await login(password);
+    userId = data.user;
   } catch (err) {
     return err as Error;
   }
