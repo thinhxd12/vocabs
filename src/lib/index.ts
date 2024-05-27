@@ -7,11 +7,11 @@ let userId = "";
 export const getUser = cache(async (id?: string) => {
   "use server";
   try {
-    if (!id) {
-      const { data: { session }, error } = await supabase.auth.getSession()
-      if (!session) throw new Error("User not found");
-      return { userId: session.user.id }
-    }
+    // if (!id) {
+    //   const { data: { session }, error } = await supabase.auth.getSession()
+    //   if (!session) throw new Error("User not found");
+    //   return { userId: session.user.id }
+    // }
     if (id !== userId) throw new Error("User not found");
   } catch {
     throw redirect("/");

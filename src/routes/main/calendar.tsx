@@ -36,16 +36,10 @@ const Calendar: Component<{}> = (props) => {
   onMount(async () => {
     const data = sessionStorage.getItem("user");
     const userId = (data && JSON.parse(data).userId) || "";
-    createAsync(
-      () =>
-        getUser(userId).then((data) => {
-          if (data) sessionStorage.setItem("user", JSON.stringify(data));
-        }),
-      { deferStream: true }
-    );
+    createAsync(() => getUser(userId), { deferStream: true });
   });
   // ***************check login**************
-  
+
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();
   const getCalendarHistoryDataAction = useAction(getCalendarHistoryData);
   const [todayDate] = createSignal<Date>(new Date());
