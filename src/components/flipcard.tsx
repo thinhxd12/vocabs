@@ -10,6 +10,7 @@ import { VocabularyType } from "~/types";
 import { Motion } from "solid-motionone";
 import { useGlobalContext } from "~/globalcontext/store";
 import styles from "./flipcard.module.scss";
+import { setMainStore } from "~/lib/mystore";
 
 const FlipCard: Component<{
   item: VocabularyType;
@@ -33,8 +34,6 @@ const FlipCard: Component<{
   const [renderNumber, setRenderNumber] = createSignal<number>(3);
   const [numbArray, setNumbArray] = createSignal<number[]>([3, 6, 9]);
 
-  const { audioSrc, setAudioSrc } = useGlobalContext();
-
   createEffect(() => {
     clearTimeout(timeoutId1);
     clearTimeout(timeoutId2);
@@ -52,7 +51,7 @@ const FlipCard: Component<{
     setPartOfSpeechs(partOfSpeech);
 
     if (currentSound) {
-      setAudioSrc(currentSound);
+      setMainStore("audioSrc", currentSound);
     }
     if (currenText()?.number > 1) {
       setRenderNumber(currenText().number);
@@ -67,7 +66,7 @@ const FlipCard: Component<{
       timeoutId2 = setTimeout(() => {
         setHoverClass(`${styles.cardContent} ${styles.cardContentHover1}`);
         const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${translations}`;
-        setAudioSrc(soundUrl);
+        setMainStore("audioSrc", soundUrl);
       }, 3000);
       timeoutId3 = setTimeout(() => {
         setHoverClass(`${styles.cardContent} ${styles.cardContentHover2}`);

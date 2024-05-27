@@ -15,13 +15,14 @@ import {
   getCalendarTodayData,
   getVocabularyFromRange,
   submitTodayProgress,
-  checkVocabulary,
   archiveVocabulary,
   getMemoriesLength,
   getSmallestWordNumberFromRange,
   updateArchiveWord,
   deleteSmallestWordNumberFromRange,
   searchText,
+  getTotalMemories,
+  handleCheckWord,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { useGlobalContext } from "~/globalcontext/store";
@@ -41,6 +42,7 @@ import styles from "./vocabulary.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import { getUser, logout } from "~/lib";
 import { createAsync, useAction } from "@solidjs/router";
+import { mainStore, setMainStore } from "~/lib/mystore";
 
 let timerRef: NodeJS.Timeout;
 let audioRef: HTMLAudioElement;
@@ -57,7 +59,6 @@ const Vocabulary: Component<{}> = () => {
   });
   // ***************check login**************
 
-  const [currentText, setCurrentText] = createSignal<VocabularyType>();
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
 
@@ -138,30 +139,11 @@ const Vocabulary: Component<{}> = () => {
   };
 
   const getMemoriesLengthAction = useAction(getMemoriesLength);
+
   const handleRenderText = async (text: VocabularyType) => {
-    setCurrentText(text);
     setSearchTerm("");
     setSearchResult([]);
-
-    // handlecheck
-
-    if (text.number > 1) {
-      checkVocabulary(text.number - 1, text.created_at);
-    } else {
-      await archiveVocabulary(text.word);
-      const data = await getSmallestWordNumberFromRange(text.word);
-
-      if (data) {
-        await deleteSmallestWordNumberFromRange(data.created_at);
-        await updateArchiveWord(data, text.created_at);
-        const count = await getMemoriesLengthAction();
-        setTotalMemories(count);
-      } else {
-        deleteVocabulary(text.created_at);
-        const count = await getMemoriesLengthAction();
-        setTotalMemories(count);
-      }
-    }
+    handleCheckWord(text);
   };
 
   const handleCloseTranslation = () => {
@@ -330,14 +312,14 @@ const Vocabulary: Component<{}> = () => {
   // -------------------AUTOPLAY END-------------------- //
   // -------------------TIMMER START-------------------- //
   const showDesktopNotification = () => {
-    // const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
+    const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
     const letter = wordListType() === 1 ? "I" : "II";
     const newProgress =
       wordListType() === 1 ? todayData().time1 + 1 : todayData().time2 + 1;
 
     const notification = new Notification("Start Focusing", {
-      // icon: img,
-      // requireInteraction: true,
+      icon: img,
+      requireInteraction: true,
       body: `${letter}-${newProgress}`,
     });
 
@@ -390,27 +372,19 @@ const Vocabulary: Component<{}> = () => {
     }
   };
 
-  // -------------------LOGOUT-------------------- //
-  const logoutAction = useAction(logout);
-  const handleLogout = () => {
-    logoutAction();
-    sessionStorage.removeItem("user");
-  };
-  // -------------------LOGOUT-------------------- //
-
   const test = () => {
     console.log(132);
   };
 
   return (
     <MetaProvider>
-      <Title>{currentText()?.word || "main"}</Title>
+      <Title>{mainStore.renderWord?.word || "main"}</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio
         hidden
         ref={audioRef}
-        src={audioSrc()}
+        src={mainStore.audioSrc}
         onloadeddata={() => audioRef.play()}
         onended={() => setAudioSrc("")}
       ></audio>
@@ -427,7 +401,7 @@ const Vocabulary: Component<{}> = () => {
           class={styles.vocabulary}
         >
           <div class={styles.flashCardContainer}>
-            <FlipCard item={currentText()!} />
+            <FlipCard item={mainStore.renderWord!} />
           </div>
 
           <Show
@@ -536,20 +510,20 @@ const Vocabulary: Component<{}> = () => {
             {/* <button onClick={test}>click</button> */}
 
             {/* Bookmark */}
-            <Show when={showBookmark()}>
-              <Bookmark onClose={() => setShowBookmark(false)} />
+            <Show when={mainStore.showBookmark}>
+              <Bookmark onClose={() => setMainStore("showBookmark", false)} />
             </Show>
 
             {/* Definition */}
-            <Show when={currentText()?.word}>
+            <Show when={mainStore.renderWord}>
               <Definition
-                item={currentText()!}
+                item={mainStore.renderWord!}
                 onEdit={handleEditFromDefinition}
               />
             </Show>
           </div>
 
-          <Presence>
+          {/* <Presence>
             <Show when={showMenubar()}>
               <Motion.div
                 class={styles.menubar}
@@ -629,9 +603,9 @@ const Vocabulary: Component<{}> = () => {
                 </div>
               </Motion.div>
             </Show>
-          </Presence>
+          </Presence> */}
 
-          <Presence>
+          {/* <Presence>
             <Show when={isRunning()}>
               <Motion.button
                 class={buttons.buttonTimer}
@@ -657,7 +631,7 @@ const Vocabulary: Component<{}> = () => {
                 ></Motion.div>
               </Motion.button>
             </Show>
-          </Presence>
+          </Presence> */}
         </div>
         {/* Edit */}
         <Presence>
@@ -682,7 +656,7 @@ const Vocabulary: Component<{}> = () => {
 
         {/* Translation */}
         <Presence>
-          <Show when={showTranslate()}>
+          <Show when={mainStore.showTranslate}>
             <Motion.div
               class={styles.editOverlay}
               initial={{
@@ -698,7 +672,7 @@ const Vocabulary: Component<{}> = () => {
             >
               <Translation
                 translateText={translateTerm()}
-                onClose={handleCloseTranslation}
+                onClose={() => setMainStore("showTranslate", false)}
               />
             </Motion.div>
           </Show>

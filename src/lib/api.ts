@@ -1,10 +1,11 @@
-import { action, redirect } from "@solidjs/router";
+import { action, cache, redirect } from "@solidjs/router";
 import { CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, } from "~/types";
 import { DEFAULT_CORS_PROXY, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import { format } from "date-fns";
 import { createSignal } from "solid-js";
 import { parse } from 'node-html-parser';
 import { supabase } from "./supbabase";
+import { setMainStore } from "./mystore";
 
 
 export const searchText = async (text: string) => {
@@ -666,7 +667,31 @@ export const submitNewMonth = action(async (formData: FormData) => {
 }, "startMonth");
 
 //handle check vocabulary
-export const checkVocabulary = async (numb: number, time: string) => {
+
+export const handleCheckWord = async (text: VocabularyType) => {
+    setMainStore("renderWord", text);
+    // handlecheck
+
+    if (text.number > 1) {
+        checkVocabulary(text.number - 1, text.created_at);
+    } else {
+        await archiveVocabulary(text.word);
+        const data = await getSmallestWordNumberFromRange(text.word);
+
+        if (data) {
+            await deleteSmallestWordNumberFromRange(data.created_at);
+            await updateArchiveWord(data, text.created_at);
+            const total = await getTotalMemories();
+            setMainStore("totalMemories", total);
+        } else {
+            deleteVocabulary(text.created_at);
+            const total = await getTotalMemories();
+            setMainStore("totalMemories", total);
+        }
+    }
+};
+
+const checkVocabulary = async (numb: number, time: string) => {
     "use server";
     const { error } = await supabase
         .from(mapTables.vocabulary)
@@ -744,6 +769,67 @@ export const getMemoriesLength = action(async () => {
         .select('*', { count: "exact" });
     return count as number;
 }, "getMemoriesLength");
+
+
+export const updateTodaySchedule = async (type: number, numb: number, day: string) => {
+    "use server";
+    const updateObj = type === 1 ? { time1: numb } : { time2: numb }
+    const { error } = await supabase
+        .from(mapTables.schedule)
+        .update(updateObj)
+        .eq('date', day);
+    if (error) console.error(error);
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+export const getTotalMemories = (async () => {
+    "use server";
+    const { count } = await supabase
+        .from(mapTables.memories)
+        .select('*', { count: "exact" });
+    return count as number;
+});
+
+export const getTodayData = (async (date: string) => {
+    "use server";
+    const { data, error } = await supabase
+        .from(mapTables.schedule)
+        .select()
+        .eq('date', date);
+    if (data) return data[0] as ScheduleType;
+});
+
+
+//get 50 word
+export const getListContent = async (start: number, end: number) => {
+    "use server";
+    const { data, error } = await supabase
+        .from(mapTables.vocabulary)
+        .select()
+        .order('created_at')
+        .range(start, end)
+    if (data) return data as VocabularyType[];
+};
 
 
 //get weather data
