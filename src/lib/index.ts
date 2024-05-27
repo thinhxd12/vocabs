@@ -9,11 +9,10 @@ export const getUser = cache(async () => {
     // if (!user.email) throw new Error("User not found");
     const { data, error } = await supabase.auth.getSession()
     const { session } = data;
-    if (!session) throw new Error("User not found");
+    // if (!session) throw new Error("User not found");
   } catch {
     throw redirect("/");
   }
-  return 'abc'
 }, "user");
 
 export const loginAction = action(async (formData: FormData) => {
