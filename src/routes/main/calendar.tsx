@@ -36,7 +36,13 @@ const Calendar: Component<{}> = (props) => {
   onMount(async () => {
     const data = sessionStorage.getItem("user");
     const userId = (data && JSON.parse(data).userId) || "";
-    createAsync(() => getUser(userId), { deferStream: true });
+    createAsync(
+      () =>
+        getUser(userId).then((user) => {
+          if (user) sessionStorage.setItem("user", JSON.stringify(user));
+        }),
+      { deferStream: true }
+    );
   });
   // ***************check login**************
 
