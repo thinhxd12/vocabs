@@ -5,8 +5,11 @@ import { supabase } from "./supbabase";
 export const getUser = cache(async () => {
   "use server";
   try {
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user.email) throw new Error("User not found");
+    // const { data: { user } } = await supabase.auth.getUser()
+    // if (!user.email) throw new Error("User not found");
+    const { data, error } = await supabase.auth.getSession()
+    const { session } = data;
+    if (!session) throw new Error("User not found");
   } catch {
     throw redirect("/");
   }
