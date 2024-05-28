@@ -27,13 +27,13 @@ import forms from "../../assets/styles/form.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
-import { createAsync, useAction, type RouteDefinition } from "@solidjs/router";
+import { createAsync, useAction } from "@solidjs/router";
 
 let ref: HTMLDivElement;
 
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
-  createAsync(() => getUser(), { deferStream: true });
+  const user = createAsync(() => getUser());
   // ***************check login**************
 
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();

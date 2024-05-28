@@ -5,60 +5,34 @@ import {
   Show,
   createEffect,
   createSignal,
-  on,
   onMount,
 } from "solid-js";
 import { VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
   deleteVocabulary,
-  getCalendarTodayData,
-  getVocabularyFromRange,
-  submitTodayProgress,
-  archiveVocabulary,
-  getMemoriesLength,
-  getSmallestWordNumberFromRange,
-  updateArchiveWord,
-  deleteSmallestWordNumberFromRange,
   searchText,
-  getTotalMemories,
   handleCheckWord,
   getTodayData,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
-import { useGlobalContext } from "~/globalcontext/store";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import FlipCard from "~/components/flipcard";
 import Definition from "~/components/definition";
 import Translation from "~/components/translation";
 import Edit from "~/components/edit";
 import Bookmark from "~/components/bookmark";
-import { OcHourglass2 } from "solid-icons/oc";
-import { BsTranslate, BsTrash3Fill } from "solid-icons/bs";
+import { BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
-import { ImBooks } from "solid-icons/im";
-import { BiSolidHourglassTop } from "solid-icons/bi";
 import { format } from "date-fns";
 import styles from "./vocabulary.module.scss";
-import buttons from "../../assets/styles/buttons.module.scss";
-import { getUser, logout } from "~/lib";
-import {
-  createAsync,
-  useAction,
-  useSubmission,
-  type RouteDefinition,
-} from "@solidjs/router";
+import { getUser } from "~/lib";
+import { createAsync } from "@solidjs/router";
 import { mainStore, setListStore, setMainStore } from "~/lib/mystore";
-
-let timerRef: NodeJS.Timeout;
-let audioRef: HTMLAudioElement;
-let intervalCountdown: NodeJS.Timeout;
-const [minutes, setMinutes] = createSignal(6);
-const [isRunning, setIsRunning] = createSignal(false);
 
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
-  createAsync(() => getUser(), { deferStream: true });
+  const user = createAsync(() => getUser());
   // ***************check login**************
 
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
@@ -74,7 +48,7 @@ const Vocabulary: Component<{}> = () => {
         navigator.userAgent
       )
     );
-    handleGetCalendarTodayData();
+    handleGetTodayData();
   });
 
   createEffect(() => {
@@ -82,6 +56,14 @@ const Vocabulary: Component<{}> = () => {
       setSearchInputColor("#957c3e");
     }
   });
+
+  const handleGetTodayData = async () => {
+    const todayDate = format(new Date(), "yyyy-MM-dd");
+    const data = await getTodayData(todayDate);
+    if (data) {
+      setListStore("listToday", data);
+    }
+  };
 
   //search text
   const trigger = debounce(async (str: string) => {
@@ -137,10 +119,8 @@ const Vocabulary: Component<{}> = () => {
     }
 
     if (keyDown === "Enter" && searchResult().length === 0)
-      setShowTranslate(true);
+      setMainStore("showTranslate", true);
   };
-
-  const getMemoriesLengthAction = useAction(getMemoriesLength);
 
   const handleRenderText = async (text: VocabularyType) => {
     setSearchTerm("");
@@ -148,19 +128,8 @@ const Vocabulary: Component<{}> = () => {
     handleCheckWord(text);
   };
 
-  const handleCloseTranslation = () => {
-    setShowTranslate(false);
-    setTranslateTerm("");
-  };
-
-  // -------------------BOOKMARK START-------------------- //
-  const [showBookmark, setShowBookmark] = createSignal<boolean>(false);
-  // -------------------BOOKMARK END-------------------- //
-
   // -------------------TRANSLATE START-------------------- //
   const [translateTerm, setTranslateTerm] = createSignal<string>("");
-  const [showTranslate, setShowTranslate] = createSignal(false);
-
   // -------------------TRANSLATE END-------------------- //
   // -------------------DELETE START-------------------- //
   const [deleteBtnIndex, setDeleteBtnIndex] = createSignal<number>(0);
@@ -191,176 +160,7 @@ const Vocabulary: Component<{}> = () => {
     setShowEdit(true);
   };
   // -------------------EDIT END-------------------- //
-  // -------------------AUTOPLAY START-------------------- //
-  const getVocabularyFromRangeAction = useAction(getVocabularyFromRange);
-  const handleGetCalendarTodayData = async () => {
-    const todayDate = format(new Date(), "yyyy-MM-dd");
-    getTodayData(todayDate).then((data) => {
-      if (data) {
-        setListStore("listToday", data);
-      }
-    });
-  };
 
-  const handleAutoplay = () => {
-    setAudioSrc("");
-    handleRenderText(wordList()[counter()]);
-    setCounter(counter() + 1);
-  };
-
-  const submitTodayProgressAction = useAction(submitTodayProgress);
-
-  const startAutoplay = async () => {
-    const newProgress =
-      wordListType() === 1 ? todayData().time1 + 1 : todayData().time2 + 1;
-    if (counter() === 0) {
-      await submitTodayProgressAction(wordListType(), newProgress);
-      handleGetCalendarTodayData();
-    }
-    handleAutoplay();
-    timerRef = setInterval(() => {
-      if (counter() < wordList().length) {
-        handleAutoplay();
-      } else {
-        stopAutoplay();
-        //get wordlist to update lastest changed
-        handleEternalRecurrence();
-      }
-    }, 7500);
-  };
-
-  const handleEternalRecurrence = () => {
-    const progress =
-      wordListType() === 1 ? todayData().time1 : todayData().time2;
-    if (progress < 9) {
-      startCountdown();
-    } else {
-      setWordList([]);
-      setWordListType(0);
-    }
-  };
-
-  const pauseAutoplay = () => {
-    clearInterval(timerRef);
-  };
-
-  const stopAutoplay = () => {
-    clearInterval(timerRef);
-    //wordlist index
-    setCounter(0);
-    //bottom button input background
-    setBottomActive(false);
-  };
-
-  const {
-    setBottomIndex,
-    bottomActive,
-    setBottomActive,
-    counter,
-    setCounter,
-    wordList,
-    setWordList,
-    setTotalMemories,
-    showMenubar,
-    setShowMenubar,
-    wordListType,
-    setWordListType,
-    todayData,
-    setTodayData,
-    audioSrc,
-    setAudioSrc,
-  } = useGlobalContext();
-
-  createEffect(
-    on(bottomActive, () => {
-      if (bottomActive() && wordList().length > 0) {
-        startAutoplay();
-      } else {
-        pauseAutoplay();
-      }
-    })
-  );
-
-  const handleSetDailyWord = async (id: number) => {
-    switch (id) {
-      case 1:
-        //get 50 word
-        setWordListType(1);
-        const data1 = await getVocabularyFromRangeAction(
-          todayData().index1,
-          todayData().index1 + 49
-        );
-        if (data1) {
-          setWordList(data1);
-        }
-        setBottomIndex(todayData().index1 + 1);
-        // stopAutoplay();
-        break;
-      case 2:
-        //get 59word
-        setWordListType(2);
-        const data2 = await getVocabularyFromRangeAction(
-          todayData().index2,
-          todayData().index2 + 49
-        );
-        if (data2) {
-          setWordList(data2);
-        }
-        setBottomIndex(todayData().index2 + 1);
-        // stopAutoplay();
-        break;
-      default:
-        break;
-    }
-  };
-
-  // -------------------AUTOPLAY END-------------------- //
-  // -------------------TIMMER START-------------------- //
-  const showDesktopNotification = () => {
-    const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
-    const letter = wordListType() === 1 ? "I" : "II";
-    const newProgress =
-      wordListType() === 1 ? todayData().time1 + 1 : todayData().time2 + 1;
-
-    const notification = new Notification("Start Focusing", {
-      icon: img,
-      requireInteraction: true,
-      body: `${letter}-${newProgress}`,
-    });
-
-    notification.onclose = () => {
-      setBottomActive(true);
-      setAudioSrc("");
-      audioRef.pause();
-    };
-  };
-
-  const startCountdown = () => {
-    clearInterval(intervalCountdown);
-    setIsRunning(true);
-    intervalCountdown = setInterval(() => {
-      setMinutes((prev: number) => {
-        if (prev === 1) {
-          clearInterval(intervalCountdown);
-          setIsRunning(false);
-          handleSetDailyWord(wordListType());
-          showDesktopNotification();
-          setAudioSrc("/sounds/09_Autumn_Mvt_3_Allegro.mp3");
-          audioRef.play();
-          return 6;
-        }
-        return prev - 1;
-      });
-    }, 60000);
-  };
-
-  const stopCountdown = () => {
-    setIsRunning(false);
-    clearInterval(intervalCountdown);
-    setMinutes(6);
-  };
-
-  // -------------------TIMMER END-------------------- //
   // -------------------MOBILE START-------------------- //
 
   const [isMobile, setIsMobile] = createSignal(false);
@@ -377,22 +177,14 @@ const Vocabulary: Component<{}> = () => {
     }
   };
 
-  const test = () => {
-    console.log(132);
-  };
+  // -------------------MOBILE END-------------------- //
 
   return (
     <MetaProvider>
       <Title>{mainStore.renderWord?.word || "main"}</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <audio
-        hidden
-        ref={audioRef}
-        src={mainStore.audioSrc}
-        onloadeddata={() => audioRef.play()}
-        onended={() => setAudioSrc("")}
-      ></audio>
+
       <Motion.div
         class={styles.vocabularyContainer}
         animate={{ opacity: [0, 1] }}

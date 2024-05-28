@@ -17,7 +17,7 @@ import {
 } from "~/lib/api";
 import { format } from "date-fns";
 import styles from "./weather.module.scss";
-import { createAsync, type RouteDefinition } from "@solidjs/router";
+import { createAsync } from "@solidjs/router";
 import { getUser } from "~/lib";
 
 type WeatherGeoType = {
@@ -28,15 +28,9 @@ type WeatherGeoType = {
 let canvas: HTMLCanvasElement;
 let audio: HTMLAudioElement;
 
-let ref: HTMLDivElement;
-
-// export const route = {
-//   load: () => getUser(),
-// } satisfies RouteDefinition;
-
 const Weather: Component<{}> = (props) => {
   // ***************check login**************
-  createAsync(() => getUser(), { deferStream: true });
+  const user = createAsync(() => getUser());
   // ***************check login**************
 
   const WEATHER_GEOS: WeatherGeoType[] = [
@@ -77,16 +71,19 @@ const Weather: Component<{}> = (props) => {
     switch (curdata.summary) {
       case "Light Rain":
       case "Light Showers":
+      case "Light Drizzle":
         setAudioSrc("/sounds/weather/rain_light_2.m4a");
         setupWeather("drizzle", curdata.isDayTime);
         break;
       case "Moderate Rain":
       case "Showers":
+      case "Drizzle":
         setAudioSrc("/sounds/weather/rain_light.m4a");
         setupWeather("rain", curdata.isDayTime);
         break;
       case "Heavy Rain":
       case "Heavy Showers":
+      case "Heavy Drizzle":
         setAudioSrc("/sounds/weather/rain.m4a");
         setupWeather("storm", curdata.isDayTime);
         break;

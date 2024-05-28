@@ -1,6 +1,7 @@
 import { createSignal } from "solid-js";
 import { supabase } from "./supbabase";
-import { useSession } from "vinxi/http";
+import { useSession } from "@solidjs/start/server";
+import { getRequestEvent } from "solid-js/web";
 
 
 export function validateUsername(username: unknown) {
@@ -22,14 +23,17 @@ export async function login(password: string) {
     password: password,
   })
   if (error) throw new Error(error.message);
-
-  return { user: user.id }
+  return { id: user!.email }
 }
 
 export async function logout() {
-  const { error } = await supabase.auth.signOut()
+  const { error } = await supabase.auth.signOut();
+  const session = await getSession();
+  await session.update(d => (d.userId = undefined));
 }
 
 export async function register(username: string, password: string) { }
 
-export async function getSession() { }
+export async function getSession() {
+  return useSession(getRequestEvent()!, { password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace" });
+}

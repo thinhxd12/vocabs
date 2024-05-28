@@ -4,7 +4,6 @@ import { createStore } from "solid-js/store";
 import { getDataImage, getUnsplashImage } from "~/lib/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
-import { GlobalContextProvider } from "~/globalcontext/store";
 import { Motion } from "solid-motionone";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
@@ -119,10 +118,8 @@ const MainLayout = (props: RouteSectionProps) => {
       </Show>
 
       <div class={styles.mainCenter}>
-        <GlobalContextProvider>
-          {props.children}
-          <Bottom />
-        </GlobalContextProvider>
+        {props.children}
+        <Bottom />
       </div>
 
       <Show when={!isMobile()}>

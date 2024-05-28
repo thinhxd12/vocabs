@@ -25,6 +25,7 @@ import { OcHourglass2 } from "solid-icons/oc";
 
 let intervalCountdown: NodeJS.Timeout;
 let intervalAutoplay: NodeJS.Timeout;
+let audioRef: HTMLAudioElement;
 const [showMenu, setShowMenu] = createSignal<boolean>(false);
 const [showTimer, setShowTimer] = createSignal<boolean>(false);
 const [minute, setMinute] = createSignal<number>(6);
@@ -56,7 +57,6 @@ const Bottom: Component<{}> = () => {
     });
     notification.onclose = () => {
       setMainStore("audioSrc", "");
-      // setListStore("listButton", false);
       handleAutoplay();
     };
   };
@@ -72,7 +72,7 @@ const Bottom: Component<{}> = () => {
         }
         return prev - 1;
       });
-    }, 1000);
+    }, 60000);
   };
 
   const endCountdown = () => {
@@ -105,6 +105,7 @@ const Bottom: Component<{}> = () => {
   };
 
   const startAutoplay = async () => {
+    clearInterval(intervalAutoplay);
     const newProgress =
       listStore.listType === 1
         ? listStore.listToday.time1 + 1
@@ -187,6 +188,13 @@ const Bottom: Component<{}> = () => {
 
   return (
     <div class={styles.bottom}>
+      <audio
+        hidden
+        ref={audioRef}
+        src={mainStore.audioSrc}
+        onloadeddata={() => audioRef.play()}
+        onended={() => setMainStore("audioSrc", "")}
+      ></audio>
       <div class={styles.bottomBar}>
         <div class={styles.bottomIndex}>
           <div class={styles.bottomIndexNums}>
