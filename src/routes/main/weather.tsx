@@ -17,7 +17,7 @@ import {
 } from "~/lib/api";
 import { format } from "date-fns";
 import styles from "./weather.module.scss";
-import { createAsync } from "@solidjs/router";
+import { createAsync, useAction } from "@solidjs/router";
 import { getUser } from "~/lib";
 
 type WeatherGeoType = {
@@ -30,16 +30,12 @@ let audio: HTMLAudioElement;
 
 const Weather: Component<{}> = (props) => {
   // ***************check login**************
+  const getUserAction = useAction(getUser);
   onMount(async () => {
     const data = sessionStorage.getItem("user");
     const userId = (data && JSON.parse(data).userId) || "";
-    createAsync(
-      () =>
-        getUser(userId).then((user) => {
-          if (user) sessionStorage.setItem("user", JSON.stringify(user));
-        }),
-      { deferStream: true }
-    );
+    const user = await getUserAction(userId);
+    if (user) sessionStorage.setItem("user", JSON.stringify(user));
   });
   // ***************check login**************
 

@@ -6,7 +6,6 @@ import {
   createSignal,
   onMount,
 } from "solid-js";
-import { createAsync, useAction } from "@solidjs/router";
 import {
   getCalendarHistoryData,
   getCalendarScheduleData,
@@ -28,21 +27,18 @@ import forms from "../../assets/styles/form.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
+import { useAction } from "@solidjs/router";
 
 let ref: HTMLDivElement;
 
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
+  const getUserAction = useAction(getUser);
   onMount(async () => {
     const data = sessionStorage.getItem("user");
     const userId = (data && JSON.parse(data).userId) || "";
-    createAsync(
-      () =>
-        getUser(userId).then((user) => {
-          if (user) sessionStorage.setItem("user", JSON.stringify(user));
-        }),
-      { deferStream: true }
-    );
+    const user = await getUserAction(userId);
+    if (user) sessionStorage.setItem("user", JSON.stringify(user));
   });
   // ***************check login**************
 

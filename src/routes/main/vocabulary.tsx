@@ -41,7 +41,7 @@ import { format } from "date-fns";
 import styles from "./vocabulary.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import { getUser, logout } from "~/lib";
-import { createAsync, useAction } from "@solidjs/router";
+import { createAsync, useAction, useSubmission } from "@solidjs/router";
 import { mainStore, setMainStore } from "~/lib/mystore";
 
 let timerRef: NodeJS.Timeout;
@@ -52,16 +52,12 @@ const [isRunning, setIsRunning] = createSignal(false);
 
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
+  const getUserAction = useAction(getUser);
   onMount(async () => {
     const data = sessionStorage.getItem("user");
     const userId = (data && JSON.parse(data).userId) || "";
-    createAsync(
-      () =>
-        getUser(userId).then((user) => {
-          if (user) sessionStorage.setItem("user", JSON.stringify(user));
-        }),
-      { deferStream: true }
-    );
+    const user = await getUserAction(userId);
+    if (user) sessionStorage.setItem("user", JSON.stringify(user));
   });
   // ***************check login**************
 
