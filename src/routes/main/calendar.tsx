@@ -2,13 +2,15 @@ import {
   Component,
   Index,
   Show,
+  Suspense,
   createResource,
   createSignal,
+  lazy,
   onMount,
 } from "solid-js";
 import {
   getCalendarHistoryData,
-  getCalendarScheduleData,
+  getScheduleData,
   getThisWeekData,
   submitNewHistory,
   submitNewMonth,
@@ -18,8 +20,8 @@ import {
 
 import { HistoryType } from "~/types";
 import { createSlider } from "solid-slider";
-import HistoryCard from "~/components/historycard";
-import CalendarDropdown from "~/components/calendardropdown";
+const HistoryCard = lazy(() => import("~/components/historycard"));
+const CalendarDropdown = lazy(() => import("~/components/calendardropdown"));
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { format } from "date-fns";
@@ -27,26 +29,31 @@ import forms from "../../assets/styles/form.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
-import { createAsync, useAction } from "@solidjs/router";
+import { RouteDefinition, createAsync, useAction } from "@solidjs/router";
 
 let ref: HTMLDivElement;
 
+export const route = {
+  load() {
+    getScheduleData();
+  },
+} satisfies RouteDefinition;
+
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
-  const user = createAsync(() => getUser());
+  const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();
+  const schedule = createAsync(() => getScheduleData(), {
+    deferStream: true,
+  });
+
   const getCalendarHistoryDataAction = useAction(getCalendarHistoryData);
   const [todayDate] = createSignal<Date>(new Date());
   const [weekIndex, setWeekIndex] = createSignal<number>(0);
 
   const getThisWeekDataAction = useAction(getThisWeekData);
-
-  const [calendarScheduleData] = createResource(async () => {
-    const response = await getCalendarScheduleData();
-    return response;
-  });
 
   const options = {
     duration: 1000,
@@ -129,14 +136,10 @@ const Calendar: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <Title>schedule</Title>
+      <Title>calendar</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <Motion.div
-        class={styles.calendar}
-        animate={{ opacity: [0, 1] }}
-        transition={{ duration: 0.6 }}
-      >
+      <div class={styles.calendar}>
         <div class={styles.calendarCard}>
           <div
             class={styles.calendarImage}
@@ -169,8 +172,8 @@ const Calendar: Component<{}> = (props) => {
               <div class={styles.calendarWeekTitle}>Fri</div>
               <div class={styles.calendarWeekTitle}>Sat</div>
             </div>
-            <Show when={calendarScheduleData()} fallback={<CalendarLoading />}>
-              <Index each={calendarScheduleData()}>
+            <Suspense fallback={<CalendarLoading />}>
+              <Index each={schedule()}>
                 {(data, i) => {
                   return (
                     <div class={styles.calendarWeek}>
@@ -244,7 +247,7 @@ const Calendar: Component<{}> = (props) => {
                   );
                 }}
               </Index>
-            </Show>
+            </Suspense>
           </div>
         </div>
 
@@ -473,7 +476,7 @@ const Calendar: Component<{}> = (props) => {
           without which any great growth. The poison of which weaker natures
           perish strengthens the strong — nor do they call it poison.
         </div>
-      </Motion.div>
+      </div>
     </MetaProvider>
   );
 };

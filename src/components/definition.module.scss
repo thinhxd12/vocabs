@@ -2,8 +2,10 @@
 
 .definition {
     @include baseBody(#f7f7f7);
-    width: 100%;
+    min-width: 360px;
+    max-width: 360px;
     padding: 0;
+    overflow-x: hidden;
 
     .definitionHeader {
         position: absolute;

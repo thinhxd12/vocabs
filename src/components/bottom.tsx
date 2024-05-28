@@ -32,11 +32,16 @@ const [minute, setMinute] = createSignal<number>(6);
 
 const Bottom: Component<{}> = () => {
   const todayDate = format(new Date(), "yyyy-MM-dd");
-  onMount(() => {
-    getTotalMemories().then((total) => {
-      setMainStore("totalMemories", total);
-    });
-  });
+
+  const total = createAsync(
+    () =>
+      getTotalMemories().then((data) => {
+        if (data) {
+          setMainStore("totalMemories", data);
+        }
+      }),
+    { deferStream: true }
+  );
 
   // -------------------LOGOUT-------------------- //
   const logoutAction = useAction(logout);
@@ -76,11 +81,12 @@ const Bottom: Component<{}> = () => {
   };
 
   const endCountdown = () => {
+    handleGetListContent(listStore.listType);
+    setMinute(6);
     setShowTimer(false);
     clearInterval(intervalCountdown);
     setMainStore("audioSrc", "/sounds/09_Autumn_Mvt_3_Allegro.mp3");
     showDesktopNotification();
-    setMinute(6);
   };
 
   const stopCountdown = () => {
@@ -116,8 +122,9 @@ const Bottom: Component<{}> = () => {
         newProgress,
         listStore.listToday.date
       );
-      await updateTodayData();
+      updateTodayData();
     }
+
     handleRenderWord();
     intervalAutoplay = setInterval(() => {
       if (listStore.listCount < listStore.listContent.length) {
@@ -142,19 +149,16 @@ const Bottom: Component<{}> = () => {
         : listStore.listToday.time2;
     if (currentProgress < 9) {
       startCountdown();
-    } else {
-      setListStore("listContent", []);
-      setListStore("listType", 0);
     }
   };
 
   const handleAutoplay = () => {
     if (listStore.listButton) {
-      startAutoplay();
       setListStore("listButton", false);
+      startAutoplay();
     } else {
-      pauseAutoplay();
       setListStore("listButton", true);
+      pauseAutoplay();
     }
   };
 
@@ -162,21 +166,19 @@ const Bottom: Component<{}> = () => {
     switch (id) {
       case 1:
         setListStore("listType", 1);
-        getListContent(
+        const data1 = await getListContent(
           listStore.listToday.index1,
           listStore.listToday.index1 + 49
-        ).then((data) => {
-          if (data) setListStore("listContent", data);
-        });
+        );
+        if (data1) setListStore("listContent", data1);
         break;
       case 2:
         setListStore("listType", 2);
-        getListContent(
+        const data2 = await getListContent(
           listStore.listToday.index2,
           listStore.listToday.index2 + 49
-        ).then((data) => {
-          if (data) setListStore("listContent", data);
-        });
+        );
+        if (data2) setListStore("listContent", data2);
         break;
       default:
         break;

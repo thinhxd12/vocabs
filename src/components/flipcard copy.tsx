@@ -9,7 +9,7 @@ import {
 import { VocabularyType } from "~/types";
 import { Motion } from "solid-motionone";
 import styles from "./flipcard.module.scss";
-import { mainStore, setMainStore } from "~/lib/mystore";
+import { setMainStore } from "~/lib/mystore";
 
 const FlipCard: Component<{
   item: VocabularyType;
@@ -18,7 +18,7 @@ const FlipCard: Component<{
   let timeoutId2: NodeJS.Timeout;
   let timeoutId3: NodeJS.Timeout;
 
-  // const currenText = createMemo(() => props.item);
+  const currenText = createMemo(() => props.item);
   const [partOfSpeechs, setPartOfSpeechs] = createSignal<string>("");
   const [hoverClass, setHoverClass] = createSignal<string>("");
 
@@ -38,40 +38,38 @@ const FlipCard: Component<{
     clearTimeout(timeoutId2);
     clearTimeout(timeoutId3);
 
-    if (mainStore.renderWord) {
-      let currentSound = mainStore.renderWord!.audio;
-      let translations = mainStore
-        .renderWord!.translations.map((item) => item.translations.join(", "))
-        .join(", ");
+    let currentSound = currenText()?.audio;
+    let translations = currenText()
+      ?.translations.map((item) => item.translations.join(", "))
+      .join(", ");
 
-      let partOfSpeech = mainStore
-        .renderWord!.translations.map((item) => item.partOfSpeech)
-        .join("-");
+    let partOfSpeech = currenText()
+      ?.translations.map((item) => item.partOfSpeech)
+      .join("-");
 
-      setPartOfSpeechs(partOfSpeech);
+    setPartOfSpeechs(partOfSpeech);
 
-      if (currentSound) {
-        setMainStore("audioSrc", currentSound);
-      }
-      if (mainStore.renderWord!.number > 1) {
-        setRenderNumber(mainStore.renderWord!.number);
-        setHoverClass(styles.cardContent);
-        setNumbArray(createNumberArray(mainStore.renderWord!.number));
-        timeoutId1 = setTimeout(() => {
-          setRenderNumber(renderNumber() - 1);
-          setNumbArray(createNumberArray(renderNumber()));
-        }, 2500);
-      }
-      if (translations) {
-        timeoutId2 = setTimeout(() => {
-          setHoverClass(`${styles.cardContent} ${styles.cardContentHover1}`);
-          const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${translations}`;
-          setMainStore("audioSrc", soundUrl);
-        }, 3000);
-        timeoutId3 = setTimeout(() => {
-          setHoverClass(`${styles.cardContent} ${styles.cardContentHover2}`);
-        }, 5500);
-      }
+    if (currentSound) {
+      setMainStore("audioSrc", currentSound);
+    }
+    if (currenText()?.number > 1) {
+      setRenderNumber(currenText().number);
+      setHoverClass(styles.cardContent);
+      setNumbArray(createNumberArray(currenText()?.number));
+      timeoutId1 = setTimeout(() => {
+        setRenderNumber(renderNumber() - 1);
+        setNumbArray(createNumberArray(renderNumber()));
+      }, 2500);
+    }
+    if (translations) {
+      timeoutId2 = setTimeout(() => {
+        setHoverClass(`${styles.cardContent} ${styles.cardContentHover1}`);
+        const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${translations}`;
+        setMainStore("audioSrc", soundUrl);
+      }, 3000);
+      timeoutId3 = setTimeout(() => {
+        setHoverClass(`${styles.cardContent} ${styles.cardContentHover2}`);
+      }, 5500);
     }
   });
 
@@ -81,7 +79,7 @@ const FlipCard: Component<{
         <div class={styles.numberFlipContainer}>
           <div class={styles.numberFlipBackground}></div>
           <div class={styles.numberFlipContent}>
-            <Show when={mainStore.renderWord}>
+            <Show when={currenText()}>
               <Show
                 when={props.item?.number > 1}
                 fallback={
@@ -170,21 +168,19 @@ const FlipCard: Component<{
       </div>
       <div class={styles.flipCardRightContent}>
         <Show
-          when={mainStore.renderWord}
+          when={currenText()}
           fallback={<div class={styles.cardContent}></div>}
         >
           <div class={hoverClass()}>
             <div class={styles.cardBottom}>
-              <p class={styles.cardBottomPhonetic}>
-                {mainStore.renderWord!.phonetics}
-              </p>
-              <p class={styles.cardBottomText}>{mainStore.renderWord!.word}</p>
+              <p class={styles.cardBottomPhonetic}>{currenText()?.phonetics}</p>
+              <p class={styles.cardBottomText}>{currenText()?.word}</p>
               <p class={styles.cardBottomClass}>【 {partOfSpeechs()} 】</p>
               <p class={styles.cardBottomDate}>05/07/22</p>
             </div>
             <div class={styles.cardTop}>
               <Index
-                each={mainStore.renderWord!.translations}
+                each={currenText()?.translations}
                 fallback={<p class={styles.cardTopText}>No items</p>}
               >
                 {(item, index) => (
@@ -198,10 +194,8 @@ const FlipCard: Component<{
               </Index>
             </div>
             <div class={styles.cardBottom}>
-              <p class={styles.cardBottomPhonetic}>
-                {mainStore.renderWord!.phonetics}
-              </p>
-              <p class={styles.cardBottomText}>{mainStore.renderWord!.word}</p>
+              <p class={styles.cardBottomPhonetic}>{currenText()?.phonetics}</p>
+              <p class={styles.cardBottomText}>{currenText()?.word}</p>
               <p class={styles.cardBottomClass}>【 {partOfSpeechs()} 】</p>
             </div>
           </div>

@@ -3,8 +3,10 @@ import {
   Index,
   JSX,
   Show,
+  Suspense,
   createEffect,
   createSignal,
+  lazy,
   onMount,
 } from "solid-js";
 import { VocabularyType } from "~/types";
@@ -17,23 +19,39 @@ import {
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-import FlipCard from "~/components/flipcard";
-import Definition from "~/components/definition";
-import Translation from "~/components/translation";
-import Edit from "~/components/edit";
-import Bookmark from "~/components/bookmark";
+const Translation = lazy(() => import("~/components/translation"));
+const Edit = lazy(() => import("~/components/edit"));
+const Bookmark = lazy(() => import("~/components/bookmark"));
+const Definition = lazy(() => import("~/components/definition"));
+const FlipCard = lazy(() => import("~/components/flipcard"));
 import { BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { format } from "date-fns";
 import styles from "./vocabulary.module.scss";
 import { getUser } from "~/lib";
-import { createAsync } from "@solidjs/router";
+import { RouteDefinition, createAsync } from "@solidjs/router";
 import { mainStore, setListStore, setMainStore } from "~/lib/mystore";
+
+const todayDate = format(new Date(), "yyyy-MM-dd");
+export const route = {
+  load() {
+    getUser(), getTodayData(todayDate);
+  },
+} satisfies RouteDefinition;
 
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
-  const user = createAsync(() => getUser());
+  const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
+  const todayData = createAsync(
+    () =>
+      getTodayData(todayDate).then((data) => {
+        if (data) {
+          setListStore("listToday", data);
+        }
+      }),
+    { deferStream: true }
+  );
 
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
@@ -48,7 +66,6 @@ const Vocabulary: Component<{}> = () => {
         navigator.userAgent
       )
     );
-    handleGetTodayData();
   });
 
   createEffect(() => {
@@ -56,14 +73,6 @@ const Vocabulary: Component<{}> = () => {
       setSearchInputColor("#957c3e");
     }
   });
-
-  const handleGetTodayData = async () => {
-    const todayDate = format(new Date(), "yyyy-MM-dd");
-    const data = await getTodayData(todayDate);
-    if (data) {
-      setListStore("listToday", data);
-    }
-  };
 
   //search text
   const trigger = debounce(async (str: string) => {
@@ -184,12 +193,7 @@ const Vocabulary: Component<{}> = () => {
       <Title>{mainStore.renderWord?.word || "main"}</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-
-      <Motion.div
-        class={styles.vocabularyContainer}
-        animate={{ opacity: [0, 1] }}
-        transition={{ duration: 0.6 }}
-      >
+      <div class={styles.vocabularyContainer}>
         <div
           ref={divRef}
           tabIndex={0}
@@ -197,9 +201,11 @@ const Vocabulary: Component<{}> = () => {
           onKeyDown={onKeyDownDiv}
           class={styles.vocabulary}
         >
-          <div class={styles.flashCardContainer}>
-            <FlipCard item={mainStore.renderWord!} />
-          </div>
+          <Suspense>
+            <div class={styles.flashCardContainer}>
+              <FlipCard item={mainStore.renderWord!} />
+            </div>
+          </Suspense>
 
           <Show
             when={isMobile()}
@@ -312,123 +318,13 @@ const Vocabulary: Component<{}> = () => {
             </Show>
 
             {/* Definition */}
-            <Show when={mainStore.renderWord}>
+            <Suspense>
               <Definition
                 item={mainStore.renderWord!}
                 onEdit={handleEditFromDefinition}
               />
-            </Show>
+            </Suspense>
           </div>
-
-          {/* <Presence>
-            <Show when={showMenubar()}>
-              <Motion.div
-                class={styles.menubar}
-                initial={{
-                  opacity: 0,
-                  bottom: "-150px",
-                }}
-                animate={{
-                  opacity: 1,
-                  bottom: 0,
-                }}
-                exit={{
-                  opacity: 0,
-                  bottom: "-150px",
-                }}
-                transition={{ duration: 0.3, easing: "ease-in-out" }}
-              >
-                <div class={styles.menubarContent}>
-                  <button
-                    class={
-                      wordListType() === 1
-                        ? `${buttons.buttonMenuWordlist} ${buttons.buttonMenuWordlistActive}`
-                        : buttons.buttonMenuWordlist
-                    }
-                    onClick={() => {
-                      handleSetDailyWord(1);
-                      setShowMenubar(false);
-                    }}
-                  >
-                    <span>I</span>
-                    <small>{todayData().time1}</small>
-                  </button>
-                  <button
-                    class={
-                      wordListType() === 2
-                        ? `${buttons.buttonMenuWordlist} ${buttons.buttonMenuWordlistActive}`
-                        : buttons.buttonMenuWordlist
-                    }
-                    onClick={() => {
-                      handleSetDailyWord(2);
-                      setShowMenubar(false);
-                    }}
-                  >
-                    <span>II</span>
-                    <small>{todayData().time2}</small>
-                  </button>
-                  <button
-                    class={buttons.buttonMenu}
-                    onClick={() => {
-                      setShowBookmark(true);
-                      setShowMenubar(false);
-                    }}
-                  >
-                    <ImBooks size={18} />
-                  </button>
-                  <button
-                    class={buttons.buttonMenu}
-                    onClick={() => {
-                      setShowTranslate(true);
-                      setShowMenubar(false);
-                    }}
-                  >
-                    <BsTranslate size={15} />
-                  </button>
-                  <button
-                    class={buttons.buttonMenu}
-                    onClick={() => {
-                      startCountdown();
-                      setShowMenubar(false);
-                    }}
-                  >
-                    <BiSolidHourglassTop size={16} />
-                  </button>
-                  <button class={buttons.buttonMenu} onClick={handleLogout}>
-                    E
-                  </button>
-                </div>
-              </Motion.div>
-            </Show>
-          </Presence> */}
-
-          {/* <Presence>
-            <Show when={isRunning()}>
-              <Motion.button
-                class={buttons.buttonTimer}
-                onClick={stopCountdown}
-                initial={{
-                  opacity: 0,
-                  bottom: "-27px",
-                }}
-                animate={{
-                  opacity: 1,
-                  bottom: "1px",
-                }}
-                exit={{
-                  opacity: 0,
-                  bottom: "-27px",
-                }}
-                transition={{ duration: 0.3, easing: "ease-in-out" }}
-              >
-                <OcHourglass2 size={11} />
-                <Motion.div
-                  class={styles.buttonTimerOverlay}
-                  animate={{ height: `${(1 - minutes() / 6) * 100}%` }}
-                ></Motion.div>
-              </Motion.button>
-            </Show>
-          </Presence> */}
         </div>
         {/* Edit */}
         <Presence>
@@ -474,7 +370,7 @@ const Vocabulary: Component<{}> = () => {
             </Motion.div>
           </Show>
         </Presence>
-      </Motion.div>
+      </div>
     </MetaProvider>
   );
 };

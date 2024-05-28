@@ -1,4 +1,3 @@
-import { createSignal } from "solid-js";
 import { supabase } from "./supbabase";
 import { useSession } from "@solidjs/start/server";
 import { getRequestEvent } from "solid-js/web";

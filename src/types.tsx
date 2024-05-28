@@ -115,3 +115,8 @@ export interface FixMinutelyTWeatherType {
   intensity: number;
   probability: number;
 }
+
+export interface WeatherGeoType {
+  name: string;
+  geo: string;
+}

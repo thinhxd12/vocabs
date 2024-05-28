@@ -43,7 +43,7 @@ const chunk = (array: any[], size: number) =>
         return acc;
     }, []);
 
-export const getCalendarScheduleData = async () => {
+export const getScheduleData = cache(async () => {
     "use server";
     const date = new Date();
     const thisMonth = date.getMonth();
@@ -92,7 +92,7 @@ export const getCalendarScheduleData = async () => {
         const calendarScheduleArr = chunk(mergedArray, 7);
         return calendarScheduleArr;
     }
-};
+}, "schedule");
 
 //get start index of schedule
 export const getThisWeekData = action(async () => {
@@ -104,15 +104,6 @@ export const getThisWeekData = action(async () => {
     if (data) return data[0].index1;
 });
 
-//get today data
-export const getCalendarTodayData = async (date: string) => {
-    "use server";
-    const { data, error } = await supabase
-        .from(mapTables.schedule)
-        .select()
-        .eq('date', date);
-    if (data) return data[0] as ScheduleType;
-};
 
 //get all history
 export const getCalendarHistoryData = action(async () => {
@@ -595,16 +586,6 @@ export const submitTodayReset = action(async (formData: FormData) => {
     throw redirect("/main/vocabulary");
 }, "todayReset");
 
-//edit today schedule
-export const submitTodayProgress = action(async (type: number, numb: number) => {
-    "use server";
-    const updateObj = type === 1 ? { time1: numb } : { time2: numb }
-    const { error } = await supabase
-        .from(mapTables.schedule)
-        .update(updateObj)
-        .eq('date', format(new Date().toISOString(), "yyyy-MM-dd"));
-    if (error) console.error(error);
-}, "todaySubmitProgress");
 
 export const submitNewHistory = action(async (formData: FormData) => {
     "use server";
@@ -750,26 +731,6 @@ export const deleteSmallestWordNumberFromRange = async (time: string) => {
 }
 //archiver ------------------------------------ end
 
-//get 50 word
-export const getVocabularyFromRange = action(async (start: number, end: number) => {
-    "use server";
-    const { data, error } = await supabase
-        .from(mapTables.vocabulary)
-        .select()
-        .order('created_at')
-        .range(start, end)
-    if (data) return data as VocabularyType[];
-}, "getVocabularyFromRange");
-
-//get memories length
-export const getMemoriesLength = action(async () => {
-    "use server";
-    const { count } = await supabase
-        .from(mapTables.memories)
-        .select('*', { count: "exact" });
-    return count as number;
-}, "getMemoriesLength");
-
 
 export const updateTodaySchedule = async (type: number, numb: number, day: string) => {
     "use server";
@@ -802,22 +763,22 @@ export const updateTodaySchedule = async (type: number, numb: number, day: strin
 
 
 
-export const getTotalMemories = (async () => {
+export const getTotalMemories = cache(async () => {
     "use server";
     const { count } = await supabase
         .from(mapTables.memories)
         .select('*', { count: "exact" });
     return count as number;
-});
+}, "total");
 
-export const getTodayData = (async (date: string) => {
+export const getTodayData = cache(async (date: string) => {
     "use server";
     const { data, error } = await supabase
         .from(mapTables.schedule)
         .select()
         .eq('date', date);
     if (data) return data[0] as ScheduleType;
-});
+}, 'todaySchedule');
 
 
 //get 50 word
@@ -981,12 +942,12 @@ const fetchGetJSON = async (url: string) => {
     }
 }
 
-export const getCurrentWeatherData = async (geostr: string) => {
+export const getCurrentWeatherData = cache(async (geostr: string) => {
     const geos = geostr.split(",");
     const URL = `https://api.open-meteo.com/v1/forecast?latitude=${geos[0]}&longitude=${geos[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&forecast_minutely_15=1&timezone=auto&models=best_match`;
     const data = await fetchGetJSON(URL);
     return cleanDataCurrently(data);
-}
+}, "currentWeather")
 
 const cleanDataCurrently = (data: any) => {
     return {

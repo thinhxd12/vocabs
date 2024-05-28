@@ -9,7 +9,7 @@ import {
   createCanvas,
   loadImage,
 } from "~/lib/weatherServices";
-import { CurrentlyWeatherType } from "~/types";
+import { CurrentlyWeatherType, WeatherGeoType } from "~/types";
 import {
   getCurrentWeatherData,
   getMinutelyWeatherData,
@@ -17,21 +17,32 @@ import {
 } from "~/lib/api";
 import { format } from "date-fns";
 import styles from "./weather.module.scss";
-import { createAsync } from "@solidjs/router";
 import { getUser } from "~/lib";
-
-type WeatherGeoType = {
-  name: string;
-  geo: string;
-};
+import { RouteDefinition, createAsync } from "@solidjs/router";
 
 let canvas: HTMLCanvasElement;
 let audio: HTMLAudioElement;
 
+export const route = {
+  load() {
+    getCurrentWeatherData("10.588468,106.400650");
+  },
+} satisfies RouteDefinition;
+
 const Weather: Component<{}> = (props) => {
   // ***************check login**************
-  const user = createAsync(() => getUser());
+  const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
+
+  const currentDataDefault = createAsync(
+    () =>
+      getCurrentWeatherData("10.588468,106.400650").then((data) => {
+        setCurrentData(data);
+      }),
+    {
+      deferStream: true,
+    }
+  );
 
   const WEATHER_GEOS: WeatherGeoType[] = [
     {
