@@ -35,11 +35,7 @@ const Bottom: Component<{}> = () => {
     getTotalMemories().then((total) => {
       setMainStore("totalMemories", total);
     });
-    getTodayData(todayDate).then((data) => {
-      if (data) {
-        setListStore("listToday", data);
-      }
-    });
+
   });
 
   // -------------------LOGOUT-------------------- //

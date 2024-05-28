@@ -17,7 +17,7 @@ import {
 } from "~/lib/api";
 import { format } from "date-fns";
 import styles from "./weather.module.scss";
-import { createAsync, useAction } from "@solidjs/router";
+import { createAsync, type RouteDefinition } from "@solidjs/router";
 import { getUser } from "~/lib";
 
 type WeatherGeoType = {
@@ -28,15 +28,23 @@ type WeatherGeoType = {
 let canvas: HTMLCanvasElement;
 let audio: HTMLAudioElement;
 
+let ref: HTMLDivElement;
+
+// export const route = {
+//   load: () => getUser(),
+// } satisfies RouteDefinition;
+
 const Weather: Component<{}> = (props) => {
   // ***************check login**************
-  const getUserAction = useAction(getUser);
-  onMount(async () => {
-    const data = sessionStorage.getItem("user");
-    const userId = (data && JSON.parse(data).userId) || "";
-    const user = await getUserAction(userId);
-    if (user) sessionStorage.setItem("user", JSON.stringify(user));
-  });
+  createAsync(() => getUser(), { deferStream: true });
+
+  // const getUserAction = useAction(getUser);
+  // onMount(async () => {
+  //   const data = sessionStorage.getItem("user");
+  //   const userId = (data && JSON.parse(data).userId) || "";
+  //   const user = await getUserAction(userId);
+  //   if (user) sessionStorage.setItem("user", JSON.stringify(user));
+  // });
   // ***************check login**************
 
   const WEATHER_GEOS: WeatherGeoType[] = [

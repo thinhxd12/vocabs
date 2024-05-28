@@ -28,13 +28,18 @@ let userId = "";
 //   }
 // }, "user");
 
-export const getUser = action(async (id?: string) => {
+export const getUser = cache(async (id?: string) => {
   "use server";
-  const { data: { user } } = await supabase.auth.getUser();
-  const userSessionId = user && user.id || "";
-  if (userSessionId !== "") return { userId: userSessionId }
-  if (!id) throw redirect("/");
-  if (id !== userSessionId) throw redirect("/");
+  // const { data: { user } } = await supabase.auth.getUser();
+  // console.log(user);
+  const { data: { session }, error } = await supabase.auth.getSession()
+  // console.log(session);
+  if (!session?.user) throw redirect("/")
+
+  // const userSessionId = user && user.id || "";
+  // if (userSessionId !== "") return { userId: userSessionId }
+  // if (!id) throw redirect("/");
+  // if (id !== userSessionId) throw redirect("/");
 }, "user");
 
 export async function getUserLoginId() {

@@ -23,6 +23,7 @@ import {
   searchText,
   getTotalMemories,
   handleCheckWord,
+  getTodayData,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { useGlobalContext } from "~/globalcontext/store";
@@ -41,8 +42,13 @@ import { format } from "date-fns";
 import styles from "./vocabulary.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import { getUser, logout } from "~/lib";
-import { createAsync, useAction, useSubmission } from "@solidjs/router";
-import { mainStore, setMainStore } from "~/lib/mystore";
+import {
+  createAsync,
+  useAction,
+  useSubmission,
+  type RouteDefinition,
+} from "@solidjs/router";
+import { mainStore, setListStore, setMainStore } from "~/lib/mystore";
 
 let timerRef: NodeJS.Timeout;
 let audioRef: HTMLAudioElement;
@@ -50,15 +56,17 @@ let intervalCountdown: NodeJS.Timeout;
 const [minutes, setMinutes] = createSignal(6);
 const [isRunning, setIsRunning] = createSignal(false);
 
+
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
-  const getUserAction = useAction(getUser);
-  onMount(async () => {
-    const data = sessionStorage.getItem("user");
-    const userId = (data && JSON.parse(data).userId) || "";
-    const user = await getUserAction(userId);
-    if (user) sessionStorage.setItem("user", JSON.stringify(user));
-  });
+  createAsync(() => getUser(), { deferStream: true });
+  // const getUserAction = useAction(getUser);
+  // onMount(async () => {
+  //   const data = sessionStorage.getItem("user");
+  //   const userId = (data && JSON.parse(data).userId) || "";
+  //   const user = await getUserAction(userId);
+  //   if (user) sessionStorage.setItem("user", JSON.stringify(user));
+  // });
   // ***************check login**************
 
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
@@ -194,9 +202,12 @@ const Vocabulary: Component<{}> = () => {
   // -------------------AUTOPLAY START-------------------- //
   const getVocabularyFromRangeAction = useAction(getVocabularyFromRange);
   const handleGetCalendarTodayData = async () => {
-    let date = format(new Date(), "yyyy-MM-dd");
-    const data = await getCalendarTodayData(date);
-    if (data) setTodayData(data);
+    const todayDate = format(new Date(), "yyyy-MM-dd");
+    getTodayData(todayDate).then((data) => {
+      if (data) {
+        setListStore("listToday", data);
+      }
+    });
   };
 
   const handleAutoplay = () => {

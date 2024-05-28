@@ -27,19 +27,21 @@ import forms from "../../assets/styles/form.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
-import { useAction } from "@solidjs/router";
+import { createAsync, useAction, type RouteDefinition } from "@solidjs/router";
 
 let ref: HTMLDivElement;
 
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
-  const getUserAction = useAction(getUser);
-  onMount(async () => {
-    const data = sessionStorage.getItem("user");
-    const userId = (data && JSON.parse(data).userId) || "";
-    const user = await getUserAction(userId);
-    if (user) sessionStorage.setItem("user", JSON.stringify(user));
-  });
+  createAsync(() => getUser(), { deferStream: true });
+
+  // const getUserAction = useAction(getUser);
+  // onMount(async () => {
+  //   const data = sessionStorage.getItem("user");
+  //   const userId = (data && JSON.parse(data).userId) || "";
+  //   const user = await getUserAction(userId);
+  //   if (user) sessionStorage.setItem("user", JSON.stringify(user));
+  // });
   // ***************check login**************
 
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();
