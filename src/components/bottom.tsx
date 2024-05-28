@@ -35,16 +35,12 @@ const Bottom: Component<{}> = () => {
     getTotalMemories().then((total) => {
       setMainStore("totalMemories", total);
     });
-
   });
 
   // -------------------LOGOUT-------------------- //
   const logoutAction = useAction(logout);
-  const handleLogout = () => {
-    logoutAction();
-    sessionStorage.removeItem("user");
-  };
   // -------------------LOGOUT-------------------- //
+
   // -------------------COUNTDOWN START-------------------- //
   const showDesktopNotification = () => {
     const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
@@ -60,7 +56,8 @@ const Bottom: Component<{}> = () => {
     });
     notification.onclose = () => {
       setMainStore("audioSrc", "");
-      setListStore("listButton", false);
+      // setListStore("listButton", false);
+      handleAutoplay();
     };
   };
 
@@ -75,7 +72,7 @@ const Bottom: Component<{}> = () => {
         }
         return prev - 1;
       });
-    }, 60000);
+    }, 1000);
   };
 
   const endCountdown = () => {
@@ -374,7 +371,7 @@ const Bottom: Component<{}> = () => {
               >
                 <BiSolidHourglassTop size={16} />
               </button>
-              <button class={buttons.buttonMenu} onClick={handleLogout}>
+              <button class={buttons.buttonMenu} onClick={logoutAction}>
                 E
               </button>
             </Motion.div>

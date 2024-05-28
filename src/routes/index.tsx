@@ -2,15 +2,10 @@ import { useSubmission, type RouteSectionProps } from "@solidjs/router";
 import { Show } from "solid-js";
 import styles from "./index.module.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-import { getUserLoginId, loginAction } from "~/lib";
+import { loginAction } from "~/lib";
 
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginAction);
-
-  const handleLogin = async () => {
-    const user = await getUserLoginId();
-    if (user) sessionStorage.setItem("user", JSON.stringify(user));
-  };
 
   return (
     <MetaProvider>
@@ -18,12 +13,7 @@ export default function Login(props: RouteSectionProps) {
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <main class={styles.login}>
-        <form
-          action={loginAction}
-          method="post"
-          onSubmit={handleLogin}
-          class={styles.loginForm}
-        >
+        <form action={loginAction} method="post" class={styles.loginForm}>
           <div class={styles.loginItem}>
             <input name="password" type="password" class={styles.loginInput} />
           </div>

@@ -34,14 +34,6 @@ let ref: HTMLDivElement;
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
   createAsync(() => getUser(), { deferStream: true });
-
-  // const getUserAction = useAction(getUser);
-  // onMount(async () => {
-  //   const data = sessionStorage.getItem("user");
-  //   const userId = (data && JSON.parse(data).userId) || "";
-  //   const user = await getUserAction(userId);
-  //   if (user) sessionStorage.setItem("user", JSON.stringify(user));
-  // });
   // ***************check login**************
 
   const [historyData, setHistoryData] = createSignal<HistoryType[]>();

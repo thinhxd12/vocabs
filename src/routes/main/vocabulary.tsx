@@ -56,17 +56,9 @@ let intervalCountdown: NodeJS.Timeout;
 const [minutes, setMinutes] = createSignal(6);
 const [isRunning, setIsRunning] = createSignal(false);
 
-
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
   createAsync(() => getUser(), { deferStream: true });
-  // const getUserAction = useAction(getUser);
-  // onMount(async () => {
-  //   const data = sessionStorage.getItem("user");
-  //   const userId = (data && JSON.parse(data).userId) || "";
-  //   const user = await getUserAction(userId);
-  //   if (user) sessionStorage.setItem("user", JSON.stringify(user));
-  // });
   // ***************check login**************
 
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);

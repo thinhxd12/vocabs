@@ -2,7 +2,6 @@ import { createSignal } from "solid-js";
 import { supabase } from "./supbabase";
 import { useSession } from "vinxi/http";
 
-const [user, setUser] = createSignal<{ email: string }>({ email: "" });
 
 export function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
@@ -33,7 +32,4 @@ export async function logout() {
 
 export async function register(username: string, password: string) { }
 
-export async function getSession() {
-  const { data, error } = await supabase.auth.getSession()
-  return data;
-}
+export async function getSession() { }
