@@ -9,7 +9,7 @@
         position: sticky;
         top: 0;
         left: 0;
-        width: 100%;
+        width: 360px;
         display: flex;
         justify-content: space-between;
         align-items: flex-start;
@@ -24,8 +24,7 @@
         }
 
         .bookmarkHeaderRight {
-            @include flex;
-            padding: 1px;
+            margin: 1px 2px;
         }
     }
 

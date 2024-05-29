@@ -1,13 +1,4 @@
-import {
-  Component,
-  Index,
-  Show,
-  Suspense,
-  createResource,
-  createSignal,
-  lazy,
-  onMount,
-} from "solid-js";
+import { Component, Index, Show, Suspense, createSignal, lazy } from "solid-js";
 import {
   getCalendarHistory,
   getScheduleData,
@@ -18,7 +9,6 @@ import {
   submitTodayReset,
 } from "~/lib/api";
 
-import { HistoryType } from "~/types";
 const CalendarDropdown = lazy(() => import("~/components/calendardropdown"));
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
@@ -27,7 +17,7 @@ import forms from "../../assets/styles/form.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
-import { RouteDefinition, createAsync, useAction } from "@solidjs/router";
+import { RouteDefinition, createAsync } from "@solidjs/router";
 import HistoryCard from "~/components/historycard";
 import { mainStore, setMainStore } from "~/lib/mystore";
 

@@ -2,7 +2,6 @@ import { action, cache } from "@solidjs/router";
 import { CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, } from "~/types";
 import { DEFAULT_CORS_PROXY, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import { format } from "date-fns";
-import { createSignal } from "solid-js";
 import { parse } from 'node-html-parser';
 import { supabase } from "./supbabase";
 import { setMainStore } from "./mystore";
@@ -930,12 +929,13 @@ const fetchGetJSON = async (url: string) => {
     }
 }
 
-export const getCurrentWeatherData = cache(async (geostr: string) => {
+export const getCurrentWeatherData = (async (geostr: string) => {
+    "use server";
     const geos = geostr.split(",");
     const URL = `https://api.open-meteo.com/v1/forecast?latitude=${geos[0]}&longitude=${geos[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&forecast_minutely_15=1&timezone=auto&models=best_match`;
     const data = await fetchGetJSON(URL);
     return cleanDataCurrently(data);
-}, "currentWeather")
+})
 
 const cleanDataCurrently = (data: any) => {
     return {
@@ -951,9 +951,8 @@ const cleanDataCurrently = (data: any) => {
     } as CurrentlyWeatherType;
 }
 
-const [minutelyData, setMinutelyData] = createSignal<FixMinutelyTWeatherType[]>([]);
-
-export const getMinutelyWeatherData = async (geostr: string) => {
+export const getMinutelyWeatherData = (async (geostr: string) => {
+    "use server";
     const WEATHER_KEY = import.meta.env.VITE_PIRATE_KEY;
     const URL = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geostr}?&units=ca?exclude=currently,daily,hourly`
     const data = await fetchGetJSON(URL);
@@ -965,12 +964,12 @@ export const getMinutelyWeatherData = async (geostr: string) => {
             probability: item.precipProbability
         }
     })
-    setMinutelyData(result);
     return result as FixMinutelyTWeatherType[];
-}
+})
 
-export const makePrediction = (): string => {
-    let data = minutelyData();
+export const makePrediction = (data?: FixMinutelyTWeatherType[]): string => {
+    "use server";
+    if (!data) return "";
     let lightRainIndex = data.findIndex(
         (item) => item.intensity >= 0.1 && item.probability >= PRECIPITATION_PROBABILITY
     );

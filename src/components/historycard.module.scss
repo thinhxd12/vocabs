@@ -34,15 +34,16 @@
         }
 
         .oddCard {
-            background-color: $color-calendar-bg;
+            // background-color: $color-calendar-bg;
             @include flex-center;
             flex-grow: 1;
         }
 
         .evenCard {
-            background-color: $color-calendar-white;
+            // background-color: $color-calendar-white;
             @include flex-center;
             flex-grow: 1;
+            padding-left: 9px;
         }
 
         .historyCardItemFrom,
