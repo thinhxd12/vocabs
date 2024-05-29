@@ -1,4 +1,4 @@
-import { action, cache, redirect } from "@solidjs/router";
+import { action, cache } from "@solidjs/router";
 import { CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, } from "~/types";
 import { DEFAULT_CORS_PROXY, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import { format } from "date-fns";
@@ -94,27 +94,7 @@ export const getScheduleData = cache(async () => {
     }
 }, "schedule");
 
-//get start index of schedule
-export const getThisWeekData = action(async () => {
-    "use server";
-    const { data, error } = await supabase.from(mapTables.schedule)
-        .select()
-        .order('date');
-    if (error) throw error;
-    if (data) return data[0].index1;
-});
 
-
-//get all history
-export const getCalendarHistoryData = action(async () => {
-    "use server";
-    try {
-        const { data, error } = await supabase.from(mapTables.history).select().order('created_at');
-        return data as HistoryType[];
-    } catch (error) {
-        console.error(error);
-    }
-});
 
 //insert all data table history
 export const uploadObjToSupabase = action(async (objs: Object[]) => {
@@ -583,7 +563,6 @@ export const submitTodayReset = action(async (formData: FormData) => {
         })
         .eq('date', format(new Date().toISOString(), "yyyy-MM-dd"));
     if (error) return { message: error.message };
-    throw redirect("/main/vocabulary");
 }, "todayReset");
 
 
@@ -604,7 +583,6 @@ export const submitNewHistory = action(async (formData: FormData) => {
         })
         .eq('created_at', monthId);
     if (error) return { message: error.message };
-    throw redirect("/main/vocabulary");
 }, "submitNewHistoryMonth");
 
 export const submitNewWeek = action(async (formData: FormData) => {
@@ -627,7 +605,6 @@ export const submitNewWeek = action(async (formData: FormData) => {
             }]);
         if (error) console.log(error);
     }
-    throw redirect("/main/vocabulary");
 }, "startNewWeek");
 
 export const submitNewMonth = action(async (formData: FormData) => {
@@ -644,7 +621,6 @@ export const submitNewMonth = action(async (formData: FormData) => {
         .from(mapTables.history)
         .insert([insertData])
     if (error) console.error(error);
-    throw redirect("/main/vocabulary");
 }, "startMonth");
 
 //handle check vocabulary
@@ -742,10 +718,22 @@ export const updateTodaySchedule = async (type: number, numb: number, day: strin
     if (error) console.error(error);
 };
 
+//get all history
+export const getCalendarHistory = (async () => {
+    "use server";
+    const { data, error } = await supabase.from(mapTables.history).select().order('created_at', { ascending: false });
+    return data as HistoryType[];
+});
 
-
-
-
+//get start index of schedule
+export const getThisWeekIndex = (async () => {
+    "use server";
+    const { data, error } = await supabase.from(mapTables.schedule)
+        .select()
+        .order('date');
+    if (error) throw error;
+    if (data) return data[0].index1 as number;
+});
 
 
 

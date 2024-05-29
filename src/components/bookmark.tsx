@@ -2,6 +2,7 @@ import {
   Component,
   Setter,
   Show,
+  Suspense,
   createResource,
   createSignal,
 } from "solid-js";
@@ -15,31 +16,27 @@ import {
   OcStarfill2,
   OcX2,
 } from "solid-icons/oc";
+import { cache } from "@solidjs/router";
 
 const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const bookmarkUrl = import.meta.env.VITE_BOOKMARK;
 
-  const getBookMarkData = async (num: number) => {
+  const getBookMarkData = cache(async (num: number) => {
     return (await fetch(bookmarkUrl + `getBookmark&num=${num}`)).json();
+  }, "bookmark");
+
+  const [bookmarkId, setBookmarkId] = createSignal<number>(0);
+  const [bookmark, { refetch: refetchBookmark, mutate: mutateBookmark }] =
+    createResource(bookmarkId, getBookMarkData);
+
+  const handleGetNextBookmark = (num: number) => {
+    setBookmarkId(num);
+    refetchBookmark();
   };
 
-  const [bookMarkNum, setbookMarkNum] = createSignal<number>(0);
-  const [bookmarkItem, { refetch, mutate }] = createResource(
-    bookMarkNum,
-    getBookMarkData
-  );
-
-  const getBookMark = (num: number) => {
-    if (num === bookMarkNum()) {
-      refetch();
-      return;
-    }
-    setbookMarkNum(num);
-  };
-
-  const checkBookMark = (val: boolean) => {
+  const handleCheckBookmark = (val: boolean) => {
     fetch(bookmarkUrl + `setBookmark&check=${val}`);
-    mutate((item) => {
+    mutateBookmark((item) => {
       return {
         ...item,
         check: val,
@@ -61,34 +58,29 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         <div class={styles.bookmarkHeaderLeft}>
           <button
             class={buttons.buttonBookmark}
-            onclick={() => getBookMark(-1)}
+            onclick={() => handleGetNextBookmark(-1)}
           >
             <OcChevronleft2 size={17} />
           </button>
           <button
             class={buttons.buttonBookmark}
-            onclick={() => checkBookMark(!bookmarkItem().check)}
+            onclick={() => handleCheckBookmark(!bookmark()?.check)}
           >
-            <Show
-              when={bookmarkItem.loading}
-              fallback={
-                <Show
-                  when={bookmarkItem().check}
-                  fallback={<OcStar2 size={17} />}
-                >
-                  <OcStarfill2 size={17} color="#ffc107" />
-                </Show>
-              }
-            >
-              <OcStar2 size={17} />
-            </Show>
+            <Suspense fallback={<OcStar2 size={17} />}>
+              <Show when={bookmark()?.check} fallback={<OcStar2 size={17} />}>
+                <OcStarfill2 size={17} color="#ffc107" />
+              </Show>
+            </Suspense>
           </button>
-          <button class={buttons.buttonBookmark} onclick={() => getBookMark(1)}>
+          <button
+            class={buttons.buttonBookmark}
+            onclick={() => handleGetNextBookmark(1)}
+          >
             <OcChevronright2 size={17} />
           </button>
           <button
             class={buttons.buttonBookmark}
-            onclick={() => copyBookMarkToClipboard(bookmarkItem().value)}
+            onclick={() => copyBookMarkToClipboard(bookmark()?.value)}
           >
             <OcCopy2 size={14} />
           </button>
@@ -100,22 +92,17 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         </div>
       </div>
 
-      <Show
-        when={bookmarkItem.loading}
-        fallback={
-          <div
-            class={
-              bookmarkItem().check
-                ? styles.bookmarkBodyChecked
-                : styles.bookmarkBody
-            }
-          >
-            <p class={styles.bookmarkPassage}>{bookmarkItem().value}</p>
-          </div>
-        }
+      <Suspense
+        fallback={<p class={styles.bookmarkLoading}>loading bookmark...</p>}
       >
-        <p class={styles.bookmarkLoading}>loading...</p>
-      </Show>
+        <div
+          class={
+            bookmark()?.check ? styles.bookmarkBodyChecked : styles.bookmarkBody
+          }
+        >
+          <p class={styles.bookmarkPassage}>{bookmark()?.value}</p>
+        </div>
+      </Suspense>
     </div>
   );
 };

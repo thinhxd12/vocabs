@@ -9,9 +9,9 @@ import {
   onMount,
 } from "solid-js";
 import {
-  getCalendarHistoryData,
+  getCalendarHistory,
   getScheduleData,
-  getThisWeekData,
+  getThisWeekIndex,
   submitNewHistory,
   submitNewMonth,
   submitNewWeek,
@@ -19,8 +19,6 @@ import {
 } from "~/lib/api";
 
 import { HistoryType } from "~/types";
-import { createSlider } from "solid-slider";
-const HistoryCard = lazy(() => import("~/components/historycard"));
 const CalendarDropdown = lazy(() => import("~/components/calendardropdown"));
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
@@ -30,8 +28,8 @@ import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
 import { RouteDefinition, createAsync, useAction } from "@solidjs/router";
-
-let ref: HTMLDivElement;
+import HistoryCard from "~/components/historycard";
+import { mainStore, setMainStore } from "~/lib/mystore";
 
 export const route = {
   load() {
@@ -44,52 +42,43 @@ const Calendar: Component<{}> = (props) => {
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
-  const [historyData, setHistoryData] = createSignal<HistoryType[]>();
   const schedule = createAsync(() => getScheduleData(), {
     deferStream: true,
   });
 
-  const getCalendarHistoryDataAction = useAction(getCalendarHistoryData);
+  mainStore.historyList.length === 0 &&
+    createAsync(
+      () =>
+        getCalendarHistory().then((data) => {
+          if (data) setMainStore("historyList", data);
+        }),
+      {
+        deferStream: true,
+      }
+    );
+
+  !mainStore.thisWeekIndex &&
+    createAsync(
+      () =>
+        getThisWeekIndex().then((data) => {
+          if (data) setMainStore("thisWeekIndex", data + 1);
+        }),
+      {
+        deferStream: true,
+      }
+    );
+
+  const handleUpdateHistoryList = () => {
+    setTimeout(async () => {
+      const data = await getCalendarHistory();
+      if (data) setMainStore("historyList", data);
+    }, 1000);
+    setShowNewWeek(false);
+    setShowNewHistory(false);
+    setShowNewMonth(false);
+  };
+
   const [todayDate] = createSignal<Date>(new Date());
-  const [weekIndex, setWeekIndex] = createSignal<number>(0);
-
-  const getThisWeekDataAction = useAction(getThisWeekData);
-
-  const options = {
-    duration: 1000,
-    loop: true,
-    initial: -1,
-  };
-  const [slider, { current, next, prev, moveTo }] = createSlider(options);
-
-  onMount(async () => {
-    //******get calendar history
-    await getCalendarHistoryDataFromStorage();
-
-    //******set slider
-    slider(ref);
-
-    //******get calendarImageContent
-    getThisWeekDataFromStorage();
-  });
-
-  const getCalendarHistoryDataFromStorage = async () => {
-    const data = sessionStorage.getItem("history");
-    if (data === null || JSON.parse(data).length === 0) {
-      const result = await getCalendarHistoryDataAction();
-      setHistoryData(result);
-      sessionStorage.setItem("history", JSON.stringify(result));
-    } else setHistoryData(JSON.parse(data));
-  };
-
-  const getThisWeekDataFromStorage = async () => {
-    const data = sessionStorage.getItem("week");
-    if (data === null) {
-      const result = await getThisWeekDataAction();
-      setWeekIndex(result);
-      sessionStorage.setItem("week", result);
-    } else setWeekIndex(Number(data));
-  };
 
   const CalendarLoading = () => {
     return (
@@ -115,24 +104,10 @@ const Calendar: Component<{}> = (props) => {
 
   // ---------------------POP UP---------------------------
   const [showNewWeek, setShowNewWeek] = createSignal<boolean>(false);
-  const handleShowSetNewWeek = () => {
-    sessionStorage.removeItem("week");
-    setShowNewWeek(true);
-  };
-
   const [showTodayReset, setShowTodayReset] = createSignal<boolean>(false);
-
   const [showNewHistory, setShowNewHistory] = createSignal<boolean>(false);
-  const handleShowSetNewHistory = () => {
-    sessionStorage.removeItem("history");
-    setShowNewHistory(true);
-  };
-
   const [showNewMonth, setShowNewMonth] = createSignal<boolean>(false);
-  const handleShowSetNewMonth = () => {
-    sessionStorage.removeItem("history");
-    setShowNewMonth(true);
-  };
+  // ---------------------POP UP---------------------------
 
   return (
     <MetaProvider>
@@ -141,24 +116,23 @@ const Calendar: Component<{}> = (props) => {
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <div class={styles.calendar}>
         <div class={styles.calendarCard}>
-          <div
-            class={styles.calendarImage}
-            style={{
-              "background-image": `url('/images/main/${format(
-                todayDate(),
-                "M"
-              )}.jpg')`,
-            }}
-          >
+          <div class={styles.calendarImage}>
+            <img src={`/images/main/${format(todayDate(), "M")}.jpg`} />
             <div class={styles.calendarImageContent}>
-              <p class={styles.setNewMonth} onClick={handleShowSetNewMonth}>
+              <p
+                class={styles.setNewMonth}
+                onClick={() => setShowNewMonth(true)}
+              >
                 {format(todayDate(), "MMMM")}
               </p>
-              <p class={styles.setNewWeek} onClick={handleShowSetNewWeek}>
+              <p class={styles.setNewWeek} onClick={() => setShowNewWeek(true)}>
                 {format(todayDate(), "yyyy")}
               </p>
-              <p class={styles.setNewHistory} onClick={handleShowSetNewHistory}>
-                {weekIndex() + 1} &#183; {weekIndex() + 200}
+              <p
+                class={styles.setNewHistory}
+                onClick={() => setShowNewHistory(true)}
+              >
+                {mainStore.thisWeekIndex} &#183; {mainStore.thisWeekIndex + 199}
               </p>
             </div>
           </div>
@@ -251,223 +225,245 @@ const Calendar: Component<{}> = (props) => {
           </div>
         </div>
 
-        <Show when={historyData()}>
-          <div class={styles.calendarHistory} ref={ref}>
-            <Index each={historyData()}>
+        <Suspense>
+          <div class={styles.calendarHistory}>
+            <Index each={mainStore.historyList}>
               {(data, i) => {
-                return <HistoryCard item={data()} />;
+                return (
+                  <HistoryCard
+                    item={data()}
+                    class={i % 2 === 0 ? "oddCard" : "evenCard"}
+                  />
+                );
               }}
             </Index>
           </div>
-        </Show>
+        </Suspense>
 
-        <div class={styles.calendarDropdownContainer}>
-          {/* new week */}
-          <Presence>
-            <Show when={showNewWeek()}>
-              <Motion
-                initial={{ y: "-100%" }}
-                animate={{ y: "0%" }}
-                exit={{ y: "100%" }}
-                transition={{ duration: 0.5 }}
+        {/* new week */}
+        <Presence>
+          <Show when={showNewWeek()}>
+            <Motion
+              initial={{ minHeight: "0px" }}
+              animate={{ minHeight: "85px" }}
+              exit={{ minHeight: "0px" }}
+              transition={{ duration: 0.5 }}
+              class={styles.calendarDropdownContainer}
+            >
+              <CalendarDropdown
+                onClose={setShowNewWeek}
+                header="Set new schedule!"
               >
-                <CalendarDropdown
-                  onClose={setShowNewWeek}
-                  header="Set new schedule!"
+                <form
+                  class={forms.formBody}
+                  action={submitNewWeek}
+                  method="post"
                 >
-                  <form
-                    class={forms.formBody}
-                    action={submitNewWeek}
-                    method="post"
-                  >
-                    <div class={forms.calendarFormGroupContainer}>
-                      <div class={forms.calendarFormInputGroup}>
-                        <input
-                          class={forms.calendarFormInput}
-                          name="startDay"
-                          autocomplete="off"
-                          type="date"
-                        />
-                      </div>
-                      <div class={forms.calendarFormInputGroup}>
-                        <select
-                          class={forms.calendarFormSelect}
-                          name="startIndex"
-                        >
-                          <option value="0">1 - 200</option>
-                          <option value="200">201 - 400</option>
-                          <option value="400">401 - 600</option>
-                          <option value="600">601 - 800</option>
-                          <option value="800">801 - 1000</option>
-                          <option value="1000">1001 - 1200</option>
-                          <option value="1200">1201 - 1400</option>
-                          <option value="1400">1401 - 1600</option>
-                          <option value="1600">1601 - 1800</option>
-                          <option value="1800">1801 - 2000</option>
-                        </select>
-                      </div>
+                  <div class={forms.calendarFormGroupContainer}>
+                    <div class={forms.calendarFormInputGroup}>
+                      <input
+                        class={forms.calendarFormInput}
+                        name="startDay"
+                        autocomplete="off"
+                        type="date"
+                      />
                     </div>
-                    <button class={buttons.buttonSubmit} type="submit">
-                      Submit
-                    </button>
-                  </form>
-                </CalendarDropdown>
-              </Motion>
-            </Show>
-          </Presence>
-          {/* showTodayReset */}
-          <Presence>
-            <Show when={showTodayReset()}>
-              <Motion
-                initial={{ y: "-100%" }}
-                animate={{ y: "0%" }}
-                exit={{ y: "100%" }}
-                transition={{ duration: 0.5 }}
+                    <div class={forms.calendarFormInputGroup}>
+                      <select
+                        class={forms.calendarFormSelect}
+                        name="startIndex"
+                      >
+                        <option value="0">1 - 200</option>
+                        <option value="200">201 - 400</option>
+                        <option value="400">401 - 600</option>
+                        <option value="600">601 - 800</option>
+                        <option value="800">801 - 1000</option>
+                        <option value="1000">1001 - 1200</option>
+                        <option value="1200">1201 - 1400</option>
+                        <option value="1400">1401 - 1600</option>
+                        <option value="1600">1601 - 1800</option>
+                        <option value="1800">1801 - 2000</option>
+                      </select>
+                    </div>
+                  </div>
+                  <button
+                    class={buttons.buttonSubmit}
+                    type="submit"
+                    onClick={handleUpdateHistoryList}
+                  >
+                    Submit
+                  </button>
+                </form>
+              </CalendarDropdown>
+            </Motion>
+          </Show>
+        </Presence>
+        {/* showTodayReset */}
+        <Presence>
+          <Show when={showTodayReset()}>
+            <Motion
+              initial={{ minHeight: "0px" }}
+              animate={{ minHeight: "85px" }}
+              exit={{ minHeight: "0px" }}
+              transition={{ duration: 0.5 }}
+              class={styles.calendarDropdownContainer}
+            >
+              <CalendarDropdown
+                onClose={setShowTodayReset}
+                header="Reset today schedule!"
               >
-                <CalendarDropdown
-                  onClose={setShowTodayReset}
-                  header="Reset today schedule!"
+                <form
+                  class={forms.formBody}
+                  action={submitTodayReset}
+                  method="post"
                 >
-                  <form
-                    class={forms.formBody}
-                    action={submitTodayReset}
-                    method="post"
-                  >
-                    <div class={forms.calendarFormGroupContainer}>
-                      <div class={forms.calendarFormInputGroup}>
-                        <input
-                          class={forms.calendarFormInput}
-                          name="todayIndex1"
-                          autocomplete="off"
-                          type="number"
-                          max={9}
-                          min={0}
-                        />
-                      </div>
-                      <div class={forms.calendarFormInputGroup}>
-                        <input
-                          class={forms.calendarFormInput}
-                          name="todayIndex2"
-                          autocomplete="off"
-                          type="number"
-                          max={9}
-                          min={0}
-                        />
-                      </div>
+                  <div class={forms.calendarFormGroupContainer}>
+                    <div class={forms.calendarFormInputGroup}>
+                      <input
+                        class={forms.calendarFormInput}
+                        name="todayIndex1"
+                        autocomplete="off"
+                        type="number"
+                        min={0}
+                      />
                     </div>
-                    <button class={buttons.buttonSubmit} type="submit">
-                      Submit
-                    </button>
-                  </form>
-                </CalendarDropdown>
-              </Motion>
-            </Show>
-          </Presence>
-          {/* showNewHistory */}
-          <Presence>
-            <Show when={showNewHistory()}>
-              <Motion
-                initial={{ y: "-100%" }}
-                animate={{ y: "0%" }}
-                exit={{ y: "100%" }}
-                transition={{ duration: 0.5 }}
+                    <div class={forms.calendarFormInputGroup}>
+                      <input
+                        class={forms.calendarFormInput}
+                        name="todayIndex2"
+                        autocomplete="off"
+                        type="number"
+                        min={0}
+                      />
+                    </div>
+                  </div>
+                  <button
+                    class={buttons.buttonSubmit}
+                    type="submit"
+                    onClick={() => setShowTodayReset(false)}
+                  >
+                    Submit
+                  </button>
+                </form>
+              </CalendarDropdown>
+            </Motion>
+          </Show>
+        </Presence>
+        {/* showNewHistory */}
+        <Presence>
+          <Show when={showNewHistory()}>
+            <Motion
+              initial={{ minHeight: "0px" }}
+              animate={{ minHeight: "85px" }}
+              exit={{ minHeight: "0px" }}
+              transition={{ duration: 0.5 }}
+              class={styles.calendarDropdownContainer}
+            >
+              <CalendarDropdown
+                onClose={setShowNewHistory}
+                header="Set new history row!"
               >
-                <CalendarDropdown
-                  onClose={setShowNewHistory}
-                  header="Set new history row!"
+                <form
+                  class={forms.formBody}
+                  action={submitNewHistory}
+                  method="post"
                 >
-                  <form
-                    class={forms.formBody}
-                    action={submitNewHistory}
-                    method="post"
-                  >
-                    <input
-                      name="monthId"
-                      value={historyData()!.pop()!.created_at}
-                      style={{ display: "none" }}
-                    />
-                    <div class={forms.calendarFormGroupContainer}>
-                      <div class={forms.calendarFormInputGroup}>
-                        <select
-                          class={forms.calendarFormSelect}
-                          name="indexWeek"
-                          value={weekIndex() + 1}
-                        >
-                          <option value="1">1 - 200</option>
-                          <option value="201">201 - 400</option>
-                          <option value="401">401 - 600</option>
-                          <option value="601">601 - 800</option>
-                          <option value="801">801 - 1000</option>
-                          <option value="1001">1001 - 1200</option>
-                          <option value="1201">1201 - 1400</option>
-                          <option value="1401">1401 - 1600</option>
-                          <option value="1601">1601 - 1800</option>
-                          <option value="1801">1801 - 2000</option>
-                        </select>
-                      </div>
-                      <div class={forms.calendarFormInputGroup}>
-                        <input
-                          class={forms.calendarFormInputDate}
-                          name="fromDate"
-                          autocomplete="off"
-                          type="date"
-                        />
-                      </div>
-                      <div class={forms.calendarFormInputGroup}>
-                        <input
-                          class={forms.calendarFormInput}
-                          name="toDate"
-                          autocomplete="off"
-                          type="date"
-                        />
-                      </div>
+                  <input
+                    name="monthId"
+                    value={mainStore.historyList[0].created_at}
+                    style={{ display: "none" }}
+                  />
+                  <div class={forms.calendarFormGroupContainer}>
+                    <div class={forms.calendarFormInputGroup}>
+                      <select
+                        class={forms.calendarFormSelect}
+                        name="indexWeek"
+                        value={mainStore.thisWeekIndex}
+                      >
+                        <option value="1">1 - 200</option>
+                        <option value="201">201 - 400</option>
+                        <option value="401">401 - 600</option>
+                        <option value="601">601 - 800</option>
+                        <option value="801">801 - 1000</option>
+                        <option value="1001">1001 - 1200</option>
+                        <option value="1201">1201 - 1400</option>
+                        <option value="1401">1401 - 1600</option>
+                        <option value="1601">1601 - 1800</option>
+                        <option value="1801">1801 - 2000</option>
+                      </select>
                     </div>
-                    <button class={buttons.buttonSubmit} type="submit">
-                      Submit
-                    </button>
-                  </form>
-                </CalendarDropdown>
-              </Motion>
-            </Show>
-          </Presence>
-          {/* showNewMonth */}
-          <Presence>
-            <Show when={showNewMonth()}>
-              <Motion
-                initial={{ y: "-100%" }}
-                animate={{ y: "0%" }}
-                exit={{ y: "100%" }}
-                transition={{ duration: 0.5 }}
+                    <div class={forms.calendarFormInputGroup}>
+                      <input
+                        class={forms.calendarFormInputDate}
+                        name="fromDate"
+                        autocomplete="off"
+                        type="date"
+                      />
+                    </div>
+                    <div class={forms.calendarFormInputGroup}>
+                      <input
+                        class={forms.calendarFormInput}
+                        name="toDate"
+                        autocomplete="off"
+                        type="date"
+                      />
+                    </div>
+                  </div>
+                  <button
+                    class={buttons.buttonSubmit}
+                    type="submit"
+                    onClick={handleUpdateHistoryList}
+                  >
+                    Submit
+                  </button>
+                </form>
+              </CalendarDropdown>
+            </Motion>
+          </Show>
+        </Presence>
+        {/* showNewMonth */}
+        <Presence>
+          <Show when={showNewMonth()}>
+            <Motion
+              initial={{ minHeight: "0px" }}
+              animate={{ minHeight: "85px" }}
+              exit={{ minHeight: "0px" }}
+              transition={{ duration: 0.5 }}
+              class={styles.calendarDropdownContainer}
+            >
+              <CalendarDropdown
+                onClose={setShowNewMonth}
+                header="Set new history slide!"
               >
-                <CalendarDropdown
-                  onClose={setShowNewMonth}
-                  header="Set new history slide!"
+                <form
+                  class={styles.calendarDropdownForm}
+                  action={submitNewMonth}
+                  method="post"
                 >
-                  <form
-                    class={styles.calendarDropdownForm}
-                    action={submitNewMonth}
-                    method="post"
-                  >
-                    <div class={forms.calendarFormGroupContainer}>
-                      <div class={forms.calendarFormInputGroup}>
-                        <select
-                          class={forms.calendarFormSelect}
-                          name="startMonthIndex"
-                        >
-                          <option value="1">1 - 1000</option>
-                          <option value="1001">1001 - 2000</option>
-                        </select>
-                      </div>
+                  <div class={forms.calendarFormGroupContainer}>
+                    <div class={forms.calendarFormInputGroup}>
+                      <select
+                        class={forms.calendarFormSelect}
+                        name="startMonthIndex"
+                      >
+                        <option value="1">1 - 1000</option>
+                        <option value="1001">1001 - 2000</option>
+                      </select>
                     </div>
-                    <button class={buttons.buttonSubmit} type="submit">
-                      Submit
-                    </button>
-                  </form>
-                </CalendarDropdown>
-              </Motion>
-            </Show>
-          </Presence>
-        </div>
+                  </div>
+
+                  <button
+                    class={buttons.buttonSubmit}
+                    type="submit"
+                    onClick={handleUpdateHistoryList}
+                  >
+                    Submit
+                  </button>
+                </form>
+              </CalendarDropdown>
+            </Motion>
+          </Show>
+        </Presence>
         <div class={styles.calendarQuote}>
           The tree that is supposed to grow to a proud height can dispense with
           bad weather and storms. Whether misfortune and external resistance,

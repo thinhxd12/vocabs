@@ -1,7 +1,7 @@
 import { createAsync } from "@solidjs/router";
 import { createStore } from "solid-js/store";
 import { getTotalMemories } from "~/lib/api";
-import { ScheduleType, VocabularyType } from "~/types";
+import { HistoryType, ScheduleType, VocabularyType } from "~/types";
 
 type ListStoreType = {
   listType: 0 | 1 | 2;
@@ -32,6 +32,8 @@ type MainStoreType = {
   showBookmark: boolean;
   showTranslate: boolean;
   renderWord: VocabularyType | null;
+  historyList: HistoryType[];
+  thisWeekIndex: number;
 }
 
 export const [mainStore, setMainStore] = createStore<MainStoreType>({
@@ -39,7 +41,9 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   audioSrc: "",
   showBookmark: false,
   showTranslate: false,
-  renderWord: null
+  renderWord: null,
+  historyList: [],
+  thisWeekIndex: 0
 })
 
 

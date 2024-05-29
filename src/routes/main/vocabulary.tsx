@@ -22,8 +22,6 @@ import { Meta, MetaProvider, Title } from "@solidjs/meta";
 const Translation = lazy(() => import("~/components/translation"));
 const Edit = lazy(() => import("~/components/edit"));
 const Bookmark = lazy(() => import("~/components/bookmark"));
-const Definition = lazy(() => import("~/components/definition"));
-const FlipCard = lazy(() => import("~/components/flipcard"));
 import { BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { format } from "date-fns";
@@ -31,6 +29,8 @@ import styles from "./vocabulary.module.scss";
 import { getUser } from "~/lib";
 import { RouteDefinition, createAsync } from "@solidjs/router";
 import { mainStore, setListStore, setMainStore } from "~/lib/mystore";
+import FlipCard from "~/components/flipcard";
+import Definition from "~/components/definition";
 
 const todayDate = format(new Date(), "yyyy-MM-dd");
 export const route = {
@@ -201,11 +201,9 @@ const Vocabulary: Component<{}> = () => {
           onKeyDown={onKeyDownDiv}
           class={styles.vocabulary}
         >
-          <Suspense>
-            <div class={styles.flashCardContainer}>
-              <FlipCard item={mainStore.renderWord!} />
-            </div>
-          </Suspense>
+          <div class={styles.flashCardContainer}>
+            <FlipCard item={mainStore.renderWord!} />
+          </div>
 
           <Show
             when={isMobile()}
@@ -318,12 +316,12 @@ const Vocabulary: Component<{}> = () => {
             </Show>
 
             {/* Definition */}
-            <Suspense>
+            <Show when={mainStore.renderWord}>
               <Definition
                 item={mainStore.renderWord!}
                 onEdit={handleEditFromDefinition}
               />
-            </Suspense>
+            </Show>
           </div>
         </div>
         {/* Edit */}

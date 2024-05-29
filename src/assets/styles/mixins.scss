@@ -10,7 +10,7 @@ $color-red-1: #f90000;
 $color-red-2: #de0000;
 $color-red-3: #ca140c;
 $color-red-4: #d35542;
-$color-calendar-bg: rgba(255, 255, 255, 0.96);
+$color-calendar-bg: #fffffff5;
 $color-calendar-white: #f4f4f4;
 $color-calendar-black: #161616;
 $color-calendar-border: #16161633;
@@ -104,7 +104,14 @@ $color-vintage-background: #fffeff;
 // -------------------RESPONSIVE START-------------------- //
 @media only screen and (max-width: 960px) {}
 
-@media only screen and (max-width: 650px) {}
+@media only screen and (max-width: 550px) {
+
+  .mainButtons,
+  .mainLeft,
+  .mainRight {
+    display: none;
+  }
+}
 
 // -------------------RESPONSIVE END-------------------- //
 

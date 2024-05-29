@@ -165,7 +165,8 @@ const Weather: Component<{}> = (props) => {
   };
 
   onMount(async () => {
-    loadTextures();
+    const dpi = window.devicePixelRatio;
+    loadTextures(dpi);
     Chart.register(Title, Tooltip, Legend, Colors, Filler);
     await handleGetWeatherData(WEATHER_GEOS[0].geo);
     audio.volume = 0.5;
@@ -359,7 +360,7 @@ const Weather: Component<{}> = (props) => {
     textureBgCtx.drawImage(bg, 0, 0, textureBgSize.width, textureBgSize.height);
   };
 
-  const loadTextures = async () => {
+  const loadTextures = async (dpi: number) => {
     const dropAlpha = loadImage("/images/openmeteo/drop-alpha.png");
     const dropColor = loadImage("/images/openmeteo/drop-color.png");
 
@@ -378,7 +379,7 @@ const Weather: Component<{}> = (props) => {
       textureNightBg,
     ]);
 
-    const dpi = window.devicePixelRatio;
+    // const dpi = window.devicePixelRatio;
 
     let canvasWidth = 360;
     let canvasHeight = window.innerHeight - 34;
