@@ -125,7 +125,7 @@ const Calendar: Component<{}> = (props) => {
       <div class={styles.calendar}>
         <div class={styles.calendarCard}>
           <div class={styles.calendarImage}>
-            <img src={`/images/main/${format(todayDate(), "M")}.jpg`} />
+            <img src={`/images/main/${format(todayDate(), "M")}.jpg`} width={360} height={240}/>
             <div class={styles.calendarImageContent}>
               <p
                 class={styles.setNewMonth}

@@ -227,6 +227,7 @@ const Vocabulary: Component<{}> = () => {
               <img
                 src="/images/main/input-left-corner.png"
                 class={styles.myInputLeftOrnament}
+                height={38}
               />
               <div class={styles.myInputCenterContent}>
                 <input
@@ -238,6 +239,7 @@ const Vocabulary: Component<{}> = () => {
               <img
                 src="/images/main/input-right-corner.png"
                 class={styles.myInputRightOrnament}
+                height={38}
               />
               <img
                 src="/images/main/center.png"
