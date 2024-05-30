@@ -109,7 +109,7 @@ $color-vintage-background: #fffeff;
   .mainButtons,
   .mainLeft,
   .mainRight {
-    display: none;
+    display: none !important;
   }
 }
 

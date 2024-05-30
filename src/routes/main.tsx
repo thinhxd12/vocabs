@@ -44,14 +44,7 @@ const MainLayout = (props: RouteSectionProps) => {
     return result;
   };
 
-  const [isMobile, setIsMobile] = createSignal(false);
-
   onMount(() => {
-    setIsMobile(
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      )
-    );
     getWakeup();
     setInterval(() => {
       getWakeup();
@@ -88,65 +81,60 @@ const MainLayout = (props: RouteSectionProps) => {
 
   return (
     <div class={styles.main}>
-      <Show when={!isMobile()}>
-        <div class={styles.mainButtons}>
-          <button onClick={changeToggle} class={styles.mainButton}>
-            <Show
-              when={toggleMainPage()}
-              fallback={<VsLayoutCentered size={17} />}
-            >
-              <VsLayoutActivitybarRight size={17} />
-            </Show>
-          </button>
-          <button onClick={handleGetNextImage} class={styles.mainButton}>
-            <TbRefresh size={17} />
-          </button>
-        </div>
-        <Motion.div
-          class={styles.mainLeft}
-          animate={{
-            width: toggleMainPage()
-              ? "calc(100vw - 660px)"
-              : "calc(50vw - 180px)",
-            opacity: toggleMainPage() ? 1 : 0,
-          }}
-          transition={{ duration: 0.3 }}
-        >
-          <img class={styles.mainLeftImage} src={imageObj.image} />
-          <img class={styles.mainLeftImageBlurred} src={imageObj.image} />
-        </Motion.div>
-      </Show>
+      <div class={styles.mainButtons}>
+        <button onClick={changeToggle} class={styles.mainButton}>
+          <Show
+            when={toggleMainPage()}
+            fallback={<VsLayoutCentered size={17} />}
+          >
+            <VsLayoutActivitybarRight size={17} />
+          </Show>
+        </button>
+        <button onClick={handleGetNextImage} class={styles.mainButton}>
+          <TbRefresh size={17} />
+        </button>
+      </div>
+      <Motion.div
+        class={styles.mainLeft}
+        animate={{
+          width: toggleMainPage()
+            ? "calc(100vw - 660px)"
+            : "calc(50vw - 180px)",
+          opacity: toggleMainPage() ? 1 : 0,
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        <img class={styles.mainLeftImage} src={imageObj.image} />
+        <img class={styles.mainLeftImageBlurred} src={imageObj.image} />
+      </Motion.div>
 
       <div class={styles.mainCenter}>
         {props.children}
         <Bottom />
       </div>
 
-      <Show when={!isMobile()}>
-        <Motion.div
-          class={styles.mainRight}
-          animate={{
-            width: toggleMainPage() ? "300px" : "calc(50vw - 180px)",
-            opacity: toggleMainPage() ? 1 : 0,
-            display: isMobile() ? "none" : "unset",
-          }}
-          transition={{ duration: 0.3 }}
-        >
-          <div class={styles.mainRightHeader}>
-            <p class={styles.mainRightDate}>{imageObj.date}</p>
-            <h3 class={styles.mainRightTitle}>{imageObj.title}</h3>
-            <p class={styles.mainRightAttribute}>{imageObj.attr}</p>
-            <div class={styles.mainRightAuthors}>
-              <img class={styles.mainRightImage} src={imageObj.authorImg} />
-              <div class={styles.mainRightAuthor}>
-                <p class={styles.mainRightName}>{imageObj.authorName}</p>
-                <p class={styles.mainRightYear}>{imageObj.authorYear}</p>
-              </div>
+      <Motion.div
+        class={styles.mainRight}
+        animate={{
+          width: toggleMainPage() ? "300px" : "calc(50vw - 180px)",
+          opacity: toggleMainPage() ? 1 : 0,
+        }}
+        transition={{ duration: 0.3 }}
+      >
+        <div class={styles.mainRightHeader}>
+          <p class={styles.mainRightDate}>{imageObj.date}</p>
+          <h3 class={styles.mainRightTitle}>{imageObj.title}</h3>
+          <p class={styles.mainRightAttribute}>{imageObj.attr}</p>
+          <div class={styles.mainRightAuthors}>
+            <img class={styles.mainRightImage} src={imageObj.authorImg} />
+            <div class={styles.mainRightAuthor}>
+              <p class={styles.mainRightName}>{imageObj.authorName}</p>
+              <p class={styles.mainRightYear}>{imageObj.authorYear}</p>
             </div>
           </div>
-          <div class={styles.mainRightBody} innerHTML={imageObj.content} />
-        </Motion.div>
-      </Show>
+        </div>
+        <div class={styles.mainRightBody} innerHTML={imageObj.content} />
+      </Motion.div>
     </div>
   );
 };

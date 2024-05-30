@@ -2,21 +2,16 @@
 
 
 .historyCard {
-    max-width: 360px;
+    min-width: 360px;
+    width: 360px;
     overflow: hidden;
-    border-top: 1px solid $color-black;
     scroll-snap-align: start;
-    padding-bottom: 2px;
-
-    &:last-child {
-        border-bottom: 1px solid $color-black;
-    }
 
     .historyCardItem {
         width: 360px;
         padding: 0 3px;
         display: flex;
-        margin-top: 2px;
+        margin: 1px 0;
 
         .historyCardItemDesc {
             background: $color-calendar-black;

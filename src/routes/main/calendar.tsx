@@ -1,4 +1,12 @@
-import { Component, Index, Show, Suspense, createSignal, lazy } from "solid-js";
+import {
+  Component,
+  Index,
+  Show,
+  Suspense,
+  createSignal,
+  lazy,
+  onMount,
+} from "solid-js";
 import {
   getCalendarHistory,
   getScheduleData,
@@ -26,6 +34,7 @@ export const route = {
     getScheduleData();
   },
 } satisfies RouteDefinition;
+let refEl: HTMLDivElement;
 
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
@@ -98,6 +107,15 @@ const Calendar: Component<{}> = (props) => {
   const [showNewHistory, setShowNewHistory] = createSignal<boolean>(false);
   const [showNewMonth, setShowNewMonth] = createSignal<boolean>(false);
   // ---------------------POP UP---------------------------
+
+  onMount(() => {
+    refEl.addEventListener("wheel", (event) => {
+      event.preventDefault();
+      refEl.scrollBy({
+        left: event.deltaY < 0 ? -60 : 60,
+      });
+    });
+  });
 
   return (
     <MetaProvider>
@@ -216,7 +234,7 @@ const Calendar: Component<{}> = (props) => {
         </div>
 
         <Suspense>
-          <div class={styles.calendarHistory}>
+          <div class={styles.calendarHistory} ref={refEl}>
             <Index each={mainStore.historyList}>
               {(data, i) => {
                 return (
