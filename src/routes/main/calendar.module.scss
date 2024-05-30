@@ -18,14 +18,14 @@
 
     .calendarImage {
         position: relative;
-        text-align: center;
         height: 240px;
         width: 360px;
-        background-size: cover;
-        background-position: right bottom;
         overflow: hidden;
 
         img {
+            position: absolute;
+            top: 0;
+            left: 0;
             object-fit: cover;
         }
 
@@ -72,6 +72,7 @@
         background: $color-calendar-bg;
         padding: 6px;
         width: 360px;
+        overflow-x: hidden;
 
         .calendarWeek {
             @include flex-center;

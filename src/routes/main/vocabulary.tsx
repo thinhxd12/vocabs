@@ -244,6 +244,7 @@ const Vocabulary: Component<{}> = () => {
               <img
                 src="/images/main/center.png"
                 class={styles.myInputButton}
+                height={24}
                 onClick={() => {
                   setSearchResult([]);
                   setSearchTerm("");
