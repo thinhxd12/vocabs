@@ -34,6 +34,7 @@ type MainStoreType = {
   renderWord: VocabularyType | null;
   historyList: HistoryType[];
   thisWeekIndex: number;
+  mainToggle: boolean;
 }
 
 export const [mainStore, setMainStore] = createStore<MainStoreType>({
@@ -43,7 +44,8 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   showTranslate: false,
   renderWord: null,
   historyList: [],
-  thisWeekIndex: 0
+  thisWeekIndex: 0,
+  mainToggle: false,
 })
 
 

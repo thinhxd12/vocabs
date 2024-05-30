@@ -9,6 +9,7 @@ import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
 import { format } from "date-fns";
 import styles from "./main.module.scss";
+import { mainStore, setMainStore } from "~/lib/mystore";
 
 const MainLayout = (props: RouteSectionProps) => {
   const getDataImageAction = useAction(getDataImage);
@@ -51,11 +52,11 @@ const MainLayout = (props: RouteSectionProps) => {
     }, 840000);
   });
 
-  const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
+  // const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
 
-  const changeToggle = () => {
-    setToggleMainPage(!toggleMainPage());
-  };
+  // const changeToggle = () => {
+  //   setToggleMainPage(!toggleMainPage());
+  // };
 
   const handleGetNextImage = () => {
     getNextImageData(imageObj.nextImageUrl!);
@@ -82,9 +83,12 @@ const MainLayout = (props: RouteSectionProps) => {
   return (
     <div class={styles.main}>
       <div class={styles.mainButtons}>
-        <button onClick={changeToggle} class={styles.mainButton}>
+        <button
+          onClick={() => setMainStore("mainToggle", !mainStore.mainToggle)}
+          class={styles.mainButton}
+        >
           <Show
-            when={toggleMainPage()}
+            when={mainStore.mainToggle}
             fallback={<VsLayoutCentered size={17} />}
           >
             <VsLayoutActivitybarRight size={17} />
@@ -97,10 +101,10 @@ const MainLayout = (props: RouteSectionProps) => {
       <Motion.div
         class={styles.mainLeft}
         animate={{
-          width: toggleMainPage()
+          width: mainStore.mainToggle
             ? "calc(100vw - 660px)"
             : "calc(50vw - 180px)",
-          opacity: toggleMainPage() ? 1 : 0,
+          opacity: mainStore.mainToggle ? 1 : 0,
         }}
         transition={{ duration: 0.3 }}
       >
@@ -116,8 +120,8 @@ const MainLayout = (props: RouteSectionProps) => {
       <Motion.div
         class={styles.mainRight}
         animate={{
-          width: toggleMainPage() ? "300px" : "calc(50vw - 180px)",
-          opacity: toggleMainPage() ? 1 : 0,
+          width: mainStore.mainToggle ? "300px" : "calc(50vw - 180px)",
+          opacity: mainStore.mainToggle ? 1 : 0,
         }}
         transition={{ duration: 0.3 }}
       >

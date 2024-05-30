@@ -158,7 +158,7 @@ const Calendar: Component<{}> = (props) => {
               <div class={styles.calendarWeekTitle}>Fri</div>
               <div class={styles.calendarWeekTitle}>Sat</div>
             </div>
-            <Show when={schedule()} fallback={<CalendarLoading />}>
+            <Suspense fallback={<CalendarLoading />}>
               <Index each={schedule()}>
                 {(data, i) => {
                   return (
@@ -233,7 +233,7 @@ const Calendar: Component<{}> = (props) => {
                   );
                 }}
               </Index>
-            </Show>
+            </Suspense>
           </div>
         </div>
 
