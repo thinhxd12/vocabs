@@ -1,5 +1,5 @@
 import { action, cache } from "@solidjs/router";
-import { CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, } from "~/types";
+import { BookmarkType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, } from "~/types";
 import { DEFAULT_CORS_PROXY, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import { format } from "date-fns";
 import { parse } from 'node-html-parser';
@@ -734,7 +734,88 @@ export const getThisWeekIndex = (async () => {
     if (data) return data[0].index1 as number;
 });
 
+export const getBookMarkData = (async () => {
+    "use server";
+    const { data, error } = await supabase.from(mapTables.bookmarks)
+        .select()
+        .eq('selected', true);
+    if (data) return data[0] as BookmarkType;
+});
 
+export const getNextBookMarkData = (async (cur: string) => {
+    "use server";
+    const { data, error } = await supabase.from(mapTables.bookmarks)
+        .select()
+        .gt('created_at', cur)
+        .order('created_at', { ascending: true })
+        .limit(1)
+    if (error) return undefined;
+    if (data.length > 0) {
+        selectBookMarkData(cur, false);
+        selectBookMarkData(data[0].created_at, true);
+        return data[0] as BookmarkType;
+    }
+});
+
+export const getPrevBookMarkData = (async (cur: string) => {
+    "use server";
+    const { data, error } = await supabase.from(mapTables.bookmarks)
+        .select()
+        .lt('created_at', cur)
+        .order('created_at', { ascending: false })
+        .limit(1)
+    if (error) return undefined;
+    if (data.length > 0) {
+        selectBookMarkData(cur, false);
+        selectBookMarkData(data[0].created_at, true);
+        return data[0] as BookmarkType;
+    }
+});
+
+export const checkBookMarkData = (async (id: string, val: boolean) => {
+    "use server";
+    const { error } = await supabase
+        .from(mapTables.bookmarks)
+        .update({
+            checked: val
+        })
+        .eq('created_at', id);
+});
+
+const selectBookMarkData = (async (id: string, val: boolean) => {
+    "use server";
+    const { error } = await supabase
+        .from(mapTables.bookmarks)
+        .update({
+            selected: val
+        })
+        .eq('created_at', id);
+});
+
+export const insertBookmarkData = action(async (formData: FormData) => {
+    "use server";
+    const doc = String(formData.get("bookmarks"));
+    const data = JSON.parse(doc);
+    for (let i = 0; i < data.length; i++) {
+        const row = data[i]
+        const { error } = await supabase
+            .from(mapTables.bookmarks)
+            .insert([row])
+        if (error) console.log('Error:', error)
+    }
+}, "insert bookmark")
+
+export const updateBookmarkData = action(async (formData: FormData) => {
+    "use server";
+    const id = String(formData.get("id"));
+    const doc = String(formData.get("bookmarks"));
+    const { error } = await supabase
+        .from(mapTables.bookmarks)
+        .update({
+            content: doc
+        })
+        .eq('created_at', id);
+}, "insert bookmark")
 
 
 
@@ -954,7 +1035,7 @@ const cleanDataCurrently = (data: any) => {
 export const getMinutelyWeatherData = (async (geostr: string) => {
     "use server";
     const WEATHER_KEY = import.meta.env.VITE_PIRATE_KEY;
-    const URL = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geostr}?&units=ca?exclude=currently,daily,hourly`
+    const URL = `https://api.pirateweather.net/forecast/${WEATHER_KEY}/${geostr}?exclude=currently,daily,hourly&units=ca`
     const data = await fetchGetJSON(URL);
     const zerotime = data.minutely.data[0].time;
     const result = data.minutely.data.map((item: MinutelyWeatherType) => {
@@ -967,7 +1048,7 @@ export const getMinutelyWeatherData = (async (geostr: string) => {
     return result as FixMinutelyTWeatherType[];
 })
 
-export const makePrediction = (data?: FixMinutelyTWeatherType[]): string => {
+export const makePrediction = async (data?: FixMinutelyTWeatherType[]) => {
     "use server";
     if (!data) return "";
     let lightRainIndex = data.findIndex(
@@ -1022,37 +1103,34 @@ export const makePrediction = (data?: FixMinutelyTWeatherType[]): string => {
         }
     }
 
-    function createText() {
-        switch (mainItem.type) {
-            case "No rain":
-                return `Next hour: No rain anywhere in the area.`;
-            case "Light rain":
-                return `Light rain ${makeText(mainItem.start, mainItem.end)}`;
-            case "Rain":
-                return `Rain ${makeText(mainItem.start, mainItem.end)}`;
-            case "Heavy rain":
-                return `Heavy rain ${makeText(mainItem.start, mainItem.end)}`;
-            default:
-                return "";
-        }
+    switch (mainItem.type) {
+        case "No rain":
+            return `Next hour: No rain anywhere in the area.`;
+        case "Light rain":
+            return `Light rain ${makeText(mainItem.start, mainItem.end)}`;
+        case "Rain":
+            return `Rain ${makeText(mainItem.start, mainItem.end)}`;
+        case "Heavy rain":
+            return `Heavy rain ${makeText(mainItem.start, mainItem.end)}`;
+        default:
+            return "";
     }
-    return createText();
 };
 
 // =====Insert data============
 // export const insertData = async () => {
-//     "use server";
-//     for (let i = 0; i < dataUp.length; i++) {
-//         const row = dataUp[i]
-//         const { error } = await supabase
-//             .from(mapTables.memories)
-//             .insert([row])
+// "use server";
+// for (let i = 0; i < data.length; i++) {
+//     const row = data[i]
+//     const { error } = await supabase
+//         .from("bookmarks")
+//         .insert([row])
 
-//         if (error) console.log('Error:', error)
-//         else console.log(`Row ${i} inserted`)
-//     }
-//     // const { data, error } = await supabase
-//     //     .from(mapTables.memories)
-//     //     .select()
-//     // return data;
+//     if (error) console.log('Error:', error)
+//     else console.log(`Row ${i} inserted`)
+// }
+// const { data, error } = await supabase
+//     .from(mapTables.memories)
+//     .select()
+// return data;
 // }

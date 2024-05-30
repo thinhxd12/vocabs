@@ -4,6 +4,13 @@
 .historyCard {
     max-width: 360px;
     overflow: hidden;
+    border-top: 1px solid $color-black;
+    scroll-snap-align: start;
+    padding-bottom: 2px;
+
+    &:last-child {
+        border-bottom: 1px solid $color-black;
+    }
 
     .historyCardItem {
         width: 360px;
@@ -34,13 +41,11 @@
         }
 
         .oddCard {
-            // background-color: $color-calendar-bg;
             @include flex-center;
             flex-grow: 1;
         }
 
         .evenCard {
-            // background-color: $color-calendar-white;
             @include flex-center;
             flex-grow: 1;
             padding-left: 9px;

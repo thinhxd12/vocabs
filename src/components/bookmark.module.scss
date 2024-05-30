@@ -66,4 +66,16 @@
         background: url("/images/main/paper.jpeg");
         background-size: cover;
     }
+
+    .bookmarkTextArea {
+        @include font("basier", 12px, $color-black, 400, normal, 15px);
+        width: 100%;
+        padding: 3px;
+        background: none;
+        outline: none;
+        border: 1px solid $color-border;
+        min-height: 150px;
+        background-image: url("/images/main/paper.jpeg");
+        background-size: cover;
+    }
 }

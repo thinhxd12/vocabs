@@ -94,7 +94,6 @@ const Vocabulary: Component<{}> = () => {
   const onKeyDownDiv: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (
     event
   ) => {
-    // console.log(event);
     const keyDown = event.key;
     if (keyDown.match(/^[a-z\-]$/)) {
       setSearchTerm(searchTerm() + keyDown);
@@ -308,7 +307,7 @@ const Vocabulary: Component<{}> = () => {
           </Show>
 
           <div class={styles.vocabularyContent}>
-            {/* <button onClick={test}>click</button> */}
+            {/* <button onClick={insertData}>click</button> */}
 
             {/* Bookmark */}
             <Show when={mainStore.showBookmark}>

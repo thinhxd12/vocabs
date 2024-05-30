@@ -67,10 +67,10 @@ const Weather: Component<{}> = (props) => {
     createResource(geo, getMinutelyWeatherData);
 
   const [audioSrc, setAudioSrc] = createSignal<string>("");
+  const [prediction, setPrediction] = createSignal<string>("");
 
-  const handleRenderWeather = async (num: string) => {
-    const index = Number(num);
-    setGeo(WEATHER_GEOS[index].geo);
+  const handleRenderWeather = (num: string) => {
+    setGeo(WEATHER_GEOS[Number(num)].geo);
     refetchCurrent();
     refetchMinutely();
   };
@@ -81,8 +81,12 @@ const Weather: Component<{}> = (props) => {
     audio.volume = 0.5;
   });
 
-  createEffect(() => {
+  createEffect(async () => {
     current() && setupWeather();
+  });
+
+  createEffect(async () => {
+    setPrediction(await makePrediction(minutely()));
   });
 
   const chartOptions = {
@@ -527,7 +531,7 @@ const Weather: Component<{}> = (props) => {
                   options={chartOptions}
                 />
               </div>
-              <p class={styles.weatherPredict}>{makePrediction(minutely())}</p>
+              <p class={styles.weatherPredict}>{prediction()}</p>
             </div>
           </Suspense>
         </div>

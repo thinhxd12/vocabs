@@ -31,9 +31,22 @@ export interface ExampleType {
   year: string;
 }
 
+// export interface BookmarkType {
+//   check: boolean;
+//   value: string;
+// }
+
 export interface BookmarkType {
-  check: boolean;
-  value: string;
+  created_at: string;
+  authors: string;
+  bookTile: string;
+  page: number;
+  location: string;
+  dateOfCreation: string;
+  content: string;
+  type: string;
+  checked: boolean;
+  selected: boolean;
 }
 
 export interface HistoryItemContentType {

@@ -1,10 +1,11 @@
 import {
   Component,
+  JSX,
   Setter,
   Show,
   Suspense,
-  createResource,
   createSignal,
+  onMount,
 } from "solid-js";
 import styles from "./bookmark.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
@@ -16,32 +17,44 @@ import {
   OcStarfill2,
   OcX2,
 } from "solid-icons/oc";
-import { cache } from "@solidjs/router";
+import {
+  checkBookMarkData,
+  getBookMarkData,
+  getNextBookMarkData,
+  getPrevBookMarkData,
+  insertBookmarkData,
+  updateBookmarkData,
+} from "~/lib/api";
+import { BookmarkType } from "~/types";
+import { FaSolidFeather } from "solid-icons/fa";
+import { AiOutlineInsertRowBelow } from "solid-icons/ai";
 
 const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
-  const bookmarkUrl = import.meta.env.VITE_BOOKMARK;
+  const onKeyDownDiv: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (
+    event
+  ) => {
+    event.stopPropagation();
+  };
 
-  const getBookMarkData = cache(async (num: number) => {
-    return (await fetch(bookmarkUrl + `getBookmark&num=${num}`)).json();
-  }, "bookmark");
+  const [bookmark, setBookmark] = createSignal<BookmarkType>();
 
-  const [bookmarkId, setBookmarkId] = createSignal<number>(0);
-  const [bookmark, { refetch: refetchBookmark, mutate: mutateBookmark }] =
-    createResource(bookmarkId, getBookMarkData);
+  onMount(async () => {
+    const data = await getBookMarkData();
+    if (data) setBookmark(data);
+  });
 
-  const handleGetNextBookmark = (num: number) => {
-    setBookmarkId(num);
-    refetchBookmark();
+  const handleGetPrevBookmark = async () => {
+    const data = await getPrevBookMarkData(bookmark()!.created_at);
+    if (data) setBookmark(data);
+  };
+  const handleGetNextBookmark = async () => {
+    const data = await getNextBookMarkData(bookmark()!.created_at);
+    if (data) setBookmark(data);
   };
 
   const handleCheckBookmark = (val: boolean) => {
-    fetch(bookmarkUrl + `setBookmark&check=${val}`);
-    mutateBookmark((item) => {
-      return {
-        ...item,
-        check: val,
-      };
-    });
+    setBookmark({ ...bookmark()!, checked: val });
+    checkBookMarkData(bookmark()!.created_at, val);
   };
 
   const copyBookMarkToClipboard = async (text: string) => {
@@ -52,37 +65,50 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
     }
   };
 
+  const [showEdit, setShowEdit] = createSignal<boolean>(false);
+  const [showInsert, setShowInsert] = createSignal<boolean>(false);
+
   return (
-    <div class={styles.bookmarkContainer}>
+    <div class={styles.bookmarkContainer} onKeyDown={onKeyDownDiv}>
       <div class={styles.bookmarkHeader}>
         <div class={styles.bookmarkHeaderLeft}>
           <button
             class={buttons.buttonBookmark}
-            onclick={() => handleGetNextBookmark(-1)}
+            onclick={() => handleGetPrevBookmark()}
           >
             <OcChevronleft2 size={17} />
           </button>
           <button
             class={buttons.buttonBookmark}
-            onclick={() => handleCheckBookmark(!bookmark()?.check)}
+            onclick={() => handleCheckBookmark(!bookmark()?.checked)}
           >
-            <Suspense fallback={<OcStar2 size={17} />}>
-              <Show when={bookmark()?.check} fallback={<OcStar2 size={17} />}>
-                <OcStarfill2 size={17} color="#ffc107" />
-              </Show>
-            </Suspense>
+            <Show when={bookmark()?.checked} fallback={<OcStar2 size={17} />}>
+              <OcStarfill2 size={17} color="#ffc107" />
+            </Show>
           </button>
           <button
             class={buttons.buttonBookmark}
-            onclick={() => handleGetNextBookmark(1)}
+            onclick={() => handleGetNextBookmark()}
           >
             <OcChevronright2 size={17} />
           </button>
           <button
             class={buttons.buttonBookmark}
-            onclick={() => copyBookMarkToClipboard(bookmark()?.value)}
+            onclick={() => copyBookMarkToClipboard(bookmark()!.content)}
           >
             <OcCopy2 size={14} />
+          </button>
+          <button
+            class={buttons.buttonBookmark}
+            onclick={() => setShowEdit(!showEdit())}
+          >
+            <FaSolidFeather size={13} />
+          </button>
+          <button
+            class={buttons.buttonBookmark}
+            onclick={() => setShowInsert(!showInsert())}
+          >
+            <AiOutlineInsertRowBelow size={16} />
           </button>
         </div>
         <div class={styles.bookmarkHeaderRight}>
@@ -97,10 +123,52 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
       >
         <div
           class={
-            bookmark()?.check ? styles.bookmarkBodyChecked : styles.bookmarkBody
+            bookmark()?.checked
+              ? styles.bookmarkBodyChecked
+              : styles.bookmarkBody
           }
         >
-          <p class={styles.bookmarkPassage}>{bookmark()?.value}</p>
+          <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
+          <Show when={showEdit()}>
+            <form
+              action={updateBookmarkData}
+              method="post"
+              onSubmit={() => setShowEdit(false)}
+            >
+              <textarea
+                class={styles.bookmarkTextArea}
+                autocomplete="off"
+                name="bookmarks"
+                value={bookmark()!.content}
+                onChange={(e) =>
+                  setBookmark({
+                    ...bookmark()!,
+                    content: e.currentTarget.value,
+                  })
+                }
+              />
+              <input hidden name="id" value={bookmark()!.created_at} />
+              <button type="submit" class={buttons.buttonSubmit}>
+                Edit
+              </button>
+            </form>
+          </Show>
+          <Show when={showInsert()}>
+            <form
+              action={insertBookmarkData}
+              method="post"
+              onSubmit={() => setShowInsert(false)}
+            >
+              <textarea
+                class={styles.bookmarkTextArea}
+                autocomplete="off"
+                name="bookmarks"
+              />
+              <button type="submit" class={buttons.buttonSubmit}>
+                Insert
+              </button>
+            </form>
+          </Show>
         </div>
       </Suspense>
     </div>

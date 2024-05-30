@@ -22,6 +22,7 @@ export const mapTables = {
   schedule: "schedule",
   history: "history",
   memories: "memories",
+  bookmarks: "bookmarks",
 };
 
 export const PRECIPITATION_PROBABILITY = 0.68;
