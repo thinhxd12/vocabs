@@ -125,7 +125,11 @@ const Calendar: Component<{}> = (props) => {
       <div class={styles.calendar}>
         <div class={styles.calendarCard}>
           <div class={styles.calendarImage}>
-            <img src={`/images/main/${format(todayDate(), "M")}.jpg`} width={360} height={240}/>
+            <img
+              src={`/images/main/${format(todayDate(), "M")}.jpg`}
+              width={360}
+              height={240}
+            />
             <div class={styles.calendarImageContent}>
               <p
                 class={styles.setNewMonth}
@@ -154,7 +158,7 @@ const Calendar: Component<{}> = (props) => {
               <div class={styles.calendarWeekTitle}>Fri</div>
               <div class={styles.calendarWeekTitle}>Sat</div>
             </div>
-            <Suspense fallback={<CalendarLoading />}>
+            <Show when={schedule()} fallback={<CalendarLoading />}>
               <Index each={schedule()}>
                 {(data, i) => {
                   return (
@@ -229,11 +233,11 @@ const Calendar: Component<{}> = (props) => {
                   );
                 }}
               </Index>
-            </Suspense>
+            </Show>
           </div>
         </div>
 
-        <Suspense>
+        <Suspense fallback={<div class={styles.calendarHistoryLoading}></div>}>
           <div class={styles.calendarHistory} ref={refEl}>
             <Index each={mainStore.historyList}>
               {(data, i) => {
