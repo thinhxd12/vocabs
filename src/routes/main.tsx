@@ -1,5 +1,5 @@
 import { useAction, RouteSectionProps } from "@solidjs/router";
-import { Show, createSignal, onMount } from "solid-js";
+import { Show, Suspense, createSignal, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getDataImage, getUnsplashImage } from "~/lib/api";
 import Bottom from "~/components/bottom";
@@ -109,7 +109,7 @@ const MainLayout = (props: RouteSectionProps) => {
       </Motion.div>
 
       <div class={styles.mainCenter}>
-        {props.children}
+        <Suspense>{props.children}</Suspense>
         <Bottom />
       </div>
 
