@@ -6,8 +6,8 @@ export default function NotFound() {
         display: "flex",
         "justify-content": "center",
         "align-items": "center",
-        width: "100vw",
-        height: "100vh",
+        width: "360px",
+        height: "calc(-34px + 100vh)",
       }}
     >
       <h1 style={{ color: "#f90000" }}>Page Not Found</h1>

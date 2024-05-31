@@ -16,14 +16,9 @@
 
         .numberFlipBackground {
             position: absolute;
-            top: -96px;
             left: 2px;
-            width: 50px;
-            height: 300px;
-            margin: 0 auto;
-            background-image: url("/images/main/flagfabricver.png");
-            background-size: cover;
-            background-position-y: bottom;
+            top: 0;
+            filter: brightness(0.9);
         }
 
         .numberFlipContent {
@@ -68,10 +63,6 @@
 
     .flipImageList {
         @include flex-center-column;
-
-        img {
-            height: 44px;
-        }
 
         .number {
             line-height: 46px;

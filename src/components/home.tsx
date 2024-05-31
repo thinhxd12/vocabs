@@ -1,5 +1,6 @@
-import { useAction, RouteSectionProps } from "@solidjs/router";
-import { Show, Suspense, createSignal, onMount } from "solid-js";
+import styles from "./home.module.scss";
+import { useAction, RouterProps } from "@solidjs/router";
+import { Show, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getDataImage, getUnsplashImage } from "~/lib/api";
 import Bottom from "~/components/bottom";
@@ -8,10 +9,9 @@ import { Motion } from "solid-motionone";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
 import { format } from "date-fns";
-import styles from "./main.module.scss";
 import { mainStore, setMainStore } from "~/lib/mystore";
 
-const MainLayout = (props: RouteSectionProps) => {
+export default function Home(props: RouterProps) {
   const getDataImageAction = useAction(getDataImage);
 
   const mockObj = {
@@ -92,12 +92,10 @@ const MainLayout = (props: RouteSectionProps) => {
           <TbRefresh size={17} />
         </button>
       </div>
+
       <Motion.div
         class={styles.mainLeft}
         animate={{
-          width: mainStore.mainToggle
-            ? "calc(100vw - 660px)"
-            : "calc(50vw - 180px)",
           opacity: mainStore.mainToggle ? 1 : 0,
         }}
         transition={{ duration: 0.3 }}
@@ -107,7 +105,7 @@ const MainLayout = (props: RouteSectionProps) => {
       </Motion.div>
 
       <div class={styles.mainCenter}>
-        <Suspense>{props.children}</Suspense>
+        {props.children as Element}
         <Bottom />
       </div>
 
@@ -135,6 +133,4 @@ const MainLayout = (props: RouteSectionProps) => {
       </Motion.div>
     </div>
   );
-};
-
-export default MainLayout;
+}

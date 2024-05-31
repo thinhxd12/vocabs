@@ -22,13 +22,13 @@ const CalendarDropdown = lazy(() => import("~/components/calendardropdown"));
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { format } from "date-fns";
-import forms from "../../assets/styles/form.module.scss";
-import buttons from "../../assets/styles/buttons.module.scss";
+import forms from "../assets/styles/form.module.scss";
+import buttons from "../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
 import { RouteDefinition, createAsync } from "@solidjs/router";
 import HistoryCard from "~/components/historycard";
-import { mainStore, setMainStore } from "~/lib/mystore";
+import { listStore, mainStore, setMainStore } from "~/lib/mystore";
 
 let refEl: HTMLDivElement;
 
@@ -321,6 +321,7 @@ const Calendar: Component<{}> = (props) => {
                         autocomplete="off"
                         type="number"
                         min={0}
+                        value={listStore.listToday.time1}
                       />
                     </div>
                     <div class={forms.calendarFormInputGroup}>
@@ -330,6 +331,7 @@ const Calendar: Component<{}> = (props) => {
                         autocomplete="off"
                         type="number"
                         min={0}
+                        value={listStore.listToday.time2}
                       />
                     </div>
                   </div>

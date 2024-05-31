@@ -1,6 +1,4 @@
-import { createAsync } from "@solidjs/router";
 import { createStore } from "solid-js/store";
-import { getTotalMemories } from "~/lib/api";
 import { HistoryType, ScheduleType, VocabularyType } from "~/types";
 
 type ListStoreType = {

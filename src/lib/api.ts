@@ -42,7 +42,7 @@ const chunk = (array: any[], size: number) =>
         return acc;
     }, []);
 
-export const getScheduleData = cache(async () => {
+export const getScheduleData = (async () => {
     "use server";
     const date = new Date();
     const thisMonth = date.getMonth();
@@ -91,7 +91,7 @@ export const getScheduleData = cache(async () => {
         const calendarScheduleArr = chunk(mergedArray, 7);
         return calendarScheduleArr;
     }
-}, "schedule");
+});
 
 
 
@@ -628,23 +628,23 @@ export const handleCheckWord = async (text: VocabularyType) => {
     setMainStore("renderWord", text);
     // handlecheck
 
-    if (text.number > 1) {
-        checkVocabulary(text.number - 1, text.created_at);
-    } else {
-        await archiveVocabulary(text.word);
-        const data = await getSmallestWordNumberFromRange(text.word);
+    // if (text.number > 1) {
+    //     checkVocabulary(text.number - 1, text.created_at);
+    // } else {
+    //     await archiveVocabulary(text.word);
+    //     const data = await getSmallestWordNumberFromRange(text.word);
 
-        if (data) {
-            await deleteSmallestWordNumberFromRange(data.created_at);
-            await updateArchiveWord(data, text.created_at);
-            const total = await getTotalMemories();
-            setMainStore("totalMemories", total);
-        } else {
-            deleteVocabulary(text.created_at);
-            const total = await getTotalMemories();
-            setMainStore("totalMemories", total);
-        }
-    }
+    //     if (data) {
+    //         await deleteSmallestWordNumberFromRange(data.created_at);
+    //         await updateArchiveWord(data, text.created_at);
+    //         const total = await getTotalMemories();
+    //         setMainStore("totalMemories", total);
+    //     } else {
+    //         deleteVocabulary(text.created_at);
+    //         const total = await getTotalMemories();
+    //         setMainStore("totalMemories", total);
+    //     }
+    // }
 };
 
 const checkVocabulary = async (numb: number, time: string) => {
@@ -831,22 +831,22 @@ export const updateBookmarkData = action(async (formData: FormData) => {
 
 
 
-export const getTotalMemories = cache(async () => {
+export const getTotalMemories = (async () => {
     "use server";
     const { count } = await supabase
         .from(mapTables.memories)
         .select('*', { count: "exact" });
     return count as number;
-}, "total");
+});
 
-export const getTodayData = cache(async (date: string) => {
+export const getTodayData = (async (date: string) => {
     "use server";
     const { data, error } = await supabase
         .from(mapTables.schedule)
         .select()
         .eq('date', date);
     if (data) return data[0] as ScheduleType;
-}, 'todaySchedule');
+});
 
 
 //get 50 word

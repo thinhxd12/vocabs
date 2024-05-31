@@ -33,15 +33,12 @@ const [minute, setMinute] = createSignal<number>(6);
 const Bottom: Component<{}> = () => {
   const todayDate = format(new Date(), "yyyy-MM-dd");
 
-  const total = createAsync(
-    () =>
-      getTotalMemories().then((data) => {
-        if (data) {
-          setMainStore("totalMemories", data);
-        }
-      }),
-    { deferStream: true }
-  );
+  onMount(async () => {
+    const data = await getTotalMemories();
+    if (data) {
+      setMainStore("totalMemories", data);
+    }
+  });
 
   // -------------------LOGOUT-------------------- //
   const logoutAction = useAction(logout);
@@ -222,7 +219,7 @@ const Bottom: Component<{}> = () => {
           </div>
         </div>
         <A
-          href="/main/vocabulary"
+          href="/vocabulary"
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn1}
         >
@@ -230,7 +227,7 @@ const Bottom: Component<{}> = () => {
           <span>Dulce periculum</span>
         </A>
         <A
-          href="/main/calendar"
+          href="/calendar"
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn2}
         >
@@ -249,7 +246,7 @@ const Bottom: Component<{}> = () => {
         </div>
 
         <A
-          href="/main/weather"
+          href="/weather"
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn3}
         >
@@ -306,7 +303,7 @@ const Bottom: Component<{}> = () => {
           </div>
         </Show>
       </div>
-
+      
       <div class={styles.bottomMenu}>
         <Presence>
           <Show when={showMenu()}>

@@ -38,7 +38,7 @@
 
     .mainLeft {
         height: 100vh;
-        width: calc(50vw - 180px);
+        flex-grow: 1;
         position: relative;
         padding: 3vh 0 7vh;
         @include flex-center;
@@ -68,9 +68,10 @@
 
     .mainRight {
         height: 100vh;
-        width: calc(50vw - 180px);
+        width: 300px;
         padding: 9px 9px 9px 15px;
         background: #19191c;
+        background: $color-calendar-black;
         border-left: 1px solid $color-border;
         opacity: 0;
 
@@ -158,10 +159,8 @@
         height: 100vh;
         overflow: hidden;
         z-index: 99;
+        background: $color-black;
+        box-shadow: 0.5px 0 0 0 $color-background-5, -0.5px 0 0 0 $color-background-5;
         position: relative;
-        box-shadow: rgba(0, 0, 0, 0.9) 0px 0px 39px 0px, rgba(0, 0, 0, 0.81) 0px 0px 12px 0px;
-        position: relative;
-        border-left: 0.5px solid #181818;
-        border-right: 0.5px solid #181818;
     }
 }

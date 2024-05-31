@@ -26,7 +26,7 @@ export const loginAction = action(async (formData: FormData) => {
   } catch (err) {
     return err as Error;
   }
-  return redirect("/main/vocabulary");
+  return redirect("/vocabulary");
 }, "login");
 
 export const logout = action(async () => {
