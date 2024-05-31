@@ -128,7 +128,20 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
               : styles.bookmarkBody
           }
         >
+          <div class={styles.bookmarkCredits}>
+            <Show when={bookmark()?.bookTile}>
+              <p class={styles.bookmarkTitle}>{bookmark()?.bookTile}</p>
+            </Show>
+            <Show when={bookmark()?.authors}>
+              <p class={styles.bookmarkAuthor}>{bookmark()?.authors}</p>
+            </Show>
+            <Show when={bookmark()?.dateOfCreation}>
+              <p class={styles.bookmarkYear}>{bookmark()?.dateOfCreation}</p>
+            </Show>
+          </div>
+
           <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
+
           <Show when={showEdit()}>
             <form
               action={updateBookmarkData}
@@ -153,6 +166,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
               </button>
             </form>
           </Show>
+
           <Show when={showInsert()}>
             <form
               action={insertBookmarkData}

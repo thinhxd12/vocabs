@@ -17,7 +17,7 @@ import {
   submitTodayReset,
 } from "~/lib/api";
 
-// const CalendarDropdown = lazy(() => import("~/components/calendardropdown"));
+const CalendarDropdown = lazy(() => import("~/components/calendardropdown"));
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { format } from "date-fns";
@@ -28,7 +28,6 @@ import { getUser } from "~/lib";
 import { RouteDefinition, createAsync } from "@solidjs/router";
 import HistoryCard from "~/components/historycard";
 import { mainStore, setMainStore } from "~/lib/mystore";
-import CalendarDropdown from "~/components/calendardropdown";
 
 export const route = {
   load() {

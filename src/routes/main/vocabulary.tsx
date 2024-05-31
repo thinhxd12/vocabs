@@ -5,6 +5,7 @@ import {
   Show,
   createEffect,
   createSignal,
+  lazy,
   onMount,
 } from "solid-js";
 import { VocabularyType } from "~/types";
@@ -17,21 +18,18 @@ import {
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-// const Translation = lazy(() => import("~/components/translation"));
-// const Edit = lazy(() => import("~/components/edit"));
-// const Bookmark = lazy(() => import("~/components/bookmark"));
 import { BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { format } from "date-fns";
-import styles from "./vocabulary.module.scss";
 import { getUser } from "~/lib";
 import { RouteDefinition, createAsync } from "@solidjs/router";
 import { mainStore, setListStore, setMainStore } from "~/lib/mystore";
+import styles from "./vocabulary.module.scss";
 import FlipCard from "~/components/flipcard";
 import Definition from "~/components/definition";
-import Translation from "~/components/translation";
-import Edit from "~/components/edit";
-import Bookmark from "~/components/bookmark";
+const Translation = lazy(() => import("~/components/translation"));
+const Edit = lazy(() => import("~/components/edit"));
+const Bookmark = lazy(() => import("~/components/bookmark"));
 
 const todayDate = format(new Date(), "yyyy-MM-dd");
 export const route = {
