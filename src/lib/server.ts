@@ -1,7 +1,5 @@
 import { supabase } from "./supbabase";
-import { useSession } from "@solidjs/start/server";
-import { getRequestEvent } from "solid-js/web";
-
+import { useSession } from "vinxi/http";
 
 export function validateUsername(username: unknown) {
   if (typeof username !== "string" || username.length < 3) {
@@ -33,6 +31,8 @@ export async function logout() {
 
 export async function register(username: string, password: string) { }
 
-export async function getSession() {
-  return useSession(getRequestEvent()!, { password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace" });
+export function getSession() {
+  return useSession({
+    password: process.env.SESSION_SECRET ?? "areallylongsecretthatyoushouldreplace"
+  });
 }

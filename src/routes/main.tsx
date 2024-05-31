@@ -52,12 +52,6 @@ const MainLayout = (props: RouteSectionProps) => {
     }, 840000);
   });
 
-  // const [toggleMainPage, setToggleMainPage] = createSignal<boolean>(false);
-
-  // const changeToggle = () => {
-  //   setToggleMainPage(!toggleMainPage());
-  // };
-
   const handleGetNextImage = () => {
     getNextImageData(imageObj.nextImageUrl!);
   };
