@@ -3,6 +3,7 @@ import {
   Index,
   Show,
   Suspense,
+  createResource,
   createSignal,
   lazy,
   onMount,
@@ -29,11 +30,6 @@ import { RouteDefinition, createAsync } from "@solidjs/router";
 import HistoryCard from "~/components/historycard";
 import { mainStore, setMainStore } from "~/lib/mystore";
 
-export const route = {
-  load() {
-    getScheduleData();
-  },
-} satisfies RouteDefinition;
 let refEl: HTMLDivElement;
 
 const Calendar: Component<{}> = (props) => {
@@ -41,31 +37,19 @@ const Calendar: Component<{}> = (props) => {
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
-  const schedule = createAsync(() => getScheduleData(), {
-    deferStream: true,
+  const [schedule, { refetch: refetchSchedule, mutate: mutateSchedule }] =
+    createResource(getScheduleData);
+
+  onMount(async () => {
+    if (mainStore.historyList.length === 0) {
+      const dataHistory = await getCalendarHistory();
+      if (dataHistory) setMainStore("historyList", dataHistory);
+    }
+    if (!mainStore.thisWeekIndex) {
+      const index = await getThisWeekIndex();
+      if (index) setMainStore("thisWeekIndex", index + 1);
+    }
   });
-
-  mainStore.historyList.length === 0 &&
-    createAsync(
-      () =>
-        getCalendarHistory().then((data) => {
-          if (data) setMainStore("historyList", data);
-        }),
-      {
-        deferStream: true,
-      }
-    );
-
-  !mainStore.thisWeekIndex &&
-    createAsync(
-      () =>
-        getThisWeekIndex().then((data) => {
-          if (data) setMainStore("thisWeekIndex", data + 1);
-        }),
-      {
-        deferStream: true,
-      }
-    );
 
   const handleUpdateHistoryList = () => {
     setTimeout(async () => {
