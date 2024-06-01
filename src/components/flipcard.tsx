@@ -63,7 +63,7 @@ const FlipCard: Component<{}> = (props) => {
       if (translations) {
         timeoutId2 = setTimeout(() => {
           setHoverClass(`${styles.cardContent} ${styles.cardContentHover1}`);
-          const soundUrl = `https://myapp-9r5h.onrender.com/hear?lang=vi&text=${translations}`;
+          const soundUrl = `https://hoctuvung3.netlify.app/api/hear?lang=vi&text=${translations}`;
           setMainStore("audioSrc", soundUrl);
         }, 3000);
         timeoutId3 = setTimeout(() => {

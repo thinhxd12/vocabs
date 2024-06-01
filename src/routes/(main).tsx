@@ -1,10 +1,5 @@
-import {
-  useAction,
-  RouterProps,
-  RouteSectionProps,
-  type RouteDefinition,
-} from "@solidjs/router";
-import { Show, Suspense, onMount } from "solid-js";
+import { useAction, RouteSectionProps } from "@solidjs/router";
+import { Show, Suspense } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getDataImage, getUnsplashImage } from "~/lib/api";
 import Bottom from "~/components/bottom";
@@ -41,21 +36,6 @@ export default function Main(props: RouteSectionProps) {
       setImageObj(result);
     } else handleGetUnsplashImage();
   };
-
-  //Wakeup sever render after 14 minutes
-  const getWakeup = async () => {
-    const url = "https://myapp-9r5h.onrender.com/wakeup";
-    const response = await fetch(url);
-    const result = response.json();
-    return result;
-  };
-
-  onMount(() => {
-    getWakeup();
-    setInterval(() => {
-      getWakeup();
-    }, 840000);
-  });
 
   const handleGetNextImage = () => {
     getNextImageData(imageObj.nextImageUrl!);

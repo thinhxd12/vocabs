@@ -161,7 +161,7 @@ export const getDataImage = action(async (url: string) => {
 
 //get translate data
 export const getTranslate = async (text: string) => {
-    const url = `https://myapp-9r5h.onrender.com/trans?text=${text}&from=auto&to=vi`
+    const url = `https://hoctuvung3.netlify.app/api/trans?text=${text}&from=auto&to=vi`
     try {
         const response = await fetch(url);
         if (!response.ok) {
