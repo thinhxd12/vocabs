@@ -21,26 +21,21 @@ import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { format } from "date-fns";
-import { getUser } from "~/lib";
-import { createAsync, type RouteDefinition } from "@solidjs/router";
+import { createAsync } from "@solidjs/router";
 import { mainStore, setListStore, setMainStore } from "~/lib/mystore";
 import styles from "./vocabulary.module.scss";
 import FlipCard from "~/components/flipcard";
 import Definition from "~/components/definition";
+import { getUser } from "~/lib";
 const Translation = lazy(() => import("~/components/translation"));
 const Edit = lazy(() => import("~/components/edit"));
 const Bookmark = lazy(() => import("~/components/bookmark"));
-
-const todayDate = format(new Date(), "yyyy-MM-dd");
-
-export const route = {
-  load: () => getUser(),
-} satisfies RouteDefinition;
 
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
+  const todayDate = format(new Date(), "yyyy-MM-dd");
   const todayData = createAsync(
     () =>
       getTodayData(todayDate).then((data) => {

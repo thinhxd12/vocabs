@@ -22,11 +22,11 @@ const CalendarDropdown = lazy(() => import("~/components/calendardropdown"));
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { format } from "date-fns";
-import forms from "../assets/styles/form.module.scss";
-import buttons from "../assets/styles/buttons.module.scss";
+import forms from "../../assets/styles/form.module.scss";
+import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
-import { RouteDefinition, createAsync } from "@solidjs/router";
+import { createAsync } from "@solidjs/router";
 import HistoryCard from "~/components/historycard";
 import { listStore, mainStore, setMainStore } from "~/lib/mystore";
 

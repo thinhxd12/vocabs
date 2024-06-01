@@ -162,5 +162,10 @@
         background: $color-black;
         box-shadow: 0.5px 0 0 0 $color-background-5, -0.5px 0 0 0 $color-background-5;
         position: relative;
+
+        .mainCenterContent {
+            width: 360px;
+            height: calc(-34px + 100vh);
+        }
     }
 }

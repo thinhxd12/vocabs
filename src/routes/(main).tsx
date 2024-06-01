@@ -1,6 +1,10 @@
-import styles from "./home.module.scss";
-import { useAction, RouterProps } from "@solidjs/router";
-import { Show, onMount } from "solid-js";
+import {
+  useAction,
+  RouterProps,
+  RouteSectionProps,
+  type RouteDefinition,
+} from "@solidjs/router";
+import { Show, Suspense, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getDataImage, getUnsplashImage } from "~/lib/api";
 import Bottom from "~/components/bottom";
@@ -10,8 +14,15 @@ import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
 import { format } from "date-fns";
 import { mainStore, setMainStore } from "~/lib/mystore";
+import styles from "./main.module.scss";
+import { getUser } from "~/lib";
 
-export default function Home(props: RouterProps) {
+
+export const route = {
+  load: () => getUser(),
+} satisfies RouteDefinition;
+
+export default function Main(props: RouteSectionProps) {
   const getDataImageAction = useAction(getDataImage);
 
   const mockObj = {
@@ -105,7 +116,9 @@ export default function Home(props: RouterProps) {
       </Motion.div>
 
       <div class={styles.mainCenter}>
-        {props.children as Element}
+        <div class={styles.mainCenterContent}>
+          <Suspense>{props.children}</Suspense>
+        </div>
         <Bottom />
       </div>
 
