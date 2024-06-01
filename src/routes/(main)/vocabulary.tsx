@@ -37,12 +37,12 @@ const Vocabulary: Component<{}> = () => {
   // ***************check login**************
 
   const todayDate = format(new Date(), "yyyy-MM-dd");
-  onMount(async () => {
-    const data = await getTodayData(todayDate);
-    if (data) {
-      setListStore("listToday", data);
-    }
-  });
+  // onMount(async () => {
+  //   const data = await getTodayData(todayDate);
+  //   if (data) {
+  //     setListStore("listToday", data);
+  //   }
+  // });
 
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");

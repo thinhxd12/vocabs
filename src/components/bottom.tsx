@@ -33,12 +33,12 @@ const [minute, setMinute] = createSignal<number>(6);
 const Bottom: Component<{}> = () => {
   const todayDate = format(new Date(), "yyyy-MM-dd");
 
-  onMount(async () => {
-    const data = await getTotalMemories();
-    if (data) {
-      setMainStore("totalMemories", data);
-    }
-  });
+  // onMount(async () => {
+  //   const data = await getTotalMemories();
+  //   if (data) {
+  //     setMainStore("totalMemories", data);
+  //   }
+  // });
 
   // -------------------LOGOUT-------------------- //
   const logoutAction = useAction(logout);
