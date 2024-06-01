@@ -11,7 +11,7 @@ export const getUser = cache(async () => {
     await logoutSession();
     throw redirect("/");
   }
-}, "user");
+}, "getUserSession");
 
 export const loginAction = action(async (formData: FormData) => {
   "use server";

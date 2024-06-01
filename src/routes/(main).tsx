@@ -15,12 +15,6 @@ import { TbRefresh } from "solid-icons/tb";
 import { format } from "date-fns";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./main.module.scss";
-import { getUser } from "~/lib";
-
-
-export const route = {
-  load: () => getUser(),
-} satisfies RouteDefinition;
 
 export default function Main(props: RouteSectionProps) {
   const getDataImageAction = useAction(getDataImage);
