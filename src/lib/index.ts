@@ -7,7 +7,6 @@ export const getUser = cache(async () => {
     const session = await getSession();
     const userId = session.data.userId;
     if (userId === undefined) throw new Error("User not found");
-    return { user: userId }
   } catch {
     await logoutSession();
     throw redirect("/");

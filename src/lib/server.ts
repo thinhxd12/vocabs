@@ -20,7 +20,7 @@ export async function login(password: string) {
     password: password,
   })
   if (error) throw new Error(error.message);
-  return { id: user!.email }
+  return { id: email }
 }
 
 export async function logout() {

@@ -31,26 +31,18 @@ const Translation = lazy(() => import("~/components/translation"));
 const Edit = lazy(() => import("~/components/edit"));
 const Bookmark = lazy(() => import("~/components/bookmark"));
 
-export const route = {
-  load() {
-    getUser();
-  },
-} satisfies RouteDefinition;
-
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
+
   const todayDate = format(new Date(), "yyyy-MM-dd");
-  const todayData = createAsync(
-    () =>
-      getTodayData(todayDate).then((data) => {
-        if (data) {
-          setListStore("listToday", data);
-        }
-      }),
-    { deferStream: true }
-  );
+  onMount(async () => {
+    const data = await getTodayData(todayDate);
+    if (data) {
+      setListStore("listToday", data);
+    }
+  });
 
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
