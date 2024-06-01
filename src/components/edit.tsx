@@ -88,7 +88,7 @@ const Edit: Component<{
     setSubmittedForm(true);
     setMainStore("renderWord", {
       ...mainStore,
-      definitions: definitionDataRender().definitions,
+      definitions: definitionData.definitions,
     });
   };
 
