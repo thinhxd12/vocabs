@@ -303,7 +303,7 @@ const Bottom: Component<{}> = () => {
           </div>
         </Show>
       </div>
-      
+
       <div class={styles.bottomMenu}>
         <Presence>
           <Show when={showMenu()}>

@@ -192,7 +192,7 @@ const Vocabulary: Component<{}> = () => {
           class={styles.vocabulary}
         >
           <div class={styles.flashCardContainer}>
-            <FlipCard item={mainStore.renderWord!} />
+            <FlipCard />
           </div>
 
           <Show
