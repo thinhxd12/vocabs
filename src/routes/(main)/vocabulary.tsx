@@ -31,10 +31,9 @@ const Translation = lazy(() => import("~/components/translation"));
 const Edit = lazy(() => import("~/components/edit"));
 const Bookmark = lazy(() => import("~/components/bookmark"));
 
-const todayDate = format(new Date(), "yyyy-MM-dd");
 export const route = {
   load() {
-    getUser(), getTodayData(todayDate);
+    getUser();
   },
 } satisfies RouteDefinition;
 
@@ -42,6 +41,7 @@ const Vocabulary: Component<{}> = () => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
+  const todayDate = format(new Date(), "yyyy-MM-dd");
   const todayData = createAsync(
     () =>
       getTodayData(todayDate).then((data) => {
