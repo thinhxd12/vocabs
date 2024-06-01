@@ -45,7 +45,7 @@ const Definition: Component<{
                             class={styles.websImg}
                             src={m().image}
                             onerror={(e) => {
-                              e.currentTarget.src = "/images/main/5small.jpg";
+                              e.currentTarget.src = "/images/main/image_not_found.jpg";
                             }}
                           />
                           <div class={styles.websImgOverlay}></div>

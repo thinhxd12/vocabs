@@ -19,6 +19,7 @@ import { FaRegularImage, FaSolidExpand } from "solid-icons/fa";
 import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import styles from "./edit.module.scss";
+import { mainStore, setMainStore } from "~/lib/mystore";
 
 const Edit: Component<{
   item: VocabularyType;
@@ -81,6 +82,14 @@ const Edit: Component<{
 
   const handleShowHandyEdit = () => {
     setShowHandyEdit(!showHandyEdit());
+  };
+
+  const handleSubmitForm = () => {
+    setSubmittedForm(true);
+    setMainStore("renderWord", {
+      ...mainStore,
+      definitions: definitionDataRender().definitions,
+    });
   };
 
   //outside click close
@@ -331,7 +340,7 @@ const Edit: Component<{
           <button
             type="submit"
             class={buttons.buttonSubmit}
-            onClick={() => setSubmittedForm(true)}
+            onClick={() => handleSubmitForm()}
           >
             Submit
           </button>

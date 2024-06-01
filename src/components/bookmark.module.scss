@@ -37,7 +37,7 @@
         font-size: 13px;
         line-height: 1.1rem;
         padding: 6px 9px;
-        min-height: 80px;
+        min-height: 125px;
 
         .bookmarkPassage::first-letter {
             @include font("NYTCheltenham", 60px, $color-white, normal, normal, 60px);
@@ -49,6 +49,7 @@
             text-align: center;
             text-transform: uppercase;
             border-radius: 3px;
+            box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 
             background-image: url('/images/main/input-left-corner.png'),
                 url('/images/main/input-right-corner.png');
