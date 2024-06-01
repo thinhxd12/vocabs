@@ -4,8 +4,7 @@
     min-width: 360px;
     max-width: 360px;
     height: calc(100vh - 34px);
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden;
     position: inherit;
     outline: none;
     position: relative;
@@ -235,9 +234,13 @@
         background-position: left 0 bottom 27%;
         padding: 6px;
         flex-grow: 1;
-        min-height: 96px;
         @include font("NYTCheltenham", 12px, $color-black, 700, normal, 14px);
         cursor: default;
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
 }

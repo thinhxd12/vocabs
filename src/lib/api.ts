@@ -628,23 +628,23 @@ export const handleCheckWord = async (text: VocabularyType) => {
     setMainStore("renderWord", text);
     // handlecheck
 
-    // if (text.number > 1) {
-    //     checkVocabulary(text.number - 1, text.created_at);
-    // } else {
-    //     await archiveVocabulary(text.word);
-    //     const data = await getSmallestWordNumberFromRange(text.word);
+    if (text.number > 1) {
+        checkVocabulary(text.number - 1, text.created_at);
+    } else {
+        await archiveVocabulary(text.word);
+        const data = await getSmallestWordNumberFromRange(text.word);
 
-    //     if (data) {
-    //         await deleteSmallestWordNumberFromRange(data.created_at);
-    //         await updateArchiveWord(data, text.created_at);
-    //         const total = await getTotalMemories();
-    //         setMainStore("totalMemories", total);
-    //     } else {
-    //         deleteVocabulary(text.created_at);
-    //         const total = await getTotalMemories();
-    //         setMainStore("totalMemories", total);
-    //     }
-    // }
+        if (data) {
+            await deleteSmallestWordNumberFromRange(data.created_at);
+            await updateArchiveWord(data, text.created_at);
+            const total = await getTotalMemories();
+            setMainStore("totalMemories", total);
+        } else {
+            deleteVocabulary(text.created_at);
+            const total = await getTotalMemories();
+            setMainStore("totalMemories", total);
+        }
+    }
 };
 
 const checkVocabulary = async (numb: number, time: string) => {
