@@ -301,7 +301,7 @@ const Vocabulary: Component<{}> = () => {
           </Show>
 
           <div class={styles.vocabularyContent}>
-            {/* <button onClick={insertData}>click</button> */}
+            {/* <button onClick={() => getSoundUrl("xin chào")}>click</button> */}
 
             {/* Bookmark */}
             <Show when={mainStore.showBookmark}>

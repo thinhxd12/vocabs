@@ -6,7 +6,6 @@ import { parse } from 'node-html-parser';
 import { supabase } from "./supbabase";
 import { setMainStore } from "./mystore";
 
-
 export const searchText = async (text: string) => {
     "use server";
     try {
@@ -161,7 +160,7 @@ export const getDataImage = action(async (url: string) => {
 
 //get translate data
 export const getTranslate = async (text: string) => {
-    const url = `https://hoctuvung3.netlify.app/api/trans?text=${text}&from=auto&to=vi`
+    const url = `https://vocabs3.vercel.app/trans?text=${text}&from=auto&to=vi`
     try {
         const response = await fetch(url);
         if (!response.ok) {
@@ -816,6 +815,26 @@ export const updateBookmarkData = action(async (formData: FormData) => {
         })
         .eq('created_at', id);
 }, "insert bookmark")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

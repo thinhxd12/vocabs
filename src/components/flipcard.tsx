@@ -63,8 +63,7 @@ const FlipCard: Component<{}> = (props) => {
       if (translations) {
         timeoutId2 = setTimeout(() => {
           setHoverClass(`${styles.cardContent} ${styles.cardContentHover1}`);
-          // const soundUrl = `https://hoctuvung3.netlify.app/api/hear?lang=vi&text=${translations}`;
-          const soundUrl =   `https://proxy.junookyo.workers.dev/?language=vi-VN&text=${translations}&speed=1`
+          const soundUrl = `https://vocabs3.vercel.app/speech?text=${translations}`;
           setMainStore("audioSrc", soundUrl);
         }, 3000);
         timeoutId3 = setTimeout(() => {
