@@ -338,10 +338,7 @@ const Vocabulary: Component<{}> = () => {
               }}
               transition={{ duration: 0.2, easing: "ease-in-out" }}
             >
-              <Translation
-                translateText={translateTerm()}
-                onClose={() => setMainStore("showTranslate", false)}
-              />
+              <Translation translateText={translateTerm()} />
             </Motion.div>
           </Show>
         </Presence>

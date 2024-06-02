@@ -34,6 +34,7 @@ const Bottom: Component<{}> = () => {
   const todayDate = format(new Date(), "yyyy-MM-dd");
 
   onMount(async () => {
+    audioRef.volume = 1;
     const data = await getTotalMemories();
     if (data) {
       setMainStore("totalMemories", data);

@@ -159,18 +159,13 @@ export const getDataImage = action(async (url: string) => {
 });
 
 //get translate data
-export const getTranslate = async (text: string) => {
+export const getTranslateData = async (text: string) => {
+    "use server";
+    if (!text) return;
     const url = `https://vocabs3.vercel.app/trans?text=${text}&from=auto&to=vi`
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data as TranslateType;
-    } catch (error) {
-        console.error(error);
-    }
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data) return data as TranslateType;
 }
 
 async function fetchGetText(url: string) {
@@ -185,6 +180,7 @@ async function fetchGetText(url: string) {
 
 export const getTextDataWebster = async (text: string) => {
     "use server";
+    if (!text) return;
     const url = `https://www.merriam-webster.com/dictionary/${text}`;
 
     const result: VocabularyType = {
@@ -388,8 +384,10 @@ const handleGetDefinitions = (data: string) => {
 
 //find sound from oed
 export const getOedSoundURL = async (text: string) => {
+    "use server";
+    if (!text) return;
     const oxfordUrl =
-        DEFAULT_CORS_PROXY +
+        // DEFAULT_CORS_PROXY +
         `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
     const oedUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
 
