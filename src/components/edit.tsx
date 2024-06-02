@@ -46,8 +46,9 @@ const Edit: Component<{}> = (props) => {
   const handleSubmitForm = () => {
     setSubmittedForm(true);
     setMainStore("renderWord", {
-      ...mainStore.editWord,
+      ...renderEditWord,
     });
+    setMainStore("showEdit", false);
   };
 
   //----------------------TOAST----------------------

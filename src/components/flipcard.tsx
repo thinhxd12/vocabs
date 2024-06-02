@@ -39,11 +39,11 @@ const FlipCard: Component<{}> = (props) => {
     if (currenText()) {
       let currentSound = currenText().audio;
       let translations = currenText()
-        ?.translations.map((item) => item.translations.join(", "))
+        .translations.map((item) => item.translations.join(", "))
         .join(", ");
 
       let partOfSpeech = currenText()
-        ?.translations.map((item) => item.partOfSpeech)
+        .translations.map((item) => item.partOfSpeech)
         .join("-");
 
       setPartOfSpeechs(partOfSpeech);
