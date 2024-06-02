@@ -625,8 +625,8 @@ export const submitNewMonth = action(async (formData: FormData) => {
 
 export const handleCheckWord = async (text: VocabularyType) => {
     setMainStore("renderWord", text);
-    // handlecheck
 
+    // handlecheck
     if (text.number > 1) {
         checkVocabulary(text.number - 1, text.created_at);
     } else {

@@ -14,7 +14,6 @@ import {
 import { OcX2 } from "solid-icons/oc";
 import { TranslateType, VocabularyType } from "~/types";
 import { useSubmission } from "@solidjs/router";
-import Definition from "./definition";
 import {
   getOedSoundURL,
   getTextDataWebster,
@@ -27,6 +26,7 @@ import useClickOutside from "solid-click-outside";
 import styles from "./translation.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
+import { EditDefinition } from "./editDefinition";
 
 const Translation: Component<{
   translateText: string;
@@ -311,9 +311,7 @@ const Translation: Component<{
           </div>
         </Show>
 
-        <Show when={definitionData().word}>
-          <Definition item={definitionData()} />
-        </Show>
+        <EditDefinition item={definitionData()} />
       </div>
       <Toaster
         position="top-center"

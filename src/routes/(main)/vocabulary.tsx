@@ -21,7 +21,7 @@ import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { format } from "date-fns";
-import { RouteDefinition, createAsync } from "@solidjs/router";
+import { createAsync } from "@solidjs/router";
 import { mainStore, setListStore, setMainStore } from "~/lib/mystore";
 import styles from "./vocabulary.module.scss";
 import FlipCard from "~/components/flipcard";
@@ -139,24 +139,13 @@ const Vocabulary: Component<{}> = () => {
     setSearchResult([]);
   };
   // -------------------DELETE END-------------------- //
+
   // -------------------EDIT START-------------------- //
-  const [showEdit, setShowEdit] = createSignal(false);
-  const [editText, setEditText] = createSignal<VocabularyType>();
-
-  const handleCloseEdit = () => {
-    setShowEdit(false);
-  };
-
   const handleEditVocabulary = (text: VocabularyType) => {
-    setEditText(text);
-    setShowEdit(true);
+    setMainStore("editWord", text);
+    setMainStore("showEdit", true);
     setSearchTerm("");
     setSearchResult([]);
-  };
-
-  const handleEditFromDefinition = (text: VocabularyType) => {
-    setEditText({ ...text, number: text.number - 1 });
-    setShowEdit(true);
   };
   // -------------------EDIT END-------------------- //
 
@@ -309,17 +298,12 @@ const Vocabulary: Component<{}> = () => {
             </Show>
 
             {/* Definition */}
-            <Show when={mainStore.renderWord}>
-              <Definition
-                item={mainStore.renderWord!}
-                onEdit={handleEditFromDefinition}
-              />
-            </Show>
+            <Definition />
           </div>
         </div>
         {/* Edit */}
         <Presence>
-          <Show when={showEdit()}>
+          <Show when={mainStore.showEdit}>
             <Motion.div
               class={styles.editOverlay}
               initial={{
@@ -333,7 +317,7 @@ const Vocabulary: Component<{}> = () => {
               }}
               transition={{ duration: 0.2, easing: "ease-in-out" }}
             >
-              <Edit item={editText()!} onClose={handleCloseEdit} />
+              <Edit />
             </Motion.div>
           </Show>
         </Presence>

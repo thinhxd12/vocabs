@@ -198,11 +198,11 @@
             display: flex;
             justify-content: flex-end;
 
-            .editItem--def {
+            .editItemDef {
                 width: 27%;
             }
 
-            .editItem--def:not(:last-child) {
+            .editItemDef:not(:last-child) {
                 margin-right: 3px;
             }
         }

@@ -1,16 +1,11 @@
-import {
-  Component,
-  Setter,
-  Show,
-  createEffect,
-  createSignal,
-  on,
-  onMount,
-} from "solid-js";
+import { Component, Show, createEffect, createSignal, on } from "solid-js";
 import { OcX2 } from "solid-icons/oc";
-import { VocabularyDefinitionType, VocabularyType } from "~/types";
+import {
+  VocabularyDefinitionType,
+  VocabularyTranslationType,
+  VocabularyType,
+} from "~/types";
 import { action, useSubmission } from "@solidjs/router";
-import Definition from "./definition";
 import { editVocabularyItem, getTextDataWebster } from "~/lib/api";
 import toast, { Toaster } from "solid-toast";
 import { createStore } from "solid-js/store";
@@ -20,43 +15,11 @@ import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import styles from "./edit.module.scss";
 import { mainStore, setMainStore } from "~/lib/mystore";
+import { EditDefinition } from "./editDefinition";
 
-const Edit: Component<{
-  item: VocabularyType;
-  onClose: Setter<boolean>;
-}> = (props) => {
+const Edit: Component<{}> = (props) => {
   const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
   const editActionResult = useSubmission(editVocabularyItem);
-  const [definitionData, setDefinitionData] = createStore<VocabularyType>(
-    props.item
-  );
-  const [definitionDataRender, setDefinitionRender] =
-    createSignal<VocabularyType>(props.item);
-  const [translationString, setTranslationString] = createSignal<string>("");
-
-  const getAndSetDefinitionData = async (text: string) => {
-    const data = await getTextDataWebster(text);
-    if (data) setDefinitionRender(data);
-  };
-
-  const handleCheck = () => {
-    setDefinitionData({
-      definitions: definitionDataRender().definitions,
-      phonetics: definitionDataRender().phonetics,
-    });
-  };
-
-  onMount(() => {
-    getAndSetDefinitionData(props.item.word);
-    let str = props.item.translations
-      .map((item) => {
-        let part = item.partOfSpeech;
-        let mean = item.translations.join("-");
-        return " -" + part + "-" + mean;
-      })
-      .join("");
-    setTranslationString(str);
-  });
 
   //----------------------TOAST----------------------
   const popSuccess = () => toast.success("Success", { duration: 3000 });
@@ -80,27 +43,23 @@ const Edit: Component<{
     )
   );
 
-  const handleShowHandyEdit = () => {
-    setShowHandyEdit(!showHandyEdit());
-  };
-
   const handleSubmitForm = () => {
     setSubmittedForm(true);
     setMainStore("renderWord", {
-      ...mainStore,
-      definitions: definitionData.definitions,
+      ...mainStore.editWord,
     });
   };
+
+  //----------------------TOAST----------------------
 
   //outside click close
   const [target, setTarget] = createSignal<HTMLElement | undefined>();
 
   useClickOutside(target, () => {
-    props.onClose(false);
+    setMainStore("showEdit", false);
   });
 
   //handy edit
-
   const [handyResult, setHandyResult] =
     createSignal<VocabularyDefinitionType>();
 
@@ -119,17 +78,15 @@ const Edit: Component<{
     const year = String(formData.get("editItem--year"));
     const syn = String(formData.get("editItem--syn"));
     const newText =
-      props.item?.word.length > 4
-        ? props.item?.word.slice(0, -2)
-        : props.item?.word;
+      mainStore.editWord!.word.length > 4
+        ? mainStore.editWord!.word.slice(0, -2)
+        : mainStore.editWord!.word;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
     x = x.replace(regText, `<b>$1</b>`);
-
     let defArr = [];
-    def1 && defArr.push({ sense: def1, similar: def1up });
-    def2 && defArr.push({ sense: def2, similar: def2up });
+    def1 && defArr.push({ sense: "&emsp;" + def1, similar: def1up });
+    def2 && defArr.push({ sense: "&emsp;" + def2, similar: def2up });
     def3 && defArr.push({ sense: "&emsp;" + def3, similar: def3up });
-
     let resultObj: VocabularyDefinitionType = {
       example: [
         {
@@ -148,19 +105,59 @@ const Edit: Component<{
       ],
       partOfSpeech: header,
     };
-
     setHandyResult(resultObj);
   });
+
+  //edit
+  const [renderEditWord, setRenderEditWord] = createStore<VocabularyType>({
+    ...mainStore.editWord!,
+  });
+  const [translationsString, setTranslationsString] = createSignal<string>("");
+
+  createEffect(async () => {
+    const str = makeTranslationText(mainStore.editWord!.translations);
+    setTranslationsString(str);
+    const { word } = { ...mainStore.editWord };
+    const data = await getTextDataWebster(word!);
+    if (data)
+      setRenderEditWord({
+        ...mainStore.editWord,
+        definitions: data.definitions,
+      });
+  });
+
+  const makeTranslationText = (arr: VocabularyTranslationType[]) => {
+    return arr
+      .map((item) => {
+        let part = item.partOfSpeech;
+        let mean = item.translations.join("-");
+        return " -" + part + "-" + mean;
+      })
+      .join("");
+  };
+
+  const handleCheck = () => {
+    setMainStore("editWord", {
+      definitions: renderEditWord.definitions,
+      phonetics: renderEditWord.phonetics,
+    });
+  };
 
   return (
     <div class={styles.edit} tabIndex={1} ref={setTarget}>
       <div class={styles.editHeader}>
         <div class={styles.editHeaderLeft}></div>
         <div class={styles.editHeaderRight}>
-          <button class={buttons.buttonPrimary} onClick={handleShowHandyEdit}>
+          <button
+            class={buttons.buttonPrimary}
+            onClick={() => setShowHandyEdit(!showHandyEdit())}
+          >
             <FaSolidExpand size={13} />
           </button>
-          <button class={buttons.buttonClose} onclick={props.onClose}>
+          <button
+            class={buttons.buttonClose}
+            onclick={() => setMainStore("showEdit", false)}
+          >
             <OcX2 size={15} />
           </button>
         </div>
@@ -276,7 +273,7 @@ const Edit: Component<{
               class={styles.searchInput}
               name="word"
               autocomplete="off"
-              value={props.item?.word}
+              value={mainStore.editWord!.word}
             />
             <img
               src="/images/main/input-right-corner.png"
@@ -289,7 +286,7 @@ const Edit: Component<{
               class={forms.formInput}
               name="audio"
               autocomplete="off"
-              value={props.item?.audio}
+              value={mainStore.editWord!.audio}
             />
           </div>
           <div class={forms.formInputGroup}>
@@ -297,17 +294,16 @@ const Edit: Component<{
               class={forms.formInput}
               name="phonetics"
               autocomplete="off"
-              value={definitionData.phonetics}
+              value={mainStore.editWord!.phonetics}
             />
           </div>
           <div class={forms.formInputGroup}>
             <textarea
               name="definitions"
               class={forms.formTextarea}
-              value={JSON.stringify(definitionData.definitions, null, " ")}
+              value={JSON.stringify(mainStore.editWord!.definitions, null, " ")}
               onChange={(e) =>
-                setDefinitionRender({
-                  ...definitionDataRender(),
+                setRenderEditWord({
                   definitions: JSON.parse(e.currentTarget.value),
                 })
               }
@@ -318,7 +314,7 @@ const Edit: Component<{
               class={forms.formInput}
               name="meaning"
               autocomplete="off"
-              value={translationString()}
+              value={translationsString()}
             />
           </div>
           <div class={forms.formInputGroup}>
@@ -327,14 +323,14 @@ const Edit: Component<{
               class={forms.formInput}
               name="number"
               autocomplete="off"
-              value={props.item?.number}
+              value={mainStore.editWord!.number}
             />
           </div>
           <input
             type="text"
             name="created_at"
             autocomplete="off"
-            value={props.item?.created_at}
+            value={mainStore.editWord!.created_at}
             style={{ display: "none" }}
           />
           <button
@@ -346,9 +342,7 @@ const Edit: Component<{
           </button>
         </form>
 
-        <Show when={definitionDataRender().word}>
-          <Definition item={definitionDataRender()} onCheck={handleCheck} />
-        </Show>
+        <EditDefinition item={renderEditWord} onCheck={handleCheck} />
       </div>
       <Toaster
         position="top-center"
