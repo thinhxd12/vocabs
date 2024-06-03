@@ -311,3 +311,16 @@ export const WMOCODE = {
     },
   },
 };
+
+import { Accessor, Signal, onCleanup } from "solid-js";
+
+export function clickOutside(element: HTMLDivElement, accessor: any) {
+  const onClick = (event: Event) => {
+    if (!element.contains(event.target as HTMLInputElement)) {
+      accessor()();
+    }
+  };
+
+  document.addEventListener("click", onClick);
+  onCleanup(() => document.removeEventListener("click", onClick));
+}

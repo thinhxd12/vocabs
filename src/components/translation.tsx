@@ -1,9 +1,10 @@
 import {
+  Accessor,
   Component,
   Index,
-  JSX,
   Match,
   Show,
+  Signal,
   Suspense,
   Switch,
   createEffect,
@@ -21,32 +22,33 @@ import {
   searchMemoriesText,
 } from "~/lib/api";
 import toast, { Toaster } from "solid-toast";
-import useClickOutside from "solid-click-outside";
 import styles from "./translation.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import { EditDefinition } from "./editDefinition";
 import { setMainStore } from "~/lib/mystore";
+import { clickOutside } from "~/utils";
 
-let searchRef: HTMLInputElement;
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      searchTranslate: Signal<string>;
+    }
+  }
+}
+
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      clickOutside: () => void;
+    }
+  }
+}
+
 const Translation: Component<{
   translateText: string;
 }> = (props) => {
   const insertActionResult = useSubmission(insertVocabularyItem);
-  const [meaning, setMeaning] = createSignal<string>("");
-
-  const handleSetTransInput = (text: string) => {
-    setMeaning(meaning() + text);
-  };
-
-  const onKeyDownTranslate: JSX.EventHandlerUnion<
-    HTMLInputElement,
-    KeyboardEvent
-  > = (event) => {
-    event.stopPropagation();
-    const keyDown = event.key;
-    if (keyDown === "Enter") handleTranslate();
-  };
 
   createEffect(async () => {
     const checkMemories = await searchMemoriesText(translateTerm());
@@ -79,13 +81,6 @@ const Translation: Component<{
     )
   );
 
-  //outside click close
-  const [target, setTarget] = createSignal<HTMLElement | undefined>();
-
-  useClickOutside(target, () => {
-    setMainStore("showTranslate", false);
-  });
-
   // ------------------------------------------------------------------------------- //
   const [translateTerm, setTranslateTerm] = createSignal<string>(
     props.translateText
@@ -102,12 +97,32 @@ const Translation: Component<{
   const [audio, { refetch: refetchAudio, mutate: mutateAudio }] =
     createResource(translateTerm, getOedSoundURL);
 
-  const handleTranslate = async () => {
-    setTranslateTerm(searchRef.value);
+  const [meaning, setMeaning] = createSignal<string>("");
+  const handleSetTransInput = (text: string) => {
+    setMeaning(meaning() + text);
+  };
+
+  const searchTranslate = (
+    element: HTMLDivElement,
+    value: Accessor<Signal<string>>
+  ) => {
+    const [field, setField] = value();
+    element.addEventListener("keydown", (e) => {
+      e.stopPropagation();
+      const keyDown = e.key;
+      const value = (e.target as HTMLInputElement).value;
+      if (keyDown === "Enter") {
+        setField(value);
+      }
+    });
+  };
+
+  const close = () => {
+    setMainStore("showTranslate", false);
   };
 
   return (
-    <div class={styles.translation} tabIndex={1} ref={setTarget}>
+    <div class={styles.translation} tabIndex={1} use:clickOutside={close}>
       <div class={styles.translationHeader}>
         <div class={styles.translationHeaderLeft}></div>
         <div class={styles.translationHeaderRight}>
@@ -126,22 +141,18 @@ const Translation: Component<{
             class={styles.searchLeftOrnament}
           />
           <input
-            class={styles.searchInput}
+            type="text"
             autocomplete="off"
-            ref={searchRef}
-            value={props.translateText}
-            onKeyDown={onKeyDownTranslate}
+            class={styles.searchInput}
+            use:searchTranslate={[translateTerm, setTranslateTerm]}
           />
-          <button class={styles.searchButton} onClick={handleTranslate}>
-            <img src="/images/main/center.png" />
-          </button>
           <img
             src="/images/main/input-right-corner.png"
             class={styles.searchRightOrnament}
           />
         </div>
 
-        <Suspense fallback={<div>...</div>}>
+        <Suspense fallback={<div class={forms.formBody}>...</div>}>
           <form
             action={insertVocabularyItem}
             method="post"

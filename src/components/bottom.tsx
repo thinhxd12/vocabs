@@ -192,7 +192,7 @@ const Bottom: Component<{}> = () => {
         hidden
         ref={audioRef}
         src={mainStore.audioSrc}
-        onloadeddata={() => audioRef.play()}
+        autoplay
         onended={() => setMainStore("audioSrc", "")}
       ></audio>
       <div class={styles.bottomBar}>

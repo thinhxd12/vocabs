@@ -9,13 +9,13 @@ import { action, useSubmission } from "@solidjs/router";
 import { editVocabularyItem, getTextDataWebster } from "~/lib/api";
 import toast, { Toaster } from "solid-toast";
 import { createStore } from "solid-js/store";
-import useClickOutside from "solid-click-outside";
 import { FaRegularImage, FaSolidExpand } from "solid-icons/fa";
 import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import styles from "./edit.module.scss";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import { EditDefinition } from "./editDefinition";
+import { clickOutside } from "~/utils";
 
 const Edit: Component<{}> = (props) => {
   const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
@@ -52,13 +52,6 @@ const Edit: Component<{}> = (props) => {
   };
 
   //----------------------TOAST----------------------
-
-  //outside click close
-  const [target, setTarget] = createSignal<HTMLElement | undefined>();
-
-  useClickOutside(target, () => {
-    setMainStore("showEdit", false);
-  });
 
   //handy edit
   const [handyResult, setHandyResult] =
@@ -144,8 +137,12 @@ const Edit: Component<{}> = (props) => {
     });
   };
 
+  const close = () => {
+    setMainStore("showEdit", false);
+  };
+
   return (
-    <div class={styles.edit} tabIndex={1} ref={setTarget}>
+    <div class={styles.edit} tabIndex={1} use:clickOutside={close}>
       <div class={styles.editHeader}>
         <div class={styles.editHeaderLeft}></div>
         <div class={styles.editHeaderRight}>

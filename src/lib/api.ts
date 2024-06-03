@@ -178,7 +178,7 @@ async function fetchGetText(url: string) {
     }
 }
 
-export const getTextDataWebster = async (text: string) => {
+export const getTextDataWebster = cache(async (text: string) => {
     "use server";
     if (!text) return;
     const url = `https://www.merriam-webster.com/dictionary/${text}`;
@@ -332,7 +332,7 @@ export const getTextDataWebster = async (text: string) => {
     } catch (error) {
         console.error(error);
     }
-};
+}, "webster");
 
 const handleGetDefinitions = (data: string) => {
     const doc = parse(data);
