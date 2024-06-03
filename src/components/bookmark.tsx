@@ -29,13 +29,15 @@ import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
 import { AiOutlineInsertRowBelow } from "solid-icons/ai";
 
-const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
-  const onKeyDownDiv: JSX.EventHandlerUnion<HTMLDivElement, KeyboardEvent> = (
-    event
-  ) => {
-    event.stopPropagation();
-  };
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      stopKeydown: () => void;
+    }
+  }
+}
 
+const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [bookmark, setBookmark] = createSignal<BookmarkType>();
 
   onMount(async () => {
@@ -68,8 +70,18 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [showEdit, setShowEdit] = createSignal<boolean>(false);
   const [showInsert, setShowInsert] = createSignal<boolean>(false);
 
+  const stopKeydown = (element: HTMLDivElement): void => {
+    element.addEventListener("keydown", (e) => {
+      e.stopPropagation();
+    });
+  };
+
   return (
-    <div class={styles.bookmarkContainer} onKeyDown={onKeyDownDiv}>
+    <div
+      class={styles.bookmarkContainer}
+      tabIndex={2}
+      use:stopKeydown={() => {}}
+    >
       <div class={styles.bookmarkHeader}>
         <div class={styles.bookmarkHeaderLeft}>
           <button
@@ -153,12 +165,13 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
                 autocomplete="off"
                 name="bookmarks"
                 value={bookmark()!.content}
-                onChange={(e) =>
+                onChange={(e) => {
+                  e.stopPropagation();
                   setBookmark({
                     ...bookmark()!,
                     content: e.currentTarget.value,
-                  })
-                }
+                  });
+                }}
               />
               <input hidden name="id" value={bookmark()!.created_at} />
               <button type="submit" class={buttons.buttonSubmit}>
