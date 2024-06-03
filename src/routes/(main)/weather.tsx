@@ -60,6 +60,7 @@ const Weather: Component<{}> = (props) => {
   ];
 
   const [geo, setGeo] = createSignal<string>(WEATHER_GEOS[0].geo);
+  const [geoTitle, setGeoTitle] = createSignal<string>(WEATHER_GEOS[0].name);
   const [current, { refetch: refetchCurrent, mutate: mutateCurrent }] =
     createResource(geo, getCurrentWeatherData);
 
@@ -71,6 +72,7 @@ const Weather: Component<{}> = (props) => {
 
   const handleRenderWeather = (num: string) => {
     setGeo(WEATHER_GEOS[Number(num)].geo);
+    setGeoTitle(WEATHER_GEOS[Number(num)].name);
     refetchCurrent();
     refetchMinutely();
   };
@@ -439,102 +441,105 @@ const Weather: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <TitleName>weather</TitleName>
+      <TitleName>⛅ {geoTitle()}</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio hidden src={audioSrc()} autoplay loop ref={audio}></audio>
       <div class={styles.weather}>
         <canvas ref={canvas} class={styles.weatherBackground} />
-        <div class={styles.weatherMain}>
-          <Suspense fallback={<div class={styles.weatherContentLoading}></div>}>
-            <div
-              class={
-                current()?.isDayTime
-                  ? styles.weatherContentDay
-                  : styles.weatherContentNight
-              }
-            >
-              <select
-                class={styles.weatherGeos}
-                onchange={(e) => handleRenderWeather(e.currentTarget.value)}
-              >
-                <Index each={WEATHER_GEOS}>
-                  {(item, index) => (
-                    <option value={index}> {item().name}</option>
-                  )}
-                </Index>
-              </select>
-              <div class={styles.weatherContentMain}>
-                <img class={styles.weatherImg} src={current()?.icon} />
-                <div class={styles.weatherContentText}>
-                  <p class={styles.weatherContentTemp}>
-                    {Math.round(current()?.temperature || 0)}°
-                  </p>
-                  <p class={styles.weatherContentInfo}>
-                    Feels {Math.round(current()?.apparentTemperature || 0)}
-                    °C
-                  </p>
-                  <p class={styles.weatherContentInfo}>
-                    Humidity {current()?.humidity} %
-                  </p>
-                  <div class={styles.weatherContentWind}>
-                    <p>
-                      Wind {Math.round(current()?.windSpeed || 0)}
-                      km/h
-                    </p>
-                    <FaSolidArrowUpLong
-                      size={12}
-                      style={{
-                        transform: `rotate(${current()?.windBearing}deg)`,
-                      }}
-                    />
-                  </div>
-                  <p class={styles.weatherContentInfo}>
-                    {format(new Date(current()?.time || 0), "h:mm a")}
-                    {" - "}
-                    {current()?.summary}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </Suspense>
-          <Suspense fallback={<div class={styles.weatherChartLoading}></div>}>
-            <div class={styles.weatherChart}>
-              <div class={styles.weatherChartContent}>
-                <Line
-                  data={{
-                    labels: minutely()?.map((item) => item.diffTime),
-                    datasets: [
-                      {
-                        label: "",
-                        data: minutely()?.map((item) => item.intensity),
-                        borderColor: "#009bff",
-                        backgroundColor: "#52a0c1bf",
-                        yAxisID: "y",
-                        fill: true,
-                        tension: 0.1,
-                        pointRadius: 0,
-                        borderWidth: 1,
-                      },
-                      {
-                        label: "",
-                        data: minutely()?.map((item) => item.probability),
-                        borderColor: "#f90000",
-                        yAxisID: "y1",
-                        fill: false,
-                        tension: 0.3,
-                        pointRadius: 0,
-                        borderWidth: 1.5,
-                      },
-                    ],
+
+        <select
+          class={
+            current()?.isDayTime
+              ? styles.weatherGeosDay
+              : styles.weatherGeosNight
+          }
+          onchange={(e) => handleRenderWeather(e.currentTarget.value)}
+        >
+          <Index each={WEATHER_GEOS}>
+            {(item, index) => <option value={index}>{item().name}</option>}
+          </Index>
+        </select>
+
+        <Suspense
+          fallback={<div class={styles.weatherContentLoading}>...</div>}
+        >
+          <div
+            class={
+              current()?.isDayTime
+                ? styles.weatherContentDay
+                : styles.weatherContentNight
+            }
+          >
+            <img class={styles.weatherImg} src={current()?.icon} width={120} />
+            <div class={styles.weatherContentText}>
+              <p class={styles.weatherContentTemp}>
+                {Math.round(current()?.temperature || 0)}°
+              </p>
+              <p class={styles.weatherContentInfo}>
+                Feels {Math.round(current()?.apparentTemperature || 0)}
+                °C
+              </p>
+              <p class={styles.weatherContentInfo}>
+                Humidity {current()?.humidity} %
+              </p>
+              <div class={styles.weatherContentWind}>
+                <p>
+                  Wind {Math.round(current()?.windSpeed || 0)}
+                  km/h
+                </p>
+                <FaSolidArrowUpLong
+                  size={12}
+                  style={{
+                    transform: `rotate(${current()?.windBearing}deg)`,
                   }}
-                  options={chartOptions}
                 />
               </div>
-              <p class={styles.weatherPredict}>{prediction()}</p>
+              <p class={styles.weatherContentInfo}>
+                {format(new Date(current()?.time || 0), "h:mm a")}
+                {" - "}
+                {current()?.summary}
+              </p>
             </div>
-          </Suspense>
-        </div>
+          </div>
+        </Suspense>
+
+        <Suspense fallback={<div class={styles.weatherChartLoading}></div>}>
+          <div class={styles.weatherChart}>
+            <div class={styles.weatherChartContent}>
+              <Line
+                data={{
+                  labels: minutely()?.map((item) => item.diffTime),
+                  datasets: [
+                    {
+                      label: "",
+                      data: minutely()?.map((item) => item.intensity),
+                      borderColor: "#009bff",
+                      backgroundColor: "#52a0c1bf",
+                      yAxisID: "y",
+                      fill: true,
+                      tension: 0.1,
+                      pointRadius: 0,
+                      borderWidth: 1,
+                    },
+                    {
+                      label: "",
+                      data: minutely()?.map((item) => item.probability),
+                      borderColor: "#f90000",
+                      yAxisID: "y1",
+                      fill: false,
+                      tension: 0.3,
+                      pointRadius: 0,
+                      borderWidth: 1.5,
+                    },
+                  ],
+                }}
+                options={chartOptions}
+              />
+            </div>
+            <p class={styles.weatherPredict}>{prediction()}</p>
+          </div>
+        </Suspense>
       </div>
     </MetaProvider>
   );

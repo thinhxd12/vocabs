@@ -105,7 +105,8 @@
             border: 1px solid $color-border;
             min-height: 150px;
             background-image: url("/images/main/paper.jpeg");
-            background-size: cover;
+            background-size: 900px 900px;
+            background-position: top center;
         }
 
         .editItemThumb {

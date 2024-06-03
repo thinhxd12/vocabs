@@ -103,7 +103,7 @@ const Calendar: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <Title>calendar</Title>
+      <Title>📆</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <div class={styles.calendar}>

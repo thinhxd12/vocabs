@@ -14,44 +14,22 @@
         position: absolute;
         top: 0;
         left: 0;
-        z-index: 9;
-    }
-
-    .weatherMain {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 99;
+        z-index: 1;
     }
 
     &::-webkit-scrollbar {
         display: none;
     }
 
-    .weatherContentNight {
-
-        .weatherGeos {
-            color: $color-calendar-white;
-        }
-
-        .weatherContentMain {
-
-            p,
-            .weatherContentWind p {
-                color: $color-calendar-white;
-            }
-
-            svg {
-                fill: $color-calendar-white;
-            }
-        }
-    }
-
-    .weatherGeos {
+    .weatherGeosDay {
         background: none;
         outline: none;
         border: none;
         height: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 999;
         @include font('Rubik', 12px, $color-black, 400, normal, 12px);
 
         option {
@@ -59,36 +37,38 @@
         }
     }
 
-    .weatherContentMain {
-        width: 100%;
+    .weatherGeosNight {
+        @extend .weatherGeosDay;
+        color: $color-calendar-white;
+    }
+
+    .weatherContentDay {
+        width: 360px;
+        min-height: 120px;
+        position: inherit;
+        z-index: 3;
         @include flex-center;
+    }
 
-        .weatherImg {
-            width: 120px;
-            margin-right: 25px;
-        }
+    .weatherContentNight {
+        @extend .weatherContentDay;
 
-        .weatherContentTemp {
-            @include font('Rubik', 54px, $color-black, 400, normal, 50px);
-        }
-
-        .weatherContentInfo {
-            @include font('Rubik', 10px, $color-black, 400, normal, 12px);
-        }
-
-        .weatherContentWind {
-            @include flex;
-            height: 10px;
-            margin: 2px 0;
-
-            p {
-                @include font('Rubik', 10px, $color-black, 400, normal, 12px);
-                margin-right: 3px;
-            }
+        p {
+            color: $color-calendar-white !important;
         }
     }
 
+    .weatherContentLoading {
+        width: 360px;
+        min-height: 120px;
+        position: inherit;
+        z-index: 3;
+        text-align: center;
+    }
+
     .weatherChart {
+        position: inherit;
+        z-index: 3;
         background-color: rgba(255, 255, 255, 0.06);
         backdrop-filter: blur(6px);
         box-shadow: rgba(0, 0, 0, 0.6) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
@@ -109,11 +89,6 @@
         text-align: center;
     }
 
-    .weatherContentLoading {
-        width: 360px;
-        height: 140px;
-    }
-
     .weatherChartLoading {
         width: 330px;
         height: 193px;
@@ -122,6 +97,29 @@
         box-shadow: rgba(0, 0, 0, 0.6) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
         border-radius: 6px;
         margin: 0 15px;
+        position: inherit;
+        z-index: 3;
+    }
+
+    .weatherContentText {
+        .weatherContentTemp {
+            @include font('Rubik', 54px, $color-black, 400, normal, 50px);
+        }
+
+        .weatherContentInfo {
+            @include font('Rubik', 10px, $color-black, 400, normal, 12px);
+        }
+
+        .weatherContentWind {
+            @include flex;
+            height: 10px;
+            margin: 2px 0;
+
+            p {
+                @include font('Rubik', 10px, $color-black, 400, normal, 12px);
+                margin-right: 3px;
+            }
+        }
     }
 
 }

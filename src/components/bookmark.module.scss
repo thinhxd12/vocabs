@@ -69,7 +69,8 @@
     .bookmarkBodyChecked {
         @extend .bookmarkBody;
         background: url("/images/main/paper.jpeg");
-        background-size: cover;
+        background-size: 900px 900px;
+        background-position: top center;
     }
 
     .bookmarkTextArea {
@@ -80,8 +81,7 @@
         outline: none;
         border: 1px solid $color-border;
         min-height: 150px;
-        background-image: url("/images/main/paper.jpeg");
-        background-size: cover;
+        background-color: $color-calendar-bg;
     }
 
     .bookmarkCredits {
