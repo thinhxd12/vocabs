@@ -77,12 +77,9 @@ const FlipCard: Component<{}> = (props) => {
     <>
       <div class={styles.flipCardLeftContent}>
         <div class={styles.numberFlipContainer}>
-          <img
-            class={styles.numberFlipBackground}
-            src="/images/main/flagfabricver.png"
-            height={186}
-            width={50}
-          />
+          <div class={styles.numberFlipBackground}>
+            <img src="/images/main/red.jpg" height={186} />
+          </div>
           <div class={styles.numberFlipContent}>
             <Show when={currenText()}>
               <Show

@@ -493,6 +493,7 @@ const Weather: Component<{}> = (props) => {
                   style={{
                     transform: `rotate(${current()?.windBearing}deg)`,
                   }}
+                  color={current()?.isDayTime ? "#000" : "#f4f4f4"}
                 />
               </div>
               <p class={styles.weatherContentInfo}>

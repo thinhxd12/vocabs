@@ -1,6 +1,5 @@
 import {
   Component,
-  JSX,
   Setter,
   Show,
   Suspense,

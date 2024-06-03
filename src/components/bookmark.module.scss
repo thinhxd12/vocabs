@@ -48,7 +48,6 @@
             margin-top: 3px;
             text-align: center;
             text-transform: uppercase;
-            border-radius: 3px;
             box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
 
             background-image: url('/images/main/input-left-corner.png'),
@@ -69,8 +68,7 @@
     .bookmarkBodyChecked {
         @extend .bookmarkBody;
         background: url("/images/main/paper.jpeg");
-        background-size: 900px 900px;
-        background-position: top center;
+        background-size: 900px auto;
     }
 
     .bookmarkTextArea {

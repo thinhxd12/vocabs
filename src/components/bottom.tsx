@@ -35,6 +35,7 @@ const Bottom: Component<{}> = () => {
 
   onMount(async () => {
     audioRef.volume = 1;
+    audioRef.preload = 'auto';
     const data = await getTotalMemories();
     if (data) {
       setMainStore("totalMemories", data);
