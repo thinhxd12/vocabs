@@ -632,7 +632,7 @@ export const handleCheckWord = async (text: VocabularyType) => {
         const data = await getSmallestWordNumberFromRange(text.word);
 
         if (data) {
-            await deleteSmallestWordNumberFromRange(data.created_at);
+            await deleteVocabulary(data.created_at);
             await updateArchiveWord(data, text.created_at);
             const total = await getTotalMemories();
             setMainStore("totalMemories", total);
@@ -694,13 +694,6 @@ export const updateArchiveWord = async (data: VocabularyType, time: string) => {
         .eq('created_at', time);
 }
 
-export const deleteSmallestWordNumberFromRange = async (time: string) => {
-    "use server";
-    const { error } = await supabase
-        .from(mapTables.vocabulary)
-        .delete()
-        .eq('created_at', time);
-}
 //archiver ------------------------------------ end
 
 
