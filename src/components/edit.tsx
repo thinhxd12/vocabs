@@ -55,7 +55,8 @@ const Edit: Component<{
   const handleSubmitForm = () => {
     setSubmittedForm(true);
     setMainStore("renderWord", {
-      ...renderEditWord,
+      ...mainStore.renderWord,
+      definitions: renderEditWord().definitions,
     });
   };
 
