@@ -1,18 +1,17 @@
 @import "../assets/styles/mixins.scss";
 
 .flipCardLeftContent {
-    width: 66px;
     height: 100%;
     overflow: hidden;
 
     .numberFlipContainer {
-        width: 64px;
+        width: 62px;
         height: 100%;
         background-color: $color-white;
         @include flex-center;
 
         .numberFlipBackground {
-            width: 56px;
+            width: 54px;
             height: 100%;
             background-color: $color-black;
             position: relative;
