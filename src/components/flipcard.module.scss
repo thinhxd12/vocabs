@@ -6,33 +6,32 @@
     overflow: hidden;
 
     .numberFlipContainer {
-        width: 60px;
+        width: 64px;
         height: 100%;
-        margin-left: auto;
-        border-left: 3px solid $color-white;
-        border-right: 3px solid $color-white;
-        position: relative;
+        background-color: $color-white;
         @include flex-center;
 
         .numberFlipBackground {
-            position: absolute;
-            left: 2px;
-            top: 0;
-            width: 50px;
-            height: 186px;
-            overflow: hidden;
+            width: 56px;
+            height: 100%;
+            background-color: $color-black;
+            position: relative;
+            @include flex-center-column;
 
             img {
-                position: inherit;
+                position: absolute;
+                left: 2px;
+                top: 0;
+            }
+
+            .numberFlipContent {
+                width: 46px;
+                height: 46px;
+                z-index: 999;
             }
         }
-
-        .numberFlipContent {
-            width: 46px;
-            height: 46px;
-            z-index: 999;
-        }
     }
+
 }
 
 .numbersContentBackground {
