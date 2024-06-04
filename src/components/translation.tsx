@@ -37,14 +37,6 @@ declare module "solid-js" {
   }
 }
 
-declare module "solid-js" {
-  namespace JSX {
-    interface Directives {
-      clickOutside: () => void;
-    }
-  }
-}
-
 const Translation: Component<{
   translateText: string;
 }> = (props) => {
@@ -143,6 +135,7 @@ const Translation: Component<{
           <input
             type="text"
             autocomplete="off"
+            value={translateTerm()}
             class={styles.searchInput}
             use:searchTranslate={[translateTerm, setTranslateTerm]}
           />

@@ -1,4 +1,11 @@
-import { Component, Show, createEffect, createSignal, on } from "solid-js";
+import {
+  Component,
+  Show,
+  createEffect,
+  createSignal,
+  on,
+  onMount,
+} from "solid-js";
 import { OcX2 } from "solid-icons/oc";
 import {
   VocabularyDefinitionType,
@@ -17,7 +24,9 @@ import { mainStore, setMainStore } from "~/lib/mystore";
 import { EditDefinition } from "./editDefinition";
 import { clickOutside } from "~/utils";
 
-const Edit: Component<{}> = (props) => {
+const Edit: Component<{
+  word: VocabularyType;
+}> = (props) => {
   const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
   const editActionResult = useSubmission(editVocabularyItem);
 
@@ -48,7 +57,6 @@ const Edit: Component<{}> = (props) => {
     setMainStore("renderWord", {
       ...renderEditWord,
     });
-    setMainStore("showEdit", false);
   };
 
   //----------------------TOAST----------------------
@@ -72,9 +80,9 @@ const Edit: Component<{}> = (props) => {
     const year = String(formData.get("editItem--year"));
     const syn = String(formData.get("editItem--syn"));
     const newText =
-      mainStore.editWord!.word.length > 4
-        ? mainStore.editWord!.word.slice(0, -2)
-        : mainStore.editWord!.word;
+      props.word.word.length > 4
+        ? props.word.word.slice(0, -2)
+        : props.word.word;
     const regText = new RegExp(`(${newText}\\w*)`, "gi");
     x = x.replace(regText, `<b>$1</b>`);
     let defArr = [];
@@ -103,19 +111,21 @@ const Edit: Component<{}> = (props) => {
   });
 
   //edit
-  const [renderEditWord, setRenderEditWord] = createStore<VocabularyType>({
-    ...mainStore.editWord!,
-  });
+  const [resultEditWord, setResultEditWord] = createSignal<VocabularyType>(
+    props.word
+  );
+  const [renderEditWord, setRenderEditWord] = createSignal<VocabularyType>(
+    props.word
+  );
   const [translationsString, setTranslationsString] = createSignal<string>("");
 
   createEffect(async () => {
-    const str = makeTranslationText(mainStore.editWord!.translations);
+    const str = makeTranslationText(props.word?.translations);
     setTranslationsString(str);
-    const { word } = { ...mainStore.editWord };
-    const data = await getTextDataWebster(word!);
+    const data = await getTextDataWebster(props.word?.word);
     if (data)
       setRenderEditWord({
-        ...mainStore.editWord,
+        ...props.word,
         definitions: data.definitions,
       });
   });
@@ -131,9 +141,10 @@ const Edit: Component<{}> = (props) => {
   };
 
   const handleCheck = () => {
-    setMainStore("editWord", {
-      definitions: renderEditWord.definitions,
-      phonetics: renderEditWord.phonetics,
+    setResultEditWord({
+      ...props.word,
+      definitions: renderEditWord().definitions,
+      phonetics: renderEditWord().phonetics,
     });
   };
 
@@ -141,8 +152,19 @@ const Edit: Component<{}> = (props) => {
     setMainStore("showEdit", false);
   };
 
+  const stopKeydown = (element: HTMLDivElement): void => {
+    element.addEventListener("keydown", (e) => {
+      e.stopPropagation();
+    });
+  };
+
   return (
-    <div class={styles.edit} tabIndex={1} use:clickOutside={close}>
+    <div
+      class={styles.edit}
+      tabIndex={3}
+      use:clickOutside={close}
+      use:stopKeydown={() => {}}
+    >
       <div class={styles.editHeader}>
         <div class={styles.editHeaderLeft}></div>
         <div class={styles.editHeaderRight}>
@@ -271,7 +293,7 @@ const Edit: Component<{}> = (props) => {
               class={styles.searchInput}
               name="word"
               autocomplete="off"
-              value={mainStore.editWord!.word}
+              value={resultEditWord()?.word}
             />
             <img
               src="/images/main/input-right-corner.png"
@@ -284,7 +306,7 @@ const Edit: Component<{}> = (props) => {
               class={forms.formInput}
               name="audio"
               autocomplete="off"
-              value={mainStore.editWord!.audio}
+              value={resultEditWord()?.audio}
             />
           </div>
           <div class={forms.formInputGroup}>
@@ -292,16 +314,17 @@ const Edit: Component<{}> = (props) => {
               class={forms.formInput}
               name="phonetics"
               autocomplete="off"
-              value={mainStore.editWord!.phonetics}
+              value={resultEditWord()?.phonetics}
             />
           </div>
           <div class={forms.formInputGroup}>
             <textarea
               name="definitions"
               class={forms.formTextarea}
-              value={JSON.stringify(mainStore.editWord!.definitions, null, " ")}
+              value={JSON.stringify(resultEditWord()?.definitions, null, " ")}
               onChange={(e) =>
                 setRenderEditWord({
+                  ...resultEditWord(),
                   definitions: JSON.parse(e.currentTarget.value),
                 })
               }
@@ -321,14 +344,14 @@ const Edit: Component<{}> = (props) => {
               class={forms.formInput}
               name="number"
               autocomplete="off"
-              value={mainStore.editWord!.number}
+              value={resultEditWord()?.number}
             />
           </div>
           <input
             type="text"
             name="created_at"
             autocomplete="off"
-            value={mainStore.editWord!.created_at}
+            value={resultEditWord()?.created_at}
             style={{ display: "none" }}
           />
           <button
@@ -339,8 +362,9 @@ const Edit: Component<{}> = (props) => {
             Submit
           </button>
         </form>
-
-        <EditDefinition item={renderEditWord} onCheck={handleCheck} />
+        <Show when={renderEditWord()}>
+          <EditDefinition item={renderEditWord()!} onCheck={handleCheck} />
+        </Show>
       </div>
       <Toaster
         position="top-center"

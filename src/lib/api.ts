@@ -104,7 +104,7 @@ export const uploadObjToSupabase = action(async (objs: Object[]) => {
 });
 
 //get image link
-export const getDataImage = action(async (url: string) => {
+export const getDataImage = (async (url: string) => {
     "use server";
     try {
         const response = await fetch(url);

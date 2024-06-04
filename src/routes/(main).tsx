@@ -1,4 +1,4 @@
-import { useAction, RouteSectionProps } from "@solidjs/router";
+import { RouteSectionProps } from "@solidjs/router";
 import { Show, Suspense } from "solid-js";
 import { createStore } from "solid-js/store";
 import { getDataImage, getUnsplashImage } from "~/lib/api";
@@ -12,8 +12,6 @@ import { mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./main.module.scss";
 
 export default function Main(props: RouteSectionProps) {
-  const getDataImageAction = useAction(getDataImage);
-
   const mockObj = {
     image: "/images/main/main-image.jpg",
     date: "01 July 2023",
@@ -31,7 +29,7 @@ export default function Main(props: RouteSectionProps) {
   const [imageObj, setImageObj] = createStore<ImageType>(mockObj);
 
   const getNextImageData = async (url: string) => {
-    const result = await getDataImageAction(url);
+    const result = await getDataImage(url);
     if (result) {
       setImageObj(result);
     } else handleGetUnsplashImage();
@@ -51,11 +49,6 @@ export default function Main(props: RouteSectionProps) {
       authorImg: data[0].user.profile_image.medium,
       authorName: data[0].user.name,
       authorYear: "",
-    });
-    const bookmarkUrl = import.meta.env.VITE_BOOKMARK;
-    const quote = await (await fetch(bookmarkUrl + `getRandomBookmark`)).json();
-    setImageObj({
-      content: `<p>"${quote.value}"</p>`,
     });
   };
 

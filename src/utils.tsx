@@ -312,7 +312,15 @@ export const WMOCODE = {
   },
 };
 
-import { Accessor, Signal, onCleanup } from "solid-js";
+import { onCleanup } from "solid-js";
+
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      clickOutside: () => void;
+    }
+  }
+}
 
 export function clickOutside(element: HTMLDivElement, accessor: any) {
   const onClick = (event: Event) => {

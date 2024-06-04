@@ -1,19 +1,10 @@
-import { Component, Index, Setter, Show, createMemo } from "solid-js";
-import { VocabularyType } from "~/types";
-import { FaSolidCheck } from "solid-icons/fa";
+import { Component, Index, Show } from "solid-js";
 import styles from "./definition.module.scss";
-import buttons from "../assets/styles/buttons.module.scss";
-import { mainStore, setMainStore } from "~/lib/mystore";
+import { mainStore } from "~/lib/mystore";
 
-const Definition: Component<{}> = () => {
-  const handleEdit = () => {
-    setMainStore("showEdit", true);
-    setMainStore("editWord", {
-      ...mainStore.renderWord,
-      number: mainStore.renderWord!.number - 1,
-    });
-  };
-
+const Definition: Component<{
+  onEdit: () => void;
+}> = (props) => {
   return (
     <>
       <Show when={mainStore.renderWord}>
@@ -23,7 +14,7 @@ const Definition: Component<{}> = () => {
               {(item, index) => {
                 return (
                   <div class={styles.websEntry}>
-                    <p class={styles.websHead} onclick={handleEdit}>
+                    <p class={styles.websHead} onClick={() => props.onEdit()}>
                       {item().partOfSpeech}
                     </p>
                     <Index each={item().definitions}>

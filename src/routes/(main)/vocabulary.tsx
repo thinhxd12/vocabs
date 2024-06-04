@@ -125,8 +125,9 @@ const Vocabulary: Component<{}> = () => {
   // -------------------DELETE END-------------------- //
 
   // -------------------EDIT START-------------------- //
+  const [editWord, setEditWord] = createSignal<VocabularyType>();
   const handleEditVocabulary = (text: VocabularyType) => {
-    setMainStore("editWord", text);
+    setEditWord(text);
     setMainStore("showEdit", true);
     setSearchTerm("");
     setSearchResult([]);
@@ -144,8 +145,8 @@ const Vocabulary: Component<{}> = () => {
     const [field, setField] = value();
     element.addEventListener("keydown", (e) => {
       const keyDown = e.key;
-      if (keyDown.match(/^[a-z\-]$/)) {
-        setSearchTerm(searchTerm() + keyDown);
+      if (keyDown.match(/^[a-zA-Z\-]$/)) {
+        setSearchTerm(searchTerm() + String(keyDown).toLowerCase());
         if (searchTerm().length > 2) {
           trigger(searchTerm());
         }
@@ -325,7 +326,9 @@ const Vocabulary: Component<{}> = () => {
             </Show>
 
             {/* Definition */}
-            <Definition />
+            <Definition
+              onEdit={() => handleEditVocabulary(mainStore.renderWord!)}
+            />
           </div>
         </div>
         {/* Edit */}
@@ -344,7 +347,7 @@ const Vocabulary: Component<{}> = () => {
               }}
               transition={{ duration: 0.2, easing: "ease-in-out" }}
             >
-              <Edit />
+              <Edit word={editWord()!} />
             </Motion.div>
           </Show>
         </Presence>
