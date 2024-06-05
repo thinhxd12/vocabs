@@ -54,10 +54,11 @@ const Edit: Component<{
 
   const handleSubmitForm = () => {
     setSubmittedForm(true);
-    setMainStore("renderWord", {
-      ...mainStore.renderWord,
-      definitions: renderEditWord().definitions,
-    });
+    if (mainStore.renderWord)
+      setMainStore("renderWord", {
+        ...mainStore.renderWord,
+        definitions: renderEditWord().definitions,
+      });
   };
 
   //----------------------TOAST----------------------

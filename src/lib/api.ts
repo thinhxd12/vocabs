@@ -696,7 +696,6 @@ export const updateArchiveWord = async (data: VocabularyType, time: string) => {
 
 //archiver ------------------------------------ end
 
-
 export const updateTodaySchedule = async (type: number, numb: number, day: string) => {
     "use server";
     const updateObj = type === 1 ? { time1: numb } : { time2: numb }

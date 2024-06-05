@@ -138,37 +138,38 @@ const Weather: Component<{}> = (props) => {
         position: "left" as const,
         min: 0,
         max: 1.5,
-        border: { dash: [1, 1] },
+        border: { dash: [2, 2] },
         grid: {
           drawTicks: false,
-          color: ["black", "#ae0000", "#ae0000"],
+          color: ["transparent", "#444444", "#444444"],
         },
         ticks: {
           stepSize: 0.5,
           callback: function (value: any, index: any) {
             switch (value) {
               case 0:
-                return "LIGT";
+                return "LIGHT";
               case 0.5:
                 return "MED";
               case 1:
-                return "HVY";
+                return "HEAVY";
               default:
                 null;
             }
           },
           font: {
-            size: 9,
+            size: 10,
             weight: "normal",
           },
           color: "black",
+          padding: 3,
         },
       },
       y1: {
         min: 0,
         max: 1,
         type: "linear" as const,
-        display: true,
+        display: false,
         position: "right" as const,
         grid: {
           display: true,
@@ -192,13 +193,13 @@ const Weather: Component<{}> = (props) => {
 
   // -------------------------------CANVAS------------------
   const textureBgSize = {
-    width: 384,
-    height: 256,
+    width: 900,
+    height: 1900,
   };
 
   const textureFgSize = {
-    width: 96,
-    height: 64,
+    width: 90,
+    height: 190,
   };
 
   const defaultOptions = {
