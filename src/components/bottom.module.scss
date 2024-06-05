@@ -217,6 +217,18 @@
             height: 100%;
             z-index: 12;
         }
+
+        .bottomImageProgress {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 1px;
+            z-index: 24;
+            background-color: $color-calendar-green-1;
+            box-shadow: 0 0 6px $color-calendar-green-2;
+            transition: all 0.3s ease;
+        }
+
     }
 
     .bottomMenu {

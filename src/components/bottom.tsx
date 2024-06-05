@@ -35,7 +35,7 @@ const Bottom: Component<{}> = () => {
 
   onMount(async () => {
     audioRef.volume = 1;
-    audioRef.preload = 'auto';
+    audioRef.preload = "auto";
     const data = await getTotalMemories();
     if (data) {
       setMainStore("totalMemories", data);
@@ -302,6 +302,14 @@ const Bottom: Component<{}> = () => {
                 />
               </Show>
             </Presence>
+            <Show when={listStore.listCount}>
+              <Motion.div
+                class={styles.bottomImageProgress}
+                animate={{
+                  width: `${listStore.listCount * 2}%`,
+                }}
+              ></Motion.div>
+            </Show>
           </div>
         </Show>
       </div>
