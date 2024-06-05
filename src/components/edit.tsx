@@ -54,7 +54,7 @@ const Edit: Component<{
 
   const handleSubmitForm = () => {
     setSubmittedForm(true);
-    if (mainStore.renderWord)
+    if (mainStore.renderWord?.word === resultEditWord().word)
       setMainStore("renderWord", {
         ...mainStore.renderWord,
         definitions: renderEditWord().definitions,
