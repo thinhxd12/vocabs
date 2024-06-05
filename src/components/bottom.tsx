@@ -1,4 +1,4 @@
-import { A, createAsync, useAction } from "@solidjs/router";
+import { A, useAction } from "@solidjs/router";
 import { Component, Show, createSignal, onMount } from "solid-js";
 import { format } from "date-fns";
 import styles from "./bottom.module.scss";
@@ -25,17 +25,15 @@ import { OcHourglass2 } from "solid-icons/oc";
 
 let intervalCountdown: NodeJS.Timeout;
 let intervalAutoplay: NodeJS.Timeout;
-let audioRef: HTMLAudioElement;
 const [showMenu, setShowMenu] = createSignal<boolean>(false);
 const [showTimer, setShowTimer] = createSignal<boolean>(false);
 const [minute, setMinute] = createSignal<number>(6);
 
 const Bottom: Component<{}> = () => {
+  let audio: HTMLAudioElement | null;
   const todayDate = format(new Date(), "yyyy-MM-dd");
 
   onMount(async () => {
-    audioRef.volume = 1;
-    audioRef.preload = "auto";
     const data = await getTotalMemories();
     if (data) {
       setMainStore("totalMemories", data);
@@ -60,7 +58,8 @@ const Bottom: Component<{}> = () => {
       body: `${letter}-${newProgress}`,
     });
     notification.onclose = () => {
-      setMainStore("audioSrc", "");
+      audio?.pause();
+      audio = null;
       handleAutoplay();
     };
   };
@@ -84,8 +83,10 @@ const Bottom: Component<{}> = () => {
     setMinute(6);
     setShowTimer(false);
     clearInterval(intervalCountdown);
-    setMainStore("audioSrc", "/sounds/09_Autumn_Mvt_3_Allegro.mp3");
     showDesktopNotification();
+    audio = new Audio();
+    audio.src = "/sounds/09_Autumn_Mvt_3_Allegro.mp3";
+    audio.play();
   };
 
   const stopCountdown = () => {
@@ -104,7 +105,6 @@ const Bottom: Component<{}> = () => {
   };
 
   const handleRenderWord = () => {
-    setMainStore("audioSrc", "");
     handleCheckWord(listStore.listContent[listStore.listCount]);
     setListStore("listCount", listStore.listCount + 1);
   };
@@ -189,13 +189,6 @@ const Bottom: Component<{}> = () => {
 
   return (
     <div class={styles.bottom}>
-      <audio
-        hidden
-        ref={audioRef}
-        src={mainStore.audioSrc}
-        autoplay
-        onended={() => setMainStore("audioSrc", "")}
-      ></audio>
       <div class={styles.bottomBar}>
         <div class={styles.bottomIndex}>
           <div class={styles.bottomIndexNums}>

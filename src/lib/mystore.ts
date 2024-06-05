@@ -26,7 +26,6 @@ export const [listStore, setListStore] = createStore<ListStoreType>({
 
 type MainStoreType = {
   totalMemories: number;
-  audioSrc: string;
   showBookmark: boolean;
   showTranslate: boolean;
   showEdit: boolean;
@@ -38,7 +37,6 @@ type MainStoreType = {
 
 export const [mainStore, setMainStore] = createStore<MainStoreType>({
   totalMemories: 0,
-  audioSrc: "",
   showBookmark: false,
   showTranslate: false,
   showEdit: false,

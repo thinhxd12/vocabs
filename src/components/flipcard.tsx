@@ -5,12 +5,14 @@ import {
   createEffect,
   createMemo,
   createSignal,
+  onCleanup,
 } from "solid-js";
 import { Motion } from "solid-motionone";
 import styles from "./flipcard.module.scss";
 import { mainStore, setMainStore } from "~/lib/mystore";
 
 const FlipCard: Component<{}> = (props) => {
+  let audio: HTMLAudioElement | null;
   let timeoutId1: NodeJS.Timeout;
   let timeoutId2: NodeJS.Timeout;
   let timeoutId3: NodeJS.Timeout;
@@ -37,6 +39,7 @@ const FlipCard: Component<{}> = (props) => {
     clearTimeout(timeoutId3);
 
     if (currenText()) {
+      audio = new Audio();
       let currentSound = currenText().audio;
       let translations = currenText()
         .translations.map((item) => item.translations.join(", "))
@@ -49,7 +52,8 @@ const FlipCard: Component<{}> = (props) => {
       setPartOfSpeechs(partOfSpeech);
 
       if (currentSound) {
-        setMainStore("audioSrc", currentSound);
+        audio.src = currentSound;
+        audio.play();
       }
       if (currenText().number > 1) {
         setRenderNumber(currenText().number);
@@ -64,13 +68,18 @@ const FlipCard: Component<{}> = (props) => {
         timeoutId2 = setTimeout(() => {
           setHoverClass(`${styles.cardContent} ${styles.cardContentHover1}`);
           const soundUrl = `https://vocabs3.vercel.app/speech?text=${translations}`;
-          setMainStore("audioSrc", soundUrl);
+          audio!.src = soundUrl;
+          audio!.play();
         }, 3000);
         timeoutId3 = setTimeout(() => {
           setHoverClass(`${styles.cardContent} ${styles.cardContentHover2}`);
         }, 5500);
       }
     }
+    onCleanup(() => {
+      audio?.pause();
+      audio = null;
+    });
   });
 
   return (
