@@ -13,11 +13,11 @@ import styles from "./main.module.scss";
 
 export default function Main(props: RouteSectionProps) {
   const mockObj = {
-    image: "/images/main/main-image.jpg",
+    image: "/images/main/main-image.webp",
     date: "01 July 2023",
     title: "The Red Buoy, Saint-Tropez",
     attr: "Oil on canvas • 81 × 65 cm",
-    authorImg: "/images/main/main-author.jpg",
+    authorImg: "/images/main/main-author.webp",
     authorName: "Paul Signac",
     authorYear: "1895",
     content:

@@ -19,7 +19,7 @@ export default function Login(props: RouteSectionProps) {
           </div>
           <div class={styles.loginItem}>
             <button type="submit" class={styles.loginBtn}>
-              <img src="/images/main/laurel.png" width={18} />
+              <img src="/images/main/laurel.webp" width={18} />
             </button>
           </div>
           <Show when={loggingIn.result}>

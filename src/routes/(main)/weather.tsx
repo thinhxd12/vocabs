@@ -292,14 +292,14 @@ const Weather: Component<{}> = (props) => {
   };
 
   const loadTextures = async () => {
-    const dropAlpha = loadImage("/images/openmeteo/drop-alpha.png");
-    const dropColor = loadImage("/images/openmeteo/drop-color.png");
+    const dropAlpha = loadImage("/images/openmeteo/drop-alpha.webp");
+    const dropColor = loadImage("/images/openmeteo/drop-color.webp");
 
-    const textureDayFg = loadImage("/images/openmeteo/weather/day-fg.jpg");
-    const textureDayBg = loadImage("/images/openmeteo/weather/day-bg.jpg");
+    const textureDayFg = loadImage("/images/openmeteo/weather/day-fg.webp");
+    const textureDayBg = loadImage("/images/openmeteo/weather/day-bg.webp");
 
-    const textureNightFg = loadImage("/images/openmeteo/weather/night-fg.jpg");
-    const textureNightBg = loadImage("/images/openmeteo/weather/night-bg.jpg");
+    const textureNightFg = loadImage("/images/openmeteo/weather/night-fg.webp");
+    const textureNightBg = loadImage("/images/openmeteo/weather/night-bg.webp");
 
     const imagesData = await Promise.all([
       dropAlpha,
@@ -354,11 +354,11 @@ const Weather: Component<{}> = (props) => {
   };
 
   const setupWeather = async () => {
-    const textureDayFg = loadImage("/images/openmeteo/weather/day-fg.jpg");
-    const textureDayBg = loadImage("/images/openmeteo/weather/day-bg.jpg");
+    const textureDayFg = loadImage("/images/openmeteo/weather/day-fg.webp");
+    const textureDayBg = loadImage("/images/openmeteo/weather/day-bg.webp");
 
-    const textureNightFg = loadImage("/images/openmeteo/weather/night-fg.jpg");
-    const textureNightBg = loadImage("/images/openmeteo/weather/night-bg.jpg");
+    const textureNightFg = loadImage("/images/openmeteo/weather/night-fg.webp");
+    const textureNightBg = loadImage("/images/openmeteo/weather/night-bg.webp");
 
     const imagesData = await Promise.all([
       textureDayFg,

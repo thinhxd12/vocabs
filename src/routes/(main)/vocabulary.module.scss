@@ -80,31 +80,25 @@
     }
 
     .newInputContainer {
-        @include flex-center;
         border-top: 0.5px solid $color-vintage-2;
         border-bottom: 0.5px solid $color-vintage-2;
-        position: relative;
 
         .newInputContent {
-            width: 100%;
-            height: 36px;
-            @include flex-center;
+            position: relative;
 
-            .newInputBackground {
+            p {
+                @include font("NYTCheltenham", 16px, $color-vintage-1, 700, normal, 36px);
+                text-transform: uppercase;
                 width: 360px;
                 height: 36px;
+                position: inherit;
+                text-align: center;
+            }
+
+            .newInputBackground {
                 position: absolute;
-                background: url("/images/main/inputbackground.jpg");
-                background-size: cover;
                 top: 0;
                 left: 0;
-                @include flex-center;
-
-                p {
-                    @include font("NYTCheltenham", 16px, $color-vintage-1, 700, normal, 16px);
-                    text-transform: uppercase;
-                }
-
             }
         }
     }
@@ -199,8 +193,8 @@
             overflow: hidden;
             font-family: "Rubik";
             font-size: 10px;
-            background-image: url('/images/main/input-left-corner.png'),
-                url('/images/main/input-right-corner.png');
+            background-image: url('/images/main/input-left-corner.webp'),
+                url('/images/main/input-right-corner.webp');
             background-position: left top,
                 right top;
             background-repeat: no-repeat,

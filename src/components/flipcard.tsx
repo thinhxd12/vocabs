@@ -78,7 +78,7 @@ const FlipCard: Component<{}> = (props) => {
       <div class={styles.flipCardLeftContent}>
         <div class={styles.numberFlipContainer}>
           <div class={styles.numberFlipBackground}>
-            <img src="/images/main/flag.jpg" height={186} width={50} />
+            <img src="/images/main/flag.webp" height={186} width={50} />
             <div class={styles.numberFlipContent}>
               <Show when={currenText()}>
                 <Show
@@ -91,7 +91,7 @@ const FlipCard: Component<{}> = (props) => {
                         animate={{ y: 24, transition: { delay: 3 } }}
                         transition={{ duration: 0.6, easing: "ease-in-out" }}
                       >
-                        <img src="/images/main/cup.png" height={44} />
+                        <img src="/images/main/cup.webp" height={44} />
                         <span class={styles.number}>1</span>
                       </Motion.div>
                     </div>

@@ -219,14 +219,18 @@ const Vocabulary: Component<{}> = () => {
               <>
                 <div class={styles.newInputContainer}>
                   <div class={styles.newInputContent}>
-                    <div class={styles.newInputBackground}>
-                      <Motion.p
-                        animate={{ color: searchInputColor() }}
-                        transition={{ duration: 0.3, easing: "ease" }}
-                      >
-                        {searchTerm()}
-                      </Motion.p>
-                    </div>
+                    <img
+                      src="/images/main/inputbackground.webp"
+                      width={360}
+                      height={36}
+                      class={styles.newInputBackground}
+                    />
+                    <Motion.p
+                      animate={{ color: searchInputColor() }}
+                      transition={{ duration: 0.3, easing: "ease" }}
+                    >
+                      {searchTerm()}
+                    </Motion.p>
                   </div>
                 </div>
               </>
@@ -234,7 +238,7 @@ const Vocabulary: Component<{}> = () => {
           >
             <div class={styles.myInputContainer}>
               <img
-                src="/images/main/input-left-corner.png"
+                src="/images/main/input-left-corner.webp"
                 class={styles.myInputLeftOrnament}
                 height={38}
               />
@@ -248,12 +252,12 @@ const Vocabulary: Component<{}> = () => {
                 />
               </div>
               <img
-                src="/images/main/input-right-corner.png"
+                src="/images/main/input-right-corner.webp"
                 class={styles.myInputRightOrnament}
                 height={38}
               />
               <img
-                src="/images/main/center.png"
+                src="/images/main/center.webp"
                 class={styles.myInputButton}
                 height={24}
                 onClick={clearSearchResult}

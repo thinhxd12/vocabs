@@ -110,7 +110,7 @@ const Calendar: Component<{}> = (props) => {
         <div class={styles.calendarCard}>
           <div class={styles.calendarImage}>
             <img
-              src={`/images/main/${format(todayDate(), "M")}.jpg`}
+              src={`/images/main/${format(todayDate(), "M")}.webp`}
               width={360}
               height={240}
             />

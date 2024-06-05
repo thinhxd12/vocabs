@@ -129,7 +129,7 @@ const Translation: Component<{
       <div class={styles.translationBody}>
         <div class={styles.searchContent}>
           <img
-            src="/images/main/input-left-corner.png"
+            src="/images/main/input-left-corner.webp"
             class={styles.searchLeftOrnament}
           />
           <input
@@ -140,7 +140,7 @@ const Translation: Component<{
             use:searchTranslate={[translateTerm, setTranslateTerm]}
           />
           <img
-            src="/images/main/input-right-corner.png"
+            src="/images/main/input-right-corner.webp"
             class={styles.searchRightOrnament}
           />
         </div>

@@ -246,7 +246,7 @@ const Edit: Component<{
                 </div>
               </div>
               <div class={styles.editItemXs}>
-                <img src="/images/main/clover1.png" width={15} height={15} />
+                <img src="/images/main/laurel.webp" width={15} height={15} />
                 <input
                   class={styles.editItemDef}
                   autocomplete="off"
@@ -288,7 +288,7 @@ const Edit: Component<{
         <form action={editVocabularyItem} method="post" class={forms.formBody}>
           <div class={styles.searchContent}>
             <img
-              src="/images/main/input-left-corner.png"
+              src="/images/main/input-left-corner.webp"
               class={styles.searchLeftOrnament}
             />
             <input
@@ -298,7 +298,7 @@ const Edit: Component<{
               value={resultEditWord()?.word}
             />
             <img
-              src="/images/main/input-right-corner.png"
+              src="/images/main/input-right-corner.webp"
               class={styles.searchRightOrnament}
             />
           </div>

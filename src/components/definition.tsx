@@ -32,7 +32,7 @@ const Definition: Component<{
                               src={m().image}
                               onerror={(e) => {
                                 e.currentTarget.src =
-                                  "/images/main/image_not_found.jpg";
+                                  "/images/main/image_not_found.webp";
                               }}
                             />
                             <div class={styles.websImgOverlay}></div>
