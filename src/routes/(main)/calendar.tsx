@@ -63,28 +63,6 @@ const Calendar: Component<{}> = (props) => {
 
   const [todayDate] = createSignal<Date>(new Date());
 
-  const CalendarLoading = () => {
-    return (
-      <>
-        <Index each={Array.from(Array(5).keys())}>
-          {(item, n) => {
-            return (
-              <div class={styles.calendarWeek}>
-                <div class={styles.calendarDayLoading}>11</div>
-                <div class={styles.calendarDayLoading}>12</div>
-                <div class={styles.calendarDayLoading}>13</div>
-                <div class={styles.calendarDayLoading}>14</div>
-                <div class={styles.calendarDayLoading}>15</div>
-                <div class={styles.calendarDayLoading}>16</div>
-                <div class={styles.calendarDayLoading}>17</div>
-              </div>
-            );
-          }}
-        </Index>
-      </>
-    );
-  };
-
   // ---------------------POP UP---------------------------
   const [showNewWeek, setShowNewWeek] = createSignal<boolean>(false);
   const [showTodayReset, setShowTodayReset] = createSignal<boolean>(false);
@@ -142,7 +120,7 @@ const Calendar: Component<{}> = (props) => {
               <div class={styles.calendarWeekTitle}>Fri</div>
               <div class={styles.calendarWeekTitle}>Sat</div>
             </div>
-            <Suspense fallback={<CalendarLoading />}>
+            <Suspense fallback={<div class={styles.calendarWeekLoading}>...</div>}>
               <Index each={schedule()}>
                 {(data, i) => {
                   return (

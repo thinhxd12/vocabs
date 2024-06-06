@@ -183,12 +183,8 @@
             }
         }
 
-        .calendarDayLoading {
-            height: 21px;
-            width: 49px;
+        .calendarWeekLoading{
             @include flex-center;
-            @include font('Rubik', 13px, $color-calendar-text-1, 600, normal, 21px);
-            filter: blur(3px);
         }
     }
 
