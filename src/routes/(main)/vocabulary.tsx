@@ -130,6 +130,11 @@ const Vocabulary: Component<{}> = () => {
     setSearchTerm("");
     setSearchResult([]);
   };
+
+  const handleEditVocabularyFromDefinition = (text: VocabularyType) => {
+    setEditWord({ ...text, number: text.number - 1 });
+    setMainStore("showEdit", true);
+  };
   // -------------------EDIT END-------------------- //
 
   // -------------------MOBILE START-------------------- //
@@ -329,7 +334,9 @@ const Vocabulary: Component<{}> = () => {
 
             {/* Definition */}
             <Definition
-              onEdit={() => handleEditVocabulary(mainStore.renderWord!)}
+              onEdit={() =>
+                handleEditVocabularyFromDefinition(mainStore.renderWord!)
+              }
             />
           </div>
         </div>
