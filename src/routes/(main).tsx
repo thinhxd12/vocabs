@@ -71,16 +71,12 @@ export default function Main(props: RouteSectionProps) {
         </button>
       </div>
 
-      <Motion.div
-        class={styles.mainLeft}
-        animate={{
-          opacity: mainStore.mainToggle ? 1 : 0,
-        }}
-        transition={{ duration: 0.3 }}
-      >
-        <img class={styles.mainLeftImage} src={imageObj.image} />
-        <img class={styles.mainLeftImageBlurred} src={imageObj.image} />
-      </Motion.div>
+      <Show when={mainStore.mainToggle}>
+        <div class={styles.mainLeft}>
+          <img class={styles.mainLeftImage} src={imageObj.image} />
+          <img class={styles.mainLeftImageBlurred} src={imageObj.image} />
+        </div>
+      </Show>
 
       <div class={styles.mainCenter}>
         <div class={styles.mainCenterContent}>
@@ -89,28 +85,23 @@ export default function Main(props: RouteSectionProps) {
         <Bottom />
       </div>
 
-      <Motion.div
-        class={styles.mainRight}
-        animate={{
-          width: mainStore.mainToggle ? "300px" : "calc(50vw - 180px)",
-          opacity: mainStore.mainToggle ? 1 : 0,
-        }}
-        transition={{ duration: 0.3 }}
-      >
-        <div class={styles.mainRightHeader}>
-          <p class={styles.mainRightDate}>{imageObj.date}</p>
-          <h3 class={styles.mainRightTitle}>{imageObj.title}</h3>
-          <p class={styles.mainRightAttribute}>{imageObj.attr}</p>
-          <div class={styles.mainRightAuthors}>
-            <img class={styles.mainRightImage} src={imageObj.authorImg} />
-            <div class={styles.mainRightAuthor}>
-              <p class={styles.mainRightName}>{imageObj.authorName}</p>
-              <p class={styles.mainRightYear}>{imageObj.authorYear}</p>
+      <Show when={mainStore.mainToggle}>
+        <div class={styles.mainRight}>
+          <div class={styles.mainRightHeader}>
+            <p class={styles.mainRightDate}>{imageObj.date}</p>
+            <h3 class={styles.mainRightTitle}>{imageObj.title}</h3>
+            <p class={styles.mainRightAttribute}>{imageObj.attr}</p>
+            <div class={styles.mainRightAuthors}>
+              <img class={styles.mainRightImage} src={imageObj.authorImg} />
+              <div class={styles.mainRightAuthor}>
+                <p class={styles.mainRightName}>{imageObj.authorName}</p>
+                <p class={styles.mainRightYear}>{imageObj.authorYear}</p>
+              </div>
             </div>
           </div>
+          <div class={styles.mainRightBody} innerHTML={imageObj.content} />
         </div>
-        <div class={styles.mainRightBody} innerHTML={imageObj.content} />
-      </Motion.div>
+      </Show>
     </div>
   );
 }

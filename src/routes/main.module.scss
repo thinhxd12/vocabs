@@ -43,7 +43,6 @@
         padding: 3vh 0 7vh;
         @include flex-center;
         border-right: 1px solid $color-border;
-        opacity: 0;
 
         .mainLeftImage {
             position: inherit;
@@ -73,7 +72,6 @@
         background: #19191c;
         background: $color-calendar-black;
         border-left: 1px solid $color-border;
-        opacity: 0;
 
         .mainRightHeader {
             max-height: 30vh;
