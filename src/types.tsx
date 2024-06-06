@@ -31,11 +31,6 @@ export interface ExampleType {
   year: string;
 }
 
-// export interface BookmarkType {
-//   check: boolean;
-//   value: string;
-// }
-
 export interface BookmarkType {
   created_at: string;
   authors: string;

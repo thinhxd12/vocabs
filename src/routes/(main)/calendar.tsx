@@ -3,7 +3,6 @@ import {
   Index,
   Show,
   Suspense,
-  createResource,
   createSignal,
   lazy,
   onMount,
@@ -17,7 +16,6 @@ import {
   submitNewWeek,
   submitTodayReset,
 } from "~/lib/api";
-
 const CalendarDropdown = lazy(() => import("~/components/calendardropdown"));
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
@@ -27,18 +25,21 @@ import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
 import { createAsync } from "@solidjs/router";
-import HistoryCard from "~/components/historycard";
 import { listStore, mainStore, setMainStore } from "~/lib/mystore";
+import HistoryCard from "~/components/historycard";
 
 let refEl: HTMLDivElement;
+
+export const route = {
+  load: () => getScheduleData(),
+};
 
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
-  const [schedule, { refetch: refetchSchedule, mutate: mutateSchedule }] =
-    createResource(getScheduleData);
+  const schedule = createAsync(() => getScheduleData(), { deferStream: true });
 
   onMount(async () => {
     if (mainStore.historyList.length === 0) {
@@ -120,7 +121,9 @@ const Calendar: Component<{}> = (props) => {
               <div class={styles.calendarWeekTitle}>Fri</div>
               <div class={styles.calendarWeekTitle}>Sat</div>
             </div>
-            <Suspense fallback={<div class={styles.calendarWeekLoading}>...</div>}>
+            <Suspense
+              fallback={<div class={styles.calendarWeekLoading}>...</div>}
+            >
               <Index each={schedule()}>
                 {(data, i) => {
                   return (

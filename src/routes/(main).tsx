@@ -4,7 +4,6 @@ import { createStore } from "solid-js/store";
 import { getDataImage, getUnsplashImage } from "~/lib/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
-import { Motion } from "solid-motionone";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
 import { format } from "date-fns";

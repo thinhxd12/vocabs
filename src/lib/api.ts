@@ -41,7 +41,7 @@ const chunk = (array: any[], size: number) =>
         return acc;
     }, []);
 
-export const getScheduleData = (async () => {
+export const getScheduleData = cache(async () => {
     "use server";
     const date = new Date();
     const thisMonth = date.getMonth();
@@ -90,7 +90,7 @@ export const getScheduleData = (async () => {
         const calendarScheduleArr = chunk(mergedArray, 7);
         return calendarScheduleArr;
     }
-});
+}, "getSchedule");
 
 
 
@@ -848,14 +848,14 @@ export const getTotalMemories = (async () => {
     return count as number;
 });
 
-export const getTodayData = (async (date: string) => {
+export const getTodayData = cache(async (date: string) => {
     "use server";
     const { data, error } = await supabase
         .from(mapTables.schedule)
         .select()
         .eq('date', date);
     if (data) return data[0] as ScheduleType;
-});
+}, "getTodayData");
 
 
 //get 50 word

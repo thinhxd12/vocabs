@@ -2,11 +2,9 @@ import {
   Accessor,
   Component,
   Index,
-  JSX,
   Show,
   Signal,
   createEffect,
-  createRenderEffect,
   createSignal,
   lazy,
   onMount,
@@ -19,7 +17,7 @@ import {
   handleCheckWord,
   getTodayData,
 } from "~/lib/api";
-import { Motion, Presence, motion } from "solid-motionone";
+import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
@@ -52,26 +50,26 @@ declare module "solid-js" {
 
 let mobileInput: HTMLInputElement;
 
+const todayDate = format(new Date(), "yyyy-MM-dd");
+export const route = {
+  load: () =>
+    getTodayData(todayDate).then((data) => {
+      if (data) {
+        setListStore("listToday", data);
+      }
+    }),
+};
+
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
-
-  const todayDate = format(new Date(), "yyyy-MM-dd");
-  onMount(async () => {
-    const data = await getTodayData(todayDate);
-    if (data) {
-      setListStore("listToday", data);
-    }
-  });
 
   const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
 
   const [searchInputColor, setSearchInputColor] =
     createSignal<string>("#957c3e");
-
-  // let divRef: HTMLDivElement | undefined;
 
   onMount(async () => {
     setIsMobile(

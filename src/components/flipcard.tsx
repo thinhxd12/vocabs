@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 import { Motion } from "solid-motionone";
 import styles from "./flipcard.module.scss";
-import { mainStore, setMainStore } from "~/lib/mystore";
+import { mainStore } from "~/lib/mystore";
 
 const FlipCard: Component<{}> = (props) => {
   let audio: HTMLAudioElement | null;
