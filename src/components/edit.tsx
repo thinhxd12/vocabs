@@ -165,7 +165,7 @@ const Edit: Component<{
       class={styles.edit}
       tabIndex={3}
       use:clickOutside={close}
-      use:stopKeydown={() => {}}
+      use:stopKeydown={null}
     >
       <div class={styles.editHeader}>
         <div class={styles.editHeaderLeft}></div>

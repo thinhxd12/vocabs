@@ -31,7 +31,7 @@ import { AiOutlineInsertRowBelow } from "solid-icons/ai";
 declare module "solid-js" {
   namespace JSX {
     interface Directives {
-      stopKeydown: () => void;
+      stopKeydown: null;
     }
   }
 }
@@ -76,11 +76,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   };
 
   return (
-    <div
-      class={styles.bookmarkContainer}
-      tabIndex={2}
-      use:stopKeydown={() => {}}
-    >
+    <div class={styles.bookmarkContainer} tabIndex={2} use:stopKeydown={null}>
       <div class={styles.bookmarkHeader}>
         <div class={styles.bookmarkHeaderLeft}>
           <button

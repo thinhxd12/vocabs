@@ -33,6 +33,12 @@ type MainStoreType = {
   historyList: HistoryType[];
   thisWeekIndex: number;
   mainToggle: boolean;
+  searchResult: VocabularyType[];
+  translateTerm: string;
+  searchTerm: string;
+  searchTermColor: string;
+  searchSelectedIndex: number;
+  searchDeleteIndex: number;
 }
 
 export const [mainStore, setMainStore] = createStore<MainStoreType>({
@@ -44,6 +50,12 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   historyList: [],
   thisWeekIndex: 0,
   mainToggle: false,
+  searchResult: [],
+  translateTerm: "",
+  searchTerm: "",
+  searchTermColor: "#957c3e",
+  searchSelectedIndex: 0,
+  searchDeleteIndex: 0,
 })
 
 

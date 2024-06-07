@@ -619,12 +619,10 @@ export const submitNewMonth = action(async (formData: FormData) => {
     if (error) console.error(error);
 }, "startMonth");
 
-//handle check vocabulary
-
+// handlecheck
 export const handleCheckWord = async (text: VocabularyType) => {
     setMainStore("renderWord", text);
 
-    // handlecheck
     if (text.number > 1) {
         checkVocabulary(text.number - 1, text.created_at);
     } else {

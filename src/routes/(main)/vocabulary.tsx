@@ -1,14 +1,4 @@
-import {
-  Accessor,
-  Component,
-  Index,
-  Show,
-  Signal,
-  createEffect,
-  createSignal,
-  lazy,
-  onMount,
-} from "solid-js";
+import { Component, Index, Show, createSignal, lazy, onMount } from "solid-js";
 import { VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
@@ -35,15 +25,7 @@ const Bookmark = lazy(() => import("~/components/bookmark"));
 declare module "solid-js" {
   namespace JSX {
     interface Directives {
-      searchWord: Signal<VocabularyType[]>;
-    }
-  }
-}
-
-declare module "solid-js" {
-  namespace JSX {
-    interface Directives {
-      searchWordMobile: Signal<string>;
+      searchWordMobile: null;
     }
   }
 }
@@ -65,60 +47,30 @@ const Vocabulary: Component<{}> = () => {
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
-  const [searchResult, setSearchResult] = createSignal<VocabularyType[]>([]);
-  const [searchTerm, setSearchTerm] = createSignal<string>("");
-
-  const [searchInputColor, setSearchInputColor] =
-    createSignal<string>("#957c3e");
-
-  onMount(async () => {
-    setIsMobile(
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent
-      )
-    );
-  });
-
-  createEffect(() => {
-    if (searchResult().length > 0) {
-      setSearchInputColor("#957c3e");
-    }
-  });
-
   //search text
   const trigger = debounce(async (str: string) => {
     const res = await searchText(str);
     if (res) {
       if (res.length === 0) {
-        setSearchResult([]);
-        setSearchInputColor("#ca140c");
-        setTranslateTerm(str);
-      } else {
-        deleteBtnIndex() !== 0 && setDeleteBtnIndex(0);
-        setSearchResult(res);
+        setMainStore("searchTermColor", "#ca140c");
       }
+      setMainStore("searchResult", res);
+      mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
     }
   }, 450);
 
-  const [selectedItemIndex, setSelectedItemIndex] = createSignal<number>(0);
-
   const handleRenderText = async (text: VocabularyType) => {
     if (mobileInput) mobileInput.value = "";
-    setSearchTerm("");
-    setSearchResult([]);
+    setMainStore("searchTerm", "");
+    setMainStore("searchResult", []);
     handleCheckWord(text);
   };
 
-  // -------------------TRANSLATE START-------------------- //
-  const [translateTerm, setTranslateTerm] = createSignal<string>("");
-  // -------------------TRANSLATE END-------------------- //
   // -------------------DELETE START-------------------- //
-  const [deleteBtnIndex, setDeleteBtnIndex] = createSignal<number>(0);
   const handleDeleteVocabulary = (time: string) => {
+    setMainStore("searchTerm", "");
+    setMainStore("searchResult", []);
     deleteVocabulary(time);
-    setSearchTerm("");
-    setDeleteBtnIndex(0);
-    setSearchResult([]);
   };
   // -------------------DELETE END-------------------- //
 
@@ -127,8 +79,8 @@ const Vocabulary: Component<{}> = () => {
   const handleEditVocabulary = (text: VocabularyType) => {
     setEditWord(text);
     setMainStore("showEdit", true);
-    setSearchTerm("");
-    setSearchResult([]);
+    setMainStore("searchTerm", "");
+    setMainStore("searchResult", []);
   };
 
   const handleEditVocabularyFromDefinition = (text: VocabularyType) => {
@@ -139,66 +91,29 @@ const Vocabulary: Component<{}> = () => {
 
   // -------------------MOBILE START-------------------- //
   const [isMobile, setIsMobile] = createSignal(false);
-  // -------------------MOBILE END-------------------- //
 
-  const searchWord = (
-    element: HTMLDivElement,
-    value: Accessor<Signal<VocabularyType[]>>
-  ) => {
-    const [field, setField] = value();
-    element.addEventListener("keydown", (e) => {
-      const keyDown = e.key;
-      if (keyDown.match(/^[a-zA-Z\-]$/)) {
-        setSearchTerm(searchTerm() + String(keyDown).toLowerCase());
-        if (searchTerm().length > 2) {
-          trigger(searchTerm());
-        }
-      }
-      if (keyDown?.match(/^[1-9]$/)) {
-        const keyDonwNumber = Number(keyDown);
-        if (field().length > 0 && keyDonwNumber <= field().length) {
-          setSelectedItemIndex(Number(keyDown));
-          setTimeout(() => {
-            setSelectedItemIndex(0);
-          }, 300);
-          setTimeout(() => {
-            handleRenderText(field()[Number(keyDown) - 1]);
-          }, 600);
-        }
-      }
-      if (keyDown === "Backspace") {
-        setSearchTerm(searchTerm().slice(0, -1));
-        if (searchTerm().length > 2) {
-          trigger(searchTerm());
-        }
-      }
-      if (keyDown === " ") {
-        setSearchInputColor("#957c3e");
-        setSearchTerm("");
-        setField([]);
-      }
-      if (keyDown === "Enter" && field().length === 0)
-        setMainStore("showTranslate", true);
-    });
-  };
+  onMount(async () => {
+    setIsMobile(
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    );
+  });
 
-  const searchWordMobile = (
-    element: HTMLDivElement,
-    value: Accessor<Signal<string>>
-  ) => {
-    const [field, setField] = value();
+  const searchWordMobile = (element: HTMLDivElement) => {
     element.addEventListener("input", (e) => {
       const value = (e.target as HTMLInputElement).value;
-      setField(value);
-      if (field().length > 2) {
-        trigger(field());
+      setMainStore("searchTerm", value);
+      if (value.length > 2) {
+        trigger(value);
       }
     });
   };
+  // -------------------MOBILE END-------------------- //
 
   const clearSearchResult = () => {
-    setSearchTerm("");
-    setSearchResult([]);
+    setMainStore("searchTerm", "");
+    setMainStore("searchResult", []);
     mobileInput.value = "";
   };
 
@@ -207,11 +122,8 @@ const Vocabulary: Component<{}> = () => {
       <Title>{mainStore.renderWord?.word || "main"}</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <div
-        class={styles.vocabularyContainer}
-        use:searchWord={[searchResult, setSearchResult]}
-      >
-        <div tabIndex={0} class={styles.vocabulary}>
+      <div class={styles.vocabularyContainer}>
+        <div class={styles.vocabulary}>
           <div class={styles.flashCardContainer}>
             <FlipCard />
           </div>
@@ -228,12 +140,13 @@ const Vocabulary: Component<{}> = () => {
                       height={36}
                       class={styles.newInputBackground}
                     />
-                    <Motion.p
-                      animate={{ color: searchInputColor() }}
-                      transition={{ duration: 0.3, easing: "ease" }}
+                    <p
+                      style={{
+                        color: mainStore.searchTermColor,
+                      }}
                     >
-                      {searchTerm()}
-                    </Motion.p>
+                      {mainStore.searchTerm}
+                    </p>
                   </div>
                 </div>
               </>
@@ -250,7 +163,7 @@ const Vocabulary: Component<{}> = () => {
                   type="text"
                   autocomplete="off"
                   class={styles.myInput}
-                  use:searchWordMobile={[searchTerm, setSearchTerm]}
+                  use:searchWordMobile={null}
                   ref={mobileInput}
                 />
               </div>
@@ -268,14 +181,14 @@ const Vocabulary: Component<{}> = () => {
             </div>
           </Show>
 
-          <Show when={searchResult().length > 0}>
+          <Show when={mainStore.searchResult.length > 0}>
             <div class={styles.searchContainer}>
               <div>
-                <Index each={searchResult()}>
+                <Index each={mainStore.searchResult}>
                   {(data, i: number) => (
                     <div
                       class={
-                        i + 1 === selectedItemIndex()
+                        i + 1 === mainStore.searchSelectedIndex
                           ? `${styles.myItem} ${styles.myItemHover}`
                           : styles.myItem
                       }
@@ -300,13 +213,15 @@ const Vocabulary: Component<{}> = () => {
                       <div
                         class={`${styles.myItemButton} ${styles.myItemButtonEnd}`}
                       >
-                        <Show when={i + 1 !== deleteBtnIndex()}>
+                        <Show when={i + 1 !== mainStore.searchDeleteIndex}>
                           <button
                             class={styles.myItemDeleteButton}
-                            onClick={() => setDeleteBtnIndex(i + 1)}
+                            onClick={() =>
+                              setMainStore("searchDeleteIndex", i + 1)
+                            }
                           ></button>
                         </Show>
-                        <Show when={i + 1 === deleteBtnIndex()}>
+                        <Show when={i + 1 === mainStore.searchDeleteIndex}>
                           <button
                             class={styles.myItemDeleteButton}
                             onClick={() =>
@@ -377,7 +292,7 @@ const Vocabulary: Component<{}> = () => {
               }}
               transition={{ duration: 0.2, easing: "ease-in-out" }}
             >
-              <Translation translateText={translateTerm()} />
+              <Translation translateText={mainStore.translateTerm} />
             </Motion.div>
           </Show>
         </Presence>

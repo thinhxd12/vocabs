@@ -1,7 +1,12 @@
 import { RouteSectionProps } from "@solidjs/router";
 import { Show, Suspense } from "solid-js";
 import { createStore } from "solid-js/store";
-import { getDataImage, getUnsplashImage } from "~/lib/api";
+import {
+  getDataImage,
+  getUnsplashImage,
+  handleCheckWord,
+  searchText,
+} from "~/lib/api";
 import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
@@ -9,6 +14,15 @@ import { TbRefresh } from "solid-icons/tb";
 import { format } from "date-fns";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./main.module.scss";
+import { debounce } from "@solid-primitives/scheduled";
+
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      searchWord: null;
+    }
+  }
+}
 
 export default function Main(props: RouteSectionProps) {
   const mockObj = {
@@ -51,8 +65,71 @@ export default function Main(props: RouteSectionProps) {
     });
   };
 
+  //------------------HANDLE SEARCH--------------------
+  const trigger = debounce(async (str: string) => {
+    const res = await searchText(str);
+    if (res) {
+      if (res.length === 0) {
+        setMainStore("searchTermColor", "#ca140c");
+      }
+      setMainStore("searchResult", res);
+      mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
+    }
+  }, 450);
+
+  const searchWord = (element: HTMLDivElement) => {
+    element.addEventListener("keydown", (e) => {
+      const keyDown = e.key;
+      if (keyDown.match(/^[a-zA-Z\-]$/)) {
+        setMainStore(
+          "searchTerm",
+          mainStore.searchTerm + String(keyDown).toLowerCase()
+        );
+        if (mainStore.searchTerm.length > 2) {
+          trigger(mainStore.searchTerm);
+        }
+      }
+      if (keyDown?.match(/^[1-9]$/)) {
+        const keyDonwNumber = Number(keyDown);
+        if (
+          mainStore.searchResult.length > 0 &&
+          keyDonwNumber <= mainStore.searchResult.length
+        ) {
+          setMainStore("searchSelectedIndex", Number(keyDown));
+          setTimeout(() => {
+            setMainStore("searchSelectedIndex", 0);
+          }, 300);
+          const parsedResult = JSON.parse(
+            JSON.stringify(mainStore.searchResult)
+          );
+          setTimeout(() => {
+            setMainStore("searchTerm", "");
+            setMainStore("searchResult", []);
+            handleCheckWord(parsedResult[Number(keyDown) - 1]);
+          }, 600);
+        }
+      }
+      if (keyDown === "Backspace") {
+        setMainStore("searchTerm", mainStore.searchTerm.slice(0, -1));
+        if (mainStore.searchTerm.length > 2) {
+          trigger(mainStore.searchTerm);
+        }
+      }
+      if (keyDown === " ") {
+        setMainStore("searchTermColor", "#957c3e");
+        setMainStore("searchTerm", "");
+        setMainStore("searchResult", []);
+      }
+      if (keyDown === "Enter" && mainStore.searchResult.length === 0) {
+        setMainStore("translateTerm", mainStore.searchTerm);
+        setMainStore("searchTerm", "");
+        setMainStore("showTranslate", true);
+      }
+    });
+  };
+
   return (
-    <div class={styles.main}>
+    <div class={styles.main} tabIndex={0} use:searchWord={null}>
       <div class={styles.mainButtons}>
         <button
           onClick={() => setMainStore("mainToggle", !mainStore.mainToggle)}
