@@ -634,23 +634,25 @@ export const submitNewMonth = action(async (formData: FormData) => {
 // handlecheck
 export const handleCheckWord = async (text: VocabularySearchType) => {
     const wordData = await getWordData(text.created_at)
-    setMainStore("renderWord", wordData!);
+    if (wordData) {
+        setMainStore("renderWord", wordData);
 
-    if (wordData!.number > 1) {
-        checkVocabulary(wordData!.number - 1, text.created_at);
-    } else {
-        await archiveVocabulary(text.word);
-        const data = await getSmallestWordNumberFromRange(text.word);
-
-        if (data) {
-            await deleteVocabulary(data.created_at);
-            await updateArchiveWord(data, text.created_at);
-            const total = await getTotalMemories();
-            setMainStore("totalMemories", total);
+        if (wordData.number > 1) {
+            checkVocabulary(wordData!.number - 1, text.created_at);
         } else {
-            deleteVocabulary(text.created_at);
-            const total = await getTotalMemories();
-            setMainStore("totalMemories", total);
+            await archiveVocabulary(text.word);
+            const data = await getSmallestWordNumberFromRange(text.word);
+
+            if (data) {
+                await deleteVocabulary(data.created_at);
+                await updateArchiveWord(data, text.created_at);
+                const total = await getTotalMemories();
+                setMainStore("totalMemories", total);
+            } else {
+                deleteVocabulary(text.created_at);
+                const total = await getTotalMemories();
+                setMainStore("totalMemories", total);
+            }
         }
     }
 };
