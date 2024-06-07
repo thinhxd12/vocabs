@@ -8,6 +8,11 @@ export interface VocabularyType {
   definitions: VocabularyDefinitionType[];
 }
 
+export interface VocabularySearchType {
+  word: string;
+  created_at: string;
+}
+
 export interface VocabularyTranslationType {
   partOfSpeech: string;
   translations: string[];

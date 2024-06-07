@@ -1,6 +1,6 @@
 import { action, cache } from "@solidjs/router";
-import { BookmarkType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularyTranslationType, VocabularyType, } from "~/types";
-import { DEFAULT_CORS_PROXY, PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
+import { BookmarkType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularySearchType, VocabularyTranslationType, VocabularyType, } from "~/types";
+import { PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import { format } from "date-fns";
 import { parse } from 'node-html-parser';
 import { supabase } from "./supbabase";
@@ -11,9 +11,22 @@ export const searchText = async (text: string) => {
     try {
         const { data, error } = await supabase
             .from(mapTables.vocabulary)
-            .select()
+            .select("word,created_at")
             .like("word", `${text}%`);
-        return data as VocabularyType[];
+        return data as VocabularySearchType[];
+    } catch (error) {
+        console.error(error);
+    }
+};
+
+export const getWordData = async (time: string) => {
+    "use server";
+    try {
+        const { data, error } = await supabase
+            .from(mapTables.vocabulary)
+            .select()
+            .eq("created_at", time)
+        if (data) return data[0] as VocabularyType;
     } catch (error) {
         console.error(error);
     }
@@ -387,7 +400,6 @@ export const getOedSoundURL = async (text: string) => {
     "use server";
     if (!text) return;
     const oxfordUrl =
-        // DEFAULT_CORS_PROXY +
         `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
     const oedUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
 
@@ -620,11 +632,12 @@ export const submitNewMonth = action(async (formData: FormData) => {
 }, "startMonth");
 
 // handlecheck
-export const handleCheckWord = async (text: VocabularyType) => {
-    setMainStore("renderWord", text);
+export const handleCheckWord = async (text: VocabularySearchType) => {
+    const wordData = await getWordData(text.created_at)
+    setMainStore("renderWord", wordData!);
 
-    if (text.number > 1) {
-        checkVocabulary(text.number - 1, text.created_at);
+    if (wordData!.number > 1) {
+        checkVocabulary(wordData!.number - 1, text.created_at);
     } else {
         await archiveVocabulary(text.word);
         const data = await getSmallestWordNumberFromRange(text.word);
@@ -861,10 +874,10 @@ export const getListContent = async (start: number, end: number) => {
     "use server";
     const { data, error } = await supabase
         .from(mapTables.vocabulary)
-        .select()
+        .select("word,created_at")
         .order('created_at')
         .range(start, end)
-    if (data) return data as VocabularyType[];
+    if (data) return data as VocabularySearchType[];
 };
 
 

@@ -1,10 +1,10 @@
 import { createStore } from "solid-js/store";
-import { HistoryType, ScheduleType, VocabularyType } from "~/types";
+import { HistoryType, ScheduleType, VocabularySearchType, VocabularyType } from "~/types";
 
 type ListStoreType = {
   listType: 0 | 1 | 2;
   listCount: number;
-  listContent: VocabularyType[],
+  listContent: VocabularySearchType[],
   listButton: boolean;
   listToday: ScheduleType;
 }
@@ -33,7 +33,7 @@ type MainStoreType = {
   historyList: HistoryType[];
   thisWeekIndex: number;
   mainToggle: boolean;
-  searchResult: VocabularyType[];
+  searchResult: VocabularySearchType[];
   translateTerm: string;
   searchTerm: string;
   searchTermColor: string;

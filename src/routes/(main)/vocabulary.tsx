@@ -1,11 +1,12 @@
 import { Component, Index, Show, createSignal, lazy, onMount } from "solid-js";
-import { VocabularyType } from "~/types";
+import { VocabularySearchType, VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
   deleteVocabulary,
   searchText,
   handleCheckWord,
   getTodayData,
+  getWordData,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
@@ -59,7 +60,7 @@ const Vocabulary: Component<{}> = () => {
     }
   }, 450);
 
-  const handleRenderText = async (text: VocabularyType) => {
+  const handleRenderText = async (text: VocabularySearchType) => {
     if (mobileInput) mobileInput.value = "";
     setMainStore("searchTerm", "");
     setMainStore("searchResult", []);
@@ -76,8 +77,9 @@ const Vocabulary: Component<{}> = () => {
 
   // -------------------EDIT START-------------------- //
   const [editWord, setEditWord] = createSignal<VocabularyType>();
-  const handleEditVocabulary = (text: VocabularyType) => {
-    setEditWord(text);
+  const handleEditVocabulary = async (text: VocabularySearchType) => {
+    const wordData = await getWordData(text.created_at);
+    setEditWord(wordData);
     setMainStore("showEdit", true);
     setMainStore("searchTerm", "");
     setMainStore("searchResult", []);
