@@ -13,7 +13,9 @@ export const searchText = async (text: string) => {
         const { data, error } = await supabase
             .from(mapTables.vocabulary)
             .select("word,created_at")
-            .like("word", `${text}%`);
+            .like("word", `${text}%`)
+            .limit(6)
+
         return data as VocabularySearchType[];
     } catch (error) {
         console.error(error);
