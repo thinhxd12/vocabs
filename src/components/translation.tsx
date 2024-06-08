@@ -27,7 +27,7 @@ import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import { EditDefinition } from "./editDefinition";
 import { setMainStore } from "~/lib/mystore";
-import { clickOutside } from "~/utils";
+import { clickOutside, stopKeydown } from "~/utils";
 
 declare module "solid-js" {
   namespace JSX {
@@ -114,7 +114,12 @@ const Translation: Component<{
   };
 
   return (
-    <div class={styles.translation} tabIndex={1} use:clickOutside={close}>
+    <div
+      class={styles.translation}
+      tabIndex={1}
+      use:stopKeydown={null}
+      use:clickOutside={close}
+    >
       <div class={styles.translationHeader}>
         <div class={styles.translationHeaderLeft}></div>
         <div class={styles.translationHeaderRight}>

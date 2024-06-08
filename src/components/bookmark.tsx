@@ -27,14 +27,7 @@ import {
 import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
 import { AiOutlineInsertRowBelow } from "solid-icons/ai";
-
-declare module "solid-js" {
-  namespace JSX {
-    interface Directives {
-      stopKeydown: null;
-    }
-  }
-}
+import { stopKeydown } from "~/utils";
 
 const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [bookmark, setBookmark] = createSignal<BookmarkType>();
@@ -69,14 +62,8 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [showEdit, setShowEdit] = createSignal<boolean>(false);
   const [showInsert, setShowInsert] = createSignal<boolean>(false);
 
-  const stopKeydown = (element: HTMLDivElement): void => {
-    element.addEventListener("keydown", (e) => {
-      e.stopPropagation();
-    });
-  };
-
   return (
-    <div class={styles.bookmarkContainer} tabIndex={2} use:stopKeydown={null}>
+    <div class={styles.bookmarkContainer} tabIndex={1} use:stopKeydown={null}>
       <div class={styles.bookmarkHeader}>
         <div class={styles.bookmarkHeaderLeft}>
           <button

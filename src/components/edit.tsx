@@ -4,7 +4,6 @@ import {
   createEffect,
   createSignal,
   on,
-  onMount,
 } from "solid-js";
 import { OcX2 } from "solid-icons/oc";
 import {
@@ -15,14 +14,13 @@ import {
 import { action, useSubmission } from "@solidjs/router";
 import { editVocabularyItem, getTextDataWebster } from "~/lib/api";
 import toast, { Toaster } from "solid-toast";
-import { createStore } from "solid-js/store";
 import { FaRegularImage, FaSolidExpand } from "solid-icons/fa";
 import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import styles from "./edit.module.scss";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import { EditDefinition } from "./editDefinition";
-import { clickOutside } from "~/utils";
+import { clickOutside, stopKeydown } from "~/utils";
 
 const Edit: Component<{
   word: VocabularyType;
@@ -152,12 +150,6 @@ const Edit: Component<{
 
   const close = () => {
     setMainStore("showEdit", false);
-  };
-
-  const stopKeydown = (element: HTMLDivElement): void => {
-    element.addEventListener("keydown", (e) => {
-      e.stopPropagation();
-    });
   };
 
   return (

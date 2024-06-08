@@ -332,3 +332,17 @@ export function clickOutside(element: HTMLDivElement, accessor: any) {
   document.addEventListener("click", onClick);
   onCleanup(() => document.removeEventListener("click", onClick));
 }
+
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      stopKeydown: null;
+    }
+  }
+}
+
+export const stopKeydown = (element: HTMLDivElement): void => {
+  element.addEventListener("keydown", (e) => {
+    e.stopPropagation();
+  });
+};
