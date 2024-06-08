@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { parse } from 'node-html-parser';
 import { supabase } from "./supbabase";
 import { setMainStore } from "./mystore";
+import { parseKindleEntries, readKindleClipping } from "@darylserrano/kindle-clippings";
 
 export const searchText = async (text: string) => {
     "use server";
@@ -797,13 +798,23 @@ const selectBookMarkData = (async (id: string, val: boolean) => {
 export const insertBookmarkData = action(async (formData: FormData) => {
     "use server";
     const doc = String(formData.get("bookmarks"));
-    const data = JSON.parse(doc);
-    for (let i = 0; i < data.length; i++) {
-        const row = data[i]
+    let entries = readKindleClipping(doc);
+    let parsedEntries = parseKindleEntries(entries);
+    for (let i = 0; i < parsedEntries.length; i++) {
+        const row = {
+            authors: parsedEntries[i].authors,
+            bookTile: parsedEntries[i].bookTile,
+            page: parsedEntries[i].page,
+            location: parsedEntries[i].location,
+            dateOfCreation: parsedEntries[i].dateOfCreation,
+            content: parsedEntries[i].content,
+            type: parsedEntries[i].type,
+        }
         const { error } = await supabase
             .from(mapTables.bookmarks)
             .insert([row])
         if (error) console.log('Error:', error)
+        else console.log(`Row ${i} inserted`)
     }
 }, "insert bookmark")
 

@@ -67,6 +67,7 @@ export default function Main(props: RouteSectionProps) {
 
   //------------------HANDLE SEARCH--------------------
   const trigger = debounce(async (str: string) => {
+    setMainStore("searchTermColor", "#957c3e");
     const res = await searchText(str);
     if (res) {
       if (res.length === 0) {
