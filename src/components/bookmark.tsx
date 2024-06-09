@@ -1,5 +1,6 @@
 import {
   Component,
+  Index,
   Setter,
   Show,
   Suspense,
@@ -8,17 +9,12 @@ import {
 } from "solid-js";
 import styles from "./bookmark.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
-import {
-  OcChevronleft2,
-  OcChevronright2,
-  OcCopy2,
-  OcStar2,
-  OcStarfill2,
-  OcX2,
-} from "solid-icons/oc";
+import { OcCopy2, OcSearch2, OcStar2, OcStarfill2, OcX2 } from "solid-icons/oc";
 import {
   checkBookMarkData,
+  findBookMarkData,
   getBookMarkData,
+  getBookMarkDataItem,
   getNextBookMarkData,
   getPrevBookMarkData,
   insertBookmarkData,
@@ -27,7 +23,14 @@ import {
 import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
 import { AiOutlineInsertRowBelow } from "solid-icons/ai";
-import { stopKeydown } from "~/utils";
+
+declare module "solid-js" {
+  namespace JSX {
+    interface Directives {
+      searchBookmark: null;
+    }
+  }
+}
 
 const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [bookmark, setBookmark] = createSignal<BookmarkType>();
@@ -61,6 +64,24 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
 
   const [showEdit, setShowEdit] = createSignal<boolean>(false);
   const [showInsert, setShowInsert] = createSignal<boolean>(false);
+  const [showSearch, setShowSearch] = createSignal<boolean>(false);
+  const [searchData, setSearchData] = createSignal<BookmarkType[]>();
+
+  const searchBookmark = (element: HTMLDivElement) => {
+    element.addEventListener("keydown", async (e) => {
+      const value = (e.target as HTMLInputElement).value;
+      if (e.key === "Enter") {
+        const data = await findBookMarkData(value);
+        if (data) setSearchData(data);
+      }
+    });
+  };
+
+  const handleRenderSearchItem = async (item: BookmarkType) => {
+    const data = await getBookMarkDataItem(item.created_at);
+    if (data) setBookmark(data);
+    setShowSearch(false);
+  };
 
   return (
     <div class={styles.bookmarkContainer} tabIndex={1} use:stopKeydown={null}>
@@ -68,23 +89,11 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         <div class={styles.bookmarkHeaderLeft}>
           <button
             class={buttons.buttonBookmark}
-            onclick={() => handleGetPrevBookmark()}
-          >
-            <OcChevronleft2 size={17} />
-          </button>
-          <button
-            class={buttons.buttonBookmark}
             onclick={() => handleCheckBookmark(!bookmark()?.checked)}
           >
             <Show when={bookmark()?.checked} fallback={<OcStar2 size={17} />}>
               <OcStarfill2 size={17} color="#ffc107" />
             </Show>
-          </button>
-          <button
-            class={buttons.buttonBookmark}
-            onclick={() => handleGetNextBookmark()}
-          >
-            <OcChevronright2 size={17} />
           </button>
           <button
             class={buttons.buttonBookmark}
@@ -103,6 +112,12 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             onclick={() => setShowInsert(!showInsert())}
           >
             <AiOutlineInsertRowBelow size={16} />
+          </button>
+          <button
+            class={buttons.buttonBookmark}
+            onclick={() => setShowSearch(!showSearch())}
+          >
+            <OcSearch2 size={14} />
           </button>
         </div>
         <div class={styles.bookmarkHeaderRight}>
@@ -133,8 +148,17 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
               <p class={styles.bookmarkYear}>{bookmark()?.dateOfCreation}</p>
             </Show>
           </div>
-
           <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
+
+          <button
+            class={styles.buttonBookmarkLeft}
+            onclick={() => handleGetPrevBookmark()}
+          ></button>
+
+          <button
+            class={styles.buttonBookmarkRight}
+            onclick={() => handleGetNextBookmark()}
+          ></button>
 
           <Show when={showEdit()}>
             <form
@@ -177,6 +201,23 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
                 Insert
               </button>
             </form>
+          </Show>
+
+          <Show when={showSearch()}>
+            <div class={styles.bookmarkTextArea}>
+              <input class={styles.bookmarkInput} use:searchBookmark={null} />
+              <Show when={searchData()}>
+                <Index each={searchData()}>
+                  {(data) => {
+                    return (
+                      <p onClick={() => handleRenderSearchItem(data())}>
+                        ... {data()?.content} ...
+                      </p>
+                    );
+                  }}
+                </Index>
+              </Show>
+            </div>
           </Show>
         </div>
       </Suspense>

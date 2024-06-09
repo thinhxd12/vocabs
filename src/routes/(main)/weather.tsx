@@ -38,7 +38,7 @@ const Weather: Component<{}> = (props) => {
 
   const WEATHER_GEOS: WeatherGeoType[] = [
     {
-      name: "ThuThua",
+      name: "Thuthua",
       geo: "10.588468,106.400650",
     },
     {
@@ -46,7 +46,7 @@ const Weather: Component<{}> = (props) => {
       geo: "41.8933203,12.4829321",
     },
     {
-      name: "CanTho",
+      name: "Cantho",
       geo: "10.0364216,105.7875219",
     },
     {
@@ -470,7 +470,7 @@ const Weather: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <TitleName>⛅ {geoTitle()}</TitleName>
+      <TitleName>{geoTitle()} ⛅</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio hidden src={audioSrc()} autoplay loop ref={audio}></audio>

@@ -832,9 +832,42 @@ export const updateBookmarkData = action(async (formData: FormData) => {
         .eq('created_at', id);
 }, "insert bookmark")
 
+export const findBookMarkData = (async (val: string) => {
+    "use server";
+    const { data, error } = await supabase
+        .from(mapTables.bookmarks)
+        .select()
+        .textSearch('content', val);
 
+    const res = data?.map(item => {
+        let newcontent = findSentence(item.content, val);
+        return {
+            ...item,
+            content: newcontent
+        }
+    })
 
+    return res;
+});
 
+function findSentence(text: string, word: string) {
+    var sentences = text.match(/[^\.!\?]+[\.!\?]+/g);
+    if (sentences)
+        for (var i = 0; i < sentences.length; i++) {
+            if (sentences[i].includes(word)) {
+                return sentences[i];
+            }
+        }
+    return "";
+}
+
+export const getBookMarkDataItem = (async (time: string) => {
+    "use server";
+    const { data, error } = await supabase.from(mapTables.bookmarks)
+        .select()
+        .eq('created_at', time)
+    if (data) return data[0];
+});
 
 
 

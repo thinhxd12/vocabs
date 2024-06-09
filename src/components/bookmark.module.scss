@@ -16,6 +16,7 @@
         border-bottom: 1px solid $color-border;
         background: $color-background-4;
         height: 27px;
+        z-index: 999;
 
         .bookmarkHeaderLeft {
             height: 100%;
@@ -38,6 +39,7 @@
         line-height: 1.1rem;
         padding: 6px 9px;
         min-height: 125px;
+        position: relative;
 
         .bookmarkPassage::first-letter {
             @include font("NYTCheltenham", 60px, $color-white, normal, normal, 60px);
@@ -99,6 +101,60 @@
 
         .bookmarkYear {
             @include font('NYTImperial', 10px, $color-black, 600, normal, 14px);
+        }
+    }
+
+    .buttonBookmarkLeft {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 45px;
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+        background: transparent;
+        transition: all 0.6s;
+
+        &:hover {
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
+        }
+    }
+
+    .buttonBookmarkRight {
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 45px;
+        border: 0;
+        outline: 0;
+        cursor: pointer;
+        background: transparent;
+        transition: all 0.6s;
+
+        &:hover {
+            background: linear-gradient(270deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
+        }
+    }
+
+    .bookmarkInput {
+        @include font("basier", 12px, $color-black, 400, normal, 15px);
+        width: 100%;
+        padding: 3px;
+        background: none;
+        outline: none;
+        border: none;
+        border-bottom: 1px solid $color-border;
+        margin-bottom: 3px;
+    }
+
+    .bookmarkTextArea p {
+        margin-bottom: 9px;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(0, 0, 0, 0.21);
         }
     }
 }
