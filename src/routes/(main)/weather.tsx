@@ -354,6 +354,20 @@ const Weather: Component<{}> = (props) => {
   };
 
   const setupWeather = async () => {
+    const textureDayRainFg = loadImage(
+      "/images/openmeteo/weather/day-rain-fg.webp"
+    );
+    const textureDayRainBg = loadImage(
+      "/images/openmeteo/weather/day-rain-bg.webp"
+    );
+
+    const textureNightRainFg = loadImage(
+      "/images/openmeteo/weather/night-rain-fg.webp"
+    );
+    const textureNightRainBg = loadImage(
+      "/images/openmeteo/weather/night-rain-bg.webp"
+    );
+
     const textureDayFg = loadImage("/images/openmeteo/weather/day-fg.webp");
     const textureDayBg = loadImage("/images/openmeteo/weather/day-bg.webp");
 
@@ -361,6 +375,10 @@ const Weather: Component<{}> = (props) => {
     const textureNightBg = loadImage("/images/openmeteo/weather/night-bg.webp");
 
     const imagesData = await Promise.all([
+      textureDayRainFg,
+      textureDayRainBg,
+      textureNightRainFg,
+      textureNightRainBg,
       textureDayFg,
       textureDayBg,
       textureNightFg,
@@ -431,12 +449,22 @@ const Weather: Component<{}> = (props) => {
 
     raindrops.clearDrops();
 
-    if (current()!.isDayTime) {
-      generateTextures(imagesData[0], imagesData[1]);
-      renderer.updateTextures();
+    if (weatherType !== "sunny") {
+      if (current()!.isDayTime) {
+        generateTextures(imagesData[0], imagesData[1]);
+        renderer.updateTextures();
+      } else {
+        generateTextures(imagesData[2], imagesData[3]);
+        renderer.updateTextures();
+      }
     } else {
-      generateTextures(imagesData[2], imagesData[3]);
-      renderer.updateTextures();
+      if (current()!.isDayTime) {
+        generateTextures(imagesData[4], imagesData[5]);
+        renderer.updateTextures();
+      } else {
+        generateTextures(imagesData[6], imagesData[7]);
+        renderer.updateTextures();
+      }
     }
   };
 
