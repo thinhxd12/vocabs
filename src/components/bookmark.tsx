@@ -23,6 +23,7 @@ import {
 import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
 import { AiOutlineInsertRowBelow } from "solid-icons/ai";
+import { stopKeydown } from "~/utils";
 
 declare module "solid-js" {
   namespace JSX {
