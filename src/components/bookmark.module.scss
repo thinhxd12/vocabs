@@ -4,6 +4,8 @@
     @include baseBody;
     width: 100%;
     padding: 0 !important;
+    border: 0;
+    outline: 0;
 
     .bookmarkHeader {
         position: sticky;
@@ -115,7 +117,7 @@
         cursor: pointer;
         background: transparent;
         transition: all 0.6s;
-        z-index: 999;
+        z-index: 810;
 
         &:hover {
             background: linear-gradient(90deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
@@ -133,7 +135,7 @@
         cursor: pointer;
         background: transparent;
         transition: all 0.6s;
-        z-index: 999;
+        z-index: 810;
 
         &:hover {
             background: linear-gradient(270deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
