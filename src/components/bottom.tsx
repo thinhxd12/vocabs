@@ -236,7 +236,11 @@ const Bottom: Component<{}> = () => {
         >
           <button class={styles.bottomCenter}>
             <span>{Math.floor(mainStore.totalMemories / 100)}</span>
-            <small>{mainStore.totalMemories % 100}</small>
+            <small>
+              {mainStore.totalMemories % 100 < 10
+                ? "0" + (mainStore.totalMemories % 100)
+                : mainStore.totalMemories % 100}
+            </small>
           </button>
         </div>
 
