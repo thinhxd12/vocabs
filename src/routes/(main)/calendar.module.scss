@@ -140,6 +140,15 @@
                     }
                 }
 
+                .dateTimeIndexDot {
+                    width: 3px;
+                    height: 3px;
+                    border-radius: 50%;
+                    margin-bottom: 6px;
+                    margin-left: -1px;
+                    background-color: $color-calendar-text-2;
+                }
+
                 .dateTimeIndexDone {
                     color: $color-calendar-text-1;
                 }
@@ -174,16 +183,20 @@
 
             .dateTimeIndexToday {
                 color: $color-red-1;
-                color: 1;
             }
 
             .dateTimeIndex {
                 color: $color-red-1;
                 opacity: 0.6;
             }
+
+            .dateTimeIndexDot {
+                background-color: $color-red-1;
+                opacity: 0.6;
+            }
         }
 
-        .calendarWeekLoading{
+        .calendarWeekLoading {
             @include flex-center;
         }
     }
@@ -216,9 +229,7 @@
     .calendarHistoryLoading {
         width: 360px;
         height: 99px;
-        background-color: red;
     }
-
 
     .calendarDropdownContainer {
         overflow: hidden;

@@ -74,11 +74,7 @@ export interface CalendarScheduleType {
 
 export interface HistoryType {
   created_at: string;
-  week1: HistoryItemContentType;
-  week2: HistoryItemContentType;
-  week3: HistoryItemContentType;
-  week4: HistoryItemContentType;
-  week5: HistoryItemContentType;
+  data: HistoryItemContentType[];
 }
 
 export interface ImageType {

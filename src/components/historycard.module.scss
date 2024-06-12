@@ -34,18 +34,7 @@
                 z-index: 33;
             }
         }
-
-        .oddCard {
-            @include flex-center;
-            flex-grow: 1;
-        }
-
-        .evenCard {
-            @include flex-center;
-            flex-grow: 1;
-            padding-left: 9px;
-        }
-
+        
         .historyCardItemFrom,
         .historyCardItemTo {
             width: 120px;

@@ -1,5 +1,5 @@
 import { action, cache } from "@solidjs/router";
-import { BookmarkType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularySearchType, VocabularyTranslationType, VocabularyType, } from "~/types";
+import { BookmarkType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryItemContentType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularySearchType, VocabularyTranslationType, VocabularyType, } from "~/types";
 import { PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import { format } from "date-fns";
 import { parse } from 'node-html-parser';
@@ -57,7 +57,7 @@ const chunk = (array: any[], size: number) =>
         return acc;
     }, []);
 
-export const getScheduleData = cache(async () => {
+export const getScheduleData = cache(async (str: string) => {
     "use server";
     const date = new Date();
     const thisMonth = date.getMonth();
@@ -89,10 +89,25 @@ export const getScheduleData = cache(async () => {
             month: thisMonth + 1,
         });
     }
-    const { data, error } = await supabase.from(mapTables.schedule).select();
+    const { data, error } = await supabase.from(mapTables.schedule).select().order('date');
+
 
     if (data) {
-        const scheduleData = data?.map((item: any, index: number) => {
+        let index = data.findIndex(item => item.date === str);
+        let newData = data;
+        if (index > 0) {
+            let startIndex = Math.floor(index / 6) * 6;
+            newData = data.map((n, i) => {
+                if (i >= startIndex && i < startIndex + 6) {
+                    return n
+                }
+                return {
+                    ...n, time1: -1, time2: -1
+                }
+            })
+        }
+
+        const scheduleData = newData.map((item: any, index: number) => {
             const day = new Date(item.date);
             return { ...item, date: day.getDate(), month: day.getMonth() };
         });
@@ -100,7 +115,7 @@ export const getScheduleData = cache(async () => {
         const mergedArray = monthDateArr.map(item => {
             return {
                 ...item,
-                ...scheduleData.find((item2: any) => item2.date === item.date && item2.month === item.month) // find the item from the second array with the same id
+                ...scheduleData.find((item2: any) => item2.date === item.date && item2.month === item.month)
             };
         });
         const calendarScheduleArr = chunk(mergedArray, 7);
@@ -109,15 +124,6 @@ export const getScheduleData = cache(async () => {
 }, "getSchedule");
 
 
-
-//insert all data table history
-export const uploadObjToSupabase = action(async (objs: Object[]) => {
-    "use server";
-    for (let obj of objs) {
-        let { error } = await supabase.from(mapTables.history).insert([obj]);
-        console.log(error);
-    }
-});
 
 //get image link
 export const getDataImage = (async (url: string) => {
@@ -577,62 +583,107 @@ export const submitTodayReset = action(async (formData: FormData) => {
 }, "todayReset");
 
 
-export const submitNewHistory = action(async (formData: FormData) => {
-    "use server";
-    const indexWeek = Number(formData.get("indexWeek"));
-    const fromDate = String(formData.get("fromDate"));
-    const toDate = String(formData.get("toDate"));
-    const monthId = String(formData.get("monthId"));
-
-    let key = indexWeek % 1000 === 1 ? "week1" : "week" + ((indexWeek % 1000 - 1) / 200 + 1);
-    const { error } = await supabase
-        .from(mapTables.history)
-        .update({
-            [key]: {
-                index: indexWeek, from_date: fromDate, to_date: toDate
-            }
-        })
-        .eq('created_at', monthId);
-    if (error) return { message: error.message };
-}, "submitNewHistoryMonth");
-
-export const submitNewWeek = action(async (formData: FormData) => {
+// -------------------------------NEW------------------------------------
+export const submitNewSchedule = action(async (formData: FormData) => {
     "use server";
     const startDay = String(formData.get("startDay"));
-    const startIndex = Number(formData.get("startIndex"));
+    const startIndex = Number(formData.get("startMonthIndex"));
+
+    //create new Schedule
     const { error } = await supabase
         .from(mapTables.schedule)
         .delete()
         .gte('time1', 0)
-    for (let i = 0; i < 6; i++) {
-        let { error } = await supabase
-            .from(mapTables.schedule)
-            .insert([{
-                date: format((new Date(new Date(startDay).getTime() + i * 86400000)).toISOString(), "yyyy-MM-dd"),
-                index1: i % 2 == 0 ? startIndex : startIndex + 50,
-                index2: i % 2 == 0 ? startIndex + 100 : startIndex + 150,
-                time1: 0,
-                time2: 0,
-            }]);
-        if (error) console.log(error);
-    }
-}, "startNewWeek");
 
-export const submitNewMonth = action(async (formData: FormData) => {
-    "use server";
-    const startMonthIndex = Number(formData.get("startMonthIndex"));
-    const insertData = {
-        week1: { index: startMonthIndex, from_date: "", to_date: "" },
-        week2: { index: startMonthIndex + 200, from_date: "", to_date: "" },
-        week3: { index: startMonthIndex + 400, from_date: "", to_date: "" },
-        week4: { index: startMonthIndex + 600, from_date: "", to_date: "" },
-        week5: { index: startMonthIndex + 800, from_date: "", to_date: "" },
+    let newIndex = 0;
+    for (let j = 0; j < 5; j++) {
+        if (startIndex === 1)
+            switch (j) {
+                case 0:
+                    newIndex = startIndex;
+                    break;
+                case 1:
+                    newIndex = startIndex + 400;
+                    break;
+                case 2:
+                    newIndex = startIndex + 800;
+                    break;
+                case 3:
+                    newIndex = startIndex + 200;
+                    break;
+                case 4:
+                    newIndex = startIndex + 600;
+                    break;
+                default:
+                    break;
+            }
+        else switch (j) {
+            case 0:
+                newIndex = startIndex + 400;
+                break;
+            case 1:
+                newIndex = startIndex;
+                break;
+            case 2:
+                newIndex = startIndex + 600;
+                break;
+            case 3:
+                newIndex = startIndex + 200;
+                break;
+            case 4:
+                newIndex = startIndex + 800;
+                break;
+            default:
+                break;
+        }
+        for (let i = 0; i < 6; i++) {
+            let { error } = await supabase
+                .from(mapTables.schedule)
+                .insert([{
+                    date: format((new Date(new Date(startDay).getTime() + (5 * j + i) * 86400000)).toISOString(), "yyyy-MM-dd"),
+                    index1: i % 2 == 0 ? newIndex : newIndex + 50,
+                    index2: i % 2 == 0 ? newIndex + 100 : newIndex + 150,
+                    time1: 0,
+                    time2: 0,
+                }]);
+        }
     }
-    let { error } = await supabase
+
+    //create new History month
+    const insertData = {
+        data: [
+            { index: startIndex, from_date: "", to_date: "" },
+            { index: startIndex + 200, from_date: "", to_date: "" },
+            { index: startIndex + 400, from_date: "", to_date: "" },
+            { index: startIndex + 600, from_date: "", to_date: "" },
+            { index: startIndex + 800, from_date: "", to_date: "" },
+        ]
+    }
+
+    let { error: errorMonth } = await supabase
         .from(mapTables.history)
         .insert([insertData])
-    if (error) console.error(error);
-}, "startMonth");
+
+}, "submitNewSchedule");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // handlecheck
 export const handleCheckWord = async (text: VocabularySearchType) => {
@@ -730,14 +781,40 @@ export const getCalendarHistory = (async () => {
 });
 
 //get start index of schedule
-export const getThisWeekIndex = (async () => {
+export const getThisWeekScheduleIndex = (async (str: string, history: HistoryType) => {
     "use server";
     const { data, error } = await supabase.from(mapTables.schedule)
         .select()
         .order('date');
-    if (error) throw error;
-    if (data) return data[0].index1 as number;
+    if (data) {
+        let index = data.findIndex(item => item.date === str);
+        if (index > 0) {
+            let startIndex = Math.floor(index / 6) * 6;
+            let currentWeek = data.slice(startIndex, startIndex + 6) as ScheduleType[];
+            const thisWeekIndex = data[startIndex].index1 as number;
+
+            //submit history item
+            const historyIndex = history.data.findIndex(item => item.index === thisWeekIndex)
+            if (historyIndex > 0) {
+                let allGreater = currentWeek.every(item => item.time1 >= 9 && item.time2 >= 9);
+                if (allGreater) {
+                    let updateData = history.data;
+                    updateData[historyIndex] = { index: thisWeekIndex, from_date: currentWeek[0].date, to_date: currentWeek[5].date }
+                    const { error } = await supabase
+                        .from(mapTables.history)
+                        .update({
+                            data: updateData
+                        })
+                        .eq('created_at', history.created_at);
+                }
+            }
+            return thisWeekIndex;
+        }
+        return 12344;
+    }
 });
+
+
 
 export const getBookMarkData = (async () => {
     "use server";
@@ -1049,19 +1126,15 @@ export const makePrediction = async (data?: FixMinutelyTWeatherType[]) => {
 };
 
 // =====Insert data============
-// export const insertData = async () => {
-// "use server";
-// for (let i = 0; i < data.length; i++) {
-//     const row = data[i]
-//     const { error } = await supabase
-//         .from("bookmarks")
-//         .insert([row])
+// export const insertData = async (data: any) => {
+//     "use server";
+//     for (let i = 0; i < data.length; i++) {
+//         const row = data[i]
+//         const { error } = await supabase
+//             .from("history")
+//             .insert([{ data: row }])
 
-//     if (error) console.log('Error:', error)
-//     else console.log(`Row ${i} inserted`)
-// }
-// const { data, error } = await supabase
-//     .from(mapTables.memories)
-//     .select()
-// return data;
+//         if (error) console.log('Error:', error)
+//         else console.log(`Row ${i} inserted`)
+//     }
 // }
