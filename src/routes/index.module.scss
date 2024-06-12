@@ -55,21 +55,20 @@
                 border-radius: 3px;
                 overflow: hidden;
 
-                img,
-                svg {
-                    transition: 1.2s ease-in-out;
+                img {
                     opacity: 0.3;
-                    transform: rotate(360deg);
+                }
+            }
+
+            .loginBtnLoading {
+
+                @extend .loginBtn;
+
+                img {
+                    opacity: 0.81;
                 }
 
-                &:hover {
-
-                    img,
-                    svg {
-                        opacity: 0.81;
-                        transform: rotate(0deg);
-                    }
-                }
+                animation: rotate 3s normal linear infinite;
             }
         }
 
@@ -80,4 +79,31 @@
         }
     }
 
+}
+
+@keyframes rotate {
+    0% {
+        -webkit-transform: rotate3d(0, 0, 1, 0deg);
+        transform: rotate3d(0, 0, 1, 0deg);
+    }
+
+    25% {
+        -webkit-transform: rotate3d(0, 0, 1, 90deg);
+        transform: rotate3d(0, 0, 1, 90deg);
+    }
+
+    50% {
+        -webkit-transform: rotate3d(0, 0, 1, 180deg);
+        transform: rotate3d(0, 0, 1, 180deg);
+    }
+
+    75% {
+        -webkit-transform: rotate3d(0, 0, 1, 270deg);
+        transform: rotate3d(0, 0, 1, 270deg);
+    }
+
+    100% {
+        -webkit-transform: rotate3d(0, 0, 1, 360deg);
+        transform: rotate3d(0, 0, 1, 360deg);
+    }
 }

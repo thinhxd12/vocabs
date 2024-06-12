@@ -18,7 +18,12 @@ export default function Login(props: RouteSectionProps) {
             <input name="password" type="password" class={styles.loginInput} />
           </div>
           <div class={styles.loginItem}>
-            <button type="submit" class={styles.loginBtn}>
+            <button
+              type="submit"
+              class={
+                loggingIn.pending ? styles.loginBtnLoading : styles.loginBtn
+              }
+            >
               <img src="/images/main/laurel.webp" width={18} />
             </button>
           </div>
