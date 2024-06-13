@@ -14,6 +14,7 @@ import {
   getTodayData,
   getTotalMemories,
   handleCheckWord,
+  updateTodayData,
   updateTodaySchedule,
 } from "~/lib/api";
 import { BiSolidHourglassTop } from "solid-icons/bi";
@@ -34,10 +35,12 @@ const Bottom: Component<{}> = () => {
   const todayDate = format(new Date(), "yyyy-MM-dd");
 
   onMount(async () => {
-    const data = await getTotalMemories();
-    if (data) {
-      setMainStore("totalMemories", data);
-    }
+    const data = await Promise.all([
+      getTotalMemories(),
+      getTodayData(todayDate),
+    ]);
+    setMainStore("totalMemories", data[0]!);
+    setListStore("listToday", data[1]!);
   });
 
   // -------------------LOGOUT-------------------- //
@@ -97,13 +100,6 @@ const Bottom: Component<{}> = () => {
 
   // -------------------COUNTDOWN END-------------------- //
   // -------------------AUTOPLAY START-------------------- //
-  const updateTodayData = async () => {
-    const data = await getTodayData(todayDate);
-    if (data) {
-      setListStore("listToday", data);
-    }
-  };
-
   const handleRenderWord = () => {
     handleCheckWord(listStore.listContent[listStore.listCount]);
     setListStore("listCount", listStore.listCount + 1);
@@ -121,7 +117,7 @@ const Bottom: Component<{}> = () => {
         newProgress,
         listStore.listToday.date
       );
-      updateTodayData();
+      updateTodayData(todayDate);
     }
 
     handleRenderWord();

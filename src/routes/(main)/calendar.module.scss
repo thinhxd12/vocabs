@@ -144,8 +144,7 @@
                     width: 3px;
                     height: 3px;
                     border-radius: 50%;
-                    margin-bottom: 6px;
-                    margin-left: -1px;
+                    margin-bottom: 9px;
                     background-color: $color-calendar-text-2;
                 }
 
@@ -196,7 +195,8 @@
             }
         }
 
-        .calendarWeekLoading {
+        .calendarWeekLoading,
+        .calendarHistoryLoading {
             @include flex-center;
         }
     }
@@ -226,13 +226,33 @@
         }
     }
 
-    .calendarHistoryLoading {
+    .calendarDropdown {
+        @include baseBody($color-calendar-bg);
         width: 360px;
-        height: 99px;
-    }
+        z-index: 999;
 
-    .calendarDropdownContainer {
-        overflow: hidden;
+        .calendarDropdownHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid $color-calendar-border;
+            height: 21px;
+            padding: 2px 0 2px 2px;
+
+            .calendarDropdownHeaderLeft {
+                p {
+                    @include font('Rubik', 12px, $color-black, 400, normal, 18px);
+                }
+            }
+
+            .calendarDropdownHeaderRight {
+                @include flex;
+            }
+        }
+
+        .calendarDropdownBody {
+            padding-top: 3px;
+        }
     }
 
     .calendarQuote {
@@ -244,6 +264,7 @@
         @include font("NYTCheltenham", 12px, $color-black, 700, normal, 14px);
         cursor: default;
         overflow-y: scroll;
+        z-index: 9999;
 
         &::-webkit-scrollbar {
             display: none;

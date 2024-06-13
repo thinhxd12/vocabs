@@ -72,6 +72,15 @@ export interface CalendarScheduleType {
   month: number;
 }
 
+export interface CalendarType {
+  date: number;
+  month: number;
+  index1?: number;
+  index2?: number;
+  time1?: number;
+  time2?: number;
+}
+
 export interface HistoryType {
   created_at: string;
   data: HistoryItemContentType[];

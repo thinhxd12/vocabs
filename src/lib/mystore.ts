@@ -1,5 +1,5 @@
 import { createStore } from "solid-js/store";
-import { HistoryType, ScheduleType, VocabularySearchType, VocabularyType } from "~/types";
+import { CalendarType, HistoryType, ScheduleType, VocabularySearchType, VocabularyType } from "~/types";
 
 type ListStoreType = {
   listType: 0 | 1 | 2;
@@ -31,6 +31,7 @@ type MainStoreType = {
   showEdit: boolean;
   renderWord: VocabularyType | null;
   historyList: HistoryType[];
+  calendarList: Array<CalendarType[]>;
   thisWeekIndex: number;
   mainToggle: boolean;
   searchResult: VocabularySearchType[];
@@ -48,7 +49,8 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   showEdit: false,
   renderWord: null,
   historyList: [],
-  thisWeekIndex: 0,
+  calendarList: [],
+  thisWeekIndex: -1,
   mainToggle: false,
   searchResult: [],
   translateTerm: "",

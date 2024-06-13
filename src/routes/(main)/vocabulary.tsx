@@ -5,16 +5,14 @@ import {
   deleteVocabulary,
   searchText,
   handleCheckWord,
-  getTodayData,
   getWordData,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
-import { format } from "date-fns";
 import { createAsync } from "@solidjs/router";
-import { mainStore, setListStore, setMainStore } from "~/lib/mystore";
+import { mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./vocabulary.module.scss";
 import FlipCard from "~/components/flipcard";
 import Definition from "~/components/definition";
@@ -32,16 +30,6 @@ declare module "solid-js" {
 }
 
 let mobileInput: HTMLInputElement;
-
-const todayDate = format(new Date(), "yyyy-MM-dd");
-export const route = {
-  load: () =>
-    getTodayData(todayDate).then((data) => {
-      if (data) {
-        setListStore("listToday", data);
-      }
-    }),
-};
 
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************

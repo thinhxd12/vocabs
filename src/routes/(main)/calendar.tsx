@@ -4,7 +4,6 @@ import {
   Show,
   Suspense,
   createSignal,
-  lazy,
   onMount,
 } from "solid-js";
 import {
@@ -13,8 +12,8 @@ import {
   getThisWeekScheduleIndex,
   submitNewSchedule,
   submitTodayReset,
+  updateTodayData,
 } from "~/lib/api";
-const CalendarDropdown = lazy(() => import("~/components/calendardropdown"));
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { format } from "date-fns";
@@ -25,42 +24,44 @@ import { getUser } from "~/lib";
 import { createAsync } from "@solidjs/router";
 import { listStore, mainStore, setMainStore } from "~/lib/mystore";
 import HistoryCard from "~/components/historycard";
-import { ScheduleType } from "~/types";
+import { CalendarType } from "~/types";
+import { OcX2 } from "solid-icons/oc";
 
 let refEl: HTMLDivElement;
 const todayDate = format(new Date(), "yyyy-MM-dd");
-
-export const route = {
-  load: () => getScheduleData(todayDate),
-};
 
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
-  const schedule = createAsync(() => getScheduleData(todayDate), {
-    deferStream: true,
-  });
-
   onMount(async () => {
-    if (mainStore.historyList.length === 0) {
-      const dataHistory = await getCalendarHistory();
-      if (dataHistory) setMainStore("historyList", dataHistory);
-    }
-    if (!mainStore.thisWeekIndex) {
-      const data = await getThisWeekScheduleIndex(
+    if (mainStore.calendarList.length === 0) {
+      const data = await Promise.all([
+        getScheduleData(todayDate),
+        getCalendarHistory(),
+      ]);
+
+      setMainStore("calendarList", data[0]!);
+      setMainStore("historyList", data[1]!);
+
+      const index = await getThisWeekScheduleIndex(
         todayDate,
         mainStore.historyList[0]
       );
-      if (data) setMainStore("thisWeekIndex", data);
+      if (index) setMainStore("thisWeekIndex", index);
     }
   });
 
   const handleUpdateHistoryList = () => {
     setMainStore("historyList", []);
-    setMainStore("thisWeekIndex", 0);
+    setMainStore("thisWeekIndex", -1);
     setShowSetNewSchedule(false);
+  };
+
+  const handleUpdateTodaySchedule = () => {
+    updateTodayData(todayDate);
+    setShowTodayReset(false);
   };
 
   // ---------------------POP UP---------------------------
@@ -79,12 +80,12 @@ const Calendar: Component<{}> = (props) => {
   });
 
   const IndexElement: Component<{
-    date: ScheduleType;
+    date: CalendarType;
   }> = (props) => {
     return (
       <>
         <Show
-          when={props.date.time1 >= 0}
+          when={(props.date.time1 as number) >= 0}
           fallback={<div class={styles.dateTimeIndexDot}></div>}
         >
           <div>{props.date.time1}</div>
@@ -116,8 +117,10 @@ const Calendar: Component<{}> = (props) => {
                 {format(new Date(), "yyyy")}
               </p>
               <p class={styles.setNewHistory}>
-                {mainStore.thisWeekIndex + 1} &#183;{" "}
-                {mainStore.thisWeekIndex + 200}
+                <Show when={mainStore.thisWeekIndex >= 0} fallback={"NaN"}>
+                  {mainStore.thisWeekIndex + 1} &#183;{" "}
+                  {mainStore.thisWeekIndex + 200}
+                </Show>
               </p>
             </div>
           </div>
@@ -134,67 +137,72 @@ const Calendar: Component<{}> = (props) => {
             <Suspense
               fallback={<div class={styles.calendarWeekLoading}>...</div>}
             >
-              <Index each={schedule()}>
+              <Index each={mainStore.calendarList}>
                 {(data, i) => {
                   return (
                     <div class={styles.calendarWeek}>
                       <Index each={data()}>
-                        {(date, n) => {
+                        {(item, n) => {
                           return (
                             <div class={styles.calendarDay}>
-                              <Show when={"time1" in date()}>
+                              <Show when={"time1" in item()}>
                                 <div class={styles.dateTimeIndexHidden}>
-                                  {Math.max(date().time1, date().time2)}
+                                  {Math.max(
+                                    item().time1 as number,
+                                    item().time2 as number
+                                  )}
                                 </div>
                               </Show>
 
                               <Show
-                                when={date().month === new Date().getMonth()}
+                                when={item().month === new Date().getMonth()}
                                 fallback={
                                   <div class={styles.dateText}>
-                                    {date().date}
+                                    {item().date}
                                   </div>
                                 }
                               >
                                 <Show
                                   when={
-                                    date().month === new Date().getMonth() &&
-                                    date().date === new Date().getDate()
+                                    item().month === new Date().getMonth() &&
+                                    item().date === new Date().getDate()
                                   }
                                   fallback={
                                     <div class={styles.dateTextThisMonth}>
-                                      {date().date}
+                                      {item().date}
                                     </div>
                                   }
                                 >
                                   <div
                                     class={`${styles.dateTextThisMonth} ${styles.todayDate}`}
-                                    onClick={() => setShowTodayReset(true)}
+                                    onClick={() =>
+                                      setShowTodayReset(!showTodayReset())
+                                    }
                                   >
-                                    {date().date}
+                                    {item().date}
                                   </div>
                                 </Show>
                               </Show>
 
-                              <Show when={"time1" in date()}>
+                              <Show when={"time1" in item()}>
                                 <Show
-                                  when={date().date === new Date().getDate()}
+                                  when={item().date === new Date().getDate()}
                                   fallback={
                                     <div
                                       class={
-                                        date().time1 > 0
+                                        (item().time1 as number) > 0
                                           ? `${styles.dateTimeIndex} ${styles.dateTimeIndexDone}`
                                           : styles.dateTimeIndex
                                       }
                                     >
-                                      <IndexElement date={date()} />
+                                      <IndexElement date={item()} />
                                     </div>
                                   }
                                 >
                                   <div
                                     class={`${styles.dateTimeIndex} ${styles.dateTimeIndexToday}`}
                                   >
-                                    <IndexElement date={date()} />
+                                    <IndexElement date={item()} />
                                   </div>
                                 </Show>
                               </Show>
@@ -226,16 +234,26 @@ const Calendar: Component<{}> = (props) => {
         <Presence>
           <Show when={showTodayReset()}>
             <Motion
-              initial={{ minHeight: "0px" }}
-              animate={{ minHeight: "85px" }}
-              exit={{ minHeight: "0px" }}
-              transition={{ duration: 0.5 }}
-              class={styles.calendarDropdownContainer}
+              initial={{ height: "0px" }}
+              animate={{ height: "81px" }}
+              exit={{ height: "0px" }}
+              transition={{ duration: 0.3, easing: "ease" }}
+              class={styles.calendarDropdown}
             >
-              <CalendarDropdown
-                onClose={setShowTodayReset}
-                header="Reset today schedule!"
-              >
+              <div class={styles.calendarDropdownHeader}>
+                <div class={styles.calendarDropdownHeaderLeft}>
+                  <p>Reset today schedule!</p>
+                </div>
+                <div class={styles.calendarDropdownHeaderRight}>
+                  <button
+                    class={buttons.buttonClose}
+                    onclick={() => setShowTodayReset(false)}
+                  >
+                    <OcX2 size={15} />
+                  </button>
+                </div>
+              </div>
+              <div class={styles.calendarDropdownBody}>
                 <form
                   class={forms.formBody}
                   action={submitTodayReset}
@@ -266,12 +284,12 @@ const Calendar: Component<{}> = (props) => {
                   <button
                     class={buttons.buttonSubmit}
                     type="submit"
-                    onClick={() => setShowTodayReset(false)}
+                    onClick={handleUpdateTodaySchedule}
                   >
                     Submit
                   </button>
                 </form>
-              </CalendarDropdown>
+              </div>
             </Motion>
           </Show>
         </Presence>
@@ -280,16 +298,26 @@ const Calendar: Component<{}> = (props) => {
         <Presence>
           <Show when={showSetNewSchedule()}>
             <Motion
-              initial={{ minHeight: "0px" }}
-              animate={{ minHeight: "85px" }}
-              exit={{ minHeight: "0px" }}
-              transition={{ duration: 0.5 }}
-              class={styles.calendarDropdownContainer}
+              initial={{ height: "0px" }}
+              animate={{ height: "81px" }}
+              exit={{ height: "0px" }}
+              transition={{ duration: 0.3, easing: "ease" }}
+              class={styles.calendarDropdown}
             >
-              <CalendarDropdown
-                onClose={setShowSetNewSchedule}
-                header="Set new schedule!"
-              >
+              <div class={styles.calendarDropdownHeader}>
+                <div class={styles.calendarDropdownHeaderLeft}>
+                  <p>Set new schedule!</p>
+                </div>
+                <div class={styles.calendarDropdownHeaderRight}>
+                  <button
+                    class={buttons.buttonClose}
+                    onclick={() => setShowSetNewSchedule(false)}
+                  >
+                    <OcX2 size={15} />
+                  </button>
+                </div>
+              </div>
+              <div class={styles.calendarDropdownBody}>
                 <form
                   class={forms.formBody}
                   action={submitNewSchedule}
@@ -322,7 +350,7 @@ const Calendar: Component<{}> = (props) => {
                     Submit
                   </button>
                 </form>
-              </CalendarDropdown>
+              </div>
             </Motion>
           </Show>
         </Presence>

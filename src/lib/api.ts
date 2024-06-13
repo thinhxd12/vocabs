@@ -1,10 +1,10 @@
 import { action, cache } from "@solidjs/router";
-import { BookmarkType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryItemContentType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularySearchType, VocabularyTranslationType, VocabularyType, } from "~/types";
+import { BookmarkType, CalendarType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryItemContentType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularySearchType, VocabularyTranslationType, VocabularyType, } from "~/types";
 import { PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import { format } from "date-fns";
 import { parse } from 'node-html-parser';
 import { supabase } from "./supbabase";
-import { setMainStore } from "./mystore";
+import { mainStore, setListStore, setMainStore } from "./mystore";
 import { parseKindleEntries, readKindleClipping } from "@darylserrano/kindle-clippings";
 
 export const searchText = async (text: string) => {
@@ -57,7 +57,73 @@ const chunk = (array: any[], size: number) =>
         return acc;
     }, []);
 
-export const getScheduleData = cache(async (str: string) => {
+// export const getScheduleData = cache(async (str: string) => {
+//     "use server";
+//     const date = new Date();
+//     const thisMonth = date.getMonth();
+//     const thisYear = date.getFullYear();
+//     const firstDayofMonth = new Date(thisYear, thisMonth, 1).getDay();
+//     const lastDateofMonth = new Date(thisYear, thisMonth + 1, 0).getDate();
+//     const lastDayofMonth = new Date(
+//         thisYear,
+//         thisMonth,
+//         lastDateofMonth
+//     ).getDay();
+//     const lastDateofLastMonth = new Date(thisYear, thisMonth, 0).getDate();
+//     const monthDateArr = [];
+//     for (let i = firstDayofMonth; i > 0; i--) {
+//         monthDateArr.push({
+//             date: lastDateofLastMonth - i + 1,
+//             month: thisMonth - 1,
+//         });
+//     }
+//     for (let i = 1; i <= lastDateofMonth; i++) {
+//         monthDateArr.push({
+//             date: i,
+//             month: thisMonth,
+//         });
+//     }
+//     for (let i = lastDayofMonth; i < 6; i++) {
+//         monthDateArr.push({
+//             date: i - lastDayofMonth + 1,
+//             month: thisMonth + 1,
+//         });
+//     }
+//     const { data, error } = await supabase.from(mapTables.schedule).select().order('date');
+
+
+//     if (data) {
+//         let index = data.findIndex(item => item.date === str);
+//         let newData = data;
+//         if (index > 0) {
+//             let startIndex = Math.floor(index / 6) * 6;
+//             newData = data.map((n, i) => {
+//                 if (i >= startIndex && i < startIndex + 6) {
+//                     return n
+//                 }
+//                 return {
+//                     ...n, time1: -1, time2: -1
+//                 }
+//             })
+//         }
+
+//         const scheduleData = newData.map((item: any, index: number) => {
+//             const day = new Date(item.date);
+//             return { ...item, date: day.getDate(), month: day.getMonth() };
+//         });
+
+//         const mergedArray = monthDateArr.map(item => {
+//             return {
+//                 ...item,
+//                 ...scheduleData.find((item2: any) => item2.date === item.date && item2.month === item.month)
+//             };
+//         });
+//         const calendarScheduleArr = chunk(mergedArray, 7);
+//         return calendarScheduleArr;
+//     }
+// }, "getSchedule");
+
+export const getScheduleData = (async (str: string) => {
     "use server";
     const date = new Date();
     const thisMonth = date.getMonth();
@@ -119,10 +185,9 @@ export const getScheduleData = cache(async (str: string) => {
             };
         });
         const calendarScheduleArr = chunk(mergedArray, 7);
-        return calendarScheduleArr;
+        return calendarScheduleArr as Array<CalendarType[]>;
     }
-}, "getSchedule");
-
+});
 
 
 //get image link
@@ -781,13 +846,13 @@ export const getCalendarHistory = (async () => {
 });
 
 //get start index of schedule
-export const getThisWeekScheduleIndex = (async (str: string, history: HistoryType) => {
+export const getThisWeekScheduleIndex = (async (day: string, history: HistoryType) => {
     "use server";
     const { data, error } = await supabase.from(mapTables.schedule)
         .select()
         .order('date');
     if (data) {
-        let index = data.findIndex(item => item.date === str);
+        let index = data.findIndex(item => item.date === day);
         if (index > 0) {
             let startIndex = Math.floor(index / 6) * 6;
             let currentWeek = data.slice(startIndex, startIndex + 6) as ScheduleType[];
@@ -810,7 +875,7 @@ export const getThisWeekScheduleIndex = (async (str: string, history: HistoryTyp
             }
             return thisWeekIndex;
         }
-        return 12344;
+        return -9;
     }
 });
 
@@ -993,6 +1058,34 @@ export const getTodayData = cache(async (date: string) => {
     if (data) return data[0] as ScheduleType;
 }, "getTodayData");
 
+export const updateTodayData = async (date: string) => {
+    const data = await getTodayData(date);
+    if (data) {
+        setListStore("listToday", data);
+        handleUpdateCalendarData(data);
+    }
+};
+
+const handleUpdateCalendarData = async (data: ScheduleType) => {
+    const day = new Date(data.date);
+    const date = day.getDate();
+    const month = day.getMonth();
+
+    if (mainStore.calendarList.length > 0) {
+        const newData = mainStore.calendarList.map((week) => {
+            return week.map((item) => {
+                return item.date === date && item.month === month
+                    ? {
+                        ...item,
+                        time1: data.time1,
+                        time2: data.time2,
+                    }
+                    : { ...item };
+            });
+        });
+        setMainStore("calendarList", newData);
+    }
+};
 
 //get 50 word
 export const getListContent = async (start: number, end: number) => {
