@@ -10,7 +10,8 @@ import {
 import { Motion } from "solid-motionone";
 import styles from "./flipcard.module.scss";
 import { mainStore } from "~/lib/mystore";
-import { Image } from "@unpic/solid";
+import { cld } from "~/lib/supbabase";
+import { scale } from "@cloudinary/url-gen/actions/resize";
 
 const FlipCard: Component<{}> = (props) => {
   let audio: HTMLAudioElement | null;
@@ -88,13 +89,17 @@ const FlipCard: Component<{}> = (props) => {
       <div class={styles.flipCardLeftContent}>
         <div class={styles.numberFlipContainer}>
           <div class={styles.numberFlipBackground}>
-            {/* <img src="/images/main/flag.webp" height={186} width={50} /> */}
-            <Image
-              src="/images/main/flag.webp"
-              layout="constrained"
-              width={50}
+            <img
+              src={cld
+                .image("images/main/flag")
+                .quality("auto")
+                .format("auto")
+                .resize(scale().width(50).height(186))
+                .toURL()}
               height={186}
+              width={50}
               alt="flag"
+              loading="lazy"
             />
             <div class={styles.numberFlipContent}>
               <Show when={currenText()}>
@@ -108,13 +113,17 @@ const FlipCard: Component<{}> = (props) => {
                         animate={{ y: 0, transition: { delay: 2.5 } }}
                         transition={{ duration: 0.6, easing: "ease-in-out" }}
                       >
-                        {/* <img src="/images/main/cup.webp" height={44} /> */}
-                        <Image
-                          src="/images/main/cup.webp"
-                          layout="constrained"
-                          width={27}
+                        <img
+                          src={cld
+                            .image("images/main/cup")
+                            .quality("auto")
+                            .format("auto")
+                            .resize(scale().width(50).height(186))
+                            .toURL()}
                           height={44}
-                          alt="cup"
+                          width={27}
+                          alt="flag"
+                          loading="lazy"
                         />
                         <span class={styles.number}>1</span>
                       </Motion.div>

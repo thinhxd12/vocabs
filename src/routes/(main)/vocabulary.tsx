@@ -17,6 +17,8 @@ import styles from "./vocabulary.module.scss";
 import FlipCard from "~/components/flipcard";
 import Definition from "~/components/definition";
 import { getUser } from "~/lib";
+import { cld } from "~/lib/supbabase";
+import { scale } from "@cloudinary/url-gen/actions/resize";
 const Translation = lazy(() => import("~/components/translation"));
 const Edit = lazy(() => import("~/components/edit"));
 const Bookmark = lazy(() => import("~/components/bookmark"));
@@ -125,9 +127,16 @@ const Vocabulary: Component<{}> = () => {
                 <div class={styles.newInputContainer}>
                   <div class={styles.newInputContent}>
                     <img
-                      src="/images/main/inputbackground.webp"
-                      width={360}
+                      src={cld
+                        .image("images/main/inputbackground")
+                        .quality("auto")
+                        .format("auto")
+                        .resize(scale().width(360).height(36))
+                        .toURL()}
                       height={36}
+                      width={360}
+                      alt="inputbackground"
+                      loading="lazy"
                       class={styles.newInputBackground}
                     />
                     <p
@@ -144,9 +153,17 @@ const Vocabulary: Component<{}> = () => {
           >
             <div class={styles.myInputContainer}>
               <img
-                src="/images/main/input-left-corner.webp"
-                class={styles.myInputLeftOrnament}
+                src={cld
+                  .image("images/main/input-left-corner")
+                  .quality("auto")
+                  .format("auto")
+                  .resize(scale().width(19).height(38))
+                  .toURL()}
                 height={38}
+                width={19}
+                alt="inputbackground"
+                loading="lazy"
+                class={styles.myInputLeftOrnament}
               />
               <div class={styles.myInputCenterContent}>
                 <input
@@ -158,15 +175,30 @@ const Vocabulary: Component<{}> = () => {
                 />
               </div>
               <img
-                src="/images/main/input-right-corner.webp"
-                class={styles.myInputRightOrnament}
+                src={cld
+                  .image("images/main/input-right-corner")
+                  .quality("auto")
+                  .format("auto")
+                  .resize(scale().width(19).height(38))
+                  .toURL()}
                 height={38}
+                width={19}
+                alt="inputbackground"
+                loading="lazy"
+                class={styles.myInputRightOrnament}
               />
               <img
-                src="/images/main/center.webp"
-                class={styles.myInputButton}
+                src={cld
+                  .image("images/main/center")
+                  .quality("auto")
+                  .format("auto")
+                  .resize(scale().width(24).height(24))
+                  .toURL()}
                 height={24}
-                onClick={clearSearchResult}
+                width={24}
+                alt="inputbackground"
+                loading="lazy"
+                class={styles.myInputButton}
               />
             </div>
           </Show>
