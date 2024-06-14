@@ -129,7 +129,6 @@ const Vocabulary: Component<{}> = () => {
                       height={36}
                       width={360}
                       alt="inputbackground"
-                      loading="lazy"
                       class={styles.newInputBackground}
                     />
                     <p
@@ -150,7 +149,6 @@ const Vocabulary: Component<{}> = () => {
                 height={38}
                 width={19}
                 alt="inputbackground"
-                loading="lazy"
                 class={styles.myInputLeftOrnament}
               />
               <div class={styles.myInputCenterContent}>

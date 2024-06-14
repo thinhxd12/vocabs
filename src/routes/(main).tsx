@@ -133,6 +133,7 @@ export default function Main(props: RouteSectionProps) {
     <div class={styles.main} tabIndex={0} use:searchWord={null}>
       <div class={styles.mainButtons}>
         <button
+          aria-label="Layout"
           onClick={() => setMainStore("mainToggle", !mainStore.mainToggle)}
           class={styles.mainButton}
         >
@@ -143,7 +144,12 @@ export default function Main(props: RouteSectionProps) {
             <VsLayoutActivitybarRight size={17} />
           </Show>
         </button>
-        <button onClick={handleGetNextImage} class={styles.mainButton}>
+
+        <button
+          onClick={handleGetNextImage}
+          class={styles.mainButton}
+          aria-label="Change Image"
+        >
           <TbRefresh size={17} />
         </button>
       </div>
