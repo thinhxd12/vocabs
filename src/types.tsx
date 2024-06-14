@@ -63,15 +63,6 @@ export interface ScheduleType {
   time2: number;
 }
 
-export interface CalendarScheduleType {
-  date: number;
-  index1: number;
-  index2: number;
-  time1: number;
-  time2: number;
-  month: number;
-}
-
 export interface CalendarType {
   date: number;
   month: number;

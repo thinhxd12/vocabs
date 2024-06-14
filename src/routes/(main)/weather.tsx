@@ -310,7 +310,9 @@ const Weather: Component<{}> = (props) => {
       textureNightBg,
     ]);
 
-    const dpi = window.devicePixelRatio;
+    // const dpi = window.devicePixelRatio;
+    // fix for mobile
+    const dpi = 1;
 
     let canvasWidth = 360;
     let canvasHeight = window.innerHeight - 34;

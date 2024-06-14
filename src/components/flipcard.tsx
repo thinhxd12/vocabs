@@ -10,6 +10,7 @@ import {
 import { Motion } from "solid-motionone";
 import styles from "./flipcard.module.scss";
 import { mainStore } from "~/lib/mystore";
+import { Image } from "@unpic/solid";
 
 const FlipCard: Component<{}> = (props) => {
   let audio: HTMLAudioElement | null;
@@ -87,7 +88,14 @@ const FlipCard: Component<{}> = (props) => {
       <div class={styles.flipCardLeftContent}>
         <div class={styles.numberFlipContainer}>
           <div class={styles.numberFlipBackground}>
-            <img src="/images/main/flag.webp" height={186} width={50} />
+            {/* <img src="/images/main/flag.webp" height={186} width={50} /> */}
+            <Image
+              src="/images/main/flag.webp"
+              layout="constrained"
+              width={50}
+              height={186}
+              alt="flag"
+            />
             <div class={styles.numberFlipContent}>
               <Show when={currenText()}>
                 <Show
@@ -100,7 +108,14 @@ const FlipCard: Component<{}> = (props) => {
                         animate={{ y: 0, transition: { delay: 2.5 } }}
                         transition={{ duration: 0.6, easing: "ease-in-out" }}
                       >
-                        <img src="/images/main/cup.webp" height={44} />
+                        {/* <img src="/images/main/cup.webp" height={44} /> */}
+                        <Image
+                          src="/images/main/cup.webp"
+                          layout="constrained"
+                          width={27}
+                          height={44}
+                          alt="cup"
+                        />
                         <span class={styles.number}>1</span>
                       </Motion.div>
                     </div>
