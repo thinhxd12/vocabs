@@ -10,8 +10,6 @@ import {
 import { Motion } from "solid-motionone";
 import styles from "./flipcard.module.scss";
 import { mainStore } from "~/lib/mystore";
-import { cld } from "~/lib/supbabase";
-import { scale } from "@cloudinary/url-gen/actions/resize";
 
 const FlipCard: Component<{}> = (props) => {
   let audio: HTMLAudioElement | null;
@@ -90,12 +88,7 @@ const FlipCard: Component<{}> = (props) => {
         <div class={styles.numberFlipContainer}>
           <div class={styles.numberFlipBackground}>
             <img
-              src={cld
-                .image("images/main/flag")
-                .quality("auto")
-                .format("auto")
-                .resize(scale().width(50).height(186))
-                .toURL()}
+              src="images/main/flag.webp"
               height={186}
               width={50}
               alt="flag"
@@ -114,12 +107,7 @@ const FlipCard: Component<{}> = (props) => {
                         transition={{ duration: 0.6, easing: "ease-in-out" }}
                       >
                         <img
-                          src={cld
-                            .image("images/main/cup")
-                            .quality("auto")
-                            .format("auto")
-                            .resize(scale().width(50).height(186))
-                            .toURL()}
+                          src="images/main/cup.webp"
                           height={44}
                           width={27}
                           alt="flag"
