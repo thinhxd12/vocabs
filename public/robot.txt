@@ -1,5 +1,5 @@
-User-agent: *
-Disallow: /
-Allow: /public/
+user-agent: *
+disallow: /
+allow: /public/
 
-Sitemap: https://hoctuvung3.vercel.app/vocabulary
+sitemap: https://hoctuvung3.vercel.app/vocabulary
