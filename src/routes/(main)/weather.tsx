@@ -61,6 +61,7 @@ const Weather: Component<{}> = (props) => {
 
   const [geo, setGeo] = createSignal<string>(WEATHER_GEOS[0].geo);
   const [geoTitle, setGeoTitle] = createSignal<string>(WEATHER_GEOS[0].name);
+
   const [current, { refetch: refetchCurrent, mutate: mutateCurrent }] =
     createResource(geo, getCurrentWeatherData);
 
@@ -84,11 +85,12 @@ const Weather: Component<{}> = (props) => {
   });
 
   createEffect(async () => {
-    current() && setupWeather();
+    current.state === "ready" && setupWeather();
   });
 
   createEffect(async () => {
-    setPrediction(await makePrediction(minutely()));
+    minutely.state === "ready" &&
+      setPrediction(await makePrediction(minutely()));
   });
 
   const chartOptions = {
