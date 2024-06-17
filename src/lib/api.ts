@@ -1,7 +1,7 @@
 import { action, cache } from "@solidjs/router";
 import { BookmarkType, CalendarType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryItemContentType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularySearchType, VocabularyTranslationType, VocabularyType, } from "~/types";
 import { PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
-import { format } from "date-fns";
+import { format, parse as parseTime } from "date-fns";
 import { parse } from 'node-html-parser';
 import { supabase } from "./supbabase";
 import { mainStore, setListStore, setMainStore } from "./mystore";
@@ -56,72 +56,6 @@ const chunk = (array: any[], size: number) =>
         if (i % size === 0) acc.push(array.slice(i, i + size));
         return acc;
     }, []);
-
-// export const getScheduleData = cache(async (str: string) => {
-//     "use server";
-//     const date = new Date();
-//     const thisMonth = date.getMonth();
-//     const thisYear = date.getFullYear();
-//     const firstDayofMonth = new Date(thisYear, thisMonth, 1).getDay();
-//     const lastDateofMonth = new Date(thisYear, thisMonth + 1, 0).getDate();
-//     const lastDayofMonth = new Date(
-//         thisYear,
-//         thisMonth,
-//         lastDateofMonth
-//     ).getDay();
-//     const lastDateofLastMonth = new Date(thisYear, thisMonth, 0).getDate();
-//     const monthDateArr = [];
-//     for (let i = firstDayofMonth; i > 0; i--) {
-//         monthDateArr.push({
-//             date: lastDateofLastMonth - i + 1,
-//             month: thisMonth - 1,
-//         });
-//     }
-//     for (let i = 1; i <= lastDateofMonth; i++) {
-//         monthDateArr.push({
-//             date: i,
-//             month: thisMonth,
-//         });
-//     }
-//     for (let i = lastDayofMonth; i < 6; i++) {
-//         monthDateArr.push({
-//             date: i - lastDayofMonth + 1,
-//             month: thisMonth + 1,
-//         });
-//     }
-//     const { data, error } = await supabase.from(mapTables.schedule).select().order('date');
-
-
-//     if (data) {
-//         let index = data.findIndex(item => item.date === str);
-//         let newData = data;
-//         if (index > 0) {
-//             let startIndex = Math.floor(index / 6) * 6;
-//             newData = data.map((n, i) => {
-//                 if (i >= startIndex && i < startIndex + 6) {
-//                     return n
-//                 }
-//                 return {
-//                     ...n, time1: -1, time2: -1
-//                 }
-//             })
-//         }
-
-//         const scheduleData = newData.map((item: any, index: number) => {
-//             const day = new Date(item.date);
-//             return { ...item, date: day.getDate(), month: day.getMonth() };
-//         });
-
-//         const mergedArray = monthDateArr.map(item => {
-//             return {
-//                 ...item,
-//                 ...scheduleData.find((item2: any) => item2.date === item.date && item2.month === item.month)
-//             };
-//         });
-//         const calendarScheduleArr = chunk(mergedArray, 7);
-//         return calendarScheduleArr;
-//     }
-// }, "getSchedule");
 
 export const getScheduleData = (async (str: string) => {
     "use server";
@@ -652,9 +586,18 @@ export const submitTodayReset = action(async (formData: FormData) => {
 export const submitNewSchedule = action(async (formData: FormData) => {
     "use server";
     const startDay = String(formData.get("startDay"));
-    const startIndex = Number(formData.get("startMonthIndex"));
+    let startIndex = Number(formData.get("startMonthIndex"));
+    if (!startDay) return;
 
-    //create new Schedule
+    startIndex = startIndex === 0 ? 1000 : 0;
+
+    const { count } = await supabase
+        .from(mapTables.vocabulary)
+        .select('*', { count: "exact" });
+    if (!count) return;
+
+    startIndex = count >= 2000 ? startIndex : 0;
+
     const { error } = await supabase
         .from(mapTables.schedule)
         .delete()
@@ -662,7 +605,7 @@ export const submitNewSchedule = action(async (formData: FormData) => {
 
     let newIndex = 0;
     for (let j = 0; j < 5; j++) {
-        if (startIndex === 1)
+        if (startIndex === 0)
             switch (j) {
                 case 0:
                     newIndex = startIndex;
@@ -701,11 +644,12 @@ export const submitNewSchedule = action(async (formData: FormData) => {
             default:
                 break;
         }
+
         for (let i = 0; i < 6; i++) {
             let { error } = await supabase
                 .from(mapTables.schedule)
                 .insert([{
-                    date: format((new Date(new Date(startDay).getTime() + (5 * j + i) * 86400000)).toISOString(), "yyyy-MM-dd"),
+                    date: format((new Date(new Date(startDay).getTime() + (6 * j + i) * 86400000)).toISOString(), "yyyy-MM-dd"),
                     index1: i % 2 == 0 ? newIndex : newIndex + 50,
                     index2: i % 2 == 0 ? newIndex + 100 : newIndex + 150,
                     time1: 0,
@@ -859,10 +803,10 @@ export const getThisWeekScheduleIndex = (async (day: string, history: HistoryTyp
             const thisWeekIndex = data[startIndex].index1 as number;
 
             //submit history item
-            const historyIndex = history.data.findIndex(item => item.index === thisWeekIndex)
-            if (historyIndex > 0) {
-                let allGreater = currentWeek.every(item => item.time1 >= 9 && item.time2 >= 9);
-                if (allGreater) {
+            const allGreater = currentWeek.every(item => item.time1 >= 9 && item.time2 >= 9);
+            if (allGreater) {
+                const historyIndex = history.data.findIndex(item => item.index === thisWeekIndex)
+                if (historyIndex !== -1 && history.data[historyIndex].from_date === "") {
                     let updateData = history.data;
                     updateData[historyIndex] = { index: thisWeekIndex, from_date: currentWeek[0].date, to_date: currentWeek[5].date }
                     const { error } = await supabase
@@ -1111,27 +1055,79 @@ const fetchGetJSON = async (url: string) => {
     }
 }
 
-export const getCurrentWeatherData = (async (geostr: string) => {
-    "use server";
-    const geos = geostr.split(",");
-    const URL = `https://api.open-meteo.com/v1/forecast?latitude=${geos[0]}&longitude=${geos[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&forecast_minutely_15=1&timezone=auto&models=best_match`;
-    const data = await fetchGetJSON(URL);
-    return cleanDataCurrently(data);
-})
+// export const getCurrentWeatherData = (async (geostr: string) => {
+//     "use server";
+//     const geos = geostr.split(",");
+//     const URL = `https://api.open-meteo.com/v1/forecast?latitude=${geos[0]}&longitude=${geos[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&forecast_minutely_15=1&timezone=auto&models=best_match`;
+//     const data = await fetchGetJSON(URL);
+//     return cleanDataCurrently(data);
+// })
 
-const cleanDataCurrently = (data: any) => {
-    return {
-        time: data.current.time,
-        icon: data.current.is_day ? "/images/openmeteo/icons/day/" + WMOCODE[data.current.weather_code as keyof typeof WMOCODE].day.image : "/images/openmeteo/icons/night/" + WMOCODE[data.current.weather_code as keyof typeof WMOCODE].night.image,
-        summary: data.current.is_day ? WMOCODE[data.current.weather_code as keyof typeof WMOCODE].day.description : WMOCODE[data.current.weather_code as keyof typeof WMOCODE].night.description,
-        humidity: Math.round(data.current.relative_humidity_2m),
-        temperature: data.current.temperature_2m,
-        apparentTemperature: data.current.apparent_temperature,
-        windSpeed: data.current.wind_speed_10m,
-        windBearing: data.current.wind_direction_10m,
-        isDayTime: data.current.is_day,
-    } as CurrentlyWeatherType;
-}
+// const cleanDataCurrently = (data: any) => {
+//     return {
+//         time: data.current.time,
+//         icon: data.current.is_day ? "/images/openmeteo/icons/day/" + WMOCODE[data.current.weather_code as keyof typeof WMOCODE].day.image : "/images/openmeteo/icons/night/" + WMOCODE[data.current.weather_code as keyof typeof WMOCODE].night.image,
+//         summary: data.current.is_day ? WMOCODE[data.current.weather_code as keyof typeof WMOCODE].day.description : WMOCODE[data.current.weather_code as keyof typeof WMOCODE].night.description,
+//         humidity: Math.round(data.current.relative_humidity_2m),
+//         temperature: data.current.temperature_2m,
+//         apparentTemperature: data.current.apparent_temperature,
+//         windSpeed: data.current.wind_speed_10m,
+//         windBearing: data.current.wind_direction_10m,
+//         isDayTime: data.current.is_day,
+//     } as CurrentlyWeatherType;
+// }
+
+export const getCurrentWeatherData = (async (url: string) => {
+    "use server";
+    let current: CurrentlyWeatherType = {
+        time: new Date().toISOString(),
+        icon: "",
+        summary: "",
+        humidity: 0,
+        temperature: 0,
+        apparentTemperature: 0,
+        windSpeed: 0,
+        uvIndex: 0,
+        hourlyData: []
+    }
+
+    const URL = `https://thoitiet.edu.vn/${url}`;
+    const pageImgHtml = await fetchGetText(URL);
+    const doc = parse(pageImgHtml);
+    current.summary = getElText(doc, ".overview-caption-item-detail", "");
+    current.temperature = parseInt(getElText(doc, ".current-temperature", ""));
+    current.apparentTemperature = parseInt(getElText(doc, ".overview-caption-summary-detail", "").replace(/[^0-9]+/g, ""));
+
+    doc.querySelectorAll(".weather-detail-location-item div>span").forEach((el, i) => {
+        switch (i) {
+            case 1:
+                current.humidity = parseInt(el.textContent);
+                break;
+            case 3:
+                current.windSpeed = parseInt(el.textContent);
+                break;
+            case 5:
+                current.uvIndex = parseInt(el.textContent);
+                break;
+            default:
+                break;
+        }
+    });
+
+    const iconUrl = getElAttribute(doc, ".overview-current img", "src")
+    const iconId = iconUrl.split("/").pop().split("@")[0];
+    current.icon = iconId;
+
+    doc.querySelectorAll(".weather-item.bg-white.text-dark").forEach((el, i) => {
+        const time = getElText(el, "h3 span", "");
+        const temperature = parseInt(getElText(el, ".weather-item-footer>span", ""))
+        const iconUrl = getElAttribute(el, ".weather-item-body img", "src")
+        const iconId = iconUrl.split("/").pop().split("@")[0];
+        const number = parseInt(getElText(el, ".weather-item-body>div", ""))
+        current.hourlyData.push({ time: format(parseTime(time, "hh:mm a", new Date()), "ha"), temperature: temperature, icon: iconId, probability: number })
+    });
+    return current as CurrentlyWeatherType;
+})
 
 export const getMinutelyWeatherData = (async (geostr: string) => {
     "use server";
@@ -1217,6 +1213,7 @@ export const makePrediction = async (data?: FixMinutelyTWeatherType[]) => {
             return "";
     }
 };
+
 
 // =====Insert data============
 // export const insertData = async (data: any) => {

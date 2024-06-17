@@ -34,16 +34,20 @@ const Calendar: Component<{}> = (props) => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
+  const [monthIndex, setMonthIndex] = createSignal<number>(-1);
 
-  onMount(async () => {
+  const getAllDataCalendar = async () => {
     if (mainStore.calendarList.length === 0) {
       const data = await Promise.all([
         getScheduleData(todayDate),
         getCalendarHistory(),
       ]);
 
-      setMainStore("calendarList", data[0]!);
-      setMainStore("historyList", data[1]!);
+      data[0] && setMainStore("calendarList", data[0]);
+      if (data[1]) {
+        setMainStore("historyList", data[1]);
+        setMonthIndex(data[1]![0].data[0].index);
+      }
 
       const index = await getThisWeekScheduleIndex(
         todayDate,
@@ -51,16 +55,22 @@ const Calendar: Component<{}> = (props) => {
       );
       if (index) setMainStore("thisWeekIndex", index);
     }
+  };
+
+  onMount(() => {
+    getAllDataCalendar();
   });
 
   const handleUpdateHistoryList = () => {
+    setMainStore("calendarList", []);
     setMainStore("historyList", []);
-    setMainStore("thisWeekIndex", -1);
+    setMainStore("thisWeekIndex", -9);
     setShowSetNewSchedule(false);
+    getAllDataCalendar();
   };
 
-  const handleUpdateTodaySchedule = () => {
-    updateTodayData(todayDate);
+  const handleUpdateTodaySchedule = async () => {
+    await updateTodayData(todayDate);
     setShowTodayReset(false);
   };
 
@@ -134,7 +144,9 @@ const Calendar: Component<{}> = (props) => {
               <div class={styles.calendarWeekTitle}>Fri</div>
               <div class={styles.calendarWeekTitle}>Sat</div>
             </div>
-            <Suspense
+
+            <Show
+              when={mainStore.calendarList.length > 0}
               fallback={<div class={styles.calendarWeekLoading}>...</div>}
             >
               <Index each={mainStore.calendarList}>
@@ -214,7 +226,7 @@ const Calendar: Component<{}> = (props) => {
                   );
                 }}
               </Index>
-            </Suspense>
+            </Show>
           </div>
         </div>
 
@@ -332,15 +344,7 @@ const Calendar: Component<{}> = (props) => {
                         type="date"
                       />
                     </div>
-                    <div class={forms.calendarFormInputGroup}>
-                      <select
-                        class={forms.calendarFormSelect}
-                        name="startMonthIndex"
-                      >
-                        <option value="0">1 - 1000</option>
-                        <option value="1000">1001 - 2000</option>
-                      </select>
-                    </div>
+                    <input hidden name="startMonthIndex" value={monthIndex()} />
                   </div>
                   <button
                     class={buttons.buttonSubmit}

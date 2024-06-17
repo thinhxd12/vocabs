@@ -69,9 +69,6 @@
     .weatherChart {
         position: inherit;
         z-index: 3;
-        // box-shadow: rgba(0, 0, 0, 0.3) 0px 6px 18px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-        // backdrop-filter: blur(1px);
-        // border-radius: 3px;
         width: 330px;
         height: 193px;
         margin: 0 15px;
@@ -91,11 +88,6 @@
     .weatherChartLoading {
         width: 330px;
         height: 193px;
-        background-color: rgba(255, 255, 255, 0.06);
-        backdrop-filter: blur(6px);
-        box-shadow: rgba(0, 0, 0, 0.6) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-        border-radius: 6px;
-        margin: 0 15px;
         position: inherit;
         z-index: 3;
     }
@@ -106,6 +98,10 @@
         }
 
         .weatherContentInfo {
+            span {
+                @include font('SF-Pro', 10px, $color-black, 400, normal, 12px);
+            }
+
             @include font('Rubik', 10px, $color-black, 400, normal, 12px);
         }
 
@@ -117,6 +113,47 @@
             p {
                 @include font('Rubik', 10px, $color-black, 400, normal, 12px);
                 margin-right: 3px;
+            }
+        }
+    }
+
+    .weatherHourly {
+        @include flex;
+        z-index: 3;
+        width: 360px;
+        position: inherit;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        scroll-snap-type: x mandatory;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+
+        .weatherHourlyItem {
+            @include flex-center-column;
+            min-width: 60px;
+            scroll-snap-align: start;
+
+            .weatherHourlyTime {
+                @include font('Rubik', 13px, $color-black, 500, normal, 15px);
+            }
+
+            .weatherHourlyProb {
+                @include font('Rubik', 12px, #52a0c1, 500, normal, 12px);
+            }
+
+            .weatherHourlyProbHidden {
+                min-height: 12px;
+            }
+
+            .weatherHourlyIcon {
+                margin-top: -6px;
+                margin-bottom: 6px;
+            }
+
+            .weatherHourlyTemp {
+                @include font('Rubik', 13.5px, $color-black, 500, normal, 15px);
             }
         }
     }

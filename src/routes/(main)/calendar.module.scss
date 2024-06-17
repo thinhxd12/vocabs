@@ -30,7 +30,6 @@
 
         .calendarImageContent {
             min-width: 60px;
-            cursor: pointer;
             position: absolute;
             bottom: 6px;
             right: 6px;
@@ -51,18 +50,20 @@
                 @include font('Poppins', 10px, $color-calendar-white, 400, normal, 10px);
                 text-transform: uppercase;
                 padding: 3px 3px 0px;
+                cursor: default;
             }
 
             .setNewWeek {
                 @include font('Poppins', 18px, $color-calendar-white, 400, normal, 16px);
                 padding: 5px 5px 2px;
-
+                cursor: pointer;
             }
 
             .setNewHistory {
                 @include font('Poppins', 8px, $color-calendar-white, 400, normal, 8px);
                 padding: 3px 3px 1px;
                 margin-bottom: 0px;
+                cursor: default;
             }
         }
     }

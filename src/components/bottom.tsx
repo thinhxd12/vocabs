@@ -189,7 +189,7 @@ const Bottom: Component<{}> = () => {
         <div class={styles.bottomIndex}>
           <div class={styles.bottomIndexNums}>
             <Show
-              when={listStore.listToday.date}
+              when={listStore.listToday?.date}
               fallback={
                 <>
                   <span>

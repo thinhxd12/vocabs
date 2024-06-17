@@ -107,8 +107,15 @@ export interface CurrentlyWeatherType {
   temperature: number;
   apparentTemperature: number;
   windSpeed: number;
-  windBearing: number;
-  isDayTime: boolean;
+  uvIndex: number;
+  hourlyData: HourlyWeatherType[];
+}
+
+export interface HourlyWeatherType {
+  time: string;
+  temperature: number;
+  icon: string;
+  probability: number;
 }
 
 export interface MinutelyWeatherType {
@@ -128,4 +135,5 @@ export interface FixMinutelyTWeatherType {
 export interface WeatherGeoType {
   name: string;
   geo: string;
+  lat: string;
 }
