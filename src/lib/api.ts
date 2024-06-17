@@ -1145,7 +1145,7 @@ export const getMinutelyWeatherData = (async (geostr: string) => {
     return result as FixMinutelyTWeatherType[];
 })
 
-export const makePrediction = async (data?: FixMinutelyTWeatherType[]) => {
+export const makePrediction = (async (data?: FixMinutelyTWeatherType[]) => {
     "use server";
     if (!data) return "";
     let lightRainIndex = data.findIndex(
@@ -1212,7 +1212,7 @@ export const makePrediction = async (data?: FixMinutelyTWeatherType[]) => {
         default:
             return "";
     }
-};
+});
 
 
 // =====Insert data============

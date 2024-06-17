@@ -53,7 +53,8 @@
     .weatherContentNight {
         @extend .weatherContentDay;
 
-        p {
+        p,
+        span {
             color: $color-calendar-white !important;
         }
     }
@@ -119,7 +120,7 @@
 
     .weatherHourly {
         @include flex;
-        z-index: 3;
+        z-index: 99;
         width: 360px;
         position: inherit;
         overflow-x: scroll;
