@@ -338,7 +338,7 @@ const Bottom: Component<{}> = () => {
                 }}
               >
                 <span>I</span>
-                <small>{listStore.listToday.time1}</small>
+                <small>_{listStore.listToday.index1}</small>
               </button>
               <button
                 class={
@@ -352,7 +352,7 @@ const Bottom: Component<{}> = () => {
                 }}
               >
                 <span>II</span>
-                <small>{listStore.listToday.time2}</small>
+                <small>_{listStore.listToday.index2}</small>
               </button>
               <button
                 class={buttons.buttonMenu}
