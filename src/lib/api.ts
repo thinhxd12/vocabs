@@ -1080,7 +1080,6 @@ const fetchGetJSON = async (url: string) => {
 export const getCurrentWeatherData = (async (url: string) => {
     "use server";
     let current: CurrentlyWeatherType = {
-        time: new Date().toISOString(),
         icon: "",
         summary: "",
         humidity: 0,

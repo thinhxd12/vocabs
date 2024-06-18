@@ -100,7 +100,6 @@ export interface TranslateType {
 }
 
 export interface CurrentlyWeatherType {
-  time: string;
   icon: string;
   summary: string;
   humidity: number;

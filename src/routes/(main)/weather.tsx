@@ -23,10 +23,15 @@ import {
   getMinutelyWeatherData,
   makePrediction,
 } from "~/lib/api";
-import { format } from "date-fns";
 import styles from "./weather.module.scss";
 import { getUser } from "~/lib";
 import { createAsync } from "@solidjs/router";
+import {
+  FaSolidDroplet,
+  FaSolidTemperatureLow,
+  FaSolidWind,
+} from "solid-icons/fa";
+import { TbUvIndex } from "solid-icons/tb";
 
 let canvas: HTMLCanvasElement;
 let audio: HTMLAudioElement;
@@ -39,12 +44,12 @@ const Weather: Component<{}> = (props) => {
 
   const WEATHER_GEOS: WeatherGeoType[] = [
     {
-      name: "Thuthua",
+      name: "Thủ Thừa",
       geo: "long-an/thu-thua/binh-thanh-thu-thua",
       lat: "10.588468,106.400650",
     },
     {
-      name: "Cantho",
+      name: "Cần Thơ",
       geo: "can-tho/ninh-kieu",
       lat: "10.0364216,105.7875219",
     },
@@ -96,7 +101,7 @@ const Weather: Component<{}> = (props) => {
             label: "",
             data: minutely()!.map((item) => item.intensity),
             borderColor: "#009bff",
-            backgroundColor: "#52a0c1",
+            backgroundColor: "#52a0c1bf",
             yAxisID: "y",
             fill: true,
             tension: 0.1,
@@ -151,12 +156,12 @@ const Weather: Component<{}> = (props) => {
         ticks: {
           stepSize: 0.2,
           callback: function (value: any, index: any) {
-            return value == 0 ? "" : value % 10 === 0 ? value + "m" : null;
+            return value === 0 ? "" : value === 60 ? "60m" : null;
           },
           font: {
             size: 9,
           },
-          color: "black",
+          color: "white",
         },
       },
       y: {
@@ -168,18 +173,18 @@ const Weather: Component<{}> = (props) => {
         border: { dash: [2, 2] },
         grid: {
           drawTicks: false,
-          color: ["transparent", "#444444", "#444444"],
+          color: ["transparent", "#ffffff1e", "#ffffff1e"],
         },
         ticks: {
           stepSize: 0.5,
           callback: function (value: any, index: any) {
             switch (value) {
               case 0:
-                return "LIGHT";
+                return "";
               case 0.5:
-                return "MED";
+                return "";
               case 1:
-                return "HEAVY";
+                return "";
               default:
                 null;
             }
@@ -188,7 +193,7 @@ const Weather: Component<{}> = (props) => {
             size: 10,
             weight: "normal",
           },
-          color: "black",
+          color: "white",
           padding: 3,
         },
       },
@@ -212,7 +217,7 @@ const Weather: Component<{}> = (props) => {
           font: {
             size: 9,
           },
-          color: "black",
+          color: "white",
         },
       },
     },
@@ -504,69 +509,51 @@ const Weather: Component<{}> = (props) => {
       <audio hidden src={audioSrc()} autoplay loop ref={audio}></audio>
       <div class={styles.weather}>
         <canvas ref={canvas} class={styles.weatherBackground} />
-        <select
-          class={
-            current()?.icon.slice(-1) === "d"
-              ? styles.weatherGeosDay
-              : styles.weatherGeosNight
-          }
-          onchange={(e) => handleRenderWeather(e.currentTarget.value)}
-        >
-          <Index each={WEATHER_GEOS}>
-            {(item, index) => <option value={index}>{item().name}</option>}
-          </Index>
-        </select>
 
-        <Show
-          when={current.state === "ready"}
-          fallback={<div class={styles.weatherContentLoading}>...</div>}
-        >
-          <div
-            class={
-              current()?.icon.slice(-1) === "d"
-                ? styles.weatherContentDay
-                : styles.weatherContentNight
-            }
+        <div class={styles.weatherContent}>
+          <select
+            class={styles.weatherSelect}
+            onchange={(e) => handleRenderWeather(e.currentTarget.value)}
           >
+            <Index each={WEATHER_GEOS}>
+              {(item, index) => <option value={index}>{item().name}</option>}
+            </Index>
+          </select>
+          <p class={styles.weatherTemperature}>
+            {Math.round(current()?.temperature || 0)}°
+          </p>
+          <div class={styles.weatherImgDiv}>
+            <p>{current()?.summary}</p>
             <img
               class={styles.weatherImg}
               src={"/images/openmeteo/icons/" + current()?.icon + ".svg"}
-              width={120}
+              width={30}
             />
-            <div class={styles.weatherContentText}>
-              <p class={styles.weatherContentTemp}>
-                {Math.round(current()?.temperature || 0)}°
-              </p>
-              <p class={styles.weatherContentInfo}>
-                Feels {Math.round(current()?.apparentTemperature || 0)}
-                °C
-              </p>
-              <p class={styles.weatherContentInfo}>
-                Humidity {current()?.humidity} %
-              </p>
-              <div class={styles.weatherContentWind}>
-                <p>
-                  Wind {Math.round(current()?.windSpeed || 0)}
-                  km/h
-                </p>
-              </div>
-              <p class={styles.weatherContentInfo}>UV {current()?.uvIndex}</p>
-              <p class={styles.weatherContentInfo}>
-                {format(new Date(current()?.time || 0), "h:mm a")}
-                <span> - {current()?.summary}</span>
-              </p>
+          </div>
+          <div class={styles.weatherInfoDiv}>
+            <div class={styles.weatherInfo}>
+              <FaSolidTemperatureLow size={10} />
+              <span>{Math.round(current()?.apparentTemperature || 0)}°</span>
+            </div>
+            <div class={styles.weatherInfo}>
+              <FaSolidDroplet size={10} />
+              <span>
+                {current()?.humidity}
+                <small>%</small>
+              </span>
+            </div>
+            <div class={styles.weatherInfo}>
+              <FaSolidWind size={10} />
+              <span>
+                {Math.round(current()?.windSpeed || 0)} <small>km/h</small>
+              </span>
+            </div>
+            <div class={styles.weatherInfo}>
+              <TbUvIndex size={15} />
+              <span>{current()?.uvIndex}</span>
             </div>
           </div>
-        </Show>
-
-        <Suspense fallback={<div class={styles.weatherChartLoading}></div>}>
-          <div class={styles.weatherChart}>
-            <div class={styles.weatherChartContent}>
-              <Line data={chartData()} options={chartOptions} />
-            </div>
-            <p class={styles.weatherPredict}>{prediction()}</p>
-          </div>
-        </Suspense>
+        </div>
 
         <Show
           when={current.state === "ready" && current().hourlyData.length > 0}
@@ -601,6 +588,15 @@ const Weather: Component<{}> = (props) => {
             </Index>
           </div>
         </Show>
+
+        <Suspense fallback={<div class={styles.weatherChartLoading}>...</div>}>
+          <div class={styles.weatherChart}>
+            <div class={styles.weatherChartContent}>
+              <Line data={chartData()} options={chartOptions} />
+            </div>
+            <p class={styles.weatherPredict}>{prediction()}</p>
+          </div>
+        </Suspense>
       </div>
     </MetaProvider>
   );

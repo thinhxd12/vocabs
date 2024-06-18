@@ -132,13 +132,13 @@
         @include flex-center-column;
 
         .cardBottomPhonetic {
-            @include font("SF-Pro", 12px, $color-red-3, 600, normal, 12px);
+            @include font("SFProDisplay", 12px, $color-red-3, 600, normal, 12px);
             padding-bottom: 6px;
         }
 
         .cardBottomClass {
             margin-top: 12px;
-            @include font("SF-Pro", 9px, $color-white, normal, normal, 12px);
+            @include font("SFProDisplay", 9px, $color-white, normal, normal, 12px);
             margin-bottom: 6px;
         }
 
