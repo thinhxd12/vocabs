@@ -549,7 +549,7 @@ const Weather: Component<{}> = (props) => {
               </span>
             </div>
             <div class={styles.weatherInfo}>
-              <TbUvIndex size={15} />
+              <TbUvIndex size={12} />
               <span>{current()?.uvIndex}</span>
             </div>
           </div>
