@@ -111,6 +111,7 @@ const Translation: Component<{
 
   const close = () => {
     setMainStore("showTranslate", false);
+    setMainStore("translateTerm", "");
   };
 
   return (
