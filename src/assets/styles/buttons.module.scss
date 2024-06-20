@@ -18,8 +18,9 @@
         right top;
     background-repeat: no-repeat,
         no-repeat;
-    background-size: auto 100%,
-        auto 100%;
+    background-size: 7px 15px,
+        7px 15px;
+
 
     &:disabled {
         opacity: 0.3;
@@ -28,60 +29,77 @@
 }
 
 .buttonMenu {
-    @extend .button;
-    width: 45px;
-    height: 21px;
-    color: #7c7b7a;
+    width: 54px;
+    height: 25px;
+    border-radius: 2px;
     transition: color 0.2s;
-    @include font("Roslindale", 14px, #7c7b7a, 700, normal, 21px);
-    background-color: $color-background-1;
+    overflow: hidden;
+    position: relative;
+    outline: 0;
+    border: none;
+    cursor: pointer;
+
+    .buttonMenuOrnament {
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        left: 0;
+        width: 54px;
+        height: 25px;
+        background-image: url('/images/main/input-left-corner.webp'),
+            url('/images/main/input-right-corner.webp');
+        background-position: left top,
+            right top;
+        background-repeat: no-repeat,
+            no-repeat;
+        background-size: 11px 25px,
+            11px 25px;
+    }
+
+    img {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+    }
+
+    span {
+        position: absolute;
+        @include font("Roslindale", 12px, #dddddd, 700, normal, 25px);
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 12;
+    }
 
     &:hover {
-        color: $color-white;
-        text-shadow: 0px 0px 6px #f4f4f4;
-
-        span,
-        small {
+        span {
             color: $color-white;
+            text-shadow: 0px 0px 6px #f4f4f4;
         }
     }
 
     &:not(:last-child) {
-        margin-bottom: 2px;
+        margin: 0 0 2px 0;
     }
+
 }
 
-.buttonMenuWordlist {
+.buttonMenuActive {
     @extend .buttonMenu;
 
     span {
-        @include font("Roslindale", 14px, #7c7b7a, 700, normal, 21px);
-    }
-
-    small {
-        @include font("Roslindale", 9px, #7c7b7a, 700, normal, 15px);
-        margin-top: 3px;
-    }
-}
-
-.buttonMenuWordlistActive {
-    @extend .buttonMenuWordlist;
-
-    span,
-    small {
         color: $color-calendar-green-1 !important;
     }
 
     &:hover {
-
-        span,
-        small {
-            color: $color-calendar-green-1 !important;
-            text-shadow: 0px 0px 12px $color-calendar-green-1 !important;
+        span {
+            text-shadow: 0px 0px 12px $color-calendar-green-2 !important;
         }
     }
-}
 
+}
 
 .buttonPrimary {
     @extend .button;
@@ -89,6 +107,9 @@
     color: #ececec;
     width: 28px;
     height: 15px;
+
+    background-size: 7px 15px,
+        7px 15px;
 
     &:hover {
         color: $color-white;
@@ -126,6 +147,8 @@
     width: 42px;
     height: 22px;
     margin-top: 3px;
+    background-size: 10px 22px,
+        10px 22px;
 
     &:hover {
         color: $color-white;
@@ -173,6 +196,8 @@
     color: #ececec;
     width: 36px;
     height: 18px;
+    background-size: 8px 18px,
+        8px 18px;
 
     &:hover {
         color: $color-white;

@@ -329,30 +329,42 @@ const Bottom: Component<{}> = () => {
               <button
                 class={
                   listStore.listType === 1
-                    ? `${buttons.buttonMenuWordlist} ${buttons.buttonMenuWordlistActive}`
-                    : buttons.buttonMenuWordlist
+                    ? buttons.buttonMenuActive
+                    : buttons.buttonMenu
                 }
                 onClick={() => {
                   handleGetListContent(1);
                   setShowMenu(false);
                 }}
               >
-                <span>I</span>
-                <small>_{listStore.listToday.index1}</small>
+                <div class={buttons.buttonMenuOrnament}></div>
+                <img
+                  alt="hourglass"
+                  src="/images/main/vintage.jpg"
+                  width={54}
+                  height={25}
+                />
+                <span>{listStore.listToday.index1}</span>
               </button>
               <button
                 class={
                   listStore.listType === 2
-                    ? `${buttons.buttonMenuWordlist} ${buttons.buttonMenuWordlistActive}`
-                    : buttons.buttonMenuWordlist
+                    ? buttons.buttonMenuActive
+                    : buttons.buttonMenu
                 }
                 onClick={() => {
                   handleGetListContent(2);
                   setShowMenu(false);
                 }}
               >
-                <span>II</span>
-                <small>_{listStore.listToday.index2}</small>
+                <div class={buttons.buttonMenuOrnament}></div>
+                <img
+                  alt="hourglass"
+                  src="/images/main/vintage1.jpg"
+                  width={54}
+                  height={25}
+                />
+                <span>{listStore.listToday.index2}</span>
               </button>
               <button
                 class={buttons.buttonMenu}
@@ -361,7 +373,13 @@ const Bottom: Component<{}> = () => {
                   setShowMenu(false);
                 }}
               >
-                <ImBooks size={18} />
+                <div class={buttons.buttonMenuOrnament}></div>
+                <img
+                  alt="hourglass"
+                  src="/images/main/bookmark.jpg"
+                  width={54}
+                  height={25}
+                />
               </button>
               <button
                 class={buttons.buttonMenu}
@@ -370,7 +388,13 @@ const Bottom: Component<{}> = () => {
                   setShowMenu(false);
                 }}
               >
-                <BsTranslate size={15} />
+                <div class={buttons.buttonMenuOrnament}></div>
+                <img
+                  alt="hourglass"
+                  src="/images/main/translate.jpg"
+                  width={54}
+                  height={25}
+                />
               </button>
               <button
                 class={buttons.buttonMenu}
@@ -379,10 +403,22 @@ const Bottom: Component<{}> = () => {
                   setShowMenu(false);
                 }}
               >
-                <BiSolidHourglassTop size={16} />
+                <div class={buttons.buttonMenuOrnament}></div>
+                <img
+                  alt="hourglass"
+                  src="/images/main/hourglass.jpg"
+                  width={54}
+                  height={25}
+                />
               </button>
               <button class={buttons.buttonMenu} onClick={logoutAction}>
-                E
+                <div class={buttons.buttonMenuOrnament}></div>
+                <img
+                  alt="hourglass"
+                  src="/images/main/exit.jpg"
+                  width={54}
+                  height={25}
+                />
               </button>
             </Motion.div>
           </Show>

@@ -72,7 +72,7 @@
     .bookmarkBodyChecked {
         @extend .bookmarkBody;
         background: url("/images/main/paper.webp");
-        background-size: 720px auto;
+        background-size: cover;
     }
 
     .bookmarkTextArea {

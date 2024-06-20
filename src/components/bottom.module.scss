@@ -232,7 +232,6 @@
     }
 
     .bottomMenu {
-        @include flex-center-column;
         position: inherit;
         width: 360px;
         position: absolute;
@@ -250,5 +249,9 @@
         background: #7c7b7a;
         transition: all 0.3s ease-in-out;
         z-index: 99;
+    }
+
+    .bottomMenuBtns{
+        @include flex-center-column;
     }
 }
