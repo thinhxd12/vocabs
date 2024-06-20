@@ -25,7 +25,7 @@ export const mapTables = {
   bookmarks: "bookmarks",
 };
 
-export const PRECIPITATION_PROBABILITY = 0.68;
+export const PRECIPITATION_PROBABILITY = 0.65;
 export const ACCUMULATION = 0.03;
 export const DEVIATION_NUMB = 0;
 

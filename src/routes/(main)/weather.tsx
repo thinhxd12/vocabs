@@ -156,10 +156,10 @@ const Weather: Component<{}> = (props) => {
         ticks: {
           stepSize: 0.2,
           callback: function (value: any, index: any) {
-            return value === 0 ? "" : value === 60 ? "60m" : null;
+            return value === 0 ? "Now" : value % 10 === 0 ? value + "m" : null;
           },
           font: {
-            size: 9,
+            size: 8,
           },
           color: "white",
         },

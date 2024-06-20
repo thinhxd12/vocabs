@@ -142,10 +142,10 @@
     }
 
     .weatherPredict {
-        @include font('SFProDisplay', 12px, $color-white, 500, normal, 15px);
+        @include font('SFProDisplay', 11px, $color-white, 500, normal, 15px);
         letter-spacing: 0.5px;
         text-align: center;
-        margin-top: -12px;
+        margin-top: -3px;
     }
 
     .weatherChartLoading {
