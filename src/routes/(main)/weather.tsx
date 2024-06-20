@@ -230,8 +230,8 @@ const Weather: Component<{}> = (props) => {
   };
 
   const textureFgSize = {
-    width: 90,
-    height: 190,
+    width: 45,
+    height: 95,
   };
 
   const defaultOptions = {
@@ -324,22 +324,19 @@ const Weather: Component<{}> = (props) => {
   };
 
   const loadTextures = async () => {
-    const dropAlpha = loadImage("/images/openmeteo/drop-alpha.webp");
-    const dropColor = loadImage("/images/openmeteo/drop-color.webp");
+    const dropAlpha = loadImage("/images/openmeteo/drop-alpha.png");
+    const dropColor = loadImage("/images/openmeteo/drop-color.png");
 
-    const textureDayFg = loadImage("/images/openmeteo/weather/day-fg.webp");
+    const textureDayRainFg = loadImage(
+      "/images/openmeteo/weather/day-rain-fg.jpg"
+    );
     const textureDayBg = loadImage("/images/openmeteo/weather/day-bg.webp");
-
-    const textureNightFg = loadImage("/images/openmeteo/weather/night-fg.webp");
-    const textureNightBg = loadImage("/images/openmeteo/weather/night-bg.webp");
 
     const imagesData = await Promise.all([
       dropAlpha,
       dropColor,
-      textureDayFg,
+      textureDayRainFg,
       textureDayBg,
-      textureNightFg,
-      textureNightBg,
     ]);
 
     // const dpi = window.devicePixelRatio;
@@ -402,10 +399,7 @@ const Weather: Component<{}> = (props) => {
       "/images/openmeteo/weather/night-rain-bg.jpg"
     );
 
-    const textureDayFg = loadImage("/images/openmeteo/weather/day-fg.webp");
     const textureDayBg = loadImage("/images/openmeteo/weather/day-bg.webp");
-
-    const textureNightFg = loadImage("/images/openmeteo/weather/night-fg.webp");
     const textureNightBg = loadImage("/images/openmeteo/weather/night-bg.webp");
 
     const imagesData = await Promise.all([
@@ -413,9 +407,7 @@ const Weather: Component<{}> = (props) => {
       textureDayRainBg,
       textureNightRainFg,
       textureNightRainBg,
-      textureDayFg,
       textureDayBg,
-      textureNightFg,
       textureNightBg,
     ]);
 
@@ -483,10 +475,10 @@ const Weather: Component<{}> = (props) => {
       }
     } else {
       if (current()!.icon.slice(-1) === "d") {
-        generateTextures(imagesData[4], imagesData[5]);
+        generateTextures(imagesData[0], imagesData[4]);
         renderer.updateTextures();
       } else {
-        generateTextures(imagesData[6], imagesData[7]);
+        generateTextures(imagesData[2], imagesData[5]);
         renderer.updateTextures();
       }
     }
