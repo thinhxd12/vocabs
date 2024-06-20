@@ -389,17 +389,17 @@ const Weather: Component<{}> = (props) => {
 
   const setupWeather = async () => {
     const textureDayRainFg = loadImage(
-      "/images/openmeteo/weather/day-rain-fg.webp"
+      "/images/openmeteo/weather/day-rain-fg.jpg"
     );
     const textureDayRainBg = loadImage(
-      "/images/openmeteo/weather/day-rain-bg.webp"
+      "/images/openmeteo/weather/day-rain-bg.jpg"
     );
 
     const textureNightRainFg = loadImage(
-      "/images/openmeteo/weather/night-rain-fg.webp"
+      "/images/openmeteo/weather/night-rain-fg.jpg"
     );
     const textureNightRainBg = loadImage(
-      "/images/openmeteo/weather/night-rain-bg.webp"
+      "/images/openmeteo/weather/night-rain-bg.jpg"
     );
 
     const textureDayFg = loadImage("/images/openmeteo/weather/day-fg.webp");
