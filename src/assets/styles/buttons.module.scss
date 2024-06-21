@@ -38,6 +38,7 @@
     outline: 0;
     border: none;
     cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.6) 0px 6px 12px;
 
     .buttonMenuOrnament {
         position: absolute;
@@ -61,11 +62,12 @@
         z-index: 1;
         top: 0;
         left: 0;
+        object-fit: cover;
     }
 
     span {
         position: absolute;
-        @include font("Roslindale", 12px, #dddddd, 700, normal, 25px);
+        @include font("Roslindale", 12px, $color-white, 700, normal, 25px);
         top: 0;
         left: 0;
         width: 100%;
@@ -75,16 +77,14 @@
 
     &:hover {
         span {
-            color: $color-white;
-            text-shadow: 0px 0px 6px #f4f4f4;
-            filter: brightness(1);
+            text-shadow: 0px 0px 3px #f4f4f4;
         }
 
         filter: brightness(1.2);
     }
 
     &:not(:last-child) {
-        margin: 0 0 2px 0;
+        margin: 0 0 1px 0;
     }
 
 }
@@ -168,7 +168,7 @@
 
     &:hover {
         color: $color-white;
-        background-color: $color-red-3;
+        background-color: $color-red-2;
     }
 }
 

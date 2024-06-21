@@ -149,9 +149,9 @@ const Weather: Component<{}> = (props) => {
           display: true,
           drawOnChartArea: false,
           drawTicks: true,
-          tickLength: 2,
+          tickLength: 1,
           tickWidth: 1,
-          tickColor: "black",
+          tickColor: "#818181",
         },
         ticks: {
           stepSize: 0.2,
@@ -173,7 +173,7 @@ const Weather: Component<{}> = (props) => {
         border: { dash: [2, 2] },
         grid: {
           drawTicks: false,
-          color: ["transparent", "#ffffff1e", "#ffffff1e"],
+          color: ["transparent", "#818181", "#818181"],
         },
         ticks: {
           stepSize: 0.5,
@@ -201,7 +201,7 @@ const Weather: Component<{}> = (props) => {
         min: 0,
         max: 1,
         type: "linear" as const,
-        display: false,
+        display: true,
         position: "right" as const,
         grid: {
           display: true,
@@ -212,7 +212,7 @@ const Weather: Component<{}> = (props) => {
         ticks: {
           stepSize: 0.25,
           callback: function (value: any, index: any) {
-            return value == 0 ? "0 (%)" : value * 100;
+            return null;
           },
           font: {
             size: 9,

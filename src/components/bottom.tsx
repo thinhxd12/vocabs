@@ -17,12 +17,10 @@ import {
   updateTodayData,
   updateTodaySchedule,
 } from "~/lib/api";
-import { BiSolidHourglassTop } from "solid-icons/bi";
-import { BsTranslate } from "solid-icons/bs";
-import { ImBooks } from "solid-icons/im";
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
 import { OcHourglass2 } from "solid-icons/oc";
+import { clickOutside } from "~/utils";
 
 let intervalCountdown: NodeJS.Timeout;
 let intervalAutoplay: NodeJS.Timeout;
@@ -183,9 +181,13 @@ const Bottom: Component<{}> = () => {
 
   // -------------------AUTOPLAY END-------------------- //
 
+  const close = () => {
+    setShowMenu(false);
+  };
+
   return (
     <div class={styles.bottom}>
-      <div class={styles.bottomBar}>
+      <div class={styles.bottomBar} use:clickOutside={close}>
         <div class={styles.bottomIndex}>
           <div class={styles.bottomIndexNums}>
             <Show
@@ -340,7 +342,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src="/images/main/vintage.jpg"
+                  src="/images/main/flower1.webp"
                   width={54}
                   height={25}
                 />
@@ -360,7 +362,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src="/images/main/vintage1.jpg"
+                  src="/images/main/flower2.webp"
                   width={54}
                   height={25}
                 />
@@ -376,7 +378,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src="/images/main/bookmark.jpg"
+                  src="/images/main/bookmark.webp"
                   width={54}
                   height={25}
                 />
@@ -391,7 +393,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src="/images/main/translate.jpg"
+                  src="/images/main/translate.webp"
                   width={54}
                   height={25}
                 />
@@ -406,7 +408,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src="/images/main/hourglass.jpg"
+                  src="/images/main/hourglass.webp"
                   width={54}
                   height={25}
                 />
@@ -415,7 +417,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src="/images/main/exit.jpg"
+                  src="/images/main/exit.webp"
                   width={54}
                   height={25}
                 />
