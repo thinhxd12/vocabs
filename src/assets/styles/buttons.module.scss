@@ -67,12 +67,13 @@
 
     span {
         position: absolute;
-        @include font("Roslindale", 12px, $color-white, 700, normal, 25px);
+        @include font("Roslindale", 11px, $color-white, 700, normal, 25px);
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
         z-index: 12;
+        text-shadow: 0 0 6px #000000e6;
     }
 
     &:hover {
