@@ -5,78 +5,91 @@
     height: 100vh;
     overflow: hidden;
     outline: none;
-    position: relative;
-    @include flex-center;
-    background: $color-black;
+    display: flex;
+    justify-content: center;
+    background-color: $color-black;
+    background-size: cover;
+    background-position: bottom;
+
+    .loginContainer {
+        margin-top: 53vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
     .loginForm {
-        width: 360px;
-        height: 100vh;
-        padding-top: 27vh;
-        border-left: 1px solid $color-border;
-        border-right: 1px solid $color-border;
+        position: initial;
+        z-index: 99;
+        position: relative;
+        height: 22px;
+        width: 136px;
+        transition: all 0.1s;
+        background: rgba(0, 0, 0, 0.3);
 
-        .loginItem {
-            @include flex-center;
+        &:hover {
+            background: rgba(0, 0, 0, 0.45);
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 38px, rgba(0, 0, 0, 0.22) 0px 0px 12px;
+        }
+
+
+        .loginInput {
+            background: none;
+            outline: none;
+            height: 100%;
             width: 100%;
-            margin-bottom: 3px;
-
-
-            .loginInput {
-                height: 30px;
-                width: 180px;
-                border-radius: 3px;
-                font-size: 12px;
-                transition: all .3s ease;
-                text-align: center;
-                background: $color-black;
-                outline: 0;
-                border: 0.1px solid $color-border;
-                color: #a59885;
-                padding-top: 2px;
-            }
-
-            .loginInput:-webkit-autofill {
-                background-color: transparent !important;
-                -webkit-box-shadow: 0 0 0 50px #000 inset;
-                -webkit-text-fill-color: #a59885;
-            }
-
-            .loginBtn {
-                margin-top: 15px;
-                width: 25px;
-                border: 0;
-                outline: 0;
-                cursor: pointer;
-                transition: all .2s;
-                @include flex-center;
-                background: none;
-                position: relative;
-                border-radius: 3px;
-                overflow: hidden;
-
-                img {
-                    opacity: 0.3;
-                }
-            }
-
-            .loginBtnLoading {
-
-                @extend .loginBtn;
-
-                img {
-                    opacity: 0.81;
-                }
-
-                animation: rotate 3s normal linear infinite;
-            }
-        }
-
-        .loginAlert {
-            @include font("basier", 12px, $color-red-2, 400, normal, 21px);
+            border-radius: 2px;
+            padding-top: 1px;
+            font-size: 16px;
+            line-height: 22px;
+            transition: all .3s ease;
             text-align: center;
-            margin-top: 6px;
+            border: 1px solid hsla(46, 15%, 66%, 0.45);
+            color: #fff;
         }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s !important;
+            -webkit-text-fill-color: #fff !important;
+            font-size: 16px !important;
+            line-height: 22px !important;
+        }
+
+        .loginBtn {
+            position: absolute;
+            right: -30px;
+            top: 2px;
+            z-index: 1001;
+            width: 18px;
+            height: 18px;
+            background: none;
+            outline: none;
+            border: none;
+            cursor: pointer;
+
+            img {
+                opacity: 0;
+            }
+        }
+
+        .loginBtnLoading {
+            @extend .loginBtn;
+
+            img {
+                opacity: 0.81;
+            }
+
+            animation: rotate 3s normal linear infinite;
+        }
+    }
+
+    .loginAlert {
+        @include font("basier", 12px, $color-white, 500, normal, 21px);
+        text-align: center;
+        margin-top: 9px;
     }
 
 }
