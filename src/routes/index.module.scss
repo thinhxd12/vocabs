@@ -10,9 +10,19 @@
     background-color: $color-black;
     background-size: cover;
     background-position: bottom;
+    position: relative;
+
+    .backgroundText {
+        position: absolute;
+        top: 30px;
+        left: 30px;
+        @include font("basier", 12px, $color-white, 500, normal, 18px);
+        width: 300px;
+        text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+    }
 
     .loginContainer {
-        margin-top: 53vh;
+        margin-top: 60vh;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -25,13 +35,12 @@
         height: 22px;
         width: 136px;
         transition: all 0.1s;
-        background: rgba(0, 0, 0, 0.3);
+        background: rgba(0, 0, 0, 0.15);
+        box-shadow: 0px 9px 21px 0px rgba(0, 0, 0, 0.81);
 
         &:hover {
             background: rgba(0, 0, 0, 0.45);
-            box-shadow: rgba(0, 0, 0, 0.3) 0px 0px 38px, rgba(0, 0, 0, 0.22) 0px 0px 12px;
         }
-
 
         .loginInput {
             background: none;
@@ -44,7 +53,7 @@
             line-height: 22px;
             transition: all .3s ease;
             text-align: center;
-            border: 1px solid hsla(46, 15%, 66%, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             color: #fff;
         }
 
