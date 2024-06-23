@@ -15,6 +15,7 @@ import { format } from "date-fns";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./main.module.scss";
 import { debounce } from "@solid-primitives/scheduled";
+import Bookmark from "~/components/bookmark";
 
 declare module "solid-js" {
   namespace JSX {
@@ -161,7 +162,7 @@ export default function Main(props: RouteSectionProps) {
             when={mainStore.showBookmark}
             fallback={<img class={styles.mainLeftImage} src={imageObj.image} />}
           >
-            <div>asdfasf</div>
+            <Bookmark onClose={() => setMainStore("showBookmark", false)} />
           </Show>
         </div>
       </Show>

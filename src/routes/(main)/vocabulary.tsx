@@ -239,9 +239,9 @@ const Vocabulary: Component<{}> = () => {
 
           <div class={styles.vocabularyContent}>
             {/* Bookmark */}
-            <Show when={mainStore.showBookmark}>
+            {/* <Show when={mainStore.showBookmark}>
               <Bookmark onClose={() => setMainStore("showBookmark", false)} />
-            </Show>
+            </Show> */}
 
             {/* Definition */}
             <Definition

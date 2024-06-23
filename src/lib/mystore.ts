@@ -1,5 +1,5 @@
 import { createStore } from "solid-js/store";
-import { CalendarType, HistoryType, ScheduleType, VocabularySearchType, VocabularyType } from "~/types";
+import { BookmarkType, CalendarType, HistoryType, ScheduleType, VocabularySearchType, VocabularyType } from "~/types";
 
 type ListStoreType = {
   listType: 0 | 1 | 2;
