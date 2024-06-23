@@ -955,7 +955,35 @@ export const getBookMarkDataItem = (async (time: string) => {
     if (data) return data[0];
 });
 
-
+export const getSpotlightImage = async () => {
+    "use server";
+    let batchQuery = {} as any;
+    batchQuery["pid"] = "338387";
+    batchQuery["fmt"] = "json";
+    batchQuery["rafb"] = "0";
+    batchQuery["ua"] = "WindowsShellClient/1";
+    batchQuery["cdm"] = "1";
+    batchQuery["disphorzres"] = "1920";
+    batchQuery["dispvertres"] = "1080";
+    batchQuery["lo"] = "80217";
+    batchQuery["pl"] = "en-US";
+    batchQuery["lc"] = "en-US";
+    batchQuery["ctry"] = "kr";
+    const baseUrl =
+        "https://arc.msn.com/v3/Delivery/Placement?" +
+        new URLSearchParams(batchQuery).toString();
+    const data = await (await fetch(baseUrl)).json();
+    if (data) {
+        const itemStr = data["batchrsp"]["items"][0].item;
+        const itemObj = JSON.parse(itemStr)["ad"];
+        // const title = itemObj["title_text"]?.tx;
+        // const text2 = itemObj["hs2_cta_text"]?.tx || '';
+        // const jsImageP = itemObj["image_fullscreen_001_portrait"];
+        const title = itemObj["hs2_title_text"]?.tx;
+        const jsImageL = itemObj["image_fullscreen_001_landscape"];
+        return { text: title, url: jsImageL.u };
+    }
+};
 
 
 
@@ -1054,28 +1082,6 @@ const fetchGetJSON = async (url: string) => {
         return "";
     }
 }
-
-// export const getCurrentWeatherData = (async (geostr: string) => {
-//     "use server";
-//     const geos = geostr.split(",");
-//     const URL = `https://api.open-meteo.com/v1/forecast?latitude=${geos[0]}&longitude=${geos[1]}&current=temperature_2m,relative_humidity_2m,apparent_temperature,is_day,precipitation,rain,snowfall,weather_code,cloud_cover,wind_speed_10m,wind_direction_10m,wind_gusts_10m&forecast_minutely_15=1&timezone=auto&models=best_match`;
-//     const data = await fetchGetJSON(URL);
-//     return cleanDataCurrently(data);
-// })
-
-// const cleanDataCurrently = (data: any) => {
-//     return {
-//         time: data.current.time,
-//         icon: data.current.is_day ? "/images/openmeteo/icons/day/" + WMOCODE[data.current.weather_code as keyof typeof WMOCODE].day.image : "/images/openmeteo/icons/night/" + WMOCODE[data.current.weather_code as keyof typeof WMOCODE].night.image,
-//         summary: data.current.is_day ? WMOCODE[data.current.weather_code as keyof typeof WMOCODE].day.description : WMOCODE[data.current.weather_code as keyof typeof WMOCODE].night.description,
-//         humidity: Math.round(data.current.relative_humidity_2m),
-//         temperature: data.current.temperature_2m,
-//         apparentTemperature: data.current.apparent_temperature,
-//         windSpeed: data.current.wind_speed_10m,
-//         windBearing: data.current.wind_direction_10m,
-//         isDayTime: data.current.is_day,
-//     } as CurrentlyWeatherType;
-// }
 
 export const getCurrentWeatherData = (async (url: string) => {
     "use server";
