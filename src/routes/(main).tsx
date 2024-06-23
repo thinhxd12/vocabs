@@ -156,8 +156,13 @@ export default function Main(props: RouteSectionProps) {
 
       <Show when={mainStore.mainToggle}>
         <div class={styles.mainLeft}>
-          <img class={styles.mainLeftImage} src={imageObj.image} />
           <img class={styles.mainLeftImageBlurred} src={imageObj.image} />
+          <Show
+            when={mainStore.showBookmark}
+            fallback={<img class={styles.mainLeftImage} src={imageObj.image} />}
+          >
+            <div>asdfasf</div>
+          </Show>
         </div>
       </Show>
 

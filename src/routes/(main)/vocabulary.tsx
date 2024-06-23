@@ -238,8 +238,6 @@ const Vocabulary: Component<{}> = () => {
           </Show>
 
           <div class={styles.vocabularyContent}>
-            {/* <button onClick={() => getSoundUrl("xin chào")}>click</button> */}
-
             {/* Bookmark */}
             <Show when={mainStore.showBookmark}>
               <Bookmark onClose={() => setMainStore("showBookmark", false)} />

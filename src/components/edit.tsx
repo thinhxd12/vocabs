@@ -50,6 +50,7 @@ const Edit: Component<{
       setMainStore("renderWord", {
         ...mainStore.renderWord,
         definitions: resultEditWord().definitions,
+        translations: resultEditWord().translations,
       });
   };
 
@@ -310,12 +311,16 @@ const Edit: Component<{
               name="definitions"
               class={forms.formTextarea}
               value={JSON.stringify(resultEditWord()?.definitions, null, " ")}
-              onChange={(e) =>
+              onChange={(e) => {
                 setRenderEditWord({
                   ...resultEditWord(),
                   definitions: JSON.parse(e.currentTarget.value),
-                })
-              }
+                });
+                setResultEditWord({
+                  ...resultEditWord(),
+                  definitions: JSON.parse(e.currentTarget.value),
+                });
+              }}
             />
           </div>
           <div class={forms.formInputGroup}>
