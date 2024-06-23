@@ -1,10 +1,4 @@
-import {
-  Component,
-  Show,
-  createEffect,
-  createSignal,
-  on,
-} from "solid-js";
+import { Component, Show, createEffect, createSignal, on } from "solid-js";
 import { OcX2 } from "solid-icons/oc";
 import {
   VocabularyDefinitionType,
@@ -55,7 +49,7 @@ const Edit: Component<{
     if (mainStore.renderWord?.word === resultEditWord().word)
       setMainStore("renderWord", {
         ...mainStore.renderWord,
-        definitions: renderEditWord().definitions,
+        definitions: resultEditWord().definitions,
       });
   };
 

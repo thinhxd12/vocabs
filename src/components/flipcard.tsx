@@ -103,7 +103,7 @@ const FlipCard: Component<{}> = (props) => {
                       <Motion.div
                         class={styles.flipImageList}
                         initial={{ y: -44 }}
-                        animate={{ y: 0, transition: { delay: 2.5 } }}
+                        animate={{ y: 0, transition: { delay: 2 } }}
                         transition={{ duration: 0.6, easing: "ease-in-out" }}
                       >
                         <img
