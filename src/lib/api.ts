@@ -956,7 +956,7 @@ export const getBookMarkDataItem = (async (time: string) => {
 });
 
 export const getSpotlightImage = async () => {
-    // "use server";
+    "use server";
     let batchQuery = {} as any;
     batchQuery["pid"] = "338387";
     batchQuery["fmt"] = "json";
