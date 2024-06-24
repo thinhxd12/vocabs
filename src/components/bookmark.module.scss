@@ -43,7 +43,7 @@
     }
 
     .bookmarkBody {
-        padding: 6px 9px;
+        padding: 6px 9px 18px;
         min-height: 100%;
 
         .bookmarkPassage::first-letter {
@@ -104,11 +104,12 @@
 
         .bookmarkAuthor {
             font-variant: small-caps;
-            @include font('NYTImperial', 24px, $color-black, 600, normal, 24px);
+            @include font('NYTImperial', 24px, $color-black, 600, normal, 22px);
+            padding-top: 3px;
         }
 
         .bookmarkYear {
-            @include font('NYTImperial', 16px, $color-black, 600, normal, 20px);
+            @include font('NYTImperial', 14px, $color-black, 600, normal, 20px);
         }
     }
 
