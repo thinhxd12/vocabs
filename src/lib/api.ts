@@ -956,12 +956,12 @@ export const getBookMarkDataItem = (async (time: string) => {
 });
 
 export const getSpotlightImage = async () => {
-    "use server";
+    // "use server";
     let batchQuery = {} as any;
     batchQuery["pid"] = "338387";
     batchQuery["fmt"] = "json";
     batchQuery["rafb"] = "0";
-    batchQuery["ua"] = "WindowsShellClient/1";
+    batchQuery["ua"] = "WindowsShellClient/0";
     batchQuery["cdm"] = "1";
     batchQuery["disphorzres"] = "1920";
     batchQuery["dispvertres"] = "1080";

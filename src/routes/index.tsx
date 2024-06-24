@@ -1,5 +1,5 @@
 import { useSubmission, type RouteSectionProps } from "@solidjs/router";
-import { Show, createResource } from "solid-js";
+import { Show, createResource, createSignal, onMount } from "solid-js";
 import styles from "./index.module.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { loginAction } from "~/lib";
@@ -7,7 +7,15 @@ import { getSpotlightImage } from "~/lib/api";
 
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginAction);
-  const [image] = createResource(getSpotlightImage);
+  const [image, setImage] = createSignal<{ text: string; url: string }>({
+    text: "",
+    url: "",
+  });
+  
+  onMount(async () => {
+    const data = await getSpotlightImage();
+    if (data) setImage(data);
+  });
 
   return (
     <MetaProvider>
@@ -20,7 +28,7 @@ export default function Login(props: RouteSectionProps) {
           "background-image": `url("${image()?.url}")`,
         }}
       >
-        <Show when={!image.loading}>
+        <Show when={image().text}>
           <p class={styles.backgroundText}>{image()!.text}</p>
         </Show>
         <div class={styles.loginContainer}>
