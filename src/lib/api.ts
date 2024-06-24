@@ -955,7 +955,7 @@ export const getBookMarkDataItem = (async (time: string) => {
     if (data) return data[0];
 });
 
-export const getSpotlightImage = async () => {
+export const getSpotlightImage = cache(async () => {
     "use server";
     let batchQuery = {} as any;
     batchQuery["pid"] = "338387";
@@ -983,7 +983,7 @@ export const getSpotlightImage = async () => {
         const jsImageL = itemObj["image_fullscreen_001_landscape"];
         return { text: title, url: jsImageL.u };
     }
-};
+}, "spotlight");
 
 
 
