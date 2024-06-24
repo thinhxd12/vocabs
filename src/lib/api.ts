@@ -978,10 +978,10 @@ export const getSpotlightImage = (async () => {
         const itemObj = JSON.parse(itemStr)["ad"];
         // const title = itemObj["title_text"]?.tx;
         // const text2 = itemObj["hs2_cta_text"]?.tx || '';
-        // const jsImageP = itemObj["image_fullscreen_001_portrait"];
         const title = itemObj["hs2_title_text"]?.tx;
         const jsImageL = itemObj["image_fullscreen_001_landscape"];
-        return { text: title, url: jsImageL.u };
+        const jsImageP = itemObj["image_fullscreen_001_portrait"];
+        return { text: title, urlL: jsImageL.u, urlP: jsImageP.u };
     }
 });
 

@@ -14,8 +14,13 @@ export default function Login(props: RouteSectionProps) {
   });
 
   onMount(async () => {
+    const flag =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      );
+
     const data = await getSpotlightImage();
-    if (data) setImage(data);
+    if (data) setImage({ text: data.text, url: flag ? data.urlP : data.urlL });
   });
 
   return (
