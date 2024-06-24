@@ -17,7 +17,6 @@ import {
   createCanvas,
   loadImage,
 } from "~/lib/weatherServices";
-import { WeatherGeoType } from "~/types";
 import {
   getCurrentWeatherData,
   getMinutelyWeatherData,
@@ -32,6 +31,7 @@ import {
   FaSolidWind,
 } from "solid-icons/fa";
 import { TbUvIndex } from "solid-icons/tb";
+import { WEATHER_GEOS } from "~/utils";
 
 let canvas: HTMLCanvasElement;
 let audio: HTMLAudioElement;
@@ -41,19 +41,6 @@ const Weather: Component<{}> = (props) => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
-
-  const WEATHER_GEOS: WeatherGeoType[] = [
-    {
-      name: "Thủ Thừa",
-      geo: "long-an/thu-thua/binh-thanh-thu-thua",
-      lat: "10.588468,106.400650",
-    },
-    {
-      name: "Cần Thơ",
-      geo: "can-tho/ninh-kieu",
-      lat: "10.0364216,105.7875219",
-    },
-  ];
 
   const [geo, setGeo] = createSignal<string>(WEATHER_GEOS[0].geo);
   const [lat, setLat] = createSignal<string>(WEATHER_GEOS[0].lat);

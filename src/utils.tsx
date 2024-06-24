@@ -312,7 +312,21 @@ export const WMOCODE = {
   },
 };
 
+export const WEATHER_GEOS: WeatherGeoType[] = [
+  {
+    name: "Thủ Thừa",
+    geo: "long-an/thu-thua/binh-thanh-thu-thua",
+    lat: "10.588468,106.400650",
+  },
+  {
+    name: "Cần Thơ",
+    geo: "can-tho/ninh-kieu",
+    lat: "10.0364216,105.7875219",
+  },
+];
+
 import { onCleanup } from "solid-js";
+import { WeatherGeoType } from "./types";
 
 declare module "solid-js" {
   namespace JSX {

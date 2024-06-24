@@ -458,7 +458,7 @@ export const editVocabularyItem = action(async (formData: FormData) => {
     const numberT = Number(formData.get("number"));
     const createT = String(formData.get("created_at"));
     const meaningT = String(formData.get("meaning"));
-    const translationsT = getTranslation(meaningT);
+    const translationsT = getTranslationArr(meaningT);
 
     const { error } = await supabase
         .from(mapTables.vocabulary)
@@ -475,7 +475,7 @@ export const editVocabularyItem = action(async (formData: FormData) => {
     return { message: "success" }
 });
 
-const getTranslation = (str: string) => {
+export const getTranslationArr = (str: string) => {
     const breakpoint = /\s+-/g;
     let means = str.split(breakpoint).filter((item) => item);
     const matchesMean = means.map((m) => {
@@ -504,7 +504,7 @@ export const insertVocabularyItem = action(async (formData: FormData) => {
     const phoneticsT = String(formData.get("phonetics"));
     const definitionsT = JSON.parse(String(formData.get("definitions")));
     const meaningT = String(formData.get("meaning"));
-    const translationsT = getTranslation(meaningT);
+    const translationsT = getTranslationArr(meaningT);
 
     const { error } = await supabase
         .from(mapTables.vocabulary)

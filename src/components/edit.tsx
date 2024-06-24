@@ -6,7 +6,11 @@ import {
   VocabularyType,
 } from "~/types";
 import { action, useSubmission } from "@solidjs/router";
-import { editVocabularyItem, getTextDataWebster } from "~/lib/api";
+import {
+  editVocabularyItem,
+  getTextDataWebster,
+  getTranslationArr,
+} from "~/lib/api";
 import toast, { Toaster } from "solid-toast";
 import { FaRegularImage, FaSolidExpand } from "solid-icons/fa";
 import buttons from "../assets/styles/buttons.module.scss";
@@ -47,11 +51,7 @@ const Edit: Component<{
   const handleSubmitForm = () => {
     setSubmittedForm(true);
     if (mainStore.renderWord?.word === resultEditWord().word)
-      setMainStore("renderWord", {
-        ...mainStore.renderWord,
-        definitions: resultEditWord().definitions,
-        translations: resultEditWord().translations,
-      });
+      setMainStore("renderWord", resultEditWord());
   };
 
   //----------------------TOAST----------------------
@@ -296,6 +296,12 @@ const Edit: Component<{
               name="audio"
               autocomplete="off"
               value={resultEditWord()?.audio}
+              onChange={(e) => {
+                setResultEditWord({
+                  ...resultEditWord(),
+                  audio: JSON.parse(e.currentTarget.value),
+                });
+              }}
             />
           </div>
           <div class={forms.formInputGroup}>
@@ -304,6 +310,12 @@ const Edit: Component<{
               name="phonetics"
               autocomplete="off"
               value={resultEditWord()?.phonetics}
+              onChange={(e) => {
+                setResultEditWord({
+                  ...resultEditWord(),
+                  phonetics: JSON.parse(e.currentTarget.value),
+                });
+              }}
             />
           </div>
           <div class={forms.formInputGroup}>
@@ -329,6 +341,12 @@ const Edit: Component<{
               name="meaning"
               autocomplete="off"
               value={translationsString()}
+              onChange={(e) => {
+                setResultEditWord({
+                  ...resultEditWord(),
+                  translations: getTranslationArr(e.currentTarget.value),
+                });
+              }}
             />
           </div>
           <div class={forms.formInputGroup}>
@@ -338,6 +356,12 @@ const Edit: Component<{
               name="number"
               autocomplete="off"
               value={resultEditWord()?.number}
+              onChange={(e) => {
+                setResultEditWord({
+                  ...resultEditWord(),
+                  number: Number(e.currentTarget.value),
+                });
+              }}
             />
           </div>
           <input

@@ -1,5 +1,12 @@
 import { A, useAction } from "@solidjs/router";
-import { Component, Show, createSignal, onMount } from "solid-js";
+import {
+  Component,
+  Show,
+  createResource,
+  createSignal,
+  onCleanup,
+  onMount,
+} from "solid-js";
 import { format } from "date-fns";
 import styles from "./bottom.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
@@ -10,6 +17,7 @@ import {
   setMainStore,
 } from "~/lib/mystore";
 import {
+  getCurrentWeatherData,
   getListContent,
   getTodayData,
   getTotalMemories,
@@ -20,7 +28,8 @@ import {
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
 import { OcHourglass2 } from "solid-icons/oc";
-import { clickOutside } from "~/utils";
+import { WEATHER_GEOS, clickOutside } from "~/utils";
+import { CurrentlyWeatherType } from "~/types";
 
 let intervalCountdown: NodeJS.Timeout;
 let intervalAutoplay: NodeJS.Timeout;
@@ -36,9 +45,11 @@ const Bottom: Component<{}> = () => {
     const data = await Promise.all([
       getTotalMemories(),
       getTodayData(todayDate),
+      getCurrentWeatherData(WEATHER_GEOS[0].geo),
     ]);
     setMainStore("totalMemories", data[0]!);
     setListStore("listToday", data[1]!);
+    setCurrent(data[2]!);
   });
 
   // -------------------LOGOUT-------------------- //
@@ -185,6 +196,17 @@ const Bottom: Component<{}> = () => {
     setShowMenu(false);
   };
 
+  const [current, setCurrent] = createSignal<CurrentlyWeatherType>();
+
+  const weatherInterval = setInterval(async () => {
+    const data = await getCurrentWeatherData(WEATHER_GEOS[0].geo);
+    if (data) setCurrent(data);
+  }, 1000 * 30 * 60);
+
+  onCleanup(() => {
+    clearInterval(weatherInterval);
+  });
+
   return (
     <div class={styles.bottom}>
       <div class={styles.bottomBar} use:clickOutside={close}>
@@ -247,8 +269,28 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn3}
         >
-          <small>God from the machine</small>
-          <span>Deus ex machina</span>
+          <Show
+            when={current()}
+            fallback={
+              <>
+                <small>God from the machine</small>
+                <span>Deus ex machina</span>
+              </>
+            }
+          >
+            <span class={styles.bottomWeather}>
+              <img
+                class={styles.weatherImg}
+                src={"/images/openmeteo/icons/" + current()?.icon + ".svg"}
+                width={33}
+                alt="bottomWeatherIcon"
+              />
+              <p>{current()!.temperature}°</p>
+            </span>
+            <span class={styles.bottomWeatherSummary}>
+              {current()!.summary}
+            </span>
+          </Show>
         </A>
 
         <Show
