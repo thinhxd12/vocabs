@@ -88,7 +88,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   };
 
   return (
-    <div class={styles.bookmarkContainer} tabIndex={1} use:stopKeydown={null}>
+    <div class={styles.bookmarkContainer} tabIndex={1}>
       <Suspense fallback={<p class={styles.bookmarkLoading}>...</p>}>
         <div
           class={
@@ -109,66 +109,6 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             </Show>
           </div>
           <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
-
-          <Show when={showEdit()}>
-            <form
-              action={updateBookmarkData}
-              method="post"
-              onSubmit={() => setShowEdit(false)}
-            >
-              <textarea
-                class={styles.bookmarkTextArea}
-                autocomplete="off"
-                name="bookmarks"
-                value={bookmark()!.content}
-                onChange={(e) => {
-                  e.stopPropagation();
-                  setBookmark({
-                    ...bookmark()!,
-                    content: e.currentTarget.value,
-                  });
-                }}
-              />
-              <input hidden name="id" value={bookmark()!.created_at} />
-              <button type="submit" class={buttons.buttonSubmit}>
-                Edit
-              </button>
-            </form>
-          </Show>
-
-          <Show when={showInsert()}>
-            <form
-              action={insertBookmarkData}
-              method="post"
-              onSubmit={() => setShowInsert(false)}
-            >
-              <textarea
-                class={styles.bookmarkTextArea}
-                autocomplete="off"
-                name="bookmarks"
-              />
-              <button type="submit" class={buttons.buttonSubmit}>
-                Insert
-              </button>
-            </form>
-          </Show>
-
-          <Show when={showSearch()}>
-            <div class={styles.bookmarkTextArea}>
-              <input class={styles.bookmarkInput} use:searchBookmark={null} />
-              <Show when={searchData()}>
-                <Index each={searchData()}>
-                  {(data) => {
-                    return (
-                      <p onClick={() => handleRenderSearchItem(data())}>
-                        ... {data()?.content} ...
-                      </p>
-                    );
-                  }}
-                </Index>
-              </Show>
-            </div>
-          </Show>
         </div>
       </Suspense>
 
@@ -180,6 +120,78 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         class={styles.buttonBookmarkRight}
         onclick={() => handleGetNextBookmark()}
       ></button>
+
+      <Show when={showEdit()}>
+        <div class={styles.bookmarkEditContainer}>
+          <form
+            action={updateBookmarkData}
+            method="post"
+            onSubmit={() => setShowEdit(false)}
+          >
+            <textarea
+              class={styles.bookmarkTextArea}
+              autocomplete="off"
+              name="bookmarks"
+              value={bookmark()!.content}
+              use:stopKeydown={null}
+              onChange={(e) => {
+                e.stopPropagation();
+                setBookmark({
+                  ...bookmark()!,
+                  content: e.currentTarget.value,
+                });
+              }}
+            />
+            <input hidden name="id" value={bookmark()!.created_at} />
+            <button type="submit" class={buttons.buttonSubmit}>
+              Edit
+            </button>
+          </form>
+        </div>
+      </Show>
+
+      <Show when={showInsert()}>
+        <div class={styles.bookmarkEditContainer}>
+          <form
+            action={insertBookmarkData}
+            method="post"
+            onSubmit={() => setShowInsert(false)}
+          >
+            <textarea
+              class={styles.bookmarkTextArea}
+              autocomplete="off"
+              name="bookmarks"
+              use:stopKeydown={null}
+            />
+            <button type="submit" class={buttons.buttonSubmit}>
+              Insert
+            </button>
+          </form>
+        </div>
+      </Show>
+
+      <Show when={showSearch()}>
+        <div class={styles.bookmarkEditContainer}>
+          <div class={styles.bookmarkTextArea}>
+            <input
+              class={styles.bookmarkInput}
+              use:searchBookmark={null}
+              use:stopKeydown={null}
+            />
+            <Show when={searchData()}>
+              <Index each={searchData()}>
+                {(data) => {
+                  return (
+                    <p onClick={() => handleRenderSearchItem(data())}>
+                      ... {data()?.content} ...
+                    </p>
+                  );
+                }}
+              </Index>
+            </Show>
+          </div>
+        </div>
+      </Show>
 
       <div class={styles.bookmarkHeader}>
         <div class={styles.bookmarkHeaderLeft}></div>
