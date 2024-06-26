@@ -8,8 +8,8 @@
     display: flex;
     justify-content: center;
     background-color: $color-black;
-    background-size: cover;
-    background-position: bottom;
+    background-size: 100%;
+    background-position: center;
     position: relative;
 
     .backgroundText {
@@ -36,7 +36,6 @@
         width: 136px;
         transition: all 0.1s;
         background: rgba(0, 0, 0, 0.15);
-        box-shadow: 0px 9px 21px 0px rgba(0, 0, 0, 0.81);
 
         &:hover {
             background: rgba(0, 0, 0, 0.45);
