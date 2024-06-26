@@ -45,7 +45,7 @@
                 background: $color-black;
                 position: initial;
                 width: 100%;
-                padding: 3px 3px 1px 6px;
+                padding: 5px 3px 3px 6px;
             }
         }
 
@@ -70,7 +70,7 @@
                 right: 0;
                 bottom: 0;
                 z-index: 6;
-                background: linear-gradient(to top, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.03) 100%);
+                background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.5) 25%, rgba(0, 0, 0, 0.1) 40%, transparent 50%, transparent 100%);
             }
 
             .websDefs {
@@ -79,18 +79,19 @@
                 bottom: 0;
                 left: 0;
                 z-index: 9;
-                padding: 2px 3px 1px 6px;
-                background-color: rgba(0, 0, 0, 0.21);
+                padding: 5px 3px 3px 6px;
             }
         }
 
         .websDef {
             @include font('Poppins', 11px, $color-calendar-bg, 400, normal, 16px);
+            text-shadow: 0 0px 2px rgba(0, 0, 0, 0.9);
+            padding: 1px 0 0px;
         }
 
         .websDefUp,
         .websDef::first-letter {
-            @include font('Poppins', 12px, $color-white, 600, normal, 16px);
+            @include font('Poppins', 13px, $color-white, 700, normal, 16px);
             text-transform: uppercase;
         }
 
@@ -99,7 +100,7 @@
 
             position: relative;
             text-indent: 24px;
-            padding: 0px 3px 0 6px;
+            padding: 3px 3px 3px 6px;
             background: $color-vintage-background;
 
             b {
@@ -129,7 +130,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-end;
-            padding-right: 3px;
+            padding-right: 6px;
             background: $color-vintage-background;
 
             .websAuthor {
