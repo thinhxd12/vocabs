@@ -158,12 +158,7 @@ const Calendar: Component<{}> = (props) => {
                           return (
                             <div class={styles.calendarDay}>
                               <Show when={"time1" in item()}>
-                                <div class={styles.dateTimeIndexHidden}>
-                                  {Math.max(
-                                    item().time1 as number,
-                                    item().time2 as number
-                                  )}
-                                </div>
+                                <div class={styles.dateTimeIndexHidden}></div>
                               </Show>
 
                               <Show

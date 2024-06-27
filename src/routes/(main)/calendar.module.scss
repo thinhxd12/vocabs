@@ -127,12 +127,15 @@
                     font-size: 8px;
                     margin-right: 2px;
                     visibility: hidden;
+                    min-width: 10px;
+                    height: 100%;
                 }
 
                 .dateTimeIndex {
                     @include flex-center-column;
                     @include font('Rubik', 8px, $color-calendar-text-2, 600, normal, 9px);
                     margin-left: 2px;
+                    min-width: 10px;
 
                     div:first-child {
                         text-decoration: underline;
@@ -147,6 +150,7 @@
                     border-radius: 50%;
                     margin-bottom: 9px;
                     background-color: $color-calendar-text-2;
+                    margin-right: 7px;
                 }
 
                 .dateTimeIndexDone {

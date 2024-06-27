@@ -604,47 +604,97 @@ export const submitNewSchedule = action(async (formData: FormData) => {
         .gte('time1', 0)
 
     let newIndex = 0;
-    for (let j = 0; j < 5; j++) {
-        if (startIndex === 0)
-            switch (j) {
+
+    if (count >= 1000) {
+        for (let j = 0; j < 5; j++) {
+            if (startIndex === 0)
+                switch (j) {
+                    case 0:
+                        newIndex = startIndex;
+                        break;
+                    case 1:
+                        newIndex = startIndex + 400;
+                        break;
+                    case 2:
+                        newIndex = startIndex + 800;
+                        break;
+                    case 3:
+                        newIndex = startIndex + 200;
+                        break;
+                    case 4:
+                        newIndex = startIndex + 600;
+                        break;
+                    default:
+                        break;
+                }
+            else switch (j) {
                 case 0:
-                    newIndex = startIndex;
-                    break;
-                case 1:
                     newIndex = startIndex + 400;
                     break;
+                case 1:
+                    newIndex = startIndex;
+                    break;
                 case 2:
-                    newIndex = startIndex + 800;
+                    newIndex = startIndex + 600;
                     break;
                 case 3:
                     newIndex = startIndex + 200;
                     break;
                 case 4:
-                    newIndex = startIndex + 600;
+                    newIndex = startIndex + 800;
                     break;
                 default:
                     break;
             }
-        else switch (j) {
-            case 0:
-                newIndex = startIndex + 400;
-                break;
-            case 1:
-                newIndex = startIndex;
-                break;
-            case 2:
-                newIndex = startIndex + 600;
-                break;
-            case 3:
-                newIndex = startIndex + 200;
-                break;
-            case 4:
-                newIndex = startIndex + 800;
-                break;
-            default:
-                break;
-        }
 
+            for (let i = 0; i < 6; i++) {
+                let { error } = await supabase
+                    .from(mapTables.schedule)
+                    .insert([{
+                        date: format((new Date(new Date(startDay).getTime() + (6 * j + i) * 86400000)).toISOString(), "yyyy-MM-dd"),
+                        index1: i % 2 == 0 ? newIndex : newIndex + 50,
+                        index2: i % 2 == 0 ? newIndex + 100 : newIndex + 150,
+                        time1: 0,
+                        time2: 0,
+                    }]);
+            }
+        }
+    }
+    else if (count < 1000 && count > 200) {
+        for (let j = 0; j < Math.floor(count / 200); j++) {
+            switch (j) {
+                case 0:
+                    newIndex = startIndex;
+                    break;
+                case 1:
+                    newIndex = startIndex + 200;
+                    break;
+                case 2:
+                    newIndex = startIndex + 400;
+                    break;
+                case 3:
+                    newIndex = startIndex + 600;
+                    break;
+                case 4:
+                    newIndex = startIndex + 800;
+                    break;
+                default:
+                    break;
+            }
+            for (let i = 0; i < 6; i++) {
+                let { error } = await supabase
+                    .from(mapTables.schedule)
+                    .insert([{
+                        date: format((new Date(new Date(startDay).getTime() + (6 * j + i) * 86400000)).toISOString(), "yyyy-MM-dd"),
+                        index1: i % 2 == 0 ? newIndex : newIndex + 50,
+                        index2: i % 2 == 0 ? newIndex + 100 : newIndex + 150,
+                        time1: 0,
+                        time2: 0,
+                    }]);
+            }
+        }
+    }
+    else {
         for (let i = 0; i < 6; i++) {
             let { error } = await supabase
                 .from(mapTables.schedule)
@@ -659,7 +709,7 @@ export const submitNewSchedule = action(async (formData: FormData) => {
     }
 
     //create new History month
-    const insertData = {
+    let insertData = {
         data: [
             { index: startIndex, from_date: "", to_date: "" },
             { index: startIndex + 200, from_date: "", to_date: "" },
@@ -667,6 +717,13 @@ export const submitNewSchedule = action(async (formData: FormData) => {
             { index: startIndex + 600, from_date: "", to_date: "" },
             { index: startIndex + 800, from_date: "", to_date: "" },
         ]
+    }
+
+    if (count < 1000 && count > 200) {
+        insertData = { data: insertData.data.slice(0, Math.floor(count / 200)) }
+    }
+    else if (count <= 200) {
+        insertData = { data: insertData.data.slice(0, 1) }
     }
 
     let { error: errorMonth } = await supabase
