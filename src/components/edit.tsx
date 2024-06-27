@@ -48,12 +48,6 @@ const Edit: Component<{
     )
   );
 
-  const handleSubmitForm = () => {
-    setSubmittedForm(true);
-    if (mainStore.renderWord?.word === resultEditWord().word)
-      setMainStore("renderWord", resultEditWord());
-  };
-
   //----------------------TOAST----------------------
 
   //handy edit
@@ -141,6 +135,15 @@ const Edit: Component<{
       definitions: renderEditWord().definitions,
       phonetics: renderEditWord().phonetics,
     });
+  };
+
+  const handleSubmitForm = () => {
+    setSubmittedForm(true);
+    if (mainStore.renderWord?.word === resultEditWord().word)
+      setMainStore("renderWord", {
+        ...resultEditWord(),
+        number: resultEditWord().number + 1,
+      });
   };
 
   const close = () => {
