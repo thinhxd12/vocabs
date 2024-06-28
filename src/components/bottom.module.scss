@@ -189,8 +189,8 @@
             padding-left: 24px;
 
             p {
-                font-size: 10px;
-                padding-top: 5px;
+                @include font('SFProDisplay', 12px, #7c7b7a, 500, normal, 6px);
+                padding: 6px 0 0 3px;
             }
         }
     }

@@ -1,5 +1,5 @@
 import { action, cache } from "@solidjs/router";
-import { BookmarkType, CalendarType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryItemContentType, HistoryType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularySearchType, VocabularyTranslationType, VocabularyType, } from "~/types";
+import { BookmarkType, CalendarType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryItemContentType, HistoryType, HourlyWeatherType, ImageType, MinutelyWeatherType, ScheduleType, TodayWeatherType, TranslateType, VocabularyDefinitionType, VocabularySearchType, VocabularyTranslationType, VocabularyType, } from "~/types";
 import { PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import { format, parse as parseTime } from "date-fns";
 import { parse } from 'node-html-parser';
@@ -699,7 +699,7 @@ export const submitNewSchedule = action(async (formData: FormData) => {
             let { error } = await supabase
                 .from(mapTables.schedule)
                 .insert([{
-                    date: format((new Date(new Date(startDay).getTime() + (6 * j + i) * 86400000)).toISOString(), "yyyy-MM-dd"),
+                    date: format((new Date(new Date(startDay).getTime() + i * 86400000)).toISOString(), "yyyy-MM-dd"),
                     index1: i % 2 == 0 ? newIndex : newIndex + 50,
                     index2: i % 2 == 0 ? newIndex + 100 : newIndex + 150,
                     time1: 0,
@@ -1140,55 +1140,68 @@ const fetchGetJSON = async (url: string) => {
     }
 }
 
-export const getCurrentWeatherData = (async (url: string) => {
+// const ACCU_KEY = "jCLPUDFqHDZV7369qCF3gfHGutmpcVKG";
+// const ACCU_KEY = "KrnJm3pGAtha40EFim82KLEqvaikzMeS";
+const ACCU_KEY = "CH6KCbK2WxAuo6F5yiClbGPpKZBZHtD8";
+
+export const getCurrentWeatherData = (async (key: string) => {
     "use server";
-    let current: CurrentlyWeatherType = {
-        icon: "",
-        summary: "",
-        humidity: 0,
-        temperature: 0,
-        apparentTemperature: 0,
-        windSpeed: 0,
-        uvIndex: 0,
-        hourlyData: []
-    }
-
-    const URL = `https://thoitiet.edu.vn/${url}`;
-    const pageImgHtml = await fetchGetText(URL);
-    const doc = parse(pageImgHtml);
-    current.summary = getElText(doc, ".overview-caption-item-detail", "");
-    current.temperature = parseInt(getElText(doc, ".current-temperature", ""));
-    current.apparentTemperature = parseInt(getElText(doc, ".overview-caption-summary-detail", "").replace(/[^0-9]+/g, ""));
-
-    doc.querySelectorAll(".weather-detail-location-item div>span").forEach((el, i) => {
-        switch (i) {
-            case 1:
-                current.humidity = parseInt(el.textContent);
-                break;
-            case 3:
-                current.windSpeed = parseInt(el.textContent);
-                break;
-            case 5:
-                current.uvIndex = parseInt(el.textContent);
-                break;
-            default:
-                break;
+    const currentWeatherURI = 'https://dataservice.accuweather.com/currentconditions/v1/'
+    const querry = `${key}?apikey=${ACCU_KEY}&details=true`
+    const response = await fetch(currentWeatherURI + querry)
+    if (response.status !== 200) return undefined;
+    else {
+        const data = await response.json();
+        const current: CurrentlyWeatherType = {
+            icon: data[0].WeatherIcon,
+            summary: data[0].WeatherText,
+            humidity: data[0].RelativeHumidity,
+            temperature: data[0].Temperature.Metric.Value,
+            apparentTemperature: data[0].RealFeelTemperature.Metric.Value,
+            windSpeed: data[0].Wind.Speed.Metric.Value,
+            windDirection: data[0].Wind.Direction.Degrees,
+            uvIndex: data[0].UVIndex,
+            uvIndexText: data[0].UVIndexText,
+            isDayTime: data[0].IsDayTime,
         }
-    });
+        return current as CurrentlyWeatherType;
+    }
+})
 
-    const iconUrl = getElAttribute(doc, ".overview-current img", "src")
-    const iconId = iconUrl.split("/").pop().split("@")[0];
-    current.icon = iconId;
+export const getHourlyWeatherData = (async (key: string) => {
+    "use server";
+    const hourlyWeatherURI = 'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/'
+    const querry = `${key}?apikey=${ACCU_KEY}&metric=true`
+    const response = await fetch(hourlyWeatherURI + querry)
+    if (response.status !== 200) return undefined;
+    const data = await response.json();
+    const res = data.map((item: any) => ({
+        time: item.DateTime,
+        temperature: item.Temperature.Value,
+        icon: item.WeatherIcon,
+        probability: item.PrecipitationProbability,
+    }))
+    return res as HourlyWeatherType[];
+})
 
-    doc.querySelectorAll(".weather-item.bg-white.text-dark").forEach((el, i) => {
-        const time = getElText(el, "h3 span", "");
-        const temperature = parseInt(getElText(el, ".weather-item-footer>span", ""))
-        const iconUrl = getElAttribute(el, ".weather-item-body img", "src")
-        const iconId = iconUrl.split("/").pop().split("@")[0];
-        const number = parseInt(getElText(el, ".weather-item-body>div", ""))
-        current.hourlyData.push({ time: format(parseTime(time, "hh:mm a", new Date()), "ha"), temperature: temperature, icon: iconId, probability: number })
-    });
-    return current as CurrentlyWeatherType;
+export const getTodayWeatherData = (async (key: string) => {
+    "use server";
+    const todayWeatherURI = 'http://dataservice.accuweather.com/forecasts/v1/daily/1day/'
+    const querry = `${key}?apikey=${ACCU_KEY}&details=true`
+    const response = await fetch(todayWeatherURI + querry)
+    if (response.status !== 200) return undefined;
+    const data = await response.json();
+    const res = {
+        day: {
+            icon: data.DailyForecasts[0].Day.Icon,
+            phrase: data.DailyForecasts[0].Day.LongPhrase
+        },
+        night: {
+            icon: data.DailyForecasts[0].Night.Icon,
+            phrase: data.DailyForecasts[0].Night.LongPhrase
+        },
+    }
+    return res as TodayWeatherType;
 })
 
 export const getMinutelyWeatherData = (async (geostr: string) => {

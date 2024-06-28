@@ -100,14 +100,16 @@ export interface TranslateType {
 }
 
 export interface CurrentlyWeatherType {
-  icon: string;
+  icon: number;
   summary: string;
   humidity: number;
   temperature: number;
   apparentTemperature: number;
   windSpeed: number;
+  windDirection: number;
   uvIndex: number;
-  hourlyData: HourlyWeatherType[];
+  uvIndexText: string;
+  isDayTime: boolean;
 }
 
 export interface HourlyWeatherType {
@@ -115,6 +117,16 @@ export interface HourlyWeatherType {
   temperature: number;
   icon: string;
   probability: number;
+}
+
+export interface TodayWeatherType {
+  day: TodayWeatherItemType;
+  night: TodayWeatherItemType;
+}
+
+interface TodayWeatherItemType {
+  icon: number;
+  phrase: string;
 }
 
 export interface MinutelyWeatherType {
@@ -135,4 +147,5 @@ export interface WeatherGeoType {
   name: string;
   geo: string;
   lat: string;
+  key: string;
 }

@@ -317,11 +317,19 @@ export const WEATHER_GEOS: WeatherGeoType[] = [
     name: "Thủ Thừa",
     geo: "long-an/thu-thua/binh-thanh-thu-thua",
     lat: "10.588468,106.400650",
+    key: "354472",
   },
   {
     name: "Cần Thơ",
     geo: "can-tho/ninh-kieu",
     lat: "10.0364216,105.7875219",
+    key: "1-352508_1_al",
+  },
+  {
+    name: "Tokyo",
+    geo: "",
+    lat: "35.6821936,139.762221",
+    key: "226396",
   },
 ];
 

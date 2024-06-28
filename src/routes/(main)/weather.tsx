@@ -19,7 +19,9 @@ import {
 } from "~/lib/weatherServices";
 import {
   getCurrentWeatherData,
+  getHourlyWeatherData,
   getMinutelyWeatherData,
+  getTodayWeatherData,
   makePrediction,
 } from "~/lib/api";
 import styles from "./weather.module.scss";
@@ -32,6 +34,7 @@ import {
 } from "solid-icons/fa";
 import { TbUvIndex } from "solid-icons/tb";
 import { WEATHER_GEOS } from "~/utils";
+import { format } from "date-fns";
 
 let canvas: HTMLCanvasElement;
 let audio: HTMLAudioElement;
@@ -42,7 +45,7 @@ const Weather: Component<{}> = (props) => {
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
-  const [geo, setGeo] = createSignal<string>(WEATHER_GEOS[0].geo);
+  const [geo, setGeo] = createSignal<string>(WEATHER_GEOS[0].key);
   const [lat, setLat] = createSignal<string>(WEATHER_GEOS[0].lat);
   const [geoTitle, setGeoTitle] = createSignal<string>(WEATHER_GEOS[0].name);
   const [chartData, setChartData] = createSignal<{
@@ -53,6 +56,12 @@ const Weather: Component<{}> = (props) => {
   const [current, { refetch: refetchCurrent, mutate: mutateCurrent }] =
     createResource(geo, getCurrentWeatherData);
 
+  const [hourly, { refetch: refetchHourly, mutate: mutateHourly }] =
+    createResource(geo, getHourlyWeatherData);
+
+  const [today, { refetch: refetchToday, mutate: mutateToday }] =
+    createResource(geo, getTodayWeatherData);
+
   const [minutely, { refetch: refetchMinutely, mutate: mutateMinutely }] =
     createResource(lat, getMinutelyWeatherData);
 
@@ -60,10 +69,12 @@ const Weather: Component<{}> = (props) => {
   const [prediction, setPrediction] = createSignal<string>("");
 
   const handleRenderWeather = (num: string) => {
-    setGeo(WEATHER_GEOS[Number(num)].geo);
+    setGeo(WEATHER_GEOS[Number(num)].key);
     setLat(WEATHER_GEOS[Number(num)].lat);
     setGeoTitle(WEATHER_GEOS[Number(num)].name);
     refetchCurrent();
+    refetchHourly();
+    refetchToday();
     refetchMinutely();
   };
 
@@ -372,6 +383,7 @@ const Weather: Component<{}> = (props) => {
   };
 
   const setupWeather = async () => {
+    if (!current()) return;
     const textureDayRainFg = loadImage(
       "/images/openmeteo/weather/day-rain-fg.jpg"
     );
@@ -401,45 +413,46 @@ const Weather: Component<{}> = (props) => {
     let weatherType = "";
 
     switch (current()!.icon) {
-      case "09d":
-      case "09n":
+      case 12:
+      case 13:
+      case 14:
+      case 39:
+      case 40:
         setAudioSrc("/sounds/weather/rain_light_2.m4a");
         weatherType = "drizzle";
         break;
-      case "10d":
-      case "10n":
+      case 18:
+      case 26:
+      case 29:
         setAudioSrc("/sounds/weather/rain_light.m4a");
         weatherType = "rain";
         break;
-      case "11d":
-      case "11n":
+      case 15:
+      case 16:
+      case 17:
+      case 41:
+      case 42:
         setAudioSrc("/sounds/weather/thunderstorm.m4a");
         weatherType = "storm";
         break;
-      case "02d":
-      case "03d":
-      case "04d":
-      case "02n":
-      case "03n":
-      case "04n":
-        setAudioSrc("/sounds/weather/wind.m4a");
-        weatherType = "sunny";
-        break;
-      case "01d":
+      case 1:
+      case 2:
         setAudioSrc("/sounds/weather/forest.m4a");
         weatherType = "sunny";
         break;
-      case "01n":
+      case 33:
+      case 34:
         setAudioSrc("/sounds/weather/night.m4a");
         weatherType = "sunny";
         break;
-      case "13d":
-      case "13n":
+      case 22:
+      case 23:
+      case 44:
         setAudioSrc("/sounds/weather/snow.m4a");
         weatherType = "sunny";
         break;
       default:
-        setAudioSrc("/sounds/weather/forest.m4a");
+        setAudioSrc("/sounds/weather/wind.m4a");
         weatherType = "sunny";
         break;
     }
@@ -453,7 +466,7 @@ const Weather: Component<{}> = (props) => {
     raindrops.clearDrops();
 
     if (weatherType !== "sunny") {
-      if (current()!.icon.slice(-1) === "d") {
+      if (current()!.isDayTime) {
         generateTextures(imagesData[0], imagesData[1]);
         renderer.updateTextures();
       } else {
@@ -461,7 +474,7 @@ const Weather: Component<{}> = (props) => {
         renderer.updateTextures();
       }
     } else {
-      if (current()!.icon.slice(-1) === "d") {
+      if (current()!.isDayTime) {
         generateTextures(imagesData[0], imagesData[4]);
         renderer.updateTextures();
       } else {
@@ -472,12 +485,13 @@ const Weather: Component<{}> = (props) => {
   };
 
   onMount(() => {
-    refEl.addEventListener("wheel", (event) => {
-      event.preventDefault();
-      refEl.scrollBy({
-        left: event.deltaY < 0 ? -60 : 60,
+    if (refEl)
+      refEl.addEventListener("wheel", (event) => {
+        event.preventDefault();
+        refEl.scrollBy({
+          left: event.deltaY < 0 ? -60 : 60,
+        });
       });
-    });
   });
 
   return (
@@ -498,52 +512,85 @@ const Weather: Component<{}> = (props) => {
               {(item, index) => <option value={index}>{item().name}</option>}
             </Index>
           </select>
-          <p class={styles.weatherTemperature}>
-            {Math.round(current()?.temperature || 0)}°
-          </p>
-          <div class={styles.weatherImgDiv}>
-            <p>{current()?.summary}</p>
-            <img
-              class={styles.weatherImg}
-              src={"/images/openmeteo/icons/" + current()?.icon + ".svg"}
-              width={30}
-            />
-          </div>
-          <div class={styles.weatherInfoDiv}>
-            <div class={styles.weatherInfo}>
-              <FaSolidTemperatureLow size={10} />
-              <span>{Math.round(current()?.apparentTemperature || 0)}°</span>
+          <Show when={current()}>
+            <p class={styles.weatherTemperature}>
+              {Math.round(current()?.temperature || 0)}°
+            </p>
+            <div class={styles.weatherImgDiv}>
+              <p>{current()?.summary}</p>
+              <img
+                class={styles.weatherImg}
+                src={
+                  "https://www.accuweather.com/images/weathericons/" +
+                  current()?.icon +
+                  ".svg"
+                }
+                width={30}
+              />
             </div>
-            <div class={styles.weatherInfo}>
-              <FaSolidDroplet size={10} />
-              <span>
-                {current()?.humidity}
-                <small>%</small>
-              </span>
+            <div class={styles.weatherInfoDiv}>
+              <div class={styles.weatherInfo}>
+                <FaSolidTemperatureLow size={10} />
+                <span>{Math.round(current()?.apparentTemperature || 0)}°</span>
+              </div>
+              <div class={styles.weatherInfo}>
+                <FaSolidDroplet size={10} />
+                <span>
+                  {current()?.humidity}
+                  <small>%</small>
+                </span>
+              </div>
+              <div class={styles.weatherInfo}>
+                <FaSolidWind size={10} />
+                <span>
+                  {Math.round(current()?.windSpeed || 0)} <small>km/h</small>
+                </span>
+              </div>
+              <div class={styles.weatherInfo}>
+                <small>UV</small>
+                <span>
+                  {current()?.uvIndex} <small>({current()?.uvIndexText})</small>
+                </span>
+              </div>
             </div>
-            <div class={styles.weatherInfo}>
-              <FaSolidWind size={10} />
-              <span>
-                {Math.round(current()?.windSpeed || 0)} <small>km/h</small>
-              </span>
+          </Show>
+
+          <Show when={today()}>
+            <div class={styles.weatherToday}>
+              <div class={styles.weatherTodayItem}>
+                <img
+                  src={
+                    "https://www.accuweather.com/images/weathericons/" +
+                    today()!.day.icon +
+                    ".svg"
+                  }
+                  height={36}
+                />
+                <span>{today()!.day.phrase}</span>
+              </div>
+              <div class={styles.weatherTodayItem}>
+                <img
+                  src={
+                    "https://www.accuweather.com/images/weathericons/" +
+                    today()!.night.icon +
+                    ".svg"
+                  }
+                  height={36}
+                />
+                <span>{today()!.night.phrase}</span>
+              </div>
             </div>
-            <div class={styles.weatherInfo}>
-              <TbUvIndex size={12} />
-              <span>{current()?.uvIndex}</span>
-            </div>
-          </div>
+          </Show>
         </div>
 
-        <Show
-          when={current.state === "ready" && current().hourlyData.length > 0}
-        >
+        <Show when={hourly()}>
           <div class={styles.weatherHourly} ref={refEl}>
-            <Index each={current()!.hourlyData}>
+            <Index each={hourly()}>
               {(data, index) => {
                 return (
                   <div class={styles.weatherHourlyItem}>
                     <p class={styles.weatherHourlyTime}>
-                      {index === 0 ? "Now" : data().time}
+                      {index === 0 ? "Now" : format(data().time, "K a")}
                     </p>
                     <Show
                       when={data()!.probability > 0}
@@ -555,11 +602,15 @@ const Weather: Component<{}> = (props) => {
                     </Show>
                     <img
                       class={styles.weatherHourlyIcon}
-                      src={"/images/openmeteo/icons/" + data()!.icon + ".svg"}
-                      width={36}
+                      src={
+                        "https://www.accuweather.com/images/weathericons/" +
+                        data()!.icon +
+                        ".svg"
+                      }
+                      height={36}
                     />
                     <p class={styles.weatherHourlyTemp}>
-                      {data()!.temperature}°
+                      {Math.round(data()!.temperature)}°
                     </p>
                   </div>
                 );

@@ -52,6 +52,7 @@
         .weatherImgDiv {
             @include flex-center;
             cursor: default;
+            margin-bottom: 3px;
 
             p {
                 @include font('SFProDisplay', 16px, $color-white, 400, normal, 18px);
@@ -61,24 +62,46 @@
                 margin-left: 3px;
             }
 
-            margin: -3px 0;
         }
 
         .weatherInfoDiv {
             @include flex-center;
             cursor: default;
+            margin-bottom: 6px;
 
             .weatherInfo {
                 color: $color-white;
-                margin: 0 3px;
                 @include flex-center;
+                margin-right: 6px;
 
                 span {
                     @include font('SFProDisplay', 12px, $color-white, 400, normal, 10px);
-                    margin-left: 3px;
+                    margin-left: 1px;
+                }
+
+                small {
+                    @include font('SFProDisplay', 10px, $color-white, 400, normal, 10px);
                 }
             }
 
+        }
+    }
+
+    .weatherToday {
+        border-top: 1px solid #ffffff73;
+        padding: 6px;
+        width: 360px;
+
+        .weatherTodayItem {
+            @include flex;
+
+            img {
+                margin-right: 6px;
+            }
+
+            span {
+                @include font('SFProDisplay', 12px, $color-white, 400, normal, 14px);
+            }
         }
     }
 
@@ -87,7 +110,7 @@
         z-index: 99;
         width: 360px;
         position: absolute;
-        top: 162px;
+        top: 245px;
         overflow-x: scroll;
         overflow-y: hidden;
         scroll-snap-type: x mandatory;
@@ -116,10 +139,6 @@
                 min-height: 16px;
             }
 
-            .weatherHourlyIcon {
-                margin-top: -6px;
-            }
-
             .weatherHourlyTemp {
                 @include font('SFProDisplay', 14px, $color-white, 500, normal, 14px);
             }
@@ -130,7 +149,7 @@
     .weatherChart {
         position: absolute;
         z-index: 3;
-        top: 254px;
+        top: 345px;
         width: 330px;
         margin: 0 15px;
         @include flex-center-column;
@@ -145,7 +164,6 @@
         @include font('SFProDisplay', 11px, $color-white, 500, normal, 15px);
         letter-spacing: 0.5px;
         text-align: center;
-        margin-top: -3px;
     }
 
     .weatherChartLoading {

@@ -45,7 +45,7 @@ const Bottom: Component<{}> = () => {
     const data = await Promise.all([
       getTotalMemories(),
       getTodayData(todayDate),
-      getCurrentWeatherData(WEATHER_GEOS[0].geo),
+      getCurrentWeatherData(WEATHER_GEOS[0].key),
     ]);
     setMainStore("totalMemories", data[0]!);
     setListStore("listToday", data[1]!);
@@ -196,7 +196,9 @@ const Bottom: Component<{}> = () => {
     setShowMenu(false);
   };
 
-  const [current, setCurrent] = createSignal<CurrentlyWeatherType>();
+  const [current, setCurrent] = createSignal<CurrentlyWeatherType | undefined>(
+    undefined
+  );
 
   const weatherInterval = setInterval(async () => {
     const data = await getCurrentWeatherData(WEATHER_GEOS[0].geo);
@@ -281,11 +283,15 @@ const Bottom: Component<{}> = () => {
             <span class={styles.bottomWeather}>
               <img
                 class={styles.weatherImg}
-                src={"/images/openmeteo/icons/" + current()?.icon + ".svg"}
-                width={33}
+                src={
+                  "https://www.accuweather.com/images/weathericons/" +
+                  current()?.icon +
+                  ".svg"
+                }
+                height={20}
                 alt="bottomWeatherIcon"
               />
-              <p>{current()!.temperature}°</p>
+              <p>{Math.round(current()!.temperature)}°</p>
             </span>
             <span class={styles.bottomWeatherSummary}>
               {current()!.summary}
