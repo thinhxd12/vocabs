@@ -1020,8 +1020,8 @@ export const getSpotlightImage = (async () => {
     batchQuery["rafb"] = "0";
     batchQuery["ua"] = "WindowsShellClient/0";
     batchQuery["cdm"] = "1";
-    batchQuery["disphorzres"] = "1920";
-    batchQuery["dispvertres"] = "1080";
+    batchQuery["disphorzres"] = "2560";
+    batchQuery["dispvertres"] = "1440";
     batchQuery["lo"] = "80217";
     batchQuery["pl"] = "en-US";
     batchQuery["lc"] = "en-US";
@@ -1033,12 +1033,10 @@ export const getSpotlightImage = (async () => {
     if (data) {
         const itemStr = data["batchrsp"]["items"][0].item;
         const itemObj = JSON.parse(itemStr)["ad"];
-        // const title = itemObj["title_text"]?.tx;
-        // const text2 = itemObj["hs2_cta_text"]?.tx || '';
         const title = itemObj["hs2_title_text"]?.tx;
-        const jsImageL = itemObj["image_fullscreen_001_landscape"];
-        const jsImageP = itemObj["image_fullscreen_001_portrait"];
-        return { text: title, urlL: jsImageL.u, urlP: jsImageP.u };
+        const jsImageL = itemObj["image_fullscreen_001_landscape"].u;
+        const jsImageP = itemObj["image_fullscreen_001_portrait"].u;
+        return { text: title, urlL: jsImageL, urlP: jsImageP };
     }
 });
 
@@ -1140,14 +1138,14 @@ const fetchGetJSON = async (url: string) => {
     }
 }
 
-// const ACCU_KEY = "jCLPUDFqHDZV7369qCF3gfHGutmpcVKG";
-// const ACCU_KEY = "KrnJm3pGAtha40EFim82KLEqvaikzMeS";
-const ACCU_KEY = "CH6KCbK2WxAuo6F5yiClbGPpKZBZHtD8";
+const ACCU_KEY_1 = "CH6KCbK2WxAuo6F5yiClbGPpKZBZHtD8";
+const ACCU_KEY_2 = "W8x2s0p4lDJOZ1tnxS9sBtKsmhIVXUuq";
+const ACCU_KEY_3 = "MVZyUgJaeKuGQ3JWFmq1LIq3QruAduZN";
 
 export const getCurrentWeatherData = (async (key: string) => {
     "use server";
     const currentWeatherURI = 'https://dataservice.accuweather.com/currentconditions/v1/'
-    const querry = `${key}?apikey=${ACCU_KEY}&details=true`
+    const querry = `${key}?apikey=${ACCU_KEY_1}&details=true`
     const response = await fetch(currentWeatherURI + querry)
     if (response.status !== 200) return undefined;
     else {
@@ -1171,7 +1169,7 @@ export const getCurrentWeatherData = (async (key: string) => {
 export const getHourlyWeatherData = (async (key: string) => {
     "use server";
     const hourlyWeatherURI = 'http://dataservice.accuweather.com/forecasts/v1/hourly/12hour/'
-    const querry = `${key}?apikey=${ACCU_KEY}&metric=true`
+    const querry = `${key}?apikey=${ACCU_KEY_2}&metric=true`
     const response = await fetch(hourlyWeatherURI + querry)
     if (response.status !== 200) return undefined;
     const data = await response.json();
@@ -1187,7 +1185,7 @@ export const getHourlyWeatherData = (async (key: string) => {
 export const getTodayWeatherData = (async (key: string) => {
     "use server";
     const todayWeatherURI = 'http://dataservice.accuweather.com/forecasts/v1/daily/1day/'
-    const querry = `${key}?apikey=${ACCU_KEY}&details=true`
+    const querry = `${key}?apikey=${ACCU_KEY_3}&details=true`
     const response = await fetch(todayWeatherURI + querry)
     if (response.status !== 200) return undefined;
     const data = await response.json();

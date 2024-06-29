@@ -8,14 +8,13 @@
     display: flex;
     justify-content: center;
     background-color: $color-black;
-    background-size: 100%;
-    background-position: center;
+    background-size: cover;
     position: relative;
 
     .backgroundText {
         position: absolute;
-        top: 30px;
-        left: 30px;
+        top: 60px;
+        left: 60px;
         @include font("basier", 12px, $color-white, 500, normal, 18px);
         width: 300px;
         text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);

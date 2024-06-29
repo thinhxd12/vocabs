@@ -547,9 +547,10 @@ const Weather: Component<{}> = (props) => {
                 </span>
               </div>
               <div class={styles.weatherInfo}>
-                <small>UV</small>
                 <span>
-                  {current()?.uvIndex} <small>({current()?.uvIndexText})</small>
+                  <small>UV </small>
+                  {current()?.uvIndex}
+                  <small> ({current()?.uvIndexText})</small>
                 </span>
               </div>
             </div>
