@@ -178,6 +178,7 @@
 
         .bottomWeatherSummary {
             text-align: right;
+            padding-right: 6px;
         }
 
         .bottomWeather {
@@ -188,6 +189,7 @@
             top: 0;
             left: 0;
             height: 21px;
+            padding-right: 5px;
 
             p {
                 @include font('SFProDisplay', 12px, #7c7b7a, 500, normal, 6px);
