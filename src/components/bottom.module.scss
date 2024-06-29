@@ -177,16 +177,17 @@
         min-width: 90px;
 
         .bottomWeatherSummary {
-            padding-left: 12px;
+            text-align: right;
         }
 
         .bottomWeather {
-            @include flex-center;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
             position: absolute;
             top: 0;
             left: 0;
             height: 21px;
-            padding-left: 24px;
 
             p {
                 @include font('SFProDisplay', 12px, #7c7b7a, 500, normal, 6px);
