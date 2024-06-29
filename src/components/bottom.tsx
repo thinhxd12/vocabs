@@ -274,10 +274,10 @@ const Bottom: Component<{}> = () => {
           <Show
             when={current()}
             fallback={
-              <>
+              <div class={styles.bottomBtn3Content}>
                 <small>God from the machine</small>
                 <span>Deus ex machina</span>
-              </>
+              </div>
             }
           >
             <span class={styles.bottomWeather}>
