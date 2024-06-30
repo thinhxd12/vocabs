@@ -13,7 +13,7 @@
 
     .backgroundText {
         position: absolute;
-        top: 60px;
+        top: 30px;
         left: 60px;
         @include font("basier", 12px, $color-white, 500, normal, 18px);
         width: 300px;

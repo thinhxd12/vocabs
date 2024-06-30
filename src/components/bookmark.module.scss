@@ -44,6 +44,7 @@
     .bookmarkBody {
         padding: 6px 9px 18px;
         min-height: 100%;
+        position: relative;
 
         .bookmarkPassage::first-letter {
             @include font("NYTCheltenham", 90px, $color-white, normal, normal, 100px);
@@ -121,7 +122,7 @@
         left: 0;
         top: 0;
         height: 100%;
-        width: 45px;
+        width: 60px;
         border: 0;
         outline: 0;
         cursor: pointer;
@@ -130,7 +131,7 @@
         z-index: 810;
 
         &:hover {
-            background: linear-gradient(90deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.15) 60%, transparent 100%);
         }
     }
 
@@ -139,7 +140,7 @@
         right: 0;
         top: 0;
         height: 100%;
-        width: 45px;
+        width: 60px;
         border: 0;
         outline: 0;
         cursor: pointer;
@@ -148,7 +149,7 @@
         z-index: 810;
 
         &:hover {
-            background: linear-gradient(270deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 50%, transparent 100%);
+            background: linear-gradient(to left, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.15) 60%, transparent 100%);
         }
     }
 
