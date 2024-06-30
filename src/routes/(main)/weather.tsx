@@ -33,6 +33,7 @@ import {
 } from "solid-icons/fa";
 import { WEATHER_GEOS, WMOCODE } from "~/utils";
 import { format } from "date-fns";
+import { setMainStore } from "~/lib/mystore";
 
 let canvas: HTMLCanvasElement;
 let audio: HTMLAudioElement;
@@ -79,6 +80,7 @@ const Weather: Component<{}> = (props) => {
     Chart.register(Title, Tooltip, Legend, Colors, Filler);
     loadTextures();
     audio.volume = 0.5;
+    current.state === "ready" && setMainStore("bottomWeather", current()!);
   });
 
   createEffect(async () => {

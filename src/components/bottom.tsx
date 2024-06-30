@@ -52,7 +52,7 @@ const Bottom: Component<{}> = () => {
     ]);
     setMainStore("totalMemories", data[0]!);
     setListStore("listToday", data[1]!);
-    setCurrent(data[2]!);
+    setMainStore("bottomWeather", data[2]!);
   });
 
   // -------------------LOGOUT-------------------- //
@@ -199,21 +199,13 @@ const Bottom: Component<{}> = () => {
     setShowMenu(false);
   };
 
-  const [current, setCurrent] = createSignal<CurrentlyWeatherType | undefined>(
-    undefined
-  );
-
   const weatherInterval = setInterval(async () => {
     const data = await getCurrentWeatherData({
       lat: WEATHER_GEOS[0].lat,
       lon: WEATHER_GEOS[0].lon,
     });
-    if (data) setCurrent(data);
-  }, 1000 * 15 * 60);
-
-  onCleanup(() => {
-    clearInterval(weatherInterval);
-  });
+    if (data) setMainStore("bottomWeather", data);
+  }, 1000 * 12 * 60);
 
   return (
     <div class={styles.bottom}>
@@ -278,7 +270,7 @@ const Bottom: Component<{}> = () => {
           class={styles.bottomBtn3}
         >
           <Show
-            when={current()}
+            when={mainStore.bottomWeather}
             fallback={
               <div class={styles.bottomBtn3Content}>
                 <small>God from the machine</small>
@@ -290,20 +282,23 @@ const Bottom: Component<{}> = () => {
               <img
                 class={styles.weatherImg}
                 src={
-                  WMOCODE[String(current()!.icon) as keyof typeof WMOCODE][
-                    current()!.isDayTime ? "day" : "night"
-                  ].image
+                  WMOCODE[
+                    String(
+                      mainStore.bottomWeather!.icon
+                    ) as keyof typeof WMOCODE
+                  ][mainStore.bottomWeather!.isDayTime ? "day" : "night"].image
                 }
                 width={33}
                 alt="bottomWeatherIcon"
               />
-              <p>{Math.round(current()!.temperature)}°</p>
+              <p>{Math.round(mainStore.bottomWeather!.temperature)}°</p>
             </span>
             <span class={styles.bottomWeatherSummary}>
               {
-                WMOCODE[String(current()!.icon) as keyof typeof WMOCODE][
-                  current()!.isDayTime ? "day" : "night"
-                ].description
+                WMOCODE[
+                  String(mainStore.bottomWeather!.icon) as keyof typeof WMOCODE
+                ][mainStore.bottomWeather!.isDayTime ? "day" : "night"]
+                  .description
               }
             </span>
           </Show>

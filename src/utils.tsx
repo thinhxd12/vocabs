@@ -62,11 +62,11 @@ export const WMOCODE = {
   },
   "3": {
     day: {
-      description: "Overcast",
+      description: "Mostly Cloudy",
       image: "/images/openmeteo/icons/03d.svg",
     },
     night: {
-      description: "Overcast",
+      description: "Mostly Cloudy",
       image: "/images/openmeteo/icons/03n.svg",
     },
   },
