@@ -28,7 +28,7 @@ import {
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
 import { OcHourglass2 } from "solid-icons/oc";
-import { WEATHER_GEOS, clickOutside } from "~/utils";
+import { WEATHER_GEOS, WMOCODE, clickOutside } from "~/utils";
 import { CurrentlyWeatherType } from "~/types";
 
 let intervalCountdown: NodeJS.Timeout;
@@ -45,7 +45,10 @@ const Bottom: Component<{}> = () => {
     const data = await Promise.all([
       getTotalMemories(),
       getTodayData(todayDate),
-      getCurrentWeatherData(WEATHER_GEOS[0].key),
+      getCurrentWeatherData({
+        lat: WEATHER_GEOS[0].lat,
+        lon: WEATHER_GEOS[0].lon,
+      }),
     ]);
     setMainStore("totalMemories", data[0]!);
     setListStore("listToday", data[1]!);
@@ -201,9 +204,12 @@ const Bottom: Component<{}> = () => {
   );
 
   const weatherInterval = setInterval(async () => {
-    const data = await getCurrentWeatherData(WEATHER_GEOS[0].geo);
+    const data = await getCurrentWeatherData({
+      lat: WEATHER_GEOS[0].lat,
+      lon: WEATHER_GEOS[0].lon,
+    });
     if (data) setCurrent(data);
-  }, 1000 * 30 * 60);
+  }, 1000 * 15 * 60);
 
   onCleanup(() => {
     clearInterval(weatherInterval);
@@ -284,17 +290,21 @@ const Bottom: Component<{}> = () => {
               <img
                 class={styles.weatherImg}
                 src={
-                  "https://www.accuweather.com/images/weathericons/" +
-                  current()?.icon +
-                  ".svg"
+                  WMOCODE[String(current()!.icon) as keyof typeof WMOCODE][
+                    current()!.isDayTime ? "day" : "night"
+                  ].image
                 }
-                height={20}
+                width={33}
                 alt="bottomWeatherIcon"
               />
               <p>{Math.round(current()!.temperature)}°</p>
             </span>
             <span class={styles.bottomWeatherSummary}>
-              {current()!.summary}
+              {
+                WMOCODE[String(current()!.icon) as keyof typeof WMOCODE][
+                  current()!.isDayTime ? "day" : "night"
+                ].description
+              }
             </span>
           </Show>
         </A>

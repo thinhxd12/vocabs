@@ -52,6 +52,7 @@
         .weatherImgDiv {
             @include flex-center;
             cursor: default;
+            margin-top: -6px;
             margin-bottom: 3px;
 
             p {
@@ -110,7 +111,7 @@
         z-index: 99;
         width: 360px;
         position: absolute;
-        top: 245px;
+        top: 170px;
         overflow-x: scroll;
         overflow-y: hidden;
         scroll-snap-type: x mandatory;
@@ -149,7 +150,7 @@
     .weatherChart {
         position: absolute;
         z-index: 3;
-        top: 345px;
+        top: 270px;
         width: 330px;
         margin: 0 15px;
         @include flex-center-column;

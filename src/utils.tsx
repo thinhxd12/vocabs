@@ -33,281 +33,281 @@ export const WMOCODE = {
   "0": {
     day: {
       description: "Sunny",
-      image: "clear-day.svg",
+      image: "/images/openmeteo/icons/01d.svg",
     },
     night: {
       description: "Clear",
-      image: "clear-night.svg",
+      image: "/images/openmeteo/icons/01n.svg",
     },
   },
   "1": {
     day: {
       description: "Mainly Sunny",
-      image: "clear-day.svg",
+      image: "/images/openmeteo/icons/01d.svg",
     },
     night: {
       description: "Mainly Clear",
-      image: "clear-night.svg",
+      image: "/images/openmeteo/icons/01n.svg",
     },
   },
   "2": {
     day: {
       description: "Partly Cloudy",
-      image: "partly-cloudy-day.svg",
+      image: "/images/openmeteo/icons/02d.svg",
     },
     night: {
       description: "Partly Cloudy",
-      image: "partly-cloudy-night.svg",
+      image: "/images/openmeteo/icons/02n.svg",
     },
   },
   "3": {
     day: {
-      description: "Mostly Cloudy",
-      image: "overcast-day.svg",
+      description: "Overcast",
+      image: "/images/openmeteo/icons/03d.svg",
     },
     night: {
-      description: "Mostly Cloudy",
-      image: "overcast-night.svg",
+      description: "Overcast",
+      image: "/images/openmeteo/icons/03n.svg",
     },
   },
   "45": {
     day: {
       description: "Foggy",
-      image: "fog-day.svg",
+      image: "/images/openmeteo/icons/50d.svg",
     },
     night: {
       description: "Foggy",
-      image: "fog-night.svg",
+      image: "/images/openmeteo/icons/50n.svg",
     },
   },
   "48": {
     day: {
       description: "Rime Fog",
-      image: "fog-day.svg",
+      image: "/images/openmeteo/icons/50d.svg",
     },
     night: {
       description: "Rime Fog",
-      image: "fog-night.svg",
+      image: "/images/openmeteo/icons/50n.svg",
     },
   },
   "51": {
     day: {
       description: "Light Drizzle",
-      image: "partly-cloudy-day-drizzle.svg",
+      image: "/images/openmeteo/icons/09d.svg",
     },
     night: {
       description: "Light Drizzle",
-      image: "partly-cloudy-night-drizzle.svg",
+      image: "/images/openmeteo/icons/09n.svg",
     },
   },
   "53": {
     day: {
       description: "Drizzle",
-      image: "drizzle.svg",
+      image: "/images/openmeteo/icons/09d.svg",
     },
     night: {
       description: "Drizzle",
-      image: "drizzle.svg",
+      image: "/images/openmeteo/icons/09n.svg",
     },
   },
   "55": {
     day: {
       description: "Heavy Drizzle",
-      image: "overcast-drizzle.svg",
+      image: "/images/openmeteo/icons/09d.svg",
     },
     night: {
       description: "Heavy Drizzle",
-      image: "overcast-drizzle.svg",
+      image: "/images/openmeteo/icons/09n.svg",
     },
   },
   "56": {
     day: {
       description: "Light Freezing Drizzle",
-      image: "partly-cloudy-day-sleet.svg",
+      image: "/images/openmeteo/icons/09d.svg",
     },
     night: {
       description: "Light Freezing Drizzle",
-      image: "partly-cloudy-night-sleet.svg",
+      image: "/images/openmeteo/icons/09n.svg",
     },
   },
   "57": {
     day: {
       description: "Freezing Drizzle",
-      image: "sleet.svg",
+      image: "/images/openmeteo/icons/09d.svg",
     },
     night: {
       description: "Freezing Drizzle",
-      image: "sleet.svg",
+      image: "/images/openmeteo/icons/09n.svg",
     },
   },
   "61": {
     day: {
       description: "Light Rain",
-      image: "partly-cloudy-day-rain.svg",
+      image: "/images/openmeteo/icons/10d.svg",
     },
     night: {
       description: "Light Rain",
-      image: "partly-cloudy-night-rain.svg",
+      image: "/images/openmeteo/icons/10n.svg",
     },
   },
   "63": {
     day: {
-      description: "Moderate Rain",
-      image: "rain.svg",
+      description: "Rain",
+      image: "/images/openmeteo/icons/10d.svg",
     },
     night: {
-      description: "Moderate Rain",
-      image: "rain.svg",
+      description: "Rain",
+      image: "/images/openmeteo/icons/10n.svg",
     },
   },
   "65": {
     day: {
       description: "Heavy Rain",
-      image: "overcast-rain.svg",
+      image: "/images/openmeteo/icons/10d.svg",
     },
     night: {
       description: "Heavy Rain",
-      image: "overcast-rain.svg",
+      image: "/images/openmeteo/icons/10n.svg",
     },
   },
   "66": {
     day: {
       description: "Light Freezing Rain",
-      image: "partly-cloudy-day-sleet.svg",
+      image: "/images/openmeteo/icons/10d.svg",
     },
     night: {
       description: "Light Freezing Rain",
-      image: "partly-cloudy-night-sleet.svg",
+      image: "/images/openmeteo/icons/10n.svg",
     },
   },
   "67": {
     day: {
       description: "Freezing Rain",
-      image: "sleet.svg",
+      image: "/images/openmeteo/icons/10d.svg",
     },
     night: {
       description: "Freezing Rain",
-      image: "sleet.svg",
+      image: "/images/openmeteo/icons/10n.svg",
     },
   },
   "71": {
     day: {
       description: "Light Snow",
-      image: "partly-cloudy-day-snow.svg",
+      image: "/images/openmeteo/icons/13d.svg",
     },
     night: {
       description: "Light Snow",
-      image: "partly-cloudy-night-snow.svg",
+      image: "/images/openmeteo/icons/13n.svg",
     },
   },
   "73": {
     day: {
       description: "Snow",
-      image: "snow.svg",
+      image: "/images/openmeteo/icons/13d.svg",
     },
     night: {
       description: "Snow",
-      image: "snow.svg",
+      image: "/images/openmeteo/icons/13n.svg",
     },
   },
   "75": {
     day: {
       description: "Heavy Snow",
-      image: "overcast-snow.svg",
+      image: "/images/openmeteo/icons/13d.svg",
     },
     night: {
       description: "Heavy Snow",
-      image: "overcast-snow.svg",
+      image: "/images/openmeteo/icons/13n.svg",
     },
   },
   "77": {
     day: {
       description: "Snow Grains",
-      image: "snow.svg",
+      image: "/images/openmeteo/icons/13d.svg",
     },
     night: {
       description: "Snow Grains",
-      image: "snow.svg",
+      image: "/images/openmeteo/icons/13n.svg",
     },
   },
   "80": {
     day: {
       description: "Light Showers",
-      image: "partly-cloudy-day-drizzle.svg",
+      image: "/images/openmeteo/icons/09d.svg",
     },
     night: {
       description: "Light Showers",
-      image: "partly-cloudy-night-drizzle.svg",
+      image: "/images/openmeteo/icons/09n.svg",
     },
   },
   "81": {
     day: {
       description: "Showers",
-      image: "drizzle.svg",
+      image: "/images/openmeteo/icons/09d.svg",
     },
     night: {
       description: "Showers",
-      image: "drizzle.svg",
+      image: "/images/openmeteo/icons/09n.svg",
     },
   },
   "82": {
     day: {
       description: "Heavy Showers",
-      image: "overcast-drizzle.svg",
+      image: "/images/openmeteo/icons/09d.svg",
     },
     night: {
       description: "Heavy Showers",
-      image: "overcast-drizzle.svg",
+      image: "/images/openmeteo/icons/09n.svg",
     },
   },
   "85": {
     day: {
       description: "Light Snow Showers",
-      image: "partly-cloudy-day-sleet.svg",
+      image: "/images/openmeteo/icons/13d.svg",
     },
     night: {
       description: "Light Snow Showers",
-      image: "partly-cloudy-night-sleet.svg",
+      image: "/images/openmeteo/icons/13n.svg",
     },
   },
   "86": {
     day: {
       description: "Snow Showers",
-      image: "sleet.svg",
+      image: "/images/openmeteo/icons/13d.svg",
     },
     night: {
       description: "Snow Showers",
-      image: "sleet.svg",
+      image: "/images/openmeteo/icons/13n.svg",
     },
   },
   "95": {
     day: {
       description: "Thunderstorm",
-      image: "thunderstorms-day-rain.svg",
+      image: "/images/openmeteo/icons/11d.svg",
     },
     night: {
       description: "Thunderstorm",
-      image: "thunderstorms-night-rain.svg",
+      image: "/images/openmeteo/icons/11n.svg",
     },
   },
   "96": {
     day: {
       description: "Light Thunderstorms With Hail",
-      image: "thunderstorms-day-extreme-rain.svg",
+      image: "/images/openmeteo/icons/11d.svg",
     },
     night: {
       description: "Light Thunderstorms With Hail",
-      image: "thunderstorms-night-extreme-rain.svg",
+      image: "/images/openmeteo/icons/11n.svg",
     },
   },
   "99": {
     day: {
       description: "Thunderstorm With Hail",
-      image: "thunderstorms-day-extreme-rain.svg",
+      image: "/images/openmeteo/icons/11d.svg",
     },
     night: {
       description: "Thunderstorm With Hail",
-      image: "thunderstorms-night-extreme-rain.svg",
+      image: "/images/openmeteo/icons/11n.svg",
     },
   },
 };
@@ -315,21 +315,18 @@ export const WMOCODE = {
 export const WEATHER_GEOS: WeatherGeoType[] = [
   {
     name: "Thủ Thừa",
-    geo: "long-an/thu-thua/binh-thanh-thu-thua",
-    lat: "10.588468,106.400650",
-    key: "354472",
+    lat: 10.588468,
+    lon: 106.40065,
   },
   {
     name: "Cần Thơ",
-    geo: "can-tho/ninh-kieu",
-    lat: "10.0364216,105.7875219",
-    key: "1-352508_1_al",
+    lat: 10.0364216,
+    lon: 105.7875219,
   },
   {
     name: "Tokyo",
-    geo: "",
-    lat: "35.6821936,139.762221",
-    key: "226396",
+    lat: 35.652832,
+    lon: 139.839478,
   },
 ];
 

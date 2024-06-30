@@ -21,7 +21,6 @@ import {
   getCurrentWeatherData,
   getHourlyWeatherData,
   getMinutelyWeatherData,
-  getTodayWeatherData,
   makePrediction,
 } from "~/lib/api";
 import styles from "./weather.module.scss";
@@ -32,8 +31,7 @@ import {
   FaSolidTemperatureLow,
   FaSolidWind,
 } from "solid-icons/fa";
-import { TbUvIndex } from "solid-icons/tb";
-import { WEATHER_GEOS } from "~/utils";
+import { WEATHER_GEOS, WMOCODE } from "~/utils";
 import { format } from "date-fns";
 
 let canvas: HTMLCanvasElement;
@@ -45,8 +43,10 @@ const Weather: Component<{}> = (props) => {
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
-  const [geo, setGeo] = createSignal<string>(WEATHER_GEOS[0].key);
-  const [lat, setLat] = createSignal<string>(WEATHER_GEOS[0].lat);
+  const [geo, setGeo] = createSignal<{ lat: number; lon: number }>({
+    lat: WEATHER_GEOS[0].lat,
+    lon: WEATHER_GEOS[0].lon,
+  });
   const [geoTitle, setGeoTitle] = createSignal<string>(WEATHER_GEOS[0].name);
   const [chartData, setChartData] = createSignal<{
     labels: any[];
@@ -59,22 +59,19 @@ const Weather: Component<{}> = (props) => {
   const [hourly, { refetch: refetchHourly, mutate: mutateHourly }] =
     createResource(geo, getHourlyWeatherData);
 
-  const [today, { refetch: refetchToday, mutate: mutateToday }] =
-    createResource(geo, getTodayWeatherData);
-
   const [minutely, { refetch: refetchMinutely, mutate: mutateMinutely }] =
-    createResource(lat, getMinutelyWeatherData);
+    createResource(geo, getMinutelyWeatherData);
 
   const [audioSrc, setAudioSrc] = createSignal<string>("");
   const [prediction, setPrediction] = createSignal<string>("");
 
   const handleRenderWeather = (num: string) => {
-    setGeo(WEATHER_GEOS[Number(num)].key);
-    setLat(WEATHER_GEOS[Number(num)].lat);
+    setGeo({
+      lat: WEATHER_GEOS[Number(num)].lat,
+      lon: WEATHER_GEOS[Number(num)].lon,
+    });
     setGeoTitle(WEATHER_GEOS[Number(num)].name);
     refetchCurrent();
-    refetchHourly();
-    refetchToday();
     refetchMinutely();
   };
 
@@ -413,41 +410,42 @@ const Weather: Component<{}> = (props) => {
     let weatherType = "";
 
     switch (current()!.icon) {
-      case 12:
-      case 13:
-      case 14:
-      case 39:
-      case 40:
+      case 51:
+      case 56:
+      case 61:
+      case 66:
+      case 80:
         setAudioSrc("/sounds/weather/rain_light_2.m4a");
         weatherType = "drizzle";
         break;
-      case 18:
-      case 26:
-      case 29:
+      case 53:
+      case 57:
+      case 63:
+      case 81:
         setAudioSrc("/sounds/weather/rain_light.m4a");
         weatherType = "rain";
         break;
-      case 15:
-      case 16:
-      case 17:
-      case 41:
-      case 42:
+      case 55:
+      case 65:
+      case 67:
+      case 82:
+      case 95:
+      case 96:
+      case 99:
         setAudioSrc("/sounds/weather/thunderstorm.m4a");
         weatherType = "storm";
         break;
+      case 0:
       case 1:
-      case 2:
-        setAudioSrc("/sounds/weather/forest.m4a");
+        current()?.isDayTime
+          ? setAudioSrc("/sounds/weather/forest.m4a")
+          : setAudioSrc("/sounds/weather/night.m4a");
         weatherType = "sunny";
         break;
-      case 33:
-      case 34:
-        setAudioSrc("/sounds/weather/night.m4a");
-        weatherType = "sunny";
-        break;
-      case 22:
-      case 23:
-      case 44:
+      case 71:
+      case 73:
+      case 75:
+      case 77:
         setAudioSrc("/sounds/weather/snow.m4a");
         weatherType = "sunny";
         break;
@@ -456,6 +454,8 @@ const Weather: Component<{}> = (props) => {
         weatherType = "sunny";
         break;
     }
+
+    audio.play();
 
     raindrops.options = {
       ...defaultOptions,
@@ -512,36 +512,43 @@ const Weather: Component<{}> = (props) => {
               {(item, index) => <option value={index}>{item().name}</option>}
             </Index>
           </select>
+
           <Show when={current()}>
             <p class={styles.weatherTemperature}>
               {Math.round(current()?.temperature || 0)}°
             </p>
             <div class={styles.weatherImgDiv}>
-              <p>{current()?.summary}</p>
+              <p>
+                {
+                  WMOCODE[String(current()!.icon) as keyof typeof WMOCODE][
+                    current()!.isDayTime ? "day" : "night"
+                  ].description
+                }
+              </p>
               <img
                 class={styles.weatherImg}
                 src={
-                  "https://www.accuweather.com/images/weathericons/" +
-                  current()?.icon +
-                  ".svg"
+                  WMOCODE[String(current()!.icon) as keyof typeof WMOCODE][
+                    current()!.isDayTime ? "day" : "night"
+                  ].image
                 }
                 width={30}
               />
             </div>
             <div class={styles.weatherInfoDiv}>
               <div class={styles.weatherInfo}>
-                <FaSolidTemperatureLow size={10} />
+                <FaSolidTemperatureLow size={9} />
                 <span>{Math.round(current()?.apparentTemperature || 0)}°</span>
               </div>
               <div class={styles.weatherInfo}>
-                <FaSolidDroplet size={10} />
+                <FaSolidDroplet size={9} />
                 <span>
                   {current()?.humidity}
                   <small>%</small>
                 </span>
               </div>
               <div class={styles.weatherInfo}>
-                <FaSolidWind size={10} />
+                <FaSolidWind size={9} />
                 <span>
                   {Math.round(current()?.windSpeed || 0)} <small>km/h</small>
                 </span>
@@ -550,41 +557,13 @@ const Weather: Component<{}> = (props) => {
                 <span>
                   <small>UV </small>
                   {current()?.uvIndex}
-                  <small> ({current()?.uvIndexText})</small>
                 </span>
-              </div>
-            </div>
-          </Show>
-
-          <Show when={today()}>
-            <div class={styles.weatherToday}>
-              <div class={styles.weatherTodayItem}>
-                <img
-                  src={
-                    "https://www.accuweather.com/images/weathericons/" +
-                    today()!.day.icon +
-                    ".svg"
-                  }
-                  height={36}
-                />
-                <span>{today()!.day.phrase}</span>
-              </div>
-              <div class={styles.weatherTodayItem}>
-                <img
-                  src={
-                    "https://www.accuweather.com/images/weathericons/" +
-                    today()!.night.icon +
-                    ".svg"
-                  }
-                  height={36}
-                />
-                <span>{today()!.night.phrase}</span>
               </div>
             </div>
           </Show>
         </div>
 
-        <Show when={hourly()}>
+        <Suspense fallback={<div class={styles.weatherHourly}>...</div>}>
           <div class={styles.weatherHourly} ref={refEl}>
             <Index each={hourly()}>
               {(data, index) => {
@@ -604,9 +583,9 @@ const Weather: Component<{}> = (props) => {
                     <img
                       class={styles.weatherHourlyIcon}
                       src={
-                        "https://www.accuweather.com/images/weathericons/" +
-                        data()!.icon +
-                        ".svg"
+                        WMOCODE[String(data()!.icon) as keyof typeof WMOCODE][
+                          data()!.isDayTime ? "day" : "night"
+                        ].image
                       }
                       height={36}
                     />
@@ -618,7 +597,7 @@ const Weather: Component<{}> = (props) => {
               }}
             </Index>
           </div>
-        </Show>
+        </Suspense>
 
         <Suspense fallback={<div class={styles.weatherChartLoading}>...</div>}>
           <div class={styles.weatherChart}>
