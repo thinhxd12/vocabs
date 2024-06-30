@@ -1138,7 +1138,7 @@ const fetchGetJSON = async (url: string) => {
     }
 }
 
-const ACCU_KEY_1 = "CH6KCbK2WxAuo6F5yiClbGPpKZBZHtD8";
+const ACCU_KEY_1 = "jCLPUDFqHDZV7369qCF3gfHGutmpcVKG";
 const ACCU_KEY_2 = "6IqbT9qUObQLZAN9VHsI5Maq60g7fTLp";
 const ACCU_KEY_3 = "MVZyUgJaeKuGQ3JWFmq1LIq3QruAduZN";
 
