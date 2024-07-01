@@ -288,7 +288,7 @@ const Bottom: Component<{}> = () => {
                     ) as keyof typeof WMOCODE
                   ][mainStore.bottomWeather!.isDayTime ? "day" : "night"].image
                 }
-                width={27}
+                height={24}
                 alt="bottomWeatherIcon"
               />
               <p>{Math.round(mainStore.bottomWeather!.temperature)}°</p>
