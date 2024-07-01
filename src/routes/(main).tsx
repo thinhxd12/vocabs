@@ -132,65 +132,66 @@ export default function Main(props: RouteSectionProps) {
 
   return (
     <div class={styles.main} tabIndex={0} use:searchWord={null}>
-      <div class={styles.mainButtons}>
-        <button
-          aria-label="Layout"
-          onClick={() => setMainStore("mainToggle", !mainStore.mainToggle)}
-          class={styles.mainButton}
-        >
-          <Show
-            when={mainStore.mainToggle}
-            fallback={<VsLayoutCentered size={17} />}
-          >
-            <VsLayoutActivitybarRight size={17} />
-          </Show>
-        </button>
-
-        <button
-          onClick={handleGetNextImage}
-          class={styles.mainButton}
-          aria-label="Change Image"
-        >
-          <TbRefresh size={17} />
-        </button>
-      </div>
-
       <Show when={mainStore.mainToggle}>
-        <div class={styles.mainLeft}>
-          <img class={styles.mainLeftImageBlurred} src={imageObj.image} />
-          <Show
-            when={mainStore.showBookmark}
-            fallback={<img class={styles.mainLeftImage} src={imageObj.image} />}
-          >
+        <Show
+          when={!mainStore.showBookmark}
+          fallback={
             <Bookmark onClose={() => setMainStore("showBookmark", false)} />
-          </Show>
-        </div>
+          }
+        >
+          <div class={styles.mainLeft}>
+            <img class={styles.mainLeftImageBlurred} src={imageObj.image} />
+            <img class={styles.mainLeftImage} src={imageObj.image} />
+
+            <div class={styles.mainButtons}>
+              <button
+                aria-label="Layout"
+                onClick={() =>
+                  setMainStore("mainToggle", !mainStore.mainToggle)
+                }
+                class={styles.mainButton}
+              >
+                <Show
+                  when={mainStore.mainToggle}
+                  fallback={<VsLayoutCentered size={17} />}
+                >
+                  <VsLayoutActivitybarRight size={17} />
+                </Show>
+              </button>
+
+              <button
+                onClick={handleGetNextImage}
+                class={styles.mainButton}
+                aria-label="Change Image"
+              >
+                <TbRefresh size={17} />
+              </button>
+            </div>
+          </div>
+          <div class={styles.mainRight}>
+            <div class={styles.mainRightHeader}>
+              <p class={styles.mainRightDate}>{imageObj.date}</p>
+              <h3 class={styles.mainRightTitle}>{imageObj.title}</h3>
+              <p class={styles.mainRightAttribute}>{imageObj.attr}</p>
+              <div class={styles.mainRightAuthors}>
+                <img class={styles.mainRightImage} src={imageObj.authorImg} />
+                <div class={styles.mainRightAuthor}>
+                  <p class={styles.mainRightName}>{imageObj.authorName}</p>
+                  <p class={styles.mainRightYear}>{imageObj.authorYear}</p>
+                </div>
+              </div>
+            </div>
+            <div class={styles.mainRightBody} innerHTML={imageObj.content} />
+          </div>
+        </Show>
       </Show>
 
       <div class={styles.mainCenter}>
-        <div class={styles.mainCenterContent}>
-          <Suspense>{props.children}</Suspense>
-        </div>
+        <Suspense fallback={<div class={styles.mainCenterContent}></div>}>
+          <div class={styles.mainCenterContent}>{props.children}</div>
+        </Suspense>
         <Bottom />
       </div>
-
-      <Show when={mainStore.mainToggle}>
-        <div class={styles.mainRight}>
-          <div class={styles.mainRightHeader}>
-            <p class={styles.mainRightDate}>{imageObj.date}</p>
-            <h3 class={styles.mainRightTitle}>{imageObj.title}</h3>
-            <p class={styles.mainRightAttribute}>{imageObj.attr}</p>
-            <div class={styles.mainRightAuthors}>
-              <img class={styles.mainRightImage} src={imageObj.authorImg} />
-              <div class={styles.mainRightAuthor}>
-                <p class={styles.mainRightName}>{imageObj.authorName}</p>
-                <p class={styles.mainRightYear}>{imageObj.authorYear}</p>
-              </div>
-            </div>
-          </div>
-          <div class={styles.mainRightBody} innerHTML={imageObj.content} />
-        </div>
-      </Show>
     </div>
   );
 }

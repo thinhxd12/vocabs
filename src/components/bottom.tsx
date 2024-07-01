@@ -280,7 +280,7 @@ const Bottom: Component<{}> = () => {
           >
             <span class={styles.bottomWeather}>
               <img
-                class={styles.weatherImg}
+                class={styles.bottomWeatherImg}
                 src={
                   WMOCODE[
                     String(
@@ -288,7 +288,7 @@ const Bottom: Component<{}> = () => {
                     ) as keyof typeof WMOCODE
                   ][mainStore.bottomWeather!.isDayTime ? "day" : "night"].image
                 }
-                width={33}
+                width={27}
                 alt="bottomWeatherIcon"
               />
               <p>{Math.round(mainStore.bottomWeather!.temperature)}°</p>

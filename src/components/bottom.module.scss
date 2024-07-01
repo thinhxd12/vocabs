@@ -2,10 +2,12 @@
 
 .bottom {
     position: relative;
+    height: 34px;
+    width: 360px;
 
     .bottomBar {
-        height: 34px;
-        width: 360px;
+        height: 100%;
+        width: 100%;
         border-top: 1px solid $color-border;
         background-color: $color-background-1;
         @include flex;
@@ -14,36 +16,35 @@
     }
 
     .bottomIndex {
-        width: 6px;
+        width: 9px;
         height: 33px;
         background: $color-border;
         display: flex;
         flex-direction: column;
         align-items: center;
+        cursor: default;
 
         .bottomIndexNums {
             @include flex-center-column;
-            width: 6px;
+            width: 100%;
             height: 20px;
 
             span {
                 text-align: center;
-                @include font("basier", 9px, $color-black, 600, normal, 9px);
-                width: 6px;
-                height: 10px;
+                @include font("Roslindale", 9px, $color-black, 600, normal, 10px);
                 display: block;
             }
         }
 
         .bottomIndexDay {
-            width: 6px;
+            width: 100%;
             height: 13px;
             background-color: $color-black;
             @include flex-center;
 
             span {
-                @include font("basier", 7px, #575757, 600, normal, 6px);
-                height: 6px;
+                @include font("basier", 9px, #575757, 600, normal, 9px);
+                padding-top: 2px;
                 transform: rotateZ(-90deg);
             }
 
@@ -156,8 +157,8 @@
 
     .bottomBtn1 {
         @extend .bottomBtn;
-        width: 84px;
-        min-width: 84px;
+        width: 81px;
+        min-width: 81px;
     }
 
     .bottomBtn2 {
@@ -190,12 +191,11 @@
             left: 0;
             height: 21px;
             padding-right: 5px;
-            padding-top: 1px;
+            padding-top: 9px;
 
             p {
-                @include font('SFProDisplay', 11px, $color-white, 400, normal, 11px);
-                padding: 4px 0 0 0px;
-                margin-left: -2px;
+                @include font('SFProDisplay', 11px, #7c7b7a, 400, normal, 11px);
+                padding: 3px 0 0 1px;
             }
         }
 

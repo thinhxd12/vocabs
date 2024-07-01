@@ -9,7 +9,7 @@
     outline: 0;
 
     .mainButtons {
-        position: fixed;
+        position: absolute;
         right: 0;
         bottom: 0;
         z-index: 1001;
@@ -24,7 +24,7 @@
             transition: all 0.2s;
             @include font(sans-serif, 14px, $color-white, 700, normal, 16px);
             opacity: 0.12;
-            margin: 1px;
+            margin-left: 2px;
 
             &:hover {
                 opacity: 1;
@@ -43,7 +43,6 @@
         flex-grow: 1;
         position: relative;
         @include flex-center;
-        border-right: 1px solid $color-border;
 
         .mainLeftImage {
             margin: 3vh 0 7vh;
@@ -73,7 +72,8 @@
         padding: 9px 9px 9px 15px;
         background: #19191c;
         background: $color-calendar-black;
-        border-left: 1px solid $color-border;
+        position: relative;
+        z-index: 999;
 
         .mainRightHeader {
             max-height: 30vh;
@@ -112,7 +112,6 @@
                 .mainRightImage {
                     width: 45px;
                     height: 45px;
-                    border-radius: 6px;
                     object-fit: fill;
                     margin-right: 6px;
                 }
@@ -166,6 +165,7 @@
         .mainCenterContent {
             width: 360px;
             height: calc(-34px + 100vh);
+            background: $color-black;
         }
     }
 }

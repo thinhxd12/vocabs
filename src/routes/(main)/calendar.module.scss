@@ -189,9 +189,13 @@
                 color: $color-red-1;
             }
 
-            .dateTimeIndex {
+            .dateTextThisMonth~.dateTimeIndex {
                 color: $color-red-1;
                 opacity: 0.6;
+            }
+
+            .dateText~.dateTimeIndex {
+                color: $color-calendar-text-2;
             }
 
             .dateTimeIndexDot {
