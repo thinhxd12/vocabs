@@ -424,7 +424,6 @@ const Bottom: Component<{}> = () => {
               <button
                 class={buttons.buttonMenu}
                 onClick={() => {
-                  setMainStore("showBookmark", true);
                   setMainStore("mainToggle", true);
                   setShowMenu(false);
                 }}

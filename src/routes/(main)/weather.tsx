@@ -539,18 +539,18 @@ const Weather: Component<{}> = (props) => {
             </div>
             <div class={styles.weatherInfoDiv}>
               <div class={styles.weatherInfo}>
-                <FaSolidTemperatureLow size={9} />
+                <FaSolidTemperatureLow size={10} />
                 <span>{Math.round(current()?.apparentTemperature || 0)}°</span>
               </div>
               <div class={styles.weatherInfo}>
-                <FaSolidDroplet size={9} />
+                <FaSolidDroplet size={10} />
                 <span>
                   {current()?.humidity}
                   <small>%</small>
                 </span>
               </div>
               <div class={styles.weatherInfo}>
-                <FaSolidWind size={9} />
+                <FaSolidWind size={10} />
                 <span>
                   {Math.round(current()?.windSpeed || 0)} <small>km/h</small>
                 </span>

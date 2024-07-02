@@ -11,6 +11,7 @@ import Bottom from "~/components/bottom";
 import { ImageType } from "~/types";
 import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
+import { ImBooks } from "solid-icons/im";
 import { format } from "date-fns";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./main.module.scss";
@@ -158,7 +159,13 @@ export default function Main(props: RouteSectionProps) {
                   <VsLayoutActivitybarRight size={17} />
                 </Show>
               </button>
-
+              <button
+                onClick={() => setMainStore("showBookmark", true)}
+                class={styles.mainButton}
+                aria-label="Open Bookmark"
+              >
+                <ImBooks size={17} />
+              </button>
               <button
                 onClick={handleGetNextImage}
                 class={styles.mainButton}
