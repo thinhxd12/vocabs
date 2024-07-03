@@ -130,11 +130,11 @@ const FlipCard: Component<{}> = (props) => {
                 {renderNumber() >= 100 && (
                   <Motion.div
                     class={styles.numbers}
+                    style={{ width: numbArray()[0] === 1 ? "18px" : "unset" }}
                     animate={{
                       y: -numbArray()[0] * 110,
-                      width: numbArray()[0] === 1 ? "18px" : "unset",
                     }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.5 }}
                   >
                     <div class={styles.number}>0</div>
                     <div class={styles.number}>1</div>
@@ -151,11 +151,11 @@ const FlipCard: Component<{}> = (props) => {
                 {renderNumber() >= 10 && (
                   <Motion.div
                     class={styles.numbers}
+                    style={{ width: numbArray()[1] === 1 ? "18px" : "unset" }}
                     animate={{
                       y: -numbArray()[1] * 110,
-                      width: numbArray()[1] === 1 ? "18px" : "unset",
                     }}
-                    transition={{ duration: 0.3 }}
+                    transition={{ duration: 0.5 }}
                   >
                     <div class={styles.number}>0</div>
                     <div class={styles.number}>1</div>
@@ -171,11 +171,11 @@ const FlipCard: Component<{}> = (props) => {
                 )}
                 <Motion.div
                   class={styles.numbers}
+                  style={{ width: numbArray()[2] === 1 ? "18px" : "unset" }}
                   animate={{
                     y: -numbArray()[2] * 110,
-                    width: numbArray()[2] === 1 ? "18px" : "unset",
                   }}
-                  transition={{ duration: 0.3 }}
+                  transition={{ duration: 0.5 }}
                 >
                   <div class={styles.number}>0</div>
                   <div class={styles.number}>1</div>
