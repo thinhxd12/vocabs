@@ -80,9 +80,7 @@
         }
 
         .numbersContentImg {
-            position: inherit;
             @include flex-center-column;
-            z-index: 9999;
         }
 
         .numbers {
@@ -100,7 +98,7 @@
 
 
 .flipCardNumberContainerFadeOut {
-    animation: fadeOut 0.3s;
+    animation: fadeOut 0.6s ease-in-out;
     opacity: 0;
 }
 

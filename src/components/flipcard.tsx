@@ -107,15 +107,15 @@ const FlipCard: Component<{}> = (props) => {
                 <div class={styles.numbersContentImg}>
                   <Motion.div
                     class={styles.numbers}
-                    initial={{ y: -100 }}
+                    initial={{ y: -85 }}
                     animate={{
-                      y: renderNumber() === 1 ? -100 : 0,
+                      y: renderNumber() === 1 ? -85 : 15,
                     }}
                     transition={{ duration: 0.3 }}
                   >
                     <img
                       src="images/main/cup.webp"
-                      height={100}
+                      height={80}
                       alt="flag"
                       loading="lazy"
                     />
