@@ -1,170 +1,119 @@
 @import "../assets/styles/mixins.scss";
 
-.flipCardLeftContent {
-    height: 100%;
-    overflow: hidden;
-
-    .numberFlipContainer {
-        width: 62px;
-        height: 100%;
-        background-color: $color-white;
-        @include flex-center;
-
-        .numberFlipBackground {
-            width: 54px;
-            height: 100%;
-            background-color: $color-black;
-            position: relative;
-            @include flex-center-column;
-
-            >img {
-                position: absolute;
-                left: 2px;
-                top: 0;
-            }
-
-            .numberFlipContent {
-                width: 46px;
-                height: 46px;
-                z-index: 999;
-            }
-        }
-    }
-
-}
-
-.numbersContentBackground {
+.flipcardTextContainer {
     width: 100%;
-    height: 100%;
-    background-color: $color-white;
-    border-radius: 50%;
-    margin: 0 auto;
-    overflow: hidden;
-}
-
-.numbersContent {
-    @include flex-center;
-}
-
-.numbers {
-    @include flex-column;
-}
-
-.number {
-    @include font('Fraktur', 24px, $color-black, normal, normal, 46px);
-    text-align: center;
-    vertical-align: middle;
-}
-
-.flipImage {
-    width: 46px;
-    height: 46px;
-    background-color: $color-white;
-    border-radius: 50%;
-    margin: 0 auto;
+    height: 28px;
+    position: absolute;
+    top: 4px;
+    left: 0;
+    z-index: 999;
     overflow: hidden;
 
-    .flipImageList {
-        @include flex-center-column;
-
-        .number {
-            line-height: 46px;
-        }
-    }
-}
-
-.flipCardRightContent {
-    height: 186px;
-    width: 294px;
-    overflow: hidden;
-}
-
-.cardContent {
-    width: 300%;
-    height: 100%;
-    transition: all .15s ease;
-    display: flex;
-
-    .cardTop {
+    .flipcardTextContent {
         width: 100%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
+        height: 28*3px;
+        transition: all .15s ease;
 
-        .cardTopClass {
-            @include font("Poppins", 16px, $color-white, 500, normal, 15px);
+        .flipcardText {
             width: 100%;
-            text-align: left;
-            padding-left: 45px;
-            margin: 9px 0 0px;
+            height: 28px;
+            @include font("NYTCheltenham", 18px, $color-vintage-1, 700, normal, 28px);
             text-transform: uppercase;
-        }
-
-        .cardTopText {
-            @include font('Roslindale', 13px, $color-white, 500, normal, 15px);
-            margin-bottom: 4px;
-            position: relative;
-            text-indent: 18px;
-            letter-spacing: 0.6px;
-            width: 100%;
-            text-align: left;
-            padding-left: 27px;
-
-            &::before {
-                content: "";
-                display: inline-block;
-                width: 10px;
-                height: 10px;
-                background: url('/images/main/laurel.webp');
-                background-size: contain;
-                position: absolute;
-                top: 4px;
-                left: 30px;
-            }
-        }
-    }
-
-    .cardBottom {
-        width: 100%;
-        height: 100%;
-        @include flex-center-column;
-
-        .cardBottomPhonetic {
-            @include font("SFProDisplay", 12px, $color-red-3, 600, normal, 12px);
-            padding-bottom: 6px;
-        }
-
-        .cardBottomClass {
-            margin-top: 12px;
-            @include font("SFProDisplay", 9px, $color-white, normal, normal, 12px);
-            margin-bottom: 6px;
-        }
-
-        .cardBottomText {
-            @include font("Roslindale", 32px, $color-white, 600, normal, 24px);
-            letter-spacing: 1.5px;
-            -webkit-font-smoothing: subpixel-antialiased;
-            width: 100%;
-            word-break: break-word;
-            hyphens: auto;
             text-align: center;
         }
 
-        .cardBottomDate {
-            display: none;
+        .flipcardPhonetic {
+            width: 100%;
+            height: 28px;
+            @include font("SFProDisplay", 15px, $color-red-1, 500, normal, 28px);
+            text-align: center;
+
+            small {
+                font-size: 9px;
+                margin: 0 -9px 0 3px;
+            }
+        }
+    }
+
+    .flipcardTextContent:hover,
+    .flipcardTextContentHover1 {
+        transform: translateY(-28px);
+    }
+
+    .flipcardTextContentHover2 {
+        transform: translateY(-2*28px);
+    }
+}
+
+.flipCardNumberContainer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 9999;
+    @include flex-center;
+    background-color: rgba(0, 0, 0, 0.45);
+
+    .numberFlipContent {
+        width: 110px;
+        height: 110px;
+        background-color: $color-white;
+        position: relative;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: url("/images/main/greek-round.webp");
+            background-size: cover;
+        }
+
+        .numbersContent {
+            @include flex-center;
+        }
+
+        .numbersContentImg {
+            position: inherit;
+            @include flex-center-column;
+            z-index: 9999;
+        }
+
+        .numbers {
+            @include flex-column;
+        }
+
+        .number {
+            @include font('Fraktur', 50px, $color-black, normal, normal, 110px);
+            text-align: center;
+            vertical-align: middle;
         }
 
     }
-
 }
 
-.cardContent:hover,
-.cardContentHover1 {
-    transform: translateX(-294px);
+
+.flipCardNumberContainerFadeOut {
+    animation: fadeOut 0.3s;
+    opacity: 0;
 }
 
-.cardContentHover2 {
-    transform: translateX(-588px);
+.flipCardNumberContainerHidden {
+    display: none;
+}
+
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
 }

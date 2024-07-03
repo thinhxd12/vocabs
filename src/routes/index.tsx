@@ -47,7 +47,7 @@ export default function Login(props: RouteSectionProps) {
                   loggingIn.pending ? styles.loginBtnLoading : styles.loginBtn
                 }
               >
-                <img src="/images/main/laurel.webp" width={18} height={18} />
+                <img src="/images/main/greek-round.webp" width={18} height={18} />
               </button>
             </div>
           </form>

@@ -1,6 +1,5 @@
 import {
   Component,
-  Index,
   Show,
   createEffect,
   createMemo,
@@ -17,8 +16,8 @@ const FlipCard: Component<{}> = (props) => {
   let timeoutId2: NodeJS.Timeout;
   let timeoutId3: NodeJS.Timeout;
 
-  const [partOfSpeechs, setPartOfSpeechs] = createSignal<string>("");
-  const [hoverClass, setHoverClass] = createSignal<string>("");
+  const [hoverClassText, setHoverClassText] = createSignal<string>("");
+  const [hoverClassNumber, setHoverClassNumber] = createSignal<string>("");
 
   const createNumberArray = (num: number) => {
     let arr = Array.from(String(num), Number);
@@ -45,35 +44,35 @@ const FlipCard: Component<{}> = (props) => {
         .translations.map((item) => item.translations.join(", "))
         .join(", ");
 
-      let partOfSpeech = currenText()
-        .translations.map((item) => item.partOfSpeech)
-        .join("-");
-
-      setPartOfSpeechs(partOfSpeech);
-
       if (currentSound) {
         audio.src = currentSound;
         audio.play();
       }
-      if (currenText().number > 1) {
-        setRenderNumber(currenText().number);
-        setHoverClass(styles.cardContent);
-        setNumbArray(createNumberArray(currenText().number));
-        timeoutId1 = setTimeout(() => {
-          setRenderNumber(renderNumber() - 1);
-          setNumbArray(createNumberArray(renderNumber()));
-        }, 2500);
-      }
+
+      setRenderNumber(currenText().number);
+      setHoverClassText(styles.flipcardTextContent);
+      setHoverClassNumber(styles.flipCardNumberContainer);
+      setNumbArray(createNumberArray(currenText().number));
+      timeoutId1 = setTimeout(() => {
+        setRenderNumber(renderNumber() - 1);
+        setNumbArray(createNumberArray(renderNumber()));
+      }, 1500);
+
       if (translations) {
         timeoutId2 = setTimeout(() => {
-          setHoverClass(`${styles.cardContent} ${styles.cardContentHover1}`);
+          setHoverClassNumber(
+            `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerFadeOut}`
+          );
+        }, 3000);
+
+        timeoutId3 = setTimeout(() => {
+          setHoverClassNumber(
+            `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerHidden}`
+          );
           const soundUrl = `https://vocabs3.vercel.app/speech?text=${translations}`;
           audio!.src = soundUrl;
           audio!.play();
-        }, 3000);
-        timeoutId3 = setTimeout(() => {
-          setHoverClass(`${styles.cardContent} ${styles.cardContentHover2}`);
-        }, 5500);
+        }, 4000);
       }
     }
     onCleanup(() => {
@@ -83,148 +82,118 @@ const FlipCard: Component<{}> = (props) => {
   });
 
   return (
-    <>
-      <div class={styles.flipCardLeftContent}>
-        <div class={styles.numberFlipContainer}>
-          <div class={styles.numberFlipBackground}>
-            <img
-              src="images/main/flag.webp"
-              height={186}
-              width={50}
-              alt="flag"
-              loading="lazy"
-            />
-            <div class={styles.numberFlipContent}>
-              <Show when={currenText()}>
-                <Show
-                  when={currenText().number > 1}
-                  fallback={
-                    <div class={styles.flipImage}>
-                      <Motion.div
-                        class={styles.flipImageList}
-                        initial={{ y: -44 }}
-                        animate={{ y: 0, transition: { delay: 2 } }}
-                        transition={{ duration: 0.6, easing: "ease-in-out" }}
-                      >
-                        <img
-                          src="images/main/cup.webp"
-                          height={44}
-                          width={27}
-                          alt="flag"
-                          loading="lazy"
-                        />
-                        <span class={styles.number}>1</span>
-                      </Motion.div>
-                    </div>
-                  }
-                >
-                  <div class={styles.numbersContentBackground}>
-                    <div class={styles.numbersContent}>
-                      {renderNumber() >= 100 && (
-                        <Motion.div
-                          class={styles.numbers}
-                          animate={{
-                            y: -numbArray()[0] * 46,
-                            width: numbArray()[0] === 1 ? "8px" : "11px",
-                          }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <div class={styles.number}>0</div>
-                          <div class={styles.number}>1</div>
-                          <div class={styles.number}>2</div>
-                          <div class={styles.number}>3</div>
-                          <div class={styles.number}>4</div>
-                          <div class={styles.number}>5</div>
-                          <div class={styles.number}>6</div>
-                          <div class={styles.number}>7</div>
-                          <div class={styles.number}>8</div>
-                          <div class={styles.number}>9</div>
-                        </Motion.div>
-                      )}
-                      {renderNumber() >= 10 && (
-                        <Motion.div
-                          class={styles.numbers}
-                          animate={{
-                            y: -numbArray()[1] * 46,
-                            width: numbArray()[1] === 1 ? "8px" : "13px",
-                          }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <div class={styles.number}>0</div>
-                          <div class={styles.number}>1</div>
-                          <div class={styles.number}>2</div>
-                          <div class={styles.number}>3</div>
-                          <div class={styles.number}>4</div>
-                          <div class={styles.number}>5</div>
-                          <div class={styles.number}>6</div>
-                          <div class={styles.number}>7</div>
-                          <div class={styles.number}>8</div>
-                          <div class={styles.number}>9</div>
-                        </Motion.div>
-                      )}
-                      <Motion.div
-                        class={styles.numbers}
-                        animate={{
-                          y: -numbArray()[2] * 46,
-                          width: numbArray()[2] === 1 ? "8px" : "13px",
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <div class={styles.number}>0</div>
-                        <div class={styles.number}>1</div>
-                        <div class={styles.number}>2</div>
-                        <div class={styles.number}>3</div>
-                        <div class={styles.number}>4</div>
-                        <div class={styles.number}>5</div>
-                        <div class={styles.number}>6</div>
-                        <div class={styles.number}>7</div>
-                        <div class={styles.number}>8</div>
-                        <div class={styles.number}>9</div>
-                      </Motion.div>
-                    </div>
-                  </div>
-                </Show>
-              </Show>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class={styles.flipCardRightContent}>
-        <Show
-          when={currenText()}
-          fallback={<div class={styles.cardContent}></div>}
-        >
-          <div class={hoverClass()}>
-            <div class={styles.cardBottom}>
-              <p class={styles.cardBottomPhonetic}>{currenText().phonetics}</p>
-              <p class={styles.cardBottomText}>{currenText().word}</p>
-              <p class={styles.cardBottomClass}>【 {partOfSpeechs()} 】</p>
-              <p class={styles.cardBottomDate}>05/07/22</p>
-            </div>
-            <div class={styles.cardTop}>
-              <Index
-                each={currenText().translations}
-                fallback={<p class={styles.cardTopText}>No items</p>}
-              >
-                {(item, index) => (
-                  <>
-                    <p class={styles.cardTopClass}>{item().partOfSpeech}</p>
-                    <Index each={item().translations}>
-                      {(m) => <p class={styles.cardTopText}>{m()}</p>}
-                    </Index>
-                  </>
-                )}
-              </Index>
-            </div>
-            <div class={styles.cardBottom}>
-              <p class={styles.cardBottomPhonetic}>{currenText().phonetics}</p>
-              <p class={styles.cardBottomText}>{currenText().word}</p>
-              <p class={styles.cardBottomClass}>【 {partOfSpeechs()} 】</p>
+    <div class={styles.flashCardContainer}>
+      <Show when={!mainStore.searchTerm}>
+        <Show when={currenText()}>
+          <div class={styles.flipcardTextContainer}>
+            <div class={hoverClassText()}>
+              <p class={styles.flipcardText}>{currenText()?.word}</p>
+              <p class={styles.flipcardPhonetic}>
+                {currenText()?.phonetics}
+                <small>({currenText()?.number - 1})</small>
+              </p>
+              <p class={styles.flipcardText}>{currenText()?.word}</p>
             </div>
           </div>
         </Show>
+      </Show>
+
+      <div class={hoverClassNumber()}>
+        <Show when={currenText()}>
+          <Show
+            when={currenText().number > 1}
+            fallback={
+              <div class={styles.numberFlipContent}>
+                <div class={styles.numbersContentImg}>
+                  <Motion.div
+                    class={styles.numbers}
+                    initial={{ y: -100 }}
+                    animate={{
+                      y: renderNumber() === 1 ? -100 : 0,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <img
+                      src="images/main/cup.webp"
+                      height={100}
+                      alt="flag"
+                      loading="lazy"
+                    />
+                    <span class={styles.number}>1</span>
+                  </Motion.div>
+                </div>
+              </div>
+            }
+          >
+            <div class={styles.numberFlipContent}>
+              <div class={styles.numbersContent}>
+                {renderNumber() >= 100 && (
+                  <Motion.div
+                    class={styles.numbers}
+                    animate={{
+                      y: -numbArray()[0] * 110,
+                      width: numbArray()[0] === 1 ? "18px" : "unset",
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div class={styles.number}>0</div>
+                    <div class={styles.number}>1</div>
+                    <div class={styles.number}>2</div>
+                    <div class={styles.number}>3</div>
+                    <div class={styles.number}>4</div>
+                    <div class={styles.number}>5</div>
+                    <div class={styles.number}>6</div>
+                    <div class={styles.number}>7</div>
+                    <div class={styles.number}>8</div>
+                    <div class={styles.number}>9</div>
+                  </Motion.div>
+                )}
+                {renderNumber() >= 10 && (
+                  <Motion.div
+                    class={styles.numbers}
+                    animate={{
+                      y: -numbArray()[1] * 110,
+                      width: numbArray()[1] === 1 ? "18px" : "unset",
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div class={styles.number}>0</div>
+                    <div class={styles.number}>1</div>
+                    <div class={styles.number}>2</div>
+                    <div class={styles.number}>3</div>
+                    <div class={styles.number}>4</div>
+                    <div class={styles.number}>5</div>
+                    <div class={styles.number}>6</div>
+                    <div class={styles.number}>7</div>
+                    <div class={styles.number}>8</div>
+                    <div class={styles.number}>9</div>
+                  </Motion.div>
+                )}
+                <Motion.div
+                  class={styles.numbers}
+                  animate={{
+                    y: -numbArray()[2] * 110,
+                    width: numbArray()[2] === 1 ? "18px" : "unset",
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <div class={styles.number}>0</div>
+                  <div class={styles.number}>1</div>
+                  <div class={styles.number}>2</div>
+                  <div class={styles.number}>3</div>
+                  <div class={styles.number}>4</div>
+                  <div class={styles.number}>5</div>
+                  <div class={styles.number}>6</div>
+                  <div class={styles.number}>7</div>
+                  <div class={styles.number}>8</div>
+                  <div class={styles.number}>9</div>
+                </Motion.div>
+              </div>
+            </div>
+          </Show>
+        </Show>
       </div>
-    </>
+    </div>
   );
 };
 

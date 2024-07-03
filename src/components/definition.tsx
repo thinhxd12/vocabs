@@ -14,9 +14,22 @@ const Definition: Component<{
               {(item, index) => {
                 return (
                   <div class={styles.websEntry}>
-                    <p class={styles.websHead} onClick={() => props.onEdit()}>
-                      {item().partOfSpeech}
-                    </p>
+                    <div class={styles.websHead}>
+                      <span class={styles.websHeadTranslations}>
+                        {mainStore
+                          .renderWord!.translations.find(
+                            (el) => el.partOfSpeech === item().partOfSpeech
+                          )
+                          ?.translations.join(", ")}
+                      </span>
+
+                      <span
+                        class={styles.websHeadPartOS}
+                        onClick={() => props.onEdit()}
+                      >
+                        {item().partOfSpeech}
+                      </span>
+                    </div>
                     <Index each={item().definitions}>
                       {(m, n) => (
                         <div

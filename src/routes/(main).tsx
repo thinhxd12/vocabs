@@ -159,6 +159,7 @@ export default function Main(props: RouteSectionProps) {
                   <VsLayoutActivitybarRight size={17} />
                 </Show>
               </button>
+
               <button
                 onClick={() => setMainStore("showBookmark", true)}
                 class={styles.mainButton}
@@ -166,6 +167,7 @@ export default function Main(props: RouteSectionProps) {
               >
                 <ImBooks size={17} />
               </button>
+
               <button
                 onClick={handleGetNextImage}
                 class={styles.mainButton}

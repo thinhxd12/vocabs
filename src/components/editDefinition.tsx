@@ -23,7 +23,11 @@ export const EditDefinition: Component<{
             {(item, index) => {
               return (
                 <div class={styles.websEntry}>
-                  <p class={styles.websHead}>{item().partOfSpeech}</p>
+                  <div class={styles.websHead}>
+                    <span class={styles.websHeadPartOS}>
+                      {item().partOfSpeech}
+                    </span>
+                  </div>
                   <Index each={item().definitions}>
                     {(m, n) => (
                       <div

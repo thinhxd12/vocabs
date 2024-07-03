@@ -131,11 +131,7 @@ const Vocabulary: Component<{}> = () => {
                       alt="inputbackground"
                       class={styles.newInputBackground}
                     />
-                    <p
-                      style={{
-                        color: mainStore.searchTermColor,
-                      }}
-                    >
+                    <p style={{ color: mainStore.searchTermColor }}>
                       {mainStore.searchTerm}
                     </p>
                   </div>
@@ -146,7 +142,7 @@ const Vocabulary: Component<{}> = () => {
             <div class={styles.myInputContainer}>
               <img
                 src="images/main/input-left-corner.webp"
-                height={38}
+                height={37}
                 width={19}
                 alt="inputbackground"
                 class={styles.myInputLeftOrnament}
@@ -162,7 +158,7 @@ const Vocabulary: Component<{}> = () => {
               </div>
               <img
                 src="images/main/input-right-corner.webp"
-                height={38}
+                height={37}
                 width={19}
                 alt="inputbackground"
                 loading="lazy"
@@ -238,11 +234,6 @@ const Vocabulary: Component<{}> = () => {
           </Show>
 
           <div class={styles.vocabularyContent}>
-            {/* Bookmark */}
-            {/* <Show when={mainStore.showBookmark}>
-              <Bookmark onClose={() => setMainStore("showBookmark", false)} />
-            </Show> */}
-
             {/* Definition */}
             <Definition
               onEdit={() =>
