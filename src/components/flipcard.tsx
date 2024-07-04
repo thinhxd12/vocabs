@@ -6,7 +6,6 @@ import {
   createSignal,
   onCleanup,
 } from "solid-js";
-import { Motion } from "solid-motionone";
 import styles from "./flipcard.module.scss";
 import { mainStore } from "~/lib/mystore";
 
@@ -63,16 +62,16 @@ const FlipCard: Component<{}> = (props) => {
           setHoverClassNumber(
             `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerFadeOut}`
           );
-        }, 3000);
+          const soundUrl = `https://vocabs3.vercel.app/speech?text=${translations}`;
+          audio!.src = soundUrl;
+          audio!.play();
+        }, 3500);
 
         timeoutId3 = setTimeout(() => {
           setHoverClassNumber(
             `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerHidden}`
           );
-          const soundUrl = `https://vocabs3.vercel.app/speech?text=${translations}`;
-          audio!.src = soundUrl;
-          audio!.play();
-        }, 4000);
+        }, 4500);
       }
     }
     onCleanup(() => {
@@ -105,13 +104,15 @@ const FlipCard: Component<{}> = (props) => {
             fallback={
               <div class={styles.numberFlipContent}>
                 <div class={styles.numbersContentImg}>
-                  <Motion.div
+                  <div
                     class={styles.numbers}
-                    initial={{ y: -85 }}
-                    animate={{
-                      y: renderNumber() === 1 ? -85 : 15,
+                    style={{
+                      transform:
+                        renderNumber() === 0
+                          ? `translate(0px, 15px)`
+                          : `translate(0px, -85px)`,
+                      transition: "0.3s",
                     }}
-                    transition={{ duration: 0.3 }}
                   >
                     <img
                       src="images/main/cup.webp"
@@ -120,21 +121,21 @@ const FlipCard: Component<{}> = (props) => {
                       loading="lazy"
                     />
                     <span class={styles.number}>1</span>
-                  </Motion.div>
+                  </div>
                 </div>
               </div>
             }
           >
             <div class={styles.numberFlipContent}>
               <div class={styles.numbersContent}>
-                {renderNumber() >= 100 && (
-                  <Motion.div
+                <Show when={renderNumber() >= 100}>
+                  <div
                     class={styles.numbers}
-                    style={{ width: numbArray()[0] === 1 ? "18px" : "unset" }}
-                    animate={{
-                      y: -numbArray()[0] * 110,
+                    style={{
+                      width: numbArray()[0] === 1 ? "18px" : "unset",
+                      transform: `translate(0px, ${-numbArray()[0] * 110}px)`,
+                      transition: "0.3s",
                     }}
-                    transition={{ duration: 0.5 }}
                   >
                     <div class={styles.number}>0</div>
                     <div class={styles.number}>1</div>
@@ -146,16 +147,16 @@ const FlipCard: Component<{}> = (props) => {
                     <div class={styles.number}>7</div>
                     <div class={styles.number}>8</div>
                     <div class={styles.number}>9</div>
-                  </Motion.div>
-                )}
-                {renderNumber() >= 10 && (
-                  <Motion.div
+                  </div>
+                </Show>
+                <Show when={renderNumber() >= 10}>
+                  <div
                     class={styles.numbers}
-                    style={{ width: numbArray()[1] === 1 ? "18px" : "unset" }}
-                    animate={{
-                      y: -numbArray()[1] * 110,
+                    style={{
+                      width: numbArray()[1] === 1 ? "18px" : "unset",
+                      transform: `translate(0px, ${-numbArray()[1] * 110}px)`,
+                      transition: "0.3s",
                     }}
-                    transition={{ duration: 0.5 }}
                   >
                     <div class={styles.number}>0</div>
                     <div class={styles.number}>1</div>
@@ -167,15 +168,15 @@ const FlipCard: Component<{}> = (props) => {
                     <div class={styles.number}>7</div>
                     <div class={styles.number}>8</div>
                     <div class={styles.number}>9</div>
-                  </Motion.div>
-                )}
-                <Motion.div
+                  </div>
+                </Show>
+                <div
                   class={styles.numbers}
-                  style={{ width: numbArray()[2] === 1 ? "18px" : "unset" }}
-                  animate={{
-                    y: -numbArray()[2] * 110,
+                  style={{
+                    width: numbArray()[2] === 1 ? "18px" : "unset",
+                    transform: `translate(0px, ${-numbArray()[2] * 110}px)`,
+                    transition: "0.3s",
                   }}
-                  transition={{ duration: 0.5 }}
                 >
                   <div class={styles.number}>0</div>
                   <div class={styles.number}>1</div>
@@ -187,7 +188,7 @@ const FlipCard: Component<{}> = (props) => {
                   <div class={styles.number}>7</div>
                   <div class={styles.number}>8</div>
                   <div class={styles.number}>9</div>
-                </Motion.div>
+                </div>
               </div>
             </div>
           </Show>

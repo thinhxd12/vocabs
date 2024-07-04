@@ -47,13 +47,13 @@
 
 .flipCardNumberContainer {
     position: absolute;
-    top: 0;
+    top: 37px;
     left: 0;
     bottom: 0;
     right: 0;
     z-index: 9999;
     @include flex-center;
-    background-color: rgba(0, 0, 0, 0.45);
+    background-color: rgba(0, 0, 0, 0.05);
 
     .numberFlipContent {
         width: 110px;
@@ -62,7 +62,8 @@
         position: relative;
         border-radius: 50%;
         overflow: hidden;
-        box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+        box-shadow: rgba(0, 0, 0, 0.45) 0px 15px 36px, rgba(0, 0, 0, 0.21) 0px 15px 12px;
+        animation: scaleUp 0.2s;
 
         &::after {
             content: "";
@@ -97,21 +98,28 @@
 }
 
 
+
 .flipCardNumberContainerFadeOut {
-    animation: fadeOut 0.6s ease-in-out;
     opacity: 0;
+    transition: opacity 1.2s cubic-bezier(0.335, 0.010, 0.030, 1.360);
+
+    .numberFlipContent {
+        transform: scale(0.6);
+        opacity: 0;
+        transition: all 0.15s;
+    }
 }
 
 .flipCardNumberContainerHidden {
     display: none;
 }
 
-@keyframes fadeOut {
+@keyframes scaleUp {
     0% {
-        opacity: 1;
+        transform: scale(0.6);
     }
 
     100% {
-        opacity: 0;
+        transform: scale(1);
     }
 }
