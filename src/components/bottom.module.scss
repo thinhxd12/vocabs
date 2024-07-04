@@ -12,7 +12,7 @@
         background-color: $color-background-1;
         @include flex;
         position: relative;
-        z-index: 150;
+        z-index: 10000;
     }
 
     .bottomIndex {
@@ -263,7 +263,7 @@
         position: absolute;
         bottom: 34px;
         left: 0;
-        z-index: 120;
+        z-index: 9999;
     }
 
     .buttonTimerOverlay {

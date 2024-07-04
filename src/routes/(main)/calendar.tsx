@@ -133,6 +133,11 @@ const Calendar: Component<{}> = (props) => {
                 </Show>
               </p>
             </div>
+            <div class={styles.calendarImageSign}>
+              <p>0 05-07-22</p>
+              <p>229 05-07-23</p>
+              <p>2270 05-07-24</p>
+            </div>
           </div>
           <div class={styles.calendarDates}>
             <div class={styles.calendarWeek}>

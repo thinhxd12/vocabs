@@ -53,7 +53,6 @@
     right: 0;
     z-index: 9999;
     @include flex-center;
-    background-color: rgba(0, 0, 0, 0.05);
 
     .numberFlipContent {
         width: 110px;
@@ -62,7 +61,7 @@
         position: relative;
         border-radius: 50%;
         overflow: hidden;
-        box-shadow: rgba(0, 0, 0, 0.45) 0px 15px 36px, rgba(0, 0, 0, 0.21) 0px 15px 12px;
+        box-shadow: rgba(0, 0, 0, 0.6) 0px 12px 24px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
         animation: scaleUp 0.2s;
 
         &::after {
