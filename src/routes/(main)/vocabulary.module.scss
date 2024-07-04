@@ -80,7 +80,7 @@
             position: relative;
 
             p {
-                @include font("NYTCheltenham", 18px, $color-vintage-1, 700, normal, 36px);
+                @include font("NYTCheltenham", 16px, $color-vintage-1, 700, normal, 36px);
                 text-transform: uppercase;
                 width: 360px;
                 height: 36px;
