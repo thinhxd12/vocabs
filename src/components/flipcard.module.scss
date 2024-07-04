@@ -61,8 +61,8 @@
         position: relative;
         border-radius: 50%;
         overflow: hidden;
-        box-shadow: rgba(0, 0, 0, 0.6) 0px 12px 24px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
         animation: scaleUp 0.2s;
+        box-shadow: 0 22px 70px 4px rgba(0, 0, 0, 0.56);
 
         &::after {
             content: "";
