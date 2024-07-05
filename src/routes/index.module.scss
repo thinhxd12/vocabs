@@ -28,9 +28,8 @@
     }
 
     .loginForm {
-        position: initial;
-        z-index: 99;
         position: relative;
+        z-index: 99;
         height: 22px;
         width: 180px;
         transition: all 0.1s;
@@ -66,7 +65,7 @@
 
         .loginBtn {
             position: absolute;
-            right: -30px;
+            right: -42px;
             top: 2px;
             z-index: 1001;
             width: 18px;
@@ -78,6 +77,11 @@
 
             img {
                 opacity: 0;
+                transition: all 0.3s;
+            }
+
+            &:hover img {
+                opacity: 1;
             }
         }
 
@@ -85,7 +89,7 @@
             @extend .loginBtn;
 
             img {
-                opacity: 0.81;
+                opacity: 1;
             }
 
             animation: rotate 3s normal linear infinite;

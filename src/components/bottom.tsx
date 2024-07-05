@@ -293,14 +293,34 @@ const Bottom: Component<{}> = () => {
               />
               <p>{Math.round(mainStore.bottomWeather!.temperature)}°</p>
             </span>
-            <span class={styles.bottomWeatherSummary}>
-              {
-                WMOCODE[
-                  String(mainStore.bottomWeather!.icon) as keyof typeof WMOCODE
-                ][mainStore.bottomWeather!.isDayTime ? "day" : "night"]
-                  .description
-              }
-            </span>
+            <div class={styles.scrollingTextContainer}>
+              <div class={styles.scrollingTextInner}>
+                <div class={styles.scrollingText}>
+                  <div class={styles.scrollingTextItem}>
+                    {
+                      WMOCODE[
+                        String(
+                          mainStore.bottomWeather!.icon
+                        ) as keyof typeof WMOCODE
+                      ][mainStore.bottomWeather!.isDayTime ? "day" : "night"]
+                        .description
+                    }
+                  </div>
+                </div>
+                <div class={styles.scrollingText}>
+                  <div class={styles.scrollingTextItem}>
+                    {
+                      WMOCODE[
+                        String(
+                          mainStore.bottomWeather!.icon
+                        ) as keyof typeof WMOCODE
+                      ][mainStore.bottomWeather!.isDayTime ? "day" : "night"]
+                        .description
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
           </Show>
         </A>
 

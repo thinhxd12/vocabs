@@ -31,7 +31,7 @@
             align-items: flex-end;
             justify-content: space-between;
             cursor: pointer;
-            padding: 10px 0 1px 12px;
+            padding: 10px 0 1px 22px;
 
             .websHeadPartOS {
                 @include font("Poppins", 18px, $color-black, 600, normal, 15px);
@@ -40,7 +40,7 @@
             }
 
             .websHeadTranslations {
-                @include font('SFProDisplay', 12px, $color-vintage-1, 500, normal, 15px);
+                @include font('SFProDisplay', 12px, $color-calendar-text-1, 500, normal, 15px);
             }
 
         }
