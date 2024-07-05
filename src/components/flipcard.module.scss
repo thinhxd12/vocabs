@@ -2,7 +2,7 @@
 
 .flipcardTextContainer {
     width: 100%;
-    height: 28px;
+    height: 27px;
     position: absolute;
     top: 4px;
     left: 0;
@@ -11,21 +11,22 @@
 
     .flipcardTextContent {
         width: 100%;
-        height: 28*3px;
+        height: 27*3px;
         transition: all .15s ease;
 
         .flipcardText {
             width: 100%;
-            height: 28px;
-            @include font("NYTCheltenham", 16px, $color-vintage-1, 700, normal, 28px);
+            height: 27px;
+            @include font("NYTCheltenham", 16px, $color-vintage-1, 800, normal, 27px);
             text-transform: uppercase;
             text-align: center;
+            text-shadow: 0 1px 3px #c4b59d, 0 -2px 1px #fff;
         }
 
         .flipcardPhonetic {
             width: 100%;
-            height: 28px;
-            @include font("SFProDisplay", 15px, $color-red-1, 500, normal, 28px);
+            height: 27px;
+            @include font("SFProDisplay", 15px, $color-red-1, 500, normal, 27px);
             text-align: center;
 
             small {
@@ -47,7 +48,7 @@
 
 .flipCardNumberContainer {
     position: absolute;
-    top: 37px;
+    top: 34px;
     left: 0;
     bottom: 0;
     right: 0;

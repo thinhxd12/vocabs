@@ -80,12 +80,13 @@
             position: relative;
 
             p {
-                @include font("NYTCheltenham", 16px, $color-vintage-1, 700, normal, 33px);
+                @include font("NYTCheltenham", 16px, $color-vintage-1, 800, normal, 36px);
                 text-transform: uppercase;
                 width: 360px;
                 height: 33px;
                 position: inherit;
                 text-align: center;
+                text-shadow: 0 1px 3px #c4b59d, 0 -2px 1px #fff;
             }
 
             .newInputBackground {
