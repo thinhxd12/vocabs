@@ -126,7 +126,7 @@ const Vocabulary: Component<{}> = () => {
                   <div class={styles.newInputContent}>
                     <img
                       src="images/main/inputbackground.webp"
-                      height={36}
+                      height={33}
                       width={360}
                       alt="inputbackground"
                       class={styles.newInputBackground}
