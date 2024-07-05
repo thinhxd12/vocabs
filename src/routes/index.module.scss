@@ -20,6 +20,14 @@
         text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
     }
 
+    .backgroundTitle {
+        position: absolute;
+        bottom: 9px;
+        right: 15px;
+        @include font("basier", 12px, $color-white, 500, normal, 18px);
+        text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+    }
+
     .loginContainer {
         margin-top: 60vh;
         display: flex;

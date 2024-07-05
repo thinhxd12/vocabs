@@ -8,7 +8,12 @@ import { getSpotlightImage } from "~/lib/api";
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginAction);
 
-  const [image, setImage] = createSignal<{ text: string; url: string }>({
+  const [image, setImage] = createSignal<{
+    title: string;
+    text: string;
+    url: string;
+  }>({
+    title: "",
     text: "",
     url: "",
   });
@@ -20,7 +25,12 @@ export default function Login(props: RouteSectionProps) {
       );
 
     const data = await getSpotlightImage();
-    if (data) setImage({ text: data.text, url: flag ? data.urlP : data.urlL });
+    if (data)
+      setImage({
+        title: data.title,
+        text: data.text,
+        url: flag ? data.urlP : data.urlL,
+      });
   });
 
   return (
@@ -37,6 +47,9 @@ export default function Login(props: RouteSectionProps) {
         <Show when={image().text !== ""}>
           <p class={styles.backgroundText}>{image()!.text}</p>
         </Show>
+        <Show when={image().title !== ""}>
+          <p class={styles.backgroundTitle}>{image()!.title}</p>
+        </Show>
         <div class={styles.loginContainer}>
           <form action={loginAction} method="post" class={styles.loginForm}>
             <input name="password" type="password" class={styles.loginInput} />
@@ -47,7 +60,11 @@ export default function Login(props: RouteSectionProps) {
                   loggingIn.pending ? styles.loginBtnLoading : styles.loginBtn
                 }
               >
-                <img src="/images/main/greek-round.webp" width={18} height={18} />
+                <img
+                  src="/images/main/greek-round.webp"
+                  width={18}
+                  height={18}
+                />
               </button>
             </div>
           </form>

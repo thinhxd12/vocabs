@@ -1034,10 +1034,12 @@ export const getSpotlightImage = (async () => {
     if (data) {
         const itemStr = data["batchrsp"]["items"][0].item;
         const itemObj = JSON.parse(itemStr)["ad"];
-        const title = itemObj["hs2_title_text"]?.tx;
+        const title = itemObj["title_text"]?.tx;
+        const text = itemObj["hs2_title_text"]?.tx;
         const jsImageL = itemObj["image_fullscreen_001_landscape"].u;
         const jsImageP = itemObj["image_fullscreen_001_portrait"].u;
-        return { text: title, urlL: jsImageL, urlP: jsImageP };
+
+        return { title: title, text: text, urlL: jsImageL, urlP: jsImageP };
     }
 });
 
