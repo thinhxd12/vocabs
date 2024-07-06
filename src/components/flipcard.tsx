@@ -132,7 +132,7 @@ const FlipCard: Component<{}> = (props) => {
                   <div
                     class={styles.numbers}
                     style={{
-                      width: numbArray()[0] === 1 ? "18px" : "unset",
+                      // width: numbArray()[0] === 1 ? "18px" : "unset",
                       transform: `translate(0px, ${-numbArray()[0] * 110}px)`,
                       transition: "0.3s",
                     }}
@@ -153,7 +153,7 @@ const FlipCard: Component<{}> = (props) => {
                   <div
                     class={styles.numbers}
                     style={{
-                      width: numbArray()[1] === 1 ? "18px" : "unset",
+                      // width: numbArray()[1] === 1 ? "18px" : "unset",
                       transform: `translate(0px, ${-numbArray()[1] * 110}px)`,
                       transition: "0.3s",
                     }}
@@ -173,7 +173,7 @@ const FlipCard: Component<{}> = (props) => {
                 <div
                   class={styles.numbers}
                   style={{
-                    width: numbArray()[2] === 1 ? "18px" : "unset",
+                    // width: numbArray()[2] === 1 ? "18px" : "unset",
                     transform: `translate(0px, ${-numbArray()[2] * 110}px)`,
                     transition: "0.3s",
                   }}

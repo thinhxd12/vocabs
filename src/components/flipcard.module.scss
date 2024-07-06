@@ -20,7 +20,7 @@
             @include font("NYTCheltenham", 16px, $color-vintage-1, 800, normal, 27px);
             text-transform: uppercase;
             text-align: center;
-            text-shadow: 0 3px 6px #adadadba, 0 -2px 1px #fff;
+            text-shadow: 0 2px 3px #adadadba, 0 -2px 1px #fff;
         }
 
         .flipcardPhonetic {
@@ -54,6 +54,7 @@
     right: 0;
     z-index: 9999;
     @include flex-center;
+    background: radial-gradient(circle at center, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.15) 30%, transparent 100%);
 
     .numberFlipContent {
         width: 110px;
@@ -63,7 +64,7 @@
         border-radius: 50%;
         overflow: hidden;
         animation: scaleUp 0.2s;
-        box-shadow: 0 22px 70px 4px rgba(0, 0, 0, 0.56);
+        box-shadow: 0 0px 40px 4px rgba(0, 0, 0, 0.56);
 
         &::after {
             content: "";
@@ -90,6 +91,7 @@
 
         .number {
             @include font('Fraktur', 50px, $color-black, normal, normal, 110px);
+            width: 27px;
             text-align: center;
             vertical-align: middle;
         }
@@ -101,12 +103,12 @@
 
 .flipCardNumberContainerFadeOut {
     opacity: 0;
-    transition: opacity 1.2s cubic-bezier(0.335, 0.010, 0.030, 1.360);
+    transition: opacity 1s cubic-bezier(0.335, 0.010, 0.030, 1.360);
 
     .numberFlipContent {
-        transform: scale(0.6);
+        transform: scale(0.5);
         opacity: 0;
-        transition: all 0.15s;
+        transition: all 0.1s;
     }
 }
 
