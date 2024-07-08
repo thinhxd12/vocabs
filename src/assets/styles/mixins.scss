@@ -411,6 +411,7 @@ $color-vintage-background: #fffeff;
 }
 
 
+// OTHER FONTS
 
 @font-face {
   font-family: "Basier";
@@ -427,6 +428,17 @@ $color-vintage-background: #fffeff;
   font-style: normal;
   font-display: swap;
 }
+
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/others/Helvetica Neue Condensed Bold.ttf") format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+// OTHER FONTS
+
 
 @font-face {
   font-family: 'SFProDisplay';
