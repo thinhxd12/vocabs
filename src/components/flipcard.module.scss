@@ -52,9 +52,11 @@
     left: 0;
     bottom: 0;
     right: 0;
-    padding-bottom: 45%;
     z-index: 9999;
-    @include flex-center;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 30%;
     background: rgba(0, 0, 0, 0.3);
 
     .ticksContainer {

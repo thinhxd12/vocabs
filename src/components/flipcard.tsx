@@ -15,13 +15,9 @@ const FlipCard: Component<{}> = (props) => {
   let timeoutId1: NodeJS.Timeout;
   let timeoutId2: NodeJS.Timeout;
 
-  const [hoverClassText, setHoverClassText] = createSignal<string>(
-    styles.flipcardTextContent
-  );
   const [hoverClassNumber, setHoverClassNumber] = createSignal<string>(
     styles.flipCardNumberContainer
   );
-
   const [flag, setFlag] = createSignal<boolean>(false);
 
   createEffect(() => {
@@ -73,7 +69,7 @@ const FlipCard: Component<{}> = (props) => {
       <Show when={!mainStore.searchTerm}>
         <Show when={mainStore.renderWord}>
           <div class={styles.flipcardTextContainer}>
-            <div class={hoverClassText()}>
+            <div class={styles.flipcardTextContent}>
               <p class={styles.flipcardText}>{mainStore.renderWord!.word}</p>
               <p class={styles.flipcardPhonetic}>
                 <span>{mainStore.renderWord!.phonetics}</span>
