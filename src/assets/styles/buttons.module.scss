@@ -208,3 +208,18 @@
         color: $color-white;
     }
 }
+
+.buttonMyInput {
+    @extend .button;
+    background-color: rgba(237, 237, 237, 0.8);
+    color: #ececec;
+    width: 24px;
+    height: 24px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 6px;
+    background-size: 10px 24px,
+        10px 24px;
+
+    &:hover {
+        color: $color-white;
+    }
+}

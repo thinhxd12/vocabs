@@ -14,6 +14,7 @@ import { FaSolidFeather } from "solid-icons/fa";
 import { createAsync } from "@solidjs/router";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./vocabulary.module.scss";
+import buttons from "../../assets/styles/buttons.module.scss";
 import FlipCard from "~/components/flipcard";
 import Definition from "~/components/definition";
 import { getUser } from "~/lib";
@@ -92,7 +93,7 @@ const Vocabulary: Component<{}> = () => {
 
   const searchWordMobile = (element: HTMLDivElement) => {
     element.addEventListener("input", (e) => {
-      const value = (e.target as HTMLInputElement).value;
+      const value = (e.target as HTMLInputElement).value.toLowerCase();
       setMainStore("searchTerm", value);
       if (value.length > 2) {
         trigger(value);
@@ -141,37 +142,22 @@ const Vocabulary: Component<{}> = () => {
           >
             <div class={styles.myInputContainer}>
               <img
-                src="images/main/input-left-corner.webp"
-                height={37}
-                width={19}
+                src="images/main/inputbackground.webp"
+                height={33}
+                width={360}
                 alt="inputbackground"
-                class={styles.myInputLeftOrnament}
+                class={styles.myInputBackground}
               />
-              <div class={styles.myInputCenterContent}>
-                <input
-                  type="text"
-                  autocomplete="off"
-                  class={styles.myInput}
-                  use:searchWordMobile={null}
-                  ref={mobileInput}
-                />
-              </div>
-              <img
-                src="images/main/input-right-corner.webp"
-                height={37}
-                width={19}
-                alt="inputbackground"
-                loading="lazy"
-                class={styles.myInputRightOrnament}
+              <input
+                type="text"
+                autocomplete="off"
+                class={styles.myInput}
+                use:searchWordMobile={null}
+                ref={mobileInput}
               />
-              <img
-                src="images/main/center.webp"
-                height={24}
-                width={24}
-                alt="inputbackground"
-                loading="lazy"
-                class={styles.myInputButton}
-              />
+              <button class={buttons.buttonMyInput} onClick={clearSearchResult}>
+                <img src="images/main/clover.webp" height={18} width={18} />
+              </button>
             </div>
           </Show>
 
