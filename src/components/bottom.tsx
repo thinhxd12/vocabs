@@ -1,12 +1,5 @@
 import { A, useAction } from "@solidjs/router";
-import {
-  Component,
-  Show,
-  createResource,
-  createSignal,
-  onCleanup,
-  onMount,
-} from "solid-js";
+import { Component, Show, createSignal, onMount } from "solid-js";
 import { format } from "date-fns";
 import styles from "./bottom.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
@@ -27,9 +20,8 @@ import {
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
-import { OcHourglass2 } from "solid-icons/oc";
-import { WEATHER_GEOS, WMOCODE, clickOutside } from "~/utils";
-import { CurrentlyWeatherType } from "~/types";
+import { WEATHER_GEOS, WMOCODE } from "~/utils";
+import { clickOutside } from "~/utils";
 
 let intervalCountdown: NodeJS.Timeout;
 let intervalAutoplay: NodeJS.Timeout;
@@ -517,7 +509,6 @@ const Bottom: Component<{}> = () => {
               }}
               transition={{ duration: 0.3, easing: "ease-in-out" }}
             >
-              <OcHourglass2 size={11} />
               <Motion.div
                 class={styles.buttonTimerOverlay}
                 animate={{ height: `${(1 - minute() / 6) * 100}%` }}

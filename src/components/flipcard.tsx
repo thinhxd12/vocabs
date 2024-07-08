@@ -2,45 +2,37 @@ import {
   Component,
   Show,
   createEffect,
-  createMemo,
   createSignal,
   onCleanup,
+  untrack,
 } from "solid-js";
 import styles from "./flipcard.module.scss";
 import { mainStore } from "~/lib/mystore";
+import Flips from "./Flips";
 
 const FlipCard: Component<{}> = (props) => {
   let audio: HTMLAudioElement | null;
   let timeoutId1: NodeJS.Timeout;
   let timeoutId2: NodeJS.Timeout;
-  let timeoutId3: NodeJS.Timeout;
 
-  const [hoverClassText, setHoverClassText] = createSignal<string>("");
-  const [hoverClassNumber, setHoverClassNumber] = createSignal<string>("");
+  const [hoverClassText, setHoverClassText] = createSignal<string>(
+    styles.flipcardTextContent
+  );
+  const [hoverClassNumber, setHoverClassNumber] = createSignal<string>(
+    styles.flipCardNumberContainer
+  );
 
-  const createNumberArray = (num: number) => {
-    let arr = Array.from(String(num), Number);
-    while (arr.length < 3) {
-      arr.unshift(0);
-    }
-    return arr;
-  };
-
-  const [renderNumber, setRenderNumber] = createSignal<number>(3);
-  const [numbArray, setNumbArray] = createSignal<number[]>([3, 6, 9]);
-
-  const currenText = createMemo(() => mainStore.renderWord!);
+  const [flag, setFlag] = createSignal<boolean>(false);
 
   createEffect(() => {
     clearTimeout(timeoutId1);
     clearTimeout(timeoutId2);
-    clearTimeout(timeoutId3);
-
-    if (currenText()) {
+    const v = mainStore.renderWord;
+    if (v) {
       audio = new Audio();
-      let currentSound = currenText().audio;
-      let translations = currenText()
-        .translations.map((item) => item.translations.join(", "))
+      const currentSound = v.audio;
+      const translations = v.translations
+        .map((item) => item.translations.join(", "))
         .join(", ");
 
       if (currentSound) {
@@ -48,17 +40,9 @@ const FlipCard: Component<{}> = (props) => {
         audio.play();
       }
 
-      setRenderNumber(currenText().number);
-      setHoverClassText(styles.flipcardTextContent);
       setHoverClassNumber(styles.flipCardNumberContainer);
-      setNumbArray(createNumberArray(currenText().number));
-      timeoutId1 = setTimeout(() => {
-        setRenderNumber(renderNumber() - 1);
-        setNumbArray(createNumberArray(renderNumber()));
-      }, 1500);
-
       if (translations) {
-        timeoutId2 = setTimeout(() => {
+        timeoutId1 = setTimeout(() => {
           setHoverClassNumber(
             `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerFadeOut}`
           );
@@ -66,134 +50,50 @@ const FlipCard: Component<{}> = (props) => {
           audio!.src = soundUrl;
           audio!.play();
         }, 3500);
-
-        timeoutId3 = setTimeout(() => {
+        timeoutId2 = setTimeout(() => {
           setHoverClassNumber(
             `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerHidden}`
           );
         }, 4500);
       }
     }
+    untrack(() => {
+      setFlag(!flag());
+    });
     onCleanup(() => {
       audio?.pause();
       audio = null;
+      clearTimeout(timeoutId1);
+      clearTimeout(timeoutId2);
     });
   });
 
   return (
     <div class={styles.flashCardContainer}>
       <Show when={!mainStore.searchTerm}>
-        <Show when={currenText()}>
+        <Show when={mainStore.renderWord}>
           <div class={styles.flipcardTextContainer}>
             <div class={hoverClassText()}>
-              <p class={styles.flipcardText}>{currenText()?.word}</p>
+              <p class={styles.flipcardText}>{mainStore.renderWord!.word}</p>
               <p class={styles.flipcardPhonetic}>
-                {currenText()?.phonetics}
-                <small>({currenText()?.number - 1})</small>
+                <span>{mainStore.renderWord!.phonetics}</span>
+                <small>({mainStore.renderWord!.number - 1})</small>
               </p>
-              <p class={styles.flipcardText}>{currenText()?.word}</p>
+              <p class={styles.flipcardText}>{mainStore.renderWord!.word}</p>
             </div>
           </div>
         </Show>
       </Show>
 
-      <div class={hoverClassNumber()}>
-        <Show when={currenText()}>
-          <Show
-            when={currenText().number > 1}
-            fallback={
-              <div class={styles.numberFlipContent}>
-                <div class={styles.numbersContentImg}>
-                  <div
-                    class={styles.numbers}
-                    style={{
-                      transform:
-                        renderNumber() === 0
-                          ? `translate(0px, 15px)`
-                          : `translate(0px, -85px)`,
-                      transition: "0.3s",
-                    }}
-                  >
-                    <img
-                      src="images/main/cup.webp"
-                      height={80}
-                      alt="flag"
-                      loading="lazy"
-                    />
-                    <span class={styles.number}>1</span>
-                  </div>
-                </div>
-              </div>
-            }
-          >
-            <div class={styles.numberFlipContent}>
-              <div class={styles.numbersContent}>
-                <Show when={renderNumber() >= 100}>
-                  <div
-                    class={styles.numbers}
-                    style={{
-                      // width: numbArray()[0] === 1 ? "18px" : "unset",
-                      transform: `translate(0px, ${-numbArray()[0] * 110}px)`,
-                      transition: "0.3s",
-                    }}
-                  >
-                    <div class={styles.number}>0</div>
-                    <div class={styles.number}>1</div>
-                    <div class={styles.number}>2</div>
-                    <div class={styles.number}>3</div>
-                    <div class={styles.number}>4</div>
-                    <div class={styles.number}>5</div>
-                    <div class={styles.number}>6</div>
-                    <div class={styles.number}>7</div>
-                    <div class={styles.number}>8</div>
-                    <div class={styles.number}>9</div>
-                  </div>
-                </Show>
-                <Show when={renderNumber() >= 10}>
-                  <div
-                    class={styles.numbers}
-                    style={{
-                      // width: numbArray()[1] === 1 ? "18px" : "unset",
-                      transform: `translate(0px, ${-numbArray()[1] * 110}px)`,
-                      transition: "0.3s",
-                    }}
-                  >
-                    <div class={styles.number}>0</div>
-                    <div class={styles.number}>1</div>
-                    <div class={styles.number}>2</div>
-                    <div class={styles.number}>3</div>
-                    <div class={styles.number}>4</div>
-                    <div class={styles.number}>5</div>
-                    <div class={styles.number}>6</div>
-                    <div class={styles.number}>7</div>
-                    <div class={styles.number}>8</div>
-                    <div class={styles.number}>9</div>
-                  </div>
-                </Show>
-                <div
-                  class={styles.numbers}
-                  style={{
-                    // width: numbArray()[2] === 1 ? "18px" : "unset",
-                    transform: `translate(0px, ${-numbArray()[2] * 110}px)`,
-                    transition: "0.3s",
-                  }}
-                >
-                  <div class={styles.number}>0</div>
-                  <div class={styles.number}>1</div>
-                  <div class={styles.number}>2</div>
-                  <div class={styles.number}>3</div>
-                  <div class={styles.number}>4</div>
-                  <div class={styles.number}>5</div>
-                  <div class={styles.number}>6</div>
-                  <div class={styles.number}>7</div>
-                  <div class={styles.number}>8</div>
-                  <div class={styles.number}>9</div>
-                </div>
-              </div>
-            </div>
-          </Show>
-        </Show>
-      </div>
+      <Show when={mainStore.renderWord}>
+        <div class={hoverClassNumber()}>
+          <div class={styles.ticksContainer}>
+            <Show when={flag()} fallback={<Flips />}>
+              <Flips />
+            </Show>
+          </div>
+        </div>
+      </Show>
     </div>
   );
 };
