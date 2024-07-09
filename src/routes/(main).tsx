@@ -27,6 +27,7 @@ declare module "solid-js" {
 }
 
 export default function Main(props: RouteSectionProps) {
+  let checkTimeout: NodeJS.Timeout;
   const mockObj = {
     image: "/images/main/main-image.webp",
     date: "01 July 2023",
@@ -78,7 +79,7 @@ export default function Main(props: RouteSectionProps) {
       setMainStore("searchResult", res);
       mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
       if (res.length === 1 && str.length > 4) {
-        setTimeout(() => {
+        checkTimeout = setTimeout(() => {
           hanldeRenderWordFromSearch("1");
         }, 1500);
       }
@@ -129,6 +130,7 @@ export default function Main(props: RouteSectionProps) {
         setMainStore("searchTermColor", "#957c3e");
         setMainStore("searchTerm", "");
         setMainStore("searchResult", []);
+        // checkTimeout && clearTimeout(checkTimeout);
       }
       if (keyDown === "Enter" && mainStore.searchResult.length === 0) {
         setMainStore("translateTerm", mainStore.searchTerm);
