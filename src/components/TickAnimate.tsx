@@ -19,6 +19,7 @@ const TickAnimate: Component<{
       <div class={`${styles.flipCard} ${styles.unfold}`}>
         <span>{props.number === 0 ? 9 : props.number - 1}</span>
       </div>
+      <div class={styles.flipCardShadow}></div>
     </div>
   );
 };

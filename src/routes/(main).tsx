@@ -1,5 +1,5 @@
 import { RouteSectionProps } from "@solidjs/router";
-import { Show, Suspense } from "solid-js";
+import { lazy, Show, Suspense } from "solid-js";
 import { createStore } from "solid-js/store";
 import {
   getDataImage,
@@ -16,7 +16,7 @@ import { format } from "date-fns";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./main.module.scss";
 import { debounce } from "@solid-primitives/scheduled";
-import Bookmark from "~/components/bookmark";
+const Bookmark = lazy(() => import("~/components/bookmark"));
 
 declare module "solid-js" {
   namespace JSX {

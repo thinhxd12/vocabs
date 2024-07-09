@@ -20,7 +20,6 @@ import Definition from "~/components/definition";
 import { getUser } from "~/lib";
 const Translation = lazy(() => import("~/components/translation"));
 const Edit = lazy(() => import("~/components/edit"));
-const Bookmark = lazy(() => import("~/components/bookmark"));
 
 declare module "solid-js" {
   namespace JSX {

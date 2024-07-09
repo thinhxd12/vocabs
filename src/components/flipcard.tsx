@@ -39,17 +39,17 @@ const FlipCard: Component<{}> = (props) => {
       setHoverClassNumber(styles.flipCardNumberContainer);
       if (translations) {
         timeoutId1 = setTimeout(() => {
-          setHoverClassNumber(
-            `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerFadeOut}`
-          );
+          // setHoverClassNumber(
+          //   `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerFadeOut}`
+          // );
           const soundUrl = `https://vocabs3.vercel.app/speech?text=${translations}`;
           audio!.src = soundUrl;
           audio!.play();
         }, 3500);
         timeoutId2 = setTimeout(() => {
-          setHoverClassNumber(
-            `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerHidden}`
-          );
+          // setHoverClassNumber(
+          //   `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerHidden}`
+          // );
         }, 4800);
       }
     }

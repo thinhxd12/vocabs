@@ -17,7 +17,7 @@ import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import styles from "./edit.module.scss";
 import { mainStore, setMainStore } from "~/lib/mystore";
-import { EditDefinition } from "./editDefinition";
+import { EditDefinition } from "./definitionEdit";
 import { clickOutside, stopKeydown } from "~/utils";
 
 const Edit: Component<{

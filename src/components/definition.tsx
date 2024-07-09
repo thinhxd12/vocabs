@@ -47,6 +47,8 @@ const Definition: Component<{
                                 e.currentTarget.src =
                                   "/images/main/image_not_found.webp";
                               }}
+                              width={360}
+                              height={240}
                             />
                             <div class={styles.websImgOverlay}></div>
                           </Show>
