@@ -130,7 +130,7 @@ export default function Main(props: RouteSectionProps) {
         setMainStore("searchTermColor", "#957c3e");
         setMainStore("searchTerm", "");
         setMainStore("searchResult", []);
-        // checkTimeout && clearTimeout(checkTimeout);
+        checkTimeout && clearTimeout(checkTimeout);
       }
       if (keyDown === "Enter" && mainStore.searchResult.length === 0) {
         setMainStore("translateTerm", mainStore.searchTerm);
