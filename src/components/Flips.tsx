@@ -3,6 +3,7 @@ import TickStatic from "./TickStatic";
 import { mainStore } from "~/lib/mystore";
 import TickAnimate from "./TickAnimate";
 import TickAnimateComplete from "./TickAnimateComplete";
+import styles from "./tick.module.scss";
 
 const Flips: Component<{}> = (props) => {
   const [numbArray, setNumbArray] = createSignal<number[]>([3, 6, 9]);
@@ -26,7 +27,9 @@ const Flips: Component<{}> = (props) => {
           when={mainStore.renderWord!.number % 10 === 0}
           fallback={<TickStatic number={numbArray()[numbArray().length - 2]} />}
         >
-          <TickAnimate number={numbArray()[numbArray().length - 2]} />
+          <div class={styles.tickContainerDelay}>
+            <TickAnimate number={numbArray()[numbArray().length - 2]} />
+          </div>
         </Show>
       </Show>
 

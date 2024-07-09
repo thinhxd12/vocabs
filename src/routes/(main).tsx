@@ -77,8 +77,26 @@ export default function Main(props: RouteSectionProps) {
       }
       setMainStore("searchResult", res);
       mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
+      if (res.length === 1 && str.length > 4) {
+        setTimeout(() => {
+          hanldeRenderWordFromSearch("1");
+        }, 1500);
+      }
     }
   }, 450);
+
+  const hanldeRenderWordFromSearch = (keyDown: string) => {
+    setMainStore("searchSelectedIndex", Number(keyDown));
+    setTimeout(() => {
+      setMainStore("searchSelectedIndex", 0);
+    }, 300);
+    const parsedResult = JSON.parse(JSON.stringify(mainStore.searchResult));
+    setTimeout(() => {
+      setMainStore("searchTerm", "");
+      setMainStore("searchResult", []);
+      handleCheckWord(parsedResult[Number(keyDown) - 1]);
+    }, 600);
+  };
 
   const searchWord = (element: HTMLDivElement) => {
     element.addEventListener("keydown", (e) => {
@@ -98,18 +116,7 @@ export default function Main(props: RouteSectionProps) {
           mainStore.searchResult.length > 0 &&
           keyDonwNumber <= mainStore.searchResult.length
         ) {
-          setMainStore("searchSelectedIndex", Number(keyDown));
-          setTimeout(() => {
-            setMainStore("searchSelectedIndex", 0);
-          }, 300);
-          const parsedResult = JSON.parse(
-            JSON.stringify(mainStore.searchResult)
-          );
-          setTimeout(() => {
-            setMainStore("searchTerm", "");
-            setMainStore("searchResult", []);
-            handleCheckWord(parsedResult[Number(keyDown) - 1]);
-          }, 600);
+          hanldeRenderWordFromSearch(keyDown);
         }
       }
       if (keyDown === "Backspace") {

@@ -9,9 +9,17 @@
     perspective-origin: 50% 50%;
     perspective: 300px;
     background: $color-calendar-black;
-    border-radius: 6px;
+    border-radius: 3px;
     margin: 0 2.5px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.tickContainerDelay {
+    .tickContainer {
+        .flipCard {
+            animation-delay: 1.8s;
+        }
+    }
 }
 
 .upperCard,
