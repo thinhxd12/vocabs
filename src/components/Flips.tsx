@@ -18,7 +18,15 @@ const Flips: Component<{}> = (props) => {
           when={mainStore.renderWord!.number % 100 === 0}
           fallback={<TickStatic number={numbArray()[numbArray().length - 3]} />}
         >
-          <TickAnimate number={numbArray()[numbArray().length - 3]} />
+          <div
+            class={
+              mainStore.renderWord!.number === 100
+                ? styles.tickContainerDelayFadeout1
+                : styles.tickContainerDelay1
+            }
+          >
+            <TickAnimate number={numbArray()[numbArray().length - 3]} />
+          </div>
         </Show>
       </Show>
 
@@ -27,7 +35,13 @@ const Flips: Component<{}> = (props) => {
           when={mainStore.renderWord!.number % 10 === 0}
           fallback={<TickStatic number={numbArray()[numbArray().length - 2]} />}
         >
-          <div class={styles.tickContainerDelay}>
+          <div
+            class={
+              mainStore.renderWord!.number === 10
+                ? styles.tickContainerDelayFadeout2
+                : styles.tickContainerDelay2
+            }
+          >
             <TickAnimate number={numbArray()[numbArray().length - 2]} />
           </div>
         </Show>

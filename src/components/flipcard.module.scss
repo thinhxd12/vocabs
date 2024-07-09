@@ -57,11 +57,10 @@
     align-items: flex-start;
     justify-content: center;
     padding-top: 30%;
-    background: linear-gradient(to top, rgb(0, 0, 0, 0.15) 0%, rgb(0, 0, 0, 0.075) 50%, transparent 70%, rgb(0, 0, 0, 0.075) 90%, rgb(0, 0, 0, 0.15) 100%);
+    // background: linear-gradient(to top, rgb(0, 0, 0, 0.15) 0%, rgb(0, 0, 0, 0.075) 50%, transparent 70%, rgb(0, 0, 0, 0.075) 90%, rgb(0, 0, 0, 0.15) 100%);
 
     .ticksContainer {
         display: flex;
-        animation: scaleUp 0.3s;
     }
 }
 
@@ -79,14 +78,4 @@
 
 .flipCardNumberContainerHidden {
     display: none;
-}
-
-@keyframes scaleUp {
-    0% {
-        transform: scale(0.6);
-    }
-
-    100% {
-        transform: scale(1);
-    }
 }

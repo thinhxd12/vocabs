@@ -501,7 +501,7 @@ const Bottom: Component<{}> = () => {
               }}
               animate={{
                 opacity: 1,
-                bottom: "1px",
+                bottom: "0px",
               }}
               exit={{
                 opacity: 0,

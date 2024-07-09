@@ -77,6 +77,8 @@ const Vocabulary: Component<{}> = () => {
   const handleEditVocabularyFromDefinition = (text: VocabularyType) => {
     setEditWord({ ...text, number: text.number - 1 });
     setMainStore("showEdit", true);
+    setMainStore("searchTerm", "");
+    setMainStore("searchResult", []);
   };
   // -------------------EDIT END-------------------- //
 

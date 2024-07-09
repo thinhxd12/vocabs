@@ -50,7 +50,7 @@ const FlipCard: Component<{}> = (props) => {
           setHoverClassNumber(
             `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerHidden}`
           );
-        }, 4500);
+        }, 4800);
       }
     }
     untrack(() => {
