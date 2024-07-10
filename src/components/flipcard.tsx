@@ -9,20 +9,17 @@ import {
 import styles from "./flipcard.module.scss";
 import { mainStore } from "~/lib/mystore";
 import Flips from "./Flips";
+import { Motion, Presence } from "solid-motionone";
 
 const FlipCard: Component<{}> = (props) => {
   let audio: HTMLAudioElement | null;
   let timeoutId1: NodeJS.Timeout;
-  let timeoutId2: NodeJS.Timeout;
 
-  const [hoverClassNumber, setHoverClassNumber] = createSignal<string>(
-    styles.flipCardNumberContainer
-  );
   const [flag, setFlag] = createSignal<boolean>(false);
+  const [showNumber, setShowNumber] = createSignal<boolean>(false);
 
   createEffect(() => {
     clearTimeout(timeoutId1);
-    clearTimeout(timeoutId2);
     const v = mainStore.renderWord;
     if (v) {
       audio = new Audio();
@@ -36,21 +33,14 @@ const FlipCard: Component<{}> = (props) => {
         audio.play();
       }
 
-      setHoverClassNumber(styles.flipCardNumberContainer);
+      setShowNumber(true);
       if (translations) {
         timeoutId1 = setTimeout(() => {
-          setHoverClassNumber(
-            `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerFadeOut}`
-          );
           const soundUrl = `https://vocabs3.vercel.app/speech?text=${translations}`;
           audio!.src = soundUrl;
           audio!.play();
+          setShowNumber(false);
         }, 3500);
-        timeoutId2 = setTimeout(() => {
-          setHoverClassNumber(
-            `${styles.flipCardNumberContainer} ${styles.flipCardNumberContainerHidden}`
-          );
-        }, 4800);
       }
     }
     untrack(() => {
@@ -60,7 +50,6 @@ const FlipCard: Component<{}> = (props) => {
       audio?.pause();
       audio = null;
       clearTimeout(timeoutId1);
-      clearTimeout(timeoutId2);
     });
   });
 
@@ -82,13 +71,21 @@ const FlipCard: Component<{}> = (props) => {
       </Show>
 
       <Show when={mainStore.renderWord}>
-        <div class={hoverClassNumber()}>
-          <div class={styles.ticksContainer}>
-            <Show when={flag()} fallback={<Flips />}>
-              <Flips />
-            </Show>
-          </div>
-        </div>
+        <Presence>
+          <Show when={showNumber()}>
+            <Motion.div
+              class={styles.flipCardNumberContainer}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0, transition: { duration: 0.6 } }}
+            >
+              <div class={styles.ticksContainer}>
+                <Show when={flag()} fallback={<Flips />}>
+                  <Flips />
+                </Show>
+              </div>
+            </Motion.div>
+          </Show>
+        </Presence>
       </Show>
     </div>
   );
