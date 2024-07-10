@@ -118,6 +118,7 @@ export default function Main(props: RouteSectionProps) {
           keyDonwNumber <= mainStore.searchResult.length
         ) {
           hanldeRenderWordFromSearch(keyDown);
+          checkTimeout && clearTimeout(checkTimeout);
         }
       }
       if (keyDown === "Backspace") {
