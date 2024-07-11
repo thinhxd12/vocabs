@@ -76,7 +76,10 @@ const FlipCard: Component<{}> = (props) => {
             <Motion.div
               class={styles.flipCardNumberContainer}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0.6 } }}
+              exit={{
+                opacity: 0,
+                transition: { duration: 0.6, easing: "ease-in-out" },
+              }}
             >
               <div class={styles.ticksContainer}>
                 <Show when={flag()} fallback={<Flips />}>
