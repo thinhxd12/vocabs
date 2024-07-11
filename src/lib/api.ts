@@ -96,7 +96,7 @@ export const getScheduleData = (async (str: string) => {
     if (data) {
         let index = data.findIndex(item => item.date === str);
         let newData = data;
-        if (index > 0) {
+        if (index >= 0) {
             let startIndex = Math.floor(index / 6) * 6;
             newData = data.map((n, i) => {
                 if (i >= startIndex && i < startIndex + 6) {
@@ -855,7 +855,7 @@ export const getThisWeekScheduleIndex = (async (day: string, history: HistoryTyp
         .order('date');
     if (data) {
         let index = data.findIndex(item => item.date === day);
-        if (index > 0) {
+        if (index >= 0) {
             let startIndex = Math.floor(index / 6) * 6;
             let currentWeek = data.slice(startIndex, startIndex + 6) as ScheduleType[];
             const thisWeekIndex = data[startIndex].index1 as number;

@@ -411,7 +411,7 @@ const Bottom: Component<{}> = () => {
                   width={54}
                   height={25}
                 />
-                <span>{listStore.listToday?.index1 ?? "N"}</span>
+                <span>{Number(listStore.listToday?.index1 + 1) ?? "N"}</span>
               </button>
               <button
                 class={
@@ -431,7 +431,7 @@ const Bottom: Component<{}> = () => {
                   width={54}
                   height={25}
                 />
-                <span>{listStore.listToday?.index2 ?? "N"}</span>
+                <span>{Number(listStore.listToday?.index2 + 1) ?? "N"}</span>
               </button>
               <button
                 class={buttons.buttonMenu}

@@ -53,7 +53,7 @@ const Calendar: Component<{}> = (props) => {
         todayDate,
         mainStore.historyList[0]
       );
-      if (index) setMainStore("thisWeekIndex", index);
+      if (index !== undefined) setMainStore("thisWeekIndex", index);
     }
   };
 
@@ -128,8 +128,9 @@ const Calendar: Component<{}> = (props) => {
               </p>
               <p class={styles.setNewHistory}>
                 <Show when={mainStore.thisWeekIndex >= 0} fallback={"NaN"}>
-                  {mainStore.thisWeekIndex + 1} &#183;{" "}
-                  {mainStore.thisWeekIndex + 200}
+                  {Number(mainStore.thisWeekIndex + 1) +
+                    " - " +
+                    Number(mainStore.thisWeekIndex + 200)}
                 </Show>
               </p>
             </div>
