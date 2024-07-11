@@ -56,7 +56,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(6px);
+    background: linear-gradient(to top,
+            transparent 0%,
+            transparent 30%,
+            rgba(0, 0, 0, 0.3) 50%,
+            transparent 70%,
+            transparent 100%);
 
     .ticksContainer {
         display: flex;
