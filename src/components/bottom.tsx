@@ -274,11 +274,9 @@ const Bottom: Component<{}> = () => {
               <img
                 class={styles.bottomWeatherImg}
                 src={
-                  WMOCODE[
-                    String(
-                      mainStore.bottomWeather!.icon
-                    ) as keyof typeof WMOCODE
-                  ][mainStore.bottomWeather!.isDayTime ? "day" : "night"].image
+                  mainStore.bottomWeather!.isDayTime
+                    ? WMOCODE[mainStore.bottomWeather!.icon].day.image
+                    : WMOCODE[mainStore.bottomWeather!.icon].night.image
                 }
                 height={24}
                 alt="bottomWeatherIcon"
@@ -289,26 +287,18 @@ const Bottom: Component<{}> = () => {
               <div class={styles.scrollingTextInner}>
                 <div class={styles.scrollingText}>
                   <div class={styles.scrollingTextItem}>
-                    {
-                      WMOCODE[
-                        String(
-                          mainStore.bottomWeather!.icon
-                        ) as keyof typeof WMOCODE
-                      ][mainStore.bottomWeather!.isDayTime ? "day" : "night"]
-                        .description
-                    }
+                    {mainStore.bottomWeather!.isDayTime
+                      ? WMOCODE[mainStore.bottomWeather!.icon].day.description
+                      : WMOCODE[mainStore.bottomWeather!.icon].night
+                          .description}
                   </div>
                 </div>
                 <div class={styles.scrollingText}>
                   <div class={styles.scrollingTextItem}>
-                    {
-                      WMOCODE[
-                        String(
-                          mainStore.bottomWeather!.icon
-                        ) as keyof typeof WMOCODE
-                      ][mainStore.bottomWeather!.isDayTime ? "day" : "night"]
-                        .description
-                    }
+                    {mainStore.bottomWeather!.isDayTime
+                      ? WMOCODE[mainStore.bottomWeather!.icon].day.description
+                      : WMOCODE[mainStore.bottomWeather!.icon].night
+                          .description}
                   </div>
                 </div>
               </div>

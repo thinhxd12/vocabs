@@ -137,3 +137,16 @@ export interface WeatherGeoType {
   lat: number;
   lon: number;
 }
+
+export interface WeatherCodeData {
+  [key: string]: {
+    day: {
+      description: string;
+      image: string;
+    };
+    night: {
+      description: string;
+      image: string;
+    };
+  };
+}

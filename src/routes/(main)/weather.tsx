@@ -521,18 +521,16 @@ const Weather: Component<{}> = (props) => {
             </p>
             <div class={styles.weatherImgDiv}>
               <p>
-                {
-                  WMOCODE[String(current()!.icon) as keyof typeof WMOCODE][
-                    current()!.isDayTime ? "day" : "night"
-                  ].description
-                }
+                {current()!.isDayTime
+                  ? WMOCODE[current()!.icon].day.description
+                  : WMOCODE[current()!.icon].night.description}
               </p>
               <img
                 class={styles.weatherImg}
                 src={
-                  WMOCODE[String(current()!.icon) as keyof typeof WMOCODE][
-                    current()!.isDayTime ? "day" : "night"
-                  ].image
+                  current()!.isDayTime
+                    ? WMOCODE[current()!.icon].day.image
+                    : WMOCODE[current()!.icon].night.image
                 }
                 width={30}
               />
@@ -585,9 +583,9 @@ const Weather: Component<{}> = (props) => {
                     <img
                       class={styles.weatherHourlyIcon}
                       src={
-                        WMOCODE[String(data()!.icon) as keyof typeof WMOCODE][
-                          data()!.isDayTime ? "day" : "night"
-                        ].image
+                        data()!.isDayTime
+                          ? WMOCODE[data()!.icon].day.image
+                          : WMOCODE[data()!.icon].night.image
                       }
                       height={36}
                     />

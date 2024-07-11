@@ -734,24 +734,6 @@ export const submitNewSchedule = action(async (formData: FormData) => {
 }, "submitNewSchedule");
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // handlecheck
 export const handleCheckWord = async (text: VocabularySearchType) => {
     const wordData = await getWordData(text.created_at)

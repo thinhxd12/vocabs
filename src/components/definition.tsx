@@ -30,49 +30,50 @@ const Definition: Component<{
                         {item().partOfSpeech}
                       </span>
                     </div>
-                    <Index each={item().definitions}>
-                      {(m, n) => (
-                        <div
-                          class={
-                            m().image
-                              ? styles.websSenseHasImage
-                              : styles.websSense
-                          }
-                        >
-                          <Show when={m().image}>
-                            <img
-                              class={styles.websImg}
-                              src={m().image}
-                              onerror={(e) => {
-                                e.currentTarget.src =
-                                  "/images/main/image_not_found.webp";
-                              }}
-                              width={360}
-                              height={240}
-                            />
-                            <div class={styles.websImgOverlay}></div>
-                          </Show>
-                          <div class={styles.websDefs}>
-                            <Index each={m().definition}>
-                              {(x, y) => (
-                                <p
-                                  class={styles.websDef}
-                                  innerHTML={
-                                    x().similar
-                                      ? x().sense +
-                                        `<span class=${styles.websDefUp}>${
-                                          " : " + x().similar
-                                        }</span>`
-                                      : x().sense
-                                  }
-                                />
-                              )}
-                            </Index>
+                    <div class={styles.websDefsContainer}>
+                      <Index each={item().definitions}>
+                        {(m, n) => (
+                          <div
+                            class={
+                              m().image
+                                ? styles.websSenseHasImage
+                                : styles.websSense
+                            }
+                          >
+                            <Show when={m().image}>
+                              <img
+                                class={styles.websImg}
+                                src={m().image}
+                                onerror={(e) => {
+                                  e.currentTarget.src =
+                                    "/images/main/image_not_found.webp";
+                                }}
+                                width={360}
+                                height={240}
+                              />
+                              <div class={styles.websImgOverlay}></div>
+                            </Show>
+                            <div class={styles.websDefs}>
+                              <Index each={m().definition}>
+                                {(x, y) => (
+                                  <p
+                                    class={styles.websDef}
+                                    innerHTML={
+                                      x().similar
+                                        ? x().sense +
+                                          `<span class=${styles.websDefUp}>${
+                                            " : " + x().similar
+                                          }</span>`
+                                        : x().sense
+                                    }
+                                  />
+                                )}
+                              </Index>
+                            </div>
                           </div>
-                        </div>
-                      )}
-                    </Index>
-
+                        )}
+                      </Index>
+                    </div>
                     <Show when={item().example[0]}>
                       <p
                         class={styles.websX}

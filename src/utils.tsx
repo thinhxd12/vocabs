@@ -29,7 +29,7 @@ export const PRECIPITATION_PROBABILITY = 0.65;
 export const ACCUMULATION = 0.03;
 export const DEVIATION_NUMB = 0;
 
-export const WMOCODE = {
+export const WMOCODE: WeatherCodeData = {
   "0": {
     day: {
       description: "Sunny",
@@ -331,7 +331,7 @@ export const WEATHER_GEOS: WeatherGeoType[] = [
 ];
 
 import { onCleanup } from "solid-js";
-import { WeatherGeoType } from "./types";
+import { WeatherCodeData, WeatherGeoType } from "./types";
 
 declare module "solid-js" {
   namespace JSX {
