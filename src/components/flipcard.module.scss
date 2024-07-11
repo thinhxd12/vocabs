@@ -54,9 +54,8 @@
     right: 0;
     z-index: 9999;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
-    padding-top: 30%;
 
     .ticksContainer {
         display: flex;
@@ -64,7 +63,7 @@
 
         span {
             display: inline-block;
-            @include font('Helvetica', 90px, $color-white, bold, normal, 90px);
+            @include font('Helvetica', 150px, $color-white, bold, normal, 150px);
         }
     }
 }
