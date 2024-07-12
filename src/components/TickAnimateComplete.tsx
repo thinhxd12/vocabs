@@ -34,13 +34,10 @@ const TickAnimateComplete: Component<{
       <span class="tick-flip-card">
         <span
           class="tick-flip-panel-front tick-flip-front tick-flip-panel"
-          style="transform: rotateX(0deg);"
+          style="transform: rotateX(0deg); background: rgb(255, 255, 255);"
         >
           <span class="tick-flip-panel-front-text">
-            <span
-              class="tick-flip-panel-text-wrapper"
-              style={{ background: "#fff" }}
-            >
+            <span class="tick-flip-panel-text-wrapper">
               <img src="/images/main/cup.webp" width={52} />
             </span>
           </span>
@@ -89,6 +86,7 @@ const TickAnimateComplete: Component<{
         </Motion.span>
         <Motion.span
           class="tick-flip-panel-back tick-flip-back tick-flip-panel"
+          initial={{ background: "#fff" }}
           animate={{
             rotateX: "-360deg",
           }}
@@ -99,10 +97,7 @@ const TickAnimateComplete: Component<{
           }}
         >
           <span class="tick-flip-panel-back-text">
-            <span
-              class="tick-flip-panel-text-wrapper"
-              style={{ background: "#fff" }}
-            >
+            <span class="tick-flip-panel-text-wrapper">
               <img src="/images/main/cup.webp" width={52} />
             </span>
           </span>

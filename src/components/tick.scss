@@ -1,13 +1,13 @@
 .tick-flip {
-    min-width: 112px;
-    height: 168px;
-    margin: 0 3px;
+    min-width: 120px;
+    height: 180px;
     border-radius: 5px;
+    margin: 0 1px;
 }
 
 .tick-flip-panel {
-    color: #dcd8d1;
-    background-color: #161616;
+    color: #b8b8b8;
+    background-color: #111111;
 }
 
 .tick-flip-shadow {
@@ -91,7 +91,7 @@
     position: absolute;
     left: 0;
     width: 100%;
-    height: 51%; // 51% to fix transparent line problem between top and bottom card
+    height: 49%; // 51% to fix transparent line problem between top and bottom card
     backface-visibility: hidden;
     transform-style: preserve-3d;
 }
@@ -136,19 +136,19 @@
     z-index: 1;
     box-shadow: inset 0 -1px rgba(0, 0, 0, 0.1);
 
-    &::after {
-        z-index: 1;
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-image: linear-gradient(180deg,
-                rgba(0, 0, 0, 0.3) 1px,
-                rgba(0, 0, 0, 0.15) 1px,
-                rgba(0, 0, 0, 0) 30%);
-    }
+    // &::after {
+    //     z-index: 1;
+    //     content: '';
+    //     position: absolute;
+    //     left: 0;
+    //     top: 0;
+    //     width: 100%;
+    //     height: 100%;
+    //     background-image: linear-gradient(180deg,
+    //             rgba(0, 0, 0, 0.3) 1px,
+    //             rgba(0, 0, 0, 0.15) 1px,
+    //             rgba(0, 0, 0, 0) 30%);
+    // }
 }
 
 .tick-flip-panel-back-shadow {

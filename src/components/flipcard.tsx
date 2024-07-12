@@ -82,6 +82,7 @@ const FlipCard: Component<{}> = (props) => {
               class={styles.flipCardNumberContainer}
               animate={{ opacity: 1 }}
               exit={{
+                y: "100%",
                 opacity: 0,
                 transition: { duration: 0.3 },
               }}
