@@ -24,7 +24,7 @@ export const EditDefinition: Component<{
               return (
                 <div class={styles.websEntry}>
                   <div class={styles.websHead}>
-                    <span class={styles.websHeadPartOS}>
+                    <span class={styles.websHeadPartOfSpeech}>
                       {item().partOfSpeech}
                     </span>
                   </div>

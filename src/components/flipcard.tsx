@@ -78,7 +78,7 @@ const FlipCard: Component<{}> = (props) => {
               animate={{ opacity: 1 }}
               exit={{
                 opacity: 0,
-                transition: { duration: 0.6, easing: "ease-in-out" },
+                transition: { duration: 0.3 },
               }}
             >
               <div class={styles.ticksContainer}>

@@ -15,19 +15,24 @@ const Definition: Component<{
                 return (
                   <div class={styles.websEntry}>
                     <div class={styles.websHead}>
-                      <span class={styles.websHeadTranslations}>
-                        {mainStore
-                          .renderWord!.translations.find(
-                            (el) => el.partOfSpeech === item().partOfSpeech
-                          )
-                          ?.translations.join(", ")}
-                      </span>
-
                       <span
-                        class={styles.websHeadPartOS}
+                        class={styles.websHeadPartOfSpeech}
                         onClick={() => props.onEdit()}
                       >
                         {item().partOfSpeech}
+                        <span class={styles.websHeadDropdown}>
+                          {mainStore
+                            .renderWord!.translations.find(
+                              (el) => el.partOfSpeech === item().partOfSpeech
+                            )
+                            ?.translations.map((n) => {
+                              return (
+                                <span class={styles.websHeadDropdownItem}>
+                                  {n}
+                                </span>
+                              );
+                            })}
+                        </span>
                       </span>
                     </div>
                     <div class={styles.websDefsContainer}>

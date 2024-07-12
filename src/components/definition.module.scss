@@ -18,7 +18,6 @@
     .definitionBody {
         .websEntry {
             background: $color-vintage-background;
-            overflow: hidden;
             position: relative;
 
             &:last-child {
@@ -26,30 +25,51 @@
             }
 
             .websHead {
-                display: flex;
-                align-items: flex-end;
-                justify-content: space-between;
-                cursor: pointer;
-                padding: 5px 0 0 20px;
-                width: 100%;
                 position: absolute;
                 top: 0;
                 left: 0;
                 z-index: 9;
                 text-shadow: 0 0px 0px rgba(0, 0, 0, 0.9);
+                width: 100%;
 
-                .websHeadPartOS {
+                .websHeadPartOfSpeech {
                     @include font("Poppins", 18px, $color-black, 600, normal, 15px);
                     text-transform: uppercase;
-                    margin-right: 27px;
-                    padding: 4px 0 0;
+                    padding: 4px 2px 0;
                     background: rgba(255, 254, 255, 0.45);
+                    position: inherit;
+                    top: 5px;
+                    right: 27px;
+                    cursor: pointer;
                 }
 
-                .websHeadTranslations {
-                    @include font('SFProDisplay', 12px, $color-calendar-black, 500, normal, 18px);
-                    padding: 0 2px;
-                    background: rgba(255, 254, 255, 0.45);
+                .websHeadDropdown {
+                    visibility: hidden;
+                    opacity: 0;
+                    position: absolute;
+                    right: 0;
+                    z-index: 9999;
+                    margin-top: 1px;
+                    display: none;
+
+                    .websHeadDropdownItem {
+                        @include font('SFProDisplay', 12px, $color-calendar-black, 500, normal, 18px);
+                        padding: 0 2px;
+                        text-align: right;
+                        display: inline-block;
+                        margin: 0 0 1px;
+                        background: $color-vintage-background;
+                        text-transform: none;
+                        text-wrap: nowrap;
+                    }
+                }
+
+                .websHeadPartOfSpeech:hover .websHeadDropdown {
+                    visibility: visible;
+                    opacity: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
                 }
 
             }
