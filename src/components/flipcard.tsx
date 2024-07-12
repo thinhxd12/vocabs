@@ -57,16 +57,21 @@ const FlipCard: Component<{}> = (props) => {
     <div class={styles.flashCardContainer}>
       <Show when={!mainStore.searchTerm}>
         <Show when={mainStore.renderWord}>
-          <div class={styles.flipcardTextContainer}>
-            <div class={styles.flipcardTextContent}>
-              <p class={styles.flipcardText}>{mainStore.renderWord!.word}</p>
-              <p class={styles.flipcardPhonetic}>
-                <span>{mainStore.renderWord!.phonetics}</span>
-                <small>({mainStore.renderWord!.number - 1})</small>
-              </p>
-              <p class={styles.flipcardText}>{mainStore.renderWord!.word}</p>
+          <Presence>
+            <div class={styles.flipcardTextContainer}>
+              <Motion.div
+                class={styles.flipcardTextContent}
+                animate={{ y: showNumber() ? -28 : 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <p class={styles.flipcardText}>{mainStore.renderWord!.word}</p>
+                <p class={styles.flipcardPhonetic}>
+                  <span>{mainStore.renderWord!.phonetics}</span>
+                  <small>({mainStore.renderWord!.number - 1})</small>
+                </p>
+              </Motion.div>
             </div>
-          </div>
+          </Presence>
         </Show>
       </Show>
 
