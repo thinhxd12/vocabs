@@ -210,7 +210,7 @@
                 color: $color-calendar-text-2;
             }
 
-            .dateTextThisMonth~.dateTimeIndexDot {
+            .dateTextThisMonth~.dateTimeIndex .dateTimeIndexDot {
                 background-color: $color-red-1;
                 opacity: 0.6;
             }
