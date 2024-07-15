@@ -47,7 +47,7 @@
         position: relative;
 
         .bookmarkPassage::first-letter {
-            @include font("NYTCheltenham", 110px, $color-white, normal, normal, 100px);
+            @include font('GaramondPro', 120px, $color-white, 700, normal, 110px);
             float: left;
             margin-right: 5px;
             margin-top: 5px;
@@ -67,7 +67,7 @@
         }
 
         .bookmarkPassage {
-            @include font("NYTImperial", 18px, $color-black, normal, normal, 28px);
+            @include font('GaramondPro', 20px, $color-black, 400, normal, 30px);
         }
     }
 
@@ -101,17 +101,17 @@
 
         .bookmarkTitle {
             text-transform: uppercase;
-            @include font('NYTImperial', 16px, $color-black, 600, normal, 20px);
+            @include font('GaramondPro', 38px, $color-black, 400, normal, 44px);
         }
 
         .bookmarkAuthor {
             font-variant: small-caps;
-            @include font('NYTImperial', 20px, $color-black, 600, normal, 18px);
+            @include font('GaramondPro', 20px, $color-black, 400, normal, 20px);
         }
 
         .bookmarkYear {
-            @include font('NYTImperial', 13px, $color-black, 600, normal, 18px);
             padding-top: 3px;
+            @include font('GaramondPro', 15px, $color-black, 400, normal, 18px);
         }
     }
 
