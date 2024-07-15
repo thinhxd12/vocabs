@@ -38,7 +38,7 @@ const TickAnimateComplete: Component<{
         >
           <span class="tick-flip-panel-front-text">
             <span class="tick-flip-panel-text-wrapper">
-              <img src="/images/main/cup.webp" width={52} />
+              <img src="/images/main/cup.webp" width={110} />
             </span>
           </span>
           <span class="tick-flip-panel-front-shadow" style="opacity: 0;"></span>
@@ -98,7 +98,7 @@ const TickAnimateComplete: Component<{
         >
           <span class="tick-flip-panel-back-text">
             <span class="tick-flip-panel-text-wrapper">
-              <img src="/images/main/cup.webp" width={52} />
+              <img src="/images/main/cup.webp" width={110} />
             </span>
           </span>
           <Motion.span
