@@ -70,11 +70,11 @@ export default function Main(props: RouteSectionProps) {
 
   //------------------HANDLE SEARCH--------------------
   const trigger = debounce(async (str: string) => {
-    setMainStore("searchTermColor", "#957c3e");
+    setMainStore("searchTermColor", "#202020");
     const res = await searchText(str);
     if (res) {
       if (res.length === 0) {
-        setMainStore("searchTermColor", "#ca140c");
+        setMainStore("searchTermColor", "#f90000");
       }
       setMainStore("searchResult", res);
       mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
@@ -128,7 +128,7 @@ export default function Main(props: RouteSectionProps) {
         }
       }
       if (keyDown === " ") {
-        setMainStore("searchTermColor", "#957c3e");
+        setMainStore("searchTermColor", "#202020");
         setMainStore("searchTerm", "");
         setMainStore("searchResult", []);
         checkTimeout && clearTimeout(checkTimeout);
