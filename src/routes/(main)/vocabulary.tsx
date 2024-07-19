@@ -133,13 +133,13 @@ const Vocabulary: Component<{}> = () => {
                       alt="inputbackground"
                       class={styles.newInputBackground}
                     />
-                    <Motion.p
-                      animate={{
+                    <p
+                      style={{
                         color: mainStore.searchTermColor,
                       }}
                     >
                       {mainStore.searchTerm}
-                    </Motion.p>
+                    </p>
                   </div>
                 </div>
               </>
