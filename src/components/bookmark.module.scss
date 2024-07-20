@@ -74,7 +74,8 @@
     .bookmarkBodyChecked {
         @extend .bookmarkBody;
         background: url("/images/main/paper.webp");
-        background-size: 100% auto;
+        background-repeat: repeat-y;
+        background-size: cover;
     }
 
     .bookmarkEditContainer {
