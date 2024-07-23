@@ -41,7 +41,7 @@ const Vocabulary: Component<{}> = () => {
     const res = await searchText(str);
     if (res) {
       if (res.length === 0) {
-        setMainStore("searchTermColor", "#ca140c");
+        setMainStore("searchTermColor", "#f90000");
       }
       setMainStore("searchResult", res);
       mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
@@ -50,6 +50,7 @@ const Vocabulary: Component<{}> = () => {
 
   const handleRenderText = async (text: VocabularySearchType) => {
     if (mobileInput) mobileInput.value = "";
+    setMainStore("searchTermColor", "#202020");
     setMainStore("searchTerm", "");
     setMainStore("searchResult", []);
     handleCheckWord(text);

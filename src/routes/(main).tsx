@@ -70,7 +70,6 @@ export default function Main(props: RouteSectionProps) {
 
   //------------------HANDLE SEARCH--------------------
   const trigger = debounce(async (str: string) => {
-    setMainStore("searchTermColor", "#202020");
     const res = await searchText(str);
     if (res) {
       if (res.length === 0) {
@@ -87,6 +86,7 @@ export default function Main(props: RouteSectionProps) {
   }, 450);
 
   const hanldeRenderWordFromSearch = (keyDown: string) => {
+    setMainStore("searchTermColor", "#202020");
     setMainStore("searchSelectedIndex", Number(keyDown));
     setTimeout(() => {
       setMainStore("searchSelectedIndex", 0);
