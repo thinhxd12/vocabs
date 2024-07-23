@@ -26,6 +26,12 @@
         opacity: 0.3;
     }
 
+    &:active {
+        svg {
+            transform: scale(0.9)
+        }
+    }
+
 }
 
 .buttonMenu {
