@@ -1,5 +1,5 @@
 import { RouteSectionProps } from "@solidjs/router";
-import { lazy, onCleanup, Show, Suspense } from "solid-js";
+import { lazy, onCleanup, onMount, Show, Suspense } from "solid-js";
 import { createStore } from "solid-js/store";
 import {
   getDataImage,
@@ -42,6 +42,11 @@ export default function Main(props: RouteSectionProps) {
     nextImageUrl:
       "https://www.getdailyart.com/en/24707/mykola-pymonenko/the-idyll",
   };
+  onMount(() => {
+    audio = new Audio();
+    audio.src = "/sounds/mp3_Boing.mp3";
+    audio.volume = 0.3;
+  });
 
   onCleanup(() => {
     audio?.pause();
@@ -82,10 +87,7 @@ export default function Main(props: RouteSectionProps) {
       if (res.length === 0) {
         setMainStore("searchTermColor", "#f90000");
         if (str.length > 3) {
-          audio = new Audio();
-          audio.src = "/sounds/mp3_Boing.mp3";
-          audio.volume = 0.3;
-          audio.play();
+          audio?.play();
         }
       }
       setMainStore("searchResult", res);
