@@ -1,5 +1,5 @@
 import { action, cache } from "@solidjs/router";
-import { BookmarkType, CalendarType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryItemContentType, HistoryType, HourlyWeatherType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularySearchType, VocabularyTranslationType, VocabularyType, } from "~/types";
+import { BookmarkType, CalendarType, CurrentlyWeatherType, ExampleType, FixMinutelyTWeatherType, HistoryItemContentType, HistoryType, HourlyWeatherType, ImageType, MinutelyWeatherType, ScheduleType, TranslateType, VocabularyDefinitionType, VocabularySearchType, VocabularyTranslationType, VocabularyType, WeatherGeoType, } from "~/types";
 import { PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTables } from "~/utils";
 import { format, parse as parseTime } from "date-fns";
 import { parse } from 'node-html-parser';
@@ -1122,6 +1122,17 @@ const fetchGetJSON = async (url: string) => {
         return "";
     }
 }
+
+
+export const getWeatherLocations = (async () => {
+    "use server";
+    const { data } = await supabase
+        .from(mapTables.weather)
+        .select()
+        .order('default', { ascending: false });
+    if (data) return data as WeatherGeoType[];
+});
+
 
 export const getCurrentWeatherData = (async ({ lat: lat, lon: lon }: { lat: number; lon: number }) => {
     "use server";

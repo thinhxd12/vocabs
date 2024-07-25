@@ -23,6 +23,7 @@ export const mapTables = {
   history: "history",
   memories: "memories",
   bookmarks: "bookmarks",
+  weather: "weather",
 };
 
 export const PRECIPITATION_PROBABILITY = 0.65;
@@ -311,24 +312,6 @@ export const WMOCODE: WeatherCodeData = {
     },
   },
 };
-
-export const WEATHER_GEOS: WeatherGeoType[] = [
-  {
-    name: "Thủ Thừa",
-    lat: 10.588468,
-    lon: 106.40065,
-  },
-  {
-    name: "Cần Thơ",
-    lat: 10.0364216,
-    lon: 105.7875219,
-  },
-  {
-    name: "Tokyo",
-    lat: 35.652832,
-    lon: 139.839478,
-  },
-];
 
 import { onCleanup } from "solid-js";
 import { WeatherCodeData, WeatherGeoType } from "./types";

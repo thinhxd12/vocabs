@@ -27,13 +27,14 @@ import styles from "./weather.module.scss";
 import { getUser } from "~/lib";
 import { createAsync } from "@solidjs/router";
 import {
+  FaSolidArrowUpLong,
   FaSolidDroplet,
   FaSolidTemperatureLow,
   FaSolidWind,
 } from "solid-icons/fa";
-import { WEATHER_GEOS, WMOCODE } from "~/utils";
+import { WMOCODE } from "~/utils";
 import { format } from "date-fns";
-import { setMainStore } from "~/lib/mystore";
+import { mainStore } from "~/lib/mystore";
 
 let canvas: HTMLCanvasElement;
 let audio: HTMLAudioElement;
@@ -45,10 +46,10 @@ const Weather: Component<{}> = (props) => {
   // ***************check login**************
 
   const [geo, setGeo] = createSignal<{ lat: number; lon: number }>({
-    lat: WEATHER_GEOS[0].lat,
-    lon: WEATHER_GEOS[0].lon,
+    lat: 0,
+    lon: 0,
   });
-  const [geoTitle, setGeoTitle] = createSignal<string>(WEATHER_GEOS[0].name);
+  const [geoTitle, setGeoTitle] = createSignal<string>("");
   const [chartData, setChartData] = createSignal<{
     labels: any[];
     datasets: any[];
@@ -68,10 +69,10 @@ const Weather: Component<{}> = (props) => {
 
   const handleRenderWeather = (num: string) => {
     setGeo({
-      lat: WEATHER_GEOS[Number(num)].lat,
-      lon: WEATHER_GEOS[Number(num)].lon,
+      lat: mainStore.weatherLocations[Number(num)].lat,
+      lon: mainStore.weatherLocations[Number(num)].lon,
     });
-    setGeoTitle(WEATHER_GEOS[Number(num)].name);
+    setGeoTitle(mainStore.weatherLocations[Number(num)].name);
     refetchCurrent();
     refetchMinutely();
   };
@@ -80,7 +81,11 @@ const Weather: Component<{}> = (props) => {
     Chart.register(Title, Tooltip, Legend, Colors, Filler);
     loadTextures();
     audio.volume = 0.5;
-    current.state === "ready" && setMainStore("bottomWeather", current()!);
+    const item =
+      mainStore.weatherLocations!.find((item) => item.default) ||
+      mainStore.weatherLocations[0];
+    setGeo({ lat: item!.lat, lon: item!.lon });
+    setGeoTitle(item!.name);
   });
 
   createEffect(async () => {
@@ -510,7 +515,7 @@ const Weather: Component<{}> = (props) => {
             class={styles.weatherSelect}
             onchange={(e) => handleRenderWeather(e.currentTarget.value)}
           >
-            <Index each={WEATHER_GEOS}>
+            <Index each={mainStore.weatherLocations}>
               {(item, index) => <option value={index}>{item().name}</option>}
             </Index>
           </select>
@@ -552,6 +557,13 @@ const Weather: Component<{}> = (props) => {
                 <span>
                   {Math.round(current()?.windSpeed || 0)} <small>km/h</small>
                 </span>
+                <FaSolidArrowUpLong
+                  size={10}
+                  style={{
+                    transform: `rotate(${current()!.windDirection}deg)`,
+                    "margin-left": "3px",
+                  }}
+                />
               </div>
               <div class={styles.weatherInfo}>
                 <span>

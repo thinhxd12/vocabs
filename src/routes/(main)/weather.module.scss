@@ -144,7 +144,7 @@
 
             .weatherHourlyTemp {
                 margin-top: 6px;
-                @include font('SFProDisplay', 14px, $color-white, 300, normal, 14px);
+                @include font('SFProDisplay', 13px, $color-white, 300, normal, 14px);
             }
         }
     }

@@ -14,14 +14,16 @@ import {
   getListContent,
   getTodayData,
   getTotalMemories,
+  getWeatherLocations,
   handleCheckWord,
   updateTodayData,
   updateTodaySchedule,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
-import { WEATHER_GEOS, WMOCODE } from "~/utils";
+import { WMOCODE } from "~/utils";
 import { clickOutside } from "~/utils";
+import { CurrentlyWeatherType } from "~/types";
 
 let intervalCountdown: NodeJS.Timeout;
 let intervalAutoplay: NodeJS.Timeout;
@@ -37,14 +39,17 @@ const Bottom: Component<{}> = () => {
     const data = await Promise.all([
       getTotalMemories(),
       getTodayData(todayDate),
-      getCurrentWeatherData({
-        lat: WEATHER_GEOS[0].lat,
-        lon: WEATHER_GEOS[0].lon,
-      }),
+      getWeatherLocations(),
     ]);
     setMainStore("totalMemories", data[0]!);
     setListStore("listToday", data[1]!);
-    setMainStore("bottomWeather", data[2]!);
+    setMainStore("weatherLocations", data[2]!);
+    const item = data[2]!.find((item) => item.default) || data[2]![0];
+    const abc = await getCurrentWeatherData({
+      lat: item!.lat,
+      lon: item!.lon,
+    });
+    setBottomWeather(abc);
   });
 
   // -------------------LOGOUT-------------------- //
@@ -191,12 +196,25 @@ const Bottom: Component<{}> = () => {
     setShowMenu(false);
   };
 
+  const [bottomWeather, setBottomWeather] = createSignal<
+    CurrentlyWeatherType | undefined
+  >({
+    apparentTemperature: 0,
+    isDayTime: true,
+    humidity: 0,
+    temperature: 0,
+    uvIndex: 0,
+    icon: 0,
+    windDirection: 0,
+    windSpeed: 0,
+  });
+
   const weatherInterval = setInterval(async () => {
     const data = await getCurrentWeatherData({
-      lat: WEATHER_GEOS[0].lat,
-      lon: WEATHER_GEOS[0].lon,
+      lat: mainStore.weatherLocations[0].lat,
+      lon: mainStore.weatherLocations[0].lon,
     });
-    if (data) setMainStore("bottomWeather", data);
+    if (data) setBottomWeather(data);
   }, 1000 * 12 * 60);
 
   return (
@@ -262,7 +280,7 @@ const Bottom: Component<{}> = () => {
           class={styles.bottomBtn3}
         >
           <Show
-            when={mainStore.bottomWeather}
+            when={bottomWeather()}
             fallback={
               <div class={styles.bottomBtn3Content}>
                 <small>God from the machine</small>
@@ -274,31 +292,29 @@ const Bottom: Component<{}> = () => {
               <img
                 class={styles.bottomWeatherImg}
                 src={
-                  mainStore.bottomWeather!.isDayTime
-                    ? WMOCODE[mainStore.bottomWeather!.icon].day.image
-                    : WMOCODE[mainStore.bottomWeather!.icon].night.image
+                  bottomWeather()!.isDayTime
+                    ? WMOCODE[bottomWeather()!.icon].day.image
+                    : WMOCODE[bottomWeather()!.icon].night.image
                 }
                 height={24}
                 alt="bottomWeatherIcon"
               />
-              <p>{Math.round(mainStore.bottomWeather!.temperature)}°</p>
+              <p>{Math.round(bottomWeather()!.temperature)}°</p>
             </span>
             <div class={styles.scrollingTextContainer}>
               <div class={styles.scrollingTextInner}>
                 <div class={styles.scrollingText}>
                   <div class={styles.scrollingTextItem}>
-                    {mainStore.bottomWeather!.isDayTime
-                      ? WMOCODE[mainStore.bottomWeather!.icon].day.description
-                      : WMOCODE[mainStore.bottomWeather!.icon].night
-                          .description}
+                    {bottomWeather()!.isDayTime
+                      ? WMOCODE[bottomWeather()!.icon].day.description
+                      : WMOCODE[bottomWeather()!.icon].night.description}
                   </div>
                 </div>
                 <div class={styles.scrollingText}>
                   <div class={styles.scrollingTextItem}>
-                    {mainStore.bottomWeather!.isDayTime
-                      ? WMOCODE[mainStore.bottomWeather!.icon].day.description
-                      : WMOCODE[mainStore.bottomWeather!.icon].night
-                          .description}
+                    {bottomWeather()!.isDayTime
+                      ? WMOCODE[bottomWeather()!.icon].day.description
+                      : WMOCODE[bottomWeather()!.icon].night.description}
                   </div>
                 </div>
               </div>

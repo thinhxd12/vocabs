@@ -136,6 +136,7 @@ export interface WeatherGeoType {
   name: string;
   lat: number;
   lon: number;
+  default: boolean;
 }
 
 export interface WeatherCodeData {

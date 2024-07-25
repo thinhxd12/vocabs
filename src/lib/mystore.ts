@@ -1,5 +1,5 @@
 import { createStore } from "solid-js/store";
-import { BookmarkType, CalendarType, CurrentlyWeatherType, HistoryType, ScheduleType, VocabularySearchType, VocabularyType } from "~/types";
+import { BookmarkType, CalendarType, CurrentlyWeatherType, HistoryType, ScheduleType, VocabularySearchType, VocabularyType, WeatherGeoType } from "~/types";
 
 type ListStoreType = {
   listType: 0 | 1 | 2;
@@ -40,7 +40,7 @@ type MainStoreType = {
   searchTermColor: string;
   searchSelectedIndex: number;
   searchDeleteIndex: number;
-  bottomWeather: CurrentlyWeatherType | null;
+  weatherLocations: WeatherGeoType[];
 }
 
 export const [mainStore, setMainStore] = createStore<MainStoreType>({
@@ -59,7 +59,7 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   searchTermColor: "#202020",
   searchSelectedIndex: 0,
   searchDeleteIndex: 0,
-  bottomWeather: null,
+  weatherLocations: [],
 })
 
 
