@@ -1,5 +1,5 @@
 import { RouteSectionProps } from "@solidjs/router";
-import { lazy, Show, Suspense } from "solid-js";
+import { lazy, onCleanup, Show, Suspense } from "solid-js";
 import { createStore } from "solid-js/store";
 import {
   getDataImage,
@@ -27,6 +27,7 @@ declare module "solid-js" {
 }
 
 export default function Main(props: RouteSectionProps) {
+  let audio: HTMLAudioElement | null;
   let checkTimeout: NodeJS.Timeout;
   const mockObj = {
     image: "/images/main/main-image.webp",
@@ -41,6 +42,12 @@ export default function Main(props: RouteSectionProps) {
     nextImageUrl:
       "https://www.getdailyart.com/en/24707/mykola-pymonenko/the-idyll",
   };
+
+  onCleanup(() => {
+    audio?.pause();
+    audio = null;
+    clearTimeout(checkTimeout);
+  });
 
   const [imageObj, setImageObj] = createStore<ImageType>(mockObj);
 
@@ -74,6 +81,12 @@ export default function Main(props: RouteSectionProps) {
     if (res) {
       if (res.length === 0) {
         setMainStore("searchTermColor", "#f90000");
+        if (str.length > 3) {
+          audio = new Audio();
+          audio.src = "/sounds/mp3_Boing.mp3";
+          audio.volume = 0.3;
+          audio.play();
+        }
       }
       setMainStore("searchResult", res);
       mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
