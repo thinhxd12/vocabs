@@ -154,11 +154,7 @@ export const getDataImage = (async (url: string) => {
                     })
                     .join("")
                 : `<p>${getElText(doc, ".main-description__text-content", "")}</p>`;
-        const nextImgUrl = getElAttribute(
-            doc,
-            `.also__item:nth-child(${Math.floor(Math.random() * 15) + 1}) a`,
-            "href"
-        );
+        const nextImgUrl = getElAttribute(doc, ".also__item a", "href");
         const regexImage = /(https?:\/\/[^\s]+iPhone\.jpg)/g;
         const regexAuthor = /(https?:\/\/[^\s]+)/g;
         const convertedImage = imgSrcGet.match(regexImage)[0] || "";
