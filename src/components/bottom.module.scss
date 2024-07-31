@@ -184,6 +184,7 @@
             width: 75px;
             overflow: hidden;
             position: absolute;
+            z-index: 3;
             bottom: 1px;
             left: 15px;
             -webkit-mask-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5) 10%, #fff 20%, #fff 80%, rgba(255, 255, 255, 0.5) 90%, transparent);
@@ -222,9 +223,15 @@
             padding-right: 5px;
             padding-top: 3px;
 
+            .bottomWeatherImg {
+                margin-top: 1px;
+                position: relative;
+                z-index: 1;
+            }
+
             p {
                 @include font('SFProDisplay', 9px, #7c7b7a, 300, normal, 12px);
-                padding-left: 4px;
+                padding: 3px 0 0 4px;
             }
         }
 

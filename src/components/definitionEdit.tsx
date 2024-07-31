@@ -24,9 +24,11 @@ export const EditDefinition: Component<{
               return (
                 <div class={styles.websEntry}>
                   <div class={styles.websHead}>
-                    <span class={styles.websHeadPartOfSpeech}>
-                      {item().partOfSpeech}
-                    </span>
+                    <div class={styles.websHeadPartOfSpeechContainer}>
+                      <span class={styles.websHeadPartOfSpeech}>
+                        {item().partOfSpeech}
+                      </span>
+                    </div>
                   </div>
                   <div class={styles.websDefsContainer}>
                     <Index each={item().definitions}>
@@ -56,10 +58,7 @@ export const EditDefinition: Component<{
                                   class={styles.websDef}
                                   innerHTML={
                                     x().similar
-                                      ? x().sense +
-                                        `<span class=${styles.websDefUp}>${
-                                          " : " + x().similar
-                                        }</span>`
+                                      ? x().sense + " : " + x().similar
                                       : x().sense
                                   }
                                 />

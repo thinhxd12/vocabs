@@ -377,10 +377,9 @@ const handleGetDefinitions = (data: string) => {
             firstItem.querySelectorAll(".sb-entry .sense").forEach((m, n) => {
                 let letter = getElText(m, ".letter", "");
                 let dtText = getElText(m, ".dtText", "");
-                const parts = dtText.split(" : ");
                 definitionItem.definitions[0].definition.push({
-                    sense: letter !== "" ? letter + " " + parts[0] : "&emsp;" + parts[0],
-                    similar: parts[1]
+                    sense: letter !== "" ? letter + " " + dtText : "&emsp;" + dtText,
+                    similar: ""
                 });
             });
         }

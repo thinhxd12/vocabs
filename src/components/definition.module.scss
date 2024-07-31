@@ -36,27 +36,35 @@
                 text-shadow: 0 0px 0px rgba(0, 0, 0, 0.9);
                 width: 100%;
 
-                .websHeadPartOfSpeech {
-                    @include font("Poppins", 18px, $color-black, 600, normal, 15px);
-                    text-transform: uppercase;
-                    padding: 4px 2px 0;
-                    background: rgba(255, 254, 255, 0.6);
+                .websHeadPartOfSpeechContainer {
                     position: inherit;
-                    top: 5px;
-                    right: 27px;
+                    top: 4px;
+                    right: 9px;
+                    height: 18px;
+                    width: 120px;
+                    text-align: center;
+                    @include flex-center;
+                    position: inherit;
+                }
+
+                .websHeadPartOfSpeech {
+                    @include font("Poppins", 18px, $color-black, 600, normal, 9px);
+                    text-transform: uppercase;
+                    padding: 8px 2px 0;
+                    background: rgba(255, 254, 255, 0.6);
                     cursor: pointer;
                 }
 
                 .websHeadDropdown {
                     visibility: hidden;
                     opacity: 0;
-                    position: absolute;
-                    right: 0;
+                    position: inherit;
+                    top: 19px;
                     z-index: 9999;
-                    margin-top: 1px;
+                    min-width: 120px;
                     display: flex;
                     flex-direction: column;
-                    align-items: flex-end;
+                    align-items: center;
 
                     .websHeadDropdownItem {
                         @include font('SFProDisplay', 12px, $color-calendar-black, 500, normal, 18px);
@@ -67,10 +75,11 @@
                         background: $color-vintage-background;
                         text-transform: none;
                         text-wrap: nowrap;
+                        cursor: default;
                     }
                 }
 
-                .websHeadPartOfSpeech:hover .websHeadDropdown {
+                .websHeadPartOfSpeechContainer:hover .websHeadDropdown {
                     visibility: visible;
                     opacity: 1;
                 }
@@ -88,7 +97,7 @@
                     width: 100%;
 
                     &:first-child {
-                        padding-top: 24px;
+                        padding-top: 23px;
                     }
 
                     .websDefs {
@@ -147,16 +156,12 @@
             }
         }
 
-
-
-
         .websDef {
             @include font('Poppins', 11px, $color-calendar-bg, 400, normal, 16px);
             text-shadow: 0 0px 2px rgba(0, 0, 0, 0.9);
             padding: 1px 0 0px;
         }
 
-        .websDefUp,
         .websDef::first-letter {
             @include font('Poppins', 13px, $color-white, 700, normal, 16px);
             text-transform: uppercase;
@@ -167,7 +172,7 @@
 
             position: relative;
             text-indent: 24px;
-            padding: 3px 3px 3px 6px;
+            padding: 3px 3px 1px 6px;
             background: $color-vintage-background;
 
             b {
@@ -178,18 +183,16 @@
 
         .websSyn {
             background: $color-vintage-background;
-            padding: 1px 0 0 6px;
+            padding: 3px 0 0 6px;
 
             b {
-                @include font('Poppins', 12px, $color-black, 600, normal, 16px);
-                text-transform: uppercase;
+                font-variant: small-caps;
+                @include font('Poppins', 13px, $color-black, 600, normal, 16px);
             }
 
             small {
-                @include font('Poppins', 10px, #282828, 400, normal, 16px);
-                color: #727272;
-                font-weight: 300;
-                text-transform: lowercase;
+                @include font('Poppins', 14px, $color-black, 700, normal, 16px);
+                text-transform: uppercase;
             }
         }
 

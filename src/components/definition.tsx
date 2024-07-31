@@ -15,11 +15,13 @@ const Definition: Component<{
                 return (
                   <div class={styles.websEntry}>
                     <div class={styles.websHead}>
-                      <span
-                        class={styles.websHeadPartOfSpeech}
-                        onClick={() => props.onEdit()}
-                      >
-                        {item().partOfSpeech}
+                      <div class={styles.websHeadPartOfSpeechContainer}>
+                        <span
+                          class={styles.websHeadPartOfSpeech}
+                          onClick={() => props.onEdit()}
+                        >
+                          {item().partOfSpeech}
+                        </span>
                         <span class={styles.websHeadDropdown}>
                           {mainStore
                             .renderWord!.translations.find(
@@ -33,7 +35,7 @@ const Definition: Component<{
                               );
                             })}
                         </span>
-                      </span>
+                      </div>
                     </div>
                     <div class={styles.websDefsContainer}>
                       <Index each={item().definitions}>
@@ -65,10 +67,7 @@ const Definition: Component<{
                                     class={styles.websDef}
                                     innerHTML={
                                       x().similar
-                                        ? x().sense +
-                                          `<span class=${styles.websDefUp}>${
-                                            " : " + x().similar
-                                          }</span>`
+                                        ? x().sense + " : " + x().similar
                                         : x().sense
                                     }
                                   />
