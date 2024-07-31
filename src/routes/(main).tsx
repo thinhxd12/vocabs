@@ -41,7 +41,7 @@ export default function Main(props: RouteSectionProps) {
       "\x3Cp>Hello July!\x3C/p>\x3Cp>Time for an artist who in my opinion, created one of the best images of Summer ... the French Pointillist, Paul Signac!\x3C/p>\x3Cp>Signac was a painter and an avid sailor. He created several marine paintings, including a series of views over the port of Saint-Tropez, where he settled in 1892.\x3C/p>\x3Cp>In this vertical painting, the eye initially fixes on the vibrant red-orange buoy, which contrasts with the water's deep blue. The reflections of the buildings then lead the viewer's eye to the background, with lighter tones. The divisionist technique and the combination of pure colors allowed Signac to depict a glittering sea, and the glimmering light of the Midi.\x3C/p>\x3Cp>The Pointillist painters differ from the Impressionists, most notably in the scientific dimension of their work. Regarding the rigor of his initial work, Signac's strokes have widened for this series; the division of tones is more relaxed.\x3C/p>",
     nextImageUrl:
       // "https://www.getdailyart.com/en/24707/mykola-pymonenko/the-idyll",
-      "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez"
+      "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez",
   };
   onMount(() => {
     audio = new Audio();
@@ -150,6 +150,7 @@ export default function Main(props: RouteSectionProps) {
         checkTimeout && clearTimeout(checkTimeout);
       }
       if (keyDown === "Enter" && mainStore.searchResult.length === 0) {
+        setMainStore("searchTermColor", "#202020");
         setMainStore("translateTerm", mainStore.searchTerm);
         setMainStore("searchTerm", "");
         setMainStore("showTranslate", true);

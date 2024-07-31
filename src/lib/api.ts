@@ -752,6 +752,7 @@ export const handleCheckWord = async (text: VocabularySearchType) => {
                 setMainStore("totalMemories", total);
             }
         }
+
     }
 };
 
