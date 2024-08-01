@@ -105,10 +105,7 @@ const Definition: Component<{
                     </Show>
 
                     <Show when={item().synonyms}>
-                      <p class={styles.websSyn}>
-                        <b>Synonym </b>
-                        <small>{item().synonyms}</small>
-                      </p>
+                      <p class={styles.websSyn}>【 {item().synonyms} 】</p>
                     </Show>
                   </div>
                 );

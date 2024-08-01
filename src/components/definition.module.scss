@@ -6,6 +6,7 @@
     max-width: 360px;
     padding: 0;
     overflow-x: hidden;
+    overflow-y: hidden;
 
     &::-webkit-scrollbar {
         display: none;
@@ -183,17 +184,10 @@
 
         .websSyn {
             background: $color-vintage-background;
-            padding: 3px 0 0 6px;
-
-            b {
-                font-variant: small-caps;
-                @include font('Poppins', 13px, $color-black, 600, normal, 16px);
-            }
-
-            small {
-                @include font('Poppins', 14px, $color-black, 700, normal, 16px);
-                text-transform: uppercase;
-            }
+            padding: 3px 6px 0 6px;
+            @include font('Poppins', 14px, $color-calendar-text-1, 700, normal, 16px);
+            text-transform: uppercase;
+            text-align: center;
         }
 
         .websCredits {
@@ -205,16 +199,16 @@
 
             .websAuthor {
                 font-variant: small-caps;
-                @include font('NYTImperial', 13px, $color-black, 600, normal, 16px);
+                @include font('NYTImperial', 11px, $color-black, 600, normal, 12px);
             }
 
             .websTitle {
                 text-transform: uppercase;
-                @include font('NYTImperial', 13px, $color-black, 600, normal, 16px);
+                @include font('NYTImperial', 11px, $color-black, 600, normal, 12px);
             }
 
             .websYear {
-                @include font('NYTImperial', 12px, $color-black, 600, normal, 16px);
+                @include font('NYTImperial', 10px, $color-black, 600, normal, 12px);
             }
         }
     }
