@@ -17,8 +17,8 @@ import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import styles from "./edit.module.scss";
 import { mainStore, setMainStore } from "~/lib/mystore";
-import { EditDefinition } from "./definitionEdit";
 import { clickOutside, stopKeydown } from "~/utils";
+import Definition from "./definition";
 
 const Edit: Component<{
   word: VocabularyType;
@@ -383,7 +383,7 @@ const Edit: Component<{
           </button>
         </form>
         <Show when={renderEditWord()}>
-          <EditDefinition item={renderEditWord()!} onCheck={handleCheck} />
+          <Definition item={renderEditWord()!} onCheck={handleCheck} />
         </Show>
       </div>
       <Toaster

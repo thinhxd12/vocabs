@@ -1,41 +1,57 @@
-import { Component, Index, Show } from "solid-js";
+import { Component, Index, Setter, Show } from "solid-js";
 import styles from "./definition.module.scss";
 import { mainStore } from "~/lib/mystore";
 import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
+import { VocabularyType } from "~/types";
 
 const Definition: Component<{
-  onEdit: () => void;
+  item?: VocabularyType;
+  onEdit?: () => void;
+  onCheck?: Setter<boolean>;
 }> = (props) => {
   return (
     <>
       <Show when={mainStore.renderWord}>
         <div class={styles.definition}>
           <div class={styles.definitionBody}>
-            <Index each={mainStore.renderWord!.definitions}>
+            <Index
+              each={
+                props.item?.definitions || mainStore.renderWord!.definitions
+              }
+            >
               {(item, index) => {
                 return (
                   <div class={styles.websEntry}>
                     <div class={styles.websHead}>
                       <div class={styles.websHeadPartOfSpeechContainer}>
-                        <span
-                          class={styles.websHeadPartOfSpeech}
-                          onClick={() => props.onEdit()}
+                        <Show
+                          when={props.onEdit}
+                          fallback={
+                            <span class={styles.websHeadPartOfSpeechNormal}>
+                              {item().partOfSpeech}
+                            </span>
+                          }
                         >
-                          {item().partOfSpeech}
-                        </span>
-                        <span class={styles.websHeadDropdown}>
-                          {mainStore
-                            .renderWord!.translations.find(
-                              (el) => el.partOfSpeech === item().partOfSpeech
-                            )
-                            ?.translations.map((n) => {
-                              return (
-                                <span class={styles.websHeadDropdownItem}>
-                                  {n}
-                                </span>
-                              );
-                            })}
-                        </span>
+                          <span
+                            class={styles.websHeadPartOfSpeech}
+                            onClick={() => props.onEdit!()}
+                          >
+                            {item().partOfSpeech}
+                          </span>
+                          <span class={styles.websHeadDropdown}>
+                            {mainStore
+                              .renderWord!.translations.find(
+                                (el) => el.partOfSpeech === item().partOfSpeech
+                              )
+                              ?.translations.map((n) => {
+                                return (
+                                  <span class={styles.websHeadDropdownItem}>
+                                    {n}
+                                  </span>
+                                );
+                              })}
+                          </span>
+                        </Show>
                       </div>
                     </div>
                     <div class={styles.websDefsContainer}>

@@ -25,9 +25,9 @@ import toast, { Toaster } from "solid-toast";
 import styles from "./translation.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
-import { EditDefinition } from "./definitionEdit";
 import { setMainStore } from "~/lib/mystore";
 import { clickOutside, stopKeydown } from "~/utils";
+import Definition from "./definition";
 
 declare module "solid-js" {
   namespace JSX {
@@ -313,7 +313,7 @@ const Translation: Component<{
         </Suspense>
 
         <Show when={definition()}>
-          <EditDefinition item={definition()!} />
+          <Definition item={definition()!} />
         </Show>
       </div>
       <Toaster
