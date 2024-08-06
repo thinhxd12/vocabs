@@ -1,6 +1,7 @@
 import { Component, Index, Show } from "solid-js";
 import styles from "./definition.module.scss";
 import { mainStore } from "~/lib/mystore";
+import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
 
 const Definition: Component<{
   onEdit: () => void;
@@ -86,26 +87,27 @@ const Definition: Component<{
                       <div class={styles.websCredits}>
                         <Show when={item().example[0].author}>
                           <div class={styles.websAuthor}>
-                            {item().example[0].author}
+                            {item().example[0].author} -
                           </div>
-                          <div>&nbsp;-&nbsp;</div>
                         </Show>
                         <Show when={item().example[0].title}>
-                          <div class={styles.websTitle}>
+                          <span class={styles.websTitle}>
                             {item().example[0].title}
-                          </div>
+                          </span>
                         </Show>
                         <Show when={item().example[0].year}>
-                          <div>&nbsp;-&nbsp;</div>
                           <div class={styles.websYear}>
-                            {item().example[0].year}
+                            - {item().example[0].year}
                           </div>
                         </Show>
                       </div>
                     </Show>
 
                     <Show when={item().synonyms}>
-                      <p class={styles.websSyn}>【 {item().synonyms} 】</p>
+                      <div class={styles.websSyn}>
+                        <RiArrowsCornerDownRightFill size={16} />
+                        <span>{item().synonyms}</span>
+                      </div>
                     </Show>
                   </div>
                 );

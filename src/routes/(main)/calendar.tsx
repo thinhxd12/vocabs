@@ -135,9 +135,9 @@ const Calendar: Component<{}> = (props) => {
               </p>
             </div>
             <div class={styles.calendarImageSign}>
-              <p>0 05-07-22</p>
-              <p>229 05-07-23</p>
-              <p>2071 05-07-24</p>
+              <p>050722-0</p>
+              <p>050723-229</p>
+              <p>050724-2071</p>
             </div>
           </div>
           <div class={styles.calendarDates}>

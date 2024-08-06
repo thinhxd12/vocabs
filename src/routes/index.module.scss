@@ -38,10 +38,10 @@
     .loginForm {
         position: relative;
         z-index: 99;
-        height: 22px;
         width: 180px;
         transition: all 0.1s;
         background: rgba(0, 0, 0, 0.15);
+        border-radius: 6px;
 
         &:hover {
             background: rgba(0, 0, 0, 0.45);
@@ -52,13 +52,14 @@
             outline: none;
             height: 100%;
             width: 100%;
-            padding-top: 1px;
             font-size: 16px;
             line-height: 22px;
             transition: all .3s ease;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: #fff;
+            padding: 3px 0 2px;
+            border-radius: 6px;
         }
 
         input:-webkit-autofill,
@@ -74,7 +75,7 @@
         .loginBtn {
             position: absolute;
             right: -42px;
-            top: 2px;
+            top: 4px;
             z-index: 1001;
             width: 18px;
             height: 18px;

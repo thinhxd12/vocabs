@@ -108,14 +108,14 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             </Show>
           </div>
           <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
-          <button
+          <div
             class={styles.buttonBookmarkLeft}
             onclick={() => handleGetPrevBookmark()}
-          ></button>
-          <button
+          ></div>
+          <div
             class={styles.buttonBookmarkRight}
             onclick={() => handleGetNextBookmark()}
-          ></button>
+          ></div>
         </div>
       </Suspense>
 
