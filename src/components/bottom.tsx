@@ -50,6 +50,13 @@ const Bottom: Component<{}> = () => {
       lon: item!.lon,
     });
     setBottomWeather(abc);
+    const weatherInterval = setInterval(async () => {
+      const data = await getCurrentWeatherData({
+        lat: item!.lat,
+        lon: item!.lon,
+      });
+      if (data) setBottomWeather(data);
+    }, 1000 * 12 * 60);
   });
 
   // -------------------LOGOUT-------------------- //
@@ -208,14 +215,6 @@ const Bottom: Component<{}> = () => {
     windDirection: 0,
     windSpeed: 0,
   });
-
-  const weatherInterval = setInterval(async () => {
-    const data = await getCurrentWeatherData({
-      lat: mainStore.weatherLocations[0].lat,
-      lon: mainStore.weatherLocations[0].lon,
-    });
-    if (data) setBottomWeather(data);
-  }, 1000 * 12 * 60);
 
   return (
     <div class={styles.bottom}>

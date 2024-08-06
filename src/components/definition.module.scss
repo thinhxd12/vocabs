@@ -1,7 +1,7 @@
 @import "../assets/styles/mixins.scss";
 
 .definition {
-    @include baseBody(#f7f7f7);
+    @include baseBody($color-vintage-background);
     min-width: 360px;
     max-width: 360px;
     padding: 0;
@@ -12,174 +12,159 @@
         display: none;
     }
 
-    .definitionHeader {
+    .definitionButtons {
         position: absolute;
-        top: 1px;
-        right: 1px;
+        top: 0;
+        right: 0;
+        margin: 1px;
         z-index: 99;
-        display: flex;
     }
 
-    .definitionBody {
-        .websEntry {
-            background: $color-vintage-background;
-            position: relative;
+    .websEntry {
+        position: relative;
+    }
 
-            &:last-child {
-                border-bottom: 1px solid $color-border;
+    .websHeader {
+        position: absolute;
+        top: 6px;
+        left: 0;
+        z-index: 9;
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+
+        .websHeaderContainer {
+            width: 120px;
+            text-align: center;
+            margin-right: 15px;
+
+            .websHeaderContent {
+                height: 22px;
+                display: inline-block;
+                padding: 4px 3px 0;
+                @include font("Poppins", 18px, $color-black, 600, normal, 18px);
+                text-transform: uppercase;
+                cursor: pointer;
+                background: rgba(255, 254, 255, 0.72);
+                height: 21px;
             }
 
-            .websHead {
+            .websHeaderContentNormal {
+                @extend .websHeaderContent;
+                cursor: default;
+            }
+        }
+    }
+
+    .websHeadDropdown {
+        visibility: hidden;
+        opacity: 0;
+        min-width: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 28px;
+        right: 15px;
+        z-index: 10;
+
+        .websHeadDropdownItem {
+            @include font('SFProDisplay', 12px, $color-calendar-black, 500, normal, 18px);
+            padding: 0 2px;
+            text-align: right;
+            display: inline-block;
+            margin: 0 0 1px;
+            background: $color-vintage-background;
+            text-transform: none;
+            text-wrap: nowrap;
+            cursor: default;
+            border-radius: 3px;
+        }
+
+    }
+
+    .websEntry:hover .websHeadDropdown {
+        visibility: visible;
+        opacity: 1;
+    }
+
+
+    .websBody {
+        .websSense {
+            position: relative;
+
+            &:first-child {
+                padding-top: 23px;
+            }
+
+            .websDefs {
+                background: $color-black;
+                padding: 2px 3px 1px 6px;
+                position: inherit;
+                z-index: 9;
+            }
+        }
+
+        .websSenseImage {
+            position: relative;
+            width: 100%;
+            height: 215px;
+            overflow: hidden;
+
+            &:first-child {
+                height: 240px;
+            }
+
+            .websImg {
+                object-fit: cover;
+                object-position: center 60%;
+                width: 100%;
+                height: 100%;
+                z-index: 6;
+            }
+
+            .websDefs {
+                position: absolute;
+                width: 100%;
+                bottom: 0;
+                left: 0;
+                z-index: 7;
+                padding: 5px 3px 4px 6px;
+            }
+
+            &::after {
+                content: "";
                 position: absolute;
                 top: 0;
                 left: 0;
-                z-index: 9;
-                text-shadow: 0 0px 0px rgba(0, 0, 0, 0.9);
-                width: 100%;
-
-                .websHeadPartOfSpeechContainer {
-                    position: inherit;
-                    top: 4px;
-                    right: 9px;
-                    height: 18px;
-                    width: 120px;
-                    text-align: center;
-                    @include flex-center;
-                    position: inherit;
-                }
-
-                .websHeadPartOfSpeech {
-                    @include font("Poppins", 18px, $color-black, 600, normal, 9px);
-                    text-transform: uppercase;
-                    padding: 8px 2px 0;
-                    background: rgba(255, 254, 255, 0.6);
-                    cursor: pointer;
-                }
-
-                .websHeadPartOfSpeechNormal {
-                    @extend .websHeadPartOfSpeech;
-                    cursor: default;
-                }
-
-                .websHeadDropdown {
-                    visibility: hidden;
-                    opacity: 0;
-                    position: inherit;
-                    top: 19px;
-                    z-index: 9999;
-                    min-width: 120px;
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-
-                    .websHeadDropdownItem {
-                        @include font('SFProDisplay', 12px, $color-calendar-black, 500, normal, 18px);
-                        padding: 0 2px;
-                        text-align: right;
-                        display: inline-block;
-                        margin: 0 0 1px;
-                        background: $color-vintage-background;
-                        text-transform: none;
-                        text-wrap: nowrap;
-                        cursor: default;
-                    }
-                }
-
-                .websHeadPartOfSpeechContainer:hover .websHeadDropdown {
-                    visibility: visible;
-                    opacity: 1;
-                }
-
-            }
-
-            .websDefsContainer {
-                position: relative;
-                top: 0;
-                left: 0;
+                right: 0;
+                bottom: 0;
                 z-index: 6;
-                width: 100%;
-
-                .websSense {
-                    width: 100%;
-
-                    &:first-child {
-                        padding-top: 23px;
-                    }
-
-                    .websDefs {
-                        background: $color-black;
-                        position: initial;
-                        width: 100%;
-                        padding: 5px 3px 4px 6px;
-                    }
-                }
-
-
-                .websSenseHasImage {
-                    width: 100%;
-                    height: 215px;
-                    overflow: hidden;
-                    position: relative;
-
-                    &:first-child {
-                        height: 240px;
-                    }
-
-                    .websImg {
-                        object-fit: cover;
-                        object-position: center 60%;
-                        width: 100%;
-                        height: 100%;
-                        z-index: 3;
-                    }
-
-                    .websImgOverlay {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        right: 0;
-                        bottom: 0;
-                        z-index: 6;
-                        background: linear-gradient(to top,
-                                rgba(0, 0, 0, 0.95) 0%,
-                                rgba(0, 0, 0, 0.5) 25%,
-                                rgba(0, 0, 0, 0.1) 40%,
-                                transparent 50%,
-                                transparent 100%);
-                    }
-
-                    .websDefs {
-                        position: absolute;
-                        width: 100%;
-                        bottom: 0;
-                        left: 0;
-                        z-index: 9;
-                        padding: 5px 3px 4px 6px;
-                    }
-                }
-
-
+                background: linear-gradient(to top,
+                        rgba(0, 0, 0, 0.75) 0%,
+                        rgba(0, 0, 0, 0.35) 25%,
+                        rgba(0, 0, 0, 0.1) 45%,
+                        transparent 60%,
+                        transparent 100%);
             }
         }
 
         .websDef {
             @include font('Poppins', 11px, $color-calendar-bg, 400, normal, 16px);
             text-shadow: 0 0px 2px rgba(0, 0, 0, 0.9);
-            padding: 1px 0 0px;
+            padding: 2px 0 1px;
         }
 
         .websDef::first-letter {
-            @include font('Poppins', 13px, $color-white, 700, normal, 16px);
+            @include font('Poppins', 13px, $color-white, 600, normal, 16px);
             text-transform: uppercase;
         }
 
         .websX {
             @include font('NYTImperial', 12px, $color-black, 400, normal, 18px);
-
             position: relative;
             text-indent: 24px;
-            padding: 3px 3px 1px 6px;
-            background: $color-vintage-background;
+            padding: 0px 3px 2px 6px;
 
             b {
                 font-weight: 600;
@@ -189,14 +174,13 @@
 
         .websSyn {
             @include flex;
-            @include font('Poppins', 14px, $color-calendar-text-1, 600, normal, 16px);
-            background: $color-vintage-background;
-            padding: 3px 6px 0 6px;
+            @include font('Poppins', 13px, #111111, 600, normal, 10px);
+            padding: 5px 3px 2px 6px;
             text-transform: uppercase;
 
             svg {
-                margin-top: -5px;
-                margin-right: 3px;
+                margin-top: -4px;
+                margin-right: 2px;
             }
         }
 
@@ -205,7 +189,7 @@
             flex-wrap: wrap;
             justify-content: flex-end;
             padding: 0 6px;
-            background: $color-vintage-background;
+            margin-bottom: 2px;
 
             .websAuthor {
                 font-variant: small-caps;
@@ -222,5 +206,7 @@
                 @include font('NYTImperial', 10px, $color-black, 600, normal, 12px);
             }
         }
+
     }
+
 }
