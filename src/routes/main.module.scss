@@ -81,7 +81,7 @@
             .mainRightDate {
                 max-width: 100%;
                 text-transform: uppercase;
-                @include font('basier', 11px, #989da7, bold, normal, 16px);
+                @include font('Basier', 11px, #989da7, bold, normal, 16px);
             }
 
             .mainRightTitle {
@@ -103,7 +103,7 @@
             .mainRightAttribute {
                 letter-spacing: -0.25px;
                 margin-bottom: 5px;
-                @include font('basier', 11px, #989da7, 400, normal);
+                @include font('Basier', 11px, #989da7, 400, normal);
             }
 
             .mainRightAuthors {
@@ -118,7 +118,7 @@
                 }
 
                 .mainRightAuthor {
-                    @include font('basier', 12px, $color-white, 400, normal, 12px);
+                    @include font('Basier', 12px, $color-white, 400, normal, 12px);
 
                     .mainRightName {
                         background: $color-border;
@@ -145,7 +145,7 @@
             }
 
             p {
-                @include font('basier', 12px, #989da7, 400, normal, 16px);
+                @include font('Basier', 12px, #989da7, 400, normal, 16px);
                 margin-bottom: 3px;
                 text-indent: 9px;
                 max-width: 275px;

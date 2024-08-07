@@ -43,7 +43,7 @@
             @include flex-center;
 
             span {
-                @include font("basier", 9px, #575757, 600, normal, 9px);
+                @include font("Basier", 9px, #575757, 600, normal, 9px);
                 padding-top: 2px;
                 transform: rotateZ(-90deg);
             }

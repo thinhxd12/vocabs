@@ -47,21 +47,18 @@
 
 
             .setNewMonth {
-                @include font('Poppins', 10px, $color-calendar-white, 400, normal, 10px);
+                @include font('SFProDisplay', 10px, $color-calendar-white, 500, normal, 14px);
                 text-transform: uppercase;
-                padding: 3px 3px 0px;
                 cursor: default;
             }
 
             .setNewWeek {
-                @include font('Poppins', 18px, $color-calendar-white, 400, normal, 16px);
-                padding: 5px 5px 2px;
+                @include font('SFProDisplay', 18px, $color-calendar-white, 500, normal, 24px);
                 cursor: pointer;
             }
 
             .setNewHistory {
-                @include font('Poppins', 8px, $color-calendar-white, 400, normal, 8px);
-                padding: 3px 3px 1px;
+                @include font('SFProDisplay', 8px, $color-calendar-white, 500, normal, 12px);
                 margin-bottom: 0px;
                 cursor: default;
             }
@@ -74,7 +71,7 @@
             left: 1px;
 
             p {
-                @include font('Poppins', 7px, $color-calendar-black, 300, normal, 10px);
+                @include font('SFProDisplay', 7px, $color-calendar-black, 300, normal, 10px);
                 text-align: left;
             }
         }
@@ -90,8 +87,6 @@
             @include flex-center;
             width: 100%;
             margin: 0 auto;
-            padding: 1px 0;
-            @include font('Poppins', 12px, $color-calendar-white, 600, normal, 21px);
 
             &:not(:first-child) {
                 border-bottom: 1px dotted $color-calendar-border;
@@ -108,7 +103,7 @@
                 cursor: default;
                 height: 21px;
                 width: 49px;
-                line-height: 24px;
+                @include font('SFProDisplay', 12px, $color-calendar-white, 700, normal, 21px);
 
                 &:first-child {
                     color: $color-red-1;

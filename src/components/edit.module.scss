@@ -97,7 +97,7 @@
         }
 
         .editInputHandy {
-            @include font("basier", 12px, $color-black, 400, normal, 15px);
+            @include font("Basier", 12px, $color-black, 400, normal, 15px);
             width: 100%;
             padding: 3px;
             background: none;
@@ -116,7 +116,7 @@
         }
 
         .editItemHeader {
-            @include font('NYTImperial', 12px, $color-black, 500, italic, 15px);
+            @include font('NYTCheltenham', 12px, $color-black, 500, italic, 15px);
             text-indent: 6px;
             margin-bottom: 6px;
             padding: 3px;

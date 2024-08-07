@@ -5,8 +5,10 @@
     min-width: 360px;
     max-width: 360px;
     padding: 0;
+    margin-bottom: 0;
     overflow-x: hidden;
     overflow-y: hidden;
+    border-bottom: 1px solid #1a1a1a;
 
     &::-webkit-scrollbar {
         display: none;
@@ -26,7 +28,7 @@
 
     .websHeader {
         position: absolute;
-        top: 6px;
+        top: 3px;
         left: 0;
         z-index: 9;
         width: 100%;
@@ -41,12 +43,11 @@
             .websHeaderContent {
                 height: 22px;
                 display: inline-block;
-                padding: 4px 3px 0;
-                @include font("Poppins", 18px, $color-black, 600, normal, 18px);
+                padding: 2px 3px 0px;
+                @include font("SFProDisplay", 19px, $color-black, 700, normal, 19px);
                 text-transform: uppercase;
                 cursor: pointer;
                 background: rgba(255, 254, 255, 0.72);
-                height: 21px;
             }
 
             .websHeaderContentNormal {
@@ -94,12 +95,12 @@
             position: relative;
 
             &:first-child {
-                padding-top: 23px;
+                padding-top: 21px;
             }
 
             .websDefs {
                 background: $color-black;
-                padding: 2px 3px 1px 6px;
+                padding: 0px 3px 3px 6px;
                 position: inherit;
                 z-index: 9;
             }
@@ -129,7 +130,7 @@
                 bottom: 0;
                 left: 0;
                 z-index: 7;
-                padding: 5px 3px 4px 6px;
+                padding: 0px 3px 3px 6px;
             }
 
             &::after {
@@ -150,36 +151,38 @@
         }
 
         .websDef {
-            @include font('Poppins', 11px, $color-calendar-bg, 500, normal, 18px);
-            text-shadow: 0 0px 2px rgba(0, 0, 0, 0.9);
+            @include font('Roobert', 12px, $color-calendar-bg, 500, normal, 16px);
             padding: 2px 0 1px;
         }
 
         .websDef::first-letter {
-            @include font('Poppins', 13px, $color-white, 600, normal, 16px);
+            @include font('Roobert', 14px, $color-white, 700, normal, 16px);
             text-transform: uppercase;
         }
 
         .websX {
-            @include font('NYTImperial', 12px, $color-black, 400, normal, 18px);
+            @include font('GaramondPro', 14px, $color-black, 400, normal, 18px);
             position: relative;
             text-indent: 24px;
-            padding: 0px 3px 2px 6px;
+            padding: 3px 3px 0px 6px;
 
             b {
-                font-weight: 600;
+                font-weight: 700;
                 color: $color-red-1;
             }
         }
 
         .websSyn {
             @include flex;
-            @include font('Poppins', 13px, #454545, 600, normal, 18px);
-            padding: 3px 3px 1px 6px;
+            padding: 0 3px 3px 2px;
+            background-color: $color-background-4;
 
             svg {
-                margin-top: -3px;
-                margin-right: 3px;
+                padding-top: 3px;
+            }
+
+            span {
+                @include font('Roobert', 12px, #53535f, 500, normal, 16px);
             }
         }
 
@@ -187,22 +190,22 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-end;
+            align-items: flex-end;
             padding: 0 6px;
-            margin-bottom: 2px;
 
             .websAuthor {
                 font-variant: small-caps;
-                @include font('NYTImperial', 11px, $color-black, 600, normal, 12px);
+                @include font("Roobert", 12px, #302d2d, 500, normal, 18px);
             }
 
             .websTitle {
                 text-transform: uppercase;
-                @include font('NYTImperial', 11px, $color-black, 600, normal, 12px);
+                @include font("Roobert", 12px, #302d2d, 500, normal, 18px);
                 margin: 0 1.5px;
             }
 
             .websYear {
-                @include font('NYTImperial', 10px, $color-black, 600, normal, 12px);
+                @include font("Roobert", 10px, #302d2d, 500, normal, 16px);
             }
         }
 

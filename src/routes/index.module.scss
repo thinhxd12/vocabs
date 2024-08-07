@@ -15,7 +15,7 @@
         position: absolute;
         top: 30px;
         left: 60px;
-        @include font("basier", 12px, $color-white, 500, normal, 18px);
+        @include font("Basier", 12px, $color-white, 500, normal, 18px);
         width: 300px;
         text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
     }
@@ -24,7 +24,7 @@
         position: absolute;
         bottom: 9px;
         right: 15px;
-        @include font("basier", 12px, $color-white, 500, normal, 18px);
+        @include font("Basier", 12px, $color-white, 500, normal, 18px);
         text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
     }
 
@@ -75,11 +75,11 @@
 
         .loginBtn {
             position: absolute;
-            right: -42px;
-            top: 4px;
+            right: -36px;
+            top: 1px;
             z-index: 1001;
-            width: 18px;
-            height: 18px;
+            width: 24px;
+            height: 24px;
             background: none;
             outline: none;
             border: none;
@@ -107,7 +107,7 @@
     }
 
     .loginAlert {
-        @include font("basier", 12px, $color-white, 500, normal, 21px);
+        @include font("Basier", 12px, $color-white, 500, normal, 21px);
         text-align: center;
         margin-top: 9px;
     }

@@ -85,7 +85,7 @@
     }
 
     .bookmarkTextArea {
-        @include font("basier", 12px, $color-black, 400, normal, 15px);
+        @include font("Basier", 12px, $color-black, 400, normal, 15px);
         padding: 3px;
         width: 100%;
         background: none;
@@ -154,7 +154,7 @@
     }
 
     .bookmarkInput {
-        @include font("basier", 12px, $color-black, 400, normal, 15px);
+        @include font("Basier", 12px, $color-black, 400, normal, 15px);
         width: 100%;
         padding: 3px;
         background: none;

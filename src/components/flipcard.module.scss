@@ -16,7 +16,7 @@
         .flipcardText {
             width: 100%;
             height: 27px;
-            @include font("NYTCheltenham", 16px, #202020, 800, normal, 27px);
+            @include font("NYTCheltenham", 18px, #202020, 700, normal, 27px);
             text-transform: uppercase;
             text-align: center;
         }

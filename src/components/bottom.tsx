@@ -143,7 +143,7 @@ const Bottom: Component<{}> = () => {
       } else {
         endAutoplay();
       }
-    }, 7500);
+    }, 8000);
   };
 
   const pauseAutoplay = () => {
