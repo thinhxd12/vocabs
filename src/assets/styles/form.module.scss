@@ -9,12 +9,16 @@
         margin-bottom: 3px;
 
         .formInput {
-            @include font("SF Pro Display", 12px, $color-black, 400, normal, 15px);
+            @include font("Basier", 12px, $color-black, 400, normal, 15px);
             width: 100%;
             padding: 3px;
             background: none;
             outline: none;
             border: none;
+        }
+
+        .formInput[name="meaning"] {
+            font-family: "SF Pro Display";
         }
 
         .formTextarea {

@@ -61,7 +61,7 @@
                 border: 0;
                 outline: 0;
                 text-align: center;
-                @include font('Roslindale', 15px, $color-white, 500, normal, 27px);
+                @include font('Constantine', 18px, $color-white, 700, normal, 27px);
             }
 
             .searchButton {
@@ -95,7 +95,7 @@
 
     .translationResultBody {
         .translationMainResult {
-            @include font('Roslindale', 14px, $color-black, 500, normal, 16px);
+            @include font('Roslindale Variable', 14px, #1A73E8, 500, normal, 16px);
             text-align: center;
             text-transform: lowercase;
             cursor: default;
@@ -105,7 +105,7 @@
         .translationResultContent {
             .translationResultItem {
                 p {
-                    @include font('Roslindale', 13px, $color-black, 500, normal, 16px);
+                    @include font('Roslindale Variable', 13px, $color-black, 500, normal, 16px);
                     margin: 3px 0;
                     cursor: default;
                     display: inline-block;
@@ -120,16 +120,16 @@
                         span:nth-child(1) {
                             cursor: default;
                             margin-left: 2px;
-                            font-family: 'Times New Roman', Times, serif;
+                            @include font('SF Pro Display', 12px, $color-black, 300, normal, 16px);
                         }
 
                         span:nth-child(2) {
-                            font-size: 10px;
+                            @include font('SF Pro Display', 10px, $color-black, 300, normal, 16px);
                         }
 
                         .frequencyContainer {
                             @include flex-center;
-                            padding-top: 3px;
+                            height: 16px;
 
                             .frequencyDot {
                                 border-radius: 2px;

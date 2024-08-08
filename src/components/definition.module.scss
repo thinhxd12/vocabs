@@ -175,10 +175,10 @@
         .websSyn {
             @include flex;
             padding: 2px 3px 3px 3px;
-            background: rgba(52, 52, 52, 0.5);
+            background: #999999;
 
             span {
-                @include font('Open Sans', 12px, #181818, 600, normal, 16px);
+                @include font('Open Sans', 12px, #111111, 600, normal, 16px);
             }
         }
 
@@ -191,17 +191,17 @@
 
             .websAuthor {
                 font-variant: small-caps;
-                @include font("Open Sans", 13px, #181818, 600, normal, 18px);
+                @include font("Open Sans", 13px, #111111, 600, normal, 18px);
             }
 
             .websTitle {
                 text-transform: uppercase;
-                @include font("Open Sans", 13px, #181818, 600, normal, 18px);
+                @include font("Open Sans", 13px, #111111, 600, normal, 18px);
                 margin: 0 1.5px;
             }
 
             .websYear {
-                @include font("Open Sans", 11px, #181818, 600, normal, 17px);
+                @include font("Open Sans", 11px, #111111, 600, normal, 17px);
             }
         }
 
