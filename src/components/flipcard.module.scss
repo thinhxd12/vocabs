@@ -24,7 +24,7 @@
         .flipcardPhonetic {
             width: 100%;
             height: 27px;
-            @include font("SF Pro Display", 14px, $color-red-1, 400, normal, 27px);
+            @include font("Open Sans", 14px, $color-red-1, 400, normal, 27px);
             text-align: center;
 
             small {
