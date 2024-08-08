@@ -35,18 +35,18 @@
             appearance: none;
             margin-left: -18px;
             cursor: pointer;
-            @include font('SFProDisplay', 21px, $color-white, 300, normal, 20px);
+            @include font("SF Pro Display", 21px, $color-white, 300, normal, 20px);
             z-index: 1001;
 
             option {
                 text-align: center;
-                @include font('SFProDisplay', 12px, $color-black, 400, normal, 12px);
+                @include font("SF Pro Display", 12px, $color-black, 400, normal, 12px);
             }
         }
 
         .weatherTemperature {
             cursor: default;
-            @include font('SFProDisplay', 99px, $color-white, 100, normal, 94px);
+            @include font("Open Sans", 99px, $color-white, 100, normal, 94px);
         }
 
         .weatherImgDiv {
@@ -56,7 +56,7 @@
             margin-bottom: 3px;
 
             p {
-                @include font('SFProDisplay', 16px, $color-white, 400, normal, 18px);
+                @include font("SF Pro Display", 16px, $color-white, 400, normal, 18px);
             }
 
             .weatherImg {
@@ -78,12 +78,12 @@
                 margin-right: 9px;
 
                 span {
-                    @include font('SFProDisplay', 12px, $color-white, 400, normal, 10px);
+                    @include font("SF Pro Display", 12px, $color-white, 400, normal, 10px);
                     margin-left: 2px;
                 }
 
                 small {
-                    @include font('SFProDisplay', 10px, $color-white, 400, normal, 10px);
+                    @include font("SF Pro Display", 10px, $color-white, 400, normal, 10px);
                 }
             }
 
@@ -103,7 +103,7 @@
             }
 
             span {
-                @include font('SFProDisplay', 12px, $color-white, 400, normal, 14px);
+                @include font("SF Pro Display", 12px, $color-white, 400, normal, 14px);
             }
         }
     }
@@ -131,11 +131,11 @@
             scroll-snap-align: start;
 
             .weatherHourlyTime {
-                @include font('SFProDisplay', 12px, $color-white, 300, normal, 12px);
+                @include font("SF Pro Display", 12px, $color-white, 300, normal, 12px);
             }
 
             .weatherHourlyProb {
-                @include font('SFProDisplay', 12px, #0062bf, 500, normal, 16px);
+                @include font("SF Pro Display", 12px, #0062bf, 500, normal, 16px);
             }
 
             .weatherHourlyProbHidden {
@@ -144,7 +144,7 @@
 
             .weatherHourlyTemp {
                 margin-top: 6px;
-                @include font('SFProDisplay', 13px, $color-white, 300, normal, 14px);
+                @include font("SF Pro Display", 13px, $color-white, 300, normal, 14px);
             }
         }
     }
@@ -165,7 +165,7 @@
     }
 
     .weatherPredict {
-        @include font('SFProDisplay', 11px, $color-white, 500, normal, 15px);
+        @include font("SF Pro Display", 11px, $color-white, 500, normal, 15px);
         letter-spacing: 0.5px;
         text-align: center;
     }

@@ -31,7 +31,7 @@
 
             span {
                 text-align: center;
-                @include font("Roslindale", 9px, $color-black, 600, normal, 10px);
+                @include font("Roslindale Variable", 9px, $color-black, 600, normal, 10px);
                 display: block;
             }
         }
@@ -43,11 +43,10 @@
             @include flex-center;
 
             span {
-                @include font("Basier", 9px, #575757, 600, normal, 9px);
+                @include font("SF Pro Display", 9px, #575757, 700, normal, 9px);
                 padding-top: 2px;
                 transform: rotateZ(-90deg);
             }
-
         }
     }
 
@@ -89,11 +88,11 @@
             cursor: pointer;
 
             span {
-                @include font("Roslindale", 12px, #7c7b7a, 600, normal, 15px);
+                @include font("Roslindale Variable", 12px, #7c7b7a, 600, normal, 15px);
             }
 
             small {
-                @include font("Roslindale", 10px, #7c7b7a, 600, normal, 14px);
+                @include font("Roslindale Variable", 10px, #7c7b7a, 600, normal, 14px);
             }
         }
     }
@@ -108,7 +107,7 @@
         overflow: hidden;
 
         span {
-            @include font('Roslindale', 9px, #7c7b7a, 600, normal, 9px);
+            @include font('Roslindale Variable', 9px, #7c7b7a, 600, normal, 9px);
             text-align: center;
             position: absolute;
             bottom: 1px;
@@ -121,7 +120,7 @@
         }
 
         small {
-            @include font('Roslindale', 6px, #7c7b7a, 400, normal, 6px);
+            @include font('Roslindale Variable', 6px, #7c7b7a, 400, normal, 6px);
             text-align: center;
             position: absolute;
             bottom: 0;
@@ -194,7 +193,7 @@
         .scrollingTextInner {
             display: flex;
             white-space: nowrap;
-            @include font('Roslindale', 9px, #7c7b7a, 600, normal, 9px);
+            @include font('Roslindale Variable', 9px, #7c7b7a, 600, normal, 9px);
             -webkit-font-smoothing: subpixel-antialiased;
         }
 
@@ -230,7 +229,7 @@
             }
 
             p {
-                @include font('SFProDisplay', 9px, #7c7b7a, 300, normal, 12px);
+                @include font('SF Pro Display', 9px, #7c7b7a, 300, normal, 12px);
                 padding: 3px 0 0 4px;
             }
         }

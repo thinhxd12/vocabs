@@ -22,7 +22,7 @@
         .editHeaderLeft {
             .editHeaderText {
                 b {
-                    @include font('NYTCheltenham', 13px, $color-black, 500, normal);
+                    @include font("SF Pro Display", 13px, $color-black, 500, normal);
                 }
             }
         }
@@ -67,7 +67,7 @@
                 border: 0;
                 outline: 0;
                 text-align: center;
-                @include font('Roslindale', 15px, $color-white, 500, normal, 27px);
+                @include font("Constantine", 18px, $color-white, 700, normal, 27px);
             }
 
             .searchButton {
@@ -116,7 +116,7 @@
         }
 
         .editItemHeader {
-            @include font('NYTCheltenham', 12px, $color-black, 500, italic, 15px);
+            @include font("SF Pro Display", 12px, $color-black, 500, italic, 15px);
             text-indent: 6px;
             margin-bottom: 6px;
             padding: 3px;
@@ -133,7 +133,7 @@
         }
 
         .editItemDef {
-            @include font('NYTCheltenham', 13px, $color-black, 700, normal, 15px);
+            @include font("SF Pro Display", 12px, $color-black, 400, normal, 15px);
             text-indent: 3px;
             background: #f7f7f7;
             border-radius: 3px;
@@ -159,7 +159,7 @@
         }
 
         .editItemTextarea {
-            @include font('NYTCheltenham', 13px, $color-black, 700, normal, 15px);
+            @include font("SF Pro Display", 13px, $color-black, 700, normal, 15px);
             padding: 6px;
             border: 0;
             outline: 0;

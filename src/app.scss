@@ -29,3 +29,27 @@ textarea::-webkit-scrollbar {
   display: none;
 }
 
+// *****FONTS*****
+
+@import url('https://fonts.cdnfonts.com/css/sf-pro-display');
+@import url('https://fonts.cdnfonts.com/css/open-sans');
+@import url('https://fonts.cdnfonts.com/css/roslindale');
+@import url('https://fonts.cdnfonts.com/css/constantine');
+@import url('https://fonts.cdnfonts.com/css/rubik');
+@import url('https://fonts.cdnfonts.com/css/adobe-garamond-pro-2');
+
+@font-face {
+  font-family: "Basier";
+  src: url("/fonts/others/basiersquare-regular-webfont.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Helvetica";
+  src: url("/fonts/others/Helvetica Neue Condensed Bold.ttf") format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}

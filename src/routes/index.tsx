@@ -60,7 +60,7 @@ export default function Login(props: RouteSectionProps) {
                   loggingIn.pending ? styles.loginBtnLoading : styles.loginBtn
                 }
               >
-                <img src="/images/main/clover.webp" width={23} height={23} />
+                <img src="/images/main/clover.webp" width={21} height={21} />
               </button>
             </div>
           </form>

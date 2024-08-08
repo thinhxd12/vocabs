@@ -89,7 +89,7 @@
                     text-transform: uppercase;
                 }
 
-                @include font('Roslindale', 25px, $color-white, 600, normal, 30px);
+                @include font('Roslindale Variable', 25px, $color-white, 600, normal, 30px);
                 max-height: 60px;
                 max-width: 275px;
                 line-clamp: 2;
