@@ -44,7 +44,7 @@
                 height: 22px;
                 display: inline-block;
                 padding: 2px 3px 0px;
-                @include font("SF Pro Display", 19px, $color-black, 700, normal, 19px);
+                @include font($f-defHeader, 19px, $color-black, 700, normal, 19px);
                 text-transform: uppercase;
                 cursor: pointer;
                 background: rgba(255, 254, 255, 0.72);
@@ -70,7 +70,7 @@
         z-index: 10;
 
         .websHeadDropdownItem {
-            @include font('SF Pro Display', 12px, $color-calendar-black, 500, normal, 18px);
+            @include font($f-defMeaning, 12px, $color-calendar-black, 500, normal, 18px);
             padding: 0 2px;
             text-align: right;
             display: inline-block;
@@ -151,16 +151,16 @@
         }
 
         .websDef {
-            @include font('Open Sans', 12px, $color-calendar-bg, 600, normal, 18px);
+            @include font($f-defDef, 12px, $color-calendar-bg, 600, normal, 18px);
         }
 
         .websDef::first-letter {
-            @include font('Open Sans', 14px, $color-white, 700, normal, 18px);
+            @include font($f-defDef, 14px, $color-white, 700, normal, 18px);
             text-transform: uppercase;
         }
 
         .websX {
-            @include font('Open Sans', 14px, $color-black, 400, normal, 22px);
+            @include font($f-defX, 14px, $color-black, 400, normal, 22px);
             position: relative;
             text-indent: 24px;
             padding: 3px 3px 0px 6px;
@@ -178,7 +178,7 @@
             background: #999999;
 
             span {
-                @include font('Open Sans', 12px, #111111, 600, normal, 16px);
+                @include font($f-defSyn, 12px, #111111, 600, normal, 16px);
             }
         }
 
@@ -191,17 +191,17 @@
 
             .websAuthor {
                 font-variant: small-caps;
-                @include font("Open Sans", 13px, #111111, 600, normal, 18px);
+                @include font($f-defAuth, 13px, #111111, 600, normal, 18px);
             }
 
             .websTitle {
                 text-transform: uppercase;
-                @include font("Open Sans", 13px, #111111, 600, normal, 18px);
+                @include font($f-defTitle, 13px, #111111, 600, normal, 18px);
                 margin: 0 1.5px;
             }
 
             .websYear {
-                @include font("Open Sans", 11px, #111111, 600, normal, 17px);
+                @include font($f-defYear, 11px, #111111, 600, normal, 17px);
             }
         }
 

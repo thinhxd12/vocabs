@@ -9,7 +9,7 @@
     transition: 0.3s ease;
     @include flex-center;
     overflow: hidden;
-    font-family: "SF Pro Display";
+    font-family: $f-button;
     font-size: 10px;
     background-color: transparent;
     background-image: url('/images/main/input-left-corner.webp'),
@@ -73,7 +73,7 @@
 
     span {
         position: absolute;
-        @include font("Roslindale", 11px, $color-white, 700, normal, 25px);
+        @include font($f-buttonMenu, 11px, $color-white, 700, normal, 25px);
         top: 0;
         left: 0;
         width: 100%;

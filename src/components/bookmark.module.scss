@@ -47,7 +47,7 @@
         position: relative;
 
         .bookmarkPassage::first-letter {
-            @include font('Adobe Garamond Pro', 160px, $color-white, 700, normal, 140px);
+            @include font($f-bookmarkText, 160px, $color-white, 700, normal, 140px);
             float: left;
             margin-right: 5px;
             margin-top: 5px;
@@ -68,7 +68,7 @@
         }
 
         .bookmarkPassage {
-            @include font('Adobe Garamond Pro', 20px, $color-black, 400, normal, 30px);
+            @include font($f-bookmarkText, 20px, $color-black, 400, normal, 30px);
         }
     }
 
@@ -85,7 +85,7 @@
     }
 
     .bookmarkTextArea {
-        @include font("Basier", 12px, $color-black, 400, normal, 15px);
+        @include font($f-bookmarkArea, 12px, $color-black, 400, normal, 15px);
         padding: 3px;
         width: 100%;
         background: none;
@@ -103,16 +103,16 @@
 
         .bookmarkTitle {
             text-transform: uppercase;
-            @include font("Constantine", 38px, $color-black, 400, normal, 44px);
+            @include font($f-bookmarkTitle, 38px, $color-black, 400, normal, 44px);
         }
 
         .bookmarkAuthor {
-            @include font("Constantine", 20px, $color-black, 400, normal, 20px);
+            @include font($f-bookmarkAuth, 20px, $color-black, 400, normal, 20px);
         }
 
         .bookmarkYear {
             padding-top: 3px;
-            @include font('Adobe Garamond Pro', 15px, $color-black, 400, normal, 18px);
+            @include font($f-bookmarkYear, 15px, $color-black, 400, normal, 18px);
         }
     }
 
@@ -153,7 +153,7 @@
     }
 
     .bookmarkInput {
-        @include font("Basier", 12px, $color-black, 400, normal, 15px);
+        @include font($f-bookmarkInput, 12px, $color-black, 400, normal, 15px);
         width: 100%;
         padding: 3px;
         background: none;

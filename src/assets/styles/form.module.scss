@@ -9,7 +9,7 @@
         margin-bottom: 3px;
 
         .formInput {
-            @include font("Basier", 12px, $color-black, 400, normal, 15px);
+            @include font($f-formInput, 12px, $color-black, 400, normal, 15px);
             width: 100%;
             padding: 3px;
             background: none;
@@ -18,11 +18,11 @@
         }
 
         .formInput[name="meaning"] {
-            font-family: "SF Pro Display";
+            font-family: $f-formInputMeaning;
         }
 
         .formTextarea {
-            @include font("Basier", 12px, $color-black, 400, normal, 15px);
+            @include font($f-formInput, 12px, $color-black, 400, normal, 15px);
             width: 100%;
             padding: 3px;
             background: none;
@@ -54,7 +54,7 @@
         padding: 3px;
         outline: 0;
         width: 100%;
-        @include font('Rubik', 11px, $color-black, 400, normal, 18px);
+        @include font($f-formInputCalendar, 11px, $color-black, 400, normal, 18px);
     }
 
     .calendarFormSelect {
@@ -64,7 +64,7 @@
         padding: 0 3px;
         outline: 0;
         width: 100%;
-        @include font('Rubik', 11px, $color-white, 400, normal, 18px);
+        @include font($f-formInputCalendar, 11px, $color-white, 400, normal, 18px);
         background: $color-calendar-black;
     }
 }

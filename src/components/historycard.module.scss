@@ -20,7 +20,7 @@
             padding: 0 6px;
             position: relative;
             cursor: default;
-            @include font('Rubik', 10px, $color-white, 500, normal, 18px);
+            @include font($f-calendarHistory, 10px, $color-white, 500, normal, 18px);
 
             &::after {
                 content: '';
@@ -40,7 +40,7 @@
             width: 120px;
             height: 18px;
             padding-left: 24px;
-            @include font('Rubik', 10px, $color-black, 500, normal, 18px);
+            @include font($f-calendarHistory, 10px, $color-black, 500, normal, 18px);
             cursor: default;
         }
     }

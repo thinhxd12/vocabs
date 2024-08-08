@@ -23,6 +23,71 @@ $color-vintage-1: #957c3e;
 $color-vintage-2: #706659;
 $color-vintage-background: #fffeff;
 
+$f-bookmarkText: "Adobe Garamond Pro";
+$f-bookmarkTitle: "Constantine";
+$f-bookmarkAuth: "Constantine";
+$f-bookmarkYear: "Adobe Garamond Pro";
+$f-bookmarkInput: "Basier";
+$f-bookmarkArea: "Basier";
+
+$f-flipNumber: "Helvetica";
+$f-searchText: "Constantine";
+$f-phonetic: "Open Sans";
+
+$f-defHeader: "SF Pro Display";
+$f-defMeaning: "SF Pro Display";
+$f-defDef: "Open Sans";
+$f-defX: "Open Sans";
+$f-defSyn: "Open Sans";
+$f-defAuth: "Open Sans";
+$f-defTitle: "Open Sans";
+$f-defYear: "Open Sans";
+
+$f-botIndexNum: "Roslindale Variable";
+$f-botIndexText: "SF Pro Display";
+$f-botCenterNum: "Roslindale Variable";
+$f-botButton: "Roslindale Variable";
+$f-botWeatherTemp: "SF Pro Display";
+
+$f-editInput: "Basier";
+$f-editHeader: "SF Pro Display";
+$f-editToast: "Basier";
+
+$f-transMainResult: "Roslindale Variable";
+$f-transItem: "Roslindale Variable";
+
+$f-calendarHistory: "Rubik";
+$f-calendarImageMonth: "SF Pro Display";
+$f-calendarImageWeek: "SF Pro Display";
+$f-calendarImageHistory: "SF Pro Display";
+$f-calendarImageSign: "Rubik";
+$f-calendarMainWeek: "SF Pro Display";
+$f-calendarMainDay: "SF Pro Display";
+$f-calendarDropdown: "Rubik";
+$f-calendarQuote: "Open Sans";
+
+$f-vocabMyItem: "Constantine";
+
+$f-weatherSelect: "SF Pro Display";
+$f-weatherTemp: "Open Sans";
+$f-weatherInfo: "SF Pro Display";
+
+$f-404: "SF Pro Display";
+
+$f-loginText: "SF Pro Display";
+
+$f-mainRightDate: "Basier";
+$f-mainRightTitle: "Roslindale Variable";
+$f-mainRightAttribute: "Basier";
+$f-mainRightAuthor: "Basier";
+$f-mainRightBody: "Basier";
+
+$f-button: "SF Pro Display";
+$f-buttonMenu: "Roslindale Variable";
+
+$f-formInput: "Basier";
+$f-formInputMeaning: "SF Pro Display";
+$f-formInputCalendar: "Rubik";
 
 
 @mixin font($family: false, $size: false, $colour: false, $weight: false, $style: false, $lh: false) {
@@ -114,4 +179,3 @@ $color-vintage-background: #fffeff;
 }
 
 // -------------------RESPONSIVE END-------------------- //
-

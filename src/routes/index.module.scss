@@ -15,7 +15,7 @@
         position: absolute;
         top: 30px;
         left: 60px;
-        @include font("Basier", 12px, $color-white, 500, normal, 18px);
+        @include font($f-loginText, 12px, $color-white, 500, normal, 18px);
         width: 300px;
         text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
     }
@@ -24,7 +24,7 @@
         position: absolute;
         bottom: 9px;
         right: 15px;
-        @include font("Basier", 12px, $color-white, 500, normal, 18px);
+        @include font($f-loginText, 12px, $color-white, 500, normal, 18px);
         text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
     }
 
@@ -107,9 +107,10 @@
     }
 
     .loginAlert {
-        @include font("Basier", 12px, $color-white, 500, normal, 21px);
+        @include font($f-loginText, 12px, $color-red-2, 500, normal, 21px);
         text-align: center;
         margin-top: 9px;
+        text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
     }
 
 }

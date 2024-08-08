@@ -19,14 +19,6 @@
         background: #f7f7f7;
         height: 25px;
 
-        .editHeaderLeft {
-            .editHeaderText {
-                b {
-                    @include font("SF Pro Display", 13px, $color-black, 500, normal);
-                }
-            }
-        }
-
         .editHeaderRight {
             padding: 1px;
             @include flex;
@@ -67,7 +59,7 @@
                 border: 0;
                 outline: 0;
                 text-align: center;
-                @include font("Constantine", 18px, $color-white, 700, normal, 27px);
+                @include font($f-searchText, 18px, $color-white, 700, normal, 27px);
             }
 
             .searchButton {
@@ -97,7 +89,7 @@
         }
 
         .editInputHandy {
-            @include font("Basier", 12px, $color-black, 400, normal, 15px);
+            @include font($f-editInput, 12px, $color-black, 400, normal, 15px);
             width: 100%;
             padding: 3px;
             background: none;
@@ -116,7 +108,7 @@
         }
 
         .editItemHeader {
-            @include font("SF Pro Display", 12px, $color-black, 500, italic, 15px);
+            @include font($f-editHeader, 12px, $color-black, 500, italic, 15px);
             text-indent: 6px;
             margin-bottom: 6px;
             padding: 3px;
@@ -133,7 +125,7 @@
         }
 
         .editItemDef {
-            @include font("SF Pro Display", 12px, $color-black, 400, normal, 15px);
+            @include font($f-editInput, 12px, $color-black, 400, normal, 15px);
             text-indent: 3px;
             background: #f7f7f7;
             border-radius: 3px;
@@ -159,7 +151,7 @@
         }
 
         .editItemTextarea {
-            @include font("SF Pro Display", 13px, $color-black, 700, normal, 15px);
+            @include font($f-editInput, 13px, $color-black, 700, normal, 15px);
             padding: 6px;
             border: 0;
             outline: 0;
@@ -218,5 +210,5 @@
 }
 
 .toastContent {
-    @include font("Basier", 12px, $color-black, 400, normal);
+    @include font($f-editToast, 12px, $color-black, 400, normal);
 }

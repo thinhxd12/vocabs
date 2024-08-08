@@ -42,7 +42,7 @@
             left: 0;
             z-index: 1001;
             padding: 0 85px 0 60px;
-            @include font("Constantine", 16px, $color-vintage-1, 700, normal, 34px);
+            @include font($f-searchText, 16px, $color-vintage-1, 700, normal, 34px);
             text-transform: uppercase;
         }
 
@@ -61,7 +61,7 @@
             position: relative;
 
             p {
-                @include font("Constantine", 18px, #202020, 700, normal, 34px);
+                @include font($f-searchText, 18px, #202020, 700, normal, 34px);
                 text-transform: uppercase;
                 width: 360px;
                 height: 33px;
@@ -141,7 +141,7 @@
             z-index: 3;
 
             p {
-                @include font("Constantine", 18px, $color-calendar-bg, 700, normal, 27px);
+                @include font($f-vocabMyItem, 18px, $color-calendar-bg, 700, normal, 27px);
                 text-transform: uppercase;
                 text-shadow: 0 2px 3px $color-black;
                 transition: all 0.1s;
@@ -162,7 +162,6 @@
             transition: 0.3s ease;
             @include flex-center;
             overflow: hidden;
-            font-family: "Rubik";
             font-size: 10px;
             background-image: url('/images/main/input-left-corner.webp'),
                 url('/images/main/input-right-corner.webp');

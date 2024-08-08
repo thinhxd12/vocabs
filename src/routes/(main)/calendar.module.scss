@@ -47,18 +47,18 @@
 
 
             .setNewMonth {
-                @include font('SF Pro Display', 10px, $color-calendar-white, 500, normal, 14px);
+                @include font($f-calendarImageMonth, 10px, $color-calendar-white, 500, normal, 14px);
                 text-transform: uppercase;
                 cursor: default;
             }
 
             .setNewWeek {
-                @include font('SF Pro Display', 18px, $color-calendar-white, 500, normal, 24px);
+                @include font($f-calendarImageWeek, 18px, $color-calendar-white, 500, normal, 24px);
                 cursor: pointer;
             }
 
             .setNewHistory {
-                @include font('SF Pro Display', 8px, $color-calendar-white, 500, normal, 12px);
+                @include font($f-calendarImageHistory, 8px, $color-calendar-white, 500, normal, 12px);
                 margin-bottom: 0px;
                 cursor: default;
             }
@@ -71,7 +71,7 @@
             left: 1px;
 
             p {
-                @include font('Rubik', 7px, $color-calendar-black, 400, normal, 10px);
+                @include font($f-calendarImageSign, 7px, $color-calendar-black, 400, normal, 10px);
                 text-align: left;
             }
         }
@@ -103,7 +103,7 @@
                 cursor: default;
                 height: 21px;
                 width: 49px;
-                @include font('SF Pro Display', 12px, $color-calendar-white, 700, normal, 21px);
+                @include font($f-calendarMainWeek, 12px, $color-calendar-white, 700, normal, 21px);
 
                 &:first-child {
                     color: $color-red-1;
@@ -119,13 +119,13 @@
                 position: relative;
 
                 .dateText {
-                    @include font('Rubik', 13px, $color-calendar-text-2, 600, normal, 21px);
+                    @include font($f-calendarMainDay, 13px, $color-calendar-text-2, 600, normal, 21px);
                     height: 21px;
                     padding-top: 1px;
                 }
 
                 .dateTextThisMonth {
-                    @include font('Rubik', 13px, $color-calendar-text-1, 600, normal, 21px);
+                    @include font($f-calendarMainDay, 13px, $color-calendar-text-1, 600, normal, 21px);
                     height: 21px;
                     padding-top: 1px;
                 }
@@ -140,7 +140,7 @@
 
                 .dateTimeIndex {
                     @include flex-center-column;
-                    @include font('Rubik', 8px, $color-calendar-text-2, 600, normal, 9px);
+                    @include font($f-calendarMainDay, 8px, $color-calendar-text-2, 600, normal, 9px);
                     margin-left: 2px;
                     min-width: 10px;
 
@@ -257,7 +257,7 @@
 
             .calendarDropdownHeaderLeft {
                 p {
-                    @include font('Rubik', 12px, $color-black, 400, normal, 18px);
+                    @include font($f-calendarDropdown, 12px, $color-black, 400, normal, 18px);
                 }
             }
 
@@ -277,7 +277,7 @@
         background-position: left 0 bottom 27%;
         padding: 6px;
         flex-grow: 1;
-        @include font("Open Sans", 12px, $color-black, 500, normal, 14px);
+        @include font($f-calendarQuote, 12px, $color-black, 500, normal, 14px);
         cursor: default;
         overflow-y: scroll;
         z-index: 99;

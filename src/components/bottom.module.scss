@@ -31,7 +31,7 @@
 
             span {
                 text-align: center;
-                @include font("Roslindale Variable", 9px, $color-black, 600, normal, 10px);
+                @include font($f-botIndexNum, 9px, $color-black, 600, normal, 10px);
                 display: block;
             }
         }
@@ -43,7 +43,7 @@
             @include flex-center;
 
             span {
-                @include font("SF Pro Display", 9px, #575757, 700, normal, 9px);
+                @include font($f-botIndexText, 9px, #575757, 700, normal, 9px);
                 padding-top: 2px;
                 transform: rotateZ(-90deg);
             }
@@ -88,11 +88,11 @@
             cursor: pointer;
 
             span {
-                @include font("Roslindale Variable", 12px, #7c7b7a, 600, normal, 15px);
+                @include font($f-botCenterNum, 12px, #7c7b7a, 600, normal, 15px);
             }
 
             small {
-                @include font("Roslindale Variable", 10px, #7c7b7a, 600, normal, 14px);
+                @include font($f-botCenterNum, 10px, #7c7b7a, 600, normal, 14px);
             }
         }
     }
@@ -107,7 +107,7 @@
         overflow: hidden;
 
         span {
-            @include font('Roslindale Variable', 9px, #7c7b7a, 600, normal, 9px);
+            @include font($f-botButton, 9px, #7c7b7a, 600, normal, 9px);
             text-align: center;
             position: absolute;
             bottom: 1px;
@@ -120,7 +120,7 @@
         }
 
         small {
-            @include font('Roslindale Variable', 6px, #7c7b7a, 400, normal, 6px);
+            @include font($f-botButton, 6px, #7c7b7a, 400, normal, 6px);
             text-align: center;
             position: absolute;
             bottom: 0;
@@ -193,7 +193,7 @@
         .scrollingTextInner {
             display: flex;
             white-space: nowrap;
-            @include font('Roslindale Variable', 9px, #7c7b7a, 600, normal, 9px);
+            @include font($f-botButton, 9px, #7c7b7a, 600, normal, 9px);
             -webkit-font-smoothing: subpixel-antialiased;
         }
 
@@ -229,7 +229,7 @@
             }
 
             p {
-                @include font('SF Pro Display', 9px, #7c7b7a, 300, normal, 12px);
+                @include font($f-botWeatherTemp, 9px, #7c7b7a, 300, normal, 12px);
                 padding: 3px 0 0 4px;
             }
         }
