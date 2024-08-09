@@ -2,45 +2,40 @@
 
 .flipcardTextContainer {
     width: 100%;
-    height: 27px;
+    height: 33px;
     position: absolute;
-    top: 4px;
+    top: 0;
     left: 0;
     z-index: 1000;
     overflow: hidden;
 
     .flipcardTextContent {
         width: 100%;
-        height: 27*3px;
+        height: 33*2px;
 
         .flipcardText {
             width: 100%;
-            height: 27px;
-            @include font($f-searchText, 18px, #202020, 700, normal, 27px);
+            height: 33px;
+            @include font($f-searchText, 18px, #202020, 700, normal, 34px);
             text-transform: uppercase;
             text-align: center;
         }
 
         .flipcardPhonetic {
             width: 100%;
-            height: 27px;
-            @include font($f-phonetic, 14px, $color-red-1, 400, normal, 27px);
+            height: 33px;
+            @include font($f-phonetic, 14px, $color-red-1, 500, normal, 34px);
             text-align: center;
-
-            small {
-                font-size: 9px;
-                margin: 0 -9px 0 3px;
-            }
         }
     }
 
     .flipcardTextContent:hover,
     .flipcardTextContentHover1 {
-        transform: translateY(-28px) !important;
+        transform: translateY(-33px) !important;
     }
 
     .flipcardTextContentHover2 {
-        transform: translateY(-2*28px);
+        transform: translateY(-2*33px);
     }
 }
 
@@ -65,4 +60,14 @@
             @include font($f-flipNumber, 180px, #f4f4f4, bold, normal, 180px);
         }
     }
+}
+
+.flipcardTextNumber {
+    position: absolute;
+    top: 2px;
+    right: 14px;
+    z-index: 1000;
+    @include font($f-flipNumber, 9px, $color-black, 400, normal, 9px);
+    width: 18px;
+    text-align: center;
 }

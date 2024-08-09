@@ -17,7 +17,8 @@
             border: none;
         }
 
-        .formInput[name="meaning"] {
+        .formInput[name="meaning"],
+        .formInput[name="phonetics"] {
             font-family: $f-formInputMeaning;
         }
 

@@ -61,15 +61,17 @@ const FlipCard: Component<{}> = (props) => {
             <div class={styles.flipcardTextContainer}>
               <Motion.div
                 class={styles.flipcardTextContent}
-                animate={{ y: showNumber() ? -28 : 0 }}
+                animate={{ y: showNumber() ? -33 : 0 }}
                 transition={{ duration: 0.5 }}
               >
                 <p class={styles.flipcardText}>{mainStore.renderWord!.word}</p>
                 <p class={styles.flipcardPhonetic}>
-                  <span>{mainStore.renderWord!.phonetics}</span>
-                  <small>({mainStore.renderWord!.number - 1})</small>
+                  {mainStore.renderWord!.phonetics}
                 </p>
               </Motion.div>
+              <span class={styles.flipcardTextNumber}>
+                {mainStore.renderWord!.number - 1}
+              </span>
             </div>
           </Presence>
         </Show>

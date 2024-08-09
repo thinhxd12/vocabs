@@ -151,7 +151,7 @@
         }
 
         .websDef {
-            @include font($f-defDef, 12px, $color-calendar-bg, 600, normal, 18px);
+            @include font($f-defDef, 12px, $color-calendar-bg, 400, normal, 18px);
         }
 
         .websDef::first-letter {
@@ -176,6 +176,11 @@
             @include flex;
             padding: 2px 3px 3px 3px;
             background: #999999;
+
+            svg {
+                color: #111111;
+                padding-left: 1px;
+            }
 
             span {
                 @include font($f-defSyn, 12px, #111111, 600, normal, 16px);

@@ -229,7 +229,7 @@
             }
 
             p {
-                @include font($f-botWeatherTemp, 9px, #7c7b7a, 300, normal, 12px);
+                @include font($f-botWeatherTemp, 9px, #7c7b7a, 500, normal, 12px);
                 padding: 3px 0 0 4px;
             }
         }

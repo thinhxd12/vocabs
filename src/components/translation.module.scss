@@ -105,8 +105,8 @@
         .translationResultContent {
             .translationResultItem {
                 p {
-                    @include font($f-transItem, 13px, $color-black, 500, normal, 16px);
-                    margin: 3px 0;
+                    @include font($f-transItem, 14px, $color-black, 600, normal, 16px);
+                    margin: 3px 0 0 6px;
                     cursor: default;
                     display: inline-block;
                 }
@@ -120,11 +120,11 @@
                         span:nth-child(1) {
                             cursor: default;
                             margin-left: 2px;
-                            @include font($f-transItem, 12px, $color-black, 300, normal, 16px);
+                            @include font($f-transItem, 12px, $color-black, 400, normal, 16px);
                         }
 
                         span:nth-child(2) {
-                            @include font($f-transItem, 10px, $color-black, 300, normal, 16px);
+                            @include font($f-transItem, 10px, $color-black, 400, normal, 16px);
                         }
 
                         .frequencyContainer {
