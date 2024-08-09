@@ -78,8 +78,8 @@
             right: -36px;
             top: 2px;
             z-index: 1001;
-            width: 24px;
-            height: 24px;
+            width: 21px;
+            height: 21px;
             background: none;
             outline: none;
             border: none;
@@ -93,6 +93,7 @@
             &:hover img {
                 opacity: 1;
             }
+
         }
 
         .loginBtnLoading {
@@ -102,7 +103,7 @@
                 opacity: 1;
             }
 
-            animation: rotate 3s normal linear infinite;
+            animation: rotate360 3s normal linear infinite;
         }
     }
 
@@ -115,29 +116,9 @@
 
 }
 
-@keyframes rotate {
-    0% {
-        -webkit-transform: rotate3d(0, 0, 1, 0deg);
-        transform: rotate3d(0, 0, 1, 0deg);
-    }
-
-    25% {
-        -webkit-transform: rotate3d(0, 0, 1, 90deg);
-        transform: rotate3d(0, 0, 1, 90deg);
-    }
-
-    50% {
-        -webkit-transform: rotate3d(0, 0, 1, 180deg);
-        transform: rotate3d(0, 0, 1, 180deg);
-    }
-
-    75% {
-        -webkit-transform: rotate3d(0, 0, 1, 270deg);
-        transform: rotate3d(0, 0, 1, 270deg);
-    }
-
-    100% {
-        -webkit-transform: rotate3d(0, 0, 1, 360deg);
-        transform: rotate3d(0, 0, 1, 360deg);
+@keyframes rotate360 {
+    to {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
     }
 }
