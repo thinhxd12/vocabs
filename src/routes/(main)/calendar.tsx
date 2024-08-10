@@ -34,7 +34,6 @@ const Calendar: Component<{}> = (props) => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
-  const [monthIndex, setMonthIndex] = createSignal<number>(-1);
 
   const getAllDataCalendar = async () => {
     if (mainStore.calendarList.length === 0) {
@@ -46,7 +45,6 @@ const Calendar: Component<{}> = (props) => {
       data[0] && setMainStore("calendarList", data[0]);
       if (data[1]) {
         setMainStore("historyList", data[1]);
-        setMonthIndex(data[1]![0].data[0].index);
       }
 
       const index = await getThisWeekScheduleIndex(
@@ -118,14 +116,12 @@ const Calendar: Component<{}> = (props) => {
               width={360}
               height={240}
             />
-            <div class={styles.calendarImageContent}>
+            <div
+              class={styles.calendarImageContent}
+              onClick={() => setShowSetNewSchedule(true)}
+            >
               <p class={styles.setNewMonth}>{format(new Date(), "MMMM")}</p>
-              <p
-                class={styles.setNewWeek}
-                onClick={() => setShowSetNewSchedule(true)}
-              >
-                {format(new Date(), "yyyy")}
-              </p>
+              <p class={styles.setNewWeek}>{format(new Date(), "yyyy")}</p>
               <p class={styles.setNewHistory}>
                 <Show when={mainStore.thisWeekIndex >= 0} fallback={"NaN"}>
                   {Number(mainStore.thisWeekIndex + 1) +
@@ -345,7 +341,6 @@ const Calendar: Component<{}> = (props) => {
                         type="date"
                       />
                     </div>
-                    <input hidden name="startMonthIndex" value={monthIndex()} />
                   </div>
                   <button
                     class={buttons.buttonSubmit}

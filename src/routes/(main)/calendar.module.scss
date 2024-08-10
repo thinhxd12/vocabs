@@ -33,6 +33,7 @@
             position: absolute;
             bottom: 9px;
             right: 9px;
+            cursor: pointer;
 
             p {
                 text-align: center;
@@ -45,22 +46,18 @@
                 }
             }
 
-
             .setNewMonth {
                 @include font($f-calendarImageMonth, 10px, $color-calendar-white, 500, normal, 14px);
                 text-transform: uppercase;
-                cursor: default;
             }
 
             .setNewWeek {
                 @include font($f-calendarImageWeek, 18px, $color-calendar-white, 500, normal, 24px);
-                cursor: pointer;
             }
 
             .setNewHistory {
                 @include font($f-calendarImageHistory, 8px, $color-calendar-white, 500, normal, 12px);
                 margin-bottom: 0px;
-                cursor: default;
             }
         }
 

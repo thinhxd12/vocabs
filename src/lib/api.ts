@@ -582,9 +582,11 @@ export const submitTodayReset = action(async (formData: FormData) => {
 export const submitNewSchedule = action(async (formData: FormData) => {
     "use server";
     const startDay = String(formData.get("startDay"));
-    let startIndex = Number(formData.get("startMonthIndex"));
     if (!startDay) return;
+    const { data: dataHistory } = await supabase.from(mapTables.history).select().order('created_at', { ascending: false });
+    if (!dataHistory) return;
 
+    let startIndex = dataHistory[0].data[0].index;
     startIndex = startIndex === 0 ? 1000 : 0;
 
     const { count } = await supabase
@@ -677,6 +679,7 @@ export const submitNewSchedule = action(async (formData: FormData) => {
                 default:
                     break;
             }
+
             for (let i = 0; i < 6; i++) {
                 let { error } = await supabase
                     .from(mapTables.schedule)
