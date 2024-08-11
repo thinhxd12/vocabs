@@ -122,7 +122,7 @@ const Vocabulary: Component<{}> = () => {
           </div>
 
           <Show
-            when={isMobile()}
+            when={!isMobile()}
             fallback={
               <>
                 <div class={styles.newInputContainer}>
@@ -161,8 +161,8 @@ const Vocabulary: Component<{}> = () => {
                 use:searchWordMobile={null}
                 ref={mobileInput}
               />
-              <button class={buttons.buttonMyInput} onClick={clearSearchResult}>
-                <img src="images/main/clover.webp" height={18} width={18} />
+              <button class={styles.buttonMyInput} onClick={clearSearchResult}>
+                <img src="images/main/clover.webp" height={24} width={24} />
               </button>
             </div>
           </Show>

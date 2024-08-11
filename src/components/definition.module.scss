@@ -201,7 +201,7 @@
 
             .websTitle {
                 text-transform: uppercase;
-                @include font($f-defTitle, 13px, #111111, 600, normal, 18px);
+                @include font($f-defTitle, 13px, #111111, 700, normal, 18px);
                 margin: 0 1.5px;
             }
 

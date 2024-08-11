@@ -46,7 +46,13 @@
             text-transform: uppercase;
         }
 
-        button {
+        .buttonMyInput {
+            width: 24px;
+            height: 24px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            background: none;
             position: absolute;
             bottom: 4px;
             right: 54px;
