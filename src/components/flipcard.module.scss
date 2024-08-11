@@ -16,7 +16,7 @@
         .flipcardText {
             width: 100%;
             height: 33px;
-            @include font($f-searchText, 18px, #202020, 700, normal, 34px);
+            @include font($f-searchText, 18px, #202020, 700, normal, 33px);
             text-transform: uppercase;
             text-align: center;
         }
@@ -24,7 +24,7 @@
         .flipcardPhonetic {
             width: 100%;
             height: 33px;
-            @include font($f-phonetic, 14px, $color-red-1, 500, normal, 34px);
+            @include font($f-phonetic, 14px, $color-red-1, 500, normal, 33px);
             text-align: center;
         }
     }
