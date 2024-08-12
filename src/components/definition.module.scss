@@ -41,10 +41,10 @@
             margin-right: 21px;
 
             .websHeaderContent {
-                height: 22px;
+                height: 24px;
                 display: inline-block;
-                padding: 2px 3px 0px;
-                @include font($f-defHeader, 19px, $color-black, 700, normal, 19px);
+                padding: 1px 3px 0px;
+                @include font($f-defHeader, 20px, $color-black, 700, normal, 20px);
                 text-transform: uppercase;
                 cursor: pointer;
                 background: rgba(255, 254, 255, 0.72);
@@ -95,7 +95,7 @@
             position: relative;
 
             &:first-child {
-                padding-top: 21px;
+                padding-top: 22px;
             }
 
             .websDefs {
