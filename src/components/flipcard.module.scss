@@ -67,7 +67,7 @@
     top: 2px;
     right: 14px;
     z-index: 1000;
-    @include font($f-flipNumber, 8px, $color-black, 500, normal, 9px);
+    @include font($f-flipSearchNumber, 8px, $color-black, 500, normal, 9px);
     width: 18px;
     text-align: center;
 }
