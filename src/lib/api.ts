@@ -902,12 +902,12 @@ export const getPrevBookMarkData = (async (cur: string) => {
     }
 });
 
-export const checkBookMarkData = (async (id: string, val: boolean) => {
+export const checkBookMarkData = (async (id: string, val: number) => {
     "use server";
     const { error } = await supabase
         .from(mapTables.bookmarks)
         .update({
-            checked: val
+            like: val
         })
         .eq('created_at', id);
 });

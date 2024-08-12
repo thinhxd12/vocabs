@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 import styles from "./bookmark.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
-import { OcCopy2, OcSearch2, OcStar2, OcStarfill2, OcX2 } from "solid-icons/oc";
+import { OcSearch2, OcX2 } from "solid-icons/oc";
 import {
   checkBookMarkData,
   findBookMarkData,
@@ -22,7 +22,8 @@ import {
 } from "~/lib/api";
 import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
-import { AiOutlineInsertRowBelow } from "solid-icons/ai";
+import { AiFillHeart, AiOutlineInsertRowBelow } from "solid-icons/ai";
+import { IoCopySharp } from "solid-icons/io";
 import { stopKeydown } from "~/utils";
 
 declare module "solid-js" {
@@ -52,9 +53,9 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
     if (data) setBookmark(data);
   };
 
-  const handleCheckBookmark = (val: boolean) => {
-    setBookmark({ ...bookmark()!, checked: val });
-    checkBookMarkData(bookmark()!.created_at, val);
+  const handleCheckBookmark = () => {
+    setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
+    checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
   };
 
   const copyBookMarkToClipboard = async (text: string) => {
@@ -91,9 +92,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
       <Suspense fallback={<p class={styles.bookmarkLoading}>...</p>}>
         <div
           class={
-            bookmark()?.checked
-              ? styles.bookmarkBodyChecked
-              : styles.bookmarkBody
+            bookmark()?.like ? styles.bookmarkBodyChecked : styles.bookmarkBody
           }
         >
           <div class={styles.bookmarkCredits}>
@@ -191,45 +190,46 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         </div>
       </Show>
 
-      <div class={styles.bookmarkHeader}>
-        <div class={styles.bookmarkHeaderLeft}></div>
-        <div class={styles.bookmarkHeaderRight}>
-          <button
-            class={buttons.buttonBookmark}
-            onclick={() => handleCheckBookmark(!bookmark()?.checked)}
+      <div class={styles.bookmarkButtons}>
+        <button
+          class={buttons.buttonBookmark}
+          onclick={() => handleCheckBookmark()}
+        >
+          <Show
+            when={bookmark()?.like}
+            fallback={<AiFillHeart size={30} color="#ffffffe6" />}
           >
-            <Show when={bookmark()?.checked} fallback={<OcStar2 size={17} />}>
-              <OcStarfill2 size={17} color="#ffc107" />
-            </Show>
-          </button>
-          <button
-            class={buttons.buttonBookmark}
-            onclick={() => copyBookMarkToClipboard(bookmark()!.content)}
-          >
-            <OcCopy2 size={14} />
-          </button>
-          <button
-            class={buttons.buttonBookmark}
-            onclick={() => setShowEdit(!showEdit())}
-          >
-            <FaSolidFeather size={13} />
-          </button>
-          <button
-            class={buttons.buttonBookmark}
-            onclick={() => setShowInsert(!showInsert())}
-          >
-            <AiOutlineInsertRowBelow size={16} />
-          </button>
-          <button
-            class={buttons.buttonBookmark}
-            onclick={() => setShowSearch(!showSearch())}
-          >
-            <OcSearch2 size={14} />
-          </button>
-          <button class={buttons.buttonBookmark} onclick={props.onClose}>
-            <OcX2 size={15} />
-          </button>
-        </div>
+            <AiFillHeart size={30} color="#fd2c55" />
+          </Show>
+        </button>
+        <div class={styles.bookmarkLike}>{bookmark()?.like}</div>
+        <button
+          class={buttons.buttonBookmark}
+          onclick={() => copyBookMarkToClipboard(bookmark()!.content)}
+        >
+          <IoCopySharp size={21} color="#ffffffe6" />
+        </button>
+        <button
+          class={buttons.buttonBookmark}
+          onclick={() => setShowEdit(!showEdit())}
+        >
+          <FaSolidFeather size={20} color="#ffffffe6" />
+        </button>
+        <button
+          class={buttons.buttonBookmark}
+          onclick={() => setShowInsert(!showInsert())}
+        >
+          <AiOutlineInsertRowBelow size={23} color="#ffffffe6" />
+        </button>
+        <button
+          class={buttons.buttonBookmark}
+          onclick={() => setShowSearch(!showSearch())}
+        >
+          <OcSearch2 size={20} color="#ffffffe6" />
+        </button>
+        <button class={buttons.buttonBookmark} onclick={props.onClose}>
+          <OcX2 size={23} color="#ffffffe6" />
+        </button>
       </div>
     </div>
   );

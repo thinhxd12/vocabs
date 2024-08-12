@@ -45,8 +45,8 @@ export interface BookmarkType {
   dateOfCreation: string;
   content: string;
   type: string;
-  checked: boolean;
   selected: boolean;
+  like: number;
 }
 
 export interface HistoryItemContentType {

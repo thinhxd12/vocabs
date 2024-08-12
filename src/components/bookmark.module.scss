@@ -17,22 +17,18 @@
         display: none;
     }
 
-    .bookmarkHeader {
+    .bookmarkButtons {
         position: fixed;
-        bottom: 0;
-        left: 0;
+        top: 36%;
+        right: 360px;
         z-index: 1001;
-        width: 100%;
-        max-width: calc(100vw - 360px);
-        height: 21px;
-        display: flex;
-        justify-content: space-between;
 
-        .bookmarkHeaderRight {
-            height: 100%;
-            padding: 0 2px 1px 0;
-            display: flex;
-            align-items: flex-end;
+        @include flex-center-column;
+
+        .bookmarkLike {
+            width: 100%;
+            text-align: center;
+            @include font($f-bookmarkLike, 12px, $color-white, 500, normal, 12px);
         }
     }
 
@@ -68,6 +64,7 @@
         }
 
         .bookmarkPassage {
+            padding-right: 15px;
             @include font($f-bookmarkText, 20px, $color-black, 400, normal, 30px);
         }
     }
