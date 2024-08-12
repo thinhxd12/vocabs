@@ -43,8 +43,8 @@
             .websHeaderContent {
                 height: 24px;
                 display: inline-block;
-                padding: 1px 3px 0px;
-                @include font($f-defHeader, 20px, $color-black, 700, normal, 20px);
+                padding: 2px 3px 0px;
+                @include font($f-defHeader, 20px, $color-black, 700, normal, 21px);
                 text-transform: uppercase;
                 cursor: pointer;
                 background: rgba(255, 254, 255, 0.72);

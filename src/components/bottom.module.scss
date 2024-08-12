@@ -204,6 +204,7 @@
         .scrollingTextItem {
             padding-right: 9px;
             min-width: 70px;
+            @include font($f-botButton, 9px, #7c7b7a, 600, normal, 9px);
         }
 
         .scrollingTextInner>div {
