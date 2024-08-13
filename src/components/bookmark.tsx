@@ -20,11 +20,11 @@ import {
   insertBookmarkData,
   updateBookmarkData,
 } from "~/lib/api";
+import { stopKeydown } from "~/utils";
 import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
 import { AiFillHeart, AiOutlineInsertRowBelow } from "solid-icons/ai";
-import { IoCopySharp } from "solid-icons/io";
-import { stopKeydown } from "~/utils";
+import { BiSolidPaste } from "solid-icons/bi";
 
 declare module "solid-js" {
   namespace JSX {
@@ -36,6 +36,7 @@ declare module "solid-js" {
 
 const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [bookmark, setBookmark] = createSignal<BookmarkType>();
+  const [likeToggle, setLikeToggle] = createSignal<boolean>(false);
 
   onMount(async () => {
     const data = await getBookMarkData();
@@ -45,17 +46,26 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   });
 
   const handleGetPrevBookmark = async () => {
+    setLikeToggle(false);
     const data = await getPrevBookMarkData(bookmark()!.created_at);
     if (data) setBookmark(data);
   };
   const handleGetNextBookmark = async () => {
+    setLikeToggle(false);
     const data = await getNextBookMarkData(bookmark()!.created_at);
     if (data) setBookmark(data);
   };
 
   const handleCheckBookmark = () => {
-    setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
-    checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
+    if (!likeToggle()) {
+      setLikeToggle(!likeToggle());
+      setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
+      checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
+    } else {
+      setLikeToggle(!likeToggle());
+      setBookmark({ ...bookmark()!, like: bookmark()!.like - 1 });
+      checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
+    }
   };
 
   const copyBookMarkToClipboard = async (text: string) => {
@@ -207,7 +217,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
           class={buttons.buttonBookmark}
           onclick={() => copyBookMarkToClipboard(bookmark()!.content)}
         >
-          <IoCopySharp size={21} color="#ffffffe6" />
+          <BiSolidPaste size={23} color="#ffffffe6" />
         </button>
         <button
           class={buttons.buttonBookmark}

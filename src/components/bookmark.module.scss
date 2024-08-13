@@ -22,7 +22,7 @@
         top: 36%;
         right: 360px;
         z-index: 1001;
-
+        padding-right: 3px;
         @include flex-center-column;
 
         .bookmarkLike {
@@ -43,12 +43,12 @@
         position: relative;
 
         .bookmarkPassage::first-letter {
-            @include font($f-bookmarkText, 160px, $color-white, 700, normal, 140px);
+            @include font($f-bookmarkText, 120px, $color-white, 700, normal, 130px);
             float: left;
-            margin-right: 5px;
-            margin-top: 5px;
+            margin-right: 6px;
+            margin-top: 9px;
             background: $color-black;
-            padding: 35px 12px 0;
+            padding: 6px 12px 0;
             text-align: center;
             text-transform: uppercase;
             border-radius: 6px;
@@ -64,7 +64,6 @@
         }
 
         .bookmarkPassage {
-            padding-right: 15px;
             @include font($f-bookmarkText, 20px, $color-black, 400, normal, 30px);
         }
     }
@@ -100,11 +99,11 @@
 
         .bookmarkTitle {
             text-transform: uppercase;
-            @include font($f-bookmarkTitle, 38px, $color-black, 400, normal, 44px);
+            @include font($f-bookmarkTitle, 38px, $color-black, normal, normal, 44px);
         }
 
         .bookmarkAuthor {
-            @include font($f-bookmarkAuth, 20px, $color-black, 400, normal, 20px);
+            @include font($f-bookmarkAuth, 20px, $color-black, normal, normal, 20px);
         }
 
         .bookmarkYear {
@@ -125,10 +124,6 @@
         background: transparent;
         transition: all 0.6s;
         z-index: 810;
-
-        &:hover {
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.15) 60%, transparent 100%);
-        }
     }
 
     .buttonBookmarkRight {
@@ -143,10 +138,6 @@
         background: transparent;
         transition: all 0.6s;
         z-index: 810;
-
-        &:hover {
-            background: linear-gradient(to left, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.15) 60%, transparent 100%);
-        }
     }
 
     .bookmarkInput {

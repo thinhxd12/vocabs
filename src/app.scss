@@ -30,25 +30,4 @@ textarea::-webkit-scrollbar {
 }
 
 // *****FONTS*****
-
-@font-face {
-  font-family: "Basier";
-  src: url("/fonts/others/basiersquare-regular-webfont.woff2") format("woff2");
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Helvetica";
-  src: url("/fonts/others/Helvetica Neue Condensed Bold.ttf") format('truetype');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-// @import url('https://fonts.cdnfonts.com/css/roslindale');
-@import url('https://fonts.cdnfonts.com/css/constantine');
-@import url('https://fonts.cdnfonts.com/css/adobe-garamond-pro-2');
-@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 @import url('https://ffmpeg-4sn.pages.dev/styles.css');

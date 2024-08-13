@@ -64,14 +64,16 @@ const FlipCard: Component<{}> = (props) => {
                 animate={{ y: showNumber() ? -33 : 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <p class={styles.flipcardText}>{mainStore.renderWord!.word}</p>
+                <p class={styles.flipcardText}>
+                  {mainStore.renderWord!.word}
+                  <span class={styles.flipcardTextNumber}>
+                    {mainStore.renderWord!.number - 1}
+                  </span>
+                </p>
                 <p class={styles.flipcardPhonetic}>
                   {mainStore.renderWord!.phonetics}
                 </p>
               </Motion.div>
-              <span class={styles.flipcardTextNumber}>
-                {mainStore.renderWord!.number - 1}
-              </span>
             </div>
           </Presence>
         </Show>

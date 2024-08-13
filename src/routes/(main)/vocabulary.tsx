@@ -50,7 +50,7 @@ const Vocabulary: Component<{}> = () => {
 
   const handleRenderText = async (text: VocabularySearchType) => {
     if (mobileInput) mobileInput.value = "";
-    setMainStore("searchTermColor", "#202020");
+    setMainStore("searchTermColor", "#ffffffe6");
     setMainStore("searchTerm", "");
     setMainStore("searchResult", []);
     handleCheckWord(text);
@@ -128,7 +128,7 @@ const Vocabulary: Component<{}> = () => {
                 <div class={styles.newInputContainer}>
                   <div class={styles.newInputContent}>
                     <img
-                      src="images/main/inputbackground.webp"
+                      src="images/main/input-wall.webp"
                       height={33}
                       width={360}
                       alt="inputbackground"
@@ -148,7 +148,7 @@ const Vocabulary: Component<{}> = () => {
           >
             <div class={styles.myInputContainer}>
               <img
-                src="images/main/inputbackground.webp"
+                src="images/main/input-wall.webp"
                 height={33}
                 width={360}
                 alt="inputbackground"

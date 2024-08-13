@@ -286,6 +286,12 @@ const Edit: Component<{
               name="word"
               autocomplete="off"
               value={resultEditWord()?.word}
+              onChange={(e) => {
+                setResultEditWord({
+                  ...resultEditWord(),
+                  word: e.currentTarget.value,
+                });
+              }}
             />
             <img
               src="/images/main/input-right-corner.webp"

@@ -211,6 +211,10 @@
     background: none;
     @include flex-center;
 
+    svg {
+        filter: drop-shadow(0 3px 3px #00000036);
+    }
+
     &:hover {
         color: $color-white;
     }

@@ -196,17 +196,17 @@
 
             .websAuthor {
                 font-variant: small-caps;
-                @include font($f-defAuth, 13px, #111111, 600, normal, 18px);
+                @include font($f-defAuth, 13px, #111111, 500, normal, 16px);
             }
 
             .websTitle {
                 text-transform: uppercase;
-                @include font($f-defTitle, 13px, #111111, 700, normal, 18px);
+                @include font($f-defTitle, 13px, #111111, 700, normal, 16px);
                 margin: 0 1.5px;
             }
 
             .websYear {
-                @include font($f-defYear, 11px, #111111, 600, normal, 17px);
+                @include font($f-defYear, 12px, #111111, 500, normal, 16px);
             }
         }
 

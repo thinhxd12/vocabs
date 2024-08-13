@@ -54,8 +54,8 @@
             cursor: pointer;
             background: none;
             position: absolute;
-            bottom: 4px;
-            right: 54px;
+            bottom: 1px;
+            right: 12px;
             z-index: 1001;
         }
     }
@@ -67,12 +67,13 @@
             position: relative;
 
             p {
-                @include font($f-searchText, 18px, #202020, 700, normal, 34px);
+                @include font($f-searchText, 18px, #ffffffe6, 700, normal, 34px);
                 text-transform: uppercase;
                 width: 360px;
                 height: 33px;
                 position: inherit;
                 text-align: center;
+                text-shadow: 0 2px 3px #00000036;
             }
 
             .newInputBackground {
@@ -117,7 +118,7 @@
             @include flex;
             justify-content: space-between;
             overflow: visible;
-            height: 27px;
+            height: 28px;
             width: 360px;
             position: relative;
             background: $color-border;
@@ -151,6 +152,7 @@
                 text-transform: uppercase;
                 text-shadow: 0 2px 3px $color-black;
                 transition: all 0.1s;
+                padding-top: 1px;
 
                 &:hover {
                     transform: scale(2.7);
