@@ -36,15 +36,15 @@
         justify-content: flex-end;
 
         .websHeaderContainer {
-            width: 120px;
+            min-width: 136px;
             text-align: center;
-            margin-right: 21px;
+            margin-right: 15px;
 
             .websHeaderContent {
-                height: 24px;
+                height: 25px;
                 display: inline-block;
-                padding: 2px 3px 0px;
-                @include font($f-defHeader, 20px, $color-black, 700, normal, 21px);
+                padding: 1px 3px 0px;
+                @include font($f-defHeader, 24px, $color-black, 700, normal, 24px);
                 text-transform: uppercase;
                 cursor: pointer;
                 background: rgba(255, 254, 255, 0.72);
@@ -60,13 +60,13 @@
     .websHeadDropdown {
         visibility: hidden;
         opacity: 0;
-        min-width: 120px;
+        min-width: 136px;
         display: flex;
         flex-direction: column;
         align-items: center;
         position: absolute;
-        top: 26px;
-        right: 20px;
+        top: 29px;
+        right: 15px;
         z-index: 10;
 
         .websHeadDropdownItem {
@@ -95,7 +95,7 @@
             position: relative;
 
             &:first-child {
-                padding-top: 22px;
+                padding-top: 24px;
             }
 
             .websDefs {
@@ -131,23 +131,9 @@
                 left: 0;
                 z-index: 7;
                 padding: 0px 3px 3px 6px;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             }
 
-            &::after {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: 6;
-                background: linear-gradient(to top,
-                        rgba(0, 0, 0, 0.75) 0%,
-                        rgba(0, 0, 0, 0.35) 25%,
-                        rgba(0, 0, 0, 0.1) 45%,
-                        transparent 60%,
-                        transparent 100%);
-            }
         }
 
         .websDef {
@@ -163,7 +149,7 @@
             @include font($f-defX, 14px, $color-black, 400, normal, 22px);
             position: relative;
             text-indent: 24px;
-            padding: 3px 3px 0px 6px;
+            padding: 0px 3px 0px 6px;
 
             b {
                 font-weight: 700;
@@ -183,7 +169,7 @@
             }
 
             span {
-                @include font($f-defSyn, 12px, #111111, 600, normal, 16px);
+                @include font($f-defSyn, 13px, #111111, 600, normal, 16px);
             }
         }
 
@@ -202,7 +188,6 @@
             .websTitle {
                 text-transform: uppercase;
                 @include font($f-defTitle, 13px, #111111, 700, normal, 16px);
-                margin: 0 1.5px;
             }
 
             .websYear {

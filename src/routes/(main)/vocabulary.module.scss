@@ -1,246 +1,5 @@
 @import "../../assets/styles/mixins.scss";
 
-.vocabularyContainer {
-    min-width: 360px;
-    max-width: 360px;
-    height: calc(100vh - 34px);
-    overflow: hidden;
-    position: inherit;
-    outline: none;
-    position: relative;
-}
-
-.vocabulary {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    position: inherit;
-    outline: none;
-    background-color: $color-black;
-
-    .myInputContainer {
-        position: relative;
-        width: 100%;
-        height: 34px;
-        border-bottom: 0.5px solid $color-vintage-2;
-
-        .myInputBackground {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2;
-        }
-
-        .myInput {
-            height: 100%;
-            width: 100%;
-            background: none;
-            border: 0;
-            outline: 0;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1001;
-            padding: 0 85px 0 60px;
-            @include font($f-searchText, 16px, $color-vintage-1, 700, normal, 34px);
-            text-transform: uppercase;
-        }
-
-        .buttonMyInput {
-            width: 24px;
-            height: 24px;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            background: none;
-            position: absolute;
-            bottom: 1px;
-            right: 12px;
-            z-index: 1001;
-        }
-    }
-
-    .newInputContainer {
-        border-bottom: 0.5px solid $color-vintage-2;
-
-        .newInputContent {
-            position: relative;
-
-            p {
-                @include font($f-searchText, 18px, #ffffffe6, 700, normal, 34px);
-                text-transform: uppercase;
-                width: 360px;
-                height: 33px;
-                position: inherit;
-                text-align: center;
-                text-shadow: 0 2px 3px #00000036;
-            }
-
-            .newInputBackground {
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-        }
-    }
-
-
-    .vocabularyContent {
-        height: calc(100vh - 68px);
-        width: 360px;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        background: $color-black;
-        position: relative;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-
-    }
-
-    .searchContainer {
-        position: absolute;
-        top: 34px;
-        left: 0;
-        height: calc(100vh - 68px);
-        width: 360px;
-        z-index: 999;
-        overflow-y: scroll;
-        background: $color-black;
-        padding-top: 9px;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
-
-        .myItem {
-            @include flex;
-            justify-content: space-between;
-            overflow: visible;
-            height: 28px;
-            width: 360px;
-            position: relative;
-            background: $color-border;
-            background-size: 30px 30px;
-            margin: 9px 0;
-        }
-
-        .myItemHover .myItemText p {
-            transform: scale(2.1);
-            text-shadow: 0 3px 5px $color-black;
-        }
-
-        .myItemNum {
-            font-size: 8px;
-            line-height: 8px;
-            width: 12px;
-            vertical-align: baseline;
-            z-index: 1;
-            @include flex-center;
-            color: $color-white;
-        }
-
-        .myItemText {
-            cursor: pointer;
-            @include flex-center;
-            flex-grow: 1;
-            z-index: 3;
-
-            p {
-                @include font($f-vocabMyItem, 18px, $color-calendar-bg, 700, normal, 27px);
-                text-transform: uppercase;
-                text-shadow: 0 2px 3px $color-black;
-                transition: all 0.1s;
-                padding-top: 1px;
-
-                &:hover {
-                    transform: scale(2.7);
-                    text-shadow: 0 3px 5px $color-black;
-                }
-            }
-        }
-
-        .myItemDeleteButton {
-            margin-left: 1px;
-            border-radius: 3px;
-            outline: 0;
-            border: none;
-            cursor: pointer;
-            transition: 0.3s ease;
-            @include flex-center;
-            overflow: hidden;
-            font-size: 10px;
-            background-image: url('/images/main/input-left-corner.webp'),
-                url('/images/main/input-right-corner.webp');
-            background-position: left top,
-                right top;
-            background-repeat: no-repeat,
-                no-repeat;
-            background-size: auto 100%,
-                auto 100%;
-
-            &:disabled {
-                opacity: 0.3;
-            }
-
-            background-color: $color-background-1;
-            color: #ececec;
-            width: 18px;
-            height: 14px;
-
-            &:hover {
-                color: $color-white;
-            }
-        }
-
-    }
-
-    .myItemButton {
-        @include flex;
-        width: 30px;
-        height: 24px;
-        padding: 0 3px;
-        z-index: 101;
-    }
-
-    .myItemButtonStart {
-        justify-content: flex-start;
-        cursor: pointer;
-    }
-
-    .myItemButtonEnd {
-        justify-content: flex-end;
-    }
-
-    .myItemEditButton {
-        cursor: pointer;
-        background: transparent;
-        border: none;
-        outline: none;
-        height: 15px;
-        width: 15px;
-        margin: -1px 0 0 -2px;
-        overflow: hidden;
-        @include flex-center;
-    }
-}
-
-.menubar {
-    width: 360px;
-    position: absolute;
-    bottom: 0;
-    z-index: 36;
-
-    .menubarContent {
-        width: 100%;
-        height: 100%;
-        @include flex-center;
-        flex-direction: column;
-    }
-
-}
-
 .editOverlay {
     width: 100%;
     height: 100%;
@@ -250,4 +9,152 @@
     left: 0;
     background-color: $color-background-3;
     z-index: 1001;
+}
+
+.vocabulary {
+    min-width: 360px;
+    max-width: 360px;
+    height: calc(100vh - 34px);
+    overflow: hidden;
+    position: inherit;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+
+    .flipCardContent {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .vocabularyBackground {
+        border-bottom: 0.5px solid $color-vintage-2;
+    }
+
+    .vocabularyContent {
+        width: 100%;
+        flex-grow: 1;
+
+        .searchContainer {
+            width: 100%;
+            height: 100%;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            .myItem {
+                @include flex;
+                justify-content: space-between;
+                overflow: visible;
+                height: 28px;
+                width: 360px;
+                position: relative;
+                background: $color-border;
+                background-size: 30px 30px;
+                margin: 9px 0;
+            }
+
+            .myItemHover .myItemText p {
+                transform: scale(2.1);
+                text-shadow: 0 3px 5px $color-black;
+            }
+
+            .myItemNum {
+                font-size: 8px;
+                line-height: 8px;
+                width: 12px;
+                vertical-align: baseline;
+                z-index: 1;
+                @include flex-center;
+                color: $color-white;
+            }
+
+            .myItemText {
+                cursor: pointer;
+                @include flex-center;
+                flex-grow: 1;
+                z-index: 3;
+
+                p {
+                    @include font($f-vocabMyItem, 18px, $color-calendar-bg, 700, normal, 27px);
+                    text-transform: uppercase;
+                    text-shadow: 0 2px 3px $color-black;
+                    transition: all 0.1s;
+                    padding-top: 1px;
+
+                    &:hover {
+                        transform: scale(2.7);
+                        text-shadow: 0 3px 5px $color-black;
+                    }
+                }
+            }
+
+            .myItemDeleteButton {
+                margin-left: 1px;
+                border-radius: 3px;
+                outline: 0;
+                border: none;
+                cursor: pointer;
+                transition: 0.3s ease;
+                @include flex-center;
+                overflow: hidden;
+                font-size: 10px;
+                background-image: url('https://ffmpeg-4sn.pages.dev/images/main/input-left-corner.webp'),
+                    url('https://ffmpeg-4sn.pages.dev/images/main/input-right-corner.webp');
+                background-position: left top,
+                    right top;
+                background-repeat: no-repeat,
+                    no-repeat;
+                background-size: auto 100%,
+                    auto 100%;
+
+                &:disabled {
+                    opacity: 0.3;
+                }
+
+                background-color: $color-background-1;
+                color: #ececec;
+                width: 18px;
+                height: 14px;
+
+                &:hover {
+                    color: $color-white;
+                }
+            }
+
+            .myItemButton {
+                @include flex;
+                width: 30px;
+                height: 24px;
+                padding: 0 3px;
+                z-index: 101;
+            }
+
+            .myItemButtonStart {
+                justify-content: flex-start;
+                cursor: pointer;
+            }
+
+            .myItemButtonEnd {
+                justify-content: flex-end;
+            }
+
+            .myItemEditButton {
+                cursor: pointer;
+                background: transparent;
+                border: none;
+                outline: none;
+                height: 15px;
+                width: 15px;
+                margin: -1px 0 0 -2px;
+                overflow: hidden;
+                @include flex-center;
+            }
+
+
+        }
+    }
 }

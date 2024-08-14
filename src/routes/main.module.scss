@@ -35,6 +35,12 @@
             svg {
                 margin: 4px;
             }
+
+            &:active {
+                svg {
+                    transform: scale(0.9)
+                }
+            }
         }
     }
 

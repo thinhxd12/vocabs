@@ -26,6 +26,7 @@ import { listStore, mainStore, setMainStore } from "~/lib/mystore";
 import HistoryCard from "~/components/historycard";
 import { CalendarType } from "~/types";
 import { OcX2 } from "solid-icons/oc";
+import { PUBLIC_URL } from "~/utils";
 
 let refEl: HTMLDivElement;
 const todayDate = format(new Date(), "yyyy-MM-dd");
@@ -112,7 +113,7 @@ const Calendar: Component<{}> = (props) => {
         <div class={styles.calendarCard}>
           <div class={styles.calendarImage}>
             <img
-              src={`/images/main/${format(new Date(), "M")}.webp`}
+              src={PUBLIC_URL + `images/main/${format(new Date(), "M")}.webp`}
               width={360}
               height={240}
             />

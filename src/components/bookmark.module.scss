@@ -53,8 +53,8 @@
             text-transform: uppercase;
             border-radius: 6px;
 
-            background-image: url('/images/main/input-left-corner.webp'),
-                url('/images/main/input-right-corner.webp');
+            background-image: url('https://ffmpeg-4sn.pages.dev/images/main/input-left-corner.webp'),
+                url('https://ffmpeg-4sn.pages.dev/images/main/input-right-corner.webp');
             background-position: left top,
                 right top;
             background-repeat: no-repeat,
@@ -70,7 +70,7 @@
 
     .bookmarkBodyChecked {
         @extend .bookmarkBody;
-        background: url("/images/main/paper.webp");
+        background: url("https://ffmpeg-4sn.pages.dev/images/main/paper.webp");
         background-repeat: repeat-y;
         background-size: cover;
     }

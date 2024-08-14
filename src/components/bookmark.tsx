@@ -207,9 +207,9 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         >
           <Show
             when={bookmark()?.like}
-            fallback={<AiFillHeart size={30} color="#ffffffe6" />}
+            fallback={<AiFillHeart size={24} color="#ffffffe6" />}
           >
-            <AiFillHeart size={30} color="#fd2c55" />
+            <AiFillHeart size={24} color="#fd2c55" />
           </Show>
         </button>
         <div class={styles.bookmarkLike}>{bookmark()?.like}</div>
@@ -217,28 +217,28 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
           class={buttons.buttonBookmark}
           onclick={() => copyBookMarkToClipboard(bookmark()!.content)}
         >
-          <BiSolidPaste size={23} color="#ffffffe6" />
+          <BiSolidPaste size={22} color="#ffffffe6" />
         </button>
         <button
           class={buttons.buttonBookmark}
           onclick={() => setShowEdit(!showEdit())}
         >
-          <FaSolidFeather size={20} color="#ffffffe6" />
+          <FaSolidFeather size={19} color="#ffffffe6" />
         </button>
         <button
           class={buttons.buttonBookmark}
           onclick={() => setShowInsert(!showInsert())}
         >
-          <AiOutlineInsertRowBelow size={23} color="#ffffffe6" />
+          <AiOutlineInsertRowBelow size={22} color="#ffffffe6" />
         </button>
         <button
           class={buttons.buttonBookmark}
           onclick={() => setShowSearch(!showSearch())}
         >
-          <OcSearch2 size={20} color="#ffffffe6" />
+          <OcSearch2 size={18} color="#ffffffe6" />
         </button>
         <button class={buttons.buttonBookmark} onclick={props.onClose}>
-          <OcX2 size={23} color="#ffffffe6" />
+          <OcX2 size={20} color="#ffffffe6" />
         </button>
       </div>
     </div>

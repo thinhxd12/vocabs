@@ -1,3 +1,4 @@
+import { PUBLIC_URL } from "~/utils";
 
 export function createCanvas(width: number, height: number): HTMLCanvasElement {
     let canvas = document.createElement("canvas");
@@ -747,8 +748,8 @@ export class RainRenderer {
         this.width = this.canvas.width;
         this.height = this.canvas.height;
 
-        let vertShader = await getShader("/images/openmeteo/shaders/simple.vert");
-        let fragShader = await getShader("/images/openmeteo/shaders/water.frag");
+        let vertShader = await getShader("images/openmeteo/shaders/simple.vert");
+        let fragShader = await getShader("images/openmeteo/shaders/water.frag");
 
         this.gl = new GL(this.canvas, { alpha: false }, vertShader, fragShader);
         let gl = this.gl;

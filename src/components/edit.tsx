@@ -17,7 +17,7 @@ import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import styles from "./edit.module.scss";
 import { mainStore, setMainStore } from "~/lib/mystore";
-import { clickOutside, stopKeydown } from "~/utils";
+import { clickOutside, PUBLIC_URL, stopKeydown } from "~/utils";
 import Definition from "./definition";
 
 const Edit: Component<{
@@ -236,7 +236,11 @@ const Edit: Component<{
                 </div>
               </div>
               <div class={styles.editItemXs}>
-                <img src="/images/main/laurel.webp" width={15} height={15} />
+                <img
+                  src={PUBLIC_URL + "images/main/laurel.webp"}
+                  width={15}
+                  height={15}
+                />
                 <input
                   class={styles.editItemDef}
                   autocomplete="off"
@@ -278,7 +282,7 @@ const Edit: Component<{
         <form action={editVocabularyItem} method="post" class={forms.formBody}>
           <div class={styles.searchContent}>
             <img
-              src="/images/main/input-left-corner.webp"
+              src={PUBLIC_URL + "images/main/input-left-corner.webp"}
               class={styles.searchLeftOrnament}
             />
             <input
@@ -294,7 +298,7 @@ const Edit: Component<{
               }}
             />
             <img
-              src="/images/main/input-right-corner.webp"
+              src={PUBLIC_URL + "images/main/input-right-corner.webp"}
               class={styles.searchRightOrnament}
             />
           </div>

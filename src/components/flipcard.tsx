@@ -1,15 +1,19 @@
 import {
   Component,
+  JSX,
   Show,
   createEffect,
   createSignal,
   onCleanup,
+  onMount,
   untrack,
 } from "solid-js";
 import styles from "./flipcard.module.scss";
-import { mainStore } from "~/lib/mystore";
+import { mainStore, setMainStore } from "~/lib/mystore";
 import Flips from "./Flips";
 import { Motion, Presence } from "solid-motionone";
+import { debounce } from "@solid-primitives/scheduled";
+import { searchText } from "~/lib/api";
 
 const FlipCard: Component<{}> = (props) => {
   let audio: HTMLAudioElement | null;
@@ -53,53 +57,126 @@ const FlipCard: Component<{}> = (props) => {
     });
   });
 
-  return (
-    <div class={styles.flashCardContainer}>
-      <Show when={!mainStore.searchTerm}>
-        <Show when={mainStore.renderWord}>
-          <Presence>
-            <div class={styles.flipcardTextContainer}>
-              <Motion.div
-                class={styles.flipcardTextContent}
-                animate={{ y: showNumber() ? -33 : 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <p class={styles.flipcardText}>
-                  {mainStore.renderWord!.word}
-                  <span class={styles.flipcardTextNumber}>
-                    {mainStore.renderWord!.number - 1}
-                  </span>
-                </p>
-                <p class={styles.flipcardPhonetic}>
-                  {mainStore.renderWord!.phonetics}
-                </p>
-              </Motion.div>
-            </div>
-          </Presence>
-        </Show>
-      </Show>
+  // -------------------MOBILE START-------------------- //
+  const [isMobile, setIsMobile] = createSignal(false);
 
-      <Show when={mainStore.renderWord}>
+  onMount(async () => {
+    setIsMobile(
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent
+      )
+    );
+  });
+
+  const trigger = debounce(async (str: string) => {
+    const res = await searchText(str);
+    if (res) {
+      if (res.length === 0) {
+        setMainStore("searchTermColor", "#f90000");
+      }
+      setMainStore("searchResult", res);
+      mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
+    }
+  }, 450);
+
+  const searchWordMobile = (element: HTMLDivElement) => {
+    element.addEventListener("input", (e) => {
+      const value = (e.target as HTMLInputElement).value.toLowerCase();
+      setMainStore("searchTerm", value);
+      if (value.length > 2) {
+        trigger(value);
+      }
+    });
+  };
+
+  const clearSearchResult = (e: any) => {
+    setMainStore("searchTerm", "");
+    setMainStore("searchTermColor", "#ffffffe6");
+    e.currentTarget.value = "";
+  };
+  // -------------------MOBILE END-------------------- //
+
+  return (
+    <div class={styles.flipCard}>
+      <div class={styles.flipCardTextContainer}>
         <Presence>
-          <Show when={showNumber()}>
+          <Show
+            when={!showNumber()}
+            fallback={
+              <Motion.div
+                class={styles.flipCardTextPhonetic}
+                initial={{ y: -33 }}
+                animate={{ y: 0 }}
+                exit={{ y: 33 }}
+                transition={{ duration: 0.3 }}
+              >
+                {mainStore.renderWord && mainStore.renderWord!.phonetics}
+              </Motion.div>
+            }
+          >
             <Motion.div
-              class={styles.flipCardNumberContainer}
-              animate={{ opacity: 1 }}
-              exit={{
-                y: "100%",
-                opacity: 0,
-                transition: { duration: 0.3 },
-              }}
+              class={styles.flipCardTextContent}
+              initial={{ y: -33 }}
+              animate={{ y: 0 }}
+              exit={{ y: 33 }}
+              transition={{ duration: 0.3 }}
             >
-              <div class={styles.ticksContainer}>
-                <Show when={flag()} fallback={<Flips />}>
-                  <Flips />
-                </Show>
-              </div>
+              <Show
+                when={isMobile()}
+                fallback={
+                  <>
+                    <p
+                      style={{
+                        color: mainStore.searchTermColor,
+                      }}
+                    >
+                      {mainStore.searchTerm || mainStore.renderWord?.word}
+                    </p>
+                    <span class={styles.flipCardTextNumber}>
+                      {mainStore.renderWord && mainStore.renderWord!.number - 1}
+                    </span>
+                  </>
+                }
+              >
+                <input
+                  class={styles.flipCardTextMobile}
+                  type="text"
+                  autocomplete="off"
+                  value={mainStore.renderWord?.word || ""}
+                  use:searchWordMobile={null}
+                  onfocus={(e) => (e.currentTarget.value = "")}
+                  onblur={(e) => clearSearchResult(e)}
+                  style={{
+                    color: mainStore.searchTermColor,
+                  }}
+                />
+                <span class={styles.flipCardTextNumber}>
+                  {mainStore.renderWord && mainStore.renderWord!.number - 1}
+                </span>
+              </Show>
             </Motion.div>
           </Show>
         </Presence>
-      </Show>
+      </div>
+      <Presence>
+        <Show when={showNumber()}>
+          <Motion.div
+            class={styles.flipCardNumberContainer}
+            animate={{ opacity: 1 }}
+            exit={{
+              y: "100%",
+              opacity: 0,
+            }}
+            transition={{ duration: 0.3 }}
+          >
+            <div class={styles.ticksContainer}>
+              <Show when={flag()} fallback={<Flips />}>
+                <Flips />
+              </Show>
+            </div>
+          </Motion.div>
+        </Show>
+      </Presence>
     </div>
   );
 };

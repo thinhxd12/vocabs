@@ -12,8 +12,8 @@
     font-family: $f-button;
     font-size: 10px;
     background-color: transparent;
-    background-image: url('/images/main/input-left-corner.webp'),
-        url('/images/main/input-right-corner.webp');
+    background-image: url('https://ffmpeg-4sn.pages.dev/images/main/input-left-corner.webp'),
+        url('https://ffmpeg-4sn.pages.dev/images/main/input-right-corner.webp');
     background-position: left top,
         right top;
     background-repeat: no-repeat,
@@ -53,8 +53,8 @@
         left: 0;
         width: 54px;
         height: 25px;
-        background-image: url('/images/main/input-left-corner.webp'),
-            url('/images/main/input-right-corner.webp');
+        background-image: url('https://ffmpeg-4sn.pages.dev/images/main/input-left-corner.webp'),
+            url('https://ffmpeg-4sn.pages.dev/images/main/input-right-corner.webp');
         background-position: left top,
             right top;
         background-repeat: no-repeat,
@@ -73,7 +73,7 @@
 
     span {
         position: absolute;
-        @include font($f-buttonMenu, 11px, $color-white, 700, normal, 25px);
+        @include font($f-buttonMenu, 12px, $color-white, 700, normal, 25px);
         top: 0;
         left: 0;
         width: 100%;

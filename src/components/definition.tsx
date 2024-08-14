@@ -5,6 +5,7 @@ import { mainStore } from "~/lib/mystore";
 import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
 import { FaSolidCheck } from "solid-icons/fa";
 import { VocabularyType } from "~/types";
+import { PUBLIC_URL } from "~/utils";
 
 const Definition: Component<{
   item?: VocabularyType;
@@ -92,7 +93,8 @@ const Definition: Component<{
                               src={item().image}
                               onerror={(e) => {
                                 e.currentTarget.src =
-                                  "/images/main/image_not_found.webp";
+                                  PUBLIC_URL +
+                                  "images/main/image_not_found.webp";
                               }}
                               width={360}
                               height={240}
@@ -132,7 +134,7 @@ const Definition: Component<{
                     <div class={styles.websCredits}>
                       <Show when={entry().example[0].author}>
                         <span class={styles.websAuthor}>
-                          {entry().example[0].author} -
+                          {entry().example[0].author}-
                         </span>
                       </Show>
                       <Show when={entry().example[0].title}>
@@ -142,7 +144,7 @@ const Definition: Component<{
                       </Show>
                       <Show when={entry().example[0].year}>
                         <span class={styles.websYear}>
-                          - {entry().example[0].year}
+                          -{entry().example[0].year}
                         </span>
                       </Show>
                     </div>

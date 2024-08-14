@@ -136,10 +136,14 @@
                 }
 
                 .dateTimeIndex {
-                    @include flex-center-column;
-                    @include font($f-calendarMainDay, 8px, $color-calendar-text-2, 600, normal, 9px);
                     margin-left: 2px;
                     min-width: 10px;
+                    @include flex-center-column;
+                    @include font($f-calendarMainDay, 8px, $color-calendar-text-2, 600, normal, 9px);
+
+                    div {
+                        font-family: $f-calendarMainDay;
+                    }
 
                     div:first-child {
                         text-decoration: underline;
@@ -269,7 +273,7 @@
     }
 
     .calendarQuote {
-        background: url("/images/main/grunge-image-tree.webp");
+        background: url("https://ffmpeg-4sn.pages.dev/images/main/grunge-image-tree.webp");
         background-size: cover;
         background-position: left 0 bottom 27%;
         padding: 6px;
