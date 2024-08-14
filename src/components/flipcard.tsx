@@ -99,64 +99,62 @@ const FlipCard: Component<{}> = (props) => {
   return (
     <div class={styles.flipCard}>
       <div class={styles.flipCardTextContainer}>
-        <Presence>
-          <Show
-            when={!showNumber()}
-            fallback={
-              <Motion.div
-                class={styles.flipCardTextPhonetic}
-                initial={{ y: -33 }}
-                animate={{ y: 0 }}
-                exit={{ y: 33 }}
-                transition={{ duration: 0.3 }}
-              >
-                {mainStore.renderWord && mainStore.renderWord!.phonetics}
-              </Motion.div>
-            }
-          >
+        <Show
+          when={!showNumber()}
+          fallback={
             <Motion.div
-              class={styles.flipCardTextContent}
+              class={styles.flipCardTextPhonetic}
               initial={{ y: -33 }}
               animate={{ y: 0 }}
               exit={{ y: 33 }}
               transition={{ duration: 0.3 }}
             >
-              <Show
-                when={isMobile()}
-                fallback={
-                  <>
-                    <p
-                      style={{
-                        color: mainStore.searchTermColor,
-                      }}
-                    >
-                      {mainStore.searchTerm || mainStore.renderWord?.word}
-                    </p>
-                    <span class={styles.flipCardTextNumber}>
-                      {mainStore.renderWord && mainStore.renderWord!.number - 1}
-                    </span>
-                  </>
-                }
-              >
-                <input
-                  class={styles.flipCardTextMobile}
-                  type="text"
-                  autocomplete="off"
-                  value={mainStore.renderWord?.word || ""}
-                  use:searchWordMobile={null}
-                  onfocus={(e) => (e.currentTarget.value = "")}
-                  onblur={(e) => clearSearchResult(e)}
-                  style={{
-                    color: mainStore.searchTermColor,
-                  }}
-                />
-                <span class={styles.flipCardTextNumber}>
-                  {mainStore.renderWord && mainStore.renderWord!.number - 1}
-                </span>
-              </Show>
+              {mainStore.renderWord && mainStore.renderWord!.phonetics}
             </Motion.div>
-          </Show>
-        </Presence>
+          }
+        >
+          <Motion.div
+            class={styles.flipCardTextContent}
+            initial={{ y: -33 }}
+            animate={{ y: 0 }}
+            exit={{ y: 33 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Show
+              when={isMobile()}
+              fallback={
+                <>
+                  <p
+                    style={{
+                      color: mainStore.searchTermColor,
+                    }}
+                  >
+                    {mainStore.searchTerm || mainStore.renderWord?.word}
+                  </p>
+                  <span class={styles.flipCardTextNumber}>
+                    {mainStore.renderWord && mainStore.renderWord!.number - 1}
+                  </span>
+                </>
+              }
+            >
+              <input
+                class={styles.flipCardTextMobile}
+                type="text"
+                autocomplete="off"
+                value={mainStore.renderWord?.word || ""}
+                use:searchWordMobile={null}
+                onfocus={(e) => (e.currentTarget.value = "")}
+                onblur={(e) => clearSearchResult(e)}
+                style={{
+                  color: mainStore.searchTermColor,
+                }}
+              />
+              <span class={styles.flipCardTextNumber}>
+                {mainStore.renderWord && mainStore.renderWord!.number - 1}
+              </span>
+            </Show>
+          </Motion.div>
+        </Show>
       </div>
       <Presence>
         <Show when={showNumber()}>
