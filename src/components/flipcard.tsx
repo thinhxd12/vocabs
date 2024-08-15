@@ -99,46 +99,30 @@ const FlipCard: Component<{}> = (props) => {
   return (
     <div class={styles.flipCard}>
       <div class={styles.flipCardTextContainer}>
-        <Show
-          when={!showNumber()}
-          fallback={
-            <Motion.div
-              class={styles.flipCardTextPhonetic}
-              initial={{ y: -33 }}
-              animate={{ y: 0 }}
-              exit={{ y: 33 }}
-              transition={{ duration: 0.3 }}
-            >
-              {mainStore.renderWord && mainStore.renderWord!.phonetics}
-            </Motion.div>
-          }
+        <Motion.div
+          class={styles.flipCardTextContent}
+          animate={{ y: showNumber() ? -33 : 0 }}
+          transition={{ duration: 0.2, delay: 0.05 }}
         >
-          <Motion.div
-            class={styles.flipCardTextContent}
-            initial={{ y: -33 }}
-            animate={{ y: 0 }}
-            exit={{ y: 33 }}
-            transition={{ duration: 0.3 }}
+          <Show
+            when={isMobile()}
+            fallback={
+              <div class={styles.flipCardTextWord}>
+                <p
+                  style={{
+                    color: mainStore.searchTermColor,
+                  }}
+                >
+                  {mainStore.searchTerm || mainStore.renderWord?.word}
+                </p>
+                <span class={styles.flipCardTextNumber}>
+                  {mainStore.renderWord && mainStore.renderWord!.number - 1}
+                </span>
+              </div>
+            }
           >
-            <Show
-              when={isMobile()}
-              fallback={
-                <>
-                  <p
-                    style={{
-                      color: mainStore.searchTermColor,
-                    }}
-                  >
-                    {mainStore.searchTerm || mainStore.renderWord?.word}
-                  </p>
-                  <span class={styles.flipCardTextNumber}>
-                    {mainStore.renderWord && mainStore.renderWord!.number - 1}
-                  </span>
-                </>
-              }
-            >
+            <div class={styles.flipCardTextWord}>
               <input
-                class={styles.flipCardTextMobile}
                 type="text"
                 autocomplete="off"
                 value={mainStore.renderWord?.word || ""}
@@ -152,10 +136,14 @@ const FlipCard: Component<{}> = (props) => {
               <span class={styles.flipCardTextNumber}>
                 {mainStore.renderWord && mainStore.renderWord!.number - 1}
               </span>
-            </Show>
-          </Motion.div>
-        </Show>
+            </div>
+          </Show>
+          <div class={styles.flipCardTextPhonetic}>
+            {mainStore.renderWord && mainStore.renderWord!.phonetics}
+          </div>
+        </Motion.div>
       </div>
+
       <Presence>
         <Show when={showNumber()}>
           <Motion.div

@@ -5,6 +5,7 @@ import {
   Show,
   Suspense,
   createSignal,
+  onCleanup,
   onMount,
 } from "solid-js";
 import styles from "./bookmark.module.scss";
@@ -36,7 +37,6 @@ declare module "solid-js" {
 
 const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [bookmark, setBookmark] = createSignal<BookmarkType>();
-  const [likeToggle, setLikeToggle] = createSignal<boolean>(false);
 
   onMount(async () => {
     const data = await getBookMarkData();
@@ -46,24 +46,24 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   });
 
   const handleGetPrevBookmark = async () => {
-    setLikeToggle(false);
     const data = await getPrevBookMarkData(bookmark()!.created_at);
-    if (data) setBookmark(data);
+    if (data) {
+      setBookmark(data);
+    }
   };
   const handleGetNextBookmark = async () => {
-    setLikeToggle(false);
     const data = await getNextBookMarkData(bookmark()!.created_at);
-    if (data) setBookmark(data);
+    if (data) {
+      setBookmark(data);
+    }
   };
 
   const handleCheckBookmark = () => {
-    if (!likeToggle()) {
-      setLikeToggle(!likeToggle());
-      setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
+    if (bookmark()!.like > 0) {
+      setBookmark({ ...bookmark()!, like: bookmark()!.like - 1 });
       checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
     } else {
-      setLikeToggle(!likeToggle());
-      setBookmark({ ...bookmark()!, like: bookmark()!.like - 1 });
+      setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
       checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
     }
   };
@@ -97,6 +97,11 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
     setShowSearch(false);
   };
 
+  const checkBookmark = () => {
+    setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
+    checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
+  };
+
   return (
     <div class={styles.bookmarkContainer} tabIndex={1}>
       <Suspense fallback={<p class={styles.bookmarkLoading}>...</p>}>
@@ -116,7 +121,9 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
               <p class={styles.bookmarkYear}>{bookmark()?.dateOfCreation}</p>
             </Show>
           </div>
-          <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
+          <p class={styles.bookmarkPassage} ondblclick={checkBookmark}>
+            {bookmark()?.content}
+          </p>
           <div
             class={styles.buttonBookmarkLeft}
             onclick={() => handleGetPrevBookmark()}
