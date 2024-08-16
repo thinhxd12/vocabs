@@ -26,6 +26,7 @@ import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
 import { AiFillHeart, AiOutlineInsertRowBelow } from "solid-icons/ai";
 import { BiSolidPaste } from "solid-icons/bi";
+import { Motion, Presence } from "solid-motionone";
 
 declare module "solid-js" {
   namespace JSX {
@@ -97,9 +98,16 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
     setShowSearch(false);
   };
 
+  const [toggleLikeAnimation, setToggleLikeAnimation] =
+    createSignal<boolean>(false);
+
   const checkBookmark = () => {
     setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
     checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
+    setToggleLikeAnimation(true);
+    setTimeout(() => {
+      setToggleLikeAnimation(false);
+    }, 500);
   };
 
   return (
@@ -121,9 +129,11 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
               <p class={styles.bookmarkYear}>{bookmark()?.dateOfCreation}</p>
             </Show>
           </div>
-          <p class={styles.bookmarkPassage} ondblclick={checkBookmark}>
+
+          <div class={styles.bookmarkPassage} ondblclick={checkBookmark}>
             {bookmark()?.content}
-          </p>
+          </div>
+
           <div
             class={styles.buttonBookmarkLeft}
             onclick={() => handleGetPrevBookmark()}
@@ -204,6 +214,12 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
               </Index>
             </Show>
           </div>
+        </div>
+      </Show>
+
+      <Show when={toggleLikeAnimation()}>
+        <div class={styles.likeAnimation}>
+          <AiFillHeart size={130} color="#fd2c55" />
         </div>
       </Show>
 

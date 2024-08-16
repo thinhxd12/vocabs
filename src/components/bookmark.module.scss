@@ -68,6 +68,7 @@
         .bookmarkPassage {
             @include font($f-bookmarkText, 20px, $color-black, 400, normal, 30px);
             flex-grow: 1;
+            cursor: default;
         }
     }
 
@@ -168,5 +169,41 @@
             position: relative;
             z-index: 9999;
         }
+    }
+
+    .likeAnimation {
+        position: absolute;
+        top: calc(50% - 65px);
+        left: calc(50% - 65px);
+        animation: pulse 500ms;
+
+        svg {
+            filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
+        }
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale3d(0.8, 0.8, 0.8) rotate(15deg);
+        opacity: 0.5;
+    }
+
+    25% {
+        opacity: 0.8;
+    }
+
+    50% {
+        transform: scale3d(1.1, 1.1, 1.1) rotate(-15deg);
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 0.8;
+    }
+
+    to {
+        transform: scale3d(0.8, 0.8, 0.8) rotate(15deg);
+        opacity: 0.5;
     }
 }
