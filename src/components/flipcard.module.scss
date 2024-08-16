@@ -29,7 +29,7 @@
 
             .flipCardTextNumber {
                 position: absolute;
-                bottom: 33px;
+                top: 0;
                 left: 0;
                 right: 0;
                 @include font($f-flipSearchNumber, 7px, #ffffffe6, 600, normal, 7px);
