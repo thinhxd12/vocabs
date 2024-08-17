@@ -173,8 +173,8 @@
 
     .likeAnimation {
         position: absolute;
-        top: calc(50% - 65px);
-        left: calc(50% - 65px);
+        top: calc(50% - 75px);
+        left: calc(50% - 75px);
         animation: pulse 500ms;
 
         svg {
@@ -185,25 +185,17 @@
 
 @keyframes pulse {
     0% {
-        transform: scale3d(0.8, 0.8, 0.8) rotate(15deg);
-        opacity: 0.5;
-    }
-
-    25% {
-        opacity: 0.8;
-    }
-
-    50% {
-        transform: scale3d(1.1, 1.1, 1.1) rotate(-15deg);
-        opacity: 1;
+        transform: scale3d(1.5, 1.5, 1.5) rotate(15deg);
+        opacity: 0.1;
     }
 
     75% {
-        opacity: 0.8;
+        transform: scale3d(0.7, 0.7, 0.7) rotate(-15deg);
+        opacity: 1;
     }
 
     to {
         transform: scale3d(0.8, 0.8, 0.8) rotate(15deg);
-        opacity: 0.5;
+        opacity: 1;
     }
 }

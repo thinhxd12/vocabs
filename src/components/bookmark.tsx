@@ -5,7 +5,6 @@ import {
   Show,
   Suspense,
   createSignal,
-  onCleanup,
   onMount,
 } from "solid-js";
 import styles from "./bookmark.module.scss";
@@ -24,9 +23,9 @@ import {
 import { stopKeydown } from "~/utils";
 import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
-import { AiFillHeart, AiOutlineInsertRowBelow } from "solid-icons/ai";
+import { AiOutlineInsertRowBelow } from "solid-icons/ai";
+import { BsHeartbreakFill, BsHeartFill } from "solid-icons/bs";
 import { BiSolidPaste } from "solid-icons/bi";
-import { Motion, Presence } from "solid-motionone";
 
 declare module "solid-js" {
   namespace JSX {
@@ -109,6 +108,8 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
       setToggleLikeAnimation(false);
     }, 500);
   };
+
+  const [likeIcon, setLikeIcon] = createSignal<boolean>(false);
 
   return (
     <div class={styles.bookmarkContainer} tabIndex={1}>
@@ -219,7 +220,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
 
       <Show when={toggleLikeAnimation()}>
         <div class={styles.likeAnimation}>
-          <AiFillHeart size={130} color="#fd2c55" />
+          <BsHeartFill size={150} color="#fd2c55" />
         </div>
       </Show>
 
@@ -230,36 +231,51 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         >
           <Show
             when={bookmark()?.like}
-            fallback={<AiFillHeart size={24} color="#ffffffe6" />}
+            fallback={<BsHeartFill size={24} color="#ffffffe6" />}
           >
-            <AiFillHeart size={24} color="#fd2c55" />
+            <div
+              onmouseover={() => setLikeIcon(true)}
+              onmouseleave={() => setLikeIcon(false)}
+            >
+              <Show
+                when={likeIcon()}
+                fallback={<BsHeartFill size={24} color="#fd2c55" />}
+              >
+                <BsHeartbreakFill size={24} color="#fd2c55" />
+              </Show>
+            </div>
           </Show>
         </button>
         <div class={styles.bookmarkLike}>{bookmark()?.like}</div>
+
         <button
           class={buttons.buttonBookmark}
           onclick={() => copyBookMarkToClipboard(bookmark()!.content)}
         >
           <BiSolidPaste size={22} color="#ffffffe6" />
         </button>
+
         <button
           class={buttons.buttonBookmark}
           onclick={() => setShowEdit(!showEdit())}
         >
           <FaSolidFeather size={19} color="#ffffffe6" />
         </button>
+
         <button
           class={buttons.buttonBookmark}
           onclick={() => setShowInsert(!showInsert())}
         >
           <AiOutlineInsertRowBelow size={22} color="#ffffffe6" />
         </button>
+
         <button
           class={buttons.buttonBookmark}
           onclick={() => setShowSearch(!showSearch())}
         >
           <OcSearch2 size={18} color="#ffffffe6" />
         </button>
+
         <button class={buttons.buttonBookmark} onclick={props.onClose}>
           <OcX2 size={20} color="#ffffffe6" />
         </button>

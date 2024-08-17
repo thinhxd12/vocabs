@@ -210,6 +210,7 @@
     outline: 0;
     background: none;
     @include flex-center;
+    transition: 0.3s ease;
 
     svg {
         filter: drop-shadow(0 3px 3px #00000036);
