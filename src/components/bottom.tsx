@@ -219,27 +219,32 @@ const Bottom: Component<{}> = () => {
   return (
     <div class={styles.bottom}>
       <div class={styles.bottomBar} use:clickOutside={close}>
-        <div class={styles.bottomIndex}>
-          <div class={styles.bottomIndexNums}>
-            <Show
-              when={listStore.listToday?.date}
-              fallback={
-                <>
-                  <span>
-                    <small>N</small>
-                  </span>
-                  <span>
-                    <small>N</small>
-                  </span>
-                </>
-              }
-            >
-              <span>{listStore.listToday.time1}</span>
-              <span>{listStore.listToday.time2}</span>
-            </Show>
-          </div>
-          <div class={styles.bottomIndexDay}>
-            <span>{format(new Date(), "eeeeee")}</span>
+        <div
+          class={styles.bottomIndexContainer}
+          onClick={() => setShowMenu(!showMenu())}
+        >
+          <div class={styles.bottomIndex}>
+            <div class={styles.bottomIndexNums}>
+              <Show
+                when={listStore.listToday?.date}
+                fallback={
+                  <>
+                    <span>
+                      <small>N</small>
+                    </span>
+                    <span>
+                      <small>N</small>
+                    </span>
+                  </>
+                }
+              >
+                <span>{listStore.listToday.time1}</span>
+                <span>{listStore.listToday.time2}</span>
+              </Show>
+            </div>
+            <div class={styles.bottomIndexDay}>
+              <span>{format(new Date(), "eeeeee")}</span>
+            </div>
           </div>
         </div>
         <A
@@ -259,19 +264,14 @@ const Bottom: Component<{}> = () => {
           <span>Pecunia non olet</span>
         </A>
 
-        <div
-          class={styles.bottomCenterBox}
-          onClick={() => setShowMenu(!showMenu())}
-        >
-          <button class={styles.bottomCenter}>
-            <span>{Math.floor(mainStore.totalMemories / 100)}</span>
-            <small>
-              {mainStore.totalMemories % 100 < 10
-                ? "0" + (mainStore.totalMemories % 100)
-                : mainStore.totalMemories % 100}
-            </small>
-          </button>
-        </div>
+        <button class={styles.bottomCenter}>
+          <span>{Math.floor(mainStore.totalMemories / 100)}</span>
+          <small>
+            {mainStore.totalMemories % 100 < 10
+              ? "0" + (mainStore.totalMemories % 100)
+              : mainStore.totalMemories % 100}
+          </small>
+        </button>
 
         <A
           href="/weather"
@@ -386,17 +386,17 @@ const Bottom: Component<{}> = () => {
               class={styles.bottomMenuBtns}
               initial={{
                 opacity: 0,
-                y: 150,
+                x: 90,
               }}
               animate={{
                 opacity: 1,
-                y: 0,
+                x: 0,
               }}
               exit={{
                 opacity: 0,
-                y: 150,
+                x: 90,
+                transition: { duration: 0.25, easing: [0.4, 0, 0.2, 1] },
               }}
-              transition={{ duration: 0.2, easing: "linear" }}
             >
               <button
                 class={
@@ -413,8 +413,8 @@ const Bottom: Component<{}> = () => {
                 <img
                   alt="hourglass"
                   src={PUBLIC_URL + "images/main/flower1.webp"}
-                  width={54}
-                  height={25}
+                  width={90}
+                  height={42}
                 />
                 <span>{Number(listStore.listToday?.index1 + 1) ?? "N"}</span>
               </button>
@@ -433,8 +433,8 @@ const Bottom: Component<{}> = () => {
                 <img
                   alt="hourglass"
                   src={PUBLIC_URL + "images/main/flower2.webp"}
-                  width={54}
-                  height={25}
+                  width={90}
+                  height={42}
                 />
                 <span>{Number(listStore.listToday?.index2 + 1) ?? "N"}</span>
               </button>
@@ -449,8 +449,8 @@ const Bottom: Component<{}> = () => {
                 <img
                   alt="hourglass"
                   src={PUBLIC_URL + "images/main/bookmark.webp"}
-                  width={54}
-                  height={25}
+                  width={90}
+                  height={42}
                 />
               </button>
               <button
@@ -464,8 +464,8 @@ const Bottom: Component<{}> = () => {
                 <img
                   alt="hourglass"
                   src={PUBLIC_URL + "images/main/translate.webp"}
-                  width={54}
-                  height={25}
+                  width={90}
+                  height={42}
                 />
               </button>
               <button
@@ -479,8 +479,8 @@ const Bottom: Component<{}> = () => {
                 <img
                   alt="hourglass"
                   src={PUBLIC_URL + "images/main/hourglass.webp"}
-                  width={54}
-                  height={25}
+                  width={90}
+                  height={42}
                 />
               </button>
               <button class={buttons.buttonMenu} onClick={logoutAction}>
@@ -488,8 +488,8 @@ const Bottom: Component<{}> = () => {
                 <img
                   alt="hourglass"
                   src={PUBLIC_URL + "images/main/exit.webp"}
-                  width={54}
-                  height={25}
+                  width={90}
+                  height={42}
                 />
               </button>
             </Motion.div>

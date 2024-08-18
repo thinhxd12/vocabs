@@ -15,87 +15,77 @@
         z-index: 10000;
     }
 
-    .bottomIndex {
-        width: 9px;
+    .bottomIndexContainer {
+        width: 33px;
         height: 33px;
-        background: $color-border;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        cursor: default;
-
-        .bottomIndexNums {
-            @include flex-center-column;
-            width: 100%;
-            height: 20px;
-
-            span {
-                text-align: center;
-                @include font($f-botIndexNum, 9px, $color-black, 600, normal, 10px);
-                display: block;
-            }
-        }
-
-        .bottomIndexDay {
-            width: 100%;
-            height: 13px;
-            background-color: $color-black;
-            @include flex-center;
-
-            span {
-                @include font($f-botIndexText, 9px, #575757, 700, normal, 9px);
-                padding-top: 2px;
-                transform: rotateZ(-90deg);
-            }
-        }
-    }
-
-    .bottomCenterBox {
         position: absolute;
-        left: 150px;
         bottom: 0;
-        width: 60px;
+        left: 0;
+        z-index: inherit;
         cursor: pointer;
-        z-index: 1001;
 
-        &:hover {
-            .bottomCenter {
-
-                span,
-                small {
-                    color: $color-white;
-                    text-shadow: 0px 0px 6px #f4f4f4;
-                }
-
-            }
-        }
-
-        .bottomCenter {
+        .bottomIndex {
+            width: 9px;
             height: 33px;
-            width: 21px;
-            margin-left: 19.5px;
-            display: block;
-            background: none;
-            outline: none;
-            border: none;
-            border-left: 1px solid #18181894;
-            border-right: 1px solid #18181894;
-            transition: all 0.2s;
+            background: $color-border;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-end;
             cursor: pointer;
 
-            span {
-                @include font($f-botCenterNum, 12px, #7c7b7a, 600, normal, 15px);
+            .bottomIndexNums {
+                @include flex-center-column;
+                width: 100%;
+                height: 20px;
+
+                span {
+                    text-align: center;
+                    @include font($f-botIndexNum, 9px, $color-black, 600, normal, 10px);
+                    display: block;
+                }
             }
 
-            small {
-                @include font($f-botCenterNum, 10px, #7c7b7a, 600, normal, 14px);
+            .bottomIndexDay {
+                width: 100%;
+                height: 13px;
+                background-color: $color-black;
+                @include flex-center;
+
+                span {
+                    @include font($f-botIndexText, 9px, #575757, 700, normal, 9px);
+                    padding-top: 2px;
+                    transform: rotateZ(-90deg);
+                }
             }
         }
     }
+
+
+    .bottomCenter {
+        height: 33px;
+        width: 21px;
+        display: block;
+        background: none;
+        outline: none;
+        border: none;
+        border-left: 1px solid #18181894;
+        border-right: 1px solid #18181894;
+        transition: all 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        cursor: default;
+
+        span {
+            @include font($f-botCenterNum, 12px, #7c7b7a, 600, normal, 15px);
+        }
+
+        small {
+            @include font($f-botCenterNum, 10px, #7c7b7a, 600, normal, 14px);
+        }
+    }
+
 
     .bottomBtn {
         display: block;
@@ -159,14 +149,20 @@
 
     .bottomBtn1 {
         @extend .bottomBtn;
-        width: 81px;
-        min-width: 81px;
+        width: 90px;
+        min-width: 90px;
+
+        span,
+        small {
+            padding-left: 6px;
+        }
     }
 
     .bottomBtn2 {
         @extend .bottomBtn;
-        width: 90px;
-        min-width: 90px;
+
+        flex-grow: 1;
+
 
         span,
         small {
@@ -176,16 +172,15 @@
 
     .bottomBtn3 {
         @extend .bottomBtn;
-        width: 90px;
-        min-width: 90px;
+        flex-grow: 1;
 
         .scrollingTextContainer {
-            width: 75px;
+            width: 100%;
             overflow: hidden;
             position: absolute;
             z-index: 3;
             bottom: 1px;
-            left: 15px;
+            left: 0px;
             -webkit-mask-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5) 10%, #fff 20%, #fff 80%, rgba(255, 255, 255, 0.5) 90%, transparent);
             mask-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5) 10%, #fff 20%, #fff 80%, rgba(255, 255, 255, 0.5) 90%, transparent);
         }
@@ -231,7 +226,6 @@
 
             p {
                 @include font($f-botWeatherTemp, 9px, #7c7b7a, 500, normal, 12px);
-                padding: 3px 0 0 4px;
             }
         }
 
@@ -249,6 +243,8 @@
         min-width: 90px;
         max-width: 90px;
         cursor: default;
+        flex-grow: 1;
+
 
         &:hover {
 
@@ -315,7 +311,9 @@
     }
 
     .bottomMenuBtns {
-        @include flex-center-column;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
     }
 }
 
