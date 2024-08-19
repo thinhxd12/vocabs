@@ -395,9 +395,7 @@ const Bottom: Component<{}> = () => {
         <button
           class={styles.bottomMenuButton}
           onClick={() => setShowMenu(!showMenu())}
-        >
-          click
-        </button>
+        ></button>
       </div>
 
       <div class={styles.bottomMenu}>
