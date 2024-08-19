@@ -51,12 +51,12 @@
         z-index: 3;
         top: 0;
         left: 0;
-        right: 0;
+        right: -1px;
         bottom: 0;
-        background-image: url('https://ffmpeg-4sn.pages.dev/images/main/input-left-corner.webp');
-        background-position: top left;
-        background-repeat: no-repeat;
-        background-size: auto 30px;
+        background-image: url('https://ffmpeg-4sn.pages.dev/images/main/input-left-corner.webp'), url('https://ffmpeg-4sn.pages.dev/images/main/input-right-corner.webp');
+        background-position: top left, top right;
+        background-repeat: no-repeat, no-repeat;
+        background-size: auto 30px, auto 30px;
     }
 
     img {
@@ -167,28 +167,6 @@
     &:hover {
         color: $color-white;
         background-color: $color-red-2;
-    }
-}
-
-.buttonTimer {
-    @extend .button;
-    width: 21px;
-    height: 21px;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    background-image: none;
-    background-color: $color-background-1;
-    color: $color-calendar-black;
-    border: 1px solid $color-border;
-    border-radius: 1px 1px 3px 3px;
-
-    svg {
-        z-index: 101;
-    }
-
-    &:hover {
-        color: $color-calendar-black !important;
     }
 }
 

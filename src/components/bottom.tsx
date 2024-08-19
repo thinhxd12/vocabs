@@ -219,32 +219,27 @@ const Bottom: Component<{}> = () => {
   return (
     <div class={styles.bottom}>
       <div class={styles.bottomBar} use:clickOutside={close}>
-        <div
-          class={styles.bottomIndexContainer}
-          onClick={() => setShowMenu(!showMenu())}
-        >
-          <div class={styles.bottomIndex}>
-            <div class={styles.bottomIndexNums}>
-              <Show
-                when={listStore.listToday?.date}
-                fallback={
-                  <>
-                    <span>
-                      <small>N</small>
-                    </span>
-                    <span>
-                      <small>N</small>
-                    </span>
-                  </>
-                }
-              >
-                <span>{listStore.listToday.time1}</span>
-                <span>{listStore.listToday.time2}</span>
-              </Show>
-            </div>
-            <div class={styles.bottomIndexDay}>
-              <span>{format(new Date(), "eeeeee")}</span>
-            </div>
+        <div class={styles.bottomIndex}>
+          <div class={styles.bottomIndexNums}>
+            <Show
+              when={listStore.listToday?.date}
+              fallback={
+                <>
+                  <span>
+                    <small>N</small>
+                  </span>
+                  <span>
+                    <small>N</small>
+                  </span>
+                </>
+              }
+            >
+              <span>{listStore.listToday.time1}</span>
+              <span>{listStore.listToday.time2}</span>
+            </Show>
+          </div>
+          <div class={styles.bottomIndexDay}>
+            <span>{format(new Date(), "eeeeee")}</span>
           </div>
         </div>
         <A
@@ -264,13 +259,32 @@ const Bottom: Component<{}> = () => {
           <span>Pecunia non olet</span>
         </A>
 
-        <button class={styles.bottomCenter}>
+        <button class={styles.bottomCenter} onClick={stopCountdown}>
           <span>{Math.floor(mainStore.totalMemories / 100)}</span>
           <small>
             {mainStore.totalMemories % 100 < 10
               ? "0" + (mainStore.totalMemories % 100)
               : mainStore.totalMemories % 100}
           </small>
+
+          <Presence>
+            <Show when={showTimer()}>
+              <Motion.div
+                class={styles.bottomTimer}
+                initial={{
+                  bottom: "33px",
+                }}
+                animate={{
+                  bottom: "0px",
+                  height: `${(minute() / 6) * 100}%`,
+                }}
+                exit={{
+                  bottom: "-33px",
+                }}
+                transition={{ duration: 0.25, easing: [0.4, 0, 0.2, 1] }}
+              ></Motion.div>
+            </Show>
+          </Presence>
         </button>
 
         <A
@@ -377,6 +391,13 @@ const Bottom: Component<{}> = () => {
             </Show>
           </div>
         </Show>
+
+        <button
+          class={styles.bottomMenuButton}
+          onClick={() => setShowMenu(!showMenu())}
+        >
+          click
+        </button>
       </div>
 
       <div class={styles.bottomMenu}>
@@ -391,6 +412,7 @@ const Bottom: Component<{}> = () => {
               animate={{
                 opacity: 1,
                 x: 0,
+                transition: { duration: 0.25, easing: [0.4, 0, 0.2, 1] },
               }}
               exit={{
                 opacity: 0,
@@ -493,32 +515,6 @@ const Bottom: Component<{}> = () => {
                 />
               </button>
             </Motion.div>
-          </Show>
-        </Presence>
-        <Presence>
-          <Show when={showTimer()}>
-            <Motion.button
-              class={buttons.buttonTimer}
-              onClick={stopCountdown}
-              initial={{
-                opacity: 0,
-                bottom: "-27px",
-              }}
-              animate={{
-                opacity: 1,
-                bottom: "0px",
-              }}
-              exit={{
-                opacity: 0,
-                bottom: "-27px",
-              }}
-              transition={{ duration: 0.3, easing: "ease-in-out" }}
-            >
-              <Motion.div
-                class={styles.buttonTimerOverlay}
-                animate={{ height: `${(1 - minute() / 6) * 100}%` }}
-              ></Motion.div>
-            </Motion.button>
           </Show>
         </Presence>
       </div>

@@ -15,51 +15,40 @@
         z-index: 10000;
     }
 
-    .bottomIndexContainer {
-        width: 33px;
+    .bottomIndex {
+        width: 9px;
         height: 33px;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        z-index: inherit;
-        cursor: pointer;
+        background: $color-border;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        cursor: default;
 
-        .bottomIndex {
-            width: 9px;
-            height: 33px;
-            background: $color-border;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
+        .bottomIndexNums {
+            @include flex-center-column;
+            width: 100%;
+            height: 20px;
 
-            .bottomIndexNums {
-                @include flex-center-column;
-                width: 100%;
-                height: 20px;
-
-                span {
-                    text-align: center;
-                    @include font($f-botIndexNum, 9px, $color-black, 600, normal, 10px);
-                    display: block;
-                }
+            span {
+                text-align: center;
+                @include font($f-botIndexNum, 9px, $color-black, 600, normal, 10px);
+                display: block;
             }
+        }
 
-            .bottomIndexDay {
-                width: 100%;
-                height: 13px;
-                background-color: $color-black;
-                @include flex-center;
+        .bottomIndexDay {
+            width: 100%;
+            height: 13px;
+            background-color: $color-black;
+            @include flex-center;
 
-                span {
-                    @include font($f-botIndexText, 9px, #575757, 700, normal, 9px);
-                    padding-top: 2px;
-                    transform: rotateZ(-90deg);
-                }
+            span {
+                @include font($f-botIndexText, 9px, #575757, 700, normal, 9px);
+                padding-top: 2px;
+                transform: rotateZ(-90deg);
             }
         }
     }
-
 
     .bottomCenter {
         height: 33px;
@@ -68,21 +57,36 @@
         background: none;
         outline: none;
         border: none;
-        border-left: 1px solid #18181894;
-        border-right: 1px solid #18181894;
+        border-left: 1px solid rgba(124, 123, 122, 0.21);
+        border-right: 1px solid rgba(124, 123, 122, 0.21);
         transition: all 0.2s;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-end;
-        cursor: default;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        z-index: 6;
 
         span {
             @include font($f-botCenterNum, 12px, #7c7b7a, 600, normal, 15px);
+            z-index: 6;
         }
 
         small {
-            @include font($f-botCenterNum, 10px, #7c7b7a, 600, normal, 14px);
+            @include font($f-botCenterNum, 10px, #7c7b7a, 600, normal, 15px);
+            z-index: 6;
+        }
+
+        .bottomTimer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 3;
+            width: 100%;
+            height: 100%;
+            background: rgba(124, 123, 122, 0.3);
         }
     }
 
@@ -149,13 +153,8 @@
 
     .bottomBtn1 {
         @extend .bottomBtn;
-        width: 90px;
-        min-width: 90px;
-
-        span,
-        small {
-            padding-left: 6px;
-        }
+        width: 81px;
+        min-width: 81px;
     }
 
     .bottomBtn2 {
@@ -298,6 +297,19 @@
         bottom: 34px;
         left: 0;
         z-index: 9999;
+    }
+
+    .bottomMenuButton {
+        position: absolute;
+        right: 0;
+        bottom: 34px;
+        z-index: 9999;
+        width: 30px;
+        height: 30px;
+        background: none;
+        outline: none;
+        border: none;
+        cursor: pointer;
     }
 
     .buttonTimerOverlay {
