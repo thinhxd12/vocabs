@@ -57,6 +57,7 @@ const Bottom: Component<{}> = () => {
       });
       if (data) setBottomWeather(data);
     }, 1000 * 12 * 60);
+    clearInterval(intervalCountdown);
   });
 
   // -------------------LOGOUT-------------------- //
@@ -164,7 +165,7 @@ const Bottom: Component<{}> = () => {
   };
 
   const handleAutoplay = () => {
-    if (listStore.listButton) {
+    if (listStore.listButton && listStore.listContent.length > 0) {
       setListStore("listButton", false);
       startAutoplay();
     } else {

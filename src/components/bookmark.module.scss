@@ -5,116 +5,12 @@
     width: 100%;
     max-width: calc(100vw - 360px);
     height: 100%;
-    padding: 0 !important;
+    padding: 25px 40px 25px 25px !important;
     border: 0;
     outline: 0;
     z-index: 12;
     overflow-y: scroll;
     background-size: cover;
-
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-
-    .bookmarkButtons {
-        position: fixed;
-        top: 36%;
-        right: 360px;
-        z-index: 1001;
-        padding-right: 3px;
-        @include flex-center-column;
-
-        .bookmarkLike {
-            width: 100%;
-            text-align: center;
-            @include font($f-bookmarkLike, 12px, $color-white, 500, normal, 12px);
-        }
-    }
-
-    .bookmarkLoading {
-        font-size: 16px;
-        padding: 6px 9px;
-    }
-
-    .bookmarkBody {
-        padding: 12px 18px 18px 24px;
-        min-height: 100%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-
-        .bookmarkPassage::first-letter {
-            @include font($f-bookmarkText, 120px, $color-white, 700, normal, 130px);
-            float: left;
-            margin-right: 6px;
-            margin-top: 3px;
-            background: $color-black;
-            padding: 6px 12px 0;
-            text-align: center;
-            text-transform: uppercase;
-            border-radius: 6px;
-
-            background-image: url('https://ffmpeg-4sn.pages.dev/images/main/input-left-corner.webp'),
-                url('https://ffmpeg-4sn.pages.dev/images/main/input-right-corner.webp');
-            background-position: left top,
-                right top;
-            background-repeat: no-repeat,
-                no-repeat;
-            background-size: auto 100%,
-                auto 100%;
-        }
-
-        .bookmarkPassage {
-            @include font($f-bookmarkText, 20px, $color-black, 400, normal, 30px);
-            flex-grow: 1;
-            cursor: default;
-        }
-    }
-
-    .bookmarkBodyChecked {
-        @extend .bookmarkBody;
-        background: url("https://ffmpeg-4sn.pages.dev/images/main/paper.webp");
-        background-repeat: repeat-y;
-        background-size: cover;
-    }
-
-    .bookmarkEditContainer {
-        width: 100%;
-        padding: 3px;
-    }
-
-    .bookmarkTextArea {
-        @include font($f-bookmarkArea, 12px, $color-black, 400, normal, 15px);
-        padding: 3px;
-        width: 100%;
-        background: none;
-        outline: none;
-        border: 1px solid $color-border;
-        min-height: 150px;
-        background-color: $color-calendar-bg;
-    }
-
-    .bookmarkCredits {
-        text-align: right;
-        border-bottom: 1px solid $color-border;
-        margin-bottom: 3px;
-        padding-bottom: 3px;
-
-        .bookmarkTitle {
-            text-transform: uppercase;
-            @include font($f-bookmarkTitle, 38px, $color-black, normal, normal, 44px);
-        }
-
-        .bookmarkAuthor {
-            @include font($f-bookmarkAuth, 20px, $color-black, normal, normal, 20px);
-        }
-
-        .bookmarkYear {
-            padding-top: 3px;
-            @include font($f-bookmarkYear, 15px, $color-black, 400, normal, 18px);
-        }
-    }
 
     .buttonBookmarkLeft {
         position: absolute;
@@ -144,31 +40,87 @@
         z-index: 810;
     }
 
-    .bookmarkInput {
-        @include font($f-bookmarkInput, 12px, $color-black, 400, normal, 15px);
+    .bookmarkButtons {
+        position: absolute;
+        right: 0;
+        top: 30%;
+        z-index: 1001;
+        padding-right: 3px;
+        width: 40px;
+        @include flex-center-column;
+
+        .bookmarkLike {
+            width: 100%;
+            text-align: center;
+            @include font($f-bookmarkLike, 11px, $color-white, 500, normal, 12px);
+        }
+    }
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    .bookmarkContent {
         width: 100%;
-        padding: 3px;
-        background: none;
-        outline: none;
-        border: none;
-        border-bottom: 1px solid $color-border;
-        margin-bottom: 3px;
-    }
+        min-height: 100%;
+        border: 1px solid $color-border;
 
-    .bookmarkTextArea p {
-        margin-bottom: 9px;
-        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
 
-        &:hover {
-            background-color: rgba(0, 0, 0, 0.21);
+        .bookmarkSeparated {
+            width: 70%;
+            height: 1px;
+            background: $color-border;
+            margin: 3px auto 9px;
         }
-    }
 
-    form {
-        button {
-            position: relative;
-            z-index: 9999;
+        .bookmarkTitle {
+            text-transform: uppercase;
+            @include font($f-bookmarkTitle, 30px, $color-black, normal, normal, 36px);
+            text-align: center;
+            padding: 0 6px;
         }
+
+        .bookmarkPassage::first-letter {
+            @include font($f-bookmarkText, 120px, $color-white, 700, normal, 100px);
+            float: left;
+            margin-right: 6px;
+            margin-top: 10px;
+            background: rgb(21, 21, 21);
+            padding: 6px 12px 0;
+            text-align: center;
+            text-transform: uppercase;
+
+            background-image: url('https://ffmpeg-4sn.pages.dev/images/main/input-left-corner.webp'),
+                url('https://ffmpeg-4sn.pages.dev/images/main/input-right-corner.webp');
+            background-position: left top,
+                right top;
+            background-repeat: no-repeat,
+                no-repeat;
+            background-size: auto 100%,
+                auto 100%;
+        }
+
+        .bookmarkPassage {
+            @include font($f-bookmarkText, 20px, $color-black, 400, normal, 30px);
+            padding: 0 6px;
+        }
+
+        .bookmarkAuthor {
+            @include font($f-bookmarkAuth, 14px, $color-black, 400, normal, 16px);
+            padding: 0 6px;
+            text-align: right;
+            text-transform: uppercase;
+        }
+
+        .bookmarkYear {
+            @include font($f-bookmarkYear, 14px, $color-black, 400, normal, 16px);
+            padding: 0 6px;
+            text-align: right;
+        }
+
     }
 
     .likeAnimation {
@@ -181,6 +133,30 @@
             filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
         }
     }
+
+
+    .bookmarkEditContainer {
+        width: 100%;
+        margin-top: 3px;
+    }
+
+    .bookmarkTextArea {
+        @include font($f-bookmarkArea, 12px, $color-black, 400, normal, 15px);
+        padding: 3px;
+        width: 100%;
+        background: none;
+        outline: none;
+        border: 1px solid $color-border;
+        min-height: 150px;
+        background-color: $color-calendar-bg;
+    }
+}
+
+.bookmarkContainerChecked {
+    @extend .bookmarkContainer;
+    background: url("https://ffmpeg-4sn.pages.dev/images/main/paper.webp");
+    background-repeat: repeat-y;
+    background-size: cover;
 }
 
 @keyframes pulse {

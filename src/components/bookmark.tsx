@@ -3,7 +3,6 @@ import {
   Index,
   Setter,
   Show,
-  Suspense,
   createSignal,
   onMount,
 } from "solid-js";
@@ -100,7 +99,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [toggleLikeAnimation, setToggleLikeAnimation] =
     createSignal<boolean>(false);
 
-  const checkBookmark = () => {
+  const likeBookmark = () => {
     setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
     checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
     setToggleLikeAnimation(true);
@@ -112,39 +111,34 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [likeIcon, setLikeIcon] = createSignal<boolean>(false);
 
   return (
-    <div class={styles.bookmarkContainer} tabIndex={1}>
-      <Suspense fallback={<p class={styles.bookmarkLoading}>...</p>}>
-        <div
-          class={
-            bookmark()?.like ? styles.bookmarkBodyChecked : styles.bookmarkBody
-          }
-        >
-          <div class={styles.bookmarkCredits}>
-            <Show when={bookmark()?.bookTile}>
-              <p class={styles.bookmarkTitle}>{bookmark()?.bookTile}</p>
-            </Show>
-            <Show when={bookmark()?.authors}>
-              <p class={styles.bookmarkAuthor}>{bookmark()?.authors}</p>
-            </Show>
-            <Show when={bookmark()?.dateOfCreation}>
-              <p class={styles.bookmarkYear}>{bookmark()?.dateOfCreation}</p>
-            </Show>
-          </div>
-
-          <div class={styles.bookmarkPassage} ondblclick={checkBookmark}>
-            {bookmark()?.content}
-          </div>
-
-          <div
-            class={styles.buttonBookmarkLeft}
-            onclick={() => handleGetPrevBookmark()}
-          ></div>
-          <div
-            class={styles.buttonBookmarkRight}
-            onclick={() => handleGetNextBookmark()}
-          ></div>
+    <div
+      class={
+        bookmark()?.like
+          ? styles.bookmarkContainerChecked
+          : styles.bookmarkContainer
+      }
+      tabIndex={1}
+    >
+      <div class={styles.bookmarkContent} ondblclick={likeBookmark}>
+        <div>
+          <p class={styles.bookmarkTitle}>{bookmark()?.bookTile}</p>
+          <div class={styles.bookmarkSeparated}></div>
+          <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
         </div>
-      </Suspense>
+        <div>
+          <p class={styles.bookmarkAuthor}>{bookmark()?.authors} </p>
+          <p class={styles.bookmarkYear}>*{bookmark()?.dateOfCreation}</p>
+        </div>
+      </div>
+
+      <div
+        class={styles.buttonBookmarkLeft}
+        onclick={() => handleGetPrevBookmark()}
+      ></div>
+      <div
+        class={styles.buttonBookmarkRight}
+        onclick={() => handleGetNextBookmark()}
+      ></div>
 
       <Show when={showEdit()}>
         <div class={styles.bookmarkEditContainer}>
@@ -231,7 +225,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         >
           <Show
             when={bookmark()?.like}
-            fallback={<BsHeartFill size={24} color="#ffffffe6" />}
+            fallback={<BsHeartFill size={22} color="#ffffffe6" />}
           >
             <div
               onmouseover={() => setLikeIcon(true)}
@@ -239,9 +233,9 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             >
               <Show
                 when={likeIcon()}
-                fallback={<BsHeartFill size={24} color="#fd2c55" />}
+                fallback={<BsHeartFill size={22} color="#fd2c55" />}
               >
-                <BsHeartbreakFill size={24} color="#fd2c55" />
+                <BsHeartbreakFill size={22} color="#fd2c55" />
               </Show>
             </div>
           </Show>

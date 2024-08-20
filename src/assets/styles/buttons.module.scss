@@ -117,18 +117,6 @@
     }
 }
 
-.buttonSquare {
-    @extend .button;
-    background-color: $color-background-1;
-    color: #ececec;
-    width: 18px;
-    height: 14px;
-
-    &:hover {
-        color: $color-white;
-    }
-}
-
 .buttonSuccess {
     @extend .button;
     background-color: $color-background-1;
@@ -179,20 +167,18 @@
     outline: 0;
     background: none;
     @include flex-center;
-    transition: 0.3s ease;
 
     svg {
+        transition: 0.25s ease;
+        transform: scale(0.9);
         filter: drop-shadow(0 3px 3px #00000036);
     }
 
     &:hover {
         color: $color-white;
-    }
 
-    &:active {
         svg {
-            transform: scale(0.9)
+            transform: scale(1);
         }
     }
-
 }

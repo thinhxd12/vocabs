@@ -312,16 +312,6 @@
         cursor: pointer;
     }
 
-    .buttonTimerOverlay {
-        width: 21px;
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        background: #23e2fb;
-        transition: all 0.3s ease-in-out;
-        z-index: 99;
-    }
-
     .bottomMenuBtns {
         display: flex;
         flex-direction: column;
