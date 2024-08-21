@@ -62,15 +62,14 @@
 
     .bookmarkContent {
         width: 100%;
-        min-height: 100%;
+        height: 100%;
         border: 1px solid $color-border;
-
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        outline: none;
 
         .bookmarkSeparated {
-            width: 70%;
+            width: 60%;
             height: 1px;
             background: $color-border;
             margin: 3px auto 9px;
@@ -81,6 +80,7 @@
             @include font($f-bookmarkTitle, 30px, $color-black, normal, normal, 36px);
             text-align: center;
             padding: 0 6px;
+            margin-top: 4px;
         }
 
         .bookmarkPassage::first-letter {
@@ -105,14 +105,26 @@
 
         .bookmarkPassage {
             @include font($f-bookmarkText, 20px, $color-black, 400, normal, 30px);
-            padding: 0 6px;
+            padding: 0 3px 0 18px;
+            flex-grow: 1;
+            overflow-y: scroll;
+
+            &::-webkit-scrollbar {
+                width: 2px;
+                height: 3px;
+                background-color: none;
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: $color-black;
+            }
         }
 
         .bookmarkAuthor {
-            @include font($f-bookmarkAuth, 14px, $color-black, 400, normal, 16px);
+            @include font($f-bookmarkAuth, 15px, $color-black, 400, normal, 16px);
             padding: 0 6px;
             text-align: right;
-            text-transform: uppercase;
+            text-transform: capitalize;
         }
 
         .bookmarkYear {
@@ -121,6 +133,14 @@
             text-align: right;
         }
 
+    }
+
+    .bookmarkContentChecked {
+        @extend .bookmarkContent;
+        background: url("https://ffmpeg-4sn.pages.dev/images/main/paper.webp");
+        background-repeat: repeat-y;
+        background-size: cover;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
     }
 
     .likeAnimation {
@@ -152,12 +172,6 @@
     }
 }
 
-.bookmarkContainerChecked {
-    @extend .bookmarkContainer;
-    background: url("https://ffmpeg-4sn.pages.dev/images/main/paper.webp");
-    background-repeat: repeat-y;
-    background-size: cover;
-}
 
 @keyframes pulse {
     0% {

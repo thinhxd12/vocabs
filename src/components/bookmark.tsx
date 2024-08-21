@@ -111,22 +111,22 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [likeIcon, setLikeIcon] = createSignal<boolean>(false);
 
   return (
-    <div
-      class={
-        bookmark()?.like
-          ? styles.bookmarkContainerChecked
-          : styles.bookmarkContainer
-      }
-      tabIndex={1}
-    >
-      <div class={styles.bookmarkContent} ondblclick={likeBookmark}>
+    <div class={styles.bookmarkContainer} tabIndex={1}>
+      <div
+        class={
+          bookmark()?.like
+            ? styles.bookmarkContentChecked
+            : styles.bookmarkContent
+        }
+        ondblclick={likeBookmark}
+      >
         <div>
           <p class={styles.bookmarkTitle}>{bookmark()?.bookTile}</p>
           <div class={styles.bookmarkSeparated}></div>
-          <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
         </div>
+        <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
         <div>
-          <p class={styles.bookmarkAuthor}>{bookmark()?.authors} </p>
+          <p class={styles.bookmarkAuthor}>*{bookmark()?.authors} </p>
           <p class={styles.bookmarkYear}>*{bookmark()?.dateOfCreation}</p>
         </div>
       </div>
