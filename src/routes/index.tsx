@@ -1,5 +1,5 @@
 import { useSubmission, type RouteSectionProps } from "@solidjs/router";
-import { Show, createSignal, onMount } from "solid-js";
+import { Show, createResource, createSignal, onMount } from "solid-js";
 import styles from "./index.module.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { loginAction } from "~/lib";
@@ -7,30 +7,15 @@ import { getSpotlightImage } from "~/lib/api";
 
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginAction);
-
-  const [image, setImage] = createSignal<{
-    title: string;
-    text: string;
-    url: string;
-  }>({
-    title: "",
-    text: "",
-    url: "",
-  });
+  const [imageData, { refetch, mutate }] = createResource(getSpotlightImage);
+  const [isMobile, setIsMobile] = createSignal<boolean>(false);
 
   onMount(async () => {
-    const flag =
+    setIsMobile(
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
-      );
-
-    const data = await getSpotlightImage();
-    if (data)
-      setImage({
-        title: data.title,
-        text: data.text,
-        url: flag ? data.urlP : data.urlL,
-      });
+      )
+    );
   });
 
   return (
@@ -38,18 +23,18 @@ export default function Login(props: RouteSectionProps) {
       <Title>login</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <main
-        class={styles.login}
-        style={{
-          "background-image": `url("/${image()?.url}")`,
-        }}
-      >
-        <Show when={image().text !== ""}>
-          <p class={styles.backgroundText}>{image()!.text}</p>
+      <main class={styles.login}>
+        <Show when={imageData()}>
+          <img
+            src={isMobile() ? imageData()!.urlP : imageData()!.urlL}
+            alt="loginimg"
+            loading="lazy"
+            class={styles.loginImage}
+          />
+          <p class={styles.backgroundText}>{imageData()!.text}</p>
+          <p class={styles.backgroundTitle}>{imageData()!.title}</p>
         </Show>
-        <Show when={image().title !== ""}>
-          <p class={styles.backgroundTitle}>{image()!.title}</p>
-        </Show>
+
         <div class={styles.loginContainer}>
           <form action={loginAction} method="post" class={styles.loginForm}>
             <input name="password" type="password" class={styles.loginInput} />

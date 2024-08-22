@@ -58,7 +58,7 @@ const FlipCard: Component<{}> = (props) => {
   });
 
   // -------------------MOBILE START-------------------- //
-  const [isMobile, setIsMobile] = createSignal(false);
+  const [isMobile, setIsMobile] = createSignal<boolean>(false);
 
   onMount(async () => {
     setIsMobile(
