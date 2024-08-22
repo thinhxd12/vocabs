@@ -41,7 +41,7 @@ export default function Login(props: RouteSectionProps) {
       <main
         class={styles.login}
         style={{
-          "background-image": `url("${image()?.url}")`,
+          "background-image": `url("/${image()?.url}")`,
         }}
       >
         <Show when={image().text !== ""}>
