@@ -17,7 +17,6 @@ import styles from "./vocabulary.module.scss";
 import FlipCard from "~/components/flipcard";
 import Definition from "~/components/definition";
 import { getUser } from "~/lib";
-import { PUBLIC_URL } from "~/utils";
 const Translation = lazy(() => import("~/components/translation"));
 const Edit = lazy(() => import("~/components/edit"));
 
@@ -89,7 +88,7 @@ const Vocabulary: Component<{}> = () => {
           <FlipCard />
         </div>
         <img
-          src={PUBLIC_URL + "images/main/input-wall.webp"}
+          src="images/main/input-wall.webp"
           height={33}
           width={360}
           alt="inputbackground"

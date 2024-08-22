@@ -17,8 +17,6 @@ export const URL_IMAGE_MAIN_PAGE =
 
 export const DEFAULT_CORS_PROXY = "https://mywebapp.abcworker.workers.dev/";
 
-export const PUBLIC_URL = "https://ffmpeg-4sn.pages.dev/";
-
 export const mapTables = {
   vocabulary: "vocabulary",
   schedule: "schedule",

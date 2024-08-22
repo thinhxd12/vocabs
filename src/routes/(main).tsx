@@ -16,7 +16,6 @@ import { format } from "date-fns";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./main.module.scss";
 import { debounce } from "@solid-primitives/scheduled";
-import { PUBLIC_URL } from "~/utils";
 const Bookmark = lazy(() => import("~/components/bookmark"));
 
 declare module "solid-js" {
@@ -31,11 +30,11 @@ export default function Main(props: RouteSectionProps) {
   let audio: HTMLAudioElement | null;
   let checkTimeout: NodeJS.Timeout;
   const mockObj = {
-    image: PUBLIC_URL + "images/main/main-image.webp",
+    image: "images/main/main-image.webp",
     date: "01 July 2023",
     title: "The Red Buoy, Saint-Tropez",
     attr: "Oil on canvas • 81 × 65 cm",
-    authorImg: PUBLIC_URL + "images/main/main-author.webp",
+    authorImg: "images/main/main-author.webp",
     authorName: "Paul Signac",
     authorYear: "1895",
     content:

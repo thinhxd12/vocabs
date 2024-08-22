@@ -4,7 +4,6 @@ import styles from "./index.module.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { loginAction } from "~/lib";
 import { getSpotlightImage } from "~/lib/api";
-import { PUBLIC_URL } from "~/utils";
 
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginAction);
@@ -61,11 +60,7 @@ export default function Login(props: RouteSectionProps) {
                   loggingIn.pending ? styles.loginBtnLoading : styles.loginBtn
                 }
               >
-                <img
-                  src={PUBLIC_URL + "images/main/clover.webp"}
-                  width={21}
-                  height={21}
-                />
+                <img src="images/main/clover.webp" width={21} height={21} />
               </button>
             </div>
           </form>

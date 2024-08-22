@@ -5,7 +5,6 @@ import { mainStore } from "~/lib/mystore";
 import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
 import { FaSolidCheck } from "solid-icons/fa";
 import { VocabularyType } from "~/types";
-import { PUBLIC_URL } from "~/utils";
 
 const Definition: Component<{
   item?: VocabularyType;
@@ -93,7 +92,6 @@ const Definition: Component<{
                               src={item().image}
                               onerror={(e) => {
                                 e.currentTarget.src =
-                                  PUBLIC_URL +
                                   "images/main/image_not_found.webp";
                               }}
                               width={360}

@@ -21,7 +21,7 @@ import {
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
-import { PUBLIC_URL, WMOCODE } from "~/utils";
+import { WMOCODE } from "~/utils";
 import { clickOutside } from "~/utils";
 import { CurrentlyWeatherType } from "~/types";
 
@@ -361,7 +361,7 @@ const Bottom: Component<{}> = () => {
                       opacity: 0,
                     }}
                     transition={{ duration: 0.3, easing: "ease" }}
-                    src={PUBLIC_URL + "images/main/sunset.webp"}
+                    src="images/main/sunset.webp"
                     class={styles.bottomImage}
                   />
                 }
@@ -377,7 +377,7 @@ const Bottom: Component<{}> = () => {
                     opacity: 0,
                   }}
                   transition={{ duration: 0.3, easing: "ease" }}
-                  src={PUBLIC_URL + "images/main/sunrise.webp"}
+                  src="images/main/sunrise.webp"
                   class={styles.bottomImage}
                 />
               </Show>
@@ -433,7 +433,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src={PUBLIC_URL + "images/main/flower1.webp"}
+                  src="images/main/flower1.webp"
                   width={90}
                   height={42}
                 />
@@ -453,7 +453,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src={PUBLIC_URL + "images/main/flower2.webp"}
+                  src="images/main/flower2.webp"
                   width={90}
                   height={42}
                 />
@@ -469,7 +469,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src={PUBLIC_URL + "images/main/bookmark.webp"}
+                  src="images/main/bookmark.webp"
                   width={90}
                   height={42}
                 />
@@ -484,7 +484,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src={PUBLIC_URL + "images/main/translate.webp"}
+                  src="images/main/translate.webp"
                   width={90}
                   height={42}
                 />
@@ -499,7 +499,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src={PUBLIC_URL + "images/main/hourglass.webp"}
+                  src="images/main/hourglass.webp"
                   width={90}
                   height={42}
                 />
@@ -508,7 +508,7 @@ const Bottom: Component<{}> = () => {
                 <div class={buttons.buttonMenuOrnament}></div>
                 <img
                   alt="hourglass"
-                  src={PUBLIC_URL + "images/main/exit.webp"}
+                  src="images/main/exit.webp"
                   width={90}
                   height={42}
                 />

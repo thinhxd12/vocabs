@@ -1,4 +1,3 @@
-import { PUBLIC_URL } from "~/utils";
 
 export function createCanvas(width: number, height: number): HTMLCanvasElement {
     let canvas = document.createElement("canvas");

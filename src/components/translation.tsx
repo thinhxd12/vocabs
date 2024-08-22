@@ -26,7 +26,7 @@ import styles from "./translation.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import { setMainStore } from "~/lib/mystore";
-import { clickOutside, PUBLIC_URL, stopKeydown } from "~/utils";
+import { clickOutside, stopKeydown } from "~/utils";
 import Definition from "./definition";
 
 declare module "solid-js" {
@@ -135,7 +135,7 @@ const Translation: Component<{
       <div class={styles.translationBody}>
         <div class={styles.searchContent}>
           <img
-            src={PUBLIC_URL + "images/main/input-left-corner.webp"}
+            src="images/main/input-left-corner.webp"
             class={styles.searchLeftOrnament}
           />
           <input
@@ -146,7 +146,7 @@ const Translation: Component<{
             use:searchTranslate={[translateTerm, setTranslateTerm]}
           />
           <img
-            src={PUBLIC_URL + "images/main/input-right-corner.webp"}
+            src="images/main/input-right-corner.webp"
             class={styles.searchRightOrnament}
           />
         </div>
