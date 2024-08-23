@@ -17,13 +17,13 @@ import { searchText } from "~/lib/api";
 
 const FlipCard: Component<{}> = (props) => {
   let audio: HTMLAudioElement | null;
-  let timeoutId1: NodeJS.Timeout;
+  let timeoutId: NodeJS.Timeout;
 
   const [flag, setFlag] = createSignal<boolean>(false);
   const [showNumber, setShowNumber] = createSignal<boolean>(false);
 
   createEffect(() => {
-    clearTimeout(timeoutId1);
+    clearTimeout(timeoutId);
     const v = mainStore.renderWord;
     if (v) {
       audio = new Audio();
@@ -39,7 +39,7 @@ const FlipCard: Component<{}> = (props) => {
 
       setShowNumber(true);
       if (translations) {
-        timeoutId1 = setTimeout(() => {
+        timeoutId = setTimeout(() => {
           const soundUrl = `https://vocabs3.vercel.app/speech?text=${translations}`;
           audio!.src = soundUrl;
           audio!.play();
@@ -53,7 +53,7 @@ const FlipCard: Component<{}> = (props) => {
     onCleanup(() => {
       audio?.pause();
       audio = null;
-      clearTimeout(timeoutId1);
+      clearTimeout(timeoutId);
     });
   });
 
@@ -99,61 +99,62 @@ const FlipCard: Component<{}> = (props) => {
   return (
     <div class={styles.flipCard}>
       <div class={styles.flipCardTextContainer}>
-        <Motion.div
-          class={styles.flipCardTextContent}
-          animate={{ y: showNumber() ? -33 : 0 }}
-          transition={{ duration: 0.2, delay: 0.05 }}
-        >
-          <Show
-            when={isMobile()}
-            fallback={
-              <div class={styles.flipCardTextWord}>
-                <p
-                  style={{
-                    color: mainStore.searchTermColor,
-                  }}
-                >
-                  {mainStore.searchTerm || mainStore.renderWord?.word}
-                </p>
-                <span class={styles.flipCardTextNumber}>
-                  {mainStore.renderWord && mainStore.renderWord!.number - 1}
-                </span>
-              </div>
-            }
-          >
+        <Show
+          when={isMobile()}
+          fallback={
             <div class={styles.flipCardTextWord}>
-              <input
-                type="text"
-                autocomplete="off"
-                value={mainStore.renderWord?.word || ""}
-                use:searchWordMobile={null}
-                onfocus={(e) => (e.currentTarget.value = "")}
-                onblur={(e) => clearSearchResult(e)}
-                style={{
-                  color: mainStore.searchTermColor,
-                }}
-              />
               <span class={styles.flipCardTextNumber}>
                 {mainStore.renderWord && mainStore.renderWord!.number - 1}
               </span>
+              <p
+                style={{
+                  color: mainStore.searchTermColor,
+                }}
+              >
+                {mainStore.searchTerm || mainStore.renderWord?.word}
+              </p>
+              <span class={styles.flipCardTextPhonetic}>
+                {mainStore.renderWord && mainStore.renderWord!.phonetics}
+              </span>
             </div>
-          </Show>
-          <div class={styles.flipCardTextPhonetic}>
-            {mainStore.renderWord && mainStore.renderWord!.phonetics}
+          }
+        >
+          <div class={styles.flipCardTextWord}>
+            <span class={styles.flipCardTextNumber}>
+              {mainStore.renderWord && mainStore.renderWord!.number - 1}
+            </span>
+            <input
+              type="text"
+              autocomplete="off"
+              value={mainStore.renderWord?.word || ""}
+              use:searchWordMobile={null}
+              onfocus={(e) => (e.currentTarget.value = "")}
+              onblur={(e) => clearSearchResult(e)}
+              style={{
+                color: mainStore.searchTermColor,
+              }}
+            />
+            <span class={styles.flipCardTextPhonetic}>
+              {mainStore.renderWord && mainStore.renderWord!.phonetics}
+            </span>
           </div>
-        </Motion.div>
+        </Show>
       </div>
 
       <Presence>
         <Show when={showNumber()}>
           <Motion.div
             class={styles.flipCardNumberContainer}
-            animate={{ opacity: 1 }}
+            initial={{
+              y: "-100%",
+              opacity: 0,
+            }}
+            animate={{ y: 0, opacity: 1 }}
             exit={{
               y: "100%",
               opacity: 0,
             }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.25, easing: "ease-in-out" }}
           >
             <div class={styles.ticksContainer}>
               <Show when={flag()} fallback={<Flips />}>
@@ -161,6 +162,20 @@ const FlipCard: Component<{}> = (props) => {
               </Show>
             </div>
           </Motion.div>
+        </Show>
+      </Presence>
+
+      <Presence>
+        <Show when={showNumber()}>
+          <Motion.div
+            class={styles.flipCardNumberContainerBackground}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{
+              y: "100%",
+              opacity: 0,
+            }}
+            transition={{ duration: 0.25, easing: "ease-in-out" }}
+          ></Motion.div>
         </Show>
       </Presence>
     </div>

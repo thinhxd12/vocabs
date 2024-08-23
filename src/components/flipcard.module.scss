@@ -11,61 +11,48 @@
     flex-direction: column;
     cursor: default;
 
-    .flipCardTextContent {
+    .flipCardTextWord {
         width: 100%;
-        height: 33*2px;
-        position: relative;
+        height: 33px;
+        @include flex-center-column;
 
-        .flipCardTextWord {
-            width: 100%;
-            height: 33px;
-
-            p {
-                @include font($f-searchText, 18px, #ffffffe6, 700, normal, 33px);
-                text-transform: uppercase;
-                text-align: center;
-                text-shadow: 0 2px 3px #00000036;
-            }
-
-            .flipCardTextNumber {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                @include font($f-flipSearchNumber, 7px, #ffffffe6, 600, normal, 7px);
-                text-align: center;
-                text-shadow: 0 2px 3px #00000036;
-            }
-
-            input {
-                width: 100%;
-                height: 33px;
-                @include font($f-searchText, 18px, #ffffffe6, 700, normal, 33px);
-                text-transform: uppercase;
-                text-align: center;
-                text-shadow: 0 2px 3px #00000036;
-                border: 0;
-                outline: 0;
-                background: none;
-            }
-        }
-
-        .flipCardTextPhonetic {
-            width: 100%;
-            height: 33px;
-            @include font($f-phonetic, 14px, #ffffffe6, 400, normal, 33px);
+        .flipCardTextNumber {
+            @include font($f-flipSearchNumber, 6px, rgba(255, 255, 255, 0.81), 600, normal, 6px);
             text-align: center;
             text-shadow: 0 2px 3px #00000036;
         }
 
+        p {
+            @include font($f-searchText, 18px, #ffffff, 700, normal, 18px);
+            text-transform: uppercase;
+            text-align: center;
+            text-shadow: 0 2px 3px #00000036;
+        }
 
+        input {
+            width: 100%;
+            height: 18px;
+            @include font($f-searchText, 18px, #ffffff, 700, normal, 18px);
+            text-transform: uppercase;
+            text-align: center;
+            text-shadow: 0 2px 3px #00000036;
+            border: 0;
+            outline: 0;
+            background: none;
+        }
+
+        .flipCardTextPhonetic {
+            @include font($f-phonetic, 9px, rgba(255, 255, 255, 0.81), 600, normal, 9px);
+            text-align: center;
+            text-shadow: 0 2px 3px #00000036;
+        }
     }
 
 }
 
 .flipCardNumberContainer {
     position: absolute;
-    top: 33px;
+    top: 0;
     left: 0;
     bottom: 0;
     right: 0;
@@ -84,4 +71,14 @@
             @include font($f-flipNumber, 180px, #f4f4f4, bold, normal, 180px);
         }
     }
+}
+
+.flipCardNumberContainerBackground {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 9998;
+    background-color: $color-background-1;
 }
