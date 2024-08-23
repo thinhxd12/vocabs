@@ -5,17 +5,32 @@ import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { loginAction } from "~/lib";
 import { getSpotlightImage } from "~/lib/api";
 
+type LoginImageType = {
+  title: string;
+  text: string;
+  url: string;
+};
+
 export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginAction);
-  const [imageData, { refetch, mutate }] = createResource(getSpotlightImage);
-  const [isMobile, setIsMobile] = createSignal<boolean>(false);
+  const [imageData, setImageData] = createSignal<LoginImageType>({
+    title: "",
+    text: "",
+    url: "",
+  });
 
   onMount(async () => {
-    setIsMobile(
+    const flag =
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent
-      )
-    );
+      );
+    const data = await getSpotlightImage();
+    if (data)
+      setImageData({
+        title: data.title,
+        text: data.text,
+        url: flag ? data.urlP : data.urlL,
+      });
   });
 
   return (
@@ -24,9 +39,9 @@ export default function Login(props: RouteSectionProps) {
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <main class={styles.login}>
-        <Show when={imageData()}>
+        <Show when={imageData().url}>
           <img
-            src={isMobile() ? imageData()!.urlP : imageData()!.urlL}
+            src={imageData()!.url}
             alt="loginimg"
             loading="lazy"
             class={styles.loginImage}

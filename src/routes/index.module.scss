@@ -49,7 +49,6 @@
         width: 180px;
         transition: all 0.1s;
         background: rgba(0, 0, 0, 0.15);
-        border-radius: 6px;
 
         &:hover {
             background: rgba(0, 0, 0, 0.45);
@@ -61,13 +60,11 @@
             height: 100%;
             width: 100%;
             font-size: 16px;
-            line-height: 22px;
+            line-height: 18px;
             transition: all .3s ease;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: #fff;
-            padding: 2px 0 2px;
-            border-radius: 6px;
         }
 
         input:-webkit-autofill,
@@ -77,14 +74,14 @@
             transition: background-color 5000s ease-in-out 0s !important;
             -webkit-text-fill-color: #fff !important;
             font-size: 16px !important;
-            line-height: 22px !important;
+            line-height: 18px !important;
             background: rgba(0, 0, 0, 0.15) !important;
         }
 
         .loginBtn {
             position: absolute;
             right: -30px;
-            top: 2px;
+            top: 0.5px;
             z-index: 1001;
             width: 21px;
             height: 21px;
