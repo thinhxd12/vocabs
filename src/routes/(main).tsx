@@ -102,7 +102,7 @@ export default function Main(props: RouteSectionProps) {
   }, 450);
 
   const hanldeRenderWordFromSearch = (keyDown: string) => {
-    setMainStore("searchTermColor", "#ffffffe6");
+    setMainStore("searchTermColor", "#ffffff");
     setMainStore("searchSelectedIndex", Number(keyDown));
     setTimeout(() => {
       setMainStore("searchSelectedIndex", 0);
@@ -144,13 +144,13 @@ export default function Main(props: RouteSectionProps) {
         }
       }
       if (keyDown === " ") {
-        setMainStore("searchTermColor", "#ffffffe6");
+        setMainStore("searchTermColor", "#ffffff");
         setMainStore("searchTerm", "");
         setMainStore("searchResult", []);
         checkTimeout && clearTimeout(checkTimeout);
       }
       if (keyDown === "Enter" && mainStore.searchResult.length === 0) {
-        setMainStore("searchTermColor", "#ffffffe6");
+        setMainStore("searchTermColor", "#ffffff");
         setMainStore("translateTerm", mainStore.searchTerm);
         setMainStore("searchTerm", "");
         setMainStore("showTranslate", true);

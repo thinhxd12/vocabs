@@ -56,7 +56,7 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   searchResult: [],
   translateTerm: "",
   searchTerm: "",
-  searchTermColor: "#ffffffe6",
+  searchTermColor: "#ffffff",
   searchSelectedIndex: 0,
   searchDeleteIndex: 0,
   weatherLocations: [],

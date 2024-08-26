@@ -2,13 +2,13 @@
 
 .bottom {
     position: relative;
-    height: 34px;
+    height: 36px;
     width: 360px;
+    border-top: 1px solid $color-border;
 
     .bottomBar {
         height: 100%;
         width: 100%;
-        border-top: 1px solid $color-border;
         background-color: $color-background-1;
         @include flex;
         position: relative;
@@ -17,7 +17,7 @@
 
     .bottomIndex {
         width: 9px;
-        height: 33px;
+        height: 100%;
         background: $color-border;
         display: flex;
         flex-direction: column;
@@ -27,11 +27,11 @@
         .bottomIndexNums {
             @include flex-center-column;
             width: 100%;
-            height: 20px;
+            flex-grow: 1;
 
             span {
                 text-align: center;
-                @include font($f-botIndexNum, 9px, $color-black, 600, normal, 10px);
+                @include font($f-botIndexNum, 9px, $color-black, 600, normal, 11px);
                 display: block;
             }
         }
@@ -51,7 +51,7 @@
     }
 
     .bottomCenter {
-        height: 33px;
+        height: 100%;
         width: 21px;
         display: block;
         background: none;
@@ -96,7 +96,6 @@
         height: 100%;
         border: 0;
         outline: 0;
-        padding-bottom: 1px;
         position: relative;
         overflow: hidden;
 
@@ -135,7 +134,7 @@
             }
 
             small {
-                bottom: 11px;
+                bottom: 12px;
                 color: $color-white;
                 opacity: 1;
             }
@@ -159,9 +158,7 @@
 
     .bottomBtn2 {
         @extend .bottomBtn;
-
         flex-grow: 1;
-
 
         span,
         small {
@@ -169,7 +166,7 @@
         }
     }
 
-    .bottomBtn3 {
+    .bottomBtnWeather {
         @extend .bottomBtn;
         flex-grow: 1;
 
@@ -206,25 +203,26 @@
         }
 
 
-        .bottomWeather {
+        .bottomWeatherImageContainer {
             display: flex;
             align-items: center;
             justify-content: flex-end;
             position: absolute;
             top: 0;
             left: 0;
-            height: 21px;
-            padding-right: 5px;
-            padding-top: 3px;
+            width: 100%;
 
             .bottomWeatherImg {
-                margin-top: 1px;
                 position: relative;
                 z-index: 1;
+                padding: 1px 16px 0 0;
             }
 
             p {
-                @include font($f-botWeatherTemp, 9px, #7c7b7a, 500, normal, 12px);
+                @include font($f-botWeatherTemp, 8px, #7c7b7a, 600, normal, 10px);
+                position: inherit;
+                top: 2px;
+                right: 6px;
             }
         }
 
@@ -294,7 +292,7 @@
     .bottomMenu {
         width: 360px;
         position: absolute;
-        bottom: 34px;
+        bottom: 36px;
         left: 0;
         z-index: 9999;
     }

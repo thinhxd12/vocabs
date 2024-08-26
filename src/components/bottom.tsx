@@ -291,7 +291,7 @@ const Bottom: Component<{}> = () => {
         <A
           href="/weather"
           activeClass={styles.bottomBtnActive}
-          class={styles.bottomBtn3}
+          class={styles.bottomBtnWeather}
         >
           <Show
             when={bottomWeather()}
@@ -302,7 +302,7 @@ const Bottom: Component<{}> = () => {
               </div>
             }
           >
-            <span class={styles.bottomWeather}>
+            <div class={styles.bottomWeatherImageContainer}>
               <img
                 class={styles.bottomWeatherImg}
                 src={
@@ -314,7 +314,7 @@ const Bottom: Component<{}> = () => {
                 alt="bottomWeatherIcon"
               />
               <p>{Math.round(bottomWeather()!.temperature)}°</p>
-            </span>
+            </div>
             <div class={styles.scrollingTextContainer}>
               <div class={styles.scrollingTextInner}>
                 <div class={styles.scrollingText}>

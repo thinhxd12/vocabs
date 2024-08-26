@@ -46,7 +46,7 @@ const Vocabulary: Component<{}> = () => {
   }, 450);
 
   const handleRenderText = async (text: VocabularySearchType) => {
-    setMainStore("searchTermColor", "#ffffffe6");
+    setMainStore("searchTermColor", "#ffffff");
     setMainStore("searchTerm", "");
     setMainStore("searchResult", []);
     handleCheckWord(text);
@@ -87,13 +87,7 @@ const Vocabulary: Component<{}> = () => {
         <div class={styles.flipCardContent}>
           <FlipCard />
         </div>
-        <img
-          src="images/main/input-wall.webp"
-          height={33}
-          width={360}
-          alt="inputbackground"
-          class={styles.vocabularyBackground}
-        />
+
         <div class={styles.vocabularyContent}>
           <Show when={mainStore.searchResult.length > 0}>
             <div class={styles.searchContainer}>

@@ -1,6 +1,5 @@
 import {
   Component,
-  JSX,
   Show,
   createEffect,
   createSignal,
@@ -91,7 +90,7 @@ const FlipCard: Component<{}> = (props) => {
 
   const clearSearchResult = (e: any) => {
     setMainStore("searchTerm", "");
-    setMainStore("searchTermColor", "#ffffffe6");
+    setMainStore("searchTermColor", "#ffffff");
     e.currentTarget.value = "";
   };
   // -------------------MOBILE END-------------------- //
