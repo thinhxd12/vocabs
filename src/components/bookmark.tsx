@@ -122,7 +122,13 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
       >
         <div>
           <p class={styles.bookmarkTitle}>{bookmark()?.bookTile}</p>
-          <div class={styles.bookmarkSeparated}></div>
+          <div class={styles.bookmarkSeparated}>
+            <img
+              src="images/main/bookmark-onarment.webp"
+              width={184.7}
+              height={21.9}
+            />
+          </div>
         </div>
         <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
         <div>
