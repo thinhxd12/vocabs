@@ -502,6 +502,7 @@ export const insertVocabularyItem = action(async (formData: FormData) => {
     const meaningT = String(formData.get("meaning"));
     const translationsT = getTranslationArr(meaningT);
 
+    if (definitionsT.length === 0 || translationsT.length === 0) return { message: "incorrect data" }
     const { error } = await supabase
         .from(mapTables.vocabulary)
         .insert({

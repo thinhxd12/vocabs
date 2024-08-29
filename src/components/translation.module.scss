@@ -18,7 +18,7 @@
         align-items: flex-start;
         border-bottom: 1px solid $color-border;
         background: #f7f7f7;
-        height: 33px;
+        height: 24px;
 
         .translationHeaderRight {
             padding: 1px;
@@ -156,7 +156,7 @@
 
 .toastContainer {
     width: 360px;
-    height: 100vh;
+    height: 100%;
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
@@ -164,4 +164,5 @@
 
 .toastContent {
     @include font($f-editToast, 12px, $color-black, 400, normal);
+    margin-top: 18px;
 }
