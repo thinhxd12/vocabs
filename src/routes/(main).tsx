@@ -144,6 +144,7 @@ export default function Main(props: RouteSectionProps) {
         }
       }
       if (keyDown === " ") {
+        e.preventDefault();
         setMainStore("searchTermColor", "#ffffff");
         setMainStore("searchTerm", "");
         setMainStore("searchResult", []);

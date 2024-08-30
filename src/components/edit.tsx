@@ -16,6 +16,7 @@ import { FaRegularImage, FaSolidExpand } from "solid-icons/fa";
 import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import styles from "./edit.module.scss";
+import toasts from "../assets/styles/toast.module.scss";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import { clickOutside, stopKeydown } from "~/utils";
 import Definition from "./definition";
@@ -27,9 +28,29 @@ const Edit: Component<{
   const editActionResult = useSubmission(editVocabularyItem);
 
   //----------------------TOAST----------------------
-  const popSuccess = () => toast.success("Success", { duration: 3000 });
-  const popError = (msg: string) => toast.error(msg, { duration: 3000 });
   const [submittedForm, setSubmittedForm] = createSignal<boolean>(false);
+  const popSuccess = (msg: string) =>
+    toast.success(
+      <div class={toasts.toastItemSuccess}>
+        <h3>Success!</h3>
+        <p>{msg}</p>
+      </div>,
+      {
+        style: { "margin-top": "24px", padding: "8px 12px 8px 15px" },
+      }
+    );
+
+  const popError = (msg: string) =>
+    toast.error(
+      <div class={toasts.toastItemError}>
+        <h3>Error!</h3>
+        <p>{msg}</p>
+      </div>,
+      {
+        style: { "margin-top": "24px", padding: "8px 12px 8px 15px" },
+        duration: 3000,
+      }
+    );
 
   createEffect(
     on(
@@ -37,7 +58,7 @@ const Edit: Component<{
       () => {
         if (submittedForm()) {
           if (editActionResult.result?.message === "success") {
-            popSuccess();
+            popSuccess("Edit Successful.");
           } else if (
             editActionResult.result?.message !== "success" &&
             editActionResult.result?.message !== undefined
@@ -394,8 +415,7 @@ const Edit: Component<{
       </div>
       <Toaster
         position="top-center"
-        containerClassName={styles.toastContainer}
-        toastOptions={{ className: `${styles.toastContent}` }}
+        containerClassName={toasts.toastContainer}
       />
     </div>
   );

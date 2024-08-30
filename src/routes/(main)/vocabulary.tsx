@@ -146,6 +146,7 @@ const Vocabulary: Component<{}> = () => {
           </Show>
 
           <Definition
+            item={mainStore.renderWord!}
             onEdit={() =>
               handleEditVocabularyFromDefinition(mainStore.renderWord!)
             }

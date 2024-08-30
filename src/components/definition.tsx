@@ -7,7 +7,7 @@ import { FaSolidCheck } from "solid-icons/fa";
 import { VocabularyType } from "~/types";
 
 const Definition: Component<{
-  item?: VocabularyType;
+  item: VocabularyType;
   onEdit?: () => void;
   onCheck?: Setter<boolean>;
 }> = (props) => {
@@ -21,9 +21,7 @@ const Definition: Component<{
             </button>
           </div>
         </Show>
-        <Index
-          each={props.item?.definitions || mainStore.renderWord!.definitions}
-        >
+        <Index each={props.item!.definitions}>
           {(entry, index) => {
             return (
               <div class={styles.websEntry}>
@@ -39,7 +37,7 @@ const Definition: Component<{
                     >
                       <span
                         class={styles.websHeaderContent}
-                        onClick={() => props.onEdit!()}
+                        onClick={() => (props.onEdit ? props.onEdit() : {})}
                       >
                         {entry().partOfSpeech}
                       </span>

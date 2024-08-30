@@ -456,6 +456,7 @@ export const editVocabularyItem = action(async (formData: FormData) => {
     const meaningT = String(formData.get("meaning"));
     const translationsT = getTranslationArr(meaningT);
 
+    if (definitionsT.length === 0 || translationsT.length === 0) return { message: "Incorrect data" }
     const { error } = await supabase
         .from(mapTables.vocabulary)
         .update({
@@ -502,7 +503,7 @@ export const insertVocabularyItem = action(async (formData: FormData) => {
     const meaningT = String(formData.get("meaning"));
     const translationsT = getTranslationArr(meaningT);
 
-    if (definitionsT.length === 0 || translationsT.length === 0) return { message: "incorrect data" }
+    if (definitionsT.length === 0 || translationsT.length === 0) return { message: "Incorrect data" }
     const { error } = await supabase
         .from(mapTables.vocabulary)
         .insert({
