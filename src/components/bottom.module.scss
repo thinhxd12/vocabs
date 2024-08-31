@@ -68,6 +68,7 @@
         position: relative;
         overflow: hidden;
         z-index: 6;
+        padding-bottom: 1px;
 
         span {
             @include font($f-botCenterNum, 21px, #d7d7d7, 600, normal, 18px);

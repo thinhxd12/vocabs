@@ -45,7 +45,7 @@ const Definition: Component<{
                   </div>
                 </div>
 
-                <Show when={!props.item}>
+                <Show when={props.onEdit}>
                   <div class={styles.websHeadDropdown}>
                     {mainStore
                       .renderWord!.translations.find(
