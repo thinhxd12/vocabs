@@ -11,6 +11,7 @@ import {
   createResource,
   createSignal,
   on,
+  onCleanup,
 } from "solid-js";
 import { OcX2 } from "solid-icons/oc";
 import { useSubmission } from "@solidjs/router";
@@ -41,6 +42,7 @@ declare module "solid-js" {
 const Translation: Component<{
   translateText: string;
 }> = (props) => {
+  let notiSound: HTMLAudioElement | null;
   const insertActionResult = useSubmission(insertVocabularyItem);
 
   createEffect(async () => {
@@ -92,17 +94,28 @@ const Translation: Component<{
       () => insertActionResult.result,
       () => {
         if (submittedForm()) {
+          notiSound = new Audio();
           if (insertActionResult.result?.message === "success") {
             popSuccess("New word has been saved successfully.");
+            notiSound.src = "/sounds/mp3_Ding.mp3";
+            notiSound.play();
           } else if (
             insertActionResult.result?.message !== "success" &&
             insertActionResult.result?.message !== undefined
-          )
+          ) {
             popError(insertActionResult.result?.message!);
+            notiSound.src = "/sounds/mp3_Boing.mp3";
+            notiSound.play();
+          }
         }
       }
     )
   );
+
+  onCleanup(() => {
+    notiSound?.pause();
+    notiSound = null;
+  });
 
   // ------------------------------------------------------------------------------- //
   const [translateTerm, setTranslateTerm] = createSignal<string>(

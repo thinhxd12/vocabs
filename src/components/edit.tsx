@@ -1,4 +1,11 @@
-import { Component, Show, createEffect, createSignal, on } from "solid-js";
+import {
+  Component,
+  Show,
+  createEffect,
+  createSignal,
+  on,
+  onCleanup,
+} from "solid-js";
 import { OcX2 } from "solid-icons/oc";
 import {
   VocabularyDefinitionType,
@@ -24,6 +31,7 @@ import Definition from "./definition";
 const Edit: Component<{
   word: VocabularyType;
 }> = (props) => {
+  let notiSound: HTMLAudioElement | null;
   const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
   const editActionResult = useSubmission(editVocabularyItem);
 
@@ -57,17 +65,28 @@ const Edit: Component<{
       () => editActionResult.result,
       () => {
         if (submittedForm()) {
+          notiSound = new Audio();
           if (editActionResult.result?.message === "success") {
             popSuccess("Edit Successful.");
+            notiSound.src = "/sounds/mp3_Ding.mp3";
+            notiSound.play();
           } else if (
             editActionResult.result?.message !== "success" &&
             editActionResult.result?.message !== undefined
-          )
+          ) {
             popError(editActionResult.result?.message!);
+            notiSound.src = "/sounds/mp3_Boing.mp3";
+            notiSound.play();
+          }
         }
       }
     )
   );
+
+  onCleanup(() => {
+    notiSound?.pause();
+    notiSound = null;
+  });
 
   //----------------------TOAST----------------------
 
@@ -409,6 +428,7 @@ const Edit: Component<{
             Submit
           </button>
         </form>
+
         <Show when={renderEditWord()}>
           <Definition item={renderEditWord()!} onCheck={handleCheck} />
         </Show>

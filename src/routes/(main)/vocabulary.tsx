@@ -151,47 +151,47 @@ const Vocabulary: Component<{}> = () => {
               handleEditVocabularyFromDefinition(mainStore.renderWord!)
             }
           />
-
-          <Presence>
-            <Show when={mainStore.showEdit}>
-              <Motion.div
-                class={styles.editOverlay}
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: 1,
-                }}
-                exit={{
-                  opacity: 0,
-                }}
-                transition={{ duration: 0.2, easing: "ease-in-out" }}
-              >
-                <Edit word={editWord()!} />
-              </Motion.div>
-            </Show>
-          </Presence>
-
-          <Presence>
-            <Show when={mainStore.showTranslate}>
-              <Motion.div
-                class={styles.editOverlay}
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: 1,
-                }}
-                exit={{
-                  opacity: 0,
-                }}
-                transition={{ duration: 0.2, easing: "ease-in-out" }}
-              >
-                <Translation translateText={mainStore.translateTerm} />
-              </Motion.div>
-            </Show>
-          </Presence>
         </div>
+        
+        <Presence>
+          <Show when={mainStore.showEdit}>
+            <Motion.div
+              class={styles.editOverlay}
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              transition={{ duration: 0.2, easing: "ease-in-out" }}
+            >
+              <Edit word={editWord()!} />
+            </Motion.div>
+          </Show>
+        </Presence>
+
+        <Presence>
+          <Show when={mainStore.showTranslate}>
+            <Motion.div
+              class={styles.editOverlay}
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              transition={{ duration: 0.2, easing: "ease-in-out" }}
+            >
+              <Translation translateText={mainStore.translateTerm} />
+            </Motion.div>
+          </Show>
+        </Presence>
       </div>
     </MetaProvider>
   );
