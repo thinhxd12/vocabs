@@ -4,7 +4,7 @@ import { PRECIPITATION_PROBABILITY, WMOCODE, getElAttribute, getElText, mapTable
 import { format, parse as parseTime } from "date-fns";
 import { parse } from 'node-html-parser';
 import { supabase } from "./supbabase";
-import { mainStore, setListStore, setMainStore } from "./mystore";
+import { listStore, mainStore, setListStore, setMainStore } from "./mystore";
 import { parseKindleEntries, readKindleClipping } from "@darylserrano/kindle-clippings";
 import { URLSearchParams } from "url";
 
@@ -1074,7 +1074,11 @@ export const getTodayData = cache(async (date: string) => {
 export const updateTodayData = async (date: string) => {
     const data = await getTodayData(date);
     if (data) {
-        setListStore("listToday", data);
+        setListStore("listToday", {
+            ...listStore.listToday,
+            time1: data.time1,
+            time2: data.time2,
+        });
         handleUpdateCalendarData(data);
     }
 };
