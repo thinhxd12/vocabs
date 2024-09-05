@@ -170,7 +170,7 @@
     .bottomBtnWeather {
         @extend .bottomBtn;
         flex-grow: 1;
-        min-width: 88px;
+        min-width: 90px;
         background-size: cover;
         background-image: url("/images/main/sky.webp");
 
@@ -197,7 +197,8 @@
         }
 
         .scrollingTextItem {
-            min-width: 85px;
+            min-width: 72px;
+            margin: 0 6px;
             text-align: center;
             @include font($f-botButton, 9px, $color-white, 600, normal, 9px);
         }
