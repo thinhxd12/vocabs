@@ -197,8 +197,8 @@
         }
 
         .scrollingTextItem {
-            padding-right: 9px;
-            min-width: 70px;
+            min-width: 85px;
+            text-align: center;
             @include font($f-botButton, 9px, $color-white, 600, normal, 9px);
         }
 
@@ -220,6 +220,7 @@
                 position: relative;
                 z-index: 1;
                 padding: 1px 21px 0 0;
+                filter: drop-shadow(0 3px 3px black);
             }
 
             p {
@@ -227,6 +228,7 @@
                 position: inherit;
                 top: 2px;
                 right: 6px;
+                text-shadow: 0 3px 3px black;
             }
         }
 
