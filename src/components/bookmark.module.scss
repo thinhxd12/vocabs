@@ -81,6 +81,14 @@
             padding: 0 3px 0 18px;
         }
 
+        .bookmarkPassageLoading {
+            margin: 20px auto;
+            width: 90%;
+            height: 6px;
+            background: repeating-linear-gradient(-45deg, #000 0 15px, #0000 0 20px) left/200% 100%;
+            animation: l3 12s infinite linear;
+        }
+
         .bookmarkAuthor {
             @include font($f-bookmarkAuth, 15px, #111111, 600, normal, 16px);
             padding: 0 6px;
@@ -177,5 +185,11 @@
     to {
         transform: scale3d(0.8, 0.8, 0.8) rotate(15deg);
         opacity: 1;
+    }
+}
+
+@keyframes l3 {
+    100% {
+        background-position: right
     }
 }

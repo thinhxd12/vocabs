@@ -45,12 +45,20 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   });
 
   const handleGetPrevBookmark = async () => {
+    setBookmark({
+      ...bookmark()!,
+      content: "",
+    });
     const data = await getPrevBookMarkData(bookmark()!.created_at);
     if (data) {
       setBookmark(data);
     }
   };
   const handleGetNextBookmark = async () => {
+    setBookmark({
+      ...bookmark()!,
+      content: "",
+    });
     const data = await getNextBookMarkData(bookmark()!.created_at);
     if (data) {
       setBookmark(data);
@@ -130,7 +138,14 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             />
           </div>
         </div>
-        <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
+
+        <Show
+          when={bookmark()?.content}
+          fallback={<div class={styles.bookmarkPassageLoading}></div>}
+        >
+          <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
+        </Show>
+
         <div>
           <p class={styles.bookmarkAuthor}>*{bookmark()?.authors} </p>
           <p class={styles.bookmarkYear}>*{bookmark()?.dateOfCreation}</p>
