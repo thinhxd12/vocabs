@@ -158,7 +158,7 @@
         .websX {
             @include font($f-defX, 14px, $color-black, 400, normal, 22px);
             position: relative;
-            text-indent: 24px;
+            text-indent: 12px;
             padding: 0px 3px 0px 6px;
 
             b {
@@ -188,7 +188,7 @@
             flex-wrap: wrap;
             justify-content: flex-end;
             align-items: flex-end;
-            padding: 0 6px;
+            padding: 0 3px;
 
             .websAuthor {
                 font-variant: small-caps;

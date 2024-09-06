@@ -31,8 +31,18 @@
 
         .flipCardTextNumber {
             @include font($f-flipSearchNumber, 6px, rgba(255, 255, 255, 1), 600, normal, 6px);
-            text-align: center;
+            text-align: left;
             text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
+            width: 12px;
+            position: absolute;
+            top: -3px;
+            right: -14px;
+        }
+
+        .flipCardTextNumberMobile {
+            @include font($f-flipSearchNumber, 9px, rgba(255, 255, 255, 1), 600, normal, 9px);
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
+            margin-right: 6px;
         }
 
         p {
@@ -41,6 +51,8 @@
             text-align: center;
             text-shadow: 0 2px 2px #00000036;
             margin-bottom: 1px;
+            position: relative;
+            margin-top: 6px;
         }
 
         input {
@@ -54,12 +66,18 @@
             border: 0;
             outline: 0;
             background: none;
+            margin-top: 6px;
         }
 
         .flipCardTextPhonetic {
             @include font($f-phonetic, 9px, rgba(255, 255, 255, 0.9), 600, normal, 9px);
             text-align: center;
             text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
+        }
+
+        .flipCardTextPhoneticMobile {
+            @extend .flipCardTextPhonetic;
+            padding-right: 6px;
         }
     }
 

@@ -102,15 +102,15 @@ const FlipCard: Component<{}> = (props) => {
           when={isMobile()}
           fallback={
             <div class={styles.flipCardTextWord}>
-              <span class={styles.flipCardTextNumber}>
-                {mainStore.renderWord && mainStore.renderWord!.number - 1}
-              </span>
               <p
                 style={{
                   color: mainStore.searchTermColor,
                 }}
               >
                 {mainStore.searchTerm || mainStore.renderWord?.word}
+                <span class={styles.flipCardTextNumber}>
+                  {mainStore.renderWord && mainStore.renderWord!.number - 1}
+                </span>
               </p>
               <span class={styles.flipCardTextPhonetic}>
                 {mainStore.renderWord && mainStore.renderWord!.phonetics}
@@ -119,9 +119,6 @@ const FlipCard: Component<{}> = (props) => {
           }
         >
           <div class={styles.flipCardTextWord}>
-            <span class={styles.flipCardTextNumber}>
-              {mainStore.renderWord && mainStore.renderWord!.number - 1}
-            </span>
             <input
               type="text"
               autocomplete="off"
@@ -133,9 +130,12 @@ const FlipCard: Component<{}> = (props) => {
                 color: mainStore.searchTermColor,
               }}
             />
-            <span class={styles.flipCardTextPhonetic}>
+            <div class={styles.flipCardTextPhoneticMobile}>
+              <span class={styles.flipCardTextNumberMobile}>
+                {mainStore.renderWord && mainStore.renderWord!.number - 1}
+              </span>
               {mainStore.renderWord && mainStore.renderWord!.phonetics}
-            </span>
+            </div>
           </div>
         </Show>
       </div>

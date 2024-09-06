@@ -135,7 +135,7 @@
             }
 
             small {
-                bottom: 12px;
+                bottom: 10px;
                 color: $color-white;
                 opacity: 1;
             }
@@ -153,18 +153,12 @@
 
     .bottomBtn1 {
         @extend .bottomBtn;
-        width: 81px;
-        min-width: 81px;
+        flex-grow: 1;
     }
 
     .bottomBtn2 {
         @extend .bottomBtn;
         flex-grow: 1;
-
-        span,
-        small {
-            padding-right: 9px;
-        }
     }
 
     .bottomBtnWeather {
@@ -190,6 +184,7 @@
             white-space: nowrap;
             @include font($f-botButton, 9px, $color-white, 600, normal, 9px);
             -webkit-font-smoothing: subpixel-antialiased;
+            text-shadow: 0 0 3px black;
         }
 
         .scrollingText {
@@ -220,15 +215,15 @@
             .bottomWeatherImg {
                 position: relative;
                 z-index: 1;
-                padding: 1px 21px 0 0;
+                padding: 1px 12px 0 0;
                 filter: drop-shadow(0 3px 3px black);
             }
 
             p {
                 @include font($f-botWeatherTemp, 8px, #d7d7d7, 600, normal, 10px);
                 position: inherit;
-                top: 2px;
-                right: 6px;
+                top: 1px;
+                right: 1px;
                 text-shadow: 0 3px 3px black;
             }
         }
