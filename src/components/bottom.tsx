@@ -25,7 +25,7 @@ import { WMOCODE } from "~/utils";
 import { clickOutside } from "~/utils";
 import { CurrentlyWeatherType } from "~/types";
 
-let intervalCountdown: NodeJS.Timeout;
+let intervalCountdown: NodeJS.Timeout | undefined;
 let intervalAutoplay: NodeJS.Timeout;
 const [showMenu, setShowMenu] = createSignal<boolean>(false);
 const [showTimer, setShowTimer] = createSignal<boolean>(false);
@@ -112,7 +112,12 @@ const Bottom: Component<{}> = () => {
   const stopCountdown = () => {
     setShowTimer(false);
     clearInterval(intervalCountdown);
+    intervalCountdown = undefined;
     setMinute(6);
+  };
+
+  const startOrStopCountdown = () => {
+    intervalCountdown ? stopCountdown() : startCountdown();
   };
 
   // -------------------COUNTDOWN END-------------------- //
@@ -260,7 +265,7 @@ const Bottom: Component<{}> = () => {
           <span>Pecunia non olet</span>
         </A>
 
-        <button class={styles.bottomCenter} onClick={stopCountdown}>
+        <button class={styles.bottomCenter} onClick={startOrStopCountdown}>
           <span>{Math.floor(mainStore.totalMemories / 100)}</span>
           <small>
             {mainStore.totalMemories % 100 < 10
