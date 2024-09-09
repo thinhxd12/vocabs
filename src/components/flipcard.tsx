@@ -102,16 +102,21 @@ const FlipCard: Component<{}> = (props) => {
           when={isMobile()}
           fallback={
             <div class={styles.flipCardTextWord}>
-              <p
+              <div
+                class={styles.flipCardTextWordContent}
                 style={{
                   color: mainStore.searchTermColor,
                 }}
               >
                 {mainStore.searchTerm || mainStore.renderWord?.word}
-                <span class={styles.flipCardTextNumber}>
-                  {mainStore.renderWord && mainStore.renderWord!.number - 1}
-                </span>
-              </p>
+                <Show when={mainStore.renderWord}>
+                  <span class={styles.flipCardTextNumber}>
+                    {showNumber()
+                      ? mainStore.renderWord!.number
+                      : mainStore.renderWord!.number - 1}
+                  </span>
+                </Show>
+              </div>
               <span class={styles.flipCardTextPhonetic}>
                 {mainStore.renderWord && mainStore.renderWord!.phonetics}
               </span>

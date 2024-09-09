@@ -30,13 +30,15 @@
         flex-direction: column;
 
         .flipCardTextNumber {
-            @include font($f-flipSearchNumber, 6px, rgba(255, 255, 255, 1), 600, normal, 6px);
-            text-align: left;
-            text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
             width: 12px;
+            height: 6px;
+            overflow: hidden;
             position: absolute;
             top: -3px;
             right: -14px;
+            @include font($f-flipSearchNumber, 6px, rgba(255, 255, 255, 1), 600, normal, 6px);
+            text-align: left;
+            text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
         }
 
         .flipCardTextNumberMobile {
@@ -45,7 +47,7 @@
             margin-right: 6px;
         }
 
-        p {
+        .flipCardTextWordContent {
             @include font($f-searchText, 18px, #ffffff, 700, normal, 18px);
             text-transform: uppercase;
             text-align: center;
