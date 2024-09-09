@@ -12,36 +12,20 @@ const Definition: Component<{
   onCheck?: Setter<boolean>;
 }> = (props) => {
   return (
-    <Show when={mainStore.renderWord}>
+    <Show when={props.item}>
       <div class={styles.definition}>
-        <Show when={props.onCheck}>
-          <div class={styles.definitionButtons}>
-            <button class={buttons.buttonSuccess} onclick={props.onCheck}>
-              <FaSolidCheck size={13} />
-            </button>
-          </div>
-        </Show>
         <Index each={props.item!.definitions}>
           {(entry, index) => {
             return (
               <div class={styles.websEntry}>
                 <div class={styles.websHeader}>
                   <div class={styles.websHeaderContainer}>
-                    <Show
-                      when={props.onEdit}
-                      fallback={
-                        <span class={styles.websHeaderContentNormal}>
-                          {entry().partOfSpeech}
-                        </span>
-                      }
+                    <span
+                      class={styles.websHeaderContent}
+                      onClick={props.onEdit || props.onCheck}
                     >
-                      <span
-                        class={styles.websHeaderContent}
-                        onClick={() => (props.onEdit ? props.onEdit() : {})}
-                      >
-                        {entry().partOfSpeech}
-                      </span>
-                    </Show>
+                      {entry().partOfSpeech}
+                    </span>
                   </div>
                 </div>
 

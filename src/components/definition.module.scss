@@ -14,14 +14,6 @@
         display: none;
     }
 
-    .definitionButtons {
-        position: absolute;
-        top: 0;
-        left: 0;
-        margin: 1px;
-        z-index: 99;
-    }
-
     .websEntry {
         position: relative;
     }
@@ -49,11 +41,6 @@
                 cursor: pointer;
                 background: rgba(255, 254, 255, 0.72);
             }
-
-            .websHeaderContentNormal {
-                @extend .websHeaderContent;
-                cursor: default;
-            }
         }
     }
 
@@ -75,11 +62,11 @@
             text-align: right;
             display: inline-block;
             margin: 0 0 1px;
-            background: $color-vintage-background;
+            background: rgba(255, 254, 255, 0.72);
             text-transform: none;
             text-wrap: nowrap;
             cursor: default;
-            border-radius: 3px;
+            border-radius: 1px;
         }
 
     }
