@@ -393,7 +393,7 @@ const Bottom: Component<{}> = () => {
                 />
               </Show>
             </Presence>
-        
+
             <Presence>
               <Show when={!listStore.listButton && listStore.listCount}>
                 <Motion.img

@@ -262,6 +262,8 @@
         z-index: 33;
         overflow: hidden;
         transition: all 0.3s ease;
+        -webkit-mask-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5) 10%, #fff 30%, #fff 70%, rgba(255, 255, 255, 0.5) 90%, transparent);
+        mask-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5) 10%, #fff 30%, #fff 70%, rgba(255, 255, 255, 0.5) 90%, transparent);
 
         &:hover {
             filter: brightness(1.2);
@@ -282,7 +284,6 @@
             left: 0;
             height: 100%;
             z-index: 13;
-            filter: brightness(1.2);
             box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
             object-fit: cover;
             object-position: top left;
