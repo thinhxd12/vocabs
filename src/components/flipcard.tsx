@@ -15,7 +15,8 @@ import { debounce } from "@solid-primitives/scheduled";
 import { searchText } from "~/lib/api";
 
 const FlipCard: Component<{}> = (props) => {
-  let audio: HTMLAudioElement | null;
+  let audio1: HTMLAudioElement | null;
+  let audio2: HTMLAudioElement | null;
   let timeoutId: NodeJS.Timeout;
 
   const [flag, setFlag] = createSignal<boolean>(false);
@@ -25,23 +26,24 @@ const FlipCard: Component<{}> = (props) => {
     clearTimeout(timeoutId);
     const v = mainStore.renderWord;
     if (v) {
-      audio = new Audio();
+      audio1 = new Audio();
       const currentSound = v.audio;
       const translations = v.translations
         .map((item) => item.translations.join(", "))
         .join(", ");
 
       if (currentSound) {
-        audio.src = currentSound;
-        audio.play();
+        audio1.src = currentSound;
+        audio1.play();
       }
 
       setShowNumber(true);
       if (translations) {
         timeoutId = setTimeout(() => {
           const soundUrl = `https://vocabs3.vercel.app/speech?text=${translations}`;
-          audio!.src = soundUrl;
-          audio!.play();
+          audio2 = new Audio();
+          audio2.src = soundUrl;
+          audio2.play();
           setShowNumber(false);
         }, 3500);
       }
@@ -50,8 +52,7 @@ const FlipCard: Component<{}> = (props) => {
       setFlag(!flag());
     });
     onCleanup(() => {
-      audio?.pause();
-      audio = null;
+      audio1 = audio2 = null;
       clearTimeout(timeoutId);
     });
   });
