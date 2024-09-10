@@ -357,12 +357,15 @@ const Bottom: Component<{}> = () => {
                 fallback={
                   <Motion.img
                     initial={{
+                      y: "100%",
                       opacity: 0,
                     }}
                     animate={{
+                      y: 0,
                       opacity: 1,
                     }}
                     exit={{
+                      y: "100%",
                       opacity: 0,
                     }}
                     transition={{ duration: 0.3, easing: "ease" }}
@@ -373,12 +376,15 @@ const Bottom: Component<{}> = () => {
               >
                 <Motion.img
                   initial={{
+                    y: "100%",
                     opacity: 0,
                   }}
                   animate={{
+                    y: 0,
                     opacity: 1,
                   }}
                   exit={{
+                    y: "100%",
                     opacity: 0,
                   }}
                   transition={{ duration: 0.3, easing: "ease" }}
@@ -387,14 +393,29 @@ const Bottom: Component<{}> = () => {
                 />
               </Show>
             </Presence>
-            <Show when={listStore.listCount}>
-              <Motion.div
-                class={styles.bottomImageProgress}
-                animate={{
-                  width: `${listStore.listCount * 2}%`,
-                }}
-              ></Motion.div>
-            </Show>
+        
+            <Presence>
+              <Show when={!listStore.listButton && listStore.listCount}>
+                <Motion.img
+                  initial={{
+                    y: "100%",
+                    opacity: 0,
+                  }}
+                  animate={{
+                    y: 0,
+                    opacity: 1,
+                    width: `${listStore.listCount * 2}%`,
+                  }}
+                  exit={{
+                    y: "100%",
+                    opacity: 0,
+                  }}
+                  transition={{ duration: 0.3 }}
+                  src="images/main/sunrise.webp"
+                  class={styles.bottomImageBackground}
+                />
+              </Show>
+            </Presence>
           </div>
         </Show>
 

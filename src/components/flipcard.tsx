@@ -137,9 +137,13 @@ const FlipCard: Component<{}> = (props) => {
               }}
             />
             <div class={styles.flipCardTextPhoneticMobile}>
-              <span class={styles.flipCardTextNumberMobile}>
-                {mainStore.renderWord && mainStore.renderWord!.number - 1}
-              </span>
+              <Show when={mainStore.renderWord}>
+                <span class={styles.flipCardTextNumberMobile}>
+                  {showNumber()
+                    ? mainStore.renderWord!.number
+                    : mainStore.renderWord!.number - 1}
+                </span>
+              </Show>
               {mainStore.renderWord && mainStore.renderWord!.phonetics}
             </div>
           </div>
