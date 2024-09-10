@@ -139,6 +139,10 @@
     background-size: 10px 22px,
         10px 22px;
 
+    span {
+        margin: 3px 0 0 0;
+    }
+
     &:hover {
         color: $color-white;
     }

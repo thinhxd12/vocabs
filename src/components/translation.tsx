@@ -30,6 +30,7 @@ import toasts from "../assets/styles/toast.module.scss";
 import { setMainStore } from "~/lib/mystore";
 import { clickOutside, stopKeydown } from "~/utils";
 import Definition from "./definition";
+import { BiSolidSave } from "solid-icons/bi";
 
 declare module "solid-js" {
   namespace JSX {
@@ -254,7 +255,8 @@ const Translation: Component<{
               class={buttons.buttonSubmit}
               onClick={() => setSubmittedForm(true)}
             >
-              Submit
+              <BiSolidSave size={15} />
+              <span>Save</span>
             </button>
           </form>
 

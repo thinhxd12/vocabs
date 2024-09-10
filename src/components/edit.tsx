@@ -27,6 +27,7 @@ import toasts from "../assets/styles/toast.module.scss";
 import { mainStore, setMainStore } from "~/lib/mystore";
 import { clickOutside, stopKeydown } from "~/utils";
 import Definition from "./definition";
+import { BiSolidSave } from "solid-icons/bi";
 
 const Edit: Component<{
   word: VocabularyType;
@@ -425,7 +426,8 @@ const Edit: Component<{
             class={buttons.buttonSubmit}
             onClick={() => handleSubmitForm()}
           >
-            Submit
+            <BiSolidSave size={15} />
+            <span>Save</span>
           </button>
         </form>
 

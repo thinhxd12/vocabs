@@ -26,6 +26,7 @@ import { listStore, mainStore, setMainStore } from "~/lib/mystore";
 import HistoryCard from "~/components/historycard";
 import { CalendarType } from "~/types";
 import { OcX2 } from "solid-icons/oc";
+import { BiSolidSave } from "solid-icons/bi";
 
 let refEl: HTMLDivElement;
 const todayDate = format(new Date(), "yyyy-MM-dd");
@@ -295,7 +296,8 @@ const Calendar: Component<{}> = (props) => {
                     type="submit"
                     onClick={handleUpdateTodaySchedule}
                   >
-                    Submit
+                    <BiSolidSave size={15} />
+                    <span>Save</span>
                   </button>
                 </form>
               </div>
@@ -347,7 +349,8 @@ const Calendar: Component<{}> = (props) => {
                     type="submit"
                     onClick={handleUpdateHistoryList}
                   >
-                    Submit
+                    <BiSolidSave size={15} />
+                    <span>Save</span>
                   </button>
                 </form>
               </div>

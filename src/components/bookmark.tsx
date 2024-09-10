@@ -24,7 +24,7 @@ import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
 import { AiOutlineInsertRowBelow } from "solid-icons/ai";
 import { BsHeartbreakFill, BsHeartFill } from "solid-icons/bs";
-import { BiSolidPaste } from "solid-icons/bi";
+import { BiSolidPaste, BiSolidSave } from "solid-icons/bi";
 
 declare module "solid-js" {
   namespace JSX {
@@ -189,7 +189,8 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             />
             <input hidden name="id" value={bookmark()!.created_at} />
             <button type="submit" class={buttons.buttonSubmit}>
-              Edit
+              <BiSolidSave size={15} />
+              <span>Save</span>
             </button>
           </form>
         </div>
