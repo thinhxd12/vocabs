@@ -134,7 +134,7 @@
         }
 
         .websDef {
-            @include font($f-defDef, 12px, $color-calendar-bg, 500, normal, 18px);
+            @include font($f-defDef, 13px, $color-calendar-bg, 500, normal, 18px);
         }
 
         .websDef::first-letter {

@@ -48,6 +48,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
     setBookmark({
       ...bookmark()!,
       content: "",
+      like: 0,
     });
     const data = await getPrevBookMarkData(bookmark()!.created_at);
     if (data) {
@@ -58,6 +59,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
     setBookmark({
       ...bookmark()!,
       content: "",
+      like: 0,
     });
     const data = await getNextBookMarkData(bookmark()!.created_at);
     if (data) {
@@ -141,7 +143,11 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
 
         <Show
           when={bookmark()?.content}
-          fallback={<div class={styles.bookmarkPassageLoading}></div>}
+          fallback={
+            <div class={styles.bookmarkPassageLoading}>
+              <img src="images/svg/loader.svg" width={40} height={10} />
+            </div>
+          }
         >
           <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
         </Show>
