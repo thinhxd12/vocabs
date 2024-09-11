@@ -53,16 +53,14 @@ export default function Login(props: RouteSectionProps) {
         <div class={styles.loginContainer}>
           <form action={loginAction} method="post" class={styles.loginForm}>
             <input name="password" type="password" class={styles.loginInput} />
-            <div class={styles.loginItem}>
-              <button
-                type="submit"
-                class={
-                  loggingIn.pending ? styles.loginBtnLoading : styles.loginBtn
-                }
-              >
-                <img src="images/main/clover.webp" width={21} height={21} />
-              </button>
-            </div>
+            <button
+              type="submit"
+              class={
+                loggingIn.pending ? styles.loginBtnLoading : styles.loginBtn
+              }
+            >
+              <img src="images/svg/loader-button.svg" width={15} height={15} />
+            </button>
           </form>
           <Show when={loggingIn.result}>
             <p class={styles.loginAlert} role="alert" id="error-message">

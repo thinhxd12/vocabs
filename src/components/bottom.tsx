@@ -395,7 +395,7 @@ const Bottom: Component<{}> = () => {
             </Presence>
 
             <Presence>
-              <Show when={!listStore.listButton && listStore.listCount}>
+              <Show when={listStore.listCount}>
                 <Motion.img
                   initial={{
                     y: "100%",

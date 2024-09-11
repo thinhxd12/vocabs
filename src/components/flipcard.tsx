@@ -156,14 +156,14 @@ const FlipCard: Component<{}> = (props) => {
             class={styles.flipCardNumberContainer}
             initial={{
               y: "-100%",
-              opacity: 0,
             }}
-            animate={{ y: 0, opacity: 1 }}
+            animate={{
+              y: 0,
+            }}
             exit={{
-              y: "100%",
-              opacity: 0,
+              y: "-100%",
             }}
-            transition={{ duration: 0.25, easing: "ease-in-out" }}
+            transition={{ duration: 0.3, easing: "ease" }}
           >
             <div class={styles.ticksContainer}>
               <Show when={flag()} fallback={<Flips />}>
@@ -171,20 +171,6 @@ const FlipCard: Component<{}> = (props) => {
               </Show>
             </div>
           </Motion.div>
-        </Show>
-      </Presence>
-
-      <Presence>
-        <Show when={showNumber()}>
-          <Motion.div
-            class={styles.flipCardNumberContainerBackground}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{
-              y: "100%",
-              opacity: 0,
-            }}
-            transition={{ duration: 0.25, easing: "ease-in-out" }}
-          ></Motion.div>
         </Show>
       </Presence>
     </div>
