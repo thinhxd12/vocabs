@@ -40,7 +40,6 @@ type MainStoreType = {
   searchTermColor: string;
   searchSelectedIndex: number;
   searchDeleteIndex: number;
-  weatherLocations: WeatherGeoType[];
 }
 
 export const [mainStore, setMainStore] = createStore<MainStoreType>({
@@ -59,7 +58,6 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   searchTermColor: "#ffffff",
   searchSelectedIndex: 0,
   searchDeleteIndex: 0,
-  weatherLocations: [],
 })
 
 

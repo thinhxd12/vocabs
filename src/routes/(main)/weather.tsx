@@ -21,6 +21,7 @@ import {
   getCurrentWeatherData,
   getHourlyWeatherData,
   getMinutelyWeatherData,
+  getWeatherLocations,
   makePrediction,
 } from "~/lib/api";
 import styles from "./weather.module.scss";
@@ -35,6 +36,7 @@ import {
 import { WMOCODE } from "~/utils";
 import { format } from "date-fns";
 import { mainStore } from "~/lib/mystore";
+import { WeatherGeoType } from "~/types";
 
 let canvas: HTMLCanvasElement;
 let audio: HTMLAudioElement;
@@ -67,12 +69,16 @@ const Weather: Component<{}> = (props) => {
   const [audioSrc, setAudioSrc] = createSignal<string>("");
   const [prediction, setPrediction] = createSignal<string>("");
 
+  const [weatherLocations, setWeatherLocations] = createSignal<
+    WeatherGeoType[]
+  >([]);
+
   const handleRenderWeather = (num: string) => {
     setGeo({
-      lat: mainStore.weatherLocations[Number(num)].lat,
-      lon: mainStore.weatherLocations[Number(num)].lon,
+      lat: weatherLocations()[Number(num)].lat,
+      lon: weatherLocations()[Number(num)].lon,
     });
-    setGeoTitle(mainStore.weatherLocations[Number(num)].name);
+    setGeoTitle(weatherLocations()[Number(num)].name);
     refetchCurrent();
     refetchMinutely();
   };
@@ -81,9 +87,9 @@ const Weather: Component<{}> = (props) => {
     Chart.register(Title, Tooltip, Legend, Colors, Filler);
     loadTextures();
     audio.volume = 0.5;
-    const item =
-      mainStore.weatherLocations!.find((item) => item.default) ||
-      mainStore.weatherLocations[0];
+    const locations = await getWeatherLocations();
+    setWeatherLocations(locations!);
+    const item = locations!.find((item) => item.default) || locations![0];
     setGeo({ lat: item!.lat, lon: item!.lon });
     setGeoTitle(item!.name);
   });
@@ -515,7 +521,7 @@ const Weather: Component<{}> = (props) => {
             class={styles.weatherSelect}
             onchange={(e) => handleRenderWeather(e.currentTarget.value)}
           >
-            <Index each={mainStore.weatherLocations}>
+            <Index each={weatherLocations()}>
               {(item, index) => <option value={index}>{item().name}</option>}
             </Index>
           </select>

@@ -35,27 +35,26 @@ const Bottom: Component<{}> = () => {
   let audio: HTMLAudioElement | null;
   const todayDate = format(new Date(), "yyyy-MM-dd");
 
-  onMount(async () => {
-    const data = await Promise.all([
-      getTotalMemories(),
-      getTodayData(todayDate),
-      getWeatherLocations(),
-    ]);
-    setMainStore("totalMemories", data[0]!);
-    setListStore("listToday", data[1]!);
-    setMainStore("weatherLocations", data[2]!);
-    const item = data[2]!.find((item) => item.default) || data[2]![0];
+  const getBottomWeatherData = async () => {
+    const data = await getWeatherLocations();
+    const item = data!.find((item) => item.default) || data![0];
     const abc = await getCurrentWeatherData({
       lat: item!.lat,
       lon: item!.lon,
     });
     setBottomWeather(abc);
+  };
+
+  onMount(async () => {
+    const data = await Promise.all([
+      getTotalMemories(),
+      getTodayData(todayDate),
+    ]);
+    setMainStore("totalMemories", data[0]!);
+    setListStore("listToday", data[1]!);
+    getBottomWeatherData();
     const weatherInterval = setInterval(async () => {
-      const data = await getCurrentWeatherData({
-        lat: item!.lat,
-        lon: item!.lon,
-      });
-      if (data) setBottomWeather(data);
+      getBottomWeatherData();
     }, 1000 * 12 * 60);
     clearInterval(intervalCountdown);
   });
@@ -357,15 +356,15 @@ const Bottom: Component<{}> = () => {
                 fallback={
                   <Motion.img
                     initial={{
-                      y: "100%",
+                      x: "-100%",
                       opacity: 0,
                     }}
                     animate={{
-                      y: 0,
+                      x: 0,
                       opacity: 1,
                     }}
                     exit={{
-                      y: "100%",
+                      x: "-100%",
                       opacity: 0,
                     }}
                     transition={{ duration: 0.3, easing: "ease" }}
@@ -376,15 +375,15 @@ const Bottom: Component<{}> = () => {
               >
                 <Motion.img
                   initial={{
-                    y: "100%",
+                    x: "-100%",
                     opacity: 0,
                   }}
                   animate={{
-                    y: 0,
+                    x: 0,
                     opacity: 1,
                   }}
                   exit={{
-                    y: "100%",
+                    x: "-100%",
                     opacity: 0,
                   }}
                   transition={{ duration: 0.3, easing: "ease" }}
@@ -394,28 +393,18 @@ const Bottom: Component<{}> = () => {
               </Show>
             </Presence>
 
-            <Presence>
-              <Show when={listStore.listCount}>
-                <Motion.img
-                  initial={{
-                    y: "100%",
-                    opacity: 0,
-                  }}
-                  animate={{
-                    y: 0,
-                    opacity: 1,
-                    width: `${listStore.listCount * 2}%`,
-                  }}
-                  exit={{
-                    y: "100%",
-                    opacity: 0,
-                  }}
-                  transition={{ duration: 0.3 }}
-                  src="images/main/sunrise.webp"
-                  class={styles.bottomImageBackground}
-                />
-              </Show>
-            </Presence>
+            <Show when={listStore.listCount}>
+              <Motion.img
+                animate={{
+                  x: 0,
+                  opacity: 1,
+                  width: `${listStore.listCount * 2}%`,
+                }}
+                transition={{ duration: 0.3 }}
+                src="images/main/sunrise.webp"
+                class={styles.bottomImageBackground}
+              />
+            </Show>
           </div>
         </Show>
 
