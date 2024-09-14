@@ -83,6 +83,7 @@ export default function Main(props: RouteSectionProps) {
 
   //------------------HANDLE SEARCH--------------------
   const trigger = debounce(async (str: string) => {
+    checkTimeout && clearTimeout(checkTimeout);
     const res = await searchText(str);
     if (res) {
       if (res.length === 0) {
@@ -133,8 +134,8 @@ export default function Main(props: RouteSectionProps) {
           mainStore.searchResult.length > 0 &&
           keyDonwNumber <= mainStore.searchResult.length
         ) {
-          hanldeRenderWordFromSearch(keyDown);
           checkTimeout && clearTimeout(checkTimeout);
+          hanldeRenderWordFromSearch(keyDown);
         }
       }
       if (keyDown === "Backspace") {
