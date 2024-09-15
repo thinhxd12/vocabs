@@ -8,14 +8,6 @@
     position: relative;
     outline: none;
 
-    .flipCardContent {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-
     .editOverlay {
         position: absolute;
         top: 0;
@@ -25,8 +17,22 @@
         background-color: $color-background-3;
     }
 
-
     .vocabularyContent {
+        position: absolute;
+        top: 36px;
+        left: 0;
+        right: 0;
+        bottom: -180px;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        z-index: 3;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .searchContainer {
         position: absolute;
         top: 36px;
         left: 0;
@@ -34,129 +40,211 @@
         bottom: 0;
         overflow-x: hidden;
         overflow-y: scroll;
+        z-index: 6;
+        background-color: black;
 
         &::-webkit-scrollbar {
             display: none;
         }
 
-        .searchContainer {
-            width: 100%;
-            height: 100%;
+        .myItem {
+            @include flex;
+            justify-content: space-between;
+            overflow: visible;
+            height: 28px;
+            width: 360px;
+            position: relative;
+            background: $color-border;
+            background-size: 30px 30px;
+            margin: 9px 0;
+        }
 
-            &::-webkit-scrollbar {
-                display: none;
-            }
+        .myItemHover .myItemText p {
+            transform: scale(2.1);
+            text-shadow: 0 3px 5px $color-black;
+        }
 
-            .myItem {
-                @include flex;
-                justify-content: space-between;
-                overflow: visible;
-                height: 28px;
-                width: 360px;
-                position: relative;
-                background: $color-border;
-                background-size: 30px 30px;
-                margin: 9px 0;
-            }
+        .myItemNum {
+            font-size: 8px;
+            line-height: 8px;
+            width: 12px;
+            vertical-align: baseline;
+            z-index: 1;
+            @include flex-center;
+            color: $color-white;
+        }
 
-            .myItemHover .myItemText p {
-                transform: scale(2.1);
-                text-shadow: 0 3px 5px $color-black;
-            }
+        .myItemText {
+            cursor: pointer;
+            @include flex-center;
+            flex-grow: 1;
+            z-index: 3;
 
-            .myItemNum {
-                font-size: 8px;
-                line-height: 8px;
-                width: 12px;
-                vertical-align: baseline;
-                z-index: 1;
-                @include flex-center;
-                color: $color-white;
-            }
-
-            .myItemText {
-                cursor: pointer;
-                @include flex-center;
-                flex-grow: 1;
-                z-index: 3;
-
-                p {
-                    @include font($f-vocabMyItem, 18px, $color-calendar-bg, 700, normal, 27px);
-                    text-transform: uppercase;
-                    text-shadow: 0 2px 3px $color-black;
-                    transition: all 0.1s;
-                    padding-top: 1px;
-
-                    &:hover {
-                        transform: scale(2.7);
-                        text-shadow: 0 3px 5px $color-black;
-                    }
-                }
-            }
-
-            .myItemDeleteButton {
-                margin-left: 1px;
-                border-radius: 3px;
-                outline: 0;
-                border: none;
-                cursor: pointer;
-                transition: 0.3s ease;
-                @include flex-center;
-                overflow: hidden;
-                font-size: 10px;
-                background-image: url('/images/main/input-left-corner.webp'),
-                    url('/images/main/input-right-corner.webp');
-                background-position: left top,
-                    right top;
-                background-repeat: no-repeat,
-                    no-repeat;
-                background-size: auto 100%,
-                    auto 100%;
-
-                &:disabled {
-                    opacity: 0.3;
-                }
-
-                background-color: $color-background-1;
-                color: #ececec;
-                width: 18px;
-                height: 14px;
+            p {
+                @include font($f-vocabMyItem, 18px, $color-calendar-bg, 700, normal, 27px);
+                text-transform: uppercase;
+                text-shadow: 0 2px 3px $color-black;
+                transition: all 0.1s;
+                padding-top: 1px;
 
                 &:hover {
-                    color: $color-white;
+                    transform: scale(2.7);
+                    text-shadow: 0 3px 5px $color-black;
                 }
             }
+        }
 
-            .myItemButton {
-                @include flex;
-                width: 30px;
-                height: 24px;
-                padding: 0 3px;
-                z-index: 101;
+        .myItemDeleteButton {
+            margin-left: 1px;
+            border-radius: 3px;
+            outline: 0;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s ease;
+            @include flex-center;
+            overflow: hidden;
+            font-size: 10px;
+            background-image: url('/images/main/input-left-corner.webp'),
+                url('/images/main/input-right-corner.webp');
+            background-position: left top,
+                right top;
+            background-repeat: no-repeat,
+                no-repeat;
+            background-size: auto 100%,
+                auto 100%;
+
+            &:disabled {
+                opacity: 0.3;
             }
 
-            .myItemButtonStart {
-                justify-content: flex-start;
-                cursor: pointer;
-            }
+            background-color: $color-background-1;
+            color: #ececec;
+            width: 18px;
+            height: 14px;
 
-            .myItemButtonEnd {
-                justify-content: flex-end;
+            &:hover {
+                color: $color-white;
             }
+        }
 
-            .myItemEditButton {
-                cursor: pointer;
-                background: transparent;
-                border: none;
-                outline: none;
-                height: 15px;
-                width: 15px;
-                margin: -1px 0 0 -2px;
+        .myItemButton {
+            @include flex;
+            width: 30px;
+            height: 24px;
+            padding: 0 3px;
+            z-index: 101;
+        }
+
+        .myItemButtonStart {
+            justify-content: flex-start;
+            cursor: pointer;
+        }
+
+        .myItemButtonEnd {
+            justify-content: flex-end;
+        }
+
+        .myItemEditButton {
+            cursor: pointer;
+            background: transparent;
+            border: none;
+            outline: none;
+            height: 15px;
+            width: 15px;
+            margin: -1px 0 0 -2px;
+            overflow: hidden;
+            @include flex-center;
+        }
+
+
+    }
+
+    .flipCardTextContainer {
+        width: 100%;
+        height: 36px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10000;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        cursor: default;
+        background-image: url("/images/main/input-wall.webp");
+        background-size: cover;
+        border-bottom: 1px solid $color-border;
+
+        .flipCardTextWord {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-direction: column;
+
+            .flipCardTextNumber {
+                width: 12px;
+                height: 6px;
                 overflow: hidden;
-                @include flex-center;
+                position: absolute;
+                top: -3px;
+                right: -14px;
+                @include font($f-flipSearchNumber, 6px, rgba(255, 255, 255, 1), 600, normal, 6px);
+                text-align: left;
+                text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
             }
 
+            .flipCardTextNumberMobile {
+                @include font($f-flipSearchNumber, 9px, rgba(255, 255, 255, 1), 600, normal, 9px);
+                text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
+                margin-right: 6px;
+            }
 
+            .flipCardTextWordContent {
+                @include font($f-searchText, 18px, #ffffff, 700, normal, 18px);
+                text-transform: uppercase;
+                text-align: center;
+                text-shadow: 0 2px 2px #00000036;
+                margin-bottom: 1px;
+                position: relative;
+                margin-top: 6px;
+            }
+
+            input {
+                width: 100%;
+                height: 18px;
+                @include font($f-searchText, 18px, #ffffff, 700, normal, 18px);
+                text-transform: uppercase;
+                text-align: center;
+                text-shadow: 0 2px 2px #00000036;
+                margin-bottom: 1px;
+                border: 0;
+                outline: 0;
+                background: none;
+                margin-top: 6px;
+            }
+
+            .flipCardTextPhonetic {
+                @include font($f-phonetic, 9px, rgba(255, 255, 255, 0.9), 600, normal, 9px);
+                text-align: center;
+                text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
+            }
+
+            .flipCardTextPhoneticMobile {
+                @extend .flipCardTextPhonetic;
+                padding-right: 6px;
+            }
+        }
+
+    }
+
+    .ticksContainer {
+        display: flex;
+        align-items: flex-start;
+
+        span {
+            display: inline-block;
+            @include font($f-flipNumber, 210px, #f4f4f4, bold, normal, 180px);
         }
     }
 }

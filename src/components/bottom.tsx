@@ -356,15 +356,15 @@ const Bottom: Component<{}> = () => {
                 fallback={
                   <Motion.img
                     initial={{
-                      x: "-100%",
+                      y: "100%",
                       opacity: 0,
                     }}
                     animate={{
-                      x: 0,
+                      y: 0,
                       opacity: 1,
                     }}
                     exit={{
-                      x: "-100%",
+                      y: "100%",
                       opacity: 0,
                     }}
                     transition={{ duration: 0.3, easing: "ease" }}
@@ -375,15 +375,15 @@ const Bottom: Component<{}> = () => {
               >
                 <Motion.img
                   initial={{
-                    x: "-100%",
+                    y: "100%",
                     opacity: 0,
                   }}
                   animate={{
-                    x: 0,
+                    y: 0,
                     opacity: 1,
                   }}
                   exit={{
-                    x: "-100%",
+                    y: "100%",
                     opacity: 0,
                   }}
                   transition={{ duration: 0.3, easing: "ease" }}
@@ -396,7 +396,6 @@ const Bottom: Component<{}> = () => {
             <Show when={listStore.listCount}>
               <Motion.img
                 animate={{
-                  x: 0,
                   opacity: 1,
                   width: `${listStore.listCount * 2}%`,
                 }}

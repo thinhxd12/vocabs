@@ -29,20 +29,6 @@ const Definition: Component<{
                   </div>
                 </div>
 
-                <Show when={props.onEdit}>
-                  <div class={styles.websHeadDropdown}>
-                    {mainStore
-                      .renderWord!.translations.find(
-                        (el) => el.partOfSpeech === entry().partOfSpeech
-                      )
-                      ?.translations.map((n) => {
-                        return (
-                          <span class={styles.websHeadDropdownItem}>{n}</span>
-                        );
-                      })}
-                  </div>
-                </Show>
-
                 <div class={styles.websBody}>
                   <Index each={entry().definitions}>
                     {(item, ind) => {
@@ -65,6 +51,26 @@ const Definition: Component<{
                                   )}
                                 </Index>
                               </div>
+                              <Show
+                                when={
+                                  props.onEdit &&
+                                  mainStore.renderWord!.translations.find(
+                                    (el) =>
+                                      el.partOfSpeech === entry().partOfSpeech
+                                  )?.translations
+                                }
+                              >
+                                <div class={styles.websHeadDropdown}>
+                                  {mainStore
+                                    .renderWord!.translations.find(
+                                      (el) =>
+                                        el.partOfSpeech === entry().partOfSpeech
+                                    )
+                                    ?.translations.map((n) => {
+                                      return <p>{n}</p>;
+                                    })}
+                                </div>
+                              </Show>
                             </div>
                           }
                         >
@@ -93,6 +99,26 @@ const Definition: Component<{
                                 )}
                               </Index>
                             </div>
+                            <Show
+                              when={
+                                props.onEdit &&
+                                mainStore.renderWord!.translations.find(
+                                  (el) =>
+                                    el.partOfSpeech === entry().partOfSpeech
+                                )?.translations
+                              }
+                            >
+                              <div class={styles.websHeadDropdown}>
+                                {mainStore
+                                  .renderWord!.translations.find(
+                                    (el) =>
+                                      el.partOfSpeech === entry().partOfSpeech
+                                  )
+                                  ?.translations.map((n) => {
+                                    return <p>{n}</p>;
+                                  })}
+                              </div>
+                            </Show>
                           </div>
                         </Show>
                       );
