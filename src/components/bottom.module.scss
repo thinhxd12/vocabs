@@ -51,46 +51,34 @@
     }
 
     .bottomCenter {
-        height: 100%;
-        width: 21px;
-        display: block;
-        background: none;
         outline: none;
         border: none;
         border-left: 1px solid rgba(216, 216, 216, 0.15);
         border-right: 1px solid rgba(216, 216, 216, 0.15);
-        transition: all 0.2s;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-end;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-        z-index: 6;
-        padding-bottom: 1px;
+        background: $color-black;
 
-        span {
-            @include font($f-botCenterNum, 21px, #d7d7d7, 600, normal, 18px);
-            z-index: 6;
-        }
-
-        small {
-            @include font($f-botCenterNum, 15px, #d7d7d7, 600, normal, 15px);
-            z-index: 6;
-        }
-
-        .bottomTimer {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            z-index: 3;
-            width: 100%;
+        .bottomCenterContent {
+            cursor: pointer;
             height: 100%;
-            background: $color-border;
+            width: 21px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 1px;
+
+            span {
+                @include font($f-botCenterNum, 23px, #d7d7d7, 600, normal, 18px);
+                mix-blend-mode: difference;
+            }
+
+            small {
+                padding-top: 1px;
+                @include font($f-botCenterNum, 16px, #d7d7d7, 600, normal, 15px);
+                mix-blend-mode: difference;
+            }
         }
     }
-
 
     .bottomBtn {
         display: block;

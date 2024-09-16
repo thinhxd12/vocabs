@@ -265,31 +265,23 @@ const Bottom: Component<{}> = () => {
         </A>
 
         <button class={styles.bottomCenter} onClick={startOrStopCountdown}>
-          <span>{Math.floor(mainStore.totalMemories / 100)}</span>
-          <small>
-            {mainStore.totalMemories % 100 < 10
-              ? "0" + (mainStore.totalMemories % 100)
-              : mainStore.totalMemories % 100}
-          </small>
-
-          <Presence>
-            <Show when={showTimer()}>
-              <Motion.div
-                class={styles.bottomTimer}
-                initial={{
-                  bottom: "33px",
-                }}
-                animate={{
-                  bottom: "0px",
-                  height: `${(minute() / 6) * 100}%`,
-                }}
-                exit={{
-                  bottom: "-33px",
-                }}
-                transition={{ duration: 0.25, easing: [0.4, 0, 0.2, 1] }}
-              ></Motion.div>
-            </Show>
-          </Presence>
+          <div
+            class={styles.bottomCenterContent}
+            style={{
+              background: showTimer()
+                ? `linear-gradient(to top, white 0%, white ${
+                    (minute() / 6) * 100
+                  }%, black ${(minute() / 6) * 100}%, black 100%)`
+                : "none",
+            }}
+          >
+            <span>{Math.floor(mainStore.totalMemories / 100)}</span>
+            <small>
+              {mainStore.totalMemories % 100 < 10
+                ? "0" + (mainStore.totalMemories % 100)
+                : mainStore.totalMemories % 100}
+            </small>
+          </div>
         </button>
 
         <A
