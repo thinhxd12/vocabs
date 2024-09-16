@@ -175,6 +175,7 @@
             .websAuthor {
                 font-variant: small-caps;
                 @include font($f-defAuth, 13px, #111111, 500, normal, 16px);
+                margin-right: 5px;
             }
 
             .websTitle {
@@ -184,6 +185,7 @@
 
             .websYear {
                 @include font($f-defYear, 12px, #111111, 500, normal, 16px);
+                margin-left: 5px;
             }
         }
 

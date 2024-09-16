@@ -143,7 +143,7 @@ const Definition: Component<{
                     <div class={styles.websCredits}>
                       <Show when={entry().example[0].author}>
                         <span class={styles.websAuthor}>
-                          {entry().example[0].author}-
+                          {entry().example[0].author}
                         </span>
                       </Show>
                       <Show when={entry().example[0].title}>
@@ -153,7 +153,7 @@ const Definition: Component<{
                       </Show>
                       <Show when={entry().example[0].year}>
                         <span class={styles.websYear}>
-                          -{entry().example[0].year}
+                          {entry().example[0].year}
                         </span>
                       </Show>
                     </div>
