@@ -1,10 +1,17 @@
-import { Component, Index, Setter, Show } from "solid-js";
+import {
+  Component,
+  createEffect,
+  createSignal,
+  Index,
+  Setter,
+  Show,
+  untrack,
+} from "solid-js";
 import styles from "./definition.module.scss";
-import buttons from "../assets/styles/buttons.module.scss";
 import { mainStore } from "~/lib/mystore";
 import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
-import { FaSolidCheck } from "solid-icons/fa";
 import { VocabularyType } from "~/types";
+import ImageLoading from "./image";
 
 const Definition: Component<{
   item: VocabularyType;
@@ -75,15 +82,11 @@ const Definition: Component<{
                           }
                         >
                           <div class={styles.websSenseImage}>
-                            <img
-                              class={styles.websImg}
+                            <ImageLoading
                               src={item().image}
-                              onerror={(e) => {
-                                e.currentTarget.src =
-                                  "images/main/image_not_found.webp";
-                              }}
                               width={360}
                               height={240}
+                              class={styles.websImg}
                             />
                             <div class={styles.websDefs}>
                               <Index each={item().definition}>
