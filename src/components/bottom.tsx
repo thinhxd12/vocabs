@@ -389,9 +389,9 @@ const Bottom: Component<{}> = () => {
               <Motion.img
                 animate={{
                   opacity: 1,
-                  width: `${listStore.listCount * 2}%`,
+                  width: `${(listStore.listCount + 1) * 2}%`,
                 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.3, easing: [0.4, 0, 0.2, 1] }}
                 src="images/main/sunrise.webp"
                 class={styles.bottomImageBackground}
               />

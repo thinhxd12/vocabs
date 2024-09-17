@@ -349,7 +349,7 @@ const Edit: Component<{
               onChange={(e) => {
                 setResultEditWord({
                   ...resultEditWord(),
-                  audio: JSON.parse(e.currentTarget.value),
+                  audio: e.currentTarget.value,
                 });
               }}
             />
@@ -363,7 +363,7 @@ const Edit: Component<{
               onChange={(e) => {
                 setResultEditWord({
                   ...resultEditWord(),
-                  phonetics: JSON.parse(e.currentTarget.value),
+                  phonetics: e.currentTarget.value,
                 });
               }}
             />
