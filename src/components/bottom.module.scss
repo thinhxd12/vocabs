@@ -60,7 +60,7 @@
         .bottomCenterContent {
             cursor: pointer;
             height: 100%;
-            width: 21px;
+            width: 18px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -68,13 +68,13 @@
             padding-bottom: 1px;
 
             span {
-                @include font($f-botCenterNum, 23px, #d7d7d7, 600, normal, 18px);
+                @include font($f-botCenterNum, 22px, #d7d7d7, 600, normal, 18px);
                 mix-blend-mode: difference;
             }
 
             small {
                 padding-top: 1px;
-                @include font($f-botCenterNum, 16px, #d7d7d7, 600, normal, 15px);
+                @include font($f-botCenterNum, 17px, #d7d7d7, 600, normal, 15px);
                 mix-blend-mode: difference;
             }
         }
