@@ -130,31 +130,29 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         }
         ondblclick={likeBookmark}
       >
-        <div>
-          <p class={styles.bookmarkTitle}>{bookmark()?.bookTile}</p>
-          <div class={styles.bookmarkSeparated}>
-            <img
-              src="images/main/bookmark-onarment.webp"
-              width={184.7}
-              height={21.9}
-            />
-          </div>
-        </div>
-
-        <Show
-          when={bookmark()?.content}
-          fallback={
-            <div class={styles.bookmarkPassageLoading}>
-              <img src="images/svg/loader.svg" width={40} height={10} />
+        <div class={styles.bookmarkContentInside}>
+          <div>
+            <p class={styles.bookmarkTitle}>{bookmark()?.bookTile}</p>
+            <div class={styles.bookmarkSeparated}>
+              <img src="images/main/bookmark-onarment.webp" />
             </div>
-          }
-        >
-          <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
-        </Show>
+          </div>
 
-        <div>
-          <p class={styles.bookmarkAuthor}>*{bookmark()?.authors} </p>
-          <p class={styles.bookmarkYear}>*{bookmark()?.dateOfCreation}</p>
+          <Show
+            when={bookmark()?.content}
+            fallback={
+              <div class={styles.bookmarkPassageLoading}>
+                <img src="images/svg/loader.svg" width={40} height={10} />
+              </div>
+            }
+          >
+            <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
+          </Show>
+
+          <div>
+            <p class={styles.bookmarkAuthor}>*{bookmark()?.authors} </p>
+            <p class={styles.bookmarkYear}>*{bookmark()?.dateOfCreation}</p>
+          </div>
         </div>
         <div
           class={styles.buttonBookmarkLeft}
