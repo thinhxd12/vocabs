@@ -27,6 +27,7 @@
         width: 100%;
         @include flex-center-column;
         padding: 9px 0;
+        text-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
 
         .weatherSelect {
             background: none;
@@ -61,6 +62,7 @@
 
             .weatherImg {
                 margin-left: 3px;
+                filter: drop-shadow(0 1px 3px black);
             }
 
         }
@@ -130,8 +132,13 @@
             min-width: 60px;
             scroll-snap-align: start;
 
+            img {
+                filter: drop-shadow(0 1px 3px black);
+            }
+
             .weatherHourlyTime {
                 @include font($f-weatherInfo, 12px, $color-white, 300, normal, 12px);
+                text-shadow: 0 0 3px black;
             }
 
             .weatherHourlyProb {
@@ -143,6 +150,7 @@
             }
 
             .weatherHourlyTemp {
+                text-shadow: 0 0 3px black;
                 margin-top: 6px;
                 @include font($f-weatherInfo, 13px, $color-white, 300, normal, 14px);
             }
@@ -168,6 +176,7 @@
         @include font($f-weatherInfo, 11px, $color-white, 500, normal, 15px);
         letter-spacing: 0.5px;
         text-align: center;
+        text-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
     }
 
     .weatherChartLoading {
