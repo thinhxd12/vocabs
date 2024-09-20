@@ -16,6 +16,7 @@ import {
   getBookMarkDataItem,
   getNextBookMarkData,
   getPrevBookMarkData,
+  getRandomBookMarkData,
   insertBookmarkData,
   updateBookmarkData,
 } from "~/lib/api";
@@ -25,6 +26,7 @@ import { FaSolidFeather } from "solid-icons/fa";
 import { AiOutlineInsertRowBelow } from "solid-icons/ai";
 import { BsHeartbreakFill, BsHeartFill } from "solid-icons/bs";
 import { BiSolidPaste, BiSolidSave } from "solid-icons/bi";
+import { FaSolidDice } from "solid-icons/fa";
 
 declare module "solid-js" {
   namespace JSX {
@@ -120,6 +122,12 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
 
   const [likeIcon, setLikeIcon] = createSignal<boolean>(false);
 
+  const getRandomBookmark = async () => {
+    const data = await getRandomBookMarkData();
+    if (data) {
+      setBookmark(data);
+    }
+  };
   return (
     <div class={styles.bookmarkContainer} tabIndex={1}>
       <div
@@ -272,6 +280,13 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
           onclick={() => copyBookMarkToClipboard(bookmark()!.content)}
         >
           <BiSolidPaste size={22} color="#ffffffe6" />
+        </button>
+
+        <button
+          class={buttons.buttonBookmark}
+          onclick={() => getRandomBookmark()}
+        >
+          <FaSolidDice size={26} color="#ffffffe6" />
         </button>
 
         <button

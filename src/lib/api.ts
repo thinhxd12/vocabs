@@ -864,7 +864,13 @@ export const getThisWeekScheduleIndex = (async (day: string, history: HistoryTyp
     }
 });
 
+export const getRandomBookMarkData = (async () => {
+    "use server";
+    const { data, error } = await supabase
+        .rpc('get_random_bookmark');
 
+    if (data) return data as BookmarkType;
+});
 
 export const getBookMarkData = (async () => {
     "use server";
