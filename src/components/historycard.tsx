@@ -1,9 +1,9 @@
 import { Component, Index } from "solid-js";
-import { HistoryItemContentType } from "~/types";
+import { HistoryItemType } from "~/types";
 import styles from "./historycard.module.scss";
 
 const HistoryCard: Component<{
-  item: HistoryItemContentType[];
+  item: HistoryItemType[];
 }> = (props) => {
   return (
     <div class={styles.historyCard}>
@@ -20,7 +20,7 @@ const HistoryCard: Component<{
           );
         }}
       </Index>
-    </div>
+    </div >
   );
 };
 

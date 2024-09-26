@@ -12,6 +12,12 @@ export function getElAttribute(doc: any, query: string, attr: string) {
   return (el && el.getAttribute(attr)) || "";
 }
 
+export const chunk = (array: any[], size: number) =>
+  array.reduce((acc, _, i) => {
+    if (i % size === 0) acc.push(array.slice(i, i + size));
+    return acc;
+  }, []);
+
 export const URL_IMAGE_MAIN_PAGE =
   "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez";
 
@@ -29,6 +35,8 @@ export const mapTables = {
 export const PRECIPITATION_PROBABILITY = 0.65;
 export const ACCUMULATION = 0.03;
 export const DEVIATION_NUMB = 0;
+
+export const REPETITION_PATTERN = [0, 400, 800, 200, 600, 1400, 1000, 1600, 1200, 1800];
 
 export const WMOCODE: WeatherCodeData = {
   "0": {

@@ -1,13 +1,22 @@
 import { createStore } from "solid-js/store";
-import { BookmarkType, CalendarType, CurrentlyWeatherType, HistoryType, ScheduleType, VocabularySearchType, VocabularyType, WeatherGeoType } from "~/types";
+import {
+  BookmarkType,
+  CalendarType,
+  CurrentlyWeatherType,
+  HistoryItemType,
+  ScheduleType,
+  VocabularySearchType,
+  VocabularyType,
+  WeatherGeoType,
+} from "~/types";
 
 type ListStoreType = {
   listType: 0 | 1 | 2;
   listCount: number;
-  listContent: VocabularySearchType[],
+  listContent: VocabularySearchType[];
   listButton: boolean;
   listToday: ScheduleType;
-}
+};
 
 export const [listStore, setListStore] = createStore<ListStoreType>({
   listType: 0,
@@ -21,8 +30,7 @@ export const [listStore, setListStore] = createStore<ListStoreType>({
     time1: 0,
     time2: 0,
   },
-})
-
+});
 
 type MainStoreType = {
   totalMemories: number;
@@ -30,7 +38,7 @@ type MainStoreType = {
   showTranslate: boolean;
   showEdit: boolean;
   renderWord: VocabularyType | null;
-  historyList: HistoryType[];
+  historyList: HistoryItemType[];
   calendarList: Array<CalendarType[]>;
   thisWeekIndex: number;
   mainToggle: boolean;
@@ -40,7 +48,7 @@ type MainStoreType = {
   searchTermColor: string;
   searchSelectedIndex: number;
   searchDeleteIndex: number;
-}
+};
 
 export const [mainStore, setMainStore] = createStore<MainStoreType>({
   totalMemories: 0,
@@ -58,6 +66,4 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   searchTermColor: "#ffffff",
   searchSelectedIndex: 0,
   searchDeleteIndex: 0,
-})
-
-
+});

@@ -3,8 +3,10 @@ import {
   Index,
   Show,
   Suspense,
+  createEffect,
   createSignal,
   onMount,
+  untrack,
 } from "solid-js";
 import {
   getCalendarHistory,
@@ -12,7 +14,6 @@ import {
   getThisWeekScheduleIndex,
   submitNewSchedule,
   submitTodayReset,
-  updateTodayData,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
@@ -21,12 +22,13 @@ import forms from "../../assets/styles/form.module.scss";
 import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
-import { createAsync } from "@solidjs/router";
-import { listStore, mainStore, setMainStore } from "~/lib/mystore";
+import { createAsync, useSubmission } from "@solidjs/router";
+import { listStore, mainStore, setListStore, setMainStore } from "~/lib/mystore";
 import HistoryCard from "~/components/historycard";
 import { CalendarType } from "~/types";
 import { OcX2 } from "solid-icons/oc";
 import { BiSolidSave } from "solid-icons/bi";
+import { chunk } from "~/utils";
 
 let refEl: HTMLDivElement;
 const todayDate = format(new Date(), "yyyy-MM-dd");
@@ -36,40 +38,48 @@ const Calendar: Component<{}> = (props) => {
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
-  const getAllDataCalendar = async () => {
+  const submitTodayResetAction = useSubmission(submitTodayReset);
+  const submitNewScheduleAction = useSubmission(submitNewSchedule);
+
+  onMount(async () => {
+    const index = await getThisWeekScheduleIndex(
+      todayDate
+    );
+    if (index !== undefined) setMainStore("thisWeekIndex", index);
+
     if (mainStore.calendarList.length === 0) {
-      const data = await Promise.all([
-        getScheduleData(todayDate),
-        getCalendarHistory(),
-      ]);
-
-      data[0] && setMainStore("calendarList", data[0]);
-      if (data[1]) {
-        setMainStore("historyList", data[1]);
-      }
-
-      const index = await getThisWeekScheduleIndex(
-        todayDate,
-        mainStore.historyList[0]
-      );
-      if (index !== undefined) setMainStore("thisWeekIndex", index);
+      const data1 = await getScheduleData(todayDate);
+      data1 && setMainStore("calendarList", data1);
     }
-  };
-
-  onMount(() => {
-    getAllDataCalendar();
+    if (mainStore.historyList.length === 0) {
+      const data2 = await getCalendarHistory();
+      data2 && setMainStore("historyList", data2);
+    }
   });
 
+  createEffect(() => {
+    setListStore("listToday", { ...listStore.listToday, ...submitTodayResetAction.result });
+    untrack(async () => {
+      const data = await getScheduleData(todayDate);
+      data && setMainStore("calendarList", data);
+    });
+  })
+
+  createEffect(() => {
+    let v = submitNewScheduleAction.result;
+    untrack(() => {
+      setTimeout(async () => {
+        const data = await getScheduleData(todayDate);
+        data && setMainStore("calendarList", data);
+      }, 1500);
+    });
+  })
+
   const handleUpdateHistoryList = () => {
-    setMainStore("calendarList", []);
-    setMainStore("historyList", []);
-    setMainStore("thisWeekIndex", -9);
     setShowSetNewSchedule(false);
-    getAllDataCalendar();
   };
 
-  const handleUpdateTodaySchedule = async () => {
-    await updateTodayData(todayDate);
+  const handleUpdateTodaySchedule = () => {
     setShowTodayReset(false);
   };
 
@@ -124,7 +134,7 @@ const Calendar: Component<{}> = (props) => {
               <p class={styles.setNewMonth}>{format(new Date(), "MMMM")}</p>
               <p class={styles.setNewWeek}>{format(new Date(), "yyyy")}</p>
               <p class={styles.setNewHistory}>
-                <Show when={mainStore.thisWeekIndex >= 0} fallback={"NaN"}>
+                <Show when={mainStore.thisWeekIndex >= 0} fallback={"Nothing"}>
                   {Number(mainStore.thisWeekIndex + 1) +
                     " - " +
                     Number(mainStore.thisWeekIndex + 200)}
@@ -232,9 +242,9 @@ const Calendar: Component<{}> = (props) => {
           fallback={<div class={styles.calendarHistoryLoading}>...</div>}
         >
           <div class={styles.calendarHistory} ref={refEl}>
-            <Index each={mainStore.historyList}>
+            <Index each={chunk(mainStore.historyList, 5).reverse()}>
               {(data, i) => {
-                return <HistoryCard item={data().data} />;
+                return <HistoryCard item={data()} />;
               }}
             </Index>
           </div>

@@ -1,11 +1,8 @@
 import {
   Component,
-  createEffect,
-  createSignal,
   Index,
   Setter,
   Show,
-  untrack,
 } from "solid-js";
 import styles from "./definition.module.scss";
 import { mainStore } from "~/lib/mystore";

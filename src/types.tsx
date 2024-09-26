@@ -49,12 +49,6 @@ export interface BookmarkType {
   like: number;
 }
 
-export interface HistoryItemContentType {
-  index: number;
-  from_date: string;
-  to_date: string;
-}
-
 export interface ScheduleType {
   date: string;
   index1: number;
@@ -72,9 +66,11 @@ export interface CalendarType {
   time2?: number;
 }
 
-export interface HistoryType {
+export interface HistoryItemType {
   created_at: string;
-  data: HistoryItemContentType[];
+  index: number;
+  from_date: string;
+  to_date: string;
 }
 
 export interface ImageType {
