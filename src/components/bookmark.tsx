@@ -112,6 +112,9 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
     createSignal<boolean>(false);
 
   const likeBookmark = () => {
+    const selection = window.getSelection();
+    selection!.removeAllRanges();
+
     setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
     checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
     setToggleLikeAnimation(true);

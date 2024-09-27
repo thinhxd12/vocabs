@@ -46,6 +46,7 @@ const Edit: Component<{
       </div>,
       {
         style: { "margin-top": "24px", padding: "8px 12px 8px 15px" },
+        duration: 1000,
       }
     );
 

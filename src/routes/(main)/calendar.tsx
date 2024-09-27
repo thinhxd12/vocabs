@@ -48,12 +48,12 @@ const Calendar: Component<{}> = (props) => {
     if (index !== undefined) setMainStore("thisWeekIndex", index);
 
     if (mainStore.calendarList.length === 0) {
-      const data1 = await getScheduleData(todayDate);
-      data1 && setMainStore("calendarList", data1);
+      const data = await getScheduleData(todayDate);
+      data && setMainStore("calendarList", data);
     }
     if (mainStore.historyList.length === 0) {
-      const data2 = await getCalendarHistory();
-      data2 && setMainStore("historyList", data2);
+      const data = await getCalendarHistory();
+      data && setMainStore("historyList", data);
     }
   });
 
@@ -71,7 +71,7 @@ const Calendar: Component<{}> = (props) => {
       setTimeout(async () => {
         const data = await getScheduleData(todayDate);
         data && setMainStore("calendarList", data);
-      }, 1500);
+      }, 1000);
     });
   })
 
