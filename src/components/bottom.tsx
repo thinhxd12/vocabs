@@ -94,7 +94,7 @@ const Bottom: Component<{}> = () => {
         }
         return prev - 1;
       });
-    }, 1000);
+    }, 60000);
   };
 
   const endCountdown = () => {
@@ -105,7 +105,6 @@ const Bottom: Component<{}> = () => {
     showDesktopNotification();
     audio = new Audio();
     // audio.src = "/sounds/09_Autumn_Mvt_3_Allegro.mp3";
-    // audio.src = "https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/000/481/under-water-1586954469-OxX4U5PwVV.mp3"
     audio.src = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/3a/5e/e6/3a5ee615-b992-cba4-c351-419d2c6d1578/mzaf_13102140031776931351.plus.aac.ep.m4a";
     audio.play();
   };
