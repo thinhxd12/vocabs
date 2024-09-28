@@ -39,7 +39,7 @@ type MainStoreType = {
   showEdit: boolean;
   renderWord: VocabularyType | null;
   historyList: HistoryItemType[];
-  calendarList: Array<CalendarType[]>;
+  calendarList: CalendarType[];
   thisWeekIndex: number;
   mainToggle: boolean;
   searchResult: VocabularySearchType[];

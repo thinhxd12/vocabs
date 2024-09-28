@@ -16,6 +16,7 @@ import {
   getTotalMemories,
   getWeatherLocations,
   handleCheckWord,
+  updateTodayData,
   updateTodaySchedule,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
@@ -138,14 +139,8 @@ const Bottom: Component<{}> = () => {
         newProgress,
         listStore.listToday.date
       );
-      const data1 = await getTodayData(todayDate);
-      if (data1) {
-        setListStore("listToday", {
-          ...listStore.listToday,
-          time1: data1.time1,
-          time2: data1.time2,
-        });
-      }
+
+      updateTodayData(todayDate);
     }
 
     handleRenderWord();

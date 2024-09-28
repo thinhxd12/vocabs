@@ -3,10 +3,8 @@ import {
   Index,
   Show,
   Suspense,
-  createEffect,
   createSignal,
   onMount,
-  untrack,
 } from "solid-js";
 import {
   getCalendarHistory,
@@ -39,7 +37,6 @@ const Calendar: Component<{}> = (props) => {
   // ***************check login**************
 
   const submitTodayResetAction = useSubmission(submitTodayReset);
-  const submitNewScheduleAction = useSubmission(submitNewSchedule);
 
   onMount(async () => {
     const index = await getThisWeekScheduleIndex(
@@ -57,30 +54,22 @@ const Calendar: Component<{}> = (props) => {
     }
   });
 
-  createEffect(() => {
-    setListStore("listToday", { ...listStore.listToday, ...submitTodayResetAction.result });
-    untrack(async () => {
-      const data = await getScheduleData(todayDate);
-      data && setMainStore("calendarList", data);
-    });
-  })
-
-  createEffect(() => {
-    let v = submitNewScheduleAction.result;
-    untrack(() => {
-      setTimeout(async () => {
-        const data = await getScheduleData(todayDate);
-        data && setMainStore("calendarList", data);
-      }, 1000);
-    });
-  })
-
   const handleUpdateHistoryList = () => {
     setShowSetNewSchedule(false);
+    setMainStore("calendarList", []);
+    setTimeout(async () => {
+      const data = await getScheduleData(todayDate);
+      data && setMainStore("calendarList", data);
+    }, 2000)
   };
 
   const handleUpdateTodaySchedule = () => {
     setShowTodayReset(false);
+    setTimeout(async () => {
+      setListStore("listToday", { ...listStore.listToday, ...submitTodayResetAction.result });
+      const data = await getScheduleData(todayDate);
+      data && setMainStore("calendarList", data);
+    }, 2000)
   };
 
   // ---------------------POP UP---------------------------
@@ -98,17 +87,24 @@ const Calendar: Component<{}> = (props) => {
     });
   });
 
-  const IndexElement: Component<{
-    date: CalendarType;
+  const DateDiv: Component<{
+    item: CalendarType;
   }> = (props) => {
     return (
       <>
         <Show
-          when={(props.date.time1 as number) >= 0}
-          fallback={<div class={styles.dateTimeIndexDot}></div>}
+          when={(props.item.date as number) !== new Date(todayDate).getDate()}
+          fallback={<span class={styles.toDayDate}
+            onClick={() =>
+              setShowTodayReset(!showTodayReset())
+            }
+          >{props.item.date}</span>}
         >
-          <div>{props.date.time1}</div>
-          <div>{props.date.time2}</div>
+          <Show when={(props.item.month as number) === new Date().getMonth()}
+            fallback={<span class={styles.notThisMonth}>{props.item.date}</span>}
+          >
+            <span class={styles.thisMonth}>{props.item.date}</span>
+          </Show>
         </Show>
       </>
     );
@@ -148,15 +144,13 @@ const Calendar: Component<{}> = (props) => {
             </div>
           </div>
           <div class={styles.calendarDates}>
-            <div class={styles.calendarWeek}>
-              <div class={styles.calendarWeekTitle}>Sun</div>
-              <div class={styles.calendarWeekTitle}>Mon</div>
-              <div class={styles.calendarWeekTitle}>Tue</div>
-              <div class={styles.calendarWeekTitle}>Wed</div>
-              <div class={styles.calendarWeekTitle}>Thu</div>
-              <div class={styles.calendarWeekTitle}>Fri</div>
-              <div class={styles.calendarWeekTitle}>Sat</div>
-            </div>
+            <div class={styles.calendarDateTitle}>Sun</div>
+            <div class={styles.calendarDateTitle}>Mon</div>
+            <div class={styles.calendarDateTitle}>Tue</div>
+            <div class={styles.calendarDateTitle}>Wed</div>
+            <div class={styles.calendarDateTitle}>Thu</div>
+            <div class={styles.calendarDateTitle}>Fri</div>
+            <div class={styles.calendarDateTitle}>Sat</div>
 
             <Show
               when={mainStore.calendarList.length > 0}
@@ -164,74 +158,22 @@ const Calendar: Component<{}> = (props) => {
             >
               <Index each={mainStore.calendarList}>
                 {(data, i) => {
-                  return (
-                    <div class={styles.calendarWeek}>
-                      <Index each={data()}>
-                        {(item, n) => {
-                          return (
-                            <div class={styles.calendarDay}>
-                              <Show when={"time1" in item()}>
-                                <div class={styles.dateTimeIndexHidden}></div>
-                              </Show>
-
-                              <Show
-                                when={item().month === new Date().getMonth()}
-                                fallback={
-                                  <div class={styles.dateText}>
-                                    {item().date}
-                                  </div>
-                                }
-                              >
-                                <Show
-                                  when={
-                                    item().month === new Date().getMonth() &&
-                                    item().date === new Date().getDate()
-                                  }
-                                  fallback={
-                                    <div class={styles.dateTextThisMonth}>
-                                      {item().date}
-                                    </div>
-                                  }
-                                >
-                                  <div
-                                    class={`${styles.dateTextThisMonth} ${styles.todayDate}`}
-                                    onClick={() =>
-                                      setShowTodayReset(!showTodayReset())
-                                    }
-                                  >
-                                    {item().date}
-                                  </div>
-                                </Show>
-                              </Show>
-
-                              <Show when={"time1" in item()}>
-                                <Show
-                                  when={item().date === new Date().getDate()}
-                                  fallback={
-                                    <div
-                                      class={
-                                        (item().time1 as number) > 0
-                                          ? `${styles.dateTimeIndex} ${styles.dateTimeIndexDone}`
-                                          : styles.dateTimeIndex
-                                      }
-                                    >
-                                      <IndexElement date={item()} />
-                                    </div>
-                                  }
-                                >
-                                  <div
-                                    class={`${styles.dateTimeIndex} ${styles.dateTimeIndexToday}`}
-                                  >
-                                    <IndexElement date={item()} />
-                                  </div>
-                                </Show>
-                              </Show>
-                            </div>
-                          );
-                        }}
-                      </Index>
+                  if (data().time1 === -1) {
+                    return <div class={styles.calendarDateWithoutTime}>
+                      <DateDiv item={data()} />
                     </div>
-                  );
+                  }
+                  else return <div class={styles.calendarDateWithTime}>
+                    <span class={styles.calendarDateTimesHiden}>
+                      <span>{data().time1}</span>
+                      <span>{data().time2}</span>
+                    </span>
+                    <DateDiv item={data()} />
+                    <span class={styles.calendarDateTimes}>
+                      <span>{data().time1}</span>
+                      <span>{data().time2}</span>
+                    </span>
+                  </div>
                 }}
               </Index>
             </Show>

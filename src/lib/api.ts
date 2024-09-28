@@ -28,7 +28,7 @@ import {
 import { format, parse as parseTime } from "date-fns";
 import { parse } from "node-html-parser";
 import { supabase } from "./supbabase";
-import { setMainStore } from "./mystore";
+import { listStore, mainStore, setListStore, setMainStore } from "./mystore";
 import {
   parseKindleEntries,
   readKindleClipping,
@@ -81,7 +81,7 @@ export const searchMemoriesText = async (text: string) => {
 };
 
 export const getScheduleData = async (str: string) => {
-  "use server";
+  // "use server";
   const date = new Date();
   const thisMonth = date.getMonth();
   const thisYear = date.getFullYear();
@@ -93,7 +93,7 @@ export const getScheduleData = async (str: string) => {
     lastDateofMonth
   ).getDay();
   const lastDateofLastMonth = new Date(thisYear, thisMonth, 0).getDate();
-  const monthDateArr = [];
+  let monthDateArr = [];
   for (let i = firstDayofMonth; i > 0; i--) {
     monthDateArr.push({
       date: lastDateofLastMonth - i + 1,
@@ -112,15 +112,27 @@ export const getScheduleData = async (str: string) => {
       month: thisMonth + 1,
     });
   }
+
+  monthDateArr = monthDateArr.map((item) => ({
+    ...item,
+    time1: -1,
+    time2: -1,
+  }));
+
   const { data, error } = await supabase
     .from(mapTables.schedule)
     .select()
     .order("date");
 
   if (data) {
-    const scheduleData = data.map((item: any, index: number) => {
+    const scheduleData = data.map((item: ScheduleType, index: number) => {
       const day = new Date(item.date);
-      return { ...item, date: day.getDate(), month: day.getMonth() };
+      return {
+        date: day.getDate(),
+        month: day.getMonth(),
+        time1: item.time1,
+        time2: item.time2,
+      };
     });
 
     const mergedArray = monthDateArr.map((item) => {
@@ -131,8 +143,7 @@ export const getScheduleData = async (str: string) => {
         ),
       };
     });
-    const calendarScheduleArr = chunk(mergedArray, 7);
-    return calendarScheduleArr as Array<CalendarType[]>;
+    return mergedArray as CalendarType[];
   }
 };
 
@@ -1009,6 +1020,37 @@ export const getTodayData = cache(async (date: string) => {
     .eq("date", date);
   if (data) return data[0] as ScheduleType;
 }, "getTodayData");
+
+export const updateTodayData = async (date: string) => {
+  const data = await getTodayData(date);
+  if (data) {
+    setListStore("listToday", {
+      ...listStore.listToday,
+      time1: data.time1,
+      time2: data.time2,
+    });
+    handleUpdateCalendarData(data);
+  }
+};
+
+const handleUpdateCalendarData = async (data: ScheduleType) => {
+  const day = new Date(data.date);
+  const date = day.getDate();
+  const month = day.getMonth();
+
+  if (mainStore.calendarList.length > 0) {
+    const newData = mainStore.calendarList.map((item) => {
+      return item.date === date && item.month === month
+        ? {
+            ...item,
+            time1: data.time1,
+            time2: data.time2,
+          }
+        : { ...item };
+    });
+    setMainStore("calendarList", newData);
+  }
+};
 
 //get 50 word
 export const getListContent = async (start: number, end: number) => {
