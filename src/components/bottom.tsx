@@ -105,7 +105,8 @@ const Bottom: Component<{}> = () => {
     showDesktopNotification();
     audio = new Audio();
     // audio.src = "/sounds/09_Autumn_Mvt_3_Allegro.mp3";
-    audio.src = "https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/000/481/under-water-1586954469-OxX4U5PwVV.mp3"
+    // audio.src = "https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/000/481/under-water-1586954469-OxX4U5PwVV.mp3"
+    audio.src = "/sounds/A Thousand Miles.mp3";
     audio.play();
   };
 
