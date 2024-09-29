@@ -1029,7 +1029,9 @@ export const updateTodayData = async (date: string) => {
       time1: data.time1,
       time2: data.time2,
     });
-    handleUpdateCalendarData(data);
+    if (mainStore.calendarList.length > 0) {
+      handleUpdateCalendarData(data);
+    }
   }
 };
 
@@ -1038,18 +1040,16 @@ const handleUpdateCalendarData = async (data: ScheduleType) => {
   const date = day.getDate();
   const month = day.getMonth();
 
-  if (mainStore.calendarList.length > 0) {
-    const newData = mainStore.calendarList.map((item) => {
-      return item.date === date && item.month === month
-        ? {
-            ...item,
-            time1: data.time1,
-            time2: data.time2,
-          }
-        : { ...item };
-    });
-    setMainStore("calendarList", newData);
-  }
+  const newData = mainStore.calendarList.map((item) => {
+    return item.date === date && item.month === month
+      ? {
+          ...item,
+          time1: data.time1,
+          time2: data.time2,
+        }
+      : { ...item };
+  });
+  setMainStore("calendarList", newData);
 };
 
 //get 50 word
