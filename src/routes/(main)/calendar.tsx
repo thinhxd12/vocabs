@@ -93,18 +93,18 @@ const Calendar: Component<{}> = (props) => {
     return (
       <>
         <Show
-          when={(props.item.date as number) !== new Date(todayDate).getDate()}
-          fallback={<span class={styles.toDayDate}
-            onClick={() =>
-              setShowTodayReset(!showTodayReset())
-            }
-          >{props.item.date}</span>}
-        >
-          <Show when={(props.item.month as number) === new Date().getMonth()}
+          when={(props.item.date as number) === new Date(todayDate).getDate() && (props.item.month as number) === new Date(todayDate).getMonth()}
+          fallback={<Show when={(props.item.month as number) === new Date().getMonth()}
             fallback={<span class={styles.notThisMonth}>{props.item.date}</span>}
           >
             <span class={styles.thisMonth}>{props.item.date}</span>
-          </Show>
+          </Show>}
+        >
+          <span class={styles.toDayDate}
+            onClick={() =>
+              setShowTodayReset(!showTodayReset())
+            }
+          >{props.item.date}</span>
         </Show>
       </>
     );
