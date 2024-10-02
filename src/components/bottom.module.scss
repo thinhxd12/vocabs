@@ -281,30 +281,24 @@
     }
 
     .bottomMenu {
-        width: 360px;
         position: absolute;
         bottom: 36px;
-        left: 0;
-        z-index: 9999;
-    }
-
-    .bottomMenuButton {
-        position: absolute;
+        height: fit-content;
         right: 0;
-        bottom: 34px;
         z-index: 9999;
-        width: 30px;
-        height: 30px;
-        background: none;
-        outline: none;
-        border: none;
-        cursor: pointer;
-    }
+        @include flex-column;
 
-    .bottomMenuBtns {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
+        .buttonMenuContent {
+            width: 120px;
+            height: 31px;
+            transition: all 0.25s ease;
+            text-align: right;
+            transform: translateX(89px);
+
+            &:hover {
+                transform: translateX(0);
+            }
+        }
     }
 }
 

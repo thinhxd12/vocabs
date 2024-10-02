@@ -22,12 +22,10 @@ import {
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
 import { WMOCODE } from "~/utils";
-import { clickOutside } from "~/utils";
 import { CurrentlyWeatherType } from "~/types";
 
 let intervalCountdown: NodeJS.Timeout | undefined;
 let intervalAutoplay: NodeJS.Timeout;
-const [showMenu, setShowMenu] = createSignal<boolean>(false);
 const [showTimer, setShowTimer] = createSignal<boolean>(false);
 const [minute, setMinute] = createSignal<number>(6);
 
@@ -206,10 +204,6 @@ const Bottom: Component<{}> = () => {
 
   // -------------------AUTOPLAY END-------------------- //
 
-  const close = () => {
-    setShowMenu(false);
-  };
-
   const [bottomWeather, setBottomWeather] = createSignal<
     CurrentlyWeatherType | undefined
   >({
@@ -225,7 +219,7 @@ const Bottom: Component<{}> = () => {
 
   return (
     <div class={styles.bottom}>
-      <div class={styles.bottomBar} use:clickOutside={close}>
+      <div class={styles.bottomBar}>
         <div class={styles.bottomIndex}>
           <div class={styles.bottomIndexNums}>
             <Show
@@ -399,130 +393,111 @@ const Bottom: Component<{}> = () => {
             </Show>
           </div>
         </Show>
-
-        <button
-          class={styles.bottomMenuButton}
-          onClick={() => setShowMenu(!showMenu())}
-        ></button>
       </div>
 
       <div class={styles.bottomMenu}>
-        <Presence>
-          <Show when={showMenu()}>
-            <Motion.div
-              class={styles.bottomMenuBtns}
-              initial={{
-                opacity: 0,
-                x: 90,
-              }}
-              animate={{
-                opacity: 1,
-                x: 0,
-                transition: { duration: 0.25, easing: [0.4, 0, 0.2, 1] },
-              }}
-              exit={{
-                opacity: 0,
-                x: 90,
-                transition: { duration: 0.25, easing: [0.4, 0, 0.2, 1] },
-              }}
-            >
-              <button
-                class={
-                  listStore.listType === 1
-                    ? buttons.buttonMenuActive
-                    : buttons.buttonMenu
-                }
-                onClick={() => {
-                  handleGetListContent(1);
-                  setShowMenu(false);
-                }}
-              >
-                <div class={buttons.buttonMenuOrnament}></div>
-                <img
-                  alt="hourglass"
-                  src="images/main/flower1.webp"
-                  width={90}
-                  height={42}
-                />
-                <span>{Number(listStore.listToday?.index1 + 1) ?? "N"}</span>
-              </button>
-              <button
-                class={
-                  listStore.listType === 2
-                    ? buttons.buttonMenuActive
-                    : buttons.buttonMenu
-                }
-                onClick={() => {
-                  handleGetListContent(2);
-                  setShowMenu(false);
-                }}
-              >
-                <div class={buttons.buttonMenuOrnament}></div>
-                <img
-                  alt="hourglass"
-                  src="images/main/flower2.webp"
-                  width={90}
-                  height={42}
-                />
-                <span>{Number(listStore.listToday?.index2 + 1) ?? "N"}</span>
-              </button>
-              <button
-                class={buttons.buttonMenu}
-                onClick={() => {
-                  setMainStore("mainToggle", true);
-                  setShowMenu(false);
-                }}
-              >
-                <div class={buttons.buttonMenuOrnament}></div>
-                <img
-                  alt="hourglass"
-                  src="images/main/bookmark.webp"
-                  width={90}
-                  height={42}
-                />
-              </button>
-              <button
-                class={buttons.buttonMenu}
-                onClick={() => {
-                  setMainStore("showTranslate", true);
-                  setShowMenu(false);
-                }}
-              >
-                <div class={buttons.buttonMenuOrnament}></div>
-                <img
-                  alt="hourglass"
-                  src="images/main/translate.webp"
-                  width={90}
-                  height={42}
-                />
-              </button>
-              <button
-                class={buttons.buttonMenu}
-                onClick={() => {
-                  startCountdown();
-                  setShowMenu(false);
-                }}
-              >
-                <div class={buttons.buttonMenuOrnament}></div>
-                <img
-                  alt="hourglass"
-                  src="images/main/hourglass.webp"
-                  width={90}
-                  height={42}
-                />
-              </button>
-              <button class={buttons.buttonMenu} onClick={logoutAction}>
-                <div class={buttons.buttonMenuOrnament}></div>
-                <img
-                  alt="hourglass"
-                  src="images/main/exit.webp"
-                  width={90}
-                  height={42}
-                />
-              </button>
-            </Motion.div>
-          </Show>
-        </Presence>
+        <div class={styles.buttonMenuContent}>
+          <button
+            class={
+              listStore.listType === 1
+                ? buttons.buttonMenuActive
+                : buttons.buttonMenu
+            }
+            onClick={() => {
+              handleGetListContent(1);
+            }}
+          >
+            <div class={buttons.buttonMenuOrnament}></div>
+            <img
+              alt="hourglass"
+              src="images/main/flower1.webp"
+              width={90}
+              height={42}
+            />
+            <span>{Number(listStore.listToday?.index1 + 1) ?? "N"}</span>
+          </button>
+        </div>
+        <div class={styles.buttonMenuContent}>
+
+          <button
+            class={
+              listStore.listType === 2
+                ? buttons.buttonMenuActive
+                : buttons.buttonMenu
+            }
+            onClick={() => {
+              handleGetListContent(2);
+            }}
+          >
+            <div class={buttons.buttonMenuOrnament}></div>
+            <img
+              alt="hourglass"
+              src="images/main/flower2.webp"
+              width={90}
+              height={42}
+            />
+            <span>{Number(listStore.listToday?.index2 + 1) ?? "N"}</span>
+          </button>
+        </div>
+        <div class={styles.buttonMenuContent}>
+          <button
+            class={buttons.buttonMenu}
+            onClick={() => {
+              setMainStore("mainToggle", true);
+            }}
+          >
+            <div class={buttons.buttonMenuOrnament}></div>
+            <img
+              alt="hourglass"
+              src="images/main/bookmark.webp"
+              width={90}
+              height={42}
+            />
+          </button>
+        </div>
+        <div class={styles.buttonMenuContent}>
+          <button
+            class={buttons.buttonMenu}
+            onClick={() => {
+              setMainStore("showTranslate", true);
+            }}
+          >
+            <div class={buttons.buttonMenuOrnament}></div>
+            <img
+              alt="hourglass"
+              src="images/main/translate.webp"
+              width={90}
+              height={42}
+            />
+          </button>
+        </div>
+        <div class={styles.buttonMenuContent}>
+          <button
+            class={buttons.buttonMenu}
+            onClick={() => {
+              startCountdown();
+            }}
+          >
+            <div class={buttons.buttonMenuOrnament}></div>
+            <img
+              alt="hourglass"
+              src="images/main/hourglass.webp"
+              width={90}
+              height={42}
+            />
+          </button>
+        </div>
+        <div class={styles.buttonMenuContent}>
+          <button class={buttons.buttonMenu} onClick={logoutAction}>
+            <div class={buttons.buttonMenuOrnament}></div>
+            <img
+              alt="hourglass"
+              src="images/main/exit.webp"
+              width={90}
+              height={42}
+            />
+          </button>
+        </div>
       </div>
     </div>
   );
