@@ -40,7 +40,7 @@ declare module "solid-js" {
 
 const Vocabulary: Component<{}> = () => {
   // ***************check login**************
-  const user = createAsync(() => getUser(), { deferStream: true });
+  // const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
   //search text

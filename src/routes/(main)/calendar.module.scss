@@ -189,7 +189,7 @@
     .calendarDropdown {
         @include baseBody($color-calendar-bg);
         width: 360px;
-        z-index: 999;
+        z-index: 10000;
 
         .calendarDropdownHeader {
             display: flex;
