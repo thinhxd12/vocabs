@@ -280,24 +280,63 @@
 
     }
 
-    .bottomMenu {
+    // .bottomMenu {
+    //     position: absolute;
+    //     bottom: 36px;
+    //     height: fit-content;
+    //     right: 0;
+    //     z-index: 9999;
+    //     @include flex-column;
+
+    //     .buttonMenuContent {
+    //         width: 120px;
+    //         height: 31px;
+    //         transition: all 0.25s ease;
+    //         text-align: right;
+    //         transform: translateX(89px);
+
+    //         &:hover {
+    //             transform: translateX(0);
+    //         }
+    //     }
+    // }
+
+    .buttonMenuContent {
         position: absolute;
-        bottom: 36px;
-        height: fit-content;
         right: 0;
+        width: 120px;
+        height: 31px;
+        transition: all 0.25s ease;
+        text-align: right;
         z-index: 9999;
-        @include flex-column;
+        transform: translateX(89px);
 
-        .buttonMenuContent {
-            width: 120px;
-            height: 31px;
-            transition: all 0.25s ease;
-            text-align: right;
-            transform: translateX(89px);
+        &:hover {
+            transform: translateX(0);
+        }
 
-            &:hover {
-                transform: translateX(0);
-            }
+        &:nth-child(2) {
+            bottom: 36px +31*5px;
+        }
+
+        &:nth-child(3) {
+            bottom: 36px +31*4px;
+        }
+
+        &:nth-child(4) {
+            bottom: 36px +31*3px;
+        }
+
+        &:nth-child(5) {
+            bottom: 36px +31*2px;
+        }
+
+        &:nth-child(6) {
+            bottom: 36px +31*1px;
+        }
+
+        &:nth-child(7) {
+            bottom: 36px;
         }
     }
 }
