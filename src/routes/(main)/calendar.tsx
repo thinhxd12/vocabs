@@ -33,7 +33,7 @@ const todayDate = format(new Date(), "yyyy-MM-dd");
 
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
-  // const user = createAsync(() => getUser(), { deferStream: true });
+  const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
   const submitTodayResetAction = useSubmission(submitTodayReset);
