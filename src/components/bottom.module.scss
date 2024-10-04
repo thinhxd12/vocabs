@@ -280,29 +280,9 @@
 
     }
 
-    // .bottomMenu {
-    //     position: absolute;
-    //     bottom: 36px;
-    //     height: fit-content;
-    //     right: 0;
-    //     z-index: 9999;
-    //     @include flex-column;
-
-    //     .buttonMenuContent {
-    //         width: 120px;
-    //         height: 31px;
-    //         transition: all 0.25s ease;
-    //         text-align: right;
-    //         transform: translateX(89px);
-
-    //         &:hover {
-    //             transform: translateX(0);
-    //         }
-    //     }
-    // }
-
     .buttonMenuContent {
-        $height: 31px;
+        $height: 30px;
+        $space: 3px;
 
         position: absolute;
         right: 0;
@@ -311,30 +291,30 @@
         transition: all 0.25s ease;
         text-align: right;
         z-index: 9999;
-        transform: translateX(89px);
+        transform: translateX(87px);
 
         &:hover {
             transform: translateX(0);
         }
 
         &:nth-child(2) {
-            bottom: 36px + 5*$height;
+            bottom: 36px + 5*($height + $space);
         }
 
         &:nth-child(3) {
-            bottom: 36px + 4*$height;
+            bottom: 36px + 4*($height + $space);
         }
 
         &:nth-child(4) {
-            bottom: 36px + 3*$height;
+            bottom: 36px + 3*($height + $space);
         }
 
         &:nth-child(5) {
-            bottom: 36px + 2*$height;
+            bottom: 36px + 2*($height + $space);
         }
 
         &:nth-child(6) {
-            bottom: 36px + $height;
+            bottom: 36px + ($height + $space);
         }
 
         &:nth-child(7) {
