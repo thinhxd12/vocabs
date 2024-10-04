@@ -302,10 +302,12 @@
     // }
 
     .buttonMenuContent {
+        $height: 31px;
+
         position: absolute;
         right: 0;
         width: 120px;
-        height: 31px;
+        height: $height;
         transition: all 0.25s ease;
         text-align: right;
         z-index: 9999;
@@ -316,23 +318,23 @@
         }
 
         &:nth-child(2) {
-            bottom: 36px +31*5px;
+            bottom: 36px + 5*$height;
         }
 
         &:nth-child(3) {
-            bottom: 36px +31*4px;
+            bottom: 36px + 4*$height;
         }
 
         &:nth-child(4) {
-            bottom: 36px +31*3px;
+            bottom: 36px + 3*$height;
         }
 
         &:nth-child(5) {
-            bottom: 36px +31*2px;
+            bottom: 36px + 2*$height;
         }
 
         &:nth-child(6) {
-            bottom: 36px +31*1px;
+            bottom: 36px + $height;
         }
 
         &:nth-child(7) {

@@ -100,6 +100,7 @@
             text-transform: uppercase;
             text-align: center;
             @include font($f-calendarMainWeek, 12px, $color-calendar-white, 700, normal, 21px);
+            margin-bottom: 3px;
 
             &:first-child {
                 color: $color-red-1;
