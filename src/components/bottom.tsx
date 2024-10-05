@@ -103,7 +103,7 @@ const Bottom: Component<{}> = () => {
     showDesktopNotification();
     audio = new Audio();
     // audio.src = "/sounds/09_Autumn_Mvt_3_Allegro.mp3";
-    audio.src = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/3a/5e/e6/3a5ee615-b992-cba4-c351-419d2c6d1578/mzaf_13102140031776931351.plus.aac.ep.m4a";
+    audio.src = "https://ia601804.us.archive.org/0/items/a-thousand-miles/A%20Thousand%20Miles.mp3"
     audio.play();
   };
 
@@ -396,11 +396,6 @@ const Bottom: Component<{}> = () => {
       </div>
 
 
-
-
-
-
-      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
       <div class={styles.buttonMenuContent}>
         <button class={buttons.buttonMenu} onClick={logoutAction}>
           <div class={buttons.buttonMenuOrnament}></div>
@@ -413,7 +408,6 @@ const Bottom: Component<{}> = () => {
         </button>
       </div>
 
-      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
       <div class={styles.buttonMenuContent}>
         <button
           class={buttons.buttonMenu}
@@ -431,7 +425,6 @@ const Bottom: Component<{}> = () => {
         </button>
       </div>
 
-      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
       <div class={styles.buttonMenuContent}>
         <button
           class={buttons.buttonMenu}
@@ -449,7 +442,6 @@ const Bottom: Component<{}> = () => {
         </button>
       </div>
 
-      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
       <div class={styles.buttonMenuContent}>
         <button
           class={buttons.buttonMenu}
@@ -467,9 +459,7 @@ const Bottom: Component<{}> = () => {
         </button>
       </div>
 
-      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
       <div class={styles.buttonMenuContent}>
-
         <button
           class={
             listStore.listType === 2
@@ -491,7 +481,6 @@ const Bottom: Component<{}> = () => {
         </button>
       </div>
 
-      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
       <div class={styles.buttonMenuContent}>
         <button
           class={

@@ -280,41 +280,6 @@
 
     }
 
-    .buttonMenuHandle {
-        $height: 30px;
-        $space: 40px;
-
-        position: absolute;
-        right: -21px;
-        z-index: 9990;
-        transform: rotate(-45deg);
-        box-shadow: 0px 3px 3px #000;
-
-        &:nth-child(2) {
-            bottom: $space;
-        }
-
-        &:nth-child(4) {
-            bottom: $space + $height;
-        }
-
-        &:nth-child(6) {
-            bottom: $space + 2*$height;
-        }
-
-        &:nth-child(8) {
-            bottom: $space + 3*$height;
-        }
-
-        &:nth-child(10) {
-            bottom: $space + 4*$height;
-        }
-
-        &:nth-child(12) {
-            bottom: $space + 5*$height;
-        }
-    }
-
     .buttonMenuContent {
         $height: 30px;
         $space: 36px;
@@ -333,53 +298,29 @@
             transform: translateX(0);
         }
 
-        &:nth-child(3) {
+        &:nth-child(2) {
             bottom: $space;
         }
 
-        &:nth-child(5) {
+        &:nth-child(3) {
             bottom: $space + $height;
         }
 
-        &:nth-child(7) {
+        &:nth-child(4) {
             bottom: $space + 2*$height;
         }
 
-        &:nth-child(9) {
+        &:nth-child(5) {
             bottom: $space + 3*$height;
         }
 
-        &:nth-child(11) {
+        &:nth-child(6) {
             bottom: $space + 4*$height;
         }
 
-        &:nth-child(13) {
+        &:nth-child(7) {
             bottom: $space + 5*$height;
         }
-
-        // &:nth-child(2) {
-        //     bottom: 36px + 5*($height + $space);
-        // }
-
-        // &:nth-child(3) {
-        //     bottom: 36px + 4*($height + $space);
-        // }
-
-        // &:nth-child(4) {
-        //     bottom: 36px + 3*($height + $space);
-        // }
-
-        // &:nth-child(5) {
-        //     bottom: 36px + 2*($height + $space);
-        // }
-
-        // &:nth-child(6) {
-        //     bottom: 36px + ($height + $space);
-        // }
-
-        // &:nth-child(7) {
-        //     bottom: 36px;
-        // }
     }
 }
 
