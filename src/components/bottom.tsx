@@ -103,7 +103,7 @@ const Bottom: Component<{}> = () => {
     showDesktopNotification();
     audio = new Audio();
     // audio.src = "/sounds/09_Autumn_Mvt_3_Allegro.mp3";
-    audio.src = "https://ia601804.us.archive.org/0/items/a-thousand-miles/A%20Thousand%20Miles.mp3"
+    audio.src = "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/3a/5e/e6/3a5ee615-b992-cba4-c351-419d2c6d1578/mzaf_13102140031776931351.plus.aac.ep.m4a"
     audio.play();
   };
 
