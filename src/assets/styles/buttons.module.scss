@@ -45,7 +45,6 @@
     background: none;
     cursor: pointer;
     box-shadow: 0 0 16px rgba(0, 0, 0, .28);
-    border-radius: 3px 0 0 3px;
 
     .buttonMenuOrnament {
         position: absolute;
@@ -77,13 +76,10 @@
         right: 0;
         bottom: 0;
         z-index: 12;
+        text-shadow: 0px 3px 3px #000;
     }
 
     &:hover {
-        span {
-            text-shadow: 0px 3px 3px #000;
-        }
-
         filter: brightness(1.2);
     }
 }
@@ -94,13 +90,6 @@
     span {
         color: $color-calendar-green-1 !important;
     }
-
-    &:hover {
-        span {
-            text-shadow: 0px 0px 12px $color-calendar-green-2 !important;
-        }
-    }
-
 }
 
 .buttonPrimary {

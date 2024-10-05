@@ -395,27 +395,79 @@ const Bottom: Component<{}> = () => {
         </Show>
       </div>
 
+
+
+
+
+
+      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
+      <div class={styles.buttonMenuContent}>
+        <button class={buttons.buttonMenu} onClick={logoutAction}>
+          <div class={buttons.buttonMenuOrnament}></div>
+          <img
+            alt="hourglass"
+            src="images/main/exit.webp"
+            width={90}
+            height={42}
+          />
+        </button>
+      </div>
+
+      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
       <div class={styles.buttonMenuContent}>
         <button
-          class={
-            listStore.listType === 1
-              ? buttons.buttonMenuActive
-              : buttons.buttonMenu
-          }
+          class={buttons.buttonMenu}
           onClick={() => {
-            handleGetListContent(1);
+            startCountdown();
           }}
         >
           <div class={buttons.buttonMenuOrnament}></div>
           <img
             alt="hourglass"
-            src="images/main/flower1.webp"
+            src="images/main/hourglass.webp"
             width={90}
             height={42}
           />
-          <span>{Number(listStore.listToday?.index1 + 1) ?? "N"}</span>
         </button>
       </div>
+
+      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
+      <div class={styles.buttonMenuContent}>
+        <button
+          class={buttons.buttonMenu}
+          onClick={() => {
+            setMainStore("showTranslate", true);
+          }}
+        >
+          <div class={buttons.buttonMenuOrnament}></div>
+          <img
+            alt="hourglass"
+            src="images/main/translate.webp"
+            width={90}
+            height={42}
+          />
+        </button>
+      </div>
+
+      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
+      <div class={styles.buttonMenuContent}>
+        <button
+          class={buttons.buttonMenu}
+          onClick={() => {
+            setMainStore("mainToggle", true);
+          }}
+        >
+          <div class={buttons.buttonMenuOrnament}></div>
+          <img
+            alt="hourglass"
+            src="images/main/bookmark.webp"
+            width={90}
+            height={42}
+          />
+        </button>
+      </div>
+
+      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
       <div class={styles.buttonMenuContent}>
 
         <button
@@ -438,65 +490,30 @@ const Bottom: Component<{}> = () => {
           <span>{Number(listStore.listToday?.index2 + 1) ?? "N"}</span>
         </button>
       </div>
+
+      <img src="images/main/ornament.webp" width={21.213} class={styles.buttonMenuHandle} />
       <div class={styles.buttonMenuContent}>
         <button
-          class={buttons.buttonMenu}
+          class={
+            listStore.listType === 1
+              ? buttons.buttonMenuActive
+              : buttons.buttonMenu
+          }
           onClick={() => {
-            setMainStore("mainToggle", true);
+            handleGetListContent(1);
           }}
         >
           <div class={buttons.buttonMenuOrnament}></div>
           <img
             alt="hourglass"
-            src="images/main/bookmark.webp"
+            src="images/main/flower1.webp"
             width={90}
             height={42}
           />
+          <span>{Number(listStore.listToday?.index1 + 1) ?? "N"}</span>
         </button>
       </div>
-      <div class={styles.buttonMenuContent}>
-        <button
-          class={buttons.buttonMenu}
-          onClick={() => {
-            setMainStore("showTranslate", true);
-          }}
-        >
-          <div class={buttons.buttonMenuOrnament}></div>
-          <img
-            alt="hourglass"
-            src="images/main/translate.webp"
-            width={90}
-            height={42}
-          />
-        </button>
-      </div>
-      <div class={styles.buttonMenuContent}>
-        <button
-          class={buttons.buttonMenu}
-          onClick={() => {
-            startCountdown();
-          }}
-        >
-          <div class={buttons.buttonMenuOrnament}></div>
-          <img
-            alt="hourglass"
-            src="images/main/hourglass.webp"
-            width={90}
-            height={42}
-          />
-        </button>
-      </div>
-      <div class={styles.buttonMenuContent}>
-        <button class={buttons.buttonMenu} onClick={logoutAction}>
-          <div class={buttons.buttonMenuOrnament}></div>
-          <img
-            alt="hourglass"
-            src="images/main/exit.webp"
-            width={90}
-            height={42}
-          />
-        </button>
-      </div>
+
     </div>
   );
 };
