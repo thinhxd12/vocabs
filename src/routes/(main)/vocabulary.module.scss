@@ -191,7 +191,7 @@
                 right: -14px;
                 @include font($f-flipSearchNumber, 6px, rgba(255, 255, 255, 1), 600, normal, 6px);
                 text-align: left;
-                text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
+                text-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
             }
 
             .flipCardTextNumberMobile {
@@ -204,10 +204,11 @@
                 @include font($f-searchText, 18px, #ffffff, 700, normal, 18px);
                 text-transform: uppercase;
                 text-align: center;
-                text-shadow: 0 2px 2px #00000036;
                 margin-bottom: 1px;
                 position: relative;
                 margin-top: 6px;
+                text-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
+                animation: appear 1.5s ease;
             }
 
             input {
@@ -227,7 +228,8 @@
             .flipCardTextPhonetic {
                 @include font($f-phonetic, 9px, rgba(255, 255, 255, 0.9), 600, normal, 9px);
                 text-align: center;
-                text-shadow: 0 0 1px rgba(0, 0, 0, 0.6);
+                text-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
+                opacity: 0.45;
             }
 
             .flipCardTextPhoneticMobile {
@@ -246,5 +248,17 @@
             display: inline-block;
             @include font($f-flipNumber, 210px, #f4f4f4, bold, normal, 180px);
         }
+    }
+}
+
+@keyframes appear {
+    0% {
+        opacity: 0;
+        text-shadow: 0 0px 1px rgba(0, 0, 0, 0.21);
+    }
+
+    100% {
+        opacity: 1;
+        text-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
     }
 }

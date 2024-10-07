@@ -169,6 +169,26 @@ const Vocabulary: Component<{}> = () => {
     });
   });
 
+  const FlipCardText: Component = (props) => {
+    return (
+      <div
+        class={styles.flipCardTextWordContent}
+        style={{
+          color: mainStore.searchTermColor,
+        }}
+      >
+        {mainStore.searchTerm || mainStore.renderWord?.word}
+        <Show when={mainStore.renderWord}>
+          <span class={styles.flipCardTextNumber}>
+            {showNumber()
+              ? mainStore.renderWord!.number
+              : mainStore.renderWord!.number - 1}
+          </span>
+        </Show>
+      </div>
+    )
+  }
+
   return (
     <MetaProvider>
       <Title>{mainStore.renderWord?.word || "main"}</Title>
@@ -180,21 +200,11 @@ const Vocabulary: Component<{}> = () => {
             when={isMobile()}
             fallback={
               <div class={styles.flipCardTextWord}>
-                <div
-                  class={styles.flipCardTextWordContent}
-                  style={{
-                    color: mainStore.searchTermColor,
-                  }}
-                >
-                  {mainStore.searchTerm || mainStore.renderWord?.word}
-                  <Show when={mainStore.renderWord}>
-                    <span class={styles.flipCardTextNumber}>
-                      {showNumber()
-                        ? mainStore.renderWord!.number
-                        : mainStore.renderWord!.number - 1}
-                    </span>
-                  </Show>
-                </div>
+                <Show when={flag()} fallback={
+                  <FlipCardText />
+                }>
+                  <FlipCardText />
+                </Show>
                 <span class={styles.flipCardTextPhonetic}>
                   {mainStore.renderWord && mainStore.renderWord!.phonetics}
                 </span>
