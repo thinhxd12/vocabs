@@ -40,7 +40,8 @@
                 @include font($f-defHeader, 24px, $color-black, 700, normal, 24px);
                 text-transform: uppercase;
                 cursor: pointer;
-                background: rgba(255, 254, 255, 0.72);
+                background: $color-vintage-background;
+                box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
             }
         }
     }

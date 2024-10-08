@@ -24,7 +24,7 @@ import { stopKeydown } from "~/utils";
 import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
 import { AiOutlineInsertRowBelow } from "solid-icons/ai";
-import { BsHeartbreakFill, BsHeartFill } from "solid-icons/bs";
+import { BsHeartFill } from "solid-icons/bs";
 import { BiSolidPaste, BiSolidSave } from "solid-icons/bi";
 import { FaSolidDice } from "solid-icons/fa";
 
@@ -38,6 +38,7 @@ declare module "solid-js" {
 
 const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [bookmark, setBookmark] = createSignal<BookmarkType>();
+  const [likeReset, setLikeReset] = createSignal<boolean>(true);
 
   onMount(async () => {
     const data = await getBookMarkData();
@@ -52,6 +53,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
       content: "",
       like: 0,
     });
+    setLikeReset(true);
     const data = await getPrevBookMarkData(bookmark()!.created_at);
     if (data) {
       setBookmark(data);
@@ -63,6 +65,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
       content: "",
       like: 0,
     });
+    setLikeReset(true);
     const data = await getNextBookMarkData(bookmark()!.created_at);
     if (data) {
       setBookmark(data);
@@ -70,12 +73,18 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   };
 
   const handleCheckBookmark = () => {
-    if (bookmark()!.like > 0) {
+    if (!likeReset()) {
       setBookmark({ ...bookmark()!, like: bookmark()!.like - 1 });
       checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
+      setLikeReset(!likeReset());
     } else {
       setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
       checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
+      setLikeReset(!likeReset());
+      setToggleLikeAnimation(true);
+      setTimeout(() => {
+        setToggleLikeAnimation(false);
+      }, 500);
     }
   };
 
@@ -111,20 +120,6 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [toggleLikeAnimation, setToggleLikeAnimation] =
     createSignal<boolean>(false);
 
-  const likeBookmark = () => {
-    const selection = window.getSelection();
-    selection!.removeAllRanges();
-
-    setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
-    checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
-    setToggleLikeAnimation(true);
-    setTimeout(() => {
-      setToggleLikeAnimation(false);
-    }, 500);
-  };
-
-  const [likeIcon, setLikeIcon] = createSignal<boolean>(false);
-
   const getRandomBookmark = async () => {
     const data = await getRandomBookMarkData();
     if (data) {
@@ -139,7 +134,6 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             ? styles.bookmarkContentChecked
             : styles.bookmarkContent
         }
-        ondblclick={likeBookmark}
       >
         <div class={styles.bookmarkContentInside}>
           <div>
@@ -263,17 +257,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             when={bookmark()?.like}
             fallback={<BsHeartFill size={22} color="#ffffffe6" />}
           >
-            <div
-              onmouseover={() => setLikeIcon(true)}
-              onmouseleave={() => setLikeIcon(false)}
-            >
-              <Show
-                when={likeIcon()}
-                fallback={<BsHeartFill size={22} color="#fd2c55" />}
-              >
-                <BsHeartbreakFill size={22} color="#fd2c55" />
-              </Show>
-            </div>
+            <BsHeartFill size={22} color="#fd2c55" />
           </Show>
         </button>
         <div class={styles.bookmarkLike}>{bookmark()?.like}</div>
