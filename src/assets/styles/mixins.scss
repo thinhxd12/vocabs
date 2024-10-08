@@ -155,7 +155,6 @@ $f-formInputCalendar: "Rubik", sans-serif;
 @mixin baseBody($bg: $color-background-4) {
   @include font("Basier", 12px, $color-black, 500, normal, 16px);
   padding: 3px;
-  margin-bottom: 1px;
   background: $bg;
   background-size: cover;
   background-repeat: no-repeat;
