@@ -63,10 +63,18 @@
             }
 
             .bookmarkPassage::first-letter {
-                @include font($f-bookmarkFirstLetter, 120px, #111111, normal, normal, 100px);
+                @include font($f-bookmarkFirstLetter, 125px, #fff, normal, normal, 100px);
                 text-transform: uppercase;
                 float: left;
-                margin-top: 6px;
+                margin: 6px 6px 0 0;
+                display: block;
+                background: url("/images/main/TheEndoftheDay.webp") 0 0 no-repeat;
+                background-size: cover;
+                background-position: center;
+                padding: 0 3px 3px 3px;
+                border: 1px solid #111111;
+                text-shadow: 0 0 6px rgb(0, 0, 0);
+                box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
             }
 
             .bookmarkPassage {

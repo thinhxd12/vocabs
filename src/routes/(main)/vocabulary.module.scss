@@ -191,7 +191,7 @@
                 right: -14px;
                 @include font($f-flipSearchNumber, 6px, rgba(255, 255, 255, 1), 600, normal, 6px);
                 text-align: left;
-                text-shadow: none !important;
+                text-shadow: 0 0 1px rgba(0, 0, 0, 0.9) !important;
             }
 
             .flipCardTextNumberMobile {
