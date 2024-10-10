@@ -41,7 +41,7 @@ export default function Main(props: RouteSectionProps) {
       "\x3Cp>Hello July!\x3C/p>\x3Cp>Time for an artist who in my opinion, created one of the best images of Summer ... the French Pointillist, Paul Signac!\x3C/p>\x3Cp>Signac was a painter and an avid sailor. He created several marine paintings, including a series of views over the port of Saint-Tropez, where he settled in 1892.\x3C/p>\x3Cp>In this vertical painting, the eye initially fixes on the vibrant red-orange buoy, which contrasts with the water's deep blue. The reflections of the buildings then lead the viewer's eye to the background, with lighter tones. The divisionist technique and the combination of pure colors allowed Signac to depict a glittering sea, and the glimmering light of the Midi.\x3C/p>\x3Cp>The Pointillist painters differ from the Impressionists, most notably in the scientific dimension of their work. Regarding the rigor of his initial work, Signac's strokes have widened for this series; the division of tones is more relaxed.\x3C/p>",
     nextImageUrl:
       "https://www.getdailyart.com/en/24707/mykola-pymonenko/the-idyll",
-      // "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez",
+    // "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez",
   };
   onMount(() => {
     audio = new Audio();
@@ -92,19 +92,19 @@ export default function Main(props: RouteSectionProps) {
           audio?.play();
         }
       }
-      setMainStore("searchResult", res);
-      mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
       if (res.length === 1 && str.length > 4) {
         checkTimeout = setTimeout(() => {
           hanldeRenderWordFromSearch("1");
         }, 1500);
       }
+      setMainStore("searchResult", res);
+      mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
     }
   }, 450);
 
-  const hanldeRenderWordFromSearch = (keyDown: string) => {
+  const hanldeRenderWordFromSearch = (numb: string) => {
     setMainStore("searchTermColor", "#ffffff");
-    setMainStore("searchSelectedIndex", Number(keyDown));
+    setMainStore("searchSelectedIndex", Number(numb));
     setTimeout(() => {
       setMainStore("searchSelectedIndex", 0);
     }, 300);
@@ -112,7 +112,7 @@ export default function Main(props: RouteSectionProps) {
     setTimeout(() => {
       setMainStore("searchTerm", "");
       setMainStore("searchResult", []);
-      handleCheckWord(parsedResult[Number(keyDown) - 1]);
+      handleCheckWord(parsedResult[Number(numb) - 1]);
     }, 600);
   };
 
@@ -139,6 +139,7 @@ export default function Main(props: RouteSectionProps) {
         }
       }
       if (keyDown === "Backspace") {
+        checkTimeout && clearTimeout(checkTimeout);
         setMainStore("searchTerm", mainStore.searchTerm.slice(0, -1));
         if (mainStore.searchTerm.length > 2) {
           trigger(mainStore.searchTerm);
