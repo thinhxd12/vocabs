@@ -63,7 +63,7 @@
             }
 
             .bookmarkPassage::first-letter {
-                @include font($f-bookmarkFirstLetter, 125px, #fff, normal, normal, 100px);
+                @include font($f-bookmarkFirstLetter, 125px, $color-background-4, normal, normal, 100px);
                 text-transform: uppercase;
                 float: left;
                 margin: 6px 6px 0 0;
