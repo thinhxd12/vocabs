@@ -44,6 +44,25 @@
         .bookmarkContentInside {
             position: relative;
 
+            .heart {
+                position: absolute;
+                pointer-events: none;
+                filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
+                animation: fadeInOut 1s linear infinite;
+
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: url("/images/svg/heart.svg");
+                    background-size: cover;
+                    animation: moveShape 1s linear infinite;
+                }
+            }
+
             .bookmarkSeparated {
                 width: 100%;
                 text-align: center;
@@ -131,7 +150,6 @@
 
     .bookmarkContentChecked {
         @extend .bookmarkContent;
-        box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 
         &::before {
             content: "";
@@ -146,18 +164,6 @@
             filter: contrast(0.72);
         }
     }
-
-    .likeAnimation {
-        position: absolute;
-        top: calc(50% - 75px);
-        left: calc(50% - 75px);
-        animation: pulse 500ms;
-
-        svg {
-            filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.3));
-        }
-    }
-
 
     .bookmarkEditContainer {
         width: 100%;
@@ -192,4 +198,31 @@
         transform: scale3d(0.8, 0.8, 0.8) rotate(15deg);
         opacity: 1;
     }
+}
+
+
+@keyframes fadeInOut {
+
+    0%,
+    100% {
+        opacity: 0;
+    }
+
+    20%,
+    80% {
+        opacity: 1;
+    }
+
+}
+
+@keyframes moveShape {
+
+    0% {
+        transform: translate(0) rotate(0);
+    }
+
+    100% {
+        transform: translate(300px) rotate(360deg);
+    }
+
 }

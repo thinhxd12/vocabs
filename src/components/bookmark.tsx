@@ -81,10 +81,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
       setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
       checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
       setLikeReset(!likeReset());
-      setToggleLikeAnimation(true);
-      setTimeout(() => {
-        setToggleLikeAnimation(false);
-      }, 500);
+      animationRun();
     }
   };
 
@@ -117,15 +114,20 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
     setShowSearch(false);
   };
 
-  const [toggleLikeAnimation, setToggleLikeAnimation] =
-    createSignal<boolean>(false);
-
   const getRandomBookmark = async () => {
     const data = await getRandomBookMarkData();
     if (data) {
       setBookmark(data);
     }
   };
+
+  const [spans, setSpans] = createSignal<number[]>([]);
+
+  const animationRun = () => {
+    setSpans(Array.from({ length: 30 }, (_, i) => i))
+    setTimeout(() => setSpans([]), 1000);
+  }
+
   return (
     <div class={styles.bookmarkContainer} tabIndex={1}>
       <div
@@ -142,6 +144,18 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
               <img src="images/main/bookmark-onarment.webp" />
             </div>
           </div>
+
+          <Show when={spans().length > 0}>
+            <Index each={spans()}>
+              {
+                data => {
+                  const size = Math.random() * 80 + 20;
+                  const transformValue = Math.random() * 360;
+                  return <span class={styles.heart} style={{ left: "50%", top: "50%", width: size + 'px', height: size + 'px', transform: 'rotate(' + transformValue + 'deg)' }}></span>
+                }
+              }
+            </Index>
+          </Show>
 
           <Show
             when={bookmark()?.content}
@@ -239,12 +253,6 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
               </Index>
             </Show>
           </div>
-        </div>
-      </Show>
-
-      <Show when={toggleLikeAnimation()}>
-        <div class={styles.likeAnimation}>
-          <BsHeartFill size={150} color="#fd2c55" />
         </div>
       </Show>
 
