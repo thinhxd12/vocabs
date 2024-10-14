@@ -120,9 +120,8 @@
             }
         }
 
-        .buttonBookmarkLeft {
+        .buttonBookmark {
             position: absolute;
-            left: 0px;
             bottom: 0;
             height: 120px;
             width: 72px;
@@ -131,19 +130,31 @@
             cursor: pointer;
             background: transparent;
             z-index: 810;
+            display: flex;
+            padding: 3px;
+
+            svg {
+                opacity: 0;
+                transition: all 0.1s ease;
+            }
+
+            &:hover svg {
+                opacity: 1;
+            }
+        }
+
+        .buttonBookmarkLeft {
+            @extend .buttonBookmark;
+            left: 0;
+            align-items: flex-end;
+            justify-content: flex-start;
         }
 
         .buttonBookmarkRight {
-            position: absolute;
-            right: 0px;
-            bottom: 0;
-            height: 120px;
-            width: 72px;
-            border: 0;
-            outline: 0;
-            cursor: pointer;
-            background: transparent;
-            z-index: 810;
+            @extend .buttonBookmark;
+            right: 0;
+            align-items: flex-end;
+            justify-content: flex-end;
         }
 
     }

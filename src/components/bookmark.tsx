@@ -25,7 +25,7 @@ import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
 import { AiOutlineInsertRowBelow } from "solid-icons/ai";
 import { BsHeartFill } from "solid-icons/bs";
-import { BiSolidPaste, BiSolidSave } from "solid-icons/bi";
+import { BiSolidLeftArrow, BiSolidPaste, BiSolidRightArrow, BiSolidSave } from "solid-icons/bi";
 import { FaSolidDice } from "solid-icons/fa";
 
 declare module "solid-js" {
@@ -176,11 +176,15 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         <div
           class={styles.buttonBookmarkLeft}
           onclick={() => handleGetPrevBookmark()}
-        ></div>
+        >
+          <BiSolidLeftArrow size={18} color="#111111" />
+        </div>
         <div
           class={styles.buttonBookmarkRight}
           onclick={() => handleGetNextBookmark()}
-        ></div>
+        >
+          <BiSolidRightArrow size={18} color="#111111" />
+        </div>
       </div>
 
       <Show when={showEdit()}>
