@@ -11,6 +11,7 @@ import {
 } from "~/lib/mystore";
 import {
   getCurrentWeatherData,
+  getImageFromUnsplashByKeyword,
   getListContent,
   getTodayData,
   getTotalMemories,
@@ -41,6 +42,12 @@ const Bottom: Component<{}> = () => {
       lon: item!.lon,
     });
     setBottomWeather(abc);
+
+    const desc = abc!.isDayTime
+      ? WMOCODE[abc!.icon].day.description
+      : WMOCODE[abc!.icon].night.description;
+    const weatherBgUrl = await getImageFromUnsplashByKeyword(desc);
+    setBottomWeatherBgUrl(`url(${weatherBgUrl})`);
   };
 
   onMount(async () => {
@@ -217,6 +224,8 @@ const Bottom: Component<{}> = () => {
     windSpeed: 0,
   });
 
+  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>('url("/images/main/sky.webp")');
+
   return (
     <div class={styles.bottom}>
       <div class={styles.bottomBar}>
@@ -283,6 +292,7 @@ const Bottom: Component<{}> = () => {
           href="/weather"
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtnWeather}
+          style={{ 'background-image': bottomWeatherBgUrl() }}
         >
           <Show
             when={bottomWeather()}

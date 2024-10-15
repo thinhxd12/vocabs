@@ -41,21 +41,21 @@ export const REPETITION_PATTERN = [0, 400, 800, 200, 600, 1400, 1000, 1600, 1200
 export const WMOCODE: WeatherCodeData = {
   "0": {
     day: {
-      description: "Sunny",
+      description: "Sunny Day",
       image: "images/openmeteo/icons/01d.svg",
     },
     night: {
-      description: "Clear",
+      description: "Clear Night",
       image: "images/openmeteo/icons/01n.svg",
     },
   },
   "1": {
     day: {
-      description: "Mainly Sunny",
+      description: "Mainly Sunny Day",
       image: "images/openmeteo/icons/02d.svg",
     },
     night: {
-      description: "Mainly Clear",
+      description: "Mainly Clear Night",
       image: "images/openmeteo/icons/02n.svg",
     },
   },

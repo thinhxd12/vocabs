@@ -154,7 +154,8 @@
         flex-grow: 1;
         min-width: 90px;
         background-size: cover;
-        background-image: url("/images/main/sky.webp");
+        -webkit-mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0.45), #fff 20%, #fff 80%, rgba(255, 255, 255, 0.45));
+        mask-image: linear-gradient(90deg, rgba(255, 255, 255, 0.45), #fff 20%, #fff 80%, rgba(255, 255, 255, 0.45));
 
         .scrollingTextContainer {
             width: 100%;
