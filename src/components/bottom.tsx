@@ -47,7 +47,8 @@ const Bottom: Component<{}> = () => {
       ? WMOCODE[abc!.icon].day.description
       : WMOCODE[abc!.icon].night.description;
     const weatherBgUrl = await getImageFromUnsplashByKeyword(desc);
-    setBottomWeatherBgUrl(`url(${weatherBgUrl})`);
+    if (weatherBgUrl) setBottomWeatherBgUrl(`url(${weatherBgUrl})`);
+    else setBottomWeatherBgUrl('url("/images/main/sky.webp")');
   };
 
   onMount(async () => {
