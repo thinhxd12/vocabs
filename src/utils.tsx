@@ -61,31 +61,31 @@ export const WMOCODE: WeatherCodeData = {
   },
   "2": {
     day: {
-      description: "Partly Cloudy",
+      description: "Partly Cloudy Day",
       image: "images/openmeteo/icons/03d.svg",
     },
     night: {
-      description: "Partly Cloudy",
+      description: "Partly Cloudy Night",
       image: "images/openmeteo/icons/03n.svg",
     },
   },
   "3": {
     day: {
-      description: "Mostly Cloudy",
+      description: "Mostly Cloudy Day",
       image: "images/openmeteo/icons/04.svg",
     },
     night: {
-      description: "Mostly Cloudy",
+      description: "Mostly Cloudy Night",
       image: "images/openmeteo/icons/04.svg",
     },
   },
   "45": {
     day: {
-      description: "Foggy",
+      description: "Foggy Day",
       image: "images/openmeteo/icons/15.svg",
     },
     night: {
-      description: "Foggy",
+      description: "Foggy Night",
       image: "images/openmeteo/icons/15.svg",
     },
   },
@@ -101,41 +101,41 @@ export const WMOCODE: WeatherCodeData = {
   },
   "51": {
     day: {
-      description: "Light Drizzle",
+      description: "Light Drizzle Day",
       image: "images/openmeteo/icons/46.svg",
     },
     night: {
-      description: "Light Drizzle",
+      description: "Light Drizzle Night",
       image: "images/openmeteo/icons/46.svg",
     },
   },
   "53": {
     day: {
-      description: "Drizzle",
+      description: "Drizzle Day",
       image: "images/openmeteo/icons/46.svg",
     },
     night: {
-      description: "Drizzle",
+      description: "Drizzle Night",
       image: "images/openmeteo/icons/46.svg",
     },
   },
   "55": {
     day: {
-      description: "Heavy Drizzle",
+      description: "Heavy Drizzle Day",
       image: "images/openmeteo/icons/09.svg",
     },
     night: {
-      description: "Heavy Drizzle",
+      description: "Heavy Drizzle Night",
       image: "images/openmeteo/icons/09.svg",
     },
   },
   "56": {
     day: {
-      description: "Light Freezing Drizzle",
+      description: "Light Freezing Drizzle Day",
       image: "images/openmeteo/icons/47.svg",
     },
     night: {
-      description: "Light Freezing Drizzle",
+      description: "Light Freezing Drizzle Night",
       image: "images/openmeteo/icons/47.svg",
     },
   },
@@ -151,51 +151,51 @@ export const WMOCODE: WeatherCodeData = {
   },
   "61": {
     day: {
-      description: "Light Rain",
+      description: "Light Rain Day",
       image: "images/openmeteo/icons/46.svg",
     },
     night: {
-      description: "Light Rain",
+      description: "Light Rain Night",
       image: "images/openmeteo/icons/46.svg",
     },
   },
   "63": {
     day: {
-      description: "Rain",
+      description: "Rain Day",
       image: "images/openmeteo/icons/09.svg",
     },
     night: {
-      description: "Rain",
+      description: "Rain Night",
       image: "images/openmeteo/icons/09.svg",
     },
   },
   "65": {
     day: {
-      description: "Heavy Rain",
+      description: "Heavy Rain Day",
       image: "images/openmeteo/icons/10.svg",
     },
     night: {
-      description: "Heavy Rain",
+      description: "Heavy Rain Night",
       image: "images/openmeteo/icons/10.svg",
     },
   },
   "66": {
     day: {
-      description: "Light Freezing Rain",
+      description: "Light Freezing Rain Day",
       image: "images/openmeteo/icons/47.svg",
     },
     night: {
-      description: "Light Freezing Rain",
+      description: "Light Freezing Rain Night",
       image: "images/openmeteo/icons/47.svg",
     },
   },
   "67": {
     day: {
-      description: "Freezing Rain",
+      description: "Freezing Rain Day",
       image: "images/openmeteo/icons/12.svg",
     },
     night: {
-      description: "Freezing Rain",
+      description: "Freezing Rain Night",
       image: "images/openmeteo/icons/12.svg",
     },
   },
@@ -241,31 +241,31 @@ export const WMOCODE: WeatherCodeData = {
   },
   "80": {
     day: {
-      description: "Light Showers",
+      description: "Light Showers Rain",
       image: "images/openmeteo/icons/46.svg",
     },
     night: {
-      description: "Light Showers",
+      description: "Light Showers Rain",
       image: "images/openmeteo/icons/46.svg",
     },
   },
   "81": {
     day: {
-      description: "Showers",
+      description: "Showers Rain",
       image: "images/openmeteo/icons/09.svg",
     },
     night: {
-      description: "Showers",
+      description: "Showers Rain",
       image: "images/openmeteo/icons/09.svg",
     },
   },
   "82": {
     day: {
-      description: "Heavy Showers",
+      description: "Heavy Showers Rain",
       image: "images/openmeteo/icons/10.svg",
     },
     night: {
-      description: "Heavy Showers",
+      description: "Heavy Showers Rain",
       image: "images/openmeteo/icons/10.svg",
     },
   },
@@ -322,7 +322,7 @@ export const WMOCODE: WeatherCodeData = {
 };
 
 import { onCleanup } from "solid-js";
-import { WeatherCodeData, WeatherGeoType } from "./types";
+import { WeatherCodeData } from "./types";
 
 declare module "solid-js" {
   namespace JSX {
