@@ -111,31 +111,31 @@ export const WMOCODE: WeatherCodeData = {
   },
   "53": {
     day: {
-      description: "Drizzle Day",
+      description: "Drizzle",
       image: "images/openmeteo/icons/46.svg",
     },
     night: {
-      description: "Drizzle Night",
+      description: "Drizzle",
       image: "images/openmeteo/icons/46.svg",
     },
   },
   "55": {
     day: {
-      description: "Heavy Drizzle Day",
+      description: "Heavy Drizzle",
       image: "images/openmeteo/icons/09.svg",
     },
     night: {
-      description: "Heavy Drizzle Night",
+      description: "Heavy Drizzle",
       image: "images/openmeteo/icons/09.svg",
     },
   },
   "56": {
     day: {
-      description: "Light Freezing Drizzle Day",
+      description: "Light Freezing Drizzle",
       image: "images/openmeteo/icons/47.svg",
     },
     night: {
-      description: "Light Freezing Drizzle Night",
+      description: "Light Freezing Drizzle",
       image: "images/openmeteo/icons/47.svg",
     },
   },
@@ -151,51 +151,51 @@ export const WMOCODE: WeatherCodeData = {
   },
   "61": {
     day: {
-      description: "Light Rain Day",
+      description: "Light Rain",
       image: "images/openmeteo/icons/46.svg",
     },
     night: {
-      description: "Light Rain Night",
+      description: "Light Rain",
       image: "images/openmeteo/icons/46.svg",
     },
   },
   "63": {
     day: {
-      description: "Rain Day",
+      description: "Rain",
       image: "images/openmeteo/icons/09.svg",
     },
     night: {
-      description: "Rain Night",
+      description: "Rain",
       image: "images/openmeteo/icons/09.svg",
     },
   },
   "65": {
     day: {
-      description: "Heavy Rain Day",
+      description: "Heavy Rain",
       image: "images/openmeteo/icons/10.svg",
     },
     night: {
-      description: "Heavy Rain Night",
+      description: "Heavy Rain",
       image: "images/openmeteo/icons/10.svg",
     },
   },
   "66": {
     day: {
-      description: "Light Freezing Rain Day",
+      description: "Light Freezing Rain",
       image: "images/openmeteo/icons/47.svg",
     },
     night: {
-      description: "Light Freezing Rain Night",
+      description: "Light Freezing Rain",
       image: "images/openmeteo/icons/47.svg",
     },
   },
   "67": {
     day: {
-      description: "Freezing Rain Day",
+      description: "Freezing Rain",
       image: "images/openmeteo/icons/12.svg",
     },
     night: {
-      description: "Freezing Rain Night",
+      description: "Freezing Rain",
       image: "images/openmeteo/icons/12.svg",
     },
   },
@@ -241,51 +241,51 @@ export const WMOCODE: WeatherCodeData = {
   },
   "80": {
     day: {
-      description: "Light Showers Rain",
+      description: "Light Rain",
       image: "images/openmeteo/icons/46.svg",
     },
     night: {
-      description: "Light Showers Rain",
+      description: "Light Rain",
       image: "images/openmeteo/icons/46.svg",
     },
   },
   "81": {
     day: {
-      description: "Showers Rain",
+      description: "Rain",
       image: "images/openmeteo/icons/09.svg",
     },
     night: {
-      description: "Showers Rain",
+      description: "Rain",
       image: "images/openmeteo/icons/09.svg",
     },
   },
   "82": {
     day: {
-      description: "Heavy Showers Rain",
+      description: "Heavy Rain",
       image: "images/openmeteo/icons/10.svg",
     },
     night: {
-      description: "Heavy Showers Rain",
+      description: "Heavy Rain",
       image: "images/openmeteo/icons/10.svg",
     },
   },
   "85": {
     day: {
-      description: "Light Snow Showers",
+      description: "Light Snow",
       image: "images/openmeteo/icons/49.svg",
     },
     night: {
-      description: "Light Snow Showers",
+      description: "Light Snow",
       image: "images/openmeteo/icons/49.svg",
     },
   },
   "86": {
     day: {
-      description: "Snow Showers",
+      description: "Snow",
       image: "images/openmeteo/icons/13.svg",
     },
     night: {
-      description: "Snow Showers",
+      description: "Snow",
       image: "images/openmeteo/icons/13.svg",
     },
   },
