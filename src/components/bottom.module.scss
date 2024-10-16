@@ -185,7 +185,6 @@
             white-space: nowrap;
             @include font($f-botButton, 9px, $color-white, 600, normal, 9px);
             -webkit-font-smoothing: subpixel-antialiased;
-            text-shadow: 0 0 3px black;
         }
 
         .scrollingText {
@@ -197,7 +196,7 @@
             margin: 0 6px;
             text-align: center;
             @include font($f-botButton, 9px, $color-white, 600, normal, 9px);
-            text-shadow: 0 0px 1px black;
+            text-shadow: 0 0 3px black;
         }
 
         .scrollingTextInner>div {
