@@ -65,17 +65,17 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            padding-bottom: 1px;
 
             span {
-                @include font($f-botCenterNum, 22px, #d7d7d7, 600, normal, 18px);
+                @include font($f-botCenterNum, 21px, #d7d7d7, 600, normal, 17px);
                 mix-blend-mode: difference;
+                padding-bottom: 1px;
             }
 
             small {
-                padding-top: 1px;
-                @include font($f-botCenterNum, 17px, #d7d7d7, 600, normal, 15px);
+                @include font($f-botCenterNum, 19px, #d7d7d7, 600, normal, 16px);
                 mix-blend-mode: difference;
+                padding-bottom: 1px;
             }
         }
     }
@@ -154,16 +154,6 @@
         flex-grow: 1;
         min-width: 90px;
         background-size: cover;
-
-        &::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: rgba(0, 0, 0, 0.3);
-        }
 
         &:hover {
             filter: brightness(1.2);
