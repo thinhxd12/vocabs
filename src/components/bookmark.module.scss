@@ -46,21 +46,9 @@
 
             .heart {
                 position: absolute;
-                pointer-events: none;
+                font-size: 1rem;
                 filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
-                animation: fadeInOut 1s linear infinite;
-
-                &::before {
-                    content: "";
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: url("/images/svg/heart.svg");
-                    background-size: cover;
-                    animation: moveShape 1s linear infinite;
-                }
+                animation: fly 1.5s ease forwards;
             }
 
             .bookmarkSeparated {
@@ -193,47 +181,14 @@
     }
 }
 
-
-@keyframes pulse {
+@keyframes fly {
     0% {
-        transform: scale3d(1.5, 1.5, 1.5) rotate(15deg);
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    100% {
         opacity: 0.1;
+        transform: translateY(-120vh) scale(0);
     }
-
-    75% {
-        transform: scale3d(0.7, 0.7, 0.7) rotate(-15deg);
-        opacity: 1;
-    }
-
-    to {
-        transform: scale3d(0.8, 0.8, 0.8) rotate(15deg);
-        opacity: 1;
-    }
-}
-
-
-@keyframes fadeInOut {
-
-    0%,
-    100% {
-        opacity: 0;
-    }
-
-    20%,
-    80% {
-        opacity: 1;
-    }
-
-}
-
-@keyframes moveShape {
-
-    0% {
-        transform: translate(0) rotate(0);
-    }
-
-    100% {
-        transform: translate(300px) rotate(360deg);
-    }
-
 }

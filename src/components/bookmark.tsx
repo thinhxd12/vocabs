@@ -124,8 +124,8 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [spans, setSpans] = createSignal<number[]>([]);
 
   const animationRun = () => {
-    setSpans(Array.from({ length: 30 }, (_, i) => i))
-    setTimeout(() => setSpans([]), 1000);
+    setSpans(Array.from({ length: 45 }, (_, i) => i))
+    setTimeout(() => setSpans([]), 1500);
   }
 
   return (
@@ -149,9 +149,9 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             <Index each={spans()}>
               {
                 data => {
-                  const size = Math.random() * 80 + 20;
-                  const transformValue = Math.random() * 360;
-                  return <span class={styles.heart} style={{ left: "50%", top: "50%", width: size + 'px', height: size + 'px', transform: 'rotate(' + transformValue + 'deg)' }}></span>
+                  return <span class={styles.heart} style={{ left: `${Math.random() * 98}%`, top: "100vh", "animation-delay": `${Math.random() * 0.5}s` }}>
+                    <BsHeartFill size={24} color="#e92f3f" />
+                  </span>
                 }
               }
             </Index>
