@@ -230,29 +230,6 @@ const Bottom: Component<{}> = () => {
   return (
     <div class={styles.bottom}>
       <div class={styles.bottomBar}>
-        <div class={styles.bottomIndex}>
-          <div class={styles.bottomIndexNums}>
-            <Show
-              when={listStore.listToday?.date}
-              fallback={
-                <>
-                  <span>
-                    <small>N</small>
-                  </span>
-                  <span>
-                    <small>N</small>
-                  </span>
-                </>
-              }
-            >
-              <span>{listStore.listToday.time1}</span>
-              <span>{listStore.listToday.time2}</span>
-            </Show>
-          </div>
-          <div class={styles.bottomIndexDay}>
-            <span>{format(new Date(), "eeeeee")}</span>
-          </div>
-        </div>
         <A
           href="/vocabulary"
           activeClass={styles.bottomBtnActive}
@@ -261,6 +238,7 @@ const Bottom: Component<{}> = () => {
           <small>Danger is sweet</small>
           <span>Dulce periculum</span>
         </A>
+
         <A
           href="/calendar"
           activeClass={styles.bottomBtnActive}
@@ -404,20 +382,33 @@ const Bottom: Component<{}> = () => {
             </Show>
           </div>
         </Show>
+
+        <div class={styles.bottomIndex}>
+          <div class={styles.bottomIndexNums}>
+            <Show
+              when={listStore.listToday?.date}
+              fallback={
+                <>
+                  <span>
+                    <small>N</small>
+                  </span>
+                  <span>
+                    <small>N</small>
+                  </span>
+                </>
+              }
+            >
+              <span>{listStore.listToday.time1}</span>
+              <span>{listStore.listToday.time2}</span>
+            </Show>
+          </div>
+          <div class={styles.bottomIndexDay}>
+            <span>{format(new Date(), "eeeeee")}</span>
+          </div>
+        </div>
       </div>
 
 
-      <div class={styles.buttonMenuContent}>
-        <button class={buttons.buttonMenu} onClick={logoutAction}>
-          <div class={buttons.buttonMenuOrnament}></div>
-          <img
-            alt="hourglass"
-            src="images/main/exit.webp"
-            width={90}
-            height={42}
-          />
-        </button>
-      </div>
 
       <div class={styles.buttonMenuContent}>
         <button
@@ -511,6 +502,18 @@ const Bottom: Component<{}> = () => {
             height={42}
           />
           <span>{Number(listStore.listToday?.index1 + 1) ?? "N"}</span>
+        </button>
+      </div>
+
+      <div class={styles.buttonMenuContent}>
+        <button class={buttons.buttonMenu} onClick={logoutAction}>
+          <div class={buttons.buttonMenuOrnament}></div>
+          <img
+            alt="hourglass"
+            src="images/main/exit.webp"
+            width={90}
+            height={42}
+          />
         </button>
       </div>
 
