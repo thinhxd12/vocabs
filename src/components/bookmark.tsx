@@ -138,24 +138,10 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         }
       >
         <div class={styles.bookmarkContentInside}>
-          <div>
+          <div class={styles.bookmarkTitleContent}>
             <p class={styles.bookmarkTitle}>{bookmark()?.bookTile}</p>
-            <div class={styles.bookmarkSeparated}>
-              <img src="images/main/bookmark-onarment.webp" />
-            </div>
+            <img class={styles.bookmarkSeparated} src="images/main/bookmark-onarment-1.webp" width={150} />
           </div>
-
-          <Show when={spans().length > 0}>
-            <Index each={spans()}>
-              {
-                data => {
-                  return <span class={styles.heart} style={{ left: `${Math.random() * 98}%`, top: "100vh", "animation-delay": `${Math.random() * 0.5}s` }}>
-                    <BsHeartFill size={24} color="#e92f3f" />
-                  </span>
-                }
-              }
-            </Index>
-          </Show>
 
           <Show
             when={bookmark()?.content}
@@ -168,11 +154,25 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             <p class={styles.bookmarkPassage}>{bookmark()?.content}</p>
           </Show>
 
-          <div>
-            <p class={styles.bookmarkAuthor}>*{bookmark()?.authors} </p>
-            <p class={styles.bookmarkYear}>*{bookmark()?.dateOfCreation}</p>
+          <div class={styles.bookmarkCredit} >
+            <img src="images/main/bookmark-onarment-2.webp" width={100} />
+            <p class={styles.bookmarkAuthor}>{bookmark()?.authors} </p>
+            <p class={styles.bookmarkYear}>{bookmark()?.dateOfCreation}</p>
           </div>
         </div>
+
+        <Show when={spans().length > 0}>
+          <Index each={spans()}>
+            {
+              data => {
+                return <span class={styles.heart} style={{ left: `${Math.random() * 100}%`, bottom: "0px", "animation-delay": `${Math.random() * 0.5}s` }}>
+                  <BsHeartFill size={24} color="#e92f3f" />
+                </span>
+              }
+            }
+          </Index>
+        </Show>
+
         <div
           class={styles.buttonBookmarkLeft}
           onclick={() => handleGetPrevBookmark()}

@@ -40,33 +40,35 @@
         flex-direction: column;
         outline: none;
         position: relative;
+        overflow: hidden;
+
+        .heart {
+            position: absolute;
+            font-size: 1rem;
+            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
+            animation: fly 1.5s ease forwards;
+        }
 
         .bookmarkContentInside {
             position: relative;
+            padding-bottom: 24px;
 
-            .heart {
-                position: absolute;
-                font-size: 1rem;
-                filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
-                animation: fly 1.5s ease forwards;
-            }
 
-            .bookmarkSeparated {
-                width: 100%;
-                text-align: center;
-                margin: 6px 0 12px;
 
-                img {
-                    width: 18%;
+            .bookmarkTitleContent {
+                @include flex-center-column;
+
+                .bookmarkTitle {
+                    text-transform: uppercase;
+                    @include font($f-bookmarkTitle, 45px, #111111, 600, normal, 40px);
+                    text-align: center;
+                    padding: 0 6px;
+                    margin-top: 9px;
                 }
-            }
 
-            .bookmarkTitle {
-                text-transform: uppercase;
-                @include font($f-bookmarkTitle, 39px, #111111, 500, normal, 40px);
-                text-align: center;
-                padding: 0 6px;
-                margin-top: 9px;
+                .bookmarkSeparated {
+                    margin: 6px 0 24px;
+                }
             }
 
             .bookmarkPassage::first-letter {
@@ -85,7 +87,7 @@
             }
 
             .bookmarkPassage {
-                @include font($f-bookmarkText, 20px, #111111, 400, normal, 30px);
+                @include font($f-bookmarkText, 20px, #000000, 400, normal, 30px);
                 padding: 0 3px 0 18px;
             }
 
@@ -94,18 +96,29 @@
                 @include flex-center;
             }
 
-            .bookmarkAuthor {
-                @include font($f-bookmarkAuth, 15px, #111111, 700, normal, 16px);
-                padding: 0 6px;
-                text-align: right;
-                text-transform: capitalize;
+            .bookmarkCredit {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-end;
+
+                img {
+                    padding: 6px 24px 3px 0;
+                }
+
+                .bookmarkAuthor {
+                    @include font($f-bookmarkAuth, 15px, #111111, 700, normal, 16px);
+                    padding: 0 9px;
+                    text-align: right;
+                    text-transform: capitalize;
+                }
+
+                .bookmarkYear {
+                    @include font($f-bookmarkYear, 14px, #111111, 700, normal, 16px);
+                    padding: 0 9px;
+                    text-align: right;
+                }
             }
 
-            .bookmarkYear {
-                @include font($f-bookmarkYear, 14px, #111111, 700, normal, 16px);
-                padding: 0 6px;
-                text-align: right;
-            }
         }
 
         .buttonBookmark {

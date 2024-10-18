@@ -51,7 +51,7 @@ export const WMOCODE: WeatherCodeData = {
   },
   "1": {
     day: {
-      description: "Mainly Sunny Day",
+      description: "Mainly Sunny",
       image: "images/openmeteo/icons/02d.svg",
     },
     night: {
@@ -61,31 +61,31 @@ export const WMOCODE: WeatherCodeData = {
   },
   "2": {
     day: {
-      description: "Partly Cloudy Day",
+      description: "Partly Cloudy",
       image: "images/openmeteo/icons/03d.svg",
     },
     night: {
-      description: "Partly Cloudy Night",
+      description: "Partly Cloudy",
       image: "images/openmeteo/icons/03n.svg",
     },
   },
   "3": {
     day: {
-      description: "Mostly Cloudy Day",
+      description: "Mostly Cloudy",
       image: "images/openmeteo/icons/04.svg",
     },
     night: {
-      description: "Mostly Cloudy Night",
+      description: "Mostly Cloudy",
       image: "images/openmeteo/icons/04.svg",
     },
   },
   "45": {
     day: {
-      description: "Foggy Day",
+      description: "Foggy",
       image: "images/openmeteo/icons/15.svg",
     },
     night: {
-      description: "Foggy Night",
+      description: "Foggy",
       image: "images/openmeteo/icons/15.svg",
     },
   },
@@ -101,11 +101,11 @@ export const WMOCODE: WeatherCodeData = {
   },
   "51": {
     day: {
-      description: "Light Drizzle Day",
+      description: "Light Drizzle",
       image: "images/openmeteo/icons/46.svg",
     },
     night: {
-      description: "Light Drizzle Night",
+      description: "Light Drizzle",
       image: "images/openmeteo/icons/46.svg",
     },
   },
