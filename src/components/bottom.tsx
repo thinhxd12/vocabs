@@ -316,6 +316,30 @@ const Bottom: Component<{}> = () => {
           </Show>
         </A>
 
+        <div class={styles.bottomIndex}>
+          <div class={styles.bottomIndexNums}>
+            <Show
+              when={listStore.listToday?.date}
+              fallback={
+                <>
+                  <span>
+                    <small>N</small>
+                  </span>
+                  <span>
+                    <small>N</small>
+                  </span>
+                </>
+              }
+            >
+              <span>{listStore.listToday.time1}</span>
+              <span>{listStore.listToday.time2}</span>
+            </Show>
+          </div>
+          <div class={styles.bottomIndexDay}>
+            <span>{format(new Date(), "eeeeee")}</span>
+          </div>
+        </div>
+        
         <Show
           when={listStore.listContent.length > 0}
           fallback={
@@ -383,29 +407,6 @@ const Bottom: Component<{}> = () => {
           </div>
         </Show>
 
-        <div class={styles.bottomIndex}>
-          <div class={styles.bottomIndexNums}>
-            <Show
-              when={listStore.listToday?.date}
-              fallback={
-                <>
-                  <span>
-                    <small>N</small>
-                  </span>
-                  <span>
-                    <small>N</small>
-                  </span>
-                </>
-              }
-            >
-              <span>{listStore.listToday.time1}</span>
-              <span>{listStore.listToday.time2}</span>
-            </Show>
-          </div>
-          <div class={styles.bottomIndexDay}>
-            <span>{format(new Date(), "eeeeee")}</span>
-          </div>
-        </div>
       </div>
 
 
