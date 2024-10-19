@@ -18,7 +18,7 @@
     .bottomIndex {
         width: 10px;
         height: 100%;
-        background: #555555;
+        background: #454545;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -33,6 +33,7 @@
                 text-align: center;
                 @include font($f-botIndexNum, 9px, $color-black, 600, normal, 11px);
                 display: block;
+                text-shadow: 0 0 0.5px #000000;
             }
         }
 
@@ -43,7 +44,7 @@
             @include flex-center;
 
             span {
-                @include font($f-botIndexText, 9px, #555555, 700, normal, 9px);
+                @include font($f-botIndexText, 9px, #454545, 700, normal, 9px);
                 transform: rotateZ(-90deg);
             }
         }
