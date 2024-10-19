@@ -647,20 +647,43 @@ export const handleCheckWord = async (text: VocabularySearchType) => {
       checkVocabulary(wordData!.number - 1, text.created_at);
     } else {
       await archiveVocabulary(text.word);
-      const data = await getSmallestWordNumberFromRange(text.word);
-
-      if (data) {
-        await deleteVocabulary(data.created_at);
-        await updateArchiveWord(data, text.created_at);
-        const total = await getTotalMemories();
-        setMainStore("totalMemories", total);
-      } else {
-        deleteVocabulary(text.created_at);
-        const total = await getTotalMemories();
-        setMainStore("totalMemories", total);
-      }
+      updateLastRowWord();
+      deleteVocabulary(text.created_at);
+      const total = await getTotalMemories();
+      setMainStore("totalMemories", total);
     }
   }
+};
+
+export const updateLastRowWord = async () => {
+  "use server";
+  const { data: firstRow, error: firstError } = await supabase
+    .from(mapTables.vocabulary)
+    .select("*")
+    .order("created_at", { ascending: true })
+    .limit(1);
+  const { data: lastRow, error: lastError } = await supabase
+    .from(mapTables.vocabulary)
+    .select("*")
+    .order("created_at", { ascending: false })
+    .limit(1);
+
+  if (firstError) {
+    console.error("Error fetching row:", firstError);
+    return;
+  }
+  if (lastError) {
+    console.error("Error fetching row:", lastError);
+    return;
+  }
+
+  const createdAt = new Date(firstRow![0].created_at);
+  createdAt.setSeconds(createdAt.getSeconds() - 1);
+
+  const { error: updateError } = await supabase
+    .from(mapTables.vocabulary)
+    .update({ created_at: createdAt.toISOString() })
+    .eq("created_at", lastRow![0].created_at);
 };
 
 const checkVocabulary = async (numb: number, time: string) => {
@@ -673,7 +696,6 @@ const checkVocabulary = async (numb: number, time: string) => {
     .eq("created_at", time);
 };
 
-//archiver ------------------------------------ start
 export const archiveVocabulary = async (text: string) => {
   "use server";
   const { error } = await supabase.from(mapTables.memories).insert({
@@ -681,39 +703,6 @@ export const archiveVocabulary = async (text: string) => {
   });
   if (error) return error;
 };
-
-export const getSmallestWordNumberFromRange = async (text: string) => {
-  "use server";
-  const { data, error } = await supabase
-    .from(mapTables.vocabulary)
-    .select()
-    .neq("word", text)
-    .order("created_at", { ascending: true })
-    .range(2000, 9999);
-  if (data) {
-    const sortedArr = data.sort(
-      (a: VocabularyType, b: VocabularyType) => a.number - b.number
-    );
-    return sortedArr[0];
-  }
-};
-
-export const updateArchiveWord = async (data: VocabularyType, time: string) => {
-  "use server";
-  const { error } = await supabase
-    .from(mapTables.vocabulary)
-    .update({
-      word: data.word,
-      audio: data.audio,
-      phonetics: data.phonetics,
-      number: data.number,
-      translations: data.translations,
-      definitions: data.definitions,
-    })
-    .eq("created_at", time);
-};
-
-//archiver ------------------------------------ end
 
 export const updateTodaySchedule = async (
   type: number,
