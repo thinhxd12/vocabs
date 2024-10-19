@@ -143,5 +143,6 @@ export interface WeatherCodeData {
       description: string;
       image: string;
     };
+    textdescription: string;
   };
 }

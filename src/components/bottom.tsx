@@ -43,10 +43,7 @@ const Bottom: Component<{}> = () => {
     });
     setBottomWeather(abc);
 
-    const desc = abc!.isDayTime
-      ? WMOCODE[abc!.icon].day.description
-      : WMOCODE[abc!.icon].night.description;
-    const weatherBgUrl = await getImageFromUnsplashByKeyword(desc);
+    const weatherBgUrl = await getImageFromUnsplashByKeyword(WMOCODE[abc!.icon].textdescription);
     if (weatherBgUrl) setBottomWeatherBgUrl(`url(${weatherBgUrl})`);
     else setBottomWeatherBgUrl('url("/images/main/sky.webp")');
   };

@@ -9,7 +9,7 @@
     .bottomBar {
         height: 100%;
         width: 100%;
-        background-color: $color-background-1;
+        background-color: $color-black;
         @include flex;
         position: relative;
         z-index: 10000;
