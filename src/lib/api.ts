@@ -662,7 +662,7 @@ export const updateLastRowWord = async (text: string) => {
     .select()
     .neq("word", text)
     .order("created_at", { ascending: true })
-    .range(1500, 9999);
+    .range(2000, 9999);
 
   const { data: firstRow, error: firstError } = await supabase
     .from(mapTables.vocabulary)
