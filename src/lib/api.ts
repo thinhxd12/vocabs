@@ -647,7 +647,7 @@ export const handleCheckWord = async (text: VocabularySearchType) => {
       checkVocabulary(wordData!.number - 1, text.created_at);
     } else {
       await archiveVocabulary(text.word);
-      updateLastRowWord();
+      updateLastRowWord(text.word);
       deleteVocabulary(text.created_at);
       const total = await getTotalMemories();
       setMainStore("totalMemories", total);
@@ -655,35 +655,54 @@ export const handleCheckWord = async (text: VocabularySearchType) => {
   }
 };
 
-export const updateLastRowWord = async () => {
+export const updateLastRowWord = async (text: string) => {
   "use server";
+  const { data: outRangeRows, error } = await supabase
+    .from(mapTables.vocabulary)
+    .select()
+    .neq("word", text)
+    .order("created_at", { ascending: true })
+    .range(1500, 9999);
+
   const { data: firstRow, error: firstError } = await supabase
     .from(mapTables.vocabulary)
     .select("*")
     .order("created_at", { ascending: true })
-    .limit(1);
-  const { data: lastRow, error: lastError } = await supabase
-    .from(mapTables.vocabulary)
-    .select("*")
-    .order("created_at", { ascending: false })
     .limit(1);
 
   if (firstError) {
     console.error("Error fetching row:", firstError);
     return;
   }
-  if (lastError) {
-    console.error("Error fetching row:", lastError);
-    return;
-  }
 
   const createdAt = new Date(firstRow![0].created_at);
   createdAt.setSeconds(createdAt.getSeconds() - 1);
 
-  const { error: updateError } = await supabase
-    .from(mapTables.vocabulary)
-    .update({ created_at: createdAt.toISOString() })
-    .eq("created_at", lastRow![0].created_at);
+  if (outRangeRows) {
+    const sortedArr = outRangeRows.sort(
+      (a: VocabularyType, b: VocabularyType) => a.number - b.number
+    );
+    const { error: updateError } = await supabase
+      .from(mapTables.vocabulary)
+      .update({ created_at: createdAt.toISOString() })
+      .eq("created_at", sortedArr[0].created_at);
+  } else {
+    const { data: lastRow, error: lastError } = await supabase
+      .from(mapTables.vocabulary)
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(1);
+
+    if (lastError) {
+      console.error("Error fetching row:", lastError);
+      return;
+    }
+
+    const { error: updateError } = await supabase
+      .from(mapTables.vocabulary)
+      .update({ created_at: createdAt.toISOString() })
+      .eq("created_at", lastRow![0].created_at);
+  }
 };
 
 const checkVocabulary = async (numb: number, time: string) => {
