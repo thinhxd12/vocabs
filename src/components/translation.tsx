@@ -50,6 +50,9 @@ const Translation: Component<{
     const checkMemories = await searchMemoriesText(translateTerm());
     if (checkMemories) {
       popCheckMemories(checkMemories.message);
+      notiSound = new Audio();
+      notiSound.src = "/sounds/mp3_Boing.mp3";
+      notiSound.play();
     }
   });
 
