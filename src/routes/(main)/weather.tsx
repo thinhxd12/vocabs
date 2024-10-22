@@ -28,14 +28,12 @@ import styles from "./weather.module.scss";
 import { getUser } from "~/lib";
 import { createAsync } from "@solidjs/router";
 import {
-  FaSolidArrowUpLong,
   FaSolidDroplet,
+  FaSolidLocationArrow,
   FaSolidTemperatureLow,
-  FaSolidWind,
 } from "solid-icons/fa";
 import { WMOCODE } from "~/utils";
 import { format } from "date-fns";
-import { mainStore } from "~/lib/mystore";
 import { WeatherGeoType } from "~/types";
 
 let canvas: HTMLCanvasElement;
@@ -559,17 +557,16 @@ const Weather: Component<{}> = (props) => {
                 </span>
               </div>
               <div class={styles.weatherInfo}>
-                <FaSolidWind size={10} />
+                <FaSolidLocationArrow
+                  size={12}
+                  style={{
+                    transform: `rotate(${current()!.windDirection - 45}deg)`,
+                    "margin-right": "3px",
+                  }}
+                />
                 <span>
                   {Math.round(current()?.windSpeed || 0)} <small>km/h</small>
                 </span>
-                <FaSolidArrowUpLong
-                  size={10}
-                  style={{
-                    transform: `rotate(${current()!.windDirection}deg)`,
-                    "margin-left": "3px",
-                  }}
-                />
               </div>
               <div class={styles.weatherInfo}>
                 <span>
