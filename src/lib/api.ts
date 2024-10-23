@@ -790,6 +790,14 @@ export const getThisWeekScheduleIndex = async (day: string) => {
   }
 };
 
+export const deleteBookmark = async (time: string) => {
+  "use server";
+  const { error } = await supabase
+    .from(mapTables.bookmarks)
+    .delete()
+    .eq("created_at", time);
+};
+
 export const getRandomBookMarkData = async () => {
   "use server";
   const { data, error } = await supabase.rpc("get_random_bookmark");

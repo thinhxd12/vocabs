@@ -11,6 +11,7 @@ import buttons from "../assets/styles/buttons.module.scss";
 import { OcSearch2, OcX2 } from "solid-icons/oc";
 import {
   checkBookMarkData,
+  deleteBookmark,
   findBookMarkData,
   getBookMarkData,
   getBookMarkDataItem,
@@ -24,7 +25,7 @@ import { stopKeydown } from "~/utils";
 import { BookmarkType } from "~/types";
 import { FaSolidFeather } from "solid-icons/fa";
 import { AiOutlineInsertRowBelow } from "solid-icons/ai";
-import { BsHeartFill } from "solid-icons/bs";
+import { BsHeartFill, BsTrash3, BsTrash3Fill } from "solid-icons/bs";
 import { BiSolidLeftArrow, BiSolidPaste, BiSolidRightArrow, BiSolidSave } from "solid-icons/bi";
 import { FaSolidDice } from "solid-icons/fa";
 
@@ -54,6 +55,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
       like: 0,
     });
     setLikeReset(true);
+    trashIcon() && setTrashIcon(false);
     const data = await getPrevBookMarkData(bookmark()!.created_at);
     if (data) {
       setBookmark(data);
@@ -66,6 +68,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
       like: 0,
     });
     setLikeReset(true);
+    trashIcon() && setTrashIcon(false);
     const data = await getNextBookMarkData(bookmark()!.created_at);
     if (data) {
       setBookmark(data);
@@ -126,6 +129,13 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const animationRun = () => {
     setSpans(Array.from({ length: 45 }, (_, i) => i))
     setTimeout(() => setSpans([]), 1500);
+  }
+
+  const [trashIcon, setTrashIcon] = createSignal<boolean>(false);
+  const handleDeleteBookmark = () => {
+    deleteBookmark(bookmark()!.created_at);
+    handleGetNextBookmark();
+    setTrashIcon(false);
   }
 
   return (
@@ -300,6 +310,16 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
           onclick={() => setShowInsert(!showInsert())}
         >
           <AiOutlineInsertRowBelow size={22} color="#ffffffe6" />
+        </button>
+
+        <button class={buttons.buttonBookmark}>
+          <Show when={trashIcon()}
+            fallback={
+              <BsTrash3 size={19} color="#ffffffe6" onclick={() => setTrashIcon(true)} />
+            }
+          >
+            <BsTrash3Fill size={19} color="#ca140c" onclick={() => handleDeleteBookmark()} />
+          </Show>
         </button>
 
         <button
