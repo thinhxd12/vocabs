@@ -36,14 +36,23 @@ const Bottom: Component<{}> = () => {
 
   const getBottomWeatherData = async () => {
     const data = await getWeatherLocations();
-    const item = data!.find((item) => item.default) || data![0];
-    const abc = await getCurrentWeatherData({
-      lat: item!.lat,
-      lon: item!.lon,
-    });
-    setBottomWeather(abc);
+    if (data) {
+      const item = data!.find((item) => item.default) || data![0];
+      const result = await getCurrentWeatherData({
+        lat: item!.lat,
+        lon: item!.lon,
+      });
+      result && setBottomWeather(result);
+    }
+    else {
+      const result = await getCurrentWeatherData({
+        lat: 10.6023,
+        lon: 106.4021,
+      });
+      result && setBottomWeather(result);
+    }
 
-    const weatherBgUrl = await getImageFromUnsplashByKeyword(WMOCODE[abc!.icon].textdescription);
+    const weatherBgUrl = await getImageFromUnsplashByKeyword(WMOCODE[bottomWeather().icon].textdescription);
     if (weatherBgUrl) setBottomWeatherBgUrl(`url(${weatherBgUrl})`);
     else setBottomWeatherBgUrl('url("/images/main/sky.webp")');
   };
@@ -206,14 +215,14 @@ const Bottom: Component<{}> = () => {
   // -------------------AUTOPLAY END-------------------- //
 
   const [bottomWeather, setBottomWeather] = createSignal<
-    CurrentlyWeatherType | undefined
+    CurrentlyWeatherType
   >({
     apparentTemperature: 0,
     isDayTime: true,
     humidity: 0,
     temperature: 0,
     uvIndex: 0,
-    icon: 0,
+    icon: 3,
     windDirection: 0,
     windSpeed: 0,
   });
