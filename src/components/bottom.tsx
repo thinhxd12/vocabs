@@ -23,7 +23,7 @@ import {
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
 import { WMOCODE } from "~/utils";
-import { CurrentlyWeatherType } from "~/types";
+import { CurrentlyWeatherType, WeatherGeoType } from "~/types";
 
 let intervalCountdown: NodeJS.Timeout | undefined;
 let intervalAutoplay: NodeJS.Timeout;
@@ -34,23 +34,19 @@ const Bottom: Component<{}> = () => {
   let audio: HTMLAudioElement | null;
   const todayDate = format(new Date(), "yyyy-MM-dd");
 
+  const [bottomLocation, setBottomLocation] = createSignal<WeatherGeoType>({
+    name: 'My Place',
+    lat: 10.6023,
+    lon: 106.4021,
+    default: false
+  });
+
   const getBottomWeatherData = async () => {
-    const data = await getWeatherLocations();
-    if (data) {
-      const item = data!.find((item) => item.default) || data![0];
-      const result = await getCurrentWeatherData({
-        lat: item!.lat,
-        lon: item!.lon,
-      });
-      result && setBottomWeather(result);
-    }
-    else {
-      const result = await getCurrentWeatherData({
-        lat: 10.6023,
-        lon: 106.4021,
-      });
-      result && setBottomWeather(result);
-    }
+    const result = await getCurrentWeatherData({
+      lat: bottomLocation().lat,
+      lon: bottomLocation().lon,
+    });
+    result && setBottomWeather(result);
 
     const weatherBgUrl = await getImageFromUnsplashByKeyword(WMOCODE[bottomWeather().icon].textdescription);
     if (weatherBgUrl) setBottomWeatherBgUrl(`url(${weatherBgUrl})`);
@@ -61,9 +57,13 @@ const Bottom: Component<{}> = () => {
     const data = await Promise.all([
       getTotalMemories(),
       getTodayData(todayDate),
+      getWeatherLocations()
     ]);
     setMainStore("totalMemories", data[0]!);
     setListStore("listToday", data[1]!);
+    const myLocation = data[2]!.find((item) => item.default) || data[2]![0];
+    setBottomLocation(myLocation);
+
     getBottomWeatherData();
     const weatherInterval = setInterval(async () => {
       getBottomWeatherData();
