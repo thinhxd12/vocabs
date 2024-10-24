@@ -152,19 +152,17 @@ const Bottom: Component<{}> = () => {
     setListStore("listButton", true);
     const currentProgress =
       listStore.listType === 1
-        ? listStore.listToday.time1
-        : listStore.listToday.time2;
+        ? listStore.listToday.time1 + 1
+        : listStore.listToday.time2 + 1;
+
     if (currentProgress < 9) {
       startCountdown();
     }
-    const newProgress =
-      listStore.listType === 1
-        ? listStore.listToday.time1 + 1
-        : listStore.listToday.time2 + 1;
+
     if (listStore.listCount === 0) {
       await updateTodaySchedule(
         listStore.listType,
-        newProgress,
+        currentProgress,
         listStore.listToday.date
       );
       updateTodayData(todayDate);
