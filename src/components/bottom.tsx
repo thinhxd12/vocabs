@@ -132,20 +132,6 @@ const Bottom: Component<{}> = () => {
 
   const startAutoplay = async () => {
     clearInterval(intervalAutoplay);
-    const newProgress =
-      listStore.listType === 1
-        ? listStore.listToday.time1 + 1
-        : listStore.listToday.time2 + 1;
-    if (listStore.listCount === 0) {
-      await updateTodaySchedule(
-        listStore.listType,
-        newProgress,
-        listStore.listToday.date
-      );
-
-      updateTodayData(todayDate);
-    }
-
     handleRenderWord();
     intervalAutoplay = setInterval(() => {
       if (listStore.listCount < listStore.listContent.length) {
@@ -160,7 +146,7 @@ const Bottom: Component<{}> = () => {
     clearInterval(intervalAutoplay);
   };
 
-  const endAutoplay = () => {
+  const endAutoplay = async () => {
     clearInterval(intervalAutoplay);
     setListStore("listCount", 0);
     setListStore("listButton", true);
@@ -170,6 +156,18 @@ const Bottom: Component<{}> = () => {
         : listStore.listToday.time2;
     if (currentProgress < 9) {
       startCountdown();
+    }
+    const newProgress =
+      listStore.listType === 1
+        ? listStore.listToday.time1 + 1
+        : listStore.listToday.time2 + 1;
+    if (listStore.listCount === 0) {
+      await updateTodaySchedule(
+        listStore.listType,
+        newProgress,
+        listStore.listToday.date
+      );
+      updateTodayData(todayDate);
     }
   };
 
