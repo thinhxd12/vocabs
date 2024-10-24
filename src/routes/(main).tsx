@@ -29,6 +29,7 @@ declare module "solid-js" {
 export default function Main(props: RouteSectionProps) {
   let audio: HTMLAudioElement | null;
   let checkTimeout: NodeJS.Timeout;
+  let deleteSearchTimeout: NodeJS.Timeout;
   const mockObj = {
     image: "images/main/main-image.webp",
     date: "01 July 2023",
@@ -53,6 +54,7 @@ export default function Main(props: RouteSectionProps) {
     audio?.pause();
     audio = null;
     clearTimeout(checkTimeout);
+    clearTimeout(deleteSearchTimeout);
   });
 
   const [imageObj, setImageObj] = createStore<ImageType>(mockObj);
@@ -84,21 +86,25 @@ export default function Main(props: RouteSectionProps) {
   //------------------HANDLE SEARCH--------------------
   const trigger = debounce(async (str: string) => {
     checkTimeout && clearTimeout(checkTimeout);
-    const res = await searchText(str);
-    if (res) {
-      if (res.length === 0) {
-        setMainStore("searchTermColor", "#000000");
-        if (str.length > 3) {
+    if (str.length > 2) {
+      const res = await searchText(str);
+      if (res) {
+        if (res.length === 0) {
+          setMainStore("searchTermColor", "#000000");
+          deleteSearchTimeout = setTimeout(() => {
+            setMainStore("searchTerm", "");
+            setMainStore("searchTermColor", "#ffffff");
+          }, 1000);
           audio?.play();
         }
+        if (res.length === 1 && str.length > 4) {
+          checkTimeout = setTimeout(() => {
+            hanldeRenderWordFromSearch("1");
+          }, 1500);
+        }
+        setMainStore("searchResult", res);
+        mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
       }
-      if (res.length === 1 && str.length > 4) {
-        checkTimeout = setTimeout(() => {
-          hanldeRenderWordFromSearch("1");
-        }, 1500);
-      }
-      setMainStore("searchResult", res);
-      mainStore.searchDeleteIndex !== 0 && setMainStore("searchDeleteIndex", 0);
     }
   }, 450);
 
@@ -120,6 +126,8 @@ export default function Main(props: RouteSectionProps) {
     element.addEventListener("keydown", (e) => {
       const keyDown = e.key;
       if (keyDown.match(/^[a-zA-Z\-]$/)) {
+        deleteSearchTimeout && clearTimeout(deleteSearchTimeout);
+
         setMainStore(
           "searchTerm",
           mainStore.searchTerm + String(keyDown).toLowerCase()
@@ -140,6 +148,8 @@ export default function Main(props: RouteSectionProps) {
       }
       if (keyDown === "Backspace") {
         checkTimeout && clearTimeout(checkTimeout);
+        deleteSearchTimeout && clearTimeout(deleteSearchTimeout);
+
         setMainStore("searchTerm", mainStore.searchTerm.slice(0, -1));
         if (mainStore.searchTerm.length > 2) {
           trigger(mainStore.searchTerm);

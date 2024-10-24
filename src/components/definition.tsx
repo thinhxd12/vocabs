@@ -22,15 +22,10 @@ const Definition: Component<{
           {(entry, index) => {
             return (
               <div class={styles.websEntry}>
-                <div class={styles.websHeader}>
-                  <div class={styles.websHeaderContainer}>
-                    <span
-                      class={styles.websHeaderContent}
-                      onClick={props.onEdit || props.onCheck}
-                    >
-                      {entry().partOfSpeech}
-                    </span>
-                  </div>
+                <div class={styles.websHeader}
+                  onClick={props.onEdit || props.onCheck}
+                >
+                  {entry().partOfSpeech}
                 </div>
 
                 <div class={styles.websBody}>

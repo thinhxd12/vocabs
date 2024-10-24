@@ -17,32 +17,24 @@
 
     .websEntry {
         position: relative;
+
+        &:not(:last-of-type) {
+            margin-bottom: 3px;
+        }
     }
 
     .websHeader {
         position: absolute;
         top: 3px;
-        left: 0;
+        right: 3px;
         z-index: 15;
-        width: 100%;
-        display: flex;
-        justify-content: flex-end;
-
-        .websHeaderContainer {
-            min-width: 136px;
-            text-align: center;
-            margin-right: 15px;
-
-            .websHeaderContent {
-                height: 25px;
-                display: inline-block;
-                padding: 1px 3px 0px;
-                @include font($f-defHeader, 24px, $color-black, 700, normal, 24px);
-                text-transform: uppercase;
-                cursor: pointer;
-                background: $color-vintage-background;
-            }
-        }
+        height: 28px;
+        display: inline-block;
+        padding: 1px 3px 0px;
+        @include font($f-defHeader, 28px, $color-black, 700, normal, 28px);
+        text-transform: uppercase;
+        cursor: pointer;
+        background: #ffffffc4;
     }
 
     .websHeadDropdown {
@@ -74,10 +66,10 @@
             width: 100%;
 
             &:first-child {
-                padding-top: 24px;
+                padding-top: 27px;
 
                 .websHeadDropdown {
-                    top: 24px;
+                    top: 27px;
                     z-index: 18;
                     align-items: flex-start;
                     padding-left: 24px;
@@ -140,7 +132,7 @@
         .websX {
             @include font($f-defX, 14px, $color-black, 400, normal, 22px);
             position: relative;
-            text-indent: 12px;
+            text-indent: 18px;
             padding: 0px 3px 0px 6px;
 
             b {
@@ -155,12 +147,12 @@
             background: #999999;
 
             svg {
-                color: #111111;
+                color: #000000;
                 padding-left: 1px;
             }
 
             span {
-                @include font($f-defSyn, 13px, #111111, 600, normal, 16px);
+                @include font($f-defSyn, 13px, #000000, 600, normal, 16px);
             }
         }
 
@@ -169,22 +161,28 @@
             flex-wrap: wrap;
             justify-content: flex-end;
             align-items: flex-end;
-            padding: 0 3px;
+            width: fit-content;
+            margin-left: auto;
 
             .websAuthor {
                 font-variant: small-caps;
-                @include font($f-defAuth, 13px, #111111, 500, normal, 16px);
-                margin-right: 5px;
+                @include font($f-defAuth, 13px, #000000, 500, normal, 18px);
+                padding: 1px 3px 0 15px;
+                background: #ededed;
+                border-left: 1px solid #000000;
             }
 
             .websTitle {
                 text-transform: uppercase;
-                @include font($f-defTitle, 13px, #111111, 700, normal, 16px);
+                @include font($f-defTitle, 13px, #000000, 700, normal, 18px);
+                background: #ededed;
+                padding: 1px 3px 0 3px;
             }
 
             .websYear {
-                @include font($f-defYear, 12px, #111111, 500, normal, 16px);
-                margin-left: 5px;
+                @include font($f-defYear, 13px, #000000, 500, normal, 18px);
+                padding: 1px 3px 0 3px;
+                background: #ededed;
             }
         }
 
