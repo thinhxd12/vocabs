@@ -178,13 +178,6 @@ const Vocabulary: Component<{}> = () => {
         }}
       >
         {mainStore.searchTerm || mainStore.renderWord?.word}
-        <Show when={mainStore.renderWord}>
-          <span class={styles.flipCardTextNumber}>
-            {showNumber()
-              ? mainStore.renderWord!.number
-              : mainStore.renderWord!.number - 1}
-          </span>
-        </Show>
       </div>
     )
   }
@@ -224,13 +217,6 @@ const Vocabulary: Component<{}> = () => {
                 }}
               />
               <div class={styles.flipCardTextPhoneticMobile}>
-                <Show when={mainStore.renderWord}>
-                  <span class={styles.flipCardTextNumberMobile}>
-                    {showNumber()
-                      ? mainStore.renderWord!.number
-                      : mainStore.renderWord!.number - 1}
-                  </span>
-                </Show>
                 {mainStore.renderWord && mainStore.renderWord!.phonetics}
               </div>
             </div>

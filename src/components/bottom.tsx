@@ -270,7 +270,7 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn2}
         >
-          <small>Money does not stink</small>
+          <small>Money not stink</small>
           <span>Pecunia non olet</span>
         </A>
 
