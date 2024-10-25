@@ -647,43 +647,34 @@ export const handleCheckWord = async (text: VocabularySearchType) => {
       checkVocabulary(wordData!.number - 1, text.created_at);
     } else {
       await archiveVocabulary(text.word);
-      updateLastRowWord();
       deleteVocabulary(text.created_at);
-      const total = await getTotalMemories();
-      setMainStore("totalMemories", total);
+      setTimeout(async () => {
+        updateLastRowWord(text.created_at);
+        const total = await getTotalMemories();
+        setMainStore("totalMemories", total);
+      }, 1500);
     }
   }
 };
 
-export const updateLastRowWord = async () => {
+export const updateLastRowWord = async (time: string) => {
   "use server";
-  const { data: firstRow, error: firstError } = await supabase
-    .from(mapTables.vocabulary)
-    .select("*")
-    .order("created_at", { ascending: true })
-    .limit(1);
+
   const { data: lastRow, error: lastError } = await supabase
     .from(mapTables.vocabulary)
     .select("*")
     .order("created_at", { ascending: false })
     .limit(1);
 
-  if (firstError) {
-    console.error("Error fetching row:", firstError);
-    return;
-  }
   if (lastError) {
     console.error("Error fetching row:", lastError);
     return;
   }
 
-  const createdAt = new Date(firstRow![0].created_at);
-  createdAt.setSeconds(createdAt.getSeconds() - 1);
-
   const { error: updateError } = await supabase
     .from(mapTables.vocabulary)
-    .update({ created_at: createdAt.toISOString() })
-    .eq("created_at", lastRow![0].created_at);
+    .update({ created_at: time })
+    .eq("created_at", lastRow[0].created_at);
 };
 
 const checkVocabulary = async (numb: number, time: string) => {
