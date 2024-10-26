@@ -45,7 +45,7 @@ export const WMOCODE: WeatherCodeData = {
       image: "images/openmeteo/icons/01d.svg",
     },
     night: {
-      description: "Clear Night",
+      description: "Clear",
       image: "images/openmeteo/icons/01n.svg",
     },
     textdescription: "sunny sky"
@@ -56,7 +56,7 @@ export const WMOCODE: WeatherCodeData = {
       image: "images/openmeteo/icons/02d.svg",
     },
     night: {
-      description: "Mainly Clear Night",
+      description: "Mainly Clear",
       image: "images/openmeteo/icons/02n.svg",
     },
     textdescription: "sunny sky"

@@ -216,42 +216,46 @@ const Calendar: Component<{}> = (props) => {
                 </div>
               </div>
               <div class={styles.calendarDropdownBody}>
-                <form
-                  class={forms.formBody}
-                  action={submitTodayReset}
-                  method="post"
+                <Show when={listStore.listToday.created_at}
+                  fallback={<div>No data available!</div>}
                 >
-                  <div class={forms.calendarFormGroupContainer}>
-                    <div class={forms.calendarFormInputGroup}>
-                      <input
-                        class={forms.calendarFormInput}
-                        name="todayIndex1"
-                        autocomplete="off"
-                        type="number"
-                        min={0}
-                        value={listStore.listToday.time1}
-                      />
-                    </div>
-                    <div class={forms.calendarFormInputGroup}>
-                      <input
-                        class={forms.calendarFormInput}
-                        name="todayIndex2"
-                        autocomplete="off"
-                        type="number"
-                        min={0}
-                        value={listStore.listToday.time2}
-                      />
-                    </div>
-                  </div>
-                  <button
-                    class={buttons.buttonSubmit}
-                    type="submit"
-                    onClick={handleUpdateTodaySchedule}
+                  <form
+                    class={forms.formBody}
+                    action={submitTodayReset}
+                    method="post"
                   >
-                    <BiSolidSave size={15} />
-                    <span>Save</span>
-                  </button>
-                </form>
+                    <div class={forms.calendarFormGroupContainer}>
+                      <div class={forms.calendarFormInputGroup}>
+                        <input
+                          class={forms.calendarFormInput}
+                          name="todayIndex1"
+                          autocomplete="off"
+                          type="number"
+                          min={0}
+                          value={listStore.listToday.time1}
+                        />
+                      </div>
+                      <div class={forms.calendarFormInputGroup}>
+                        <input
+                          class={forms.calendarFormInput}
+                          name="todayIndex2"
+                          autocomplete="off"
+                          type="number"
+                          min={0}
+                          value={listStore.listToday.time2}
+                        />
+                      </div>
+                    </div>
+                    <button
+                      class={buttons.buttonSubmit}
+                      type="submit"
+                      onClick={handleUpdateTodaySchedule}
+                    >
+                      <BiSolidSave size={15} />
+                      <span>Save</span>
+                    </button>
+                  </form>
+                </Show>
               </div>
             </Motion>
           </Show>
@@ -269,7 +273,7 @@ const Calendar: Component<{}> = (props) => {
             >
               <div class={styles.calendarDropdownHeader}>
                 <div class={styles.calendarDropdownHeaderLeft}>
-                  <p>Set new schedule!</p>
+                  <p>Now create new schedule!</p>
                 </div>
                 <div class={styles.calendarDropdownHeaderRight}>
                   <button
@@ -286,23 +290,13 @@ const Calendar: Component<{}> = (props) => {
                   action={submitNewSchedule}
                   method="post"
                 >
-                  <div class={forms.calendarFormGroupContainer}>
-                    <div class={forms.calendarFormInputGroup}>
-                      <input
-                        class={forms.calendarFormInput}
-                        name="startDay"
-                        autocomplete="off"
-                        type="date"
-                      />
-                    </div>
-                  </div>
                   <button
                     class={buttons.buttonSubmit}
                     type="submit"
                     onClick={handleUpdateHistoryList}
                   >
-                    <BiSolidSave size={15} />
-                    <span>Save</span>
+                    <span>Create</span>
+                    <span>🗓️</span>
                   </button>
                 </form>
               </div>

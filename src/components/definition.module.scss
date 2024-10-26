@@ -96,6 +96,7 @@
 
             .websImg {
                 object-position: center 60%;
+                filter: brightness(0.75) contrast(1.1);
             }
 
             .websDefs {
@@ -106,17 +107,6 @@
                 z-index: 7;
                 padding: 0px 3px 3px 6px;
             }
-
-            &::after {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.3);
-            }
-
         }
 
         .websDef {
@@ -143,8 +133,8 @@
 
         .websSyn {
             @include flex;
-            padding: 2px 3px 3px 3px;
-            background: #999999;
+            padding: 1px 3px 3px 3px;
+            background: #777B77;
 
             svg {
                 color: #000000;

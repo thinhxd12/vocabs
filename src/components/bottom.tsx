@@ -23,7 +23,7 @@ import {
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
 import { WMOCODE } from "~/utils";
-import { CurrentlyWeatherType, WeatherGeoType } from "~/types";
+import { CurrentlyWeatherType, WeatherCodeData, WeatherGeoType } from "~/types";
 
 let intervalCountdown: NodeJS.Timeout | undefined;
 let intervalAutoplay: NodeJS.Timeout;
@@ -47,8 +47,7 @@ const Bottom: Component<{}> = () => {
       lon: bottomLocation().lon,
     });
     result && setBottomWeather(result);
-
-    const weatherBgUrl = await getImageFromUnsplashByKeyword(WMOCODE[bottomWeather().icon].textdescription);
+    const weatherBgUrl = await getImageFromUnsplashByKeyword(WMOCODE[String(bottomWeather().icon)].textdescription);
     if (weatherBgUrl) setBottomWeatherBgUrl(`url(${weatherBgUrl})`);
     else setBottomWeatherBgUrl('url("/images/main/sky.webp")');
   };
@@ -59,16 +58,17 @@ const Bottom: Component<{}> = () => {
       getTodayData(todayDate),
       getWeatherLocations()
     ]);
-    setMainStore("totalMemories", data[0]!);
-    setListStore("listToday", data[1]!);
-    const myLocation = data[2]!.find((item) => item.default) || data[2]![0];
-    setBottomLocation(myLocation);
-
-    getBottomWeatherData();
-    const weatherInterval = setInterval(async () => {
+    if (data[0]) setMainStore("totalMemories", data[0]);
+    if (data[1]) setListStore("listToday", data[1]);
+    if (data[2]) {
+      const myLocation = data[2].find((item) => item.default) || data[2][0];
+      setBottomLocation(myLocation);
       getBottomWeatherData();
-    }, 1000 * 12 * 60);
-    clearInterval(intervalCountdown);
+      const weatherInterval = setInterval(async () => {
+        getBottomWeatherData();
+      }, 1000 * 12 * 60);
+      clearInterval(intervalCountdown);
+    }
   });
 
   // -------------------LOGOUT-------------------- //
@@ -167,15 +167,8 @@ const Bottom: Component<{}> = () => {
     if (currentProgress < 9) {
       startCountdown();
     }
-
-    if (listStore.listCount === 0) {
-      await updateTodaySchedule(
-        listStore.listType,
-        currentProgress,
-        listStore.listToday.date
-      );
-      updateTodayData(todayDate);
-    }
+    await updateTodaySchedule(todayDate, listStore.listType);
+    updateTodayData(todayDate);
   };
 
   const handleAutoplay = () => {
@@ -235,7 +228,7 @@ const Bottom: Component<{}> = () => {
         <div class={styles.bottomIndex}>
           <div class={styles.bottomIndexNums}>
             <Show
-              when={listStore.listToday?.date}
+              when={listStore.listToday.created_at}
               fallback={
                 <>
                   <span>

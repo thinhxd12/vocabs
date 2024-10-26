@@ -50,6 +50,7 @@ export interface BookmarkType {
 }
 
 export interface ScheduleType {
+  created_at: string;
   date: string;
   index1: number;
   index2: number;

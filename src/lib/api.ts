@@ -20,7 +20,6 @@ import {
 import {
   PRECIPITATION_PROBABILITY,
   REPETITION_PATTERN,
-  chunk,
   getElAttribute,
   getElText,
   mapTables,
@@ -596,12 +595,9 @@ export const submitTodayReset = action(async (formData: FormData) => {
 // -------------------------------NEW------------------------------------
 export const submitNewSchedule = action(async (formData: FormData) => {
   "use server";
-  const startDay = String(formData.get("startDay"));
-  if (!startDay) return;
-
   const { data: dataHistory } = await supabase
     .from(mapTables.history)
-    .select()
+    .select("index,created_at")
     .order("created_at", { ascending: false });
   if (!dataHistory) return;
 
@@ -609,7 +605,7 @@ export const submitNewSchedule = action(async (formData: FormData) => {
 
   const { count } = await supabase
     .from(mapTables.vocabulary)
-    .select("*", { count: "exact" });
+    .select("created_at", { count: "exact" });
   if (!count) return;
 
   const { error } = await supabase
@@ -633,7 +629,7 @@ export const submitNewSchedule = action(async (formData: FormData) => {
   let thisWeekIndex = 0;
   if (count >= 200)
     thisWeekIndex = findNextElement(currentPatternArr, lastWeekIndex);
-  createWeekSchedule(startDay, thisWeekIndex);
+  createWeekSchedule(thisWeekIndex);
   return { message: "success" };
 }, "submitNewSchedule");
 
@@ -698,28 +694,36 @@ export const archiveVocabulary = async (text: string) => {
   if (error) return error;
 };
 
-export const updateTodaySchedule = async (
-  type: number,
-  numb: number,
-  day: string
-) => {
+export const updateTodaySchedule = async (date: string, type: number) => {
   "use server";
-  const updateObj = type === 1 ? { time1: numb } : { time2: numb };
+  const data = await getTodayData(date);
+  const updateObj =
+    type === 1 ? { time1: data!.time1 + 1 } : { time2: data!.time2 + 1 };
   const { error } = await supabase
     .from(mapTables.schedule)
     .update(updateObj)
-    .eq("date", day);
-  if (error) console.error(error);
+    .eq("created_at", data!.created_at);
+  if (error) return error;
+
+  if (data!.date === "") {
+    if (
+      (data!.time1 >= 9 && data!.time2 >= 9) ||
+      (type === 2 && data!.time1 >= 9 && data!.time2 + 1 >= 9)
+    ) {
+      const { error } = await supabase
+        .from(mapTables.schedule)
+        .update({ date: date })
+        .eq("created_at", data!.created_at);
+      if (error) return error;
+    }
+  }
 };
 
-const createWeekSchedule = async (startDay: string, index: number) => {
+const createWeekSchedule = async (index: number) => {
   for (let i = 0; i < 6; i++) {
     let { error } = await supabase.from(mapTables.schedule).insert([
       {
-        date: format(
-          new Date(new Date(startDay).getTime() + i * 86400000).toISOString(),
-          "yyyy-MM-dd"
-        ),
+        date: "",
         index1: i % 2 == 0 ? index : index + 50,
         index2: i % 2 == 0 ? index + 100 : index + 150,
         time1: 0,
@@ -740,12 +744,13 @@ export const getCalendarHistory = async () => {
 };
 
 //get start index of schedule
-export const getThisWeekScheduleIndex = async (day: string) => {
+export const getThisWeekScheduleIndex = async (dayToday: string) => {
   "use server";
   const { data: thisWeekSchedule, error } = await supabase
     .from(mapTables.schedule)
     .select()
-    .order("date");
+    .order("created_at", { ascending: true });
+  if (error) return;
 
   const { data: history } = await supabase
     .from(mapTables.history)
@@ -753,34 +758,30 @@ export const getThisWeekScheduleIndex = async (day: string) => {
     .order("created_at", { ascending: false })
     .limit(1);
 
-  if (thisWeekSchedule) {
-    let indexTodaySchedule = thisWeekSchedule.findIndex(
-      (item) => item.date === day
-    );
+  const thisWeekIndex = thisWeekSchedule[0].index1;
+  const allGreater = thisWeekSchedule.every(
+    (item) => item.time1 >= 9 && item.time2 >= 9
+  );
+  const allDone = thisWeekSchedule.every((item) => item.date !== "");
 
-    if (indexTodaySchedule >= 0) {
-      const thisWeekIndex = thisWeekSchedule[0].index1 as number;
-
-      //submit history item
-      const allGreater = thisWeekSchedule.every(
-        (item) => item.time1 >= 9 && item.time2 >= 9
-      );
-
-      if (allGreater) {
-        if (thisWeekSchedule[0].date !== history![0].from_date) {
-          const insertData = {
-            index: thisWeekIndex,
-            from_date: thisWeekSchedule[0].date,
-            to_date: thisWeekSchedule[thisWeekSchedule.length - 1].date,
-          };
-          let { error: errorMonth } = await supabase
-            .from(mapTables.history)
-            .insert(insertData);
-        }
+  if (allDone) {
+    const date1 = new Date(thisWeekSchedule[0].date);
+    const date2 = new Date(thisWeekSchedule[thisWeekSchedule.length - 1].date);
+    const today = new Date(dayToday);
+    if (today < date1 || today > date2) return -9;
+    if (allGreater) {
+      if (thisWeekSchedule[0].date !== history![0].from_date) {
+        const insertData = {
+          index: thisWeekIndex,
+          from_date: thisWeekSchedule[0].date,
+          to_date: thisWeekSchedule[thisWeekSchedule.length - 1].date,
+        };
+        let { error: errorMonth } = await supabase
+          .from(mapTables.history)
+          .insert(insertData);
       }
-      return thisWeekIndex;
     }
-    return -9;
+    return thisWeekIndex;
   }
 };
 
@@ -971,10 +972,18 @@ export const getTotalMemories = async () => {
 
 export const getTodayData = cache(async (date: string) => {
   "use server";
-  const { data, error } = await supabase
+  const { data: dataByDate } = await supabase
     .from(mapTables.schedule)
     .select()
     .eq("date", date);
+  if (dataByDate && dataByDate.length > 0) return dataByDate[0] as ScheduleType;
+
+  const { data } = await supabase
+    .from(mapTables.schedule)
+    .select()
+    .eq("date", "")
+    .order("created_at", { ascending: true })
+    .limit(1);
   if (data) return data[0] as ScheduleType;
 }, "getTodayData");
 

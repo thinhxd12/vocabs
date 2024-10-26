@@ -24,6 +24,7 @@ export const [listStore, setListStore] = createStore<ListStoreType>({
   listContent: [],
   listButton: false,
   listToday: {
+    created_at: "",
     date: "",
     index1: 0,
     index2: 0,
