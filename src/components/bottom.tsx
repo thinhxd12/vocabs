@@ -110,7 +110,6 @@ const Bottom: Component<{}> = () => {
   };
 
   const endCountdown = () => {
-    handleGetListContent(listStore.listType);
     setMinute(6);
     setShowTimer(false);
     clearInterval(intervalCountdown);
@@ -158,7 +157,6 @@ const Bottom: Component<{}> = () => {
   const endAutoplay = async () => {
     clearInterval(intervalAutoplay);
     setListStore("listCount", 0);
-    setListStore("listButton", true);
     const currentProgress =
       listStore.listType === 1
         ? listStore.listToday.time1 + 1
@@ -169,6 +167,7 @@ const Bottom: Component<{}> = () => {
     }
     await updateTodaySchedule(todayDate, listStore.listType);
     updateTodayData(todayDate);
+    handleGetListContent(listStore.listType);
   };
 
   const handleAutoplay = () => {
