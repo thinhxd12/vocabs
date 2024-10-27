@@ -218,21 +218,22 @@
             top: 0;
             left: 0;
             width: 100%;
+            animation: float 12s linear infinite;
 
             .bottomWeatherImg {
                 position: absolute;
-                top: 1px;
-                right: 15px;
+                top: -1px;
+                right: 12px;
                 z-index: 1;
-                filter: drop-shadow(0 1px 3px black);
+                filter: drop-shadow(0 1px 0.5px black);
             }
 
             p {
                 @include font($f-botWeatherTemp, 8px, #d7d7d7, 600, normal, 10px);
                 position: absolute;
                 top: 1px;
-                right: 3px;
-                text-shadow: 0 1px 3px black;
+                right: 1px;
+                text-shadow: 0 1px 0.5px black;
                 z-index: 1;
             }
         }
@@ -350,5 +351,20 @@
 
     100% {
         transform: translateX(-100%) translate3d(0, 0, 0);
+    }
+}
+
+
+@keyframes float {
+    0% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(-7px, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(0, 0, 0);
     }
 }
