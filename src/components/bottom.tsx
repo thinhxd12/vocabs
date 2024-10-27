@@ -23,7 +23,7 @@ import {
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
 import { WMOCODE } from "~/utils";
-import { CurrentlyWeatherType, WeatherCodeData, WeatherGeoType } from "~/types";
+import { CurrentlyWeatherType, WeatherGeoType } from "~/types";
 
 let intervalCountdown: NodeJS.Timeout | undefined;
 let intervalAutoplay: NodeJS.Timeout;
@@ -48,8 +48,7 @@ const Bottom: Component<{}> = () => {
     });
     result && setBottomWeather(result);
     const weatherBgUrl = await getImageFromUnsplashByKeyword(WMOCODE[String(bottomWeather().icon)].textdescription);
-    if (weatherBgUrl) setBottomWeatherBgUrl(`url(${weatherBgUrl})`);
-    else setBottomWeatherBgUrl('url("/images/main/sky.webp")');
+    if (weatherBgUrl) setBottomWeatherBgUrl(weatherBgUrl);
   };
 
   onMount(async () => {
@@ -219,7 +218,7 @@ const Bottom: Component<{}> = () => {
     windSpeed: 0,
   });
 
-  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>('url("/images/main/sky.webp")');
+  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>("");
 
   return (
     <div class={styles.bottom}>
@@ -289,8 +288,12 @@ const Bottom: Component<{}> = () => {
           href="/weather"
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtnWeather}
-          style={{ 'background-image': bottomWeatherBgUrl() }}
         >
+          <Show when={bottomWeatherBgUrl()}
+            fallback={<img src="images/main/sky.webp" width={90} height={35} class={styles.bottomBtnWeatherBg} />}
+          >
+            <img src={bottomWeatherBgUrl()} width={90} height={35} class={styles.bottomBtnWeatherBg} />
+          </Show>
           <Show
             when={bottomWeather()}
             fallback={

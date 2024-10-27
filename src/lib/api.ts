@@ -563,8 +563,11 @@ export const getImageFromUnsplashByKeyword = async (keyword: string) => {
   const response = await fetch(
     `https://api.unsplash.com/photos/random?query=${keyword}&count=1&orientation=landscape&client_id=${apiKey}`
   );
-  const data = await response.json();
-  return data[0].urls.small_s3;
+  if (response.status === 200) {
+    const data = await response.json();
+    return data[0].urls.small_s3;
+  }
+  return "";
 };
 
 export const getUnsplashImage = async () => {

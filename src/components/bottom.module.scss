@@ -165,17 +165,15 @@
         @extend .bottomBtn;
         flex-grow: 1;
         min-width: 90px;
-        background-size: cover;
 
-        &::after {
-            content: "";
+        .bottomBtnWeatherBg {
             position: absolute;
+            top: 0;
+            left: 0;
             bottom: 0;
             right: 0;
-            left: 0;
-            top: 0;
-            background-color: rgba(0, 0, 0, 0.24);
-            backdrop-filter: contrast(1.5);
+            object-fit: cover;
+            filter: brightness(0.75) contrast(1.1);
         }
 
         &:hover {
