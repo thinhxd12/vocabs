@@ -667,10 +667,11 @@ export const updateLastRowWord = async (time: string) => {
   const { data, error } = await supabase
     .from(mapTables.vocabulary)
     .select("number,created_at")
+    .neq("created_at", time)
     .order("created_at", { ascending: true })
     .range(endOfIndex + 1, 9999);
 
-  if (data) {
+  if (data && data.length > 0) {
     const sortedArr = data.sort((a: any, b: any) => a.number - b.number);
     const { error: updateError } = await supabase
       .from(mapTables.vocabulary)
