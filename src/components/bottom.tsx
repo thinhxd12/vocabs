@@ -252,15 +252,27 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn1}
         >
+          <img
+            src="images/main/sisyphus.webp"
+            class={styles.bottomBtnImage}
+            height={35}
+          />
           <small>Danger is sweet</small>
           <span>Dulce periculum</span>
         </A>
+
+        <div class={styles.bottomDivide}></div>
 
         <A
           href="/calendar"
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn2}
         >
+          <img
+            src="images/main/winterman.webp"
+            class={styles.bottomBtnImage}
+            height={36}
+          />
           <small>Money not stink</small>
           <span>Pecunia non olet</span>
         </A>
@@ -290,9 +302,9 @@ const Bottom: Component<{}> = () => {
           class={styles.bottomBtnWeather}
         >
           <Show when={bottomWeatherBgUrl()}
-            fallback={<img src="images/main/sky.webp" width={90} height={35} class={styles.bottomBtnWeatherBg} />}
+            fallback={<img src="images/main/sky.webp" width={86} height={35} class={styles.bottomBtnWeatherBg} />}
           >
-            <img src={bottomWeatherBgUrl()} width={90} height={35} class={styles.bottomBtnWeatherBg} />
+            <img src={bottomWeatherBgUrl()} width={86} height={35} class={styles.bottomBtnWeatherBg} />
           </Show>
           <Show
             when={bottomWeather()}
