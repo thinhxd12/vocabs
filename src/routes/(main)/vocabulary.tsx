@@ -129,6 +129,8 @@ const Vocabulary: Component<{}> = () => {
 
   let audio1: HTMLAudioElement | null;
   let audio2: HTMLAudioElement | null;
+  let audio3: HTMLAudioElement | null;
+  let audio4: HTMLAudioElement | null;
   let timeoutId: NodeJS.Timeout;
 
   const [flag, setFlag] = createSignal<boolean>(false);
@@ -139,23 +141,37 @@ const Vocabulary: Component<{}> = () => {
     const v = mainStore.renderWord;
     if (v) {
       audio1 = new Audio();
-      const currentSound = v.audio;
+      const engSound = v.audio;
       const translations = v.translations
         .map((item) => item.translations.join(", "))
         .join(", ");
+      const tranSound = `https://vocabs3.vercel.app/speech?text=${translations}`;
 
-      if (currentSound) {
-        audio1.src = currentSound;
+      if (engSound) {
+        audio1.src = engSound;
         audio1.play();
+        audio1.addEventListener('ended', function () {
+          audio2 = new Audio();
+          audio2.src = tranSound;
+          audio2.play();
+          audio2.addEventListener('ended', function () {
+            setTimeout(() => {
+              audio3 = new Audio();
+              audio3.src = tranSound;
+              audio3.play();
+              audio3.addEventListener('ended', function () {
+                audio4 = new Audio();
+                audio4.src = engSound;
+                audio4.play();
+              });
+            }, 1000);
+          });
+        });
       }
 
       setShowNumber(true);
       if (translations) {
         timeoutId = setTimeout(() => {
-          const soundUrl = `https://vocabs3.vercel.app/speech?text=${translations}`;
-          audio2 = new Audio();
-          audio2.src = soundUrl;
-          audio2.play();
           setShowNumber(false);
         }, 3500);
       }
@@ -164,7 +180,7 @@ const Vocabulary: Component<{}> = () => {
       setFlag(!flag());
     });
     onCleanup(() => {
-      audio1 = audio2 = null;
+      audio1 = audio2 = audio3 = audio4 = null;
       clearTimeout(timeoutId);
     });
   });
