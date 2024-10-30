@@ -127,7 +127,7 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [spans, setSpans] = createSignal<number[]>([]);
 
   const animationRun = () => {
-    setSpans(Array.from({ length: 45 }, (_, i) => i))
+    setSpans(Array.from({ length: 60 }, (_, i) => i))
     setTimeout(() => setSpans([]), 1500);
   }
 
@@ -140,6 +140,18 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
 
   return (
     <div class={styles.bookmarkContainer} tabIndex={1}>
+      <Show when={spans().length > 0}>
+        <Index each={spans()}>
+          {
+            data => {
+              return <span class={styles.heart} style={{ left: `${Math.random() * 100}%`, bottom: "0px", "animation-delay": `${Math.random() * 0.5}s` }}>
+                <BsHeartFill size={24} color="#e92f3f" />
+              </span>
+            }
+          }
+        </Index>
+      </Show>
+
       <div
         class={
           bookmark()?.like
@@ -170,18 +182,6 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
             <p class={styles.bookmarkYear}>{bookmark()?.dateOfCreation}</p>
           </div>
         </div>
-
-        <Show when={spans().length > 0}>
-          <Index each={spans()}>
-            {
-              data => {
-                return <span class={styles.heart} style={{ left: `${Math.random() * 100}%`, bottom: "0px", "animation-delay": `${Math.random() * 0.5}s` }}>
-                  <BsHeartFill size={24} color="#e92f3f" />
-                </span>
-              }
-            }
-          </Index>
-        </Show>
 
         <div
           class={styles.buttonBookmarkLeft}

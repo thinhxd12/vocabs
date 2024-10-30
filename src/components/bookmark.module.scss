@@ -10,12 +10,20 @@
     outline: 0;
     z-index: 12;
     overflow-y: scroll;
-    background-size: cover;
+    position: relative;
+
+    .heart {
+        position: fixed;
+        font-size: 1rem;
+        filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
+        animation: fly 1.5s ease forwards;
+    }
 
     .bookmarkButtons {
-        position: absolute;
-        right: 0;
-        top: 30%;
+        position: fixed;
+        right: 360px;
+        top: 0;
+        height: 100%;
         z-index: 1001;
         padding-right: 3px;
         width: 40px;
@@ -41,13 +49,6 @@
         outline: none;
         position: relative;
         overflow: hidden;
-
-        .heart {
-            position: absolute;
-            font-size: 1rem;
-            filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
-            animation: fly 1.5s ease forwards;
-        }
 
         .bookmarkContentInside {
             position: relative;
