@@ -65,7 +65,7 @@ const Bottom: Component<{}> = () => {
       getBottomWeatherData();
       const weatherInterval = setInterval(async () => {
         getBottomWeatherData();
-      }, 1000 * 12 * 60);
+      }, 1000 * 15 * 60);
       clearInterval(intervalCountdown);
     }
   });
