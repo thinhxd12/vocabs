@@ -28,6 +28,7 @@ import { AiOutlineInsertRowBelow } from "solid-icons/ai";
 import { BsHeartFill, BsTrash3, BsTrash3Fill } from "solid-icons/bs";
 import { BiSolidLeftArrow, BiSolidPaste, BiSolidRightArrow, BiSolidSave } from "solid-icons/bi";
 import { FaSolidDice } from "solid-icons/fa";
+import { Motion } from "solid-motionone";
 
 declare module "solid-js" {
   namespace JSX {
@@ -127,8 +128,8 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
   const [spans, setSpans] = createSignal<number[]>([]);
 
   const animationRun = () => {
-    setSpans(Array.from({ length: 60 }, (_, i) => i))
-    setTimeout(() => setSpans([]), 1500);
+    setSpans(Array.from({ length: 150 }, (_, i) => i))
+    setTimeout(() => setSpans([]), 3500);
   }
 
   const [trashIcon, setTrashIcon] = createSignal<boolean>(false);
@@ -144,9 +145,20 @@ const Bookmark: Component<{ onClose?: Setter<boolean> }> = (props) => {
         <Index each={spans()}>
           {
             data => {
-              return <span class={styles.heart} style={{ left: `${Math.random() * 100}%`, bottom: "0px", "animation-delay": `${Math.random() * 0.5}s` }}>
+              return <Motion.span
+                class={styles.heart}
+                animate={{
+                  left: [`${Math.random() * 100}%`, `${Math.random() * 100}%`],
+                  bottom: ['-10vh', '120vh'],
+                  opacity: [1, 0.3],
+                }}
+                transition={{
+                  duration: 2,
+                  delay: Math.random() * 1.5
+                }}
+              >
                 <BsHeartFill size={24} color="#e92f3f" />
-              </span>
+              </Motion.span>
             }
           }
         </Index>

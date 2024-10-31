@@ -15,8 +15,8 @@
     .heart {
         position: fixed;
         font-size: 1rem;
-        filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
-        animation: fly 1.5s ease forwards;
+        z-index: 99;
+        filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.3));
     }
 
     .bookmarkButtons {
@@ -53,8 +53,6 @@
         .bookmarkContentInside {
             position: relative;
             padding-bottom: 24px;
-
-
 
             .bookmarkTitleContent {
                 @include flex-center-column;
@@ -163,6 +161,7 @@
 
     .bookmarkContentChecked {
         @extend .bookmarkContent;
+        z-index: 9;
 
         &::before {
             content: "";
@@ -192,17 +191,5 @@
         border: 1px solid $color-border;
         min-height: 150px;
         background-color: $color-calendar-bg;
-    }
-}
-
-@keyframes fly {
-    0% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-
-    100% {
-        opacity: 0.1;
-        transform: translateY(-120vh) scale(0);
     }
 }
