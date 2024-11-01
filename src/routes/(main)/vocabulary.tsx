@@ -5,6 +5,7 @@ import {
   createEffect,
   createSignal,
   lazy,
+  on,
   onCleanup,
   onMount,
   untrack,
@@ -43,6 +44,9 @@ const Vocabulary: Component<{}> = () => {
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
+  let vocabRef1: HTMLAudioElement | undefined;
+  let vocabRef2: HTMLAudioElement | undefined;
+  let vocabRef3: HTMLAudioElement | undefined;
   //search text
   const trigger = debounce(async (str: string) => {
     const res = await searchText(str);
@@ -129,39 +133,41 @@ const Vocabulary: Component<{}> = () => {
   let timeoutId: NodeJS.Timeout;
 
   const [flag, setFlag] = createSignal<boolean>(false);
-  const [showNumber, setShowNumber] = createSignal<boolean>(false);
+  const [showNumber, setShowNumber] = createSignal<boolean>(true);
+  const [vocabSound1, setVocabSound1] = createSignal<string>("");
+  const [vocabSound2, setVocabSound2] = createSignal<string>("");
+  const [vocabSound3, setVocabSound3] = createSignal<string>("");
 
-  createEffect(() => {
-    clearTimeout(timeoutId);
-    const v = mainStore.renderWord;
-    if (v) {
-      const wordSound = v.audio;
-      const translations = v.translations
-        .map((item) => item.translations.join(", "))
-        .join(", ");
-      const tranSound = `https://vocabs3.vercel.app/speech?text=${translations}`;
-      if (mainStore.audioRef) {
-        mainStore.audioRef.volume = 1;
+  createEffect(
+    on(
+      () => mainStore.renderWord?.audio,
+      (v) => {
+        setFlag(!flag());
+        setShowNumber(true);
+        timeoutId = setTimeout(() => {
+          setShowNumber(false);
+        }, 3600);
+
+        const translations = mainStore.renderWord?.translations
+          .map((item) => item.translations.join(", "))
+          .join(", ");
+        const tranSound = `https://vocabs3.vercel.app/speech?text=${translations}`;
+        if (vocabRef1) {
+          setVocabSound1(v as string);
+          vocabRef1.onended = function () {
+            setVocabSound2(tranSound);
+          };
+        }
+        if (vocabRef2) {
+          vocabRef2.onended = function () {
+            setTimeout(() => {
+              setVocabSound3(v as string);
+            }, 2400);
+          };
+        }
       }
-      setMainStore("audioSrc", wordSound);
-      if (mainStore.audioRef) {
-        mainStore.audioRef.onended = function () {
-          setMainStore("audioSrc", tranSound);
-        };
-      }
-      setShowNumber(true);
-      timeoutId = setTimeout(() => {
-        setShowNumber(false);
-      }, 3500);
-    }
-    untrack(() => {
-      setFlag(!flag());
-    });
-    onCleanup(() => {
-      mainStore.audioRef && mainStore.audioRef.pause();
-      clearTimeout(timeoutId);
-    });
-  });
+    )
+  );
 
   const FlipCardText: Component = (props) => {
     return (
@@ -175,6 +181,13 @@ const Vocabulary: Component<{}> = () => {
       </div>
     )
   }
+
+  onCleanup(() => {
+    vocabRef1 && vocabRef1.pause();
+    vocabRef2 && vocabRef2.pause();
+    vocabRef3 && vocabRef3.pause();
+    clearTimeout(timeoutId);
+  });
 
   return (
     <MetaProvider>
@@ -334,6 +347,24 @@ const Vocabulary: Component<{}> = () => {
           </Show>
         </Presence>
       </div>
+      <audio
+        ref={vocabRef1}
+        autoplay
+        hidden
+        src={vocabSound1()}
+      />
+      <audio
+        ref={vocabRef2}
+        autoplay
+        hidden
+        src={vocabSound2()}
+      />
+      <audio
+        ref={vocabRef3}
+        autoplay
+        hidden
+        src={vocabSound3()}
+      />
     </MetaProvider>
   );
 };
