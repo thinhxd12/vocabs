@@ -7,6 +7,7 @@ import {
   createEffect,
   createResource,
   createSignal,
+  onCleanup,
   onMount,
 } from "solid-js";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
@@ -35,9 +36,9 @@ import {
 import { WMOCODE } from "~/utils";
 import { format } from "date-fns";
 import { WeatherGeoType } from "~/types";
+import { mainStore, setMainStore } from "~/lib/mystore";
 
 let canvas: HTMLCanvasElement;
-let audio: HTMLAudioElement;
 let refEl: HTMLDivElement;
 
 const Weather: Component<{}> = (props) => {
@@ -64,7 +65,6 @@ const Weather: Component<{}> = (props) => {
   const [minutely, { refetch: refetchMinutely, mutate: mutateMinutely }] =
     createResource(geo, getMinutelyWeatherData);
 
-  const [audioSrc, setAudioSrc] = createSignal<string>("");
   const [prediction, setPrediction] = createSignal<string>("");
 
   const [weatherLocations, setWeatherLocations] = createSignal<
@@ -84,7 +84,6 @@ const Weather: Component<{}> = (props) => {
   onMount(async () => {
     Chart.register(Title, Tooltip, Legend, Colors, Filler);
     loadTextures();
-    audio.volume = 0.5;
     const locations = await getWeatherLocations();
     setWeatherLocations(locations!);
     const item = locations!.find((item) => item.default) || locations![0];
@@ -426,14 +425,14 @@ const Weather: Component<{}> = (props) => {
       case 61:
       case 66:
       case 80:
-        setAudioSrc("/sounds/weather/rain_light_2.m4a");
+        setMainStore("audioSrc", "/sounds/weather/rain_light_2.m4a");
         weatherType = "drizzle";
         break;
       case 53:
       case 57:
       case 63:
       case 81:
-        setAudioSrc("/sounds/weather/rain_light.m4a");
+        setMainStore("audioSrc", "/sounds/weather/rain_light.m4a");
         weatherType = "rain";
         break;
       case 55:
@@ -443,30 +442,33 @@ const Weather: Component<{}> = (props) => {
       case 95:
       case 96:
       case 99:
-        setAudioSrc("/sounds/weather/thunderstorm.m4a");
+        setMainStore("audioSrc", "/sounds/weather/thunderstorm.m4a");
         weatherType = "storm";
         break;
       case 0:
       case 1:
         current()?.isDayTime
-          ? setAudioSrc("/sounds/weather/forest.m4a")
-          : setAudioSrc("/sounds/weather/night.m4a");
+          ? setMainStore("audioSrc", "/sounds/weather/forest.m4a")
+          : setMainStore("audioSrc", "/sounds/weather/night.m4a");
         weatherType = "sunny";
         break;
       case 71:
       case 73:
       case 75:
       case 77:
-        setAudioSrc("/sounds/weather/snow.m4a");
+        setMainStore("audioSrc", "/sounds/weather/snow.m4a");
         weatherType = "sunny";
         break;
       default:
-        setAudioSrc("/sounds/weather/wind.m4a");
+        setMainStore("audioSrc", "/sounds/weather/wind.m4a");
         weatherType = "sunny";
         break;
     }
 
-    audio.play();
+    if (mainStore.audioRef) {
+      mainStore.audioRef.volume = 0.3;
+      mainStore.audioRef.play();
+    }
 
     raindrops.options = {
       ...defaultOptions,
@@ -505,12 +507,15 @@ const Weather: Component<{}> = (props) => {
       });
   });
 
+  onCleanup(() => {
+    mainStore.audioRef && mainStore.audioRef.pause();
+  })
+
   return (
     <MetaProvider>
       <TitleName>{geoTitle()} ⛅</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <audio hidden src={audioSrc()} autoplay loop ref={audio}></audio>
       <div class={styles.weather}>
         <canvas ref={canvas} class={styles.weatherBackground} />
 

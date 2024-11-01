@@ -1,13 +1,10 @@
 import { createStore } from "solid-js/store";
 import {
-  BookmarkType,
   CalendarType,
-  CurrentlyWeatherType,
   HistoryItemType,
   ScheduleType,
   VocabularySearchType,
   VocabularyType,
-  WeatherGeoType,
 } from "~/types";
 
 type ListStoreType = {
@@ -49,6 +46,8 @@ type MainStoreType = {
   searchTermColor: string;
   searchSelectedIndex: number;
   searchDeleteIndex: number;
+  audioSrc: string;
+  audioRef: HTMLAudioElement | null;
 };
 
 export const [mainStore, setMainStore] = createStore<MainStoreType>({
@@ -67,4 +66,6 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   searchTermColor: "#ffffff",
   searchSelectedIndex: 0,
   searchDeleteIndex: 0,
+  audioSrc: "/sounds/mp3_Ding.mp3",
+  audioRef: null,
 });

@@ -4,7 +4,6 @@ import {
   createEffect,
   createSignal,
   on,
-  onCleanup,
 } from "solid-js";
 import { OcX2 } from "solid-icons/oc";
 import {
@@ -32,7 +31,6 @@ import { BiSolidSave } from "solid-icons/bi";
 const Edit: Component<{
   word: VocabularyType;
 }> = (props) => {
-  let notiSound: HTMLAudioElement | null;
   const [showHandyEdit, setShowHandyEdit] = createSignal<boolean>(false);
   const editActionResult = useSubmission(editVocabularyItem);
 
@@ -67,28 +65,29 @@ const Edit: Component<{
       () => editActionResult.result,
       () => {
         if (submittedForm()) {
-          notiSound = new Audio();
+
           if (editActionResult.result?.message === "success") {
             popSuccess("Edit Successful.");
-            notiSound.src = "/sounds/mp3_Ding.mp3";
-            notiSound.play();
+            setMainStore("audioSrc", "/sounds/mp3_Ding.mp3");
+            if (mainStore.audioRef) {
+              mainStore.audioRef.volume = 0.3;
+              mainStore.audioRef.play();
+            }
           } else if (
             editActionResult.result?.message !== "success" &&
             editActionResult.result?.message !== undefined
           ) {
             popError(editActionResult.result?.message!);
-            notiSound.src = "/sounds/mp3_Boing.mp3";
-            notiSound.play();
+            setMainStore("audioSrc", "/sounds/mp3_Boing.mp3");
+            if (mainStore.audioRef) {
+              mainStore.audioRef.volume = 0.3;
+              mainStore.audioRef.play();
+            }
           }
         }
       }
     )
   );
-
-  onCleanup(() => {
-    notiSound?.pause();
-    notiSound = null;
-  });
 
   //----------------------TOAST----------------------
 

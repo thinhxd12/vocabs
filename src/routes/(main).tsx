@@ -1,5 +1,5 @@
 import { RouteSectionProps } from "@solidjs/router";
-import { lazy, onCleanup, onMount, Show, Suspense } from "solid-js";
+import { lazy, onCleanup, Show, Suspense } from "solid-js";
 import { createStore } from "solid-js/store";
 import {
   getDataImage,
@@ -27,7 +27,6 @@ declare module "solid-js" {
 }
 
 export default function Main(props: RouteSectionProps) {
-  let audio: HTMLAudioElement | null;
   let checkTimeout: NodeJS.Timeout;
   let deleteSearchTimeout: NodeJS.Timeout;
   const mockObj = {
@@ -44,15 +43,8 @@ export default function Main(props: RouteSectionProps) {
       "https://www.getdailyart.com/en/24707/mykola-pymonenko/the-idyll",
     // "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez",
   };
-  onMount(() => {
-    audio = new Audio();
-    audio.src = "/sounds/mp3_Boing.mp3";
-    audio.volume = 0.3;
-  });
 
   onCleanup(() => {
-    audio?.pause();
-    audio = null;
     clearTimeout(checkTimeout);
     clearTimeout(deleteSearchTimeout);
   });
@@ -95,7 +87,11 @@ export default function Main(props: RouteSectionProps) {
             setMainStore("searchTerm", "");
             setMainStore("searchTermColor", "#ffffff");
           }, 1000);
-          audio?.play();
+          setMainStore("audioSrc", "/sounds/mp3_Boing.mp3");
+          if (mainStore.audioRef) {
+            mainStore.audioRef.volume = 0.3;
+            mainStore.audioRef.play();
+          }
         }
         if (res.length === 1 && str.length > 4) {
           checkTimeout = setTimeout(() => {

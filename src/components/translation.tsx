@@ -11,7 +11,6 @@ import {
   createResource,
   createSignal,
   on,
-  onCleanup,
 } from "solid-js";
 import { OcX2 } from "solid-icons/oc";
 import { useSubmission } from "@solidjs/router";
@@ -27,7 +26,7 @@ import styles from "./translation.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
 import forms from "../assets/styles/form.module.scss";
 import toasts from "../assets/styles/toast.module.scss";
-import { setMainStore } from "~/lib/mystore";
+import { mainStore, setMainStore } from "~/lib/mystore";
 import { clickOutside, stopKeydown } from "~/utils";
 import Definition from "./definition";
 import { BiSolidSave } from "solid-icons/bi";
@@ -43,16 +42,17 @@ declare module "solid-js" {
 const Translation: Component<{
   translateText: string;
 }> = (props) => {
-  let notiSound: HTMLAudioElement | null;
   const insertActionResult = useSubmission(insertVocabularyItem);
 
   createEffect(async () => {
     const checkMemories = await searchMemoriesText(translateTerm());
     if (checkMemories) {
       popCheckMemories(checkMemories.message);
-      notiSound = new Audio();
-      notiSound.src = "/sounds/mp3_Boing.mp3";
-      notiSound.play();
+      setMainStore("audioSrc", "/sounds/mp3_Boing.mp3");
+      if (mainStore.audioRef) {
+        mainStore.audioRef.volume = 0.3;
+        mainStore.audioRef.play();
+      }
     }
   });
 
@@ -99,29 +99,22 @@ const Translation: Component<{
       () => insertActionResult.result,
       () => {
         if (submittedForm()) {
-          notiSound = new Audio();
           if (insertActionResult.result?.message === "success") {
             popSuccess("New word has been saved successfully.");
-            notiSound.src = "/sounds/mp3_Ding.mp3";
-            notiSound.play();
+            setMainStore("audioSrc", "/sounds/mp3_Ding.mp3");
+            mainStore.audioRef && mainStore.audioRef.play();
           } else if (
             insertActionResult.result?.message !== "success" &&
             insertActionResult.result?.message !== undefined
           ) {
             popError(insertActionResult.result?.message!);
-            notiSound.src = "/sounds/mp3_Boing.mp3";
-            notiSound.play();
+            setMainStore("audioSrc", "/sounds/mp3_Boing.mp3");
+            mainStore.audioRef && mainStore.audioRef.play();
           }
         }
       }
     )
   );
-
-  onCleanup(() => {
-    notiSound?.pause();
-    notiSound = null;
-  });
-
   // ------------------------------------------------------------------------------- //
   const [translateTerm, setTranslateTerm] = createSignal<string>(
     props.translateText

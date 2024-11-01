@@ -126,11 +126,6 @@ const Vocabulary: Component<{}> = () => {
     e.currentTarget.value = "";
   };
   // -------------------MOBILE END-------------------- //
-
-  let audio1: HTMLAudioElement | null;
-  let audio2: HTMLAudioElement | null;
-  let audio3: HTMLAudioElement | null;
-  let audio4: HTMLAudioElement | null;
   let timeoutId: NodeJS.Timeout;
 
   const [flag, setFlag] = createSignal<boolean>(false);
@@ -140,47 +135,30 @@ const Vocabulary: Component<{}> = () => {
     clearTimeout(timeoutId);
     const v = mainStore.renderWord;
     if (v) {
-      audio1 = new Audio();
-      const engSound = v.audio;
+      const wordSound = v.audio;
       const translations = v.translations
         .map((item) => item.translations.join(", "))
         .join(", ");
       const tranSound = `https://vocabs3.vercel.app/speech?text=${translations}`;
-
-      if (engSound) {
-        audio1.src = engSound;
-        audio1.play();
-        audio1.addEventListener('ended', function () {
-          audio2 = new Audio();
-          audio2.src = tranSound;
-          audio2.play();
-          audio2.addEventListener('ended', function () {
-            setTimeout(() => {
-              audio3 = new Audio();
-              audio3.src = tranSound;
-              audio3.play();
-              audio3.addEventListener('ended', function () {
-                audio4 = new Audio();
-                audio4.src = engSound;
-                audio4.play();
-              });
-            }, 1000);
-          });
-        });
+      if (mainStore.audioRef) {
+        mainStore.audioRef.volume = 1;
       }
-
+      setMainStore("audioSrc", wordSound);
+      if (mainStore.audioRef) {
+        mainStore.audioRef.onended = function () {
+          setMainStore("audioSrc", tranSound);
+        };
+      }
       setShowNumber(true);
-      if (translations) {
-        timeoutId = setTimeout(() => {
-          setShowNumber(false);
-        }, 3500);
-      }
+      timeoutId = setTimeout(() => {
+        setShowNumber(false);
+      }, 3500);
     }
     untrack(() => {
       setFlag(!flag());
     });
     onCleanup(() => {
-      audio1 = audio2 = audio3 = audio4 = null;
+      mainStore.audioRef && mainStore.audioRef.pause();
       clearTimeout(timeoutId);
     });
   });
