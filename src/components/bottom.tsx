@@ -217,12 +217,6 @@ const Bottom: Component<{}> = () => {
 
   return (
     <div class={styles.bottom}>
-      <audio
-        ref={(el) => setMainStore('audioRef', el)}
-        autoplay
-        hidden
-        src={mainStore.audioSrc}
-      />
       <div class={styles.bottomBar}>
         <div class={styles.bottomIndex}>
           <div class={styles.bottomIndexNums}>
@@ -421,8 +415,6 @@ const Bottom: Component<{}> = () => {
 
       </div>
 
-
-
       <div class={styles.buttonMenuContent}>
         <button
           class={buttons.buttonMenu}
@@ -530,6 +522,12 @@ const Bottom: Component<{}> = () => {
         </button>
       </div>
 
+      <audio
+        ref={(el) => setMainStore('audioRef', el)}
+        autoplay
+        hidden
+        src={mainStore.audioSrc}
+      />
     </div>
   );
 };
