@@ -125,6 +125,7 @@
             padding: 3px 3px 5px 6px;
 
             b {
+                font-weight: 700;
                 padding: 2px 3px 1px;
                 animation: textAnimate 0.2s ease-in-out forwards;
                 animation-delay: 3.6s;
@@ -186,7 +187,6 @@
 
 @keyframes textAnimate {
     to {
-        font-weight: 700;
         color: $color-red-1;
         background: #000000;
     }

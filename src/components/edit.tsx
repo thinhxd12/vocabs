@@ -69,7 +69,6 @@ const Edit: Component<{
           if (editActionResult.result?.message === "success") {
             popSuccess("Edit Successful.");
             setMainStore("audioSrc", "/sounds/mp3_Ding.mp3");
-            mainStore.audioRef && mainStore.audioRef.play();
             if (mainStore.audioRef) {
               mainStore.audioRef.volume = 0.3;
               mainStore.audioRef.play();
@@ -80,7 +79,6 @@ const Edit: Component<{
           ) {
             popError(editActionResult.result?.message!);
             setMainStore("audioSrc", "/sounds/mp3_Boing.mp3");
-            mainStore.audioRef && mainStore.audioRef.play();
             if (mainStore.audioRef) {
               mainStore.audioRef.volume = 0.3;
               mainStore.audioRef.play();

@@ -49,7 +49,6 @@ const Translation: Component<{
     if (checkMemories) {
       popCheckMemories(checkMemories.message);
       setMainStore("audioSrc", "/sounds/mp3_Boing.mp3");
-      mainStore.audioRef && mainStore.audioRef.play();
       if (mainStore.audioRef) {
         mainStore.audioRef.volume = 0.3;
         mainStore.audioRef.play();
@@ -103,14 +102,12 @@ const Translation: Component<{
           if (insertActionResult.result?.message === "success") {
             popSuccess("New word has been saved successfully.");
             setMainStore("audioSrc", "/sounds/mp3_Ding.mp3");
-            mainStore.audioRef && mainStore.audioRef.play();
           } else if (
             insertActionResult.result?.message !== "success" &&
             insertActionResult.result?.message !== undefined
           ) {
             popError(insertActionResult.result?.message!);
             setMainStore("audioSrc", "/sounds/mp3_Boing.mp3");
-            mainStore.audioRef && mainStore.audioRef.play();
           }
         }
       }
