@@ -49,6 +49,7 @@ const Translation: Component<{
     if (checkMemories) {
       popCheckMemories(checkMemories.message);
       setMainStore("audioSrc", "/sounds/mp3_Boing.mp3");
+      mainStore.audioRef && mainStore.audioRef.play();
       if (mainStore.audioRef) {
         mainStore.audioRef.volume = 0.3;
         mainStore.audioRef.play();

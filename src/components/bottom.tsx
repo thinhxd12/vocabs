@@ -111,6 +111,7 @@ const Bottom: Component<{}> = () => {
     setShowTimer(false);
     clearInterval(intervalCountdown);
     setMainStore("audioSrc", "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/3a/5e/e6/3a5ee615-b992-cba4-c351-419d2c6d1578/mzaf_13102140031776931351.plus.aac.ep.m4a");
+    mainStore.audioRef && mainStore.audioRef.play();
     showDesktopNotification();
   };
 
