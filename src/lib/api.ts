@@ -651,7 +651,7 @@ export const handleCheckWord = async (text: VocabularySearchType) => {
         updateLastRowWord(text.created_at);
         const total = await getTotalMemories();
         setMainStore("totalMemories", total);
-      }, 2000);
+      }, 2100);
     }
   }
 };

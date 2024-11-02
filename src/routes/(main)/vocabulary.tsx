@@ -146,7 +146,7 @@ const Vocabulary: Component<{}> = () => {
         setShowNumber(true);
         timeoutId = setTimeout(() => {
           setShowNumber(false);
-        }, 3600);
+        }, 3000);
 
         const translations = mainStore.renderWord?.translations
           .map((item) => item.translations.join(", "))
@@ -162,25 +162,12 @@ const Vocabulary: Component<{}> = () => {
           vocabRef2.onended = function () {
             setTimeout(() => {
               setVocabSound3(v as string);
-            }, 2400);
+            }, 1800);
           };
         }
       }
     )
   );
-
-  const FlipCardText: Component = (props) => {
-    return (
-      <div
-        class={styles.flipCardTextWordContent}
-        style={{
-          color: mainStore.searchTermColor,
-        }}
-      >
-        {mainStore.searchTerm || mainStore.renderWord?.word}
-      </div>
-    )
-  }
 
   onCleanup(() => {
     vocabRef1 && vocabRef1.pause();
@@ -200,11 +187,14 @@ const Vocabulary: Component<{}> = () => {
             when={isMobile()}
             fallback={
               <div class={styles.flipCardTextWord}>
-                <Show when={flag()} fallback={
-                  <FlipCardText />
-                }>
-                  <FlipCardText />
-                </Show>
+                <div
+                  class={styles.flipCardTextWordContent}
+                  style={{
+                    color: mainStore.searchTermColor,
+                  }}
+                >
+                  {mainStore.searchTerm || mainStore.renderWord?.word}
+                </div>
                 <span class={styles.flipCardTextPhonetic}>
                   {mainStore.renderWord && mainStore.renderWord!.phonetics}
                 </span>

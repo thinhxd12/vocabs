@@ -188,7 +188,6 @@
                 text-align: center;
                 margin-top: 3px;
                 text-shadow: 0 2px 2px rgba(0, 0, 0, 0.9);
-                animation: appear 3s ease;
             }
 
             input {
@@ -227,17 +226,5 @@
             display: inline-block;
             @include font($f-flipNumber, 210px, #f4f4f4, bold, normal, 180px);
         }
-    }
-}
-
-@keyframes appear {
-    0% {
-        mix-blend-mode: soft-light;
-        text-shadow: 0 0 0 rgba(0, 0, 0, 0.21);
-    }
-
-    50% {
-        mix-blend-mode: unset;
-        text-shadow: 0 2px 2px rgba(0, 0, 0, 0.9);
     }
 }
