@@ -130,7 +130,7 @@ const Calendar: Component<{}> = (props) => {
               <p class={styles.setNewMonth}>{format(new Date(), "MMMM")}</p>
               <p class={styles.setNewWeek}>{format(new Date(), "yyyy")}</p>
               <p class={styles.setNewHistory}>
-                <Show when={mainStore.thisWeekIndex >= 0} fallback={"Nothing"}>
+                <Show when={mainStore.thisWeekIndex >= 0} fallback={"hiems"}>
                   {Number(mainStore.thisWeekIndex + 1) +
                     " - " +
                     Number(mainStore.thisWeekIndex + 200)}

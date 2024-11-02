@@ -46,8 +46,8 @@ const Bottom: Component<{}> = () => {
       lon: bottomLocation().lon,
     });
     result && setBottomWeather(result);
-    const weatherBgUrl = await getImageFromUnsplashByKeyword(WMOCODE[String(bottomWeather().icon)].textdescription);
-    if (weatherBgUrl) setBottomWeatherBgUrl(weatherBgUrl);
+    // const weatherBgUrl = await getImageFromUnsplashByKeyword(WMOCODE[String(bottomWeather().icon)].textdescription);
+    // if (weatherBgUrl) setBottomWeatherBgUrl(weatherBgUrl);
   };
 
   onMount(async () => {
@@ -484,7 +484,14 @@ const Bottom: Component<{}> = () => {
             width={90}
             height={42}
           />
-          <span>{Number(listStore.listToday?.index2 + 1) ?? "N"}</span>
+          <Show
+            when={listStore.listToday.created_at}
+            fallback={
+              <span>hiems</span>
+            }
+          >
+            <span>{listStore.listToday.index2 + 1}</span>
+          </Show>
         </button>
       </div>
 
@@ -506,7 +513,14 @@ const Bottom: Component<{}> = () => {
             width={90}
             height={42}
           />
-          <span>{Number(listStore.listToday?.index1 + 1) ?? "N"}</span>
+          <Show
+            when={listStore.listToday.created_at}
+            fallback={
+              <span>hiems</span>
+            }
+          >
+            <span>{listStore.listToday.index1 + 1}</span>
+          </Show>
         </button>
       </div>
 
