@@ -152,16 +152,15 @@ const Bottom: Component<{}> = () => {
   const endAutoplay = async () => {
     clearInterval(intervalAutoplay);
     setListStore("listCount", 0);
+    await updateTodaySchedule(todayDate, listStore.listType);
+    updateTodayData(todayDate);
     const currentProgress =
       listStore.listType === 1
-        ? listStore.listToday.time1 + 1
-        : listStore.listToday.time2 + 1;
-
+        ? listStore.listToday.time1
+        : listStore.listToday.time2;
     if (currentProgress < 9) {
       startCountdown();
     }
-    await updateTodaySchedule(todayDate, listStore.listType);
-    updateTodayData(todayDate);
     handleGetListContent(listStore.listType);
   };
 
