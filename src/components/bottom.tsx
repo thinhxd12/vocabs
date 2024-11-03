@@ -153,7 +153,7 @@ const Bottom: Component<{}> = () => {
     clearInterval(intervalAutoplay);
     setListStore("listCount", 0);
     await updateTodaySchedule(todayDate, listStore.listType);
-    updateTodayData(todayDate);
+    await updateTodayData(todayDate);
     const currentProgress =
       listStore.listType === 1
         ? listStore.listToday.time1
