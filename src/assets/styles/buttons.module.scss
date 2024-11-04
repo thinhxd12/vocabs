@@ -35,8 +35,8 @@
 }
 
 .buttonMenu {
-    width: 86px;
-    height: 30px;
+    width: 90px;
+    height: 34px;
     transition: 0.3s ease;
     overflow: hidden;
     position: relative;
@@ -56,7 +56,7 @@
         background-image: url('/images/main/input-left-corner.webp'), url('/images/main/input-right-corner.webp');
         background-position: top left, top right;
         background-repeat: no-repeat, no-repeat;
-        background-size: auto 30px, auto 30px;
+        background-size: auto 34px, auto 34px;
     }
 
     img {
@@ -70,7 +70,7 @@
 
     span {
         position: absolute;
-        @include font($f-buttonMenu, 14px, $color-white, 700, normal, 30px);
+        @include font($f-buttonMenu, 15px, $color-white, 700, normal, 35px);
         top: 0;
         left: 0;
         right: 0;
