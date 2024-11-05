@@ -163,7 +163,9 @@ const Bottom: Component<{}> = () => {
     if (currentProgress < 9) {
       startCountdown();
     }
-    handleGetListContent(listStore.listType);
+    setTimeout(() => {
+      handleGetListContent(listStore.listType);
+    }, 1500);
   };
 
   const handleAutoplay = () => {

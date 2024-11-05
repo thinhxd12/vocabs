@@ -7,7 +7,9 @@
     overflow: hidden;
     position: relative;
     outline: none;
-    background-color: $color-black;
+    background: url("/images/main/paper.webp");
+    background-size: cover;
+    background-position: center top;
 
     .quizText {
         width: 100%;
@@ -51,9 +53,10 @@
 
     .quizProgessBar {
         position: absolute;
-        top: 36px;
-        height: 3px;
+        bottom: 0px;
+        height: 2px;
         background-color: $color-calendar-green-1;
+        box-shadow: rgba(0, 0, 0, 1) 0px 0px 3px;
     }
 
     .quizChoices {
@@ -63,7 +66,6 @@
         overflow-x: hidden;
         overflow-y: scroll;
         z-index: 3;
-        border-top: 1px solid $color-border;
 
         grid-column-gap: 3px;
         grid-row-gap: 3px;
@@ -75,14 +77,15 @@
         }
 
         .quizChoice {
-            @include font($f-quizChoice, 16px, $color-black, 600, normal, 24px);
-            padding: 6px 0;
-            min-width: 180px;
+            @include font($f-quizChoice, 14px, $color-black, 500, normal, 24px);
+            padding: 6px 3px;
+            min-width: 178.5px;
             min-height: 34px;
             text-align: center;
             background-color: $color-vintage-background;
             cursor: pointer;
             text-wrap: wrap;
+            box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px;
 
             &:hover {
                 background-color: #ececec;

@@ -95,7 +95,7 @@ const Quiz: Component<{}> = (props) => {
         setListStore("quizCount", nextCount);
         setQuizText(listStore.listContent[nextCount]);
         getRandomChoices();
-      }, 3000);
+      }, 2400);
     }
     else {
       setListStore("quizCount", 0);
@@ -104,27 +104,27 @@ const Quiz: Component<{}> = (props) => {
       await updateTodaySchedule(todayDate, listStore.listType);
       await updateTodayData(todayDate);
 
-      switch (listStore.listType) {
-        case 1:
-          const data1 = await getListContent(
-            listStore.listToday.index1,
-            listStore.listToday.index1 + 49
-          );
-          if (data1) setListStore("listContent", data1);
-          break;
-        case 2:
-          const data2 = await getListContent(
-            listStore.listToday.index2,
-            listStore.listToday.index2 + 49
-          );
-          if (data2) setListStore("listContent", data2);
-          break;
-        default:
-          break;
-      }
+      setTimeout(async () => {
+        switch (listStore.listType) {
+          case 1:
+            const data1 = await getListContent(
+              listStore.listToday.index1,
+              listStore.listToday.index1 + 49
+            );
+            if (data1) setListStore("listContent", data1);
+            break;
+          case 2:
+            const data2 = await getListContent(
+              listStore.listToday.index2,
+              listStore.listToday.index2 + 49
+            );
+            if (data2) setListStore("listContent", data2);
+            break;
+          default:
+            break;
+        }
+      }, 1500);
     }
-
-
   }
 
   return (
@@ -139,7 +139,7 @@ const Quiz: Component<{}> = (props) => {
               {quizText().word}
             </span>
             <span class={styles.quizTextPhonetic}>
-              {quizText().word}
+              {quizText().phonetics}
             </span>
             <span class={styles.quizTextNumber}>
               {quizText().number}
@@ -147,7 +147,7 @@ const Quiz: Component<{}> = (props) => {
           </Show>
         </div>
 
-        <Show when={listStore.quizCount > 0}>
+        <Show when={listStore.quizCount}>
           <Motion.div class={styles.quizProgessBar}
             animate={{
               width: `${(listStore.quizCount + 1) * 2}%`,
@@ -177,7 +177,7 @@ const Quiz: Component<{}> = (props) => {
                       fallback={
                         <Motion.div
                           class={styles.quizChoice}
-                          animate={{ backgroundColor: data().created_at === quizText().created_at ? "#a6ffca" : "#fffeff" }}
+                          animate={{ backgroundColor: data().created_at === quizText().created_at ? "#38e07b" : "#fffeff" }}
                         >
                           {data().translation}
                         </Motion.div>
@@ -185,7 +185,7 @@ const Quiz: Component<{}> = (props) => {
                     >
                       <Motion.div
                         class={styles.quizChoice}
-                        animate={{ backgroundColor: data().created_at === quizText().created_at ? "#a6ffca" : "#f90000" }}
+                        animate={{ backgroundColor: data().created_at === quizText().created_at ? "#38e07b" : "#f90000" }}
                       >
                         {data().translation}
                       </Motion.div>
