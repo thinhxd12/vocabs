@@ -8,14 +8,13 @@ import {
   on,
   onCleanup,
   onMount,
-  untrack,
 } from "solid-js";
 import { VocabularySearchType, VocabularyType } from "~/types";
 import { debounce } from "@solid-primitives/scheduled";
 import {
   deleteVocabulary,
   searchText,
-  handleCheckWord,
+  handleCheckAndRender,
   getWordData,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
@@ -63,7 +62,7 @@ const Vocabulary: Component<{}> = () => {
     setMainStore("searchTermColor", "#ffffff");
     setMainStore("searchTerm", "");
     setMainStore("searchResult", []);
-    handleCheckWord(text);
+    handleCheckAndRender(text);
   };
 
   // -------------------DELETE START-------------------- //

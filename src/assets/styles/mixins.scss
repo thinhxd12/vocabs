@@ -19,6 +19,7 @@ $color-calendar-text-2: #0000004d;
 $color-calendar-text-3: #ffffff73;
 $color-calendar-green-1: #38E07B;
 $color-calendar-green-2: #A7F1C4;
+$color-calendar-green-3: #a6ffca;
 $color-vintage-1: #957c3e;
 $color-vintage-2: #706659;
 $color-vintage-background: #fffeff;
@@ -93,6 +94,9 @@ $f-buttonMenu: 'Roslindale', sans-serif;
 $f-formInput: "Basier";
 $f-formInputMeaning: 'SFProDisplay', sans-serif;
 $f-formInputCalendar: "Rubik", sans-serif;
+
+$f-quizChoice: 'SFProDisplay', sans-serif;
+
 
 
 @mixin font($family: false, $size: false, $colour: false, $weight: false, $style: false, $lh: false) {

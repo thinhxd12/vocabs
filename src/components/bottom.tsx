@@ -16,7 +16,7 @@ import {
   getTodayData,
   getTotalMemories,
   getWeatherLocations,
-  handleCheckWord,
+  handleCheckAndRender,
   updateTodayData,
   updateTodaySchedule,
 } from "~/lib/api";
@@ -88,7 +88,9 @@ const Bottom: Component<{}> = () => {
     });
     notification.onclose = () => {
       mainStore.audioRef && mainStore.audioRef.pause();
-      handleAutoplay();
+      if (!listStore.quizTest) {
+        handleAutoplay();
+      }
     };
   };
 
@@ -129,7 +131,7 @@ const Bottom: Component<{}> = () => {
   // -------------------COUNTDOWN END-------------------- //
   // -------------------AUTOPLAY START-------------------- //
   const handleRenderWord = () => {
-    handleCheckWord(listStore.listContent[listStore.listCount]);
+    handleCheckAndRender(listStore.listContent[listStore.listCount]);
     setListStore("listCount", listStore.listCount + 1);
   };
 
@@ -418,11 +420,9 @@ const Bottom: Component<{}> = () => {
       </div>
 
       <div class={styles.buttonMenuContent}>
-        <button
+        <A
+          href="/quiz"
           class={buttons.buttonMenu}
-          onClick={() => {
-            startCountdown();
-          }}
         >
           <div class={buttons.buttonMenuOrnament}></div>
           <img
@@ -431,7 +431,7 @@ const Bottom: Component<{}> = () => {
             width={90}
             height={42}
           />
-        </button>
+        </A>
       </div>
 
       <div class={styles.buttonMenuContent}>

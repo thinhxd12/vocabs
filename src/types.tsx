@@ -9,8 +9,12 @@ export interface VocabularyType {
 }
 
 export interface VocabularySearchType {
-  word: string;
   created_at: string;
+  word: string;
+  audio: string;
+  phonetics: string;
+  number: number;
+  translations: VocabularyTranslationType[];
 }
 
 export interface VocabularyTranslationType {

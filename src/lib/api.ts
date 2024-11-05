@@ -637,22 +637,25 @@ export const submitNewSchedule = action(async (formData: FormData) => {
 }, "submitNewSchedule");
 
 // handlecheck
-export const handleCheckWord = async (text: VocabularySearchType) => {
+export const handleCheckAndRender = async (text: VocabularySearchType) => {
   const wordData = await getWordData(text.created_at);
   if (wordData) {
     setMainStore("renderWord", wordData);
+    handleCheckWord(wordData);
+  }
+};
 
-    if (wordData.number > 1) {
-      checkVocabulary(wordData!.number - 1, text.created_at);
-    } else {
-      archiveVocabulary(text.word);
-      deleteVocabulary(text.created_at);
-      setTimeout(async () => {
-        updateLastRowWord(text.created_at);
-        const total = await getTotalMemories();
-        setMainStore("totalMemories", total);
-      }, 2100);
-    }
+export const handleCheckWord = async (word: VocabularySearchType) => {
+  if (word.number > 1) {
+    checkVocabulary(word!.number - 1, word.created_at);
+  } else {
+    archiveVocabulary(word.word);
+    deleteVocabulary(word.created_at);
+    setTimeout(async () => {
+      updateLastRowWord(word.created_at);
+      const total = await getTotalMemories();
+      setMainStore("totalMemories", total);
+    }, 2100);
   }
 };
 
@@ -1027,7 +1030,7 @@ export const getListContent = async (start: number, end: number) => {
   "use server";
   const { data, error } = await supabase
     .from(mapTables.vocabulary)
-    .select("word,created_at")
+    .select("created_at,word,translations,phonetics,audio,number")
     .order("created_at")
     .range(start, end);
   if (data) return data as VocabularySearchType[];

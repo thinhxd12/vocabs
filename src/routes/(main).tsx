@@ -4,7 +4,7 @@ import { createStore } from "solid-js/store";
 import {
   getDataImage,
   getUnsplashImage,
-  handleCheckWord,
+  handleCheckAndRender,
   searchText,
 } from "~/lib/api";
 import Bottom from "~/components/bottom";
@@ -114,7 +114,7 @@ export default function Main(props: RouteSectionProps) {
     setTimeout(() => {
       setMainStore("searchTerm", "");
       setMainStore("searchResult", []);
-      handleCheckWord(parsedResult[Number(numb) - 1]);
+      handleCheckAndRender(parsedResult[Number(numb) - 1]);
     }, 600);
   };
 

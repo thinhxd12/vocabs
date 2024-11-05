@@ -10,6 +10,8 @@ import {
 type ListStoreType = {
   listType: 0 | 1 | 2;
   listCount: number;
+  quizCount: number;
+  quizTest: boolean;
   listContent: VocabularySearchType[];
   listButton: boolean;
   listToday: ScheduleType;
@@ -18,8 +20,10 @@ type ListStoreType = {
 export const [listStore, setListStore] = createStore<ListStoreType>({
   listType: 0,
   listCount: 0,
+  quizCount: 0,
   listContent: [],
   listButton: false,
+  quizTest: false,
   listToday: {
     created_at: "",
     date: "",
