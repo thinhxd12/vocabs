@@ -88,6 +88,8 @@ const Bottom: Component<{}> = () => {
       body: `${letter}-${newProgress}`,
     });
     notification.onclose = () => {
+      clearInterval(intervalCountdown);
+      intervalCountdown = undefined;
       mainStore.audioRef && mainStore.audioRef.pause();
       if (!listStore.quizTest) {
         handleAutoplay();
@@ -224,6 +226,7 @@ const Bottom: Component<{}> = () => {
       default:
         break;
     }
+    setListStore("quizRender", listStore.quizContent[0]);
   };
 
   // -------------------AUTOPLAY END-------------------- //

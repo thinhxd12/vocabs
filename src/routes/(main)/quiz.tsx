@@ -13,7 +13,7 @@ import { getUser } from "~/lib";
 import { createAsync } from "@solidjs/router";
 import styles from "./quiz.module.scss";
 import { Motion } from "solid-motionone";
-import { listStore, setListStore } from "~/lib/mystore";
+import { listStore, mainStore, setListStore, setMainStore } from "~/lib/mystore";
 import { VocabularyQuizType } from "~/types";
 import {
   getListContentQuiz,
@@ -35,8 +35,9 @@ const Quiz: Component<{}> = (props) => {
       () => listStore.quizContent,
       (v) => {
         if (listStore.quizContent.length > 0) {
-          setQuizText(listStore.quizContent[0]);
-          getRandomChoices();
+          setTimeout(() => {
+            getRandomChoices();
+          }, 1000);
         }
       }
     )
@@ -50,14 +51,6 @@ const Quiz: Component<{}> = (props) => {
     setListStore("quizTest", false);
   })
 
-  const [quizText, setQuizText] = createSignal<VocabularyQuizType>({
-    created_at: "",
-    word: "",
-    number: 0,
-    phonetics: "",
-    audio: "",
-    translations: []
-  });
   const [choices, setChoices] = createSignal<{ created_at: string, translation: string }[]>([{ created_at: "", translation: "" }, { created_at: "", translation: "" }, { created_at: "", translation: "" }, { created_at: "", translation: "" }]);
   const [checked, setChecked] = createSignal<boolean>(false);
   const [indexChecked, setIndexChecked] = createSignal<number>(0);
@@ -67,9 +60,9 @@ const Quiz: Component<{}> = (props) => {
   };
 
   const getRandomChoices = () => {
-    const filteredChoices = listStore.quizContent.filter(choice => choice.created_at !== quizText().created_at);
+    const filteredChoices = listStore.quizContent.filter(choice => choice.created_at !== listStore.quizRender.created_at);
     let randomChoices = shuffle(filteredChoices).slice(0, 5);
-    randomChoices = shuffle([...randomChoices, quizText()]);
+    randomChoices = shuffle([...randomChoices, listStore.quizRender]);
     const allChoices = randomChoices.map(item => {
       const trans = item.translations
         .map((tran) => tran.translations.join(", "))
@@ -85,11 +78,16 @@ const Quiz: Component<{}> = (props) => {
   const selectChoice = async (time: string, index: number) => {
     setIndexChecked(index);
     setChecked(true);
-    if (time === quizText().created_at) {
-      handleCheckQuizWord(quizText());
+    if (time === listStore.quizRender.created_at) {
+      handleCheckQuizWord(listStore.quizRender);
+      setListStore("quizRender", { ...listStore.quizRender, number: listStore.quizRender.number - 1 });
     }
     else {
-      setQuizText({ ...quizText(), audio: "/sounds/mp3_Boing.mp3" })
+      setMainStore("audioSrc", "/sounds/mp3_Boing.mp3");
+      if (mainStore.audioRef) {
+        mainStore.audioRef.volume = 0.1;
+        mainStore.audioRef.play();
+      }
     }
 
     const nextCount = listStore.quizCount + 1;
@@ -98,20 +96,19 @@ const Quiz: Component<{}> = (props) => {
         setIndexChecked(0);
         setChecked(false);
         setListStore("quizCount", nextCount);
-        setQuizText(listStore.quizContent[nextCount]);
+        setListStore("quizRender", listStore.quizContent[nextCount]);
         getRandomChoices();
-      }, 2400);
+      }, 2100);
     }
     else {
-      setListStore("quizCount", 0);
-      setIndexChecked(0);
-      setChecked(false);
-      await updateTodaySchedule(todayDate, listStore.listType);
-      await updateTodayData(todayDate);
-
-      setTimeout(() => {
+      setTimeout(async () => {
+        setListStore("quizCount", 0);
+        setIndexChecked(0);
+        setChecked(false);
+        await updateTodaySchedule(todayDate, listStore.listType);
+        await updateTodayData(todayDate);
         handleGetListContentQuiz();
-      }, 1500);
+      }, 2100);
     }
   }
 
@@ -134,6 +131,7 @@ const Quiz: Component<{}> = (props) => {
       default:
         break;
     }
+    setListStore("quizRender", listStore.quizContent[0]);
   }
 
   return (
@@ -145,13 +143,13 @@ const Quiz: Component<{}> = (props) => {
         <div class={styles.quizText}>
           <Show when={listStore.quizContent.length > 0}>
             <span class={styles.quizTextContent}>
-              {quizText().word}
+              {listStore.quizRender.word}
             </span>
             <span class={styles.quizTextPhonetic}>
-              {quizText().phonetics}
+              {listStore.quizRender.phonetics}
             </span>
             <span class={styles.quizTextNumber}>
-              {quizText().number}
+              {listStore.quizRender.number}
             </span>
           </Show>
         </div>
@@ -186,7 +184,7 @@ const Quiz: Component<{}> = (props) => {
                       fallback={
                         <Motion.div
                           class={styles.quizChoice}
-                          animate={{ backgroundColor: data().created_at === quizText().created_at ? "#38e07b" : "#fffeff" }}
+                          animate={{ backgroundColor: data().created_at === listStore.quizRender.created_at ? "#38e07b" : "#fffeff" }}
                         >
                           {data().translation}
                         </Motion.div>
@@ -194,7 +192,7 @@ const Quiz: Component<{}> = (props) => {
                     >
                       <Motion.div
                         class={styles.quizChoice}
-                        animate={{ backgroundColor: data().created_at === quizText().created_at ? "#38e07b" : "#f90000" }}
+                        animate={{ backgroundColor: data().created_at === listStore.quizRender.created_at ? "#38e07b" : "#f90000" }}
                       >
                         {data().translation}
                       </Motion.div>
@@ -211,7 +209,7 @@ const Quiz: Component<{}> = (props) => {
       <audio
         autoplay
         hidden
-        src={quizText().audio}
+        src={listStore.quizRender.audio}
       />
     </MetaProvider >
   );
