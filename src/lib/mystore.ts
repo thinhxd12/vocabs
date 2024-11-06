@@ -3,6 +3,7 @@ import {
   CalendarType,
   HistoryItemType,
   ScheduleType,
+  VocabularyQuizType,
   VocabularySearchType,
   VocabularyType,
 } from "~/types";
@@ -12,6 +13,7 @@ type ListStoreType = {
   listCount: number;
   quizCount: number;
   quizTest: boolean;
+  quizContent: VocabularyQuizType[];
   listContent: VocabularySearchType[];
   listButton: boolean;
   listToday: ScheduleType;
@@ -21,6 +23,7 @@ export const [listStore, setListStore] = createStore<ListStoreType>({
   listType: 0,
   listCount: 0,
   quizCount: 0,
+  quizContent: [],
   listContent: [],
   listButton: false,
   quizTest: false,

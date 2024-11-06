@@ -11,6 +11,11 @@ export interface VocabularyType {
 export interface VocabularySearchType {
   created_at: string;
   word: string;
+}
+
+export interface VocabularyQuizType {
+  created_at: string;
+  word: string;
   audio: string;
   phonetics: string;
   number: number;

@@ -12,7 +12,8 @@ import {
 import {
   getCurrentWeatherData,
   getImageFromUnsplashByKeyword,
-  getListContent,
+  getListContentQuiz,
+  getListContentVocab,
   getTodayData,
   getTotalMemories,
   getWeatherLocations,
@@ -164,7 +165,7 @@ const Bottom: Component<{}> = () => {
       startCountdown();
     }
     setTimeout(() => {
-      handleGetListContent(listStore.listType);
+      handleGetListContentVocab(listStore.listType);
     }, 1500);
   };
 
@@ -178,11 +179,11 @@ const Bottom: Component<{}> = () => {
     }
   };
 
-  const handleGetListContent = async (id: number) => {
+  const handleGetListContentVocab = async (id: number) => {
     switch (id) {
       case 1:
         setListStore("listType", 1);
-        const data1 = await getListContent(
+        const data1 = await getListContentVocab(
           listStore.listToday.index1,
           listStore.listToday.index1 + 49
         );
@@ -190,7 +191,7 @@ const Bottom: Component<{}> = () => {
         break;
       case 2:
         setListStore("listType", 2);
-        const data2 = await getListContent(
+        const data2 = await getListContentVocab(
           listStore.listToday.index2,
           listStore.listToday.index2 + 49
         );
@@ -200,6 +201,29 @@ const Bottom: Component<{}> = () => {
         break;
     }
     setListStore("listButton", true);
+  };
+
+  const handleGetListContentQuiz = async (id: number) => {
+    switch (id) {
+      case 1:
+        setListStore("listType", 1);
+        const data1 = await getListContentQuiz(
+          listStore.listToday.index1,
+          listStore.listToday.index1 + 49
+        );
+        if (data1) setListStore("quizContent", data1);
+        break;
+      case 2:
+        setListStore("listType", 2);
+        const data2 = await getListContentQuiz(
+          listStore.listToday.index2,
+          listStore.listToday.index2 + 49
+        );
+        if (data2) setListStore("quizContent", data2);
+        break;
+      default:
+        break;
+    }
   };
 
   // -------------------AUTOPLAY END-------------------- //
@@ -278,7 +302,7 @@ const Bottom: Component<{}> = () => {
           <span>Pecunia non olet</span>
         </A>
 
-        <button class={styles.bottomCenter} onClick={startOrStopCountdown}>
+        <button class={styles.bottomCenter} onClick={logoutAction}>
           <div
             class={styles.bottomCenterContent}
             style={{
@@ -428,8 +452,8 @@ const Bottom: Component<{}> = () => {
         >
           <div class={buttons.buttonMenuOrnament}></div>
           <img
-            alt="hourglass"
-            src="images/main/hourglass.webp"
+            alt="exit"
+            src="images/main/exit.webp"
             width={90}
             height={42}
           />
@@ -445,7 +469,7 @@ const Bottom: Component<{}> = () => {
         >
           <div class={buttons.buttonMenuOrnament}></div>
           <img
-            alt="hourglass"
+            alt="translate"
             src="images/main/translate.webp"
             width={90}
             height={42}
@@ -462,7 +486,7 @@ const Bottom: Component<{}> = () => {
         >
           <div class={buttons.buttonMenuOrnament}></div>
           <img
-            alt="hourglass"
+            alt="bookmark"
             src="images/main/bookmark.webp"
             width={90}
             height={42}
@@ -478,12 +502,12 @@ const Bottom: Component<{}> = () => {
               : buttons.buttonMenu
           }
           onClick={() => {
-            handleGetListContent(2);
+            listStore.quizTest ? handleGetListContentQuiz(2) : handleGetListContentVocab(2)
           }}
         >
           <div class={buttons.buttonMenuOrnament}></div>
           <img
-            alt="hourglass"
+            alt="flower2"
             src="images/main/flower2.webp"
             width={90}
             height={42}
@@ -507,12 +531,12 @@ const Bottom: Component<{}> = () => {
               : buttons.buttonMenu
           }
           onClick={() => {
-            handleGetListContent(1);
+            listStore.quizTest ? handleGetListContentQuiz(1) : handleGetListContentVocab(1)
           }}
         >
           <div class={buttons.buttonMenuOrnament}></div>
           <img
-            alt="hourglass"
+            alt="flower1"
             src="images/main/flower1.webp"
             width={90}
             height={42}
@@ -529,11 +553,11 @@ const Bottom: Component<{}> = () => {
       </div>
 
       <div class={styles.buttonMenuContent}>
-        <button class={buttons.buttonMenu} onClick={logoutAction}>
+        <button class={buttons.buttonMenu} onClick={startOrStopCountdown}>
           <div class={buttons.buttonMenuOrnament}></div>
           <img
             alt="hourglass"
-            src="images/main/exit.webp"
+            src="images/main/hourglass.webp"
             width={90}
             height={42}
           />

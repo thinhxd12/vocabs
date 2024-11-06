@@ -14,8 +14,13 @@ import { createAsync } from "@solidjs/router";
 import styles from "./quiz.module.scss";
 import { Motion } from "solid-motionone";
 import { listStore, setListStore } from "~/lib/mystore";
-import { VocabularySearchType } from "~/types";
-import { getListContent, handleCheckWord, updateTodayData, updateTodaySchedule } from "~/lib/api";
+import { VocabularyQuizType } from "~/types";
+import {
+  getListContentQuiz,
+  handleCheckQuizWord,
+  updateTodayData,
+  updateTodaySchedule
+} from "~/lib/api";
 import { format } from "date-fns";
 
 
@@ -27,10 +32,10 @@ const Quiz: Component<{}> = (props) => {
 
   createEffect(
     on(
-      () => listStore.listContent,
+      () => listStore.quizContent,
       (v) => {
-        if (listStore.listContent.length > 0) {
-          setQuizText(listStore.listContent[0]);
+        if (listStore.quizContent.length > 0) {
+          setQuizText(listStore.quizContent[0]);
           getRandomChoices();
         }
       }
@@ -45,7 +50,7 @@ const Quiz: Component<{}> = (props) => {
     setListStore("quizTest", false);
   })
 
-  const [quizText, setQuizText] = createSignal<VocabularySearchType>({
+  const [quizText, setQuizText] = createSignal<VocabularyQuizType>({
     created_at: "",
     word: "",
     number: 0,
@@ -57,12 +62,12 @@ const Quiz: Component<{}> = (props) => {
   const [checked, setChecked] = createSignal<boolean>(false);
   const [indexChecked, setIndexChecked] = createSignal<number>(0);
 
-  const shuffle = (array: VocabularySearchType[]) => {
+  const shuffle = (array: VocabularyQuizType[]) => {
     return array.sort(() => Math.random() - 0.5);
   };
 
   const getRandomChoices = () => {
-    const filteredChoices = listStore.listContent.filter(choice => choice.created_at !== quizText().created_at);
+    const filteredChoices = listStore.quizContent.filter(choice => choice.created_at !== quizText().created_at);
     let randomChoices = shuffle(filteredChoices).slice(0, 5);
     randomChoices = shuffle([...randomChoices, quizText()]);
     const allChoices = randomChoices.map(item => {
@@ -81,19 +86,19 @@ const Quiz: Component<{}> = (props) => {
     setIndexChecked(index);
     setChecked(true);
     if (time === quizText().created_at) {
-      handleCheckWord(quizText());
+      handleCheckQuizWord(quizText());
     }
     else {
       setQuizText({ ...quizText(), audio: "/sounds/mp3_Boing.mp3" })
     }
 
     const nextCount = listStore.quizCount + 1;
-    if (nextCount < listStore.listContent.length) {
+    if (nextCount < listStore.quizContent.length) {
       setTimeout(() => {
         setIndexChecked(0);
         setChecked(false);
         setListStore("quizCount", nextCount);
-        setQuizText(listStore.listContent[nextCount]);
+        setQuizText(listStore.quizContent[nextCount]);
         getRandomChoices();
       }, 2400);
     }
@@ -104,26 +109,30 @@ const Quiz: Component<{}> = (props) => {
       await updateTodaySchedule(todayDate, listStore.listType);
       await updateTodayData(todayDate);
 
-      setTimeout(async () => {
-        switch (listStore.listType) {
-          case 1:
-            const data1 = await getListContent(
-              listStore.listToday.index1,
-              listStore.listToday.index1 + 49
-            );
-            if (data1) setListStore("listContent", data1);
-            break;
-          case 2:
-            const data2 = await getListContent(
-              listStore.listToday.index2,
-              listStore.listToday.index2 + 49
-            );
-            if (data2) setListStore("listContent", data2);
-            break;
-          default:
-            break;
-        }
+      setTimeout(() => {
+        handleGetListContentQuiz();
       }, 1500);
+    }
+  }
+
+  const handleGetListContentQuiz = async () => {
+    switch (listStore.listType) {
+      case 1:
+        const data1 = await getListContentQuiz(
+          listStore.listToday.index1,
+          listStore.listToday.index1 + 49
+        );
+        if (data1) setListStore("quizContent", data1);
+        break;
+      case 2:
+        const data2 = await getListContentQuiz(
+          listStore.listToday.index2,
+          listStore.listToday.index2 + 49
+        );
+        if (data2) setListStore("quizContent", data2);
+        break;
+      default:
+        break;
     }
   }
 
@@ -134,7 +143,7 @@ const Quiz: Component<{}> = (props) => {
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <div class={styles.quiz}>
         <div class={styles.quizText}>
-          <Show when={listStore.listContent.length > 0}>
+          <Show when={listStore.quizContent.length > 0}>
             <span class={styles.quizTextContent}>
               {quizText().word}
             </span>
@@ -157,7 +166,7 @@ const Quiz: Component<{}> = (props) => {
         </Show>
 
         <div class={styles.quizChoices}>
-          <Show when={listStore.listContent.length > 0}>
+          <Show when={listStore.quizContent.length > 0}>
             <Show when={checked()}
               fallback={
                 <Index each={choices()}>
