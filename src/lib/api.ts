@@ -800,8 +800,7 @@ export const getThisWeekScheduleIndex = async (dayToday: string) => {
           .insert(insertData);
       }
     }
-    return thisWeekIndex;
-  }
+  } else return thisWeekIndex;
 };
 
 export const deleteBookmark = async (time: string) => {

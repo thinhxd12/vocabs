@@ -1,3 +1,6 @@
+import { onCleanup } from "solid-js";
+import { VocabularyQuizType, WeatherCodeData } from "./types";
+
 export function getElText(doc: any, query: string, defaultText: string) {
   const el = doc.querySelector(query);
   return (
@@ -17,6 +20,10 @@ export const chunk = (array: any[], size: number) =>
     if (i % size === 0) acc.push(array.slice(i, i + size));
     return acc;
   }, []);
+
+export const shuffleQuiz = (array: VocabularyQuizType[]) => {
+  return array.sort(() => Math.random() - 0.5);
+};
 
 export const URL_IMAGE_MAIN_PAGE =
   "https://www.getdailyart.com/en/21/paul-signac/the-red-buoy-saint-tropez";
@@ -349,8 +356,6 @@ export const WMOCODE: WeatherCodeData = {
   },
 };
 
-import { onCleanup } from "solid-js";
-import { WeatherCodeData } from "./types";
 
 declare module "solid-js" {
   namespace JSX {

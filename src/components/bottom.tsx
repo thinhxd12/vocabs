@@ -23,7 +23,7 @@ import {
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
-import { WMOCODE } from "~/utils";
+import { shuffleQuiz, WMOCODE } from "~/utils";
 import { CurrentlyWeatherType, WeatherGeoType } from "~/types";
 
 let intervalCountdown: NodeJS.Timeout | undefined;
@@ -213,7 +213,7 @@ const Bottom: Component<{}> = () => {
           listStore.listToday.index1,
           listStore.listToday.index1 + 49
         );
-        if (data1) setListStore("quizContent", data1);
+        if (data1) setListStore("quizContent", shuffleQuiz(data1));
         break;
       case 2:
         setListStore("listType", 2);
@@ -221,7 +221,7 @@ const Bottom: Component<{}> = () => {
           listStore.listToday.index2,
           listStore.listToday.index2 + 49
         );
-        if (data2) setListStore("quizContent", data2);
+        if (data2) setListStore("quizContent", shuffleQuiz(data2));
         break;
       default:
         break;

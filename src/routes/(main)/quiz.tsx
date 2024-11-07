@@ -14,7 +14,6 @@ import { createAsync } from "@solidjs/router";
 import styles from "./quiz.module.scss";
 import { Motion } from "solid-motionone";
 import { listStore, mainStore, setListStore, setMainStore } from "~/lib/mystore";
-import { VocabularyQuizType } from "~/types";
 import {
   getListContentQuiz,
   handleCheckQuizWord,
@@ -22,6 +21,7 @@ import {
   updateTodaySchedule
 } from "~/lib/api";
 import { format } from "date-fns";
+import { shuffleQuiz } from "~/utils";
 
 
 const Quiz: Component<{}> = (props) => {
@@ -55,14 +55,10 @@ const Quiz: Component<{}> = (props) => {
   const [checked, setChecked] = createSignal<boolean>(false);
   const [indexChecked, setIndexChecked] = createSignal<number>(0);
 
-  const shuffle = (array: VocabularyQuizType[]) => {
-    return array.sort(() => Math.random() - 0.5);
-  };
-
   const getRandomChoices = () => {
     const filteredChoices = listStore.quizContent.filter(choice => choice.created_at !== listStore.quizRender.created_at);
-    let randomChoices = shuffle(filteredChoices).slice(0, 5);
-    randomChoices = shuffle([...randomChoices, listStore.quizRender]);
+    let randomChoices = shuffleQuiz(filteredChoices).slice(0, 5);
+    randomChoices = shuffleQuiz([...randomChoices, listStore.quizRender]);
     const allChoices = randomChoices.map(item => {
       const trans = item.translations
         .map((tran) => tran.translations.join(", "))
@@ -119,14 +115,14 @@ const Quiz: Component<{}> = (props) => {
           listStore.listToday.index1,
           listStore.listToday.index1 + 49
         );
-        if (data1) setListStore("quizContent", data1);
+        if (data1) setListStore("quizContent", shuffleQuiz(data1));
         break;
       case 2:
         const data2 = await getListContentQuiz(
           listStore.listToday.index2,
           listStore.listToday.index2 + 49
         );
-        if (data2) setListStore("quizContent", data2);
+        if (data2) setListStore("quizContent", shuffleQuiz(data2));
         break;
       default:
         break;
