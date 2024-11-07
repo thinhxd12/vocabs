@@ -38,7 +38,7 @@
     width: 90px;
     height: 34px;
     display: inline-block;
-    transition: 0.3s ease;
+    transition: all 0.3s ease;
     overflow: hidden;
     position: relative;
     outline: 0;
@@ -67,21 +67,18 @@
         left: 0;
         object-fit: cover;
         object-position: center center;
+        transition: all 0.3s ease;
     }
 
     span {
         position: absolute;
-        @include font($f-buttonMenu, 15px, $color-white, 700, normal, 35px);
+        @include font($f-buttonMenu, 16px, $color-white, 700, normal, 35px);
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
         z-index: 12;
-        text-shadow: 0px 3px 3px #000;
-    }
-
-    &:hover {
-        filter: brightness(1.2);
+        text-shadow: 1px 1px 1px #000000;
     }
 }
 

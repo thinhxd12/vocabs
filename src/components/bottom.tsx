@@ -306,15 +306,7 @@ const Bottom: Component<{}> = () => {
         </A>
 
         <button class={styles.bottomCenter} onClick={logoutAction}>
-          <div
-            class={styles.bottomCenterContent}
-            style={{
-              background: showTimer()
-                ? `linear-gradient(to top, white 0%, white ${(minute() / 6) * 100
-                }%, black ${(minute() / 6) * 100}%, black 100%)`
-                : "none",
-            }}
-          >
+          <div class={styles.bottomCenterContent}>
             <span>{Math.floor(mainStore.totalMemories / 100)}</span>
             <small>
               {mainStore.totalMemories % 100 < 10
@@ -445,22 +437,21 @@ const Bottom: Component<{}> = () => {
             </Show>
           </div>
         </Show>
-
       </div>
 
-      <div class={styles.buttonMenuContent}>
-        <A
-          href="/quiz"
-          class={buttons.buttonMenu}
-        >
+      <div class={styles.buttonMenuContent} style={{ transform: showTimer() ? "translateX(0px)" : "" }}>
+        <button class={buttons.buttonMenu} onClick={startOrStopCountdown}>
           <div class={buttons.buttonMenuOrnament}></div>
-          <img
-            alt="exit"
-            src="images/main/exit.webp"
-            width={90}
-            height={42}
+          <Motion.img
+            animate={{
+              width: `${(1 - (minute() / 6)) * 90}px`,
+              height: '42px',
+              objectPosition: 'top left',
+            }}
+            transition={{ duration: 0.3, easing: [0.4, 0, 0.2, 1] }}
+            src="images/main/hourglass.webp"
           />
-        </A>
+        </button>
       </div>
 
       <div class={styles.buttonMenuContent}>
@@ -556,15 +547,18 @@ const Bottom: Component<{}> = () => {
       </div>
 
       <div class={styles.buttonMenuContent}>
-        <button class={buttons.buttonMenu} onClick={startOrStopCountdown}>
+        <A
+          href="/quiz"
+          class={buttons.buttonMenu}
+        >
           <div class={buttons.buttonMenuOrnament}></div>
           <img
-            alt="hourglass"
-            src="images/main/hourglass.webp"
+            alt="exit"
+            src="images/main/exit.webp"
             width={90}
             height={42}
           />
-        </button>
+        </A>
       </div>
 
       <audio

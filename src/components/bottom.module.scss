@@ -71,14 +71,12 @@
             justify-content: flex-end;
 
             span {
-                @include font($f-botCenterNum, 21px, #d7d7d7, 600, normal, 17px);
-                mix-blend-mode: difference;
+                @include font($f-botCenterNum, 21px, #d1d1d1, 600, normal, 17px);
                 padding-bottom: 1px;
             }
 
             small {
-                @include font($f-botCenterNum, 19px, #d7d7d7, 600, normal, 16px);
-                mix-blend-mode: difference;
+                @include font($f-botCenterNum, 19px, #d1d1d1, 600, normal, 16px);
                 padding-bottom: 1px;
             }
         }
