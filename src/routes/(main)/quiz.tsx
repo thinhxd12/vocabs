@@ -37,7 +37,7 @@ const Quiz: Component<{}> = (props) => {
         if (listStore.quizContent.length > 0) {
           setTimeout(() => {
             getRandomChoices();
-          }, 1000);
+          }, 500);
         }
       }
     )
@@ -94,7 +94,7 @@ const Quiz: Component<{}> = (props) => {
         setListStore("quizCount", nextCount);
         setListStore("quizRender", listStore.quizContent[nextCount]);
         getRandomChoices();
-      }, 2100);
+      }, 1500);
     }
     else {
       setTimeout(async () => {
@@ -104,7 +104,7 @@ const Quiz: Component<{}> = (props) => {
         await updateTodaySchedule(todayDate, listStore.listType);
         await updateTodayData(todayDate);
         handleGetListContentQuiz();
-      }, 2100);
+      }, 1500);
     }
   }
 
