@@ -443,10 +443,12 @@ const Bottom: Component<{}> = () => {
         <button class={buttons.buttonMenu} onClick={startOrStopCountdown}>
           <div class={buttons.buttonMenuOrnament}></div>
           <Motion.img
-            animate={{
-              width: `${(1 - (minute() / 6)) * 90}px`,
+            initial={{
               height: '42px',
               objectPosition: 'top left',
+            }}
+            animate={{
+              width: `${(1 - (minute() / 6)) * 90}px`,
             }}
             transition={{ duration: 0.3, easing: [0.4, 0, 0.2, 1] }}
             src="images/main/hourglass.webp"

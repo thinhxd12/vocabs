@@ -644,7 +644,7 @@ export const handleCheckAndRender = async (text: VocabularySearchType) => {
     setMainStore("renderWord", wordData);
 
     if (wordData.number > 1) {
-      checkVocabulary(wordData!.number - 1, text.created_at);
+      checkVocabulary(text.created_at);
     } else {
       archiveVocabulary(text.word);
       deleteVocabulary(text.created_at);
@@ -659,7 +659,7 @@ export const handleCheckAndRender = async (text: VocabularySearchType) => {
 
 export const handleCheckQuizWord = async (word: VocabularyQuizType) => {
   if (word.number > 1) {
-    checkVocabulary(word!.number - 1, word.created_at);
+    checkVocabulary(word.created_at);
   } else {
     archiveVocabulary(word.word);
     deleteVocabulary(word.created_at);
@@ -695,14 +695,9 @@ export const updateLastRowWord = async (time: string) => {
   }
 };
 
-const checkVocabulary = async (numb: number, time: string) => {
+const checkVocabulary = async (time: string) => {
   "use server";
-  const { error } = await supabase
-    .from(mapTables.vocabulary)
-    .update({
-      number: numb,
-    })
-    .eq("created_at", time);
+  const { error } = await supabase.rpc("checkitem", { date: time });
 };
 
 export const archiveVocabulary = async (text: string) => {
