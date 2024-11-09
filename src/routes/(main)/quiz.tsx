@@ -98,6 +98,11 @@ const Quiz: Component<{}> = (props) => {
     }
     else {
       setTimeout(async () => {
+        setMainStore("audioSrc", "/sounds/mp3_Ding.mp3");
+        if (mainStore.audioRef) {
+          mainStore.audioRef.volume = 0.1;
+          mainStore.audioRef.play();
+        }
         setListStore("quizCount", 0);
         setIndexChecked(0);
         setChecked(false);
