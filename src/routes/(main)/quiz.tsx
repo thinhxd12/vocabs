@@ -94,13 +94,13 @@ const Quiz: Component<{}> = (props) => {
         setListStore("quizCount", nextCount);
         setListStore("quizRender", listStore.quizContent[nextCount]);
         getRandomChoices();
-      }, 1500);
+      }, 1000);
     }
     else {
       setTimeout(async () => {
         setMainStore("audioSrc", "/sounds/mp3_Ding.mp3");
         if (mainStore.audioRef) {
-          mainStore.audioRef.volume = 0.1;
+          mainStore.audioRef.volume = 1;
           mainStore.audioRef.play();
         }
         setListStore("quizCount", 0);
@@ -108,31 +108,8 @@ const Quiz: Component<{}> = (props) => {
         setChecked(false);
         await updateTodaySchedule(todayDate, listStore.listType);
         await updateTodayData(todayDate);
-        handleGetListContentQuiz();
-      }, 1500);
+      }, 3000);
     }
-  }
-
-  const handleGetListContentQuiz = async () => {
-    switch (listStore.listType) {
-      case 1:
-        const data1 = await getListContentQuiz(
-          listStore.listToday.index1,
-          listStore.listToday.index1 + 49
-        );
-        if (data1) setListStore("quizContent", shuffleQuiz(data1));
-        break;
-      case 2:
-        const data2 = await getListContentQuiz(
-          listStore.listToday.index2,
-          listStore.listToday.index2 + 49
-        );
-        if (data2) setListStore("quizContent", shuffleQuiz(data2));
-        break;
-      default:
-        break;
-    }
-    setListStore("quizRender", listStore.quizContent[0]);
   }
 
   return (

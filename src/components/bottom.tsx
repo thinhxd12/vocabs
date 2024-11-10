@@ -102,11 +102,15 @@ const Bottom: Component<{}> = () => {
     setShowTimer(true);
     intervalCountdown = setInterval(() => {
       setMinute((prev: number) => {
-        if (prev === 1) {
+        if (prev === 2) {
+          listStore.quizTest ? handleGetListContentQuiz(listStore.listType) : handleGetListContentVocab(listStore.listType)
+          return prev - 1;
+        }
+        else if (prev === 1) {
           endCountdown();
           return 6;
         }
-        return prev - 1;
+        else return prev - 1;
       });
     }, 60000);
   };
@@ -166,9 +170,6 @@ const Bottom: Component<{}> = () => {
     if (currentProgress < 9) {
       startCountdown();
     }
-    setTimeout(() => {
-      handleGetListContentVocab(listStore.listType);
-    }, 1500);
   };
 
   const handleAutoplay = () => {
@@ -189,7 +190,10 @@ const Bottom: Component<{}> = () => {
           listStore.listToday.index1,
           listStore.listToday.index1 + 49
         );
-        if (data1) setListStore("listContent", data1);
+        if (data1) {
+          setListStore("listContent", data1);
+          setListStore("listButton", true);
+        }
         break;
       case 2:
         setListStore("listType", 2);
@@ -197,12 +201,14 @@ const Bottom: Component<{}> = () => {
           listStore.listToday.index2,
           listStore.listToday.index2 + 49
         );
-        if (data2) setListStore("listContent", data2);
+        if (data2) {
+          setListStore("listContent", data2);
+          setListStore("listButton", true);
+        }
         break;
       default:
         break;
     }
-    setListStore("listButton", true);
   };
 
   const handleGetListContentQuiz = async (id: number) => {
@@ -213,7 +219,10 @@ const Bottom: Component<{}> = () => {
           listStore.listToday.index1,
           listStore.listToday.index1 + 49
         );
-        if (data1) setListStore("quizContent", shuffleQuiz(data1));
+        if (data1) {
+          setListStore("quizContent", shuffleQuiz(data1));
+          setListStore("quizRender", data1[0]);
+        }
         break;
       case 2:
         setListStore("listType", 2);
@@ -221,12 +230,14 @@ const Bottom: Component<{}> = () => {
           listStore.listToday.index2,
           listStore.listToday.index2 + 49
         );
-        if (data2) setListStore("quizContent", shuffleQuiz(data2));
+        if (data2) {
+          setListStore("quizContent", shuffleQuiz(data2));
+          setListStore("quizRender", data2[0]);
+        }
         break;
       default:
         break;
     }
-    setListStore("quizRender", listStore.quizContent[0]);
   };
 
   // -------------------AUTOPLAY END-------------------- //
