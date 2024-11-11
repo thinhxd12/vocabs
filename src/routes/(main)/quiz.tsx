@@ -108,7 +108,7 @@ const Quiz: Component<{}> = (props) => {
         setChecked(false);
         await updateTodaySchedule(todayDate, listStore.listType);
         await updateTodayData(todayDate);
-      }, 3000);
+      }, 2000);
     }
   }
 

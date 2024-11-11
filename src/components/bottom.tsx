@@ -250,7 +250,7 @@ const Bottom: Component<{}> = () => {
     humidity: 0,
     temperature: 0,
     uvIndex: 0,
-    icon: 3,
+    icon: 96,
     windDirection: 0,
     windSpeed: 0,
   });
@@ -260,6 +260,7 @@ const Bottom: Component<{}> = () => {
   return (
     <div class={styles.bottom}>
       <div class={styles.bottomBar}>
+
         <div class={styles.bottomIndex}>
           <div class={styles.bottomIndexNums}>
             <Show
@@ -287,45 +288,46 @@ const Bottom: Component<{}> = () => {
         <A
           href="/vocabulary"
           activeClass={styles.bottomBtnActive}
-          class={styles.bottomBtn1}
+          class={styles.bottomBtn}
         >
-          <img
-            src="images/main/stanczyk.webp"
-            class={styles.bottomBtnImage}
-            width={79}
-            height={45}
-          />
           <small>Danger is sweet</small>
           <span>Dulce periculum</span>
         </A>
-
-        <div class={styles.bottomDivide}></div>
-
+        <div class={styles.bottomBtnSep}></div>
         <A
           href="/calendar"
           activeClass={styles.bottomBtnActive}
-          class={styles.bottomBtn2}
+          class={styles.bottomBtn}
         >
-          <img
-            src="images/main/sisifo.webp"
-            class={styles.bottomBtnImage}
-            width={79}
-            height={45}
-          />
           <small>Money not stink</small>
           <span>Pecunia non olet</span>
         </A>
 
-        <button class={styles.bottomCenter} onClick={logoutAction}>
-          <div class={styles.bottomCenterContent}>
-            <span>{Math.floor(mainStore.totalMemories / 100)}</span>
-            <small>
+        <div class={styles.bottomBtnSep}></div>
+
+        <div class={styles.bottomBtnCenter}>
+          <A
+            href="/quiz"
+            class={styles.bottomBtnCenterLink}
+          >
+            {/* <img
+            src="images/main/TheEndoftheDay.webp"
+            class={styles.bottomBtnImage}
+            width={79}
+            height={45}
+          /> */}
+          </A>
+          <div class={styles.bottomBtnIndex} onClick={logoutAction}>
+            <sup>{Math.floor(mainStore.totalMemories / 100)}</sup>
+            <text>
               {mainStore.totalMemories % 100 < 10
                 ? "0" + (mainStore.totalMemories % 100)
                 : mainStore.totalMemories % 100}
-            </small>
+            </text>
           </div>
-        </button>
+        </div>
+
+        <div class={styles.bottomBtnSep}></div>
 
         <A
           href="/weather"
@@ -333,88 +335,53 @@ const Bottom: Component<{}> = () => {
           class={styles.bottomBtnWeather}
         >
           <Show when={bottomWeatherBgUrl()}
-            fallback={<img src="images/main/sky.webp" width={80} height={35} class={styles.bottomBtnWeatherBg} />}
+            fallback={<img src="images/main/sky.webp" width={90} height={35} class={styles.bottomBtnImage} />}
           >
-            <img src={bottomWeatherBgUrl()} width={80} height={35} class={styles.bottomBtnWeatherBg} />
+            <img src={bottomWeatherBgUrl()} width={90} height={35} class={styles.bottomBtnImage} />
           </Show>
-          <Show
-            when={bottomWeather()}
-            fallback={
-              <div class={styles.bottomBtn3Content}>
-                <small>God from the machine</small>
-                <span>Deus ex machina</span>
-              </div>
-            }
-          >
-            <div class={styles.bottomWeatherImageContainer}>
-              <img
-                class={styles.bottomWeatherImg}
-                src={
-                  bottomWeather()!.isDayTime
-                    ? WMOCODE[bottomWeather()!.icon].day.image
-                    : WMOCODE[bottomWeather()!.icon].night.image
-                }
-                height={24}
-                alt="bottomWeatherIcon"
-              />
-              <p>{Math.round(bottomWeather()!.temperature)}°</p>
-            </div>
-            <div class={styles.scrollingTextContainer}>
-              <div class={styles.scrollingTextInner}>
-                <div class={styles.scrollingText}>
-                  <div class={styles.scrollingTextItem}>
-                    {bottomWeather()!.isDayTime
-                      ? WMOCODE[bottomWeather()!.icon].day.description
-                      : WMOCODE[bottomWeather()!.icon].night.description}
-                  </div>
+          <div class={styles.bottomBtnWeatherInfo}>
+            <img
+              class={styles.bottomWeatherImg}
+              src={
+                bottomWeather().isDayTime
+                  ? WMOCODE[bottomWeather().icon].day.image
+                  : WMOCODE[bottomWeather().icon].night.image
+              }
+              height={21}
+              width={21}
+              alt="bottomWeatherIcon"
+            />
+            <label>{Math.round(bottomWeather().temperature)}°</label>
+            <sub>{Math.round(bottomWeather().humidity)}</sub>
+          </div>
+
+          <section class={styles.scrollingTextContainer}>
+            <div class={styles.scrollingTextContent}>
+              <div class={styles.scrollingText}>
+                <div class={styles.scrollingTextItem}>
+                  {bottomWeather()!.isDayTime
+                    ? WMOCODE[bottomWeather()!.icon].day.description
+                    : WMOCODE[bottomWeather()!.icon].night.description}
                 </div>
-                <div class={styles.scrollingText}>
-                  <div class={styles.scrollingTextItem}>
-                    {bottomWeather()!.isDayTime
-                      ? WMOCODE[bottomWeather()!.icon].day.description
-                      : WMOCODE[bottomWeather()!.icon].night.description}
-                  </div>
+              </div>
+              <div class={styles.scrollingText}>
+                <div class={styles.scrollingTextItem}>
+                  {bottomWeather()!.isDayTime
+                    ? WMOCODE[bottomWeather()!.icon].day.description
+                    : WMOCODE[bottomWeather()!.icon].night.description}
                 </div>
               </div>
             </div>
-          </Show>
+          </section>
         </A>
 
-        <div class={styles.bottomDivide}></div>
+        <div class={styles.bottomBtnSep}></div>
 
-        <Show
-          when={listStore.listContent.length > 0}
-          fallback={
-            <div class={styles.bottomBtn4}>
-              <small>Remember you have to die</small>
-              <span>Memento mori</span>
-            </div>
-          }
-        >
-          <div class={styles.bottomImageContent} onClick={handleAutoplay}>
-            <Presence>
-              <Show
-                when={listStore.listButton}
-                fallback={
-                  <Motion.img
-                    initial={{
-                      y: "100%",
-                      opacity: 0,
-                    }}
-                    animate={{
-                      y: 0,
-                      opacity: 1,
-                    }}
-                    exit={{
-                      y: "100%",
-                      opacity: 0,
-                    }}
-                    transition={{ duration: 0.3, easing: "ease" }}
-                    src="images/main/sunset.webp"
-                    class={styles.bottomImage}
-                  />
-                }
-              >
+        <div class={styles.bottomBtnPlay} onClick={handleAutoplay}>
+          <Presence>
+            <Show
+              when={listStore.listButton}
+              fallback={
                 <Motion.img
                   initial={{
                     y: "100%",
@@ -429,25 +396,48 @@ const Bottom: Component<{}> = () => {
                     opacity: 0,
                   }}
                   transition={{ duration: 0.3, easing: "ease" }}
-                  src="images/main/sunrise.webp"
-                  class={styles.bottomImage}
+                  src="images/main/sunset.webp"
+                  width={90}
+                  height={35}
+                  class={styles.bottomBtnPlayImage}
                 />
-              </Show>
-            </Presence>
-
-            <Show when={listStore.listCount}>
+              }
+            >
               <Motion.img
-                animate={{
-                  opacity: 1,
-                  width: `${(listStore.listCount + 1) * 2}%`,
+                initial={{
+                  y: "100%",
+                  opacity: 0,
                 }}
-                transition={{ duration: 0.3, easing: [0.4, 0, 0.2, 1] }}
+                animate={{
+                  y: 0,
+                  opacity: 1,
+                }}
+                exit={{
+                  y: "100%",
+                  opacity: 0,
+                }}
+                transition={{ duration: 0.3, easing: "ease" }}
                 src="images/main/sunrise.webp"
-                class={styles.bottomImageBackground}
+                width={90}
+                height={35}
+                class={styles.bottomBtnPlayImage}
               />
             </Show>
-          </div>
-        </Show>
+          </Presence>
+
+          <Show when={listStore.listCount}>
+            <Motion.img
+              animate={{
+                opacity: 1,
+                width: `${(listStore.listCount + 1) * 2}%`,
+              }}
+              transition={{ duration: 0.3, easing: [0.4, 0, 0.2, 1] }}
+              src="images/main/sunrise.webp"
+              height={35}
+              class={styles.bottomBtnPlayImageProgress}
+            />
+          </Show>
+        </div>
       </div>
 
       <div class={styles.buttonMenuContent} style={{ transform: showTimer() ? "translateX(0px)" : "" }}>

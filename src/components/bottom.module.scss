@@ -13,6 +13,16 @@
         @include flex;
         position: relative;
         z-index: 10000;
+
+        .bottomBtn:nth-child(2) {
+            background: url("/images/main/stanczyk.webp") 0 0 no-repeat;
+            background-size: cover;
+        }
+
+        .bottomBtn:nth-child(4) {
+            background: url("/images/main/sisifo.webp") 0 0 no-repeat;
+            background-size: cover;
+        }
     }
 
     .bottomIndex {
@@ -50,247 +60,199 @@
         }
     }
 
-    .bottomDivide {
-        width: 1px;
+    .bottomBtn {
+        flex-grow: 1;
         height: 100%;
-        background: $color-border;
-    }
+        position: relative;
+        overflow: hidden;
 
-    .bottomCenter {
-        outline: none;
-        border: none;
-        background: $color-black;
+        &::after {
+            content: "";
+            position: absolute;
+            bottom: 1px;
+            left: 0px;
+            width: 90%;
+            height: 1px;
+            background: #d1d1d1;
+        }
 
-        .bottomCenterContent {
-            cursor: pointer;
-            height: 100%;
-            width: 18px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-end;
+        small {
+            @include font($f-botButton, 6px, #d1d1d1, 600, normal, 6px);
+            position: absolute;
+            bottom: 5px;
+            left: 1px;
+            text-align: left;
+            width: 100%;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        span {
+            @include font($f-botButton, 6px, #d1d1d1, 600, normal, 6px);
+            position: absolute;
+            bottom: 2px;
+            left: 1px;
+            text-align: left;
+            width: 100%;
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+
+
+        &:hover {
+            small {
+                bottom: 2px;
+                opacity: 1;
+            }
 
             span {
+                bottom: 5px;
+                opacity: 0;
+            }
+        }
+
+    }
+
+
+    .bottomBtnCenter {
+        flex-grow: 1;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+        background: url("/images/main/TheEndoftheDay.webp") 0 0 no-repeat;
+        background-size: cover;
+        display: flex;
+
+        .bottomBtnCenterLink {
+            flex-grow: 1;
+        }
+
+        .bottomBtnIndex {
+            position: absolute;
+            @include flex-center-column;
+            bottom: 0px;
+            right: 0px;
+            width: 21px;
+            height: 35px;
+            z-index: 13;
+            background-color: rgba(0, 0, 0, 0.6);
+            cursor: pointer;
+
+            sup {
                 @include font($f-botCenterNum, 21px, #d1d1d1, 600, normal, 17px);
                 padding-bottom: 1px;
             }
 
-            small {
+            text {
                 @include font($f-botCenterNum, 19px, #d1d1d1, 600, normal, 16px);
                 padding-bottom: 1px;
+            }
+
+            &:hover {
+
+                sup,
+                text {
+                    color: #ffffff;
+                }
             }
         }
     }
 
-    .bottomBtn {
-        display: block;
+    .bottomBtnWeather {
+        flex-grow: 1;
         height: 100%;
-        border: 0;
-        outline: 0;
+        width: 90px;
+        max-width: 90px;
         position: relative;
         overflow: hidden;
 
         .bottomBtnImage {
-            position: absolute;
-            top: 0;
-            left: 0;
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            filter: brightness(0.9);
+            filter: brightness(0.81);
         }
 
-        &:hover .bottomBtnImage {
-            filter: brightness(1);
-        }
-
-        span {
-            @include font($f-botButton, 9px, #d1d1d1, 600, normal, 9px);
-            text-align: center;
+        .bottomBtnWeatherInfo {
             position: absolute;
-            bottom: 1px;
-            left: 0;
-            z-index: 12;
-            display: block;
-            width: 100%;
-            height: 9px;
-            opacity: 1;
-            transition: 0.3s ease;
-            text-shadow: 0 1px 0.5px black;
-        }
-
-        small {
-            @include font($f-botButton, 9px, #d1d1d1, 400, normal, 9px);
-            text-align: center;
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            z-index: 9;
-            display: block;
-            width: 100%;
-            height: 9px;
-            opacity: 0;
-            transition: 0.3s ease;
-            text-shadow: 0 1px 0.5px black;
-        }
-
-        &:hover {
-            span {
-                bottom: -10px;
-                opacity: 0;
-                color: #ffffff;
-            }
-
-            small {
-                bottom: 1px;
-                opacity: 1;
-                color: #ffffff;
-            }
-        }
-    }
-
-    .bottomBtnActive {
-        @extend .bottomBtn;
-
-        span,
-        div {
-            color: $color-white;
-        }
-    }
-
-    .bottomBtn1 {
-        @extend .bottomBtn;
-        flex-grow: 1;
-    }
-
-    .bottomBtn2 {
-        @extend .bottomBtn;
-        flex-grow: 1;
-    }
-
-    .bottomBtnWeather {
-        @extend .bottomBtn;
-        flex-grow: 1;
-        min-width: 80px;
-
-        .bottomBtnWeatherBg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            object-fit: cover;
-            filter: brightness(0.75) contrast(1.1);
-        }
-
-        &:hover {
-            filter: brightness(1.2);
-        }
-
-        .scrollingTextContainer {
-            width: 100%;
-            overflow: hidden;
-            position: absolute;
-            z-index: 3;
-            bottom: 1px;
-            left: 0px;
-        }
-
-        .scrollingTextInner {
-            display: flex;
-            white-space: nowrap;
-            @include font($f-botButton, 9px, $color-white, 600, normal, 9px);
-            -webkit-font-smoothing: subpixel-antialiased;
-        }
-
-        .scrollingText {
-            display: flex;
-        }
-
-        .scrollingTextItem {
-            min-width: 72px;
-            margin: 0 6px;
-            text-align: center;
-            @include font($f-botButton, 9px, $color-white, 600, normal, 9px);
-            text-shadow: 0 1px 0.5px black;
-        }
-
-        .scrollingTextInner>div {
-            animation: scrollLeft 12s linear infinite;
-        }
-
-
-        .bottomWeatherImageContainer {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            animation: float 12s linear infinite;
+            bottom: 0px;
+            right: 0px;
+            width: 24px;
+            height: 35px;
+            background-color: rgba(0, 0, 0, 0.6);
 
             .bottomWeatherImg {
                 position: absolute;
-                top: -1px;
-                right: 12px;
-                z-index: 1;
-                filter: drop-shadow(0 1px 0.5px black);
-            }
-
-            p {
-                @include font($f-botWeatherTemp, 8px, #d7d7d7, 600, normal, 10px);
-                position: absolute;
-                top: 1px;
+                top: 0px;
                 right: 1px;
-                text-shadow: 0 1px 0.5px black;
-                z-index: 1;
+                filter: drop-shadow(0 1px 0.5px #000000);
             }
+
+            label {
+                @include font($f-botWeatherTemp, 9px, #d7d7d7, 600, normal, 9px);
+                position: absolute;
+                bottom: 0px;
+                left: 1px;
+                text-shadow: 0 1px 0.5px #000000;
+            }
+
+            sub {
+                @include font($f-botWeatherTemp, 6px, #d7d7d7, 600, normal, 6px);
+                position: absolute;
+                bottom: 1px;
+                right: 1px;
+                text-shadow: 0 1px 0.5px #000000;
+            }
+
         }
 
-        .bottomBtn3Content {
+        .scrollingTextContainer {
+            padding: 0 3px;
+            position: absolute;
+            bottom: 1px;
+            right: 24px;
+            width: 66px;
+            overflow: hidden;
 
-            span,
-            small {
-                padding-left: 15px;
+            .scrollingTextContent {
+                display: flex;
+                align-items: center;
+
+                >div {
+                    animation: scrollLeft 12s linear infinite;
+                }
+
+                .scrollingText {
+                    display: flex;
+
+                    .scrollingTextItem {
+                        @include font($f-botButton, 9px, $color-white, 600, normal, 9px);
+                        text-wrap: nowrap;
+                        margin: 0 6px;
+                        width: max-content;
+                        text-shadow: 0 1px 0.5px #000000;
+                    }
+                }
             }
         }
     }
 
-    .bottomBtn4 {
-        @extend .bottomBtn;
-        min-width: 90px;
-        cursor: default;
+    .bottomBtnPlay {
         flex-grow: 1;
-
-
-        &:hover {
-
-            span,
-            small {
-                color: #d1d1d1;
-            }
-        }
-    }
-
-    .bottomImageContent {
         height: 100%;
         width: 90px;
+        max-width: 90px;
         position: relative;
-        cursor: pointer;
-        z-index: 33;
         overflow: hidden;
-        transition: all 0.3s ease;
+        cursor: pointer;
 
-        &:hover {
-            filter: brightness(1.2);
-        }
-
-        .bottomImage {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .bottomBtnPlayImage {
             width: 100%;
             height: 100%;
-            z-index: 12;
+            object-fit: cover;
         }
 
-        .bottomImageBackground {
+        .bottomBtnPlayImageProgress {
             position: absolute;
             top: 0;
             left: 0;
@@ -299,10 +261,28 @@
             object-fit: cover;
             object-position: top left;
             box-shadow: 2px 0px 6px rgba(0, 0, 0, 0.6);
-            border-right: 0.5px solid black;
+            border-right: 0.5px solid #000000;
+            transition: all 0.3s ease;
         }
 
     }
+
+    .bottomBtnActive {
+        @extend .bottomBtn;
+
+        span,
+        small {
+            color: $color-white;
+        }
+    }
+
+    .bottomBtnSep {
+        width: 1px;
+        height: 100%;
+        background-color: $color-border;
+    }
+
+
 
     .buttonMenuContent {
         $height: 34px;
@@ -355,20 +335,5 @@
 
     100% {
         transform: translateX(-100%) translate3d(0, 0, 0);
-    }
-}
-
-
-@keyframes float {
-    0% {
-        transform: translate3d(0, 0, 0);
-    }
-
-    50% {
-        transform: translate3d(-7px, 0, 0);
-    }
-
-    100% {
-        transform: translate3d(0, 0, 0);
     }
 }
