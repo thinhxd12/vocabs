@@ -87,7 +87,7 @@ const Bottom: Component<{}> = () => {
       requireInteraction: true,
       body: `${letter}-${newProgress}`,
     });
-    notification.onclose = () => {
+    notification.onclose = async () => {
       clearInterval(intervalCountdown);
       intervalCountdown = undefined;
       mainStore.audioRef && mainStore.audioRef.pause();
@@ -95,10 +95,8 @@ const Bottom: Component<{}> = () => {
         handleGetListContentQuiz(listStore.listType);
       }
       else {
-        handleGetListContentVocab(listStore.listType);
-        setTimeout(() => {
-          handleAutoplay();
-        }, 1500);
+        await handleGetListContentVocab(listStore.listType);
+        handleAutoplay();
       }
     };
   };
