@@ -102,10 +102,11 @@ const Quiz: Component<{}> = (props) => {
         mainStore.audioRef.volume = 1;
         mainStore.audioRef.play();
       }
+      setListStore("quizContent", []);
+      setListStore("quizCount", 0);
+      setIndexChecked(0);
+      setChecked(false);
       setTimeout(async () => {
-        setListStore("quizCount", 0);
-        setIndexChecked(0);
-        setChecked(false);
         await updateTodaySchedule(todayDate, listStore.listType);
         await updateTodayData(todayDate);
       }, 2500);

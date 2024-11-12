@@ -311,7 +311,7 @@ const Bottom: Component<{}> = () => {
           >
             <span>Memento mori. <br />Remember you will die</span>
           </A>
-          <div class={styles.bottomBtnIndex} onClick={logoutAction}>
+          <div class={styles.bottomBtnIndex}>
             <sup>{Math.floor(mainStore.totalMemories / 100)}</sup>
             <text>
               {mainStore.totalMemories % 100 < 10
@@ -541,9 +541,10 @@ const Bottom: Component<{}> = () => {
       </div>
 
       <div class={styles.buttonMenuContent}>
-        <A
-          href="/quiz"
-          class={buttons.buttonMenu}
+        <button
+          class={buttons.buttonMenu
+          }
+          onClick={logoutAction}
         >
           <div class={buttons.buttonMenuOrnament}></div>
           <img
@@ -552,7 +553,7 @@ const Bottom: Component<{}> = () => {
             width={90}
             height={42}
           />
-        </A>
+        </button>
       </div>
 
       <audio
