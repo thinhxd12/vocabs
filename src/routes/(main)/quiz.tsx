@@ -97,19 +97,19 @@ const Quiz: Component<{}> = (props) => {
       }, 1000);
     }
     else {
-      setMainStore("audioSrc", "/sounds/mp3_Ding.mp3");
-      if (mainStore.audioRef) {
-        mainStore.audioRef.volume = 1;
-        mainStore.audioRef.play();
-      }
-      setListStore("quizContent", []);
-      setListStore("quizCount", 0);
-      setIndexChecked(0);
-      setChecked(false);
       setTimeout(async () => {
+        setMainStore("audioSrc", "/sounds/mp3_Ding.mp3");
+        if (mainStore.audioRef) {
+          mainStore.audioRef.volume = 1;
+          mainStore.audioRef.play();
+        }
+        setListStore("quizContent", []);
+        setListStore("quizCount", 0);
+        setIndexChecked(0);
+        setChecked(false);
         await updateTodaySchedule(todayDate, listStore.listType);
         await updateTodayData(todayDate);
-      }, 2500);
+      }, 1000);
     }
   }
 

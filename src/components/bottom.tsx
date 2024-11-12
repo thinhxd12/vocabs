@@ -290,7 +290,7 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
-          <span>Dulce periculum. <br />Danger is sweet</span>
+          <span>Memento mori. <br />Remember you will die.</span>
         </A>
         <div class={styles.bottomBtnSep}></div>
         <A
@@ -298,7 +298,7 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
-          <span>Pecunia non olet. <br />Money does not stink</span>
+          <span>Pecunia non olet. <br />Money does not stink.</span>
         </A>
 
         <div class={styles.bottomBtnSep}></div>
@@ -309,7 +309,7 @@ const Bottom: Component<{}> = () => {
             class={styles.bottomBtnCenterLink}
             activeClass={styles.bottomBtnCenterLinkActive}
           >
-            <span>Memento mori. <br />Remember you will die</span>
+            <span>Dulce periculum. <br />Danger is sweet.</span>
           </A>
           <div class={styles.bottomBtnIndex}>
             <sup>{Math.floor(mainStore.totalMemories / 100)}</sup>
