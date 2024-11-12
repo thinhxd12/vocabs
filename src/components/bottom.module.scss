@@ -66,51 +66,24 @@
         position: relative;
         overflow: hidden;
 
-        &::after {
-            content: "";
-            position: absolute;
-            bottom: 1px;
-            left: 0px;
-            width: 90%;
-            height: 1px;
-            background: #d1d1d1;
-        }
-
-        small {
-            @include font($f-botButton, 6px, #d1d1d1, 600, normal, 6px);
-            position: absolute;
-            bottom: 5px;
-            left: 1px;
-            text-align: left;
-            width: 100%;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
         span {
-            @include font($f-botButton, 6px, #d1d1d1, 600, normal, 6px);
+            @include font($f-botButton, 8px, #d1d1d1, 600, normal, 8px);
             position: absolute;
-            bottom: 2px;
-            left: 1px;
+            top: 1px;
+            left: 2px;
             text-align: left;
             width: 100%;
-            opacity: 1;
-            transition: all 0.3s ease;
+            opacity: 0.1;
+            text-shadow: 0 1px 0.5px #000000;
+            transition: all 0.1s;
         }
-
 
         &:hover {
-            small {
-                bottom: 2px;
+            span {
+                color: #ffffff;
                 opacity: 1;
             }
-
-            span {
-                bottom: 5px;
-                opacity: 0;
-            }
         }
-
     }
 
 
@@ -125,6 +98,35 @@
 
         .bottomBtnCenterLink {
             flex-grow: 1;
+            position: relative;
+
+            span {
+                @include font($f-botButton, 8px, #d1d1d1, 600, normal, 8px);
+                position: absolute;
+                top: 1px;
+                left: 0px;
+                text-align: left;
+                width: 40px;
+                opacity: 0.1;
+                text-shadow: 0 1px 0.5px #000000;
+                transition: all 0.1s;
+            }
+
+            &:hover {
+                span {
+                    color: #ffffff;
+                    opacity: 1;
+                }
+            }
+        }
+
+        .bottomBtnCenterLinkActive {
+            @extend .bottomBtnCenterLink;
+
+            span {
+                color: #ffffff;
+                opacity: 0.9;
+            }
         }
 
         .bottomBtnIndex {
@@ -132,11 +134,13 @@
             @include flex-center-column;
             bottom: 0px;
             right: 0px;
-            width: 21px;
+            width: 18px;
             height: 35px;
             z-index: 13;
             background-color: rgba(0, 0, 0, 0.6);
             cursor: pointer;
+            box-shadow: 0 0 1px #000000;
+            padding-left: 1px;
 
             sup {
                 @include font($f-botCenterNum, 21px, #d1d1d1, 600, normal, 17px);
@@ -161,8 +165,8 @@
     .bottomBtnWeather {
         flex-grow: 1;
         height: 100%;
-        width: 90px;
-        max-width: 90px;
+        width: 88px;
+        max-width: 88px;
         position: relative;
         overflow: hidden;
 
@@ -177,41 +181,33 @@
             position: absolute;
             bottom: 0px;
             right: 0px;
-            width: 24px;
+            width: 21px;
             height: 35px;
             background-color: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 1px #000000;
 
             .bottomWeatherImg {
                 position: absolute;
                 top: 0px;
-                right: 1px;
+                right: 0px;
                 filter: drop-shadow(0 1px 0.5px #000000);
             }
 
             label {
-                @include font($f-botWeatherTemp, 9px, #d7d7d7, 600, normal, 9px);
+                @include font($f-botWeatherTemp, 10px, #d7d7d7, 600, normal, 10px);
                 position: absolute;
                 bottom: 0px;
-                left: 1px;
+                left: 3px;
                 text-shadow: 0 1px 0.5px #000000;
             }
-
-            sub {
-                @include font($f-botWeatherTemp, 6px, #d7d7d7, 600, normal, 6px);
-                position: absolute;
-                bottom: 1px;
-                right: 1px;
-                text-shadow: 0 1px 0.5px #000000;
-            }
-
         }
 
         .scrollingTextContainer {
             padding: 0 3px;
             position: absolute;
-            bottom: 1px;
-            right: 24px;
-            width: 66px;
+            bottom: 0px;
+            right: 21px;
+            width: 69px;
             overflow: hidden;
 
             .scrollingTextContent {
@@ -270,9 +266,9 @@
     .bottomBtnActive {
         @extend .bottomBtn;
 
-        span,
-        small {
-            color: $color-white;
+        span {
+            color: #ffffff;
+            opacity: 1;
         }
     }
 

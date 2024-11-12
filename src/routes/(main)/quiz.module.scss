@@ -7,7 +7,7 @@
     overflow: hidden;
     position: relative;
     outline: none;
-    background-color: #f2f2f2;
+    background-color: #1f1f23;
 
     .quizText {
         width: 100%;
@@ -59,7 +59,7 @@
 
     .quizChoices {
         position: absolute;
-        top: 40px;
+        top: 41px;
         left: 0;
         overflow-x: hidden;
         overflow-y: scroll;
@@ -83,9 +83,10 @@
             background-color: $color-vintage-background;
             cursor: pointer;
             text-wrap: wrap;
-            transition: all 0.2s cubic-bezier(.4, 0, .2, 1);
+            transition: all 0.1s cubic-bezier(.4, 0, .2, 1);
 
             &:hover {
+                background-color: #ececec;
                 box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px;
             }
         }

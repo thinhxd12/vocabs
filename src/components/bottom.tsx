@@ -91,8 +91,14 @@ const Bottom: Component<{}> = () => {
       clearInterval(intervalCountdown);
       intervalCountdown = undefined;
       mainStore.audioRef && mainStore.audioRef.pause();
-      if (!listStore.quizTest) {
-        handleAutoplay();
+      if (listStore.quizTest) {
+        handleGetListContentQuiz(listStore.listType);
+      }
+      else {
+        handleGetListContentVocab(listStore.listType);
+        setTimeout(() => {
+          handleAutoplay();
+        }, 1500);
       }
     };
   };
@@ -102,11 +108,7 @@ const Bottom: Component<{}> = () => {
     setShowTimer(true);
     intervalCountdown = setInterval(() => {
       setMinute((prev: number) => {
-        if (prev === 2) {
-          listStore.quizTest ? handleGetListContentQuiz(listStore.listType) : handleGetListContentVocab(listStore.listType)
-          return prev - 1;
-        }
-        else if (prev === 1) {
+        if (prev === 1) {
           endCountdown();
           return 6;
         }
@@ -290,8 +292,7 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
-          <small>Danger is sweet</small>
-          <span>Dulce periculum</span>
+          <span>Dulce periculum. <br />Danger is sweet</span>
         </A>
         <div class={styles.bottomBtnSep}></div>
         <A
@@ -299,8 +300,7 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
-          <small>Money not stink</small>
-          <span>Pecunia non olet</span>
+          <span>Pecunia non olet. <br />Money does not stink</span>
         </A>
 
         <div class={styles.bottomBtnSep}></div>
@@ -309,13 +309,9 @@ const Bottom: Component<{}> = () => {
           <A
             href="/quiz"
             class={styles.bottomBtnCenterLink}
+            activeClass={styles.bottomBtnCenterLinkActive}
           >
-            {/* <img
-            src="images/main/TheEndoftheDay.webp"
-            class={styles.bottomBtnImage}
-            width={79}
-            height={45}
-          /> */}
+            <span>Memento mori. <br />Remember you will die</span>
           </A>
           <div class={styles.bottomBtnIndex} onClick={logoutAction}>
             <sup>{Math.floor(mainStore.totalMemories / 100)}</sup>
@@ -335,9 +331,9 @@ const Bottom: Component<{}> = () => {
           class={styles.bottomBtnWeather}
         >
           <Show when={bottomWeatherBgUrl()}
-            fallback={<img src="images/main/sky.webp" width={90} height={35} class={styles.bottomBtnImage} />}
+            fallback={<img src="images/main/sky.webp" width={88} height={35} class={styles.bottomBtnImage} />}
           >
-            <img src={bottomWeatherBgUrl()} width={90} height={35} class={styles.bottomBtnImage} />
+            <img src={bottomWeatherBgUrl()} width={88} height={35} class={styles.bottomBtnImage} />
           </Show>
           <div class={styles.bottomBtnWeatherInfo}>
             <img
@@ -352,7 +348,6 @@ const Bottom: Component<{}> = () => {
               alt="bottomWeatherIcon"
             />
             <label>{Math.round(bottomWeather().temperature)}°</label>
-            <sub>{Math.round(bottomWeather().humidity)}</sub>
           </div>
 
           <section class={styles.scrollingTextContainer}>
@@ -446,9 +441,9 @@ const Bottom: Component<{}> = () => {
           <Motion.img
             animate={{
               width: `${(1 - (minute() / 6)) * 90}px`,
-              height: '42px',
               objectPosition: 'top left',
             }}
+            height={42}
             transition={{ duration: 0.3, easing: [0.4, 0, 0.2, 1] }}
             src="images/main/hourglass.webp"
           />
