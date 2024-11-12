@@ -112,7 +112,7 @@ const Bottom: Component<{}> = () => {
         }
         else return prev - 1;
       });
-    }, 1000);
+    }, 60000);
   };
 
   const endCountdown = () => {
@@ -120,7 +120,7 @@ const Bottom: Component<{}> = () => {
     setShowTimer(false);
     clearInterval(intervalCountdown);
     setMainStore("audioSrc", "");
-    setMainStore("audioSrc", "https://ppedkpvpusslbioqalcl.supabase.co/storage/v1/object/public/weather/Ophelia.mp3");
+    setMainStore("audioSrc", import.meta.env.VITE_SUPABASE_URL + "/storage/v1/object/public/weather/Ophelia.mp3");
     showDesktopNotification();
   };
 
