@@ -112,7 +112,7 @@ const Bottom: Component<{}> = () => {
         }
         else return prev - 1;
       });
-    }, 60000);
+    }, 1000);
   };
 
   const endCountdown = () => {
@@ -120,7 +120,7 @@ const Bottom: Component<{}> = () => {
     setShowTimer(false);
     clearInterval(intervalCountdown);
     setMainStore("audioSrc", "");
-    setMainStore("audioSrc", "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/3a/5e/e6/3a5ee615-b992-cba4-c351-419d2c6d1578/mzaf_13102140031776931351.plus.aac.ep.m4a");
+    setMainStore("audioSrc", "https://ppedkpvpusslbioqalcl.supabase.co/storage/v1/object/public/weather/Ophelia.mp3");
     showDesktopNotification();
   };
 
