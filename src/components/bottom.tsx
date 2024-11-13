@@ -91,12 +91,12 @@ const Bottom: Component<{}> = () => {
       clearInterval(intervalCountdown);
       intervalCountdown = undefined;
       mainStore.audioRef && mainStore.audioRef.pause();
-      if (listStore.quizTest) {
-        handleGetListContentQuiz(listStore.listType);
-      }
-      else {
+      if (listStore.vocabPage) {
         await handleGetListContentVocab(listStore.listType);
         handleAutoplay();
+      }
+      else {
+        handleGetListContentQuiz(listStore.listType);
       }
     };
   };
@@ -173,12 +173,14 @@ const Bottom: Component<{}> = () => {
   };
 
   const handleAutoplay = () => {
-    if (listStore.listButton && listStore.listContent.length > 0) {
-      setListStore("listButton", false);
-      startAutoplay();
-    } else {
-      setListStore("listButton", true);
-      pauseAutoplay();
+    if (listStore.vocabPage && listStore.listContent.length > 0) {
+      if (listStore.listButton) {
+        setListStore("listButton", false);
+        startAutoplay();
+      } else {
+        setListStore("listButton", true);
+        pauseAutoplay();
+      }
     }
   };
 
@@ -255,7 +257,7 @@ const Bottom: Component<{}> = () => {
     windSpeed: 0,
   });
 
-  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>("https://s3.us-west-2.amazonaws.com/images.unsplash.com/small/photo-1663884130913-953004b47f52");
+  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>("");
 
   return (
     <div class={styles.bottom}>
@@ -490,7 +492,7 @@ const Bottom: Component<{}> = () => {
               : buttons.buttonMenu
           }
           onClick={() => {
-            listStore.quizTest ? handleGetListContentQuiz(2) : handleGetListContentVocab(2)
+            listStore.vocabPage ? handleGetListContentVocab(2) : handleGetListContentQuiz(2)
           }}
         >
           <div class={buttons.buttonMenuOrnament}></div>
@@ -519,7 +521,7 @@ const Bottom: Component<{}> = () => {
               : buttons.buttonMenu
           }
           onClick={() => {
-            listStore.quizTest ? handleGetListContentQuiz(1) : handleGetListContentVocab(1)
+            listStore.vocabPage ? handleGetListContentVocab(1) : handleGetListContentQuiz(1)
           }}
         >
           <div class={buttons.buttonMenuOrnament}></div>

@@ -12,12 +12,12 @@ type ListStoreType = {
   listType: 0 | 1 | 2;
   listCount: number;
   quizCount: number;
-  quizTest: boolean;
   quizContent: VocabularyQuizType[];
   quizRender: VocabularyQuizType;
   listContent: VocabularySearchType[];
   listButton: boolean;
   listToday: ScheduleType;
+  vocabPage: boolean;
 };
 
 export const [listStore, setListStore] = createStore<ListStoreType>({
@@ -25,7 +25,7 @@ export const [listStore, setListStore] = createStore<ListStoreType>({
   listCount: 0,
   quizCount: 0,
   quizContent: [],
-  quizTest: false,
+  vocabPage: false,
   quizRender: {
     created_at: "",
     word: "",

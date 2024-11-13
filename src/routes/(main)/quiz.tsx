@@ -4,8 +4,6 @@ import {
   createSignal,
   Index,
   on,
-  onCleanup,
-  onMount,
   Show,
 } from "solid-js";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
@@ -42,14 +40,6 @@ const Quiz: Component<{}> = (props) => {
       }
     )
   );
-
-  onMount(() => {
-    setListStore("quizTest", true);
-  })
-
-  onCleanup(() => {
-    setListStore("quizTest", false);
-  })
 
   const [choices, setChoices] = createSignal<{ created_at: string, choice: string }[]>([{ created_at: "", choice: "" }, { created_at: "", choice: "" }, { created_at: "", choice: "" }, { created_at: "", choice: "" }]);
   const [checked, setChecked] = createSignal<boolean>(false);

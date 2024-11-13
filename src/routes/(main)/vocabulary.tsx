@@ -22,7 +22,7 @@ import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { BsTrash3Fill } from "solid-icons/bs";
 import { FaSolidFeather } from "solid-icons/fa";
 import { createAsync } from "@solidjs/router";
-import { mainStore, setMainStore } from "~/lib/mystore";
+import { mainStore, setListStore, setMainStore } from "~/lib/mystore";
 import styles from "./vocabulary.module.scss";
 import Definition from "~/components/definition";
 import { getUser } from "~/lib";
@@ -100,6 +100,7 @@ const Vocabulary: Component<{}> = () => {
         navigator.userAgent
       )
     );
+    setListStore("vocabPage", true);
   });
 
   const triggerMobile = debounce(async (str: string) => {
@@ -173,6 +174,7 @@ const Vocabulary: Component<{}> = () => {
     vocabRef2 && vocabRef2.pause();
     vocabRef3 && vocabRef3.pause();
     clearTimeout(timeoutId);
+    setListStore("vocabPage", false);
   });
 
   return (
