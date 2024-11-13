@@ -45,7 +45,6 @@ const Vocabulary: Component<{}> = () => {
 
   let vocabRef1: HTMLAudioElement | undefined;
   let vocabRef2: HTMLAudioElement | undefined;
-  let vocabRef3: HTMLAudioElement | undefined;
   //search text
   const trigger = debounce(async (str: string) => {
     const res = await searchText(str);
@@ -136,7 +135,6 @@ const Vocabulary: Component<{}> = () => {
   const [showNumber, setShowNumber] = createSignal<boolean>(true);
   const [vocabSound1, setVocabSound1] = createSignal<string>("");
   const [vocabSound2, setVocabSound2] = createSignal<string>("");
-  const [vocabSound3, setVocabSound3] = createSignal<string>("");
 
   createEffect(
     on(
@@ -158,13 +156,6 @@ const Vocabulary: Component<{}> = () => {
             setVocabSound2(tranSound);
           };
         }
-        if (vocabRef2) {
-          vocabRef2.onended = function () {
-            setTimeout(() => {
-              setVocabSound3(v as string);
-            }, 1800);
-          };
-        }
       }
     )
   );
@@ -172,7 +163,6 @@ const Vocabulary: Component<{}> = () => {
   onCleanup(() => {
     vocabRef1 && vocabRef1.pause();
     vocabRef2 && vocabRef2.pause();
-    vocabRef3 && vocabRef3.pause();
     clearTimeout(timeoutId);
     setListStore("vocabPage", false);
   });
@@ -349,12 +339,6 @@ const Vocabulary: Component<{}> = () => {
         autoplay
         hidden
         src={vocabSound2()}
-      />
-      <audio
-        ref={vocabRef3}
-        autoplay
-        hidden
-        src={vocabSound3()}
       />
     </MetaProvider>
   );
