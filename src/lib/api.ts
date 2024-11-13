@@ -1046,7 +1046,7 @@ export const getListContentQuiz = async (start: number, end: number) => {
   "use server";
   const { data, error } = await supabase
     .from(mapTables.vocabulary)
-    .select("created_at,word,translations,phonetics,audio,number")
+    .select("created_at,word,translations,audio,number")
     .order("created_at")
     .range(start, end);
   if (data) return data as VocabularyQuizType[];

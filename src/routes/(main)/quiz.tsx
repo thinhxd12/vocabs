@@ -15,7 +15,6 @@ import styles from "./quiz.module.scss";
 import { Motion } from "solid-motionone";
 import { listStore, mainStore, setListStore, setMainStore } from "~/lib/mystore";
 import {
-  getListContentQuiz,
   handleCheckQuizWord,
   updateTodayData,
   updateTodaySchedule
@@ -25,6 +24,7 @@ import { shuffleQuiz } from "~/utils";
 
 
 const Quiz: Component<{}> = (props) => {
+  let quizAudio: HTMLAudioElement | undefined;
   const todayDate = format(new Date(), "yyyy-MM-dd");
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
@@ -51,7 +51,7 @@ const Quiz: Component<{}> = (props) => {
     setListStore("quizTest", false);
   })
 
-  const [choices, setChoices] = createSignal<{ created_at: string, translation: string }[]>([{ created_at: "", translation: "" }, { created_at: "", translation: "" }, { created_at: "", translation: "" }, { created_at: "", translation: "" }]);
+  const [choices, setChoices] = createSignal<{ created_at: string, choice: string }[]>([{ created_at: "", choice: "" }, { created_at: "", choice: "" }, { created_at: "", choice: "" }, { created_at: "", choice: "" }]);
   const [checked, setChecked] = createSignal<boolean>(false);
   const [indexChecked, setIndexChecked] = createSignal<number>(0);
 
@@ -60,12 +60,9 @@ const Quiz: Component<{}> = (props) => {
     let randomChoices = shuffleQuiz(filteredChoices).slice(0, 5);
     randomChoices = shuffleQuiz([...randomChoices, listStore.quizRender]);
     const allChoices = randomChoices.map(item => {
-      const trans = item.translations
-        .map((tran) => tran.translations.join(", "))
-        .join(", ");
       return {
         created_at: item.created_at,
-        translation: trans
+        choice: item.word,
       }
     })
     setChoices(allChoices);
@@ -77,6 +74,7 @@ const Quiz: Component<{}> = (props) => {
     if (time === listStore.quizRender.created_at) {
       handleCheckQuizWord(listStore.quizRender);
       setListStore("quizRender", { ...listStore.quizRender, number: listStore.quizRender.number - 1 });
+      quizAudio && quizAudio.play();
     }
     else {
       setMainStore("audioSrc", "/sounds/mp3_Boing.mp3");
@@ -122,10 +120,11 @@ const Quiz: Component<{}> = (props) => {
         <div class={styles.quizText}>
           <Show when={listStore.quizContent.length > 0}>
             <span class={styles.quizTextContent}>
-              {listStore.quizRender.word}
-            </span>
-            <span class={styles.quizTextPhonetic}>
-              {listStore.quizRender.phonetics}
+              {
+                listStore.quizRender.translations
+                  .map((tran) => tran.translations.join(", "))
+                  .join(", ")
+              }
             </span>
             <span class={styles.quizTextNumber}>
               {listStore.quizRender.number}
@@ -151,7 +150,7 @@ const Quiz: Component<{}> = (props) => {
                     (data, index) => {
                       return <div class={styles.quizChoice}
                         onclick={() => selectChoice(data().created_at, index + 1)}
-                      >{data().translation}</div>
+                      >{data().choice}</div>
                     }
                   }
                 </Index>
@@ -165,7 +164,7 @@ const Quiz: Component<{}> = (props) => {
                           class={styles.quizChoice}
                           animate={{ backgroundColor: data().created_at === listStore.quizRender.created_at ? "#38e07b" : "#fffeff" }}
                         >
-                          {data().translation}
+                          {data().choice}
                         </Motion.div>
                       }
                     >
@@ -173,7 +172,7 @@ const Quiz: Component<{}> = (props) => {
                         class={styles.quizChoice}
                         animate={{ backgroundColor: data().created_at === listStore.quizRender.created_at ? "#38e07b" : "#f90000" }}
                       >
-                        {data().translation}
+                        {data().choice}
                       </Motion.div>
                     </Show>
                   }
@@ -186,7 +185,7 @@ const Quiz: Component<{}> = (props) => {
       </div>
 
       <audio
-        autoplay
+        ref={quizAudio}
         hidden
         src={listStore.quizRender.audio}
       />

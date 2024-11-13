@@ -17,7 +17,6 @@ export interface VocabularyQuizType {
   created_at: string;
   word: string;
   audio: string;
-  phonetics: string;
   number: number;
   translations: VocabularyTranslationType[];
 }

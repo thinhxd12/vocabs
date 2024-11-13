@@ -30,7 +30,6 @@ export const [listStore, setListStore] = createStore<ListStoreType>({
     created_at: "",
     word: "",
     number: 0,
-    phonetics: "",
     audio: "",
     translations: [],
   },

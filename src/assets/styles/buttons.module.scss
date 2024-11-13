@@ -35,8 +35,8 @@
 }
 
 .buttonMenu {
-    width: 90px;
-    height: 34px;
+    width: 86px;
+    height: 36px;
     display: inline-block;
     transition: all 0.3s ease;
     overflow: hidden;
@@ -47,6 +47,8 @@
     cursor: pointer;
     box-shadow: 0 0 16px rgba(0, 0, 0, .28);
     background: $color-black;
+    border: 1px solid $color-border;
+    border-right: none;
 
     .buttonMenuOrnament {
         position: absolute;

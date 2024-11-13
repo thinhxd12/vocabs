@@ -255,7 +255,7 @@ const Bottom: Component<{}> = () => {
     windSpeed: 0,
   });
 
-  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>("");
+  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>("https://s3.us-west-2.amazonaws.com/images.unsplash.com/small/photo-1663884130913-953004b47f52");
 
   return (
     <div class={styles.bottom}>
@@ -290,9 +290,10 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
-          <span>Memento mori. <br />Remember you will die.</span>
+          <span>Dulce periculum. <br />Danger is sweet.</span>
         </A>
         <div class={styles.bottomBtnSep}></div>
+
         <A
           href="/calendar"
           activeClass={styles.bottomBtnActive}
@@ -303,23 +304,13 @@ const Bottom: Component<{}> = () => {
 
         <div class={styles.bottomBtnSep}></div>
 
-        <div class={styles.bottomBtnCenter}>
-          <A
-            href="/quiz"
-            class={styles.bottomBtnCenterLink}
-            activeClass={styles.bottomBtnCenterLinkActive}
-          >
-            <span>Dulce periculum. <br />Danger is sweet.</span>
-          </A>
-          <div class={styles.bottomBtnIndex}>
-            <sup>{Math.floor(mainStore.totalMemories / 100)}</sup>
-            <text>
-              {mainStore.totalMemories % 100 < 10
-                ? "0" + (mainStore.totalMemories % 100)
-                : mainStore.totalMemories % 100}
-            </text>
-          </div>
-        </div>
+        <A
+          href="/quiz"
+          activeClass={styles.bottomBtnActive}
+          class={styles.bottomBtn}
+        >
+          <span>Memento mori. <br />Remember you will die.</span>
+        </A>
 
         <div class={styles.bottomBtnSep}></div>
 
@@ -329,9 +320,9 @@ const Bottom: Component<{}> = () => {
           class={styles.bottomBtnWeather}
         >
           <Show when={bottomWeatherBgUrl()}
-            fallback={<img src="images/main/sky.webp" width={88} height={35} class={styles.bottomBtnImage} />}
+            fallback={<img src="images/main/sky.webp" width={85} height={35} class={styles.bottomBtnImage} />}
           >
-            <img src={bottomWeatherBgUrl()} width={88} height={35} class={styles.bottomBtnImage} />
+            <img src={bottomWeatherBgUrl()} width={85} height={35} class={styles.bottomBtnImage} />
           </Show>
           <div class={styles.bottomBtnWeatherInfo}>
             <img
@@ -347,6 +338,15 @@ const Bottom: Component<{}> = () => {
             />
             <label>{Math.round(bottomWeather().temperature)}°</label>
           </div>
+
+          <section class={styles.bottomBtnIndex}>
+            <sup>{Math.floor(mainStore.totalMemories / 100)}</sup>
+            <text>
+              {mainStore.totalMemories % 100 < 10
+                ? "0" + (mainStore.totalMemories % 100)
+                : mainStore.totalMemories % 100}
+            </text>
+          </section>
 
           <section class={styles.scrollingTextContainer}>
             <div class={styles.scrollingTextContent}>

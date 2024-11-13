@@ -23,6 +23,11 @@
             background: url("/images/main/sisifo.webp") 0 0 no-repeat;
             background-size: cover;
         }
+
+        .bottomBtn:nth-child(6) {
+            background: url("/images/main/TheEndoftheDay.webp") 0 0 no-repeat;
+            background-size: cover;
+        }
     }
 
     .bottomIndex {
@@ -76,7 +81,7 @@
             padding: 1px 0 0 2px;
             opacity: 0;
             text-shadow: 0 1px 0.5px #000000;
-            transition: all 0.1s;
+            transition: all 0.15s;
         }
 
         &:hover {
@@ -87,61 +92,29 @@
         }
     }
 
-
-    .bottomBtnCenter {
-        flex-grow: 1;
+    .bottomBtnWeather {
         height: 100%;
+        width: 99px;
+        max-width: 99px;
         position: relative;
         overflow: hidden;
-        background: url("/images/main/TheEndoftheDay.webp") 0 0 no-repeat;
-        background-size: cover;
-        display: flex;
 
-        .bottomBtnCenterLink {
-            flex-grow: 1;
-            position: relative;
-
-            span {
-                @include font($f-botButton, 8px, #d1d1d1, 600, normal, 8px);
-                position: absolute;
-                bottom: 0px;
-                left: 0px;
-                text-align: left;
-                width: calc(100% - 18px);
-                padding: 1px 0 0 2px;
-                opacity: 0;
-                text-shadow: 0 1px 0.5px #000000;
-                transition: all 0.1s;
-            }
-
-            &:hover {
-                span {
-                    color: #ffffff;
-                    opacity: 1;
-                }
-            }
-        }
-
-        .bottomBtnCenterLinkActive {
-            @extend .bottomBtnCenterLink;
-
-            span {
-                opacity: 1;
-            }
+        .bottomBtnImage {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .bottomBtnIndex {
             position: absolute;
             @include flex-center-column;
             bottom: 0px;
-            right: 0px;
+            left: 0px;
             width: 18px;
             height: 35px;
-            z-index: 13;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.45);
             cursor: default;
-            box-shadow: 0 0 1px #000000;
-            padding-left: 1px;
+            box-shadow: 0 0 2px #000000;
 
             sup {
                 @include font($f-botCenterNum, 21px, #d1d1d1, 600, normal, 17px);
@@ -153,54 +126,37 @@
                 padding-bottom: 1px;
             }
         }
-    }
-
-    .bottomBtnWeather {
-        flex-grow: 1;
-        height: 100%;
-        width: 88px;
-        max-width: 88px;
-        position: relative;
-        overflow: hidden;
-
-        .bottomBtnImage {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.81);
-        }
 
         .bottomBtnWeatherInfo {
             position: absolute;
-            bottom: 0px;
+            top: 0px;
             right: 0px;
-            width: 21px;
-            height: 35px;
-            background-color: rgba(0, 0, 0, 0.6);
-            box-shadow: 0 0 1px #000000;
+            width: 24px;
+            height: 25px;
+            background-color: rgba(0, 0, 0, 0.45);
+            box-shadow: 0 0 2px #000000;
 
             .bottomWeatherImg {
                 position: absolute;
-                top: 0px;
-                right: 0px;
-                filter: drop-shadow(0 1px 0.5px #000000);
+                top: 2px;
+                right: 2px;
+                filter: drop-shadow(0.5px 1px 1px #000000);
             }
 
             label {
-                @include font($f-botWeatherTemp, 8px, #d1d1d1, 600, normal, 8px);
+                @include font($f-botWeatherTemp, 7px, #d1d1d1, 600, normal, 7px);
                 position: absolute;
-                bottom: 0px;
-                left: 5px;
-                text-shadow: 0 1px 0.5px #000000;
+                top: 0px;
+                right: 0px;
+                text-shadow: 1px 1px 1px #000000;
             }
         }
 
         .scrollingTextContainer {
-            padding: 0 3px;
             position: absolute;
             bottom: 0px;
-            right: 21px;
-            width: 69px;
+            right: 0px;
+            width: calc(100% - 18px);
             overflow: hidden;
 
             .scrollingTextContent {
@@ -229,8 +185,8 @@
     .bottomBtnPlay {
         flex-grow: 1;
         height: 100%;
-        width: 90px;
-        max-width: 90px;
+        width: 85px;
+        max-width: 85px;
         position: relative;
         overflow: hidden;
         cursor: pointer;
@@ -256,24 +212,14 @@
 
     }
 
-    .bottomBtnActive {
-        @extend .bottomBtn;
-
-        span {
-            opacity: 1;
-        }
-    }
-
     .bottomBtnSep {
         width: 1px;
         height: 100%;
         background-color: $color-border;
     }
 
-
-
     .buttonMenuContent {
-        $height: 34px;
+        $height: 36px;
         $space: 36px;
 
         position: absolute;
@@ -283,7 +229,7 @@
         transition: all 0.25s ease;
         text-align: right;
         z-index: 9999;
-        transform: translateX(90px);
+        transform: translateX(86px);
 
         &:hover {
             transform: translateX(0);
