@@ -13,7 +13,7 @@ import { VsLayoutActivitybarRight, VsLayoutCentered } from "solid-icons/vs";
 import { TbRefresh } from "solid-icons/tb";
 import { ImBooks } from "solid-icons/im";
 import { format } from "date-fns";
-import { mainStore, setMainStore } from "~/lib/mystore";
+import { listStore, mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./main.module.scss";
 import { debounce } from "@solid-primitives/scheduled";
 const Bookmark = lazy(() => import("~/components/bookmark"));
@@ -120,6 +120,7 @@ export default function Main(props: RouteSectionProps) {
 
   const searchWord = (element: HTMLDivElement) => {
     element.addEventListener("keydown", (e) => {
+      if (!listStore.vocabPage) return;
       const keyDown = e.key;
       if (keyDown.match(/^[a-zA-Z\-]$/)) {
         deleteSearchTimeout && clearTimeout(deleteSearchTimeout);

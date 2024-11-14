@@ -7,7 +7,8 @@
     overflow: hidden;
     position: relative;
     outline: none;
-    background-color: #18181b;
+    background: url("/images/main/jungle.webp");
+    background-size: cover;
 
     .quizText {
         width: 100%;

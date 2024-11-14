@@ -77,7 +77,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Partly Cloudy",
       image: "images/openmeteo/icons/03n.svg",
     },
-    textdescription: "cloudy weather"
+    textdescription: "beautiful landscapes"
   },
   "3": {
     day: {
@@ -88,7 +88,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Mostly Cloudy",
       image: "images/openmeteo/icons/04.svg",
     },
-    textdescription: "cloudy weather"
+    textdescription: "cloudy"
   },
   "45": {
     day: {

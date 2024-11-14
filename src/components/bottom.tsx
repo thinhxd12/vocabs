@@ -240,6 +240,9 @@ const Bottom: Component<{}> = () => {
       default:
         break;
     }
+    setListStore("listContent", []);
+    setListStore("listCount", 0);
+    setListStore("listButton", false);
   };
 
   // -------------------AUTOPLAY END-------------------- //
