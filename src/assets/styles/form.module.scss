@@ -1,5 +1,4 @@
-@import "./mixins.scss";
-
+@use "./mixins.scss" as *;
 
 .formBody {
     @include baseBody($color-white);

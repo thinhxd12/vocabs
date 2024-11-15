@@ -3,13 +3,14 @@ import {
   Index,
   Show,
   Suspense,
+  createEffect,
   createSignal,
   onMount,
 } from "solid-js";
 import {
-  getCalendarHistory,
-  getScheduleData,
-  getThisWeekScheduleIndex,
+  getCalendarList,
+  getHistoryList,
+  getThisWeekIndex,
   submitNewSchedule,
   submitTodayReset,
 } from "~/lib/api";
@@ -21,7 +22,7 @@ import buttons from "../../assets/styles/buttons.module.scss";
 import styles from "./calendar.module.scss";
 import { getUser } from "~/lib";
 import { createAsync, useSubmission } from "@solidjs/router";
-import { listStore, mainStore, setListStore, setMainStore } from "~/lib/mystore";
+import { calendarStore, setCalendarStore } from "~/lib/mystore";
 import HistoryCard from "~/components/historycard";
 import { CalendarType } from "~/types";
 import { OcX2 } from "solid-icons/oc";
@@ -31,45 +32,55 @@ import { chunk } from "~/utils";
 let refEl: HTMLDivElement;
 const todayDate = format(new Date(), "yyyy-MM-dd");
 
+export const route = {
+  preload: () => { getCalendarList(todayDate), getThisWeekIndex(todayDate), getHistoryList(calendarStore.historyList.length > 0) }
+};
+
 const Calendar: Component<{}> = (props) => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
+  const historyList_data = createAsync(() => getHistoryList(calendarStore.historyList.length > 0));
+  const calendarList_data = createAsync(() => getCalendarList(todayDate));
+  const thisWeekIndex_data = createAsync(() => getThisWeekIndex(todayDate));
+
+  createEffect(() => {
+    if (historyList_data()) {
+      setCalendarStore("historyList", historyList_data()!);
+    }
+  })
+
+  createEffect(() => {
+    if (calendarList_data()) {
+      setCalendarStore("calendarList", calendarList_data()!);
+    }
+  })
+
+  createEffect(() => {
+    if (thisWeekIndex_data()) {
+      setCalendarStore("thisWeekIndex", thisWeekIndex_data()!);
+    }
+  })
+
   const submitTodayResetAction = useSubmission(submitTodayReset);
-
-  onMount(async () => {
-    const index = await getThisWeekScheduleIndex(
-      todayDate
-    );
-    if (index !== undefined) setMainStore("thisWeekIndex", index);
-
-    if (mainStore.calendarList.length === 0) {
-      const data = await getScheduleData(todayDate);
-      data && setMainStore("calendarList", data);
-    }
-    if (mainStore.historyList.length === 0) {
-      const data = await getCalendarHistory();
-      data && setMainStore("historyList", data);
-    }
-  });
 
   const handleUpdateHistoryList = () => {
     setShowSetNewSchedule(false);
-    setMainStore("calendarList", []);
+    setCalendarStore("calendarList", []);
     setTimeout(async () => {
-      const data = await getScheduleData(todayDate);
-      data && setMainStore("calendarList", data);
-    }, 2000)
+      const data = await getCalendarList(todayDate);
+      data && setCalendarStore("calendarList", data);
+    }, 1500)
   };
 
   const handleUpdateTodaySchedule = () => {
     setShowTodayReset(false);
     setTimeout(async () => {
-      setListStore("listToday", { ...listStore.listToday, ...submitTodayResetAction.result });
-      const data = await getScheduleData(todayDate);
-      data && setMainStore("calendarList", data);
-    }, 2000)
+      setCalendarStore("todaySchedule", { ...calendarStore.todaySchedule, ...submitTodayResetAction.result });
+      const data = await getCalendarList(todayDate);
+      data && setCalendarStore("calendarList", data);
+    }, 1500)
   };
 
   // ---------------------POP UP---------------------------
@@ -130,10 +141,10 @@ const Calendar: Component<{}> = (props) => {
               <p class={styles.setNewMonth}>{format(new Date(), "MMMM")}</p>
               <p class={styles.setNewWeek}>{format(new Date(), "yyyy")}</p>
               <p class={styles.setNewHistory}>
-                <Show when={mainStore.thisWeekIndex >= 0} fallback={"hiems"}>
-                  {Number(mainStore.thisWeekIndex + 1) +
+                <Show when={calendarStore.thisWeekIndex >= 0} fallback={"hiems"}>
+                  {Number(calendarStore.thisWeekIndex + 1) +
                     " - " +
-                    Number(mainStore.thisWeekIndex + 200)}
+                    Number(calendarStore.thisWeekIndex + 200)}
                 </Show>
               </p>
             </div>
@@ -153,10 +164,10 @@ const Calendar: Component<{}> = (props) => {
             <div class={styles.calendarDateTitle}>Sat</div>
 
             <Show
-              when={mainStore.calendarList.length > 0}
+              when={calendarStore.calendarList.length > 0}
               fallback={<div class={styles.calendarWeekLoading}>...</div>}
             >
-              <Index each={mainStore.calendarList}>
+              <Index each={calendarStore.calendarList}>
                 {(data, i) => {
                   if (data().time1 === -1) {
                     return <div class={styles.calendarDateWithoutTime}>
@@ -184,7 +195,7 @@ const Calendar: Component<{}> = (props) => {
           fallback={<div class={styles.calendarHistoryLoading}>...</div>}
         >
           <div class={styles.calendarHistory} ref={refEl}>
-            <Index each={chunk(mainStore.historyList, 5).reverse()}>
+            <Index each={chunk(calendarStore.historyList, 5).reverse()}>
               {(data, i) => {
                 return <HistoryCard item={data()} />;
               }}
@@ -216,7 +227,7 @@ const Calendar: Component<{}> = (props) => {
                 </div>
               </div>
               <div class={styles.calendarDropdownBody}>
-                <Show when={listStore.listToday.created_at}
+                <Show when={calendarStore.todaySchedule.created_at}
                   fallback={<div>No data available!</div>}
                 >
                   <form
@@ -225,6 +236,12 @@ const Calendar: Component<{}> = (props) => {
                     method="post"
                   >
                     <div class={forms.calendarFormGroupContainer}>
+                      <input
+                        hidden
+                        name="createdAt"
+                        autocomplete="off"
+                        value={calendarStore.todaySchedule.created_at}
+                      />
                       <div class={forms.calendarFormInputGroup}>
                         <input
                           class={forms.calendarFormInput}
@@ -232,7 +249,7 @@ const Calendar: Component<{}> = (props) => {
                           autocomplete="off"
                           type="number"
                           min={0}
-                          value={listStore.listToday.time1}
+                          value={calendarStore.todaySchedule.time1}
                         />
                       </div>
                       <div class={forms.calendarFormInputGroup}>
@@ -242,7 +259,7 @@ const Calendar: Component<{}> = (props) => {
                           autocomplete="off"
                           type="number"
                           min={0}
-                          value={listStore.listToday.time2}
+                          value={calendarStore.todaySchedule.time2}
                         />
                       </div>
                     </div>

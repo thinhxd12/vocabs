@@ -6,6 +6,7 @@ import {
   VocabularyQuizType,
   VocabularySearchType,
   VocabularyType,
+  WeatherGeoType,
 } from "~/types";
 
 type ListStoreType = {
@@ -16,16 +17,16 @@ type ListStoreType = {
   quizRender: VocabularyQuizType;
   listContent: VocabularySearchType[];
   listButton: boolean;
-  listToday: ScheduleType;
   vocabPage: boolean;
 };
 
 export const [listStore, setListStore] = createStore<ListStoreType>({
   listType: 0,
   listCount: 0,
+  listContent: [],
+  listButton: false,
   quizCount: 0,
   quizContent: [],
-  vocabPage: false,
   quizRender: {
     created_at: "",
     word: "",
@@ -33,17 +34,30 @@ export const [listStore, setListStore] = createStore<ListStoreType>({
     audio: "",
     translations: [],
   },
-  listContent: [],
-  listButton: false,
-  listToday: {
-    created_at: "",
-    date: "",
-    index1: 0,
-    index2: 0,
-    time1: 0,
-    time2: 0,
-  },
+  vocabPage: false,
 });
+
+type CalendarStoreType = {
+  todaySchedule: ScheduleType;
+  historyList: HistoryItemType[];
+  calendarList: CalendarType[];
+  thisWeekIndex: number;
+};
+export const [calendarStore, setCalendarStore] = createStore<CalendarStoreType>(
+  {
+    todaySchedule: {
+      created_at: "",
+      date: "",
+      index1: 0,
+      index2: 0,
+      time1: 0,
+      time2: 0,
+    },
+    historyList: [],
+    calendarList: [],
+    thisWeekIndex: -1,
+  }
+);
 
 type MainStoreType = {
   totalMemories: number;
@@ -51,9 +65,6 @@ type MainStoreType = {
   showTranslate: boolean;
   showEdit: boolean;
   renderWord: VocabularyType | null;
-  historyList: HistoryItemType[];
-  calendarList: CalendarType[];
-  thisWeekIndex: number;
   mainToggle: boolean;
   searchResult: VocabularySearchType[];
   translateTerm: string;
@@ -71,9 +82,6 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   showTranslate: false,
   showEdit: false,
   renderWord: null,
-  historyList: [],
-  calendarList: [],
-  thisWeekIndex: -1,
   mainToggle: false,
   searchResult: [],
   translateTerm: "",
@@ -83,4 +91,18 @@ export const [mainStore, setMainStore] = createStore<MainStoreType>({
   searchDeleteIndex: 0,
   audioSrc: "/sounds/mp3_Ding.mp3",
   audioRef: null,
+});
+
+type WeatherStoreType = {
+  defaultLocation: WeatherGeoType;
+  locationList: WeatherGeoType[];
+};
+export const [weatherStore, setWeatherStore] = createStore<WeatherStoreType>({
+  defaultLocation: {
+    name: "Default Location",
+    lat: 10.6023,
+    lon: 106.4021,
+    default: false,
+  },
+  locationList: [],
 });

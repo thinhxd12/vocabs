@@ -16,6 +16,7 @@ import {
   searchText,
   handleCheckAndRender,
   getWordData,
+  getTotalMemories,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
@@ -42,6 +43,14 @@ const Vocabulary: Component<{}> = () => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
+
+  const totalMemories_data = createAsync(() => getTotalMemories());
+
+  createEffect(() => {
+    if (totalMemories_data()) {
+      setMainStore("totalMemories", totalMemories_data()!);
+    }
+  })
 
   let vocabRef1: HTMLAudioElement | undefined;
   let vocabRef2: HTMLAudioElement | undefined;

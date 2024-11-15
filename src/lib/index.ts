@@ -1,7 +1,12 @@
-import { action, cache, redirect } from "@solidjs/router";
-import { getSession, login, logout as logoutSession, validatePassword } from "./server";
+import { action, query, redirect } from "@solidjs/router";
+import {
+  getSession,
+  login,
+  logout as logoutSession,
+  validatePassword,
+} from "./server";
 
-export const getUser = cache(async () => {
+export const getUser = query(async () => {
   "use server";
   try {
     const session = await getSession();
@@ -22,7 +27,7 @@ export const loginAction = action(async (formData: FormData) => {
   try {
     const user = await login(password);
     const session = await getSession();
-    await session.update(d => (d.userId = user!.id));
+    await session.update((d) => (d.userId = user!.id));
   } catch (err) {
     return err as Error;
   }

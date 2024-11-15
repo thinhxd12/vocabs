@@ -55,7 +55,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Clear",
       image: "images/openmeteo/icons/01n.svg",
     },
-    textdescription: "sunny sky"
+    textdescription: "sky"
   },
   "1": {
     day: {
@@ -66,7 +66,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Mainly Clear",
       image: "images/openmeteo/icons/02n.svg",
     },
-    textdescription: "sunny sky"
+    textdescription: "sky"
   },
   "2": {
     day: {
@@ -77,7 +77,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Partly Cloudy",
       image: "images/openmeteo/icons/03n.svg",
     },
-    textdescription: "beautiful landscapes"
+    textdescription: "landscapes"
   },
   "3": {
     day: {

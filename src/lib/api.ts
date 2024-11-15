@@ -1,4 +1,4 @@
-import { action, cache } from "@solidjs/router";
+import { action, query } from "@solidjs/router";
 import {
   BookmarkType,
   CalendarType,
@@ -25,10 +25,14 @@ import {
   getElText,
   mapTables,
 } from "~/utils";
-import { format, parse as parseTime } from "date-fns";
 import { parse } from "node-html-parser";
 import { supabase } from "./supbabase";
-import { listStore, mainStore, setListStore, setMainStore } from "./mystore";
+import {
+  calendarStore,
+  mainStore,
+  setCalendarStore,
+  setMainStore,
+} from "./mystore";
 import {
   parseKindleEntries,
   readKindleClipping,
@@ -80,74 +84,75 @@ export const searchMemoriesText = async (text: string) => {
   }
 };
 
-export const getScheduleData = async (str: string) => {
-  // "use server";
-  const date = new Date();
-  const thisMonth = date.getMonth();
-  const thisYear = date.getFullYear();
-  const firstDayofMonth = new Date(thisYear, thisMonth, 1).getDay();
-  const lastDateofMonth = new Date(thisYear, thisMonth + 1, 0).getDate();
-  const lastDayofMonth = new Date(
-    thisYear,
-    thisMonth,
-    lastDateofMonth
-  ).getDay();
-  const lastDateofLastMonth = new Date(thisYear, thisMonth, 0).getDate();
-  let monthDateArr = [];
-  for (let i = firstDayofMonth; i > 0; i--) {
-    monthDateArr.push({
-      date: lastDateofLastMonth - i + 1,
-      month: thisMonth - 1,
-    });
-  }
-  for (let i = 1; i <= lastDateofMonth; i++) {
-    monthDateArr.push({
-      date: i,
-      month: thisMonth,
-    });
-  }
-  for (let i = lastDayofMonth; i < 6; i++) {
-    monthDateArr.push({
-      date: i - lastDayofMonth + 1,
-      month: thisMonth + 1,
-    });
-  }
+// export const getScheduleData = async (str: string) => {
+//   // "use server";
+//   const date = new Date();
+//   const thisMonth = date.getMonth();
+//   const thisYear = date.getFullYear();
+//   const firstDayofMonth = new Date(thisYear, thisMonth, 1).getDay();
+//   const lastDateofMonth = new Date(thisYear, thisMonth + 1, 0).getDate();
+//   const lastDayofMonth = new Date(
+//     thisYear,
+//     thisMonth,
+//     lastDateofMonth
+//   ).getDay();
+//   const lastDateofLastMonth = new Date(thisYear, thisMonth, 0).getDate();
+//   let monthDateArr = [];
+//   for (let i = firstDayofMonth; i > 0; i--) {
+//     monthDateArr.push({
+//       date: lastDateofLastMonth - i + 1,
+//       month: thisMonth - 1,
+//     });
+//   }
+//   for (let i = 1; i <= lastDateofMonth; i++) {
+//     monthDateArr.push({
+//       date: i,
+//       month: thisMonth,
+//     });
+//   }
+//   for (let i = lastDayofMonth; i < 6; i++) {
+//     monthDateArr.push({
+//       date: i - lastDayofMonth + 1,
+//       month: thisMonth + 1,
+//     });
+//   }
 
-  monthDateArr = monthDateArr.map((item) => ({
-    ...item,
-    time1: -1,
-    time2: -1,
-  }));
+//   monthDateArr = monthDateArr.map((item) => ({
+//     ...item,
+//     time1: -1,
+//     time2: -1,
+//   }));
 
-  const { data, error } = await supabase
-    .from(mapTables.schedule)
-    .select()
-    .order("date");
+//   const { data, error } = await supabase
+//     .from(mapTables.schedule)
+//     .select()
+//     .order("date");
 
-  if (data) {
-    const scheduleData = data.map((item: ScheduleType, index: number) => {
-      const day = new Date(item.date);
-      return {
-        date: day.getDate(),
-        month: day.getMonth(),
-        time1: item.time1,
-        time2: item.time2,
-      };
-    });
+//   if (data) {
+//     const scheduleData = data.map((item: ScheduleType, index: number) => {
+//       const day = new Date(item.date);
+//       return {
+//         date: day.getDate(),
+//         month: day.getMonth(),
+//         time1: item.time1,
+//         time2: item.time2,
+//       };
+//     });
 
-    const mergedArray = monthDateArr.map((item) => {
-      return {
-        ...item,
-        ...scheduleData.find(
-          (item2: any) => item2.date === item.date && item2.month === item.month
-        ),
-      };
-    });
-    return mergedArray as CalendarType[];
-  }
-};
+//     const mergedArray = monthDateArr.map((item) => {
+//       return {
+//         ...item,
+//         ...scheduleData.find(
+//           (item2: any) => item2.date === item.date && item2.month === item.month
+//         ),
+//       };
+//     });
+//     return mergedArray as CalendarType[];
+//   }
+// };
 
 //get image link
+
 export const getDataImage = async (url: string) => {
   "use server";
   try {
@@ -222,7 +227,7 @@ async function fetchGetText(url: string) {
   }
 }
 
-export const getTextDataWebster = cache(async (text: string) => {
+export const getTextDataWebster = query(async (text: string) => {
   "use server";
   if (!text) return;
   const url = `https://www.merriam-webster.com/dictionary/${text}`;
@@ -585,13 +590,15 @@ export const submitTodayReset = action(async (formData: FormData) => {
   "use server";
   const todayIndex1 = Number(formData.get("todayIndex1"));
   const todayIndex2 = Number(formData.get("todayIndex2"));
+  const createdAt = formData.get("createdAt");
+
   const { error } = await supabase
     .from(mapTables.schedule)
     .update({
       time1: todayIndex1,
       time2: todayIndex2,
     })
-    .eq("date", format(new Date().toISOString(), "yyyy-MM-dd"));
+    .eq("created_at", createdAt);
   if (error) return { message: error.message };
   return { time1: todayIndex1, time2: todayIndex2 };
 }, "todayReset");
@@ -646,13 +653,10 @@ export const handleCheckAndRender = async (text: VocabularySearchType) => {
     if (wordData.number > 1) {
       checkVocabulary(text.created_at);
     } else {
-      archiveVocabulary(text.word);
-      deleteVocabulary(text.created_at);
-      setTimeout(async () => {
-        updateLastRowWord(text.created_at);
-        const total = await getTotalMemories();
-        setMainStore("totalMemories", total);
-      }, 2100);
+      setMainStore("totalMemories", mainStore.totalMemories + 1);
+      await archiveVocabulary(text.word);
+      await deleteVocabulary(text.created_at);
+      updateLastRowWord(text.created_at);
     }
   }
 };
@@ -661,13 +665,10 @@ export const handleCheckQuizWord = async (word: VocabularyQuizType) => {
   if (word.number > 1) {
     checkVocabulary(word.created_at);
   } else {
-    archiveVocabulary(word.word);
-    deleteVocabulary(word.created_at);
-    setTimeout(async () => {
-      updateLastRowWord(word.created_at);
-      const total = await getTotalMemories();
-      setMainStore("totalMemories", total);
-    }, 2100);
+    setMainStore("totalMemories", mainStore.totalMemories + 1);
+    await archiveVocabulary(word.word);
+    await deleteVocabulary(word.created_at);
+    updateLastRowWord(word.created_at);
   }
 };
 
@@ -708,31 +709,6 @@ export const archiveVocabulary = async (text: string) => {
   if (error) return error;
 };
 
-export const updateTodaySchedule = async (date: string, type: number) => {
-  "use server";
-  const data = await getTodayData(date);
-  const updateObj =
-    type === 1 ? { time1: data!.time1 + 1 } : { time2: data!.time2 + 1 };
-  const { error } = await supabase
-    .from(mapTables.schedule)
-    .update(updateObj)
-    .eq("created_at", data!.created_at);
-  if (error) return error;
-
-  if (data!.date === "") {
-    if (
-      (data!.time1 >= 9 && data!.time2 >= 9) ||
-      (type === 2 && data!.time1 >= 9 && data!.time2 + 1 >= 9)
-    ) {
-      const { error } = await supabase
-        .from(mapTables.schedule)
-        .update({ date: date })
-        .eq("created_at", data!.created_at);
-      if (error) return error;
-    }
-  }
-};
-
 const createWeekSchedule = async (index: number) => {
   for (let i = 0; i < 6; i++) {
     let { error } = await supabase.from(mapTables.schedule).insert([
@@ -748,17 +724,84 @@ const createWeekSchedule = async (index: number) => {
 };
 
 //get all history
-export const getCalendarHistory = async () => {
+export const getHistoryList = query(async (run: boolean) => {
   "use server";
+  if (run) return;
   const { data, error } = await supabase
     .from(mapTables.history)
     .select()
     .order("created_at");
   return data as HistoryItemType[];
-};
+}, "getHistoryList");
 
-//get start index of schedule
-export const getThisWeekScheduleIndex = async (dayToday: string) => {
+export const getCalendarList = query(async (str: string) => {
+  "use server";
+  const date = new Date(str);
+  const thisMonth = date.getMonth();
+  const thisYear = date.getFullYear();
+  const firstDayofMonth = new Date(thisYear, thisMonth, 1).getDay();
+  const lastDateofMonth = new Date(thisYear, thisMonth + 1, 0).getDate();
+  const lastDayofMonth = new Date(
+    thisYear,
+    thisMonth,
+    lastDateofMonth
+  ).getDay();
+  const lastDateofLastMonth = new Date(thisYear, thisMonth, 0).getDate();
+  let monthDateArr = [];
+  for (let i = firstDayofMonth; i > 0; i--) {
+    monthDateArr.push({
+      date: lastDateofLastMonth - i + 1,
+      month: thisMonth - 1,
+    });
+  }
+  for (let i = 1; i <= lastDateofMonth; i++) {
+    monthDateArr.push({
+      date: i,
+      month: thisMonth,
+    });
+  }
+  for (let i = lastDayofMonth; i < 6; i++) {
+    monthDateArr.push({
+      date: i - lastDayofMonth + 1,
+      month: thisMonth + 1,
+    });
+  }
+
+  monthDateArr = monthDateArr.map((item) => ({
+    ...item,
+    time1: -1,
+    time2: -1,
+  }));
+
+  const { data, error } = await supabase
+    .from(mapTables.schedule)
+    .select()
+    .order("date");
+
+  if (data) {
+    const scheduleData = data.map((item: ScheduleType, index: number) => {
+      const day = new Date(item.date);
+      return {
+        date: day.getDate(),
+        month: day.getMonth(),
+        time1: item.time1,
+        time2: item.time2,
+      };
+    });
+
+    const mergedArray = monthDateArr.map((item) => {
+      return {
+        ...item,
+        ...scheduleData.find(
+          (item2: any) => item2.date === item.date && item2.month === item.month
+        ),
+      };
+    });
+    return mergedArray as CalendarType[];
+  }
+}, "getCalendarList");
+
+export const getThisWeekIndex = query(async (dayToday: string) => {
   "use server";
   const { data: thisWeekSchedule, error } = await supabase
     .from(mapTables.schedule)
@@ -796,7 +839,41 @@ export const getThisWeekScheduleIndex = async (dayToday: string) => {
       }
     }
   } else return thisWeekIndex;
-};
+}, "getThisWeekIndex");
+
+export const getTodaySchedule = query(async (date: string) => {
+  "use server";
+  const { data: dataByDate } = await supabase
+    .from(mapTables.schedule)
+    .select()
+    .eq("date", date);
+  if (dataByDate && dataByDate.length > 0) return dataByDate[0] as ScheduleType;
+
+  const { data } = await supabase
+    .from(mapTables.schedule)
+    .select()
+    .eq("date", "")
+    .order("created_at", { ascending: true })
+    .limit(1);
+  if (data) return data[0] as ScheduleType;
+}, "getTodaySchedule");
+
+export const getTotalMemories = query(async () => {
+  "use server";
+  const { count } = await supabase
+    .from(mapTables.memories)
+    .select("*", { count: "exact" });
+  return count as number;
+}, "getTotalMemories");
+
+export const getLocationList = query(async () => {
+  "use server";
+  const { data } = await supabase
+    .from(mapTables.weather)
+    .select()
+    .order("default", { ascending: false });
+  if (data) return data as WeatherGeoType[];
+}, "getLocationList");
 
 export const deleteBookmark = async (time: string) => {
   "use server";
@@ -975,60 +1052,38 @@ export const getSpotlightImage = async () => {
   }
 };
 
-export const getTotalMemories = async () => {
+export const updateTodaySchedule = async (date: string, type: number) => {
   "use server";
-  const { count } = await supabase
-    .from(mapTables.memories)
-    .select("*", { count: "exact" });
-  return count as number;
-};
-
-export const getTodayData = cache(async (date: string) => {
-  "use server";
-  const { data: dataByDate } = await supabase
+  const data = await getTodaySchedule(date);
+  const updateObj =
+    type === 1 ? { time1: data!.time1 + 1 } : { time2: data!.time2 + 1 };
+  const { data: updatedData, error } = await supabase
     .from(mapTables.schedule)
-    .select()
-    .eq("date", date);
-  if (dataByDate && dataByDate.length > 0) return dataByDate[0] as ScheduleType;
+    .update(updateObj)
+    .eq("created_at", data!.created_at);
 
-  const { data } = await supabase
-    .from(mapTables.schedule)
-    .select()
-    .eq("date", "")
-    .order("created_at", { ascending: true })
-    .limit(1);
-  if (data) return data[0] as ScheduleType;
-}, "getTodayData");
-
-export const updateTodayData = async (date: string) => {
-  const data = await getTodayData(date);
-  if (data) {
-    setListStore("listToday", {
-      ...listStore.listToday,
-      time1: data.time1,
-      time2: data.time2,
-    });
-    if (mainStore.calendarList.length > 0) {
-      handleUpdateCalendarData(data);
+  if (data!.date === "") {
+    if (
+      (data!.time1 >= 9 && data!.time2 >= 9) ||
+      (type === 2 && data!.time1 >= 9 && data!.time2 + 1 >= 9)
+    ) {
+      const { error } = await supabase
+        .from(mapTables.schedule)
+        .update({ date: date })
+        .eq("created_at", data!.created_at);
     }
   }
+  return updateObj;
 };
 
-const handleUpdateCalendarData = async (data: ScheduleType) => {
-  const day = new Date(data.date);
-  const date = day.getDate();
-  const month = day.getMonth();
-
-  const newData = mainStore.calendarList.map((item) => {
-    return item.date === date && item.month === month
-      ? {
-          ...item,
-          time1: data.time1,
-          time2: data.time2,
-        }
-      : { ...item };
+export const updateTodayScheduleStore = (data: {
+  time1?: number;
+  time2?: number;
+}) => {
+  setCalendarStore("todaySchedule", {
+    ...calendarStore.todaySchedule,
+    ...data,
   });
-  setMainStore("calendarList", newData);
 };
 
 //get 50 word
@@ -1062,15 +1117,6 @@ const fetchGetJSON = async (url: string) => {
   } catch (error) {
     return "";
   }
-};
-
-export const getWeatherLocations = async () => {
-  "use server";
-  const { data } = await supabase
-    .from(mapTables.weather)
-    .select()
-    .order("default", { ascending: false });
-  if (data) return data as WeatherGeoType[];
 };
 
 export const getCurrentWeatherData = async ({

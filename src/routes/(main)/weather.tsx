@@ -22,7 +22,6 @@ import {
   getCurrentWeatherData,
   getHourlyWeatherData,
   getMinutelyWeatherData,
-  getWeatherLocations,
   makePrediction,
 } from "~/lib/api";
 import styles from "./weather.module.scss";
@@ -36,7 +35,7 @@ import {
 import { WMOCODE } from "~/utils";
 import { format } from "date-fns";
 import { WeatherGeoType } from "~/types";
-import { mainStore, setMainStore } from "~/lib/mystore";
+import { mainStore, setMainStore, weatherStore } from "~/lib/mystore";
 
 let canvas: HTMLCanvasElement;
 let refEl: HTMLDivElement;
@@ -50,7 +49,18 @@ const Weather: Component<{}> = (props) => {
     lat: 0,
     lon: 0,
   });
-  const [geoTitle, setGeoTitle] = createSignal<string>("");
+  // const [geoTitle, setGeoTitle] = createSignal<string>("");
+
+
+  const [currentLocation, setCurrentLocation] = createSignal<WeatherGeoType>({
+    name: "Default Location",
+    lat: 10.6023,
+    lon: 106.4021,
+    default: true,
+  });
+
+
+
   const [chartData, setChartData] = createSignal<{
     labels: any[];
     datasets: any[];
@@ -67,28 +77,18 @@ const Weather: Component<{}> = (props) => {
 
   const [prediction, setPrediction] = createSignal<string>("");
 
-  const [weatherLocations, setWeatherLocations] = createSignal<
-    WeatherGeoType[]
-  >([]);
-
   const handleRenderWeather = (num: string) => {
-    setGeo({
-      lat: weatherLocations()[Number(num)].lat,
-      lon: weatherLocations()[Number(num)].lon,
-    });
-    setGeoTitle(weatherLocations()[Number(num)].name);
+    setCurrentLocation(weatherStore.locationList[Number(num)]);
+    setGeo({ lat: currentLocation().lat, lon: currentLocation().lon });
     refetchCurrent();
+    refetchHourly();
     refetchMinutely();
   };
 
   onMount(async () => {
     Chart.register(Title, Tooltip, Legend, Colors, Filler);
+    setCurrentLocation(weatherStore.defaultLocation);
     loadTextures();
-    const locations = await getWeatherLocations();
-    setWeatherLocations(locations!);
-    const item = locations!.find((item) => item.default) || locations![0];
-    setGeo({ lat: item!.lat, lon: item!.lon });
-    setGeoTitle(item!.name);
   });
 
   createEffect(async () => {
@@ -513,7 +513,7 @@ const Weather: Component<{}> = (props) => {
 
   return (
     <MetaProvider>
-      <TitleName>{geoTitle()} ⛅</TitleName>
+      <TitleName>{currentLocation().name} ⛅</TitleName>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <div class={styles.weather}>
@@ -524,7 +524,7 @@ const Weather: Component<{}> = (props) => {
             class={styles.weatherSelect}
             onchange={(e) => handleRenderWeather(e.currentTarget.value)}
           >
-            <Index each={weatherLocations()}>
+            <Index each={weatherStore.locationList}>
               {(item, index) => <option value={index}>{item().name}</option>}
             </Index>
           </select>

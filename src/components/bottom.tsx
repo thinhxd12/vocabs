@@ -1,74 +1,76 @@
-import { A, useAction } from "@solidjs/router";
-import { Component, Show, createSignal, onMount } from "solid-js";
+import { A, createAsync, useAction } from "@solidjs/router";
+import { Component, Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { format } from "date-fns";
 import styles from "./bottom.module.scss";
 import buttons from "../assets/styles/buttons.module.scss";
 import {
+  calendarStore,
   listStore,
   mainStore,
+  setCalendarStore,
   setListStore,
   setMainStore,
+  setWeatherStore,
+  weatherStore,
 } from "~/lib/mystore";
 import {
   getCurrentWeatherData,
   getImageFromUnsplashByKeyword,
   getListContentQuiz,
   getListContentVocab,
-  getTodayData,
-  getTotalMemories,
-  getWeatherLocations,
+  getLocationList,
+  getTodaySchedule,
   handleCheckAndRender,
-  updateTodayData,
   updateTodaySchedule,
+  updateTodayScheduleStore,
 } from "~/lib/api";
 import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
 import { shuffleQuiz, WMOCODE } from "~/utils";
-import { CurrentlyWeatherType, WeatherGeoType } from "~/types";
+import { CurrentlyWeatherType } from "~/types";
 
 let intervalCountdown: NodeJS.Timeout | undefined;
 let intervalAutoplay: NodeJS.Timeout;
+let weatherInterval: NodeJS.Timeout | undefined;
 const [showTimer, setShowTimer] = createSignal<boolean>(false);
 const [minute, setMinute] = createSignal<number>(6);
+const todayDate = format(new Date(), "yyyy-MM-dd");
 
 const Bottom: Component<{}> = () => {
-  const todayDate = format(new Date(), "yyyy-MM-dd");
+  const todaySchedule_data = createAsync(() => getTodaySchedule(todayDate));
+  const locationList_data = createAsync(() => getLocationList());
 
-  const [bottomLocation, setBottomLocation] = createSignal<WeatherGeoType>({
-    name: 'My Place',
-    lat: 10.6023,
-    lon: 106.4021,
-    default: false
-  });
+  createEffect(() => {
+    if (todaySchedule_data()) {
+      setCalendarStore("todaySchedule", todaySchedule_data()!);
+    }
+  })
+
+  createEffect(() => {
+    if (locationList_data()) {
+      setWeatherStore("locationList", locationList_data()!);
+      setWeatherStore("defaultLocation", locationList_data()![0]);
+
+      getBottomWeatherData();
+      weatherInterval = setInterval(() => {
+        getBottomWeatherData();
+      }, 1000 * 15 * 60);
+    }
+  })
+
+  onCleanup(() => {
+    clearInterval(weatherInterval);
+  })
 
   const getBottomWeatherData = async () => {
     const result = await getCurrentWeatherData({
-      lat: bottomLocation().lat,
-      lon: bottomLocation().lon,
+      lat: weatherStore.defaultLocation.lat,
+      lon: weatherStore.defaultLocation.lon,
     });
     result && setBottomWeather(result);
     const weatherBgUrl = await getImageFromUnsplashByKeyword(WMOCODE[String(bottomWeather().icon)].textdescription);
     if (weatherBgUrl) setBottomWeatherBgUrl(weatherBgUrl);
   };
-
-  onMount(async () => {
-    const data = await Promise.all([
-      getTotalMemories(),
-      getTodayData(todayDate),
-      getWeatherLocations()
-    ]);
-    if (data[0]) setMainStore("totalMemories", data[0]);
-    if (data[1]) setListStore("listToday", data[1]);
-    if (data[2]) {
-      const myLocation = data[2].find((item) => item.default) || data[2][0];
-      setBottomLocation(myLocation);
-      getBottomWeatherData();
-      const weatherInterval = setInterval(async () => {
-        getBottomWeatherData();
-      }, 1000 * 15 * 60);
-      clearInterval(intervalCountdown);
-    }
-  });
 
   // -------------------LOGOUT-------------------- //
   const logoutAction = useAction(logout);
@@ -80,8 +82,8 @@ const Bottom: Component<{}> = () => {
     const letter = listStore.listType === 1 ? "I" : "II";
     const newProgress =
       listStore.listType === 1
-        ? listStore.listToday.time1 + 1
-        : listStore.listToday.time2 + 1;
+        ? calendarStore.todaySchedule.time1 + 1
+        : calendarStore.todaySchedule.time2 + 1;
     const notification = new Notification("Start Focusing", {
       icon: img,
       requireInteraction: true,
@@ -151,7 +153,7 @@ const Bottom: Component<{}> = () => {
       } else {
         endAutoplay();
       }
-    }, 7200);
+    }, 7000);
   };
 
   const pauseAutoplay = () => {
@@ -161,12 +163,12 @@ const Bottom: Component<{}> = () => {
   const endAutoplay = async () => {
     clearInterval(intervalAutoplay);
     setListStore("listCount", 0);
-    await updateTodaySchedule(todayDate, listStore.listType);
-    await updateTodayData(todayDate);
+    const res = await updateTodaySchedule(todayDate, listStore.listType);
+    updateTodayScheduleStore(res);
     const currentProgress =
       listStore.listType === 1
-        ? listStore.listToday.time1
-        : listStore.listToday.time2;
+        ? calendarStore.todaySchedule.time1
+        : calendarStore.todaySchedule.time2;
     if (currentProgress < 9) {
       startCountdown();
     }
@@ -189,8 +191,8 @@ const Bottom: Component<{}> = () => {
       case 1:
         setListStore("listType", 1);
         const data1 = await getListContentVocab(
-          listStore.listToday.index1,
-          listStore.listToday.index1 + 49
+          calendarStore.todaySchedule.index1,
+          calendarStore.todaySchedule.index1 + 49
         );
         if (data1) {
           setListStore("listContent", data1);
@@ -200,8 +202,8 @@ const Bottom: Component<{}> = () => {
       case 2:
         setListStore("listType", 2);
         const data2 = await getListContentVocab(
-          listStore.listToday.index2,
-          listStore.listToday.index2 + 49
+          calendarStore.todaySchedule.index2,
+          calendarStore.todaySchedule.index2 + 49
         );
         if (data2) {
           setListStore("listContent", data2);
@@ -218,8 +220,8 @@ const Bottom: Component<{}> = () => {
       case 1:
         setListStore("listType", 1);
         const data1 = await getListContentQuiz(
-          listStore.listToday.index1,
-          listStore.listToday.index1 + 49
+          calendarStore.todaySchedule.index1,
+          calendarStore.todaySchedule.index1 + 49
         );
         if (data1) {
           setListStore("quizContent", shuffleQuiz(data1));
@@ -229,8 +231,8 @@ const Bottom: Component<{}> = () => {
       case 2:
         setListStore("listType", 2);
         const data2 = await getListContentQuiz(
-          listStore.listToday.index2,
-          listStore.listToday.index2 + 49
+          calendarStore.todaySchedule.index2,
+          calendarStore.todaySchedule.index2 + 49
         );
         if (data2) {
           setListStore("quizContent", shuffleQuiz(data2));
@@ -269,7 +271,7 @@ const Bottom: Component<{}> = () => {
         <div class={styles.bottomIndex}>
           <div class={styles.bottomIndexNums}>
             <Show
-              when={listStore.listToday.created_at}
+              when={calendarStore.todaySchedule.created_at}
               fallback={
                 <>
                   <span>
@@ -281,8 +283,8 @@ const Bottom: Component<{}> = () => {
                 </>
               }
             >
-              <span>{listStore.listToday.time1}</span>
-              <span>{listStore.listToday.time2}</span>
+              <span>{calendarStore.todaySchedule.time1}</span>
+              <span>{calendarStore.todaySchedule.time2}</span>
             </Show>
           </div>
           <div class={styles.bottomIndexDay}>
@@ -325,9 +327,9 @@ const Bottom: Component<{}> = () => {
           class={styles.bottomBtnWeather}
         >
           <Show when={bottomWeatherBgUrl()}
-            fallback={<img src="images/main/sky.webp" width={85} height={35} class={styles.bottomBtnImage} />}
+            fallback={<img src="images/main/sky.webp" width={90} height={35} class={styles.bottomBtnImage} />}
           >
-            <img src={bottomWeatherBgUrl()} width={85} height={35} class={styles.bottomBtnImage} />
+            <img src={bottomWeatherBgUrl()} width={90} height={35} class={styles.bottomBtnImage} />
           </Show>
           <div class={styles.bottomBtnWeatherInfo}>
             <img
@@ -506,12 +508,12 @@ const Bottom: Component<{}> = () => {
             height={42}
           />
           <Show
-            when={listStore.listToday.created_at}
+            when={calendarStore.todaySchedule.created_at}
             fallback={
               <span>hiems</span>
             }
           >
-            <span>{listStore.listToday.index2 + 1}</span>
+            <span>{calendarStore.todaySchedule.index2 + 1}</span>
           </Show>
         </button>
       </div>
@@ -535,12 +537,12 @@ const Bottom: Component<{}> = () => {
             height={42}
           />
           <Show
-            when={listStore.listToday.created_at}
+            when={calendarStore.todaySchedule.created_at}
             fallback={
               <span>hiems</span>
             }
           >
-            <span>{listStore.listToday.index1 + 1}</span>
+            <span>{calendarStore.todaySchedule.index1 + 1}</span>
           </Show>
         </button>
       </div>

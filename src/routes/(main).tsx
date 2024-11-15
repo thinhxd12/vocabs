@@ -178,8 +178,8 @@ export default function Main(props: RouteSectionProps) {
           }
         >
           <div class={styles.mainLeft}>
-            <img class={styles.mainLeftImageBlurred} src={imageObj.image} />
-            <img class={styles.mainLeftImage} src={imageObj.image} />
+            <img class={styles.mainLeftImageBlurred} src={imageObj.image} loading="lazy" />
+            <img class={styles.mainLeftImage} src={imageObj.image} loading="lazy" />
 
             <div class={styles.mainButtons}>
               <button
@@ -220,7 +220,7 @@ export default function Main(props: RouteSectionProps) {
               <h3 class={styles.mainRightTitle}>{imageObj.title}</h3>
               <p class={styles.mainRightAttribute}>{imageObj.attr}</p>
               <div class={styles.mainRightAuthors}>
-                <img class={styles.mainRightImage} src={imageObj.authorImg} />
+                <img class={styles.mainRightImage} src={imageObj.authorImg} loading="lazy" />
                 <div class={styles.mainRightAuthor}>
                   <p class={styles.mainRightName}>{imageObj.authorName}</p>
                   <p class={styles.mainRightYear}>{imageObj.authorYear}</p>

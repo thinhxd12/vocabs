@@ -1,4 +1,4 @@
-@import "../assets/styles/mixins.scss";
+@use "../assets/styles/mixins.scss" as *;
 
 .bottom {
     position: relative;
@@ -82,6 +82,7 @@
             opacity: 0;
             text-shadow: 0 1px 0.5px #000000;
             transition: all 0.15s;
+            user-select: none;
         }
 
         &:hover {
@@ -94,8 +95,8 @@
 
     .bottomBtnWeather {
         height: 100%;
-        width: 99px;
-        max-width: 99px;
+        width: 90px;
+        max-width: 90px;
         position: relative;
         overflow: hidden;
 
@@ -168,7 +169,7 @@
                         @include font($f-botButton, 9px, $color-white, 600, normal, 9px);
                         text-wrap: nowrap;
                         margin: 0 6px;
-                        width: max-content;
+                        min-width: 90%;
                         text-shadow: 0 1px 0.5px #000000;
                     }
                 }

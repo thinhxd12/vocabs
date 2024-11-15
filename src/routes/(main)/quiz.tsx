@@ -14,8 +14,8 @@ import { Motion } from "solid-motionone";
 import { listStore, mainStore, setListStore, setMainStore } from "~/lib/mystore";
 import {
   handleCheckQuizWord,
-  updateTodayData,
-  updateTodaySchedule
+  updateTodaySchedule,
+  updateTodayScheduleStore
 } from "~/lib/api";
 import { format } from "date-fns";
 import { shuffleQuiz } from "~/utils";
@@ -95,8 +95,8 @@ const Quiz: Component<{}> = (props) => {
         setListStore("quizCount", 0);
         setIndexChecked(0);
         setChecked(false);
-        await updateTodaySchedule(todayDate, listStore.listType);
-        await updateTodayData(todayDate);
+        const res = await updateTodaySchedule(todayDate, listStore.listType);
+        updateTodayScheduleStore(res);
       }, 1000);
     }
   }
