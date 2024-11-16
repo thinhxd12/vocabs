@@ -28,6 +28,7 @@ import { Motion, Presence } from "solid-motionone";
 import { logout } from "~/lib";
 import { shuffleQuiz, WMOCODE } from "~/utils";
 import { CurrentlyWeatherType } from "~/types";
+import ImageLoading from "./imageloading";
 
 let intervalCountdown: NodeJS.Timeout | undefined;
 let intervalAutoplay: NodeJS.Timeout;
@@ -262,7 +263,7 @@ const Bottom: Component<{}> = () => {
     windSpeed: 0,
   });
 
-  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>("");
+  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>("images/main/sky.webp");
 
   return (
     <div class={styles.bottom}>
@@ -297,6 +298,13 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
+          <ImageLoading
+            src="images/main/stanczyk.webp"
+            alt="stanczyk"
+            width={57}
+            height={35}
+            className={styles.bottomBtnBackground}
+          />
           <span>Dulce periculum. <br />Danger is sweet.</span>
         </A>
         <div class={styles.bottomBtnSep}></div>
@@ -306,6 +314,13 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
+          <ImageLoading
+            src="images/main/sisifo.webp"
+            alt="sisifo"
+            width={57}
+            height={35}
+            className={styles.bottomBtnBackground}
+          />
           <span>Pecunia non olet. <br />Money does not stink.</span>
         </A>
 
@@ -316,6 +331,13 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
+          <ImageLoading
+            src="images/main/TheEndoftheDay.webp"
+            alt="TheEndoftheDay"
+            width={57}
+            height={35}
+            className={styles.bottomBtnBackground}
+          />
           <span>Memento mori. <br />Remember you will die.</span>
         </A>
 
@@ -326,22 +348,23 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtnWeather}
         >
-          <Show when={bottomWeatherBgUrl()}
-            fallback={<img src="images/main/sky.webp" width={90} height={35} class={styles.bottomBtnImage} />}
-          >
-            <img src={bottomWeatherBgUrl()} width={90} height={35} class={styles.bottomBtnImage} />
-          </Show>
+          <ImageLoading
+            src={bottomWeatherBgUrl()}
+            width={90}
+            height={35}
+            className={styles.bottomBtnImage}
+          />
           <div class={styles.bottomBtnWeatherInfo}>
-            <img
-              class={styles.bottomWeatherImg}
+            <ImageLoading
               src={
                 bottomWeather().isDayTime
                   ? WMOCODE[bottomWeather().icon].day.image
                   : WMOCODE[bottomWeather().icon].night.image
               }
-              height={21}
+              alt="TheEndoftheDay"
               width={21}
-              alt="bottomWeatherIcon"
+              height={21}
+              className={styles.bottomWeatherImg}
             />
             <label>{Math.round(bottomWeather().temperature)}°</label>
           </div>
@@ -440,17 +463,35 @@ const Bottom: Component<{}> = () => {
         </div>
       </div>
 
-      <div class={styles.buttonMenuContent} style={{ transform: showTimer() ? "translateX(0px)" : "" }}>
-        <button class={buttons.buttonMenu} onClick={startOrStopCountdown}>
-          <div class={buttons.buttonMenuOrnament}></div>
-          <Motion.img
-            animate={{
-              width: `${(1 - (minute() / 6)) * 90}px`,
-              objectPosition: 'top left',
-            }}
-            height={42}
-            transition={{ duration: 0.3, easing: [0.4, 0, 0.2, 1] }}
+      <div class={styles.buttonMenuContent}
+        style={{ transform: showTimer() ? "translateX(0)" : "" }}
+      >
+        <button
+          class={buttons.buttonMenu}
+          onClick={startOrStopCountdown}
+        >
+          <ImageLoading
+            src="images/main/input-left-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.leftOrnament}
+          />
+
+          <ImageLoading
             src="images/main/hourglass.webp"
+            alt="hourglass"
+            width={(1 - (minute() / 6)) * 86}
+            height={36}
+            className={buttons.buttonMenuImageTimer}
+          />
+
+          <ImageLoading
+            src="images/main/input-right-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.rightOrnament}
           />
         </button>
       </div>
@@ -462,12 +503,28 @@ const Bottom: Component<{}> = () => {
             setMainStore("showTranslate", true);
           }}
         >
-          <div class={buttons.buttonMenuOrnament}></div>
-          <img
-            alt="translate"
+          <ImageLoading
+            src="images/main/input-left-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.leftOrnament}
+          />
+
+          <ImageLoading
             src="images/main/translate.webp"
-            width={90}
-            height={42}
+            alt="translate"
+            width={86}
+            height={36}
+            className={buttons.buttonMenuImage}
+          />
+
+          <ImageLoading
+            src="images/main/input-right-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.rightOrnament}
           />
         </button>
       </div>
@@ -479,86 +536,143 @@ const Bottom: Component<{}> = () => {
             setMainStore("mainToggle", true);
           }}
         >
-          <div class={buttons.buttonMenuOrnament}></div>
-          <img
-            alt="bookmark"
+          <ImageLoading
+            src="images/main/input-left-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.leftOrnament}
+          />
+
+          <ImageLoading
             src="images/main/bookmark.webp"
-            width={90}
-            height={42}
+            alt="bookmark"
+            width={86}
+            height={36}
+            className={buttons.buttonMenuImage}
+          />
+
+          <ImageLoading
+            src="images/main/input-right-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.rightOrnament}
           />
         </button>
       </div>
 
       <div class={styles.buttonMenuContent}>
         <button
-          class={
-            listStore.listType === 2
-              ? buttons.buttonMenuActive
-              : buttons.buttonMenu
-          }
+          class={buttons.buttonMenu}
           onClick={() => {
             listStore.vocabPage ? handleGetListContentVocab(2) : handleGetListContentQuiz(2)
           }}
         >
-          <div class={buttons.buttonMenuOrnament}></div>
-          <img
+          <ImageLoading
+            src="images/main/input-left-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.leftOrnament}
+          />
+
+          <ImageLoading
             alt="flower2"
             src="images/main/flower2.webp"
-            width={90}
-            height={42}
+            width={86}
+            height={36}
+            className={buttons.buttonMenuImage}
           />
+
           <Show
             when={calendarStore.todaySchedule.created_at}
             fallback={
               <span>hiems</span>
             }
           >
-            <span>{calendarStore.todaySchedule.index2 + 1}</span>
+            <span style={{ color: listStore.listType === 2 ? "#38E07B" : "#ffffff" }}>{calendarStore.todaySchedule.index2 + 1}</span>
           </Show>
+
+          <ImageLoading
+            src="images/main/input-right-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.rightOrnament}
+          />
         </button>
       </div>
 
       <div class={styles.buttonMenuContent}>
         <button
-          class={
-            listStore.listType === 1
-              ? buttons.buttonMenuActive
-              : buttons.buttonMenu
-          }
+          class={buttons.buttonMenu}
           onClick={() => {
             listStore.vocabPage ? handleGetListContentVocab(1) : handleGetListContentQuiz(1)
           }}
         >
-          <div class={buttons.buttonMenuOrnament}></div>
-          <img
+          <ImageLoading
+            src="images/main/input-left-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.leftOrnament}
+          />
+
+          <ImageLoading
             alt="flower1"
             src="images/main/flower1.webp"
-            width={90}
-            height={42}
+            width={86}
+            height={36}
+            className={buttons.buttonMenuImage}
           />
+
           <Show
             when={calendarStore.todaySchedule.created_at}
             fallback={
               <span>hiems</span>
             }
           >
-            <span>{calendarStore.todaySchedule.index1 + 1}</span>
+            <span style={{ color: listStore.listType === 1 ? "#38E07B" : "#ffffff" }}>{calendarStore.todaySchedule.index1 + 1}</span>
           </Show>
+
+          <ImageLoading
+            src="images/main/input-right-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.rightOrnament}
+          />
         </button>
       </div>
 
       <div class={styles.buttonMenuContent}>
         <button
-          class={buttons.buttonMenu
-          }
+          class={buttons.buttonMenu}
           onClick={logoutAction}
         >
-          <div class={buttons.buttonMenuOrnament}></div>
-          <img
-            alt="exit"
+          <ImageLoading
+            src="images/main/input-left-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.leftOrnament}
+          />
+
+          <ImageLoading
             src="images/main/exit.webp"
-            width={90}
-            height={42}
+            alt="exit"
+            width={86}
+            height={36}
+            className={buttons.buttonMenuImage}
+          />
+
+          <ImageLoading
+            src="images/main/input-right-corner.webp"
+            alt="left"
+            width={15}
+            height={36}
+            className={buttons.rightOrnament}
           />
         </button>
       </div>

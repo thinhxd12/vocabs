@@ -37,60 +37,60 @@
 .buttonMenu {
     width: 86px;
     height: 36px;
-    display: inline-block;
     transition: all 0.3s ease;
     overflow: hidden;
     position: relative;
     outline: 0;
-    border: none;
-    background: none;
     cursor: pointer;
     box-shadow: 0 0 16px rgba(0, 0, 0, .28);
-    background: $color-black;
+    background: #000000;
     border: 1px solid $color-border;
     border-right: none;
 
-    .buttonMenuOrnament {
+    .leftOrnament {
         position: absolute;
-        z-index: 3;
         top: 0;
         left: 0;
-        right: -1px;
-        bottom: 0;
-        background-image: url('/images/main/input-left-corner.webp'), url('/images/main/input-right-corner.webp');
-        background-position: top left, top right;
-        background-repeat: no-repeat, no-repeat;
-        background-size: auto 34px, auto 34px;
+        z-index: 3;
     }
 
-    img {
+    .buttonMenuImage {
         position: absolute;
-        z-index: 1;
         top: 0;
         left: 0;
-        object-fit: cover;
-        object-position: center center;
-        transition: all 0.3s ease;
+        z-index: 1;
+    }
+
+    .buttonMenuImageTimer {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        img {
+            object-position: top left;
+        }
+    }
+
+    .rightOrnament {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 3;
     }
 
     span {
         position: absolute;
-        @include font($f-buttonMenu, 16px, $color-white, 700, normal, 35px);
+        @include font($f-buttonMenu, 16px, $color-white, 700, normal, 34px);
         top: 0;
         left: 0;
         right: 0;
-        bottom: 0;
+        bottom: 3px;
         z-index: 12;
         text-shadow: 1px 1px 1px #000000;
     }
-}
 
-.buttonMenuActive {
-    @extend .buttonMenu;
-
-    span {
-        color: $color-calendar-green-1 !important;
-    }
 }
 
 .buttonPrimary {

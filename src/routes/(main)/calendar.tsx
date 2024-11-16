@@ -28,6 +28,7 @@ import { CalendarType } from "~/types";
 import { OcX2 } from "solid-icons/oc";
 import { BiSolidSave } from "solid-icons/bi";
 import { chunk } from "~/utils";
+import ImageLoading from "~/components/imageloading";
 
 let refEl: HTMLDivElement;
 const todayDate = format(new Date(), "yyyy-MM-dd");
@@ -129,7 +130,7 @@ const Calendar: Component<{}> = (props) => {
       <div class={styles.calendar}>
         <div class={styles.calendarCard}>
           <div class={styles.calendarImage}>
-            <img
+            <ImageLoading
               src={`images/main/${format(new Date(), "M")}.webp`}
               width={360}
               height={240}

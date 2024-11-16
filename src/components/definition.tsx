@@ -8,7 +8,7 @@ import styles from "./definition.module.scss";
 import { mainStore } from "~/lib/mystore";
 import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
 import { VocabularyType } from "~/types";
-import ImageLoading from "./image";
+import ImageLoading from "./imageloading";
 
 const Definition: Component<{
   item: VocabularyType;
@@ -77,9 +77,10 @@ const Definition: Component<{
                             <ImageLoading
                               src={item().image}
                               width={360}
-                              height={240}
-                              class={styles.websImg}
+                              height={202.5}
+                              className={styles.websImg}
                             />
+
                             <div class={styles.websDefs}>
                               <Index each={item().definition}>
                                 {(x, y) => (
