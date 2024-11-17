@@ -84,75 +84,6 @@ export const searchMemoriesText = async (text: string) => {
   }
 };
 
-// export const getScheduleData = async (str: string) => {
-//   // "use server";
-//   const date = new Date();
-//   const thisMonth = date.getMonth();
-//   const thisYear = date.getFullYear();
-//   const firstDayofMonth = new Date(thisYear, thisMonth, 1).getDay();
-//   const lastDateofMonth = new Date(thisYear, thisMonth + 1, 0).getDate();
-//   const lastDayofMonth = new Date(
-//     thisYear,
-//     thisMonth,
-//     lastDateofMonth
-//   ).getDay();
-//   const lastDateofLastMonth = new Date(thisYear, thisMonth, 0).getDate();
-//   let monthDateArr = [];
-//   for (let i = firstDayofMonth; i > 0; i--) {
-//     monthDateArr.push({
-//       date: lastDateofLastMonth - i + 1,
-//       month: thisMonth - 1,
-//     });
-//   }
-//   for (let i = 1; i <= lastDateofMonth; i++) {
-//     monthDateArr.push({
-//       date: i,
-//       month: thisMonth,
-//     });
-//   }
-//   for (let i = lastDayofMonth; i < 6; i++) {
-//     monthDateArr.push({
-//       date: i - lastDayofMonth + 1,
-//       month: thisMonth + 1,
-//     });
-//   }
-
-//   monthDateArr = monthDateArr.map((item) => ({
-//     ...item,
-//     time1: -1,
-//     time2: -1,
-//   }));
-
-//   const { data, error } = await supabase
-//     .from(mapTables.schedule)
-//     .select()
-//     .order("date");
-
-//   if (data) {
-//     const scheduleData = data.map((item: ScheduleType, index: number) => {
-//       const day = new Date(item.date);
-//       return {
-//         date: day.getDate(),
-//         month: day.getMonth(),
-//         time1: item.time1,
-//         time2: item.time2,
-//       };
-//     });
-
-//     const mergedArray = monthDateArr.map((item) => {
-//       return {
-//         ...item,
-//         ...scheduleData.find(
-//           (item2: any) => item2.date === item.date && item2.month === item.month
-//         ),
-//       };
-//     });
-//     return mergedArray as CalendarType[];
-//   }
-// };
-
-//get image link
-
 export const getDataImage = async (url: string) => {
   "use server";
   try {
@@ -632,7 +563,6 @@ export const submitNewSchedule = action(async (formData: FormData) => {
 
   function findNextElement(arr: Array<number>, currentElement: number) {
     const currentIndex = arr.indexOf(currentElement);
-    // Use modulo to wrap around the array
     const nextIndex = (currentIndex + 1) % arr.length;
     return arr[nextIndex];
   }
@@ -710,6 +640,7 @@ export const archiveVocabulary = async (text: string) => {
 };
 
 const createWeekSchedule = async (index: number) => {
+  "use server";
   for (let i = 0; i < 6; i++) {
     let { error } = await supabase.from(mapTables.schedule).insert([
       {
