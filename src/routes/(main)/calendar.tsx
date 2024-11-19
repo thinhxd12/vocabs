@@ -8,6 +8,7 @@ import {
   onMount,
 } from "solid-js";
 import {
+  getAllHistoryList,
   getCalendarList,
   getHistoryList,
   getThisWeekIndex,
@@ -25,10 +26,9 @@ import { createAsync, useSubmission } from "@solidjs/router";
 import { calendarStore, setCalendarStore } from "~/lib/mystore";
 import HistoryCard from "~/components/historycard";
 import { CalendarType } from "~/types";
-import { OcX2 } from "solid-icons/oc";
+import { OcPluscircle3, OcX2 } from "solid-icons/oc";
 import { BiSolidSave } from "solid-icons/bi";
 import { chunk } from "~/utils";
-import ImageLoading from "~/components/imageloading";
 
 let refEl: HTMLDivElement;
 const todayDate = format(new Date(), "yyyy-MM-dd");
@@ -122,6 +122,13 @@ const Calendar: Component<{}> = (props) => {
     );
   };
 
+  const handleLoadAllHistory = async () => {
+    const data = await getAllHistoryList();
+    if (data) {
+      setCalendarStore("historyList", data);
+    }
+  }
+
   return (
     <MetaProvider>
       <Title>📆</Title>
@@ -130,7 +137,7 @@ const Calendar: Component<{}> = (props) => {
       <div class={styles.calendar}>
         <div class={styles.calendarCard}>
           <div class={styles.calendarImage}>
-            <ImageLoading
+            <img
               src={`images/main/${format(new Date(), "M")}.webp`}
               width={360}
               height={240}
@@ -201,6 +208,12 @@ const Calendar: Component<{}> = (props) => {
                 return <HistoryCard item={data()} />;
               }}
             </Index>
+            <button
+              class={styles.calendarHistoryBtn}
+              onclick={handleLoadAllHistory}
+            >
+              <OcPluscircle3 size={15} />
+            </button>
           </div>
         </Suspense>
 

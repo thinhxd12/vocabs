@@ -5,12 +5,11 @@
     width: 100%;
     max-width: calc(100vw - 360px);
     height: 100%;
-    padding: 25px 40px 25px 25px !important;
+    padding: 25px 40px 25px 40px !important;
     border: 0;
     outline: 0;
     z-index: 12;
     overflow-y: scroll;
-    position: relative;
 
     .heart {
         position: fixed;
@@ -52,7 +51,7 @@
 
         .bookmarkContentInside {
             position: relative;
-            padding-bottom: 24px;
+            padding: 0 0 24px 12px;
 
             .bookmarkTitleContent {
                 @include flex-center-column;
@@ -162,6 +161,7 @@
     .bookmarkContentChecked {
         @extend .bookmarkContent;
         z-index: 9;
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 
         &::before {
             content: "";

@@ -8,7 +8,7 @@ import styles from "./definition.module.scss";
 import { mainStore } from "~/lib/mystore";
 import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
 import { VocabularyType } from "~/types";
-import ImageLoading from "./imageloading";
+import ImageLoader from "./imageloader";
 
 const Definition: Component<{
   item: VocabularyType;
@@ -74,7 +74,7 @@ const Definition: Component<{
                           }
                         >
                           <div class={styles.websSenseImage}>
-                            <ImageLoading
+                            <ImageLoader
                               src={item().image}
                               width={360}
                               height={202.5}

@@ -540,7 +540,8 @@ export const submitNewSchedule = action(async (formData: FormData) => {
   const { data: dataHistory } = await supabase
     .from(mapTables.history)
     .select("index,created_at")
-    .order("created_at", { ascending: false });
+    .order("created_at", { ascending: false })
+    .limit(1);
   if (!dataHistory) return;
 
   const lastWeekIndex = dataHistory[0].index;
@@ -658,12 +659,27 @@ const createWeekSchedule = async (index: number) => {
 export const getHistoryList = query(async (run: boolean) => {
   "use server";
   if (run) return;
+  const { count } = await supabase
+    .from(mapTables.history)
+    .select("*", { count: "exact" });
+  const startOfIndex = Math.floor(count! / 5 - 3);
+
+  const { data, error } = await supabase
+    .from(mapTables.history)
+    .select()
+    .order("created_at")
+    .range(startOfIndex * 5, 9999);
+  return data as HistoryItemType[];
+}, "getHistoryList");
+
+export const getAllHistoryList = async () => {
+  "use server";
   const { data, error } = await supabase
     .from(mapTables.history)
     .select()
     .order("created_at");
   return data as HistoryItemType[];
-}, "getHistoryList");
+};
 
 export const getCalendarList = query(async (str: string) => {
   "use server";

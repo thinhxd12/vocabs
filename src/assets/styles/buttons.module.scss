@@ -52,6 +52,7 @@
         top: 0;
         left: 0;
         z-index: 3;
+        object-fit: cover;
     }
 
     .buttonMenuImage {
@@ -59,6 +60,7 @@
         top: 0;
         left: 0;
         z-index: 1;
+        object-fit: cover;
     }
 
     .buttonMenuImageTimer {
@@ -69,6 +71,7 @@
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
         img {
+            object-fit: cover;
             object-position: top left;
         }
     }
@@ -78,6 +81,7 @@
         top: 0;
         right: 0;
         z-index: 3;
+        object-fit: cover;
     }
 
     span {
@@ -86,7 +90,7 @@
         top: 0;
         left: 0;
         right: 0;
-        bottom: 3px;
+        bottom: 0;
         z-index: 12;
         text-shadow: 1px 1px 1px #000000;
     }

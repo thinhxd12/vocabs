@@ -60,6 +60,7 @@
             position: absolute;
             top: 0;
             left: 0;
+            object-fit: cover;
         }
 
         span {
@@ -159,8 +160,8 @@
                     .scrollingTextItem {
                         @include font($f-botButton, 9px, $color-white, 600, normal, 9px);
                         text-wrap: nowrap;
-                        margin: 0 6px;
-                        min-width: 90%;
+                        padding: 0 6px;
+                        min-width: 72px;
                         text-shadow: 0 1px 0.5px #000000;
                     }
                 }
