@@ -492,7 +492,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.rightOrnament}
             loading="lazy"
           />
@@ -510,7 +510,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-left-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.leftOrnament}
             loading="lazy"
           />
@@ -528,7 +528,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.rightOrnament}
             loading="lazy"
           />
@@ -546,7 +546,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-left-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.leftOrnament}
             loading="lazy"
           />
@@ -564,7 +564,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.rightOrnament}
             loading="lazy"
           />
@@ -582,7 +582,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-left-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.leftOrnament}
             loading="lazy"
           />
@@ -609,7 +609,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.rightOrnament}
             loading="lazy"
           />
@@ -627,7 +627,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-left-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.leftOrnament}
             loading="lazy"
           />
@@ -654,7 +654,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.rightOrnament}
             loading="lazy"
           />
@@ -670,7 +670,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-left-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.leftOrnament}
             loading="lazy"
           />
@@ -688,7 +688,7 @@ const Bottom: Component<{}> = () => {
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
-            height={36}
+            height={34}
             class={buttons.rightOrnament}
             loading="lazy"
           />
