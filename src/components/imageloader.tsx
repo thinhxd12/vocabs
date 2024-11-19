@@ -1,5 +1,5 @@
-import { Component, createEffect, createSignal, on, Show, untrack } from "solid-js";
-import { rgbaToDataURL, rgbaToThumbHash, thumbHashToDataURL } from 'thumbhash'
+import { Component, createEffect, createSignal, on, Show } from "solid-js";
+import { rgbaToThumbHash, thumbHashToDataURL } from 'thumbhash'
 import sharp from "sharp";
 
 const ImageLoader: Component<{

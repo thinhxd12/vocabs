@@ -52,10 +52,10 @@ const Bottom: Component<{}> = () => {
       setWeatherStore("locationList", locationList_data()!);
       setWeatherStore("defaultLocation", locationList_data()![0]);
 
-      // getBottomWeatherData();
-      // weatherInterval = setInterval(() => {
-      //   getBottomWeatherData();
-      // }, 1000 * 15 * 60);
+      getBottomWeatherData();
+      weatherInterval = setInterval(() => {
+        getBottomWeatherData();
+      }, 1000 * 15 * 60);
     }
   })
 
