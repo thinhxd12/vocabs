@@ -16,6 +16,8 @@ import { format } from "date-fns";
 import { listStore, mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./main.module.scss";
 import { debounce } from "@solid-primitives/scheduled";
+import ImageLoader from "~/components/imageloader";
+import MainImageLoader from "~/components/mainImage";
 const Bookmark = lazy(() => import("~/components/bookmark"));
 
 declare module "solid-js" {
@@ -30,11 +32,12 @@ export default function Main(props: RouteSectionProps) {
   let checkTimeout: NodeJS.Timeout;
   let deleteSearchTimeout: NodeJS.Timeout;
   const mockObj = {
-    image: "images/main/main-image.webp",
+    // image: "images/main/main-image.webp",
+    image: "https://hoctuvung3.vercel.app/images/main/main-image.webp",
     date: "01 July 2023",
     title: "The Red Buoy, Saint-Tropez",
     attr: "Oil on canvas • 81 × 65 cm",
-    authorImg: "images/main/main-author.webp",
+    authorImg: "https://hoctuvung3.vercel.app/images/main/main-author.webp",
     authorName: "Paul Signac",
     authorYear: "1895",
     content:
@@ -178,9 +181,7 @@ export default function Main(props: RouteSectionProps) {
           }
         >
           <div class={styles.mainLeft}>
-            <img class={styles.mainLeftImageBlurred} src={imageObj.image} loading="lazy" />
-            <img class={styles.mainLeftImage} src={imageObj.image} loading="lazy" />
-
+            <MainImageLoader src={imageObj.image} />
             <div class={styles.mainButtons}>
               <button
                 aria-label="Layout"
@@ -220,7 +221,8 @@ export default function Main(props: RouteSectionProps) {
               <h3 class={styles.mainRightTitle}>{imageObj.title}</h3>
               <p class={styles.mainRightAttribute}>{imageObj.attr}</p>
               <div class={styles.mainRightAuthors}>
-                <img class={styles.mainRightImage} src={imageObj.authorImg} loading="lazy" />
+                {/* <img class={styles.mainRightImage} src={imageObj.authorImg} loading="lazy" /> */}
+                <ImageLoader width={45} height={45} src={imageObj.authorImg} className={styles.mainRightImage} />
                 <div class={styles.mainRightAuthor}>
                   <p class={styles.mainRightName}>{imageObj.authorName}</p>
                   <p class={styles.mainRightYear}>{imageObj.authorYear}</p>

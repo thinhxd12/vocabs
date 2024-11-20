@@ -37,7 +37,7 @@ const ImageLoader: Component<{
               const hash = await createThumbhash(props.src);
               setPlaceholderData(thumbHashToDataURL(hash));
             }
-          }, 300);
+          }, 200);
         }
       }
     )

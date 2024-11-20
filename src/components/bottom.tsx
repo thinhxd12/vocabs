@@ -263,7 +263,7 @@ const Bottom: Component<{}> = () => {
     windSpeed: 0,
   });
 
-  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>("");
+  const [bottomWeatherBgUrl, setBottomWeatherBgUrl] = createSignal<string>("https://hoctuvung3.vercel.app/images/main/sky.webp");
 
   return (
     <div class={styles.bottom}>
