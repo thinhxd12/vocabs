@@ -73,6 +73,8 @@ const ImageLoader: Component<{
           width: "100%",
           height: "100%",
           "object-fit": "cover",
+          opacity: isLoading() ? 0 : 1,
+          transition: "opacity 0.3s"
         }}
         onload={handleLoad}
         loading="lazy"

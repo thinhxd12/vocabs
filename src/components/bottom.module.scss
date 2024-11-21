@@ -211,12 +211,48 @@
 
         position: absolute;
         right: 0;
-        width: 120px;
+        width: 122px;
         height: $height;
         transition: all 0.25s ease;
         text-align: right;
         z-index: 9999;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         transform: translateX(86px);
+
+        .buttonMenu {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid $color-border;
+            width: 86px;
+            background-size: cover;
+            position: relative;
+            cursor: pointer;
+            background-color: #000000;
+
+            span {
+                @include font($f-buttonMenu, 16px, $color-white, 700, normal, 16px);
+                text-shadow: 1px 1px 1px #000000;
+            }
+
+            .buttonMenuImageTimer {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 1;
+                object-fit: cover;
+                object-position: top left;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .buttonMenuLeftOrnament,
+            .buttonMenuRightOrnament {
+                position: inherit;
+                z-index: 3;
+            }
+        }
 
         &:hover {
             transform: translateX(0);
@@ -228,22 +264,42 @@
 
         &:nth-child(3) {
             bottom: $space + $height;
+
+            .buttonMenu {
+                background-image: url("/images/main/translate.webp");
+            }
         }
 
         &:nth-child(4) {
             bottom: $space + 2*$height;
+
+            .buttonMenu {
+                background-image: url("/images/main/bookmark.webp");
+            }
         }
 
         &:nth-child(5) {
             bottom: $space + 3*$height;
+
+            .buttonMenu {
+                background-image: url("/images/main/flower2.webp");
+            }
         }
 
         &:nth-child(6) {
             bottom: $space + 4*$height;
+
+            .buttonMenu {
+                background-image: url("/images/main/flower1.webp");
+            }
         }
 
         &:nth-child(7) {
             bottom: $space + 5*$height;
+
+            .buttonMenu {
+                background-image: url("/images/main/exit.webp");
+            }
         }
     }
 }

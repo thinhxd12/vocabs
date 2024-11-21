@@ -463,11 +463,13 @@ const Bottom: Component<{}> = () => {
         </div>
       </div>
 
-      <div class={styles.buttonMenuContent}
+      <div
+        class={styles.buttonMenuContent}
         style={{ transform: showTimer() ? "translateX(0)" : "" }}
       >
-        <button
-          class={buttons.buttonMenu}
+        <div></div>
+        <div
+          class={styles.buttonMenu}
           onClick={startOrStopCountdown}
         >
           <img
@@ -475,33 +477,32 @@ const Bottom: Component<{}> = () => {
             alt="left"
             width="auto"
             height={34}
-            class={buttons.leftOrnament}
+            class={styles.buttonMenuLeftOrnament}
             loading="lazy"
           />
-
           <img
             src="images/main/hourglass.webp"
             alt="hourglass"
-            width={(1 - (minute() / 6)) * 85}
+            width={(1 - (minute() / 6)) * 84}
             height={34}
-            class={buttons.buttonMenuImageTimer}
+            class={styles.buttonMenuImageTimer}
             loading="lazy"
           />
-
           <img
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
             height={34}
-            class={buttons.rightOrnament}
+            class={styles.buttonMenuRightOrnament}
             loading="lazy"
           />
-        </button>
+        </div>
       </div>
 
       <div class={styles.buttonMenuContent}>
-        <button
-          class={buttons.buttonMenu}
+        <div></div>
+        <div
+          class={styles.buttonMenu}
           onClick={() => {
             setMainStore("showTranslate", true);
           }}
@@ -511,33 +512,24 @@ const Bottom: Component<{}> = () => {
             alt="left"
             width="auto"
             height={34}
-            class={buttons.leftOrnament}
+            class={styles.buttonMenuLeftOrnament}
             loading="lazy"
           />
-
-          <img
-            src="images/main/translate.webp"
-            alt="translate"
-            width={85}
-            height={34}
-            class={buttons.buttonMenuImage}
-            loading="lazy"
-          />
-
           <img
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
             height={34}
-            class={buttons.rightOrnament}
+            class={styles.buttonMenuRightOrnament}
             loading="lazy"
           />
-        </button>
+        </div>
       </div>
 
       <div class={styles.buttonMenuContent}>
-        <button
-          class={buttons.buttonMenu}
+        <div></div>
+        <div
+          class={styles.buttonMenu}
           onClick={() => {
             setMainStore("mainToggle", true);
           }}
@@ -547,33 +539,24 @@ const Bottom: Component<{}> = () => {
             alt="left"
             width="auto"
             height={34}
-            class={buttons.leftOrnament}
+            class={styles.buttonMenuLeftOrnament}
             loading="lazy"
           />
-
-          <img
-            src="images/main/bookmark.webp"
-            alt="bookmark"
-            width={85}
-            height={34}
-            class={buttons.buttonMenuImage}
-            loading="lazy"
-          />
-
           <img
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
             height={34}
-            class={buttons.rightOrnament}
+            class={styles.buttonMenuRightOrnament}
             loading="lazy"
           />
-        </button>
+        </div>
       </div>
 
       <div class={styles.buttonMenuContent}>
-        <button
-          class={buttons.buttonMenu}
+        <div></div>
+        <div
+          class={styles.buttonMenu}
           onClick={() => {
             listStore.vocabPage ? handleGetListContentVocab(2) : handleGetListContentQuiz(2)
           }}
@@ -583,42 +566,32 @@ const Bottom: Component<{}> = () => {
             alt="left"
             width="auto"
             height={34}
-            class={buttons.leftOrnament}
+            class={styles.buttonMenuLeftOrnament}
             loading="lazy"
           />
-
-          <img
-            alt="flower2"
-            src="images/main/flower2.webp"
-            width={85}
-            height={34}
-            class={buttons.buttonMenuImage}
-            loading="lazy"
-          />
-
           <Show
             when={calendarStore.todaySchedule.created_at}
             fallback={
-              <span>hiems</span>
+              <span>Nothing</span>
             }
           >
             <span style={{ color: listStore.listType === 2 ? "#38E07B" : "#ffffff" }}>{calendarStore.todaySchedule.index2 + 1}</span>
           </Show>
-
           <img
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
             height={34}
-            class={buttons.rightOrnament}
+            class={styles.buttonMenuRightOrnament}
             loading="lazy"
           />
-        </button>
+        </div>
       </div>
 
       <div class={styles.buttonMenuContent}>
-        <button
-          class={buttons.buttonMenu}
+        <div></div>
+        <div
+          class={styles.buttonMenu}
           onClick={() => {
             listStore.vocabPage ? handleGetListContentVocab(1) : handleGetListContentQuiz(1)
           }}
@@ -628,42 +601,32 @@ const Bottom: Component<{}> = () => {
             alt="left"
             width="auto"
             height={34}
-            class={buttons.leftOrnament}
+            class={styles.buttonMenuLeftOrnament}
             loading="lazy"
           />
-
-          <img
-            alt="flower1"
-            src="images/main/flower1.webp"
-            width={85}
-            height={34}
-            class={buttons.buttonMenuImage}
-            loading="lazy"
-          />
-
           <Show
             when={calendarStore.todaySchedule.created_at}
             fallback={
-              <span>hiems</span>
+              <span>Nothing</span>
             }
           >
             <span style={{ color: listStore.listType === 1 ? "#38E07B" : "#ffffff" }}>{calendarStore.todaySchedule.index1 + 1}</span>
           </Show>
-
           <img
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
             height={34}
-            class={buttons.rightOrnament}
+            class={styles.buttonMenuRightOrnament}
             loading="lazy"
           />
-        </button>
+        </div>
       </div>
 
       <div class={styles.buttonMenuContent}>
-        <button
-          class={buttons.buttonMenu}
+        <div></div>
+        <div
+          class={styles.buttonMenu}
           onClick={logoutAction}
         >
           <img
@@ -671,28 +634,18 @@ const Bottom: Component<{}> = () => {
             alt="left"
             width="auto"
             height={34}
-            class={buttons.leftOrnament}
+            class={styles.buttonMenuLeftOrnament}
             loading="lazy"
           />
-
-          <img
-            src="images/main/exit.webp"
-            alt="exit"
-            width={85}
-            height={34}
-            class={buttons.buttonMenuImage}
-            loading="lazy"
-          />
-
           <img
             src="images/main/input-right-corner.webp"
             alt="left"
             width="auto"
             height={34}
-            class={buttons.rightOrnament}
+            class={styles.buttonMenuRightOrnament}
             loading="lazy"
           />
-        </button>
+        </div>
       </div>
 
       <audio

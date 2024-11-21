@@ -34,67 +34,6 @@
 
 }
 
-.buttonMenu {
-    width: 86px;
-    height: 36px;
-    transition: all 0.3s ease;
-    overflow: hidden;
-    position: relative;
-    outline: 0;
-    cursor: pointer;
-    box-shadow: 0 0 16px rgba(0, 0, 0, .28);
-    background: #000000;
-    border: 1px solid $color-border;
-    border-right: none;
-
-    .leftOrnament {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        z-index: 3;
-    }
-
-    .buttonMenuImage {
-        position: absolute;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        right: 0;
-        z-index: 1;
-    }
-
-    .buttonMenuImageTimer {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 1;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        object-fit: cover;
-        object-position: top left;
-    }
-
-    .rightOrnament {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 3;
-    }
-
-    span {
-        position: absolute;
-        @include font($f-buttonMenu, 16px, $color-white, 700, normal, 34px);
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        z-index: 12;
-        text-shadow: 1px 1px 1px #000000;
-    }
-
-}
-
 .buttonPrimary {
     @extend .button;
     background-color: $color-background-1;
