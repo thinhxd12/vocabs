@@ -4,7 +4,6 @@ const Text: Component<{}> = (props) => {
 
     return (
         <div>
-
         </div>
     );
 };

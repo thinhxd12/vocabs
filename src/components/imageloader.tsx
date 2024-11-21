@@ -1,6 +1,6 @@
 import { Component, createEffect, createSignal, on, Show } from "solid-js";
-import { rgbaToThumbHash, thumbHashToDataURL } from 'thumbhash'
-import sharp from "sharp";
+import { blurhashFromURL } from "blurhash-from-url";
+import decode from "@simpleimg/decode-blurhash";
 
 const ImageLoader: Component<{
   src: string;
@@ -16,28 +16,28 @@ const ImageLoader: Component<{
     setIsLoading(false);
   };
 
-  const createThumbhash = async (imageUrl: string) => {
+  const createBlurhash = async (imageUrl: string) => {
     "use server"
-    const imageBuffer = await fetch(imageUrl).then(res => res.arrayBuffer());
-    const image = sharp(imageBuffer).resize(100, 100, { fit: 'inside' });
-    const { data, info } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
-    const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data)
-    return binaryThumbHash;
+    const startTime = performance.now();
+    const output = await blurhashFromURL(imageUrl);
+    const endTime = performance.now();
+    const timeTaken = endTime - startTime;
+    if (timeTaken > 300) {
+      return output;
+    }
   }
 
   createEffect(
     on(
       () => props.src,
-      (curr, prev) => {
+      async (curr, prev) => {
         if (curr !== prev) {
           setIsLoading(true);
           setPlaceholderData("");
-          setTimeout(async () => {
-            if (isLoading()) {
-              const hash = await createThumbhash(props.src);
-              setPlaceholderData(thumbHashToDataURL(hash));
-            }
-          }, 200);
+          const hash = await createBlurhash(props.src);
+          if (isLoading()) {
+            if (hash) setPlaceholderData(decode(hash.encoded, 30, 30));
+          }
         }
       }
     )
@@ -51,6 +51,7 @@ const ImageLoader: Component<{
         height: `${props.height}px`,
         position: "relative",
         "background-color": "#000000",
+        overflow: "hidden",
       }}>
       <Show when={placeholderData()}>
         <img
@@ -60,21 +61,21 @@ const ImageLoader: Component<{
             width: "100%",
             height: "100%",
             "object-fit": "cover",
+            "z-index": 6,
             opacity: isLoading() ? 1 : 0,
-            transition: "opacity 0.3s"
+            transition: "opacity 0.3s",
           }}
-          loading="lazy"
         />
       </Show>
       <img
         src={props.src}
         alt={props.alt}
         style={{
+          position: "inherit",
+          "z-index": 3,
           width: "100%",
           height: "100%",
           "object-fit": "cover",
-          opacity: isLoading() ? 0 : 1,
-          transition: "opacity 0.3s"
         }}
         onload={handleLoad}
         loading="lazy"

@@ -2,7 +2,6 @@ import { A, createAsync, useAction } from "@solidjs/router";
 import { Component, Show, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { format } from "date-fns";
 import styles from "./bottom.module.scss";
-import buttons from "../assets/styles/buttons.module.scss";
 import {
   calendarStore,
   listStore,
@@ -298,13 +297,6 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
-          <img
-            src="images/main/stanczyk.webp"
-            alt="stanczyk"
-            width={57}
-            height={35}
-            class={styles.bottomBtnBackground}
-          />
           <span>Dulce periculum. <br />Danger is sweet.</span>
         </A>
 
@@ -315,13 +307,6 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
-          <img
-            src="images/main/sisifo.webp"
-            alt="sisifo"
-            width={57}
-            height={35}
-            class={styles.bottomBtnBackground}
-          />
           <span>Pecunia non olet. <br />Money does not stink.</span>
         </A>
 
@@ -332,13 +317,6 @@ const Bottom: Component<{}> = () => {
           activeClass={styles.bottomBtnActive}
           class={styles.bottomBtn}
         >
-          <img
-            src="images/main/TheEndoftheDay.webp"
-            alt="TheEndoftheDay"
-            width={57}
-            height={35}
-            class={styles.bottomBtnBackground}
-          />
           <span>Memento mori. <br />Remember you will die.</span>
         </A>
 

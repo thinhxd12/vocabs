@@ -13,6 +13,24 @@
         @include flex;
         position: relative;
         z-index: 10000;
+
+        .bottomBtn:nth-child(2) {
+            background-image: url("/images/main/stanczyk.webp");
+            background-size: cover;
+            background-position: center;
+        }
+
+        .bottomBtn:nth-child(4) {
+            background-image: url("/images/main/sisifo.webp");
+            background-size: cover;
+            background-position: center;
+        }
+
+        .bottomBtn:nth-child(6) {
+            background-image: url("/images/main/TheEndoftheDay.webp");
+            background-size: cover;
+            background-position: center;
+        }
     }
 
     .bottomIndex {
@@ -55,13 +73,6 @@
         height: 100%;
         position: relative;
         overflow: hidden;
-
-        .bottomBtnBackground {
-            position: absolute;
-            top: 0;
-            left: 0;
-            object-fit: cover;
-        }
 
         span {
             @include font($f-botButton, 8px, #d1d1d1, 600, normal, 8px);
