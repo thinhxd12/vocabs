@@ -18,6 +18,7 @@
     "@solidjs/router": "^0.15.0",
     "@solidjs/start": "^1.0.10",
     "@supabase/supabase-js": "^2.43.4",
+    "buffer": "^6.0.3",
     "date-fns": "^3.6.0",
     "node-html-parser": "^6.1.13",
     "sharp": "^0.33.5",

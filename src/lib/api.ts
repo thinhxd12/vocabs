@@ -3,6 +3,7 @@ import {
   BookmarkType,
   CalendarType,
   CurrentlyWeatherType,
+  DefinitionType,
   ExampleType,
   FixMinutelyTWeatherType,
   HistoryItemType,
@@ -332,11 +333,17 @@ const handleGetDefinitions = (data: string) => {
 
   const entryHeader = doc.querySelectorAll(".entry-word-section-container");
   entryHeader.forEach((item, index) => {
-    let definitionItem = {
+    interface definitionItemType {
+      definitions: DefinitionType[];
+      partOfSpeech: string;
+    }
+
+    let definitionItem: definitionItemType = {
       definitions: [
         {
           definition: [] as { sense: string; similar: string }[],
           image: "",
+          hash: "",
         },
       ],
       partOfSpeech: "",
@@ -448,6 +455,19 @@ export const editVocabularyItem = action(async (formData: FormData) => {
   if (error) return { message: error.message };
   return { message: "success" };
 });
+
+export const updateHashVocabularyItem = async (
+  id: string,
+  data: VocabularyDefinitionType[]
+) => {
+  "use server";
+  const { error } = await supabase
+    .from(mapTables.vocabulary)
+    .update({
+      definitions: data,
+    })
+    .eq("created_at", id);
+};
 
 export const getTranslationArr = (str: string) => {
   const breakpoint = /\s+-/g;

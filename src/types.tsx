@@ -32,9 +32,11 @@ export interface VocabularyDefinitionType {
   synonyms: string;
   example: ExampleType[];
 }
+
 export interface DefinitionType {
   definition: { sense: string; similar: string }[];
   image: string;
+  hash: string;
 }
 
 export interface ExampleType {

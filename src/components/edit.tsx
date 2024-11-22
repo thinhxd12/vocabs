@@ -132,6 +132,7 @@ const Edit: Component<{
       definitions: [
         {
           image: img,
+          hash: "",
           definition: defArr,
         },
       ],
@@ -156,7 +157,7 @@ const Edit: Component<{
     if (data)
       setRenderEditWord({
         ...props.word,
-        definitions: data.definitions,
+        definitions: data!.definitions,
       });
   });
 

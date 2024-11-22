@@ -8,7 +8,7 @@ import styles from "./definition.module.scss";
 import { mainStore } from "~/lib/mystore";
 import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
 import { VocabularyType } from "~/types";
-import ImageLoader from "./imageloader";
+import ImageLoaderWord from "./imageloaderdefinition";
 
 const Definition: Component<{
   item: VocabularyType;
@@ -74,8 +74,10 @@ const Definition: Component<{
                           }
                         >
                           <div class={styles.websSenseImage}>
-                            <ImageLoader
+                            <ImageLoaderWord
+                              id={props.item.created_at}
                               src={item().image}
+                              hash={item().hash}
                               width={360}
                               height={202.5}
                               className={styles.websImg}
