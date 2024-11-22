@@ -1,6 +1,6 @@
 import { Component, createEffect, createSignal, on, Show } from "solid-js";
-import { blurhashFromURL } from "blurhash-from-url";
-import decode from "@simpleimg/decode-blurhash";
+import { rgbaToThumbHash, thumbHashToDataURL, } from "thumbhash";
+import sharp from "sharp";
 
 const ImageLoader: Component<{
   src: string;
@@ -9,22 +9,21 @@ const ImageLoader: Component<{
   height: number;
   className?: string;
 }> = (props) => {
-  const [isLoading, setIsLoading] = createSignal<boolean>(true);
+  const [loaded, setLoaded] = createSignal<boolean>(false);
+  const [showPlaceholder, setShowPlaceholder] = createSignal<boolean>(false);
   const [placeholderData, setPlaceholderData] = createSignal<string>("");
 
   const handleLoad = () => {
-    setIsLoading(false);
+    setLoaded(true);
   };
 
-  const createBlurhash = async (imageUrl: string) => {
+  const createThumbhash = async (imageUrl: string) => {
     "use server"
-    const startTime = performance.now();
-    const output = await blurhashFromURL(imageUrl);
-    const endTime = performance.now();
-    const timeTaken = endTime - startTime;
-    if (timeTaken > 300) {
-      return output;
-    }
+    const imageBuffer = await fetch(imageUrl).then(res => res.arrayBuffer());
+    const image = sharp(imageBuffer).resize(30, 30, { fit: 'inside' });
+    const { data, info } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
+    return binaryThumbHash;
   }
 
   createEffect(
@@ -32,12 +31,11 @@ const ImageLoader: Component<{
       () => props.src,
       async (curr, prev) => {
         if (curr !== prev) {
-          setIsLoading(true);
-          setPlaceholderData("");
-          const hash = await createBlurhash(props.src);
-          if (isLoading()) {
-            if (hash) setPlaceholderData(decode(hash.encoded, 30, 30));
-          }
+          setLoaded(false);
+          setShowPlaceholder(false);
+          const thumbhash = await createThumbhash(props.src);
+          setPlaceholderData(thumbHashToDataURL(thumbhash));
+          setShowPlaceholder(true);
         }
       }
     )
@@ -50,10 +48,9 @@ const ImageLoader: Component<{
         width: `${props.width}px`,
         height: `${props.height}px`,
         position: "relative",
-        "background-color": "#000000",
         overflow: "hidden",
       }}>
-      <Show when={placeholderData()}>
+      <Show when={showPlaceholder()}>
         <img
           src={placeholderData()}
           style={{
@@ -62,8 +59,8 @@ const ImageLoader: Component<{
             height: "100%",
             "object-fit": "cover",
             "z-index": 6,
-            opacity: isLoading() ? 1 : 0,
-            transition: "opacity 0.3s",
+            opacity: loaded() ? 0 : 1,
+            transition: "all 0.3s",
           }}
         />
       </Show>

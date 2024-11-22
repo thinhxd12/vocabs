@@ -1,6 +1,6 @@
 import { Component, createEffect, createSignal, on } from "solid-js";
-import { blurhashFromURL } from "blurhash-from-url";
-import decode from "@simpleimg/decode-blurhash";
+import { rgbaToThumbHash, thumbHashToDataURL, } from "thumbhash";
+import sharp from "sharp";
 
 const ImageLoaderMainPage: Component<{
   src: string;
@@ -13,10 +13,13 @@ const ImageLoaderMainPage: Component<{
     setIsLoading(false);
   };
 
-  const createBlurhash = async (imageUrl: string) => {
+  const createThumbhash = async (imageUrl: string) => {
     "use server"
-    const output = await blurhashFromURL(imageUrl);
-    return output;
+    const imageBuffer = await fetch(imageUrl).then(res => res.arrayBuffer());
+    const image = sharp(imageBuffer).resize(30, 30, { fit: 'inside' });
+    const { data, info } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
+    return binaryThumbHash;
   }
 
   createEffect(
@@ -26,8 +29,8 @@ const ImageLoaderMainPage: Component<{
         if (curr !== prev) {
           setIsLoading(true);
           setPlaceholderData("");
-          const hash = await createBlurhash(props.src);
-          const dataUrl = decode(hash.encoded, hash.width, hash.height);
+          const thumbhash = await createThumbhash(props.src);
+          const dataUrl = thumbHashToDataURL(thumbhash);
           setPlaceholderData(dataUrl);
           setPlaceholderBlurData(dataUrl);
         }
