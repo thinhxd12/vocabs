@@ -1,6 +1,7 @@
 import { useSubmission, type RouteSectionProps } from "@solidjs/router";
-import { Show, createResource, createSignal, onMount } from "solid-js";
+import { Show, createSignal, onMount } from "solid-js";
 import styles from "./index.module.scss";
+import "../assets/styles/app.scss";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { loginAction } from "~/lib";
 import { getSpotlightImage } from "~/lib/api";

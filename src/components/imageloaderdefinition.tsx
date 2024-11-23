@@ -25,7 +25,7 @@ const ImageLoaderWord: Component<{
   const createThumbhash = async (imageUrl: string) => {
     "use server"
     const imageBuffer = await fetch(imageUrl).then(res => res.arrayBuffer());
-    const image = sharp(imageBuffer).resize(30, 30, { fit: 'inside' });
+    const image = sharp(imageBuffer).resize(90, 90, { fit: 'inside' });
     const { data, info } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
     return Buffer.from(binaryThumbHash).toString('base64');

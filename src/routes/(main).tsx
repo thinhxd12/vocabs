@@ -15,6 +15,8 @@ import { ImBooks } from "solid-icons/im";
 import { format } from "date-fns";
 import { listStore, mainStore, setMainStore } from "~/lib/mystore";
 import styles from "./main.module.scss";
+import "../assets/styles/app.scss";
+import "../assets/styles/fonts.scss";
 import { debounce } from "@solid-primitives/scheduled";
 import ImageLoader from "~/components/imageloader";
 import ImageLoaderMainPage from "~/components/imageloadermain";
