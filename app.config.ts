@@ -8,4 +8,9 @@ export default defineConfig({
     preset: "vercel",
     compatibilityDate: "2024-11-18",
   },
+  vite: {
+    build: {
+      cssCodeSplit: false,
+    },
+  },
 });
