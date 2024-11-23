@@ -2,13 +2,14 @@ import { Component, createEffect, createSignal, on, Show } from "solid-js";
 import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
 import sharp from "sharp";
 import { Buffer } from "buffer"
-import { mainStore } from "~/lib/mystore";
 import { updateHashVocabularyItem } from "~/lib/api";
+import { VocabularyDefinitionType } from "~/types";
 
 const ImageLoaderWord: Component<{
   id: string;
   src: string;
   hash: string;
+  def: VocabularyDefinitionType[];
   width: number;
   height: number;
   className?: string;
@@ -41,7 +42,7 @@ const ImageLoaderWord: Component<{
             const thumbhash = await createThumbhash(props.src);
             const thumbHashFromBase64 = Buffer.from(thumbhash, 'base64')
             setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));
-            let editDefinition = JSON.parse(JSON.stringify(mainStore.renderWord?.definitions));
+            let editDefinition = JSON.parse(JSON.stringify(props.def))
             editDefinition.forEach((entry: any) => {
               entry.definitions.forEach((def: any) => {
                 if (def.image === props.src)

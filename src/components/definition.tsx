@@ -76,6 +76,7 @@ const Definition: Component<{
                           <div class={styles.websSenseImage}>
                             <ImageLoaderWord
                               id={props.item.created_at}
+                              def={props.item!.definitions}
                               src={item().image}
                               hash={item().hash}
                               width={360}
