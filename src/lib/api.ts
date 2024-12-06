@@ -562,24 +562,25 @@ export const submitNewSchedule = action(async (formData: FormData) => {
     .select("index,created_at")
     .order("created_at", { ascending: false })
     .limit(1);
-  if (!dataHistory) return;
+  if (!dataHistory) return { message: "Error get history" };
 
   const lastWeekIndex = dataHistory[0].index;
 
   const { count } = await supabase
     .from(mapTables.vocabulary)
     .select("created_at", { count: "exact" });
-  if (!count) return;
+  if (!count) return { message: "Error get vocabulary count" };
 
   const { error } = await supabase
     .from(mapTables.schedule)
     .delete()
     .gte("time1", 0);
+  if (error) return { message: error.message };
 
   const limitStartIndex = Math.floor(count / 200);
 
   const currentPatternArr = REPETITION_PATTERN.filter(
-    (item) => item < limitStartIndex * 200
+    (item) => item < limitStartIndex * 200,
   );
 
   function findNextElement(arr: Array<number>, currentElement: number) {
@@ -591,7 +592,19 @@ export const submitNewSchedule = action(async (formData: FormData) => {
   let thisWeekIndex = 0;
   if (count >= 200)
     thisWeekIndex = findNextElement(currentPatternArr, lastWeekIndex);
-  createWeekSchedule(thisWeekIndex);
+
+  for (let i = 0; i < 6; i++) {
+    let { error } = await supabase.from(mapTables.schedule).insert([
+      {
+        date: null,
+        index1: i % 2 == 0 ? thisWeekIndex : thisWeekIndex + 50,
+        index2: i % 2 == 0 ? thisWeekIndex + 100 : thisWeekIndex + 150,
+        time1: 0,
+        time2: 0,
+      },
+    ]);
+  }
+
   return { message: "success" };
 }, "submitNewSchedule");
 
@@ -819,8 +832,8 @@ export const getTodaySchedule = query(async (date: string) => {
   const { data } = await supabase
     .from(mapTables.schedule)
     .select()
-    .eq("date", "")
     .order("created_at", { ascending: true })
+    .is("date", null)
     .limit(1);
   if (data) return data[0] as ScheduleType;
 }, "getTodaySchedule");
