@@ -1,21 +1,44 @@
 import { Component } from "solid-js";
 import { Motion } from "solid-motionone";
-import "../styles/tick.css";
-import { easeOutBounce, easeOutCubic, easeOutSine } from "~/lib/utils";
+import "./tick.scss";
 
 const TickAnimateComplete: Component<{
   delay: number;
 }> = (props) => {
+  function easeOutBounce(x: number): number {
+    const n1 = 7.5625;
+    const d1 = 2.75;
+
+    if (x < 1 / d1) {
+      return n1 * x * x;
+    } else if (x < 2 / d1) {
+      return n1 * (x -= 1.5 / d1) * x + 0.75;
+    } else if (x < 2.5 / d1) {
+      return n1 * (x -= 2.25 / d1) * x + 0.9375;
+    } else {
+      return n1 * (x -= 2.625 / d1) * x + 0.984375;
+    }
+  }
+
+  const easeOutSine = function easeOutSine(t: number) {
+    return Math.sin(t * (Math.PI / 2));
+  };
+
+  const easeOutCubic = function easeOutCubic(t: number) {
+    const t1 = t - 1;
+    return t1 * t1 * t1 + 1;
+  };
+
   return (
     <span class="tick-flip">
       <span class="tick-flip-card">
         <span
           class="tick-flip-panel-front tick-flip-front tick-flip-panel"
-          style="transform: rotateX(0deg);"
+          style="transform: rotateX(0deg); background: rgb(255, 255, 255);"
         >
           <span class="tick-flip-panel-front-text">
             <span class="tick-flip-panel-text-wrapper">
-              <img src="/images/cup.webp" />
+              <img src="images/main/cup.webp" width={110} />
             </span>
           </span>
           <span class="tick-flip-panel-front-shadow" style="opacity: 0;"></span>
@@ -63,6 +86,7 @@ const TickAnimateComplete: Component<{
         </Motion.span>
         <Motion.span
           class="tick-flip-panel-back tick-flip-back tick-flip-panel"
+          initial={{ background: "#fff" }}
           animate={{
             rotateX: "-360deg",
           }}
@@ -74,7 +98,7 @@ const TickAnimateComplete: Component<{
         >
           <span class="tick-flip-panel-back-text">
             <span class="tick-flip-panel-text-wrapper">
-              <img src="/images/cup.webp" />
+              <img src="images/main/cup.webp" width={110} />
             </span>
           </span>
           <Motion.span

@@ -1,0 +1,120 @@
+@use "./mixins.scss" as *;
+
+.button {
+    margin-left: 1px;
+    border-radius: 3px;
+    outline: 0;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease;
+    @include flex-center;
+    overflow: hidden;
+    font-family: $f-button;
+    font-size: 10px;
+    background-color: transparent;
+    background-image: url('/images/main/input-left-corner.webp'),
+        url('/images/main/input-right-corner.webp');
+    background-position: left top,
+        right top;
+    background-repeat: no-repeat,
+        no-repeat;
+    background-size: 7px 15px,
+        7px 15px;
+
+
+    &:disabled {
+        opacity: 0.3;
+    }
+
+    &:active {
+        svg {
+            transform: scale(0.9)
+        }
+    }
+
+}
+
+.buttonPrimary {
+    @extend .button;
+    background-color: $color-background-1;
+    color: #ececec;
+    width: 28px;
+    height: 15px;
+
+    background-size: 7px 15px,
+        7px 15px;
+
+    &:hover {
+        color: $color-white;
+    }
+}
+
+.buttonSuccess {
+    @extend .button;
+    background-color: $color-background-1;
+    color: #ececec;
+    width: 28px;
+    height: 15px;
+
+    &:hover {
+        color: $color-calendar-green-1;
+    }
+}
+
+.buttonSubmit {
+    @extend .button;
+    background-color: $color-background-1;
+    color: #ececec;
+    width: 42px;
+    height: 22px;
+    margin-top: 3px;
+    background-size: 10px 22px,
+        10px 22px;
+
+    span {
+        margin: 3px 0 0 0;
+    }
+
+    &:hover {
+        color: $color-white;
+    }
+}
+
+.buttonClose {
+    @extend .button;
+    background-color: $color-background-1;
+    color: #ececec;
+    width: 28px;
+    height: 15px;
+    transition: 0.1s;
+
+    &:hover {
+        color: $color-white;
+        background-color: $color-red-2;
+    }
+}
+
+.buttonBookmark {
+    color: #ececec;
+    width: 36px;
+    height: 30px;
+    cursor: pointer;
+    border: 0;
+    outline: 0;
+    background: none;
+    @include flex-center;
+
+    svg {
+        transition: 0.25s ease;
+        transform: scale(0.9);
+        filter: drop-shadow(0 3px 3px #00000036);
+    }
+
+    &:hover {
+        color: $color-white;
+
+        svg {
+            transform: scale(1);
+        }
+    }
+}

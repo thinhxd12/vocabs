@@ -34,7 +34,7 @@ export interface VocabularyDefinitionType {
 }
 
 export interface DefinitionType {
-  definition: { sense: string; similar?: string }[];
+  definition: { sense: string; similar: string }[];
   image: string;
   hash: string;
 }
@@ -90,8 +90,8 @@ export interface ImageType {
   authorImg: string;
   authorName: string;
   authorYear: string;
-  content?: string;
-  nextImageUrl?: string;
+  content: string;
+  nextImageUrl: string;
 }
 
 export interface TranslateType {
@@ -157,16 +157,3 @@ export interface WeatherCodeData {
     textdescription: string;
   };
 }
-
-export interface ScheduleProgressType {
-  date: string;
-  count: number;
-}
-
-export type LoginImageType = {
-  title: string;
-  hs1_title: string;
-  hs2_title: string;
-  image_L: string;
-  image_P: string;
-};

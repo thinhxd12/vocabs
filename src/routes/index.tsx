@@ -1,67 +1,75 @@
-import { useSubmission } from "@solidjs/router";
-import { createSignal, onMount, Show } from "solid-js";
-import { getSpotlightImage } from "~/lib/server";
-import { LoginImageType } from "~/types";
-import { loginAction } from "~/lib/login";
+import { useSubmission, type RouteSectionProps } from "@solidjs/router";
+import { Show, createSignal, onMount } from "solid-js";
+import styles from "./index.module.scss";
+import "../assets/styles/app.scss";
+import { Meta, MetaProvider, Title } from "@solidjs/meta";
+import { loginAction } from "~/lib";
+import { getSpotlightImage } from "~/lib/api";
 
-export default function Home() {
-  const [imageData, setImageData] = createSignal<LoginImageType | undefined>();
-  const [isMobile, setIsMobile] = createSignal<boolean>(false);
+type LoginImageType = {
+  title: string;
+  text: string;
+  url: string;
+};
 
+export default function Login(props: RouteSectionProps) {
   const loggingIn = useSubmission(loginAction);
+  const [imageData, setImageData] = createSignal<LoginImageType>({
+    title: "",
+    text: "",
+    url: "",
+  });
 
   onMount(async () => {
-    const isMobile =
+    const flag =
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent,
+        navigator.userAgent
       );
-    setIsMobile(isMobile);
     const data = await getSpotlightImage();
-    setImageData(data);
+    if (data)
+      setImageData({
+        title: data.title,
+        text: data.text,
+        url: flag ? data.urlP : data.urlL,
+      });
   });
 
   return (
-    <main class="relative h-screen w-screen">
-      <Show when={imageData()}>
-        <img
-          class="absolute h-full w-full object-cover"
-          src={isMobile() ? imageData()?.image_P : imageData()?.image_L}
-        />
-        <div class="absolute left-0 top-0 w-full px-5 pt-3 font-basier text-4 font-500 leading-6 text-white sm:w-2/3 sm:pl-12 sm:pt-10">
-          <p class="loginBackgroundText mb-1 w-full">
-            {imageData()?.hs1_title}
-          </p>
-          <p class="loginBackgroundText mb-1 w-full">
-            {imageData()?.hs2_title}
-          </p>
-        </div>
-        <p class="loginBackgroundText absolute bottom-0 right-0 w-full pb-3 pr-5 text-right font-basier text-4 font-500 leading-6 text-white">
-          {imageData()?.title}
-        </p>
-      </Show>
-      <div class="m-autow-fit absolute inset-0 z-50 flex h-full flex-col items-center">
-        <form method="post" action={loginAction}>
-          <div class="mt-[60vh] flex h-fit items-center justify-center">
-            <input
-              name="password"
-              type="password"
-              required
-              class="ml-10 mr-3 h-7 w-[180px] border-none bg-slate-900/60 text-center shadow-md outline-none hover:shadow-sm"
-            />
+    <MetaProvider>
+      <Title>login</Title>
+      <Meta name="author" content="thinhxd12@gmail.com" />
+      <Meta name="description" content="Thinh's Vocabulary Learning App" />
+      <main class={styles.login}>
+        <Show when={imageData().url}>
+          <img
+            src={imageData()!.url}
+            alt="loginimg"
+            loading="lazy"
+            class={styles.loginImage}
+          />
+          <p class={styles.backgroundText}>{imageData()!.text}</p>
+          <p class={styles.backgroundTitle}>{imageData()!.title}</p>
+        </Show>
+
+        <div class={styles.loginContainer}>
+          <form action={loginAction} method="post" class={styles.loginForm}>
+            <input name="password" type="password" class={styles.loginInput} />
             <button
               type="submit"
-              class={`flex h-7 w-7 items-center justify-center transition ${loggingIn.pending ? "opacity-0" : "opacity-100"}`}
+              class={
+                loggingIn.pending ? styles.loginBtnLoading : styles.loginBtn
+              }
             >
-              <img src="/assets/svg/loader-button.svg" width={15} height={15} />
+              <img src="images/svg/loader-button.svg" width={15} height={15} />
             </button>
-          </div>
-        </form>
-        <Show when={loggingIn.result}>
-          <p class="loginAlert mt-4 text-center font-basier text-4.5 font-600 leading-4 text-[#de0000]">
-            {loggingIn.result!.message}
-          </p>
-        </Show>
-      </div>
-    </main>
+          </form>
+          <Show when={loggingIn.result}>
+            <p class={styles.loginAlert} role="alert" id="error-message">
+              {loggingIn.result!.message}
+            </p>
+          </Show>
+        </div>
+      </main>
+    </MetaProvider>
   );
 }

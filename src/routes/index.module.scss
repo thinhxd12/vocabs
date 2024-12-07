@@ -1,0 +1,120 @@
+@use "../assets/styles/mixins.scss" as *;
+
+.login {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    outline: none;
+    display: flex;
+    justify-content: center;
+    background-color: $color-black;
+    position: relative;
+
+    .loginImage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .backgroundText {
+        position: absolute;
+        top: 30px;
+        left: 60px;
+        @include font($f-loginText, 12px, $color-white, 500, normal, 18px);
+        width: 300px;
+        text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+    }
+
+    .backgroundTitle {
+        position: absolute;
+        bottom: 9px;
+        right: 15px;
+        @include font($f-loginText, 12px, $color-white, 500, normal, 18px);
+        text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+    }
+
+    .loginContainer {
+        margin-top: 60vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .loginForm {
+        position: relative;
+        z-index: 99;
+        width: 180px;
+        height: 22px;
+        background: rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        &:hover {
+            background: rgba(0, 0, 0, 0.45);
+        }
+
+        .loginInput {
+            background: none;
+            outline: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            font-size: 16px;
+            line-height: 18px;
+            transition: all .3s ease;
+            text-align: center;
+            color: #fff;
+            border: none;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            transition: background-color 5000s ease-in-out 0s !important;
+            -webkit-text-fill-color: #fff !important;
+            font-size: 16px !important;
+            line-height: 18px !important;
+            background: rgba(0, 0, 0, 0.15) !important;
+        }
+
+        .loginBtn {
+            position: absolute;
+            top: 0;
+            right: -30px;
+            z-index: 1001;
+            width: 20px;
+            height: 20px;
+            background: none;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            @include flex-center;
+
+            img {
+                opacity: 0;
+                transition: all 0.3s;
+            }
+        }
+
+        .loginBtnLoading {
+            @extend .loginBtn;
+
+            img {
+                opacity: 1;
+            }
+        }
+    }
+
+    .loginAlert {
+        @include font($f-loginText, 12px, $color-red-2, 500, normal, 21px);
+        text-align: center;
+        margin-top: 9px;
+        text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+    }
+
+}

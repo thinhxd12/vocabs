@@ -1,0 +1,167 @@
+$color-border: #343434;
+$color-black: #000000;
+$color-white: #ffffff;
+$color-background-1: #070707;
+$color-background-2: #0c0c0c;
+$color-background-3: #121212;
+$color-background-4: #dcd8d1;
+$color-background-5: #363636;
+$color-red-1: #f90000;
+$color-red-2: #de0000;
+$color-red-3: #ca140c;
+$color-red-4: #d35542;
+$color-calendar-bg: #fffffff5;
+$color-calendar-white: #f4f4f4;
+$color-calendar-black: #161616;
+$color-calendar-border: #16161633;
+$color-calendar-text-1: #383838;
+$color-calendar-text-2: #0000004d;
+$color-calendar-text-3: #ffffff73;
+$color-calendar-green-1: #38E07B;
+$color-calendar-green-2: #A7F1C4;
+$color-calendar-green-3: #a6ffca;
+$color-vintage-1: #957c3e;
+$color-vintage-2: #706659;
+$color-vintage-background: #fffeff;
+
+
+$f-bookmarkFirstLetter: "Open Sans";
+$f-bookmarkText: 'GaramondPro', sans-serif;
+$f-bookmarkTitle: 'GaramondPro', sans-serif;
+$f-bookmarkAuth: 'GaramondPro', sans-serif;
+$f-bookmarkYear: 'GaramondPro', sans-serif;
+$f-bookmarkInput: "Basier";
+$f-bookmarkArea: "Basier";
+$f-bookmarkLike: "Basier";
+
+$f-flipNumber: 'Helvetica Neue', sans-serif;
+$f-flipSearchNumber: 'SFProDisplay', sans-serif;
+$f-searchText: "Constantine";
+$f-phonetic: 'Open Sans', sans-serif;
+
+
+$f-defHeader: 'SFProDisplay', sans-serif;
+$f-defMeaning: 'SFProDisplay', sans-serif;
+$f-defDef: 'SFProDisplay', sans-serif;
+$f-defX: 'Open Sans', sans-serif;
+$f-defSyn: 'SFProDisplay', sans-serif;
+$f-defAuth: 'SFProDisplay', sans-serif;
+$f-defTitle: 'SFProDisplay', sans-serif;
+$f-defYear: 'SFProDisplay', sans-serif;
+
+$f-botIndexNum: 'Roslindale', sans-serif;
+$f-botIndexText: 'SFProDisplay', sans-serif;
+$f-botCenterNum: 'Tupa Nova', sans-serif;
+$f-botButton: 'SFProDisplay', sans-serif;
+$f-botWeatherTemp: 'SFProDisplay', sans-serif;
+
+$f-editInput: "Basier";
+$f-editHeader: 'SFProDisplay', sans-serif;
+$f-toast: "Rubik", sans-serif;
+
+$f-transMainResult: 'Roslindale', sans-serif;
+$f-transItem: 'SFProDisplay', sans-serif;
+
+$f-calendarHistory: "Rubik", sans-serif;
+$f-calendarImageMonth: 'SFProDisplay', sans-serif;
+$f-calendarImageWeek: 'SFProDisplay', sans-serif;
+$f-calendarImageHistory: 'SFProDisplay', sans-serif;
+$f-calendarImageSign: "Rubik", sans-serif;
+$f-calendarMainWeek: 'SFProDisplay', sans-serif;
+$f-calendarMainDay: "Rubik", sans-serif;
+$f-calendarDropdown: "Rubik", sans-serif;
+$f-calendarQuote: 'GaramondPro', sans-serif;
+
+$f-vocabMyItem: "Constantine";
+
+$f-weatherSelect: 'SFProDisplay', sans-serif;
+$f-weatherTemp: 'SFProDisplay', sans-serif;
+$f-weatherInfo: 'SFProDisplay', sans-serif;
+
+$f-404: 'SFProDisplay', sans-serif;
+
+$f-loginText: 'SFProDisplay', sans-serif;
+
+$f-mainRightDate: "Basier";
+$f-mainRightTitle: 'Roslindale', sans-serif;
+$f-mainRightAttribute: "Basier";
+$f-mainRightAuthor: "Basier";
+$f-mainRightBody: "Basier";
+
+$f-button: 'SFProDisplay', sans-serif;
+$f-buttonMenu: 'Roslindale', sans-serif;
+
+$f-formInput: "Basier";
+$f-formInputMeaning: 'SFProDisplay', sans-serif;
+$f-formInputCalendar: "Rubik", sans-serif;
+
+$f-quizWord: 'SFProDisplay', sans-serif;
+$f-quizChoice: 'SFProDisplay', sans-serif;
+
+
+
+@mixin font($family: false, $size: false, $colour: false, $weight: false, $style: false, $lh: false) {
+
+  @if $family {
+    font-family: $family ;
+  }
+
+  @else {
+    font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif;
+  }
+
+  @if $size {
+    font-size: calculateRem($size);
+  }
+
+  @if $colour {
+    color: $colour;
+  }
+
+  @if $weight {
+    font-weight: $weight;
+  }
+
+  @if $style {
+    font-style: $style;
+  }
+
+  @if $lh {
+    line-height: calculateRem($lh);
+  }
+}
+
+@function calculateRem($size) {
+  $remSize: calc($size / 16px);
+  @return $remSize * 1rem;
+}
+
+@mixin flex {
+  display: flex;
+  align-items: center;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-center-column {
+  @include flex-center;
+  flex-direction: column;
+}
+
+@mixin baseBody($bg: $color-background-4) {
+  @include font("Basier", 12px, $color-black, 500, normal, 16px);
+  padding: 3px;
+  background: $bg;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}

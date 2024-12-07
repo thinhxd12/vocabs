@@ -1,21 +1,17 @@
 import { A } from "@solidjs/router";
+import styles from "./404.module.scss";
 
 export default function NotFound() {
   return (
-    <main class="flex h-screen w-screen justify-center overflow-hidden bg-black">
-      <div
-        class="flex h-full min-w-[360px] max-w-[360px] flex-col items-center justify-start pt-32"
-        style={{
-          "box-shadow": ".5px 0 #363636,-.5px 0 #363636",
-        }}
-      >
-        <h1 class="max-6-xs my-14 text-6xl font-thin uppercase text-white">
-          Not Found
-        </h1>
-        <A href="/vocab" class="text-[#de0000] hover:underline">
-          Home
-        </A>
-      </div>
-    </main>
+    <div class={styles.main}>
+      <h1 class={styles.title}>404 - Page not found</h1>
+      <p class={styles.content}>
+        The page you are looking for might have been removed had its name
+        changed or is temporarily unavailable.
+      </p>
+      <A href="/vocabulary" class={styles.button}>
+        Back to home page
+      </A>
+    </div>
   );
 }

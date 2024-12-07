@@ -1,0 +1,46 @@
+@use "../assets/styles/mixins.scss" as *;
+
+.historyCard {
+    min-width: 360px;
+    width: 360px;
+    overflow: hidden;
+    scroll-snap-align: start;
+
+    .historyCardItem {
+        width: 360px;
+        padding: 0 3px;
+        display: flex;
+        margin: 1px 0;
+
+        .historyCardItemDesc {
+            background: $color-calendar-black;
+            width: 90px;
+            height: 18px;
+            padding: 0 6px;
+            position: relative;
+            cursor: default;
+            @include font($f-calendarHistory, 10px, $color-white, 500, normal, 18px);
+
+            &::after {
+                content: '';
+                width: 6px;
+                height: 10px;
+                position: absolute;
+                left: 99%;
+                top: 4px;
+                background: #161616;
+                clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+                z-index: 33;
+            }
+        }
+
+        .historyCardItemFrom,
+        .historyCardItemTo {
+            width: 120px;
+            height: 18px;
+            padding-left: 24px;
+            @include font($f-calendarHistory, 10px, $color-black, 500, normal, 18px);
+            cursor: default;
+        }
+    }
+}

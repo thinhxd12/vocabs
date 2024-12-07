@@ -1,0 +1,146 @@
+@use "../assets/styles/mixins.scss" as *;
+
+.main {
+    width: 100vw;
+    height: 100vh;
+    @include flex-center;
+    background: $color-black;
+    border: 0;
+    outline: 0;
+
+    .mainButtons {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        z-index: 1001;
+
+        .mainButton {
+            width: 27px;
+            height: 27px;
+            cursor: pointer;
+            border-radius: 6px;
+            background: $color-background-1;
+            border: 1px solid #3434344d;
+            transition: all 0.2s;
+            @include font(sans-serif, 14px, $color-white, 700, normal, 16px);
+            opacity: 0.12;
+            margin-left: 2px;
+
+            &:hover {
+                opacity: 1;
+                box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+                text-shadow: 0px 0px 6px #f4f4f4;
+            }
+
+            svg {
+                margin: 4px;
+            }
+
+            &:active {
+                svg {
+                    transform: scale(0.9)
+                }
+            }
+        }
+    }
+
+    .mainLeft {
+        height: 100vh;
+        flex-grow: 1;
+        position: relative;
+    }
+
+    .mainRight {
+        height: 100vh;
+        width: 300px;
+        padding: 9px 9px 9px 15px;
+        background: #19191c;
+        background: $color-calendar-black;
+        position: relative;
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+
+        .mainRightHeader {
+            .mainRightDate {
+                max-width: 100%;
+                text-transform: uppercase;
+                @include font($f-mainRightDate, 11px, #989da7, bold, normal, 16px);
+            }
+
+            .mainRightTitle {
+                &::first-letter {
+                    text-transform: uppercase;
+                }
+
+                @include font($f-mainRightTitle, 25px, $color-white, 600, normal, 30px);
+            }
+
+            .mainRightAttribute {
+                letter-spacing: -0.25px;
+                margin-bottom: 5px;
+                @include font($f-mainRightAttribute, 11px, #989da7, 400, normal);
+            }
+
+            .mainRightAuthors {
+                display: flex;
+                justify-content: flex-start;
+
+                .mainRightImage {
+                    margin-right: 6px;
+                }
+
+                .mainRightAuthor {
+                    @include font($f-mainRightAuthor, 12px, $color-white, 400, normal, 12px);
+
+                    .mainRightName {
+                        background: $color-border;
+                        padding: 3px 6px;
+                        border-radius: 6px;
+                        margin-bottom: 3px;
+                    }
+
+                    .mainRightYear {
+                        padding-left: 6px;
+                    }
+                }
+            }
+        }
+
+        .mainRightBody {
+            margin: 9px 0 0;
+            padding: 9px 0 9px;
+            flex-grow: 1;
+            overflow-y: scroll;
+            mask-image: linear-gradient(to top, transparent, #fff 10%, #fff 98%, transparent 100%);
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            p {
+                @include font($f-mainRightBody, 12px, #989da7, 400, normal, 16px);
+                margin-bottom: 3px;
+                text-indent: 9px;
+                max-width: 275px;
+            }
+        }
+    }
+
+    .mainCenter {
+        min-width: 360px;
+        max-width: 360px;
+        height: 100vh;
+        overflow: hidden;
+        z-index: 99;
+        background: $color-black;
+        box-shadow: 0.5px 0 0 0 $color-background-5, -0.5px 0 0 0 $color-background-5;
+        position: relative;
+
+        .mainCenterContent {
+            width: 360px;
+            height: calc(100vh - 36px);
+            background: $color-black;
+        }
+    }
+}
