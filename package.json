@@ -37,11 +37,6 @@
   "engines": {
     "node": ">=18"
   },
-  "overrides": {
-    "@solidjs/start": {
-      "vite": "^5.0.0"
-    }
-  },
   "devDependencies": {
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.9"
