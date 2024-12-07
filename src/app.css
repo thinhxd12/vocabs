@@ -1,0 +1,22 @@
+@import "./styles/fonts.css";
+@import "./styles/buttons.css";
+@import "./styles/login.css";
+@import "./styles/layout.css";
+@import "./styles/definition.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+img {
+  -webkit-user-drag: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+body {
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}

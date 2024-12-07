@@ -1,35 +1,12 @@
 import { Component } from "solid-js";
-import "./tick.scss";
+import "../styles/tick.css";
 import { Motion } from "solid-motionone";
+import { easeOutBounce, easeOutCubic, easeOutSine } from "~/lib/utils";
 
 const TickAnimate: Component<{
   number: number;
   delay?: number;
 }> = (props) => {
-  function easeOutBounce(x: number): number {
-    const n1 = 7.5625;
-    const d1 = 2.75;
-
-    if (x < 1 / d1) {
-      return n1 * x * x;
-    } else if (x < 2 / d1) {
-      return n1 * (x -= 1.5 / d1) * x + 0.75;
-    } else if (x < 2.5 / d1) {
-      return n1 * (x -= 2.25 / d1) * x + 0.9375;
-    } else {
-      return n1 * (x -= 2.625 / d1) * x + 0.984375;
-    }
-  }
-
-  const easeOutSine = function easeOutSine(t: number) {
-    return Math.sin(t * (Math.PI / 2));
-  };
-
-  const easeOutCubic = function easeOutCubic(t: number) {
-    const t1 = t - 1;
-    return t1 * t1 * t1 + 1;
-  };
-
   return (
     <span class="tick-flip">
       <span class="tick-flip-card">

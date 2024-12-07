@@ -1,16 +1,20 @@
 import { Component, createEffect, createSignal, on, Show } from "solid-js";
-import { rgbaToThumbHash, thumbHashToDataURL, } from "thumbhash";
+import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
 import sharp from "sharp";
+import { Buffer } from "buffer";
+import { VocabularyDefinitionType } from "~/types";
+import { updateHashVocabularyItem } from "~/lib/server";
 
 const ImageLoader: Component<{
+  id?: string;
+  def?: VocabularyDefinitionType[];
   src: string;
-  alt?: string;
   width: number;
   height: number;
   className?: string;
+  hash?: string;
 }> = (props) => {
   const [loaded, setLoaded] = createSignal<boolean>(false);
-  const [showPlaceholder, setShowPlaceholder] = createSignal<boolean>(false);
   const [placeholderData, setPlaceholderData] = createSignal<string>("");
 
   const handleLoad = () => {
@@ -18,13 +22,16 @@ const ImageLoader: Component<{
   };
 
   const createThumbhash = async (imageUrl: string) => {
-    "use server"
-    const imageBuffer = await fetch(imageUrl).then(res => res.arrayBuffer());
-    const image = sharp(imageBuffer).resize(90, 90, { fit: 'inside' });
-    const { data, info } = await image.ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    "use server";
+    const imageBuffer = await fetch(imageUrl).then((res) => res.arrayBuffer());
+    const image = sharp(imageBuffer).resize(90, 90, { fit: "inside" });
+    const { data, info } = await image
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
     const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
-    return binaryThumbHash;
-  }
+    return Buffer.from(binaryThumbHash).toString("base64");
+  };
 
   createEffect(
     on(
@@ -32,50 +39,55 @@ const ImageLoader: Component<{
       async (curr, prev) => {
         if (curr !== prev) {
           setLoaded(false);
-          setShowPlaceholder(false);
-          const thumbhash = await createThumbhash(props.src);
-          setPlaceholderData(thumbHashToDataURL(thumbhash));
-          setShowPlaceholder(true);
+          setPlaceholderData("");
+          if (!props.hash) {
+            const thumbhash = await createThumbhash(props.src);
+            const thumbHashFromBase64 = Buffer.from(thumbhash, "base64");
+            setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));
+            let editDefinition = JSON.parse(JSON.stringify(props.def));
+            editDefinition.forEach((entry: any) => {
+              entry.definitions.forEach((def: any) => {
+                if (def.image === props.src) def.hash = thumbhash;
+              });
+            });
+            updateHashVocabularyItem(props.id!, editDefinition);
+          } else {
+            const thumbHashFromBase64 = Buffer.from(props.hash, "base64");
+            setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));
+          }
         }
-      }
-    )
+      },
+    ),
   );
 
-
   return (
-    <div class={props.className}
+    <div
+      class={props.className}
       style={{
         width: `${props.width}px`,
         height: `${props.height}px`,
         position: "relative",
         overflow: "hidden",
-      }}>
-      <Show when={showPlaceholder()}>
+      }}
+    >
+      <Show when={placeholderData()}>
         <img
+          class="absolute left-0 top-0 z-20 h-full w-full object-cover"
           src={placeholderData()}
+          alt="placeholder"
           style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            "object-fit": "cover",
-            "z-index": 6,
             opacity: loaded() ? 0 : 1,
-            transition: "all 0.3s",
           }}
         />
       </Show>
       <img
+        class="absolute left-0 top-0 z-10 h-full w-full object-cover"
         src={props.src}
-        alt={props.alt}
+        onLoad={handleLoad}
+        loading="eager"
         style={{
-          position: "inherit",
-          "z-index": 3,
-          width: "100%",
-          height: "100%",
-          "object-fit": "cover",
+          opacity: loaded() ? 1 : 0,
         }}
-        onload={handleLoad}
-        loading="lazy"
       />
     </div>
   );

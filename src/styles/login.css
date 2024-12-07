@@ -1,0 +1,18 @@
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s !important;
+  -webkit-text-fill-color: #fff !important;
+  font-size: 12px !important;
+  line-height: 21px !important;
+  background: rgba(0, 0, 0, 0.15) !important;
+}
+
+.loginBackgroundText {
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
+}
+
+.loginAlert {
+  text-shadow: 0 0 1px rgba(0, 0, 0, 0.9);
+}

@@ -1,0 +1,172 @@
+.toast__list {
+  --viewport-padding: 16px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--viewport-padding);
+  margin: 0;
+  list-style: none;
+  z-index: 9999;
+  outline: none;
+}
+.toast {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border: 1px solid hsl(240 5% 84%);
+  border-radius: 6px;
+  padding: 8px;
+  background-color: white;
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  margin-bottom: 3px;
+}
+.toast[data-opened] {
+  animation: slideIn 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.toast[data-closed] {
+  animation: hide 100ms ease-in;
+}
+.toast[data-swipe="move"] {
+  transform: translateX(var(--kb-toast-swipe-move-x));
+}
+.toast[data-swipe="cancel"] {
+  transform: translateX(0);
+  transition: transform 200ms ease-out;
+}
+.toast[data-swipe="end"] {
+  animation: swipeOut 100ms ease-out;
+}
+.toast__content {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.toast__close-button {
+  flex-shrink: 0;
+  height: 18px;
+  width: 18px;
+  margin-left: auto;
+  margin-top: -3px;
+  color: hsl(240 5% 34%);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toast__close-button:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+.toast__title {
+  font-family: "Rubik", sans-serif;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 600;
+  color: #404040;
+}
+.toast__description {
+  font-family: "Rubik", sans-serif;
+  font-size: 10px;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  color: #606060;
+  max-width: 180px;
+  min-width: 120px;
+}
+.toast__progress-track {
+  height: 4px;
+  width: 100%;
+  background-color: hsl(240 6% 90%);
+  border-radius: 3px;
+}
+.toast__progress-fill {
+  background-color: hsl(200 98% 39%);
+  border-radius: 3px;
+  height: 100%;
+  width: var(--kb-toast-progress-fill-width);
+  transition: width 250ms linear;
+}
+@keyframes hide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes slideIn {
+  from {
+    transform: translateX(calc(100% + var(--viewport-padding)));
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes swipeOut {
+  from {
+    transform: translateX(var(--kb-toast-swipe-end-x));
+  }
+  to {
+    transform: translateX(calc(100% + var(--viewport-padding)));
+  }
+}
+
+.toast--success .icon {
+  transform: rotate(-45deg);
+}
+
+.toast--success .icon::before,
+.toast--success .icon::after {
+  position: absolute;
+  content: "";
+  background: #e3fee6;
+  border-radius: 5px;
+  top: 50%;
+  left: 50%;
+}
+
+.toast--success .icon::before {
+  width: 10px;
+  height: 3px;
+  transform: translate(calc(-50% + 1px), calc(-50% + 1px));
+}
+.toast--success .icon::after {
+  width: 3px;
+  height: 6px;
+  transform: translate(calc(-50% - 3px), calc(-50% - 1px));
+}
+
+.toast--success .toast__progress-fill {
+  background-color: #2dd743;
+}
+
+.toast--error .icon::before,
+.toast--error .icon::after {
+  position: absolute;
+  content: "";
+  background: #ffeaec;
+  border-radius: 5px;
+  top: 50%;
+  left: 50%;
+}
+
+.toast--error .icon::before {
+  width: 3px;
+  height: 3px;
+  transform: translate(-50%, calc(-50% + 4px));
+}
+.toast--error .icon::after {
+  width: 3px;
+  height: 7px;
+  transform: translate(-50%, calc(-50% - 2px));
+}
+
+.toast--error .toast__progress-fill {
+  background-color: #e63435;
+}
