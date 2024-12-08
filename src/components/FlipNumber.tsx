@@ -1,10 +1,9 @@
-import { createEffect, createSignal, Match, on, Show, Switch } from "solid-js";
+import { createEffect, createSignal, Match, Show, Switch } from "solid-js";
 import TickStatic from "./TickStatic";
 import TickAnimate from "./TickAnimate";
 import TickAnimateComplete from "./TickAnimateComplete";
 import { Motion, Presence } from "solid-motionone";
-import TickStaticComplete from "./TickStaticComplete";
-import { easeOutBounce, easeOutCubic, easeOutSine } from "~/lib/utils";
+import { easeOutBounce } from "~/lib/utils";
 
 export default function FlipNumber(props: { value: number }) {
   const [numbArray, setNumbArray] = createSignal<number[]>([3, 6, 9]);
