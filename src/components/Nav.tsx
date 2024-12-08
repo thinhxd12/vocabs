@@ -1,5 +1,11 @@
 import { A, createAsync, useAction, useLocation } from "@solidjs/router";
-import { createEffect, createSignal, onCleanup, Show } from "solid-js";
+import {
+  Component,
+  createEffect,
+  createSignal,
+  onCleanup,
+  Show,
+} from "solid-js";
 import { format } from "date-fns";
 import {
   setVocabStore,
@@ -26,7 +32,7 @@ import { WMOCODE } from "~/lib/utils";
 import arrayShuffle from "array-shuffle";
 import { logoutAction } from "~/lib/login";
 
-export default function Nav() {
+const Nav: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
   let intervalCountdown: NodeJS.Timeout | undefined;
   let intervalAutoplay: NodeJS.Timeout;
@@ -550,4 +556,6 @@ export default function Nav() {
       </div>
     </nav>
   );
-}
+};
+
+export default Nav;

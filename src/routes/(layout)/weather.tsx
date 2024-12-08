@@ -1,5 +1,6 @@
 import { Meta, MetaProvider, Title as MetaTitle } from "@solidjs/meta";
 import {
+  Component,
   createSignal,
   Index,
   onCleanup,
@@ -37,7 +38,7 @@ import {
 import { createAsync } from "@solidjs/router";
 import { getUser } from "~/lib/login";
 
-export default function Weather() {
+const Weather: Component<{}> = (props) => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
@@ -553,4 +554,6 @@ export default function Weather() {
       </main>
     </MetaProvider>
   );
-}
+};
+
+export default Weather;

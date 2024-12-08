@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { createEffect, createSignal, For, on, Show } from "solid-js";
+import { Component, createEffect, createSignal, For, on, Show } from "solid-js";
 import { Progress } from "@kobalte/core/progress";
 import { navStore, quizStore, setQuizStore } from "~/lib/store";
 import { createAsync } from "@solidjs/router";
@@ -12,7 +12,7 @@ import {
 } from "~/lib/server";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 
-export default function Quiz() {
+const Quiz: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
   const [audioSrc, setAudioSrc] = createSignal<string>(
     "/assets/sounds/mp3_Ding.mp3",
@@ -191,4 +191,6 @@ export default function Quiz() {
       </main>
     </MetaProvider>
   );
-}
+};
+
+export default Quiz;

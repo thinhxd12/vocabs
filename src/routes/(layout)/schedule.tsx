@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import {
+  Component,
   createEffect,
   createSignal,
   For,
@@ -44,7 +45,7 @@ export const route = {
   },
 };
 
-export default function Schedule() {
+const Schedule: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
   const [audioSrc, setAudioSrc] = createSignal<string>(
     "/assets/sounds/mp3_Ding.mp3",
@@ -448,4 +449,6 @@ export default function Schedule() {
       </main>
     </MetaProvider>
   );
-}
+};
+
+export default Schedule;

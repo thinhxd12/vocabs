@@ -1,5 +1,5 @@
 import { createAsync, useSubmission } from "@solidjs/router";
-import { createEffect, createSignal, on, Show } from "solid-js";
+import { Component, createEffect, createSignal, on, Show } from "solid-js";
 import Definition from "~/components/Definition";
 import { VocabularyTranslationType, VocabularyType } from "~/types";
 import { OcX2 } from "solid-icons/oc";
@@ -28,7 +28,7 @@ import { Portal } from "solid-js/web";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { getUser } from "~/lib/login";
 
-export default function Vocab() {
+const Vocab: Component<{}> = (props) => {
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
@@ -567,4 +567,6 @@ export default function Vocab() {
       </main>
     </MetaProvider>
   );
-}
+};
+
+export default Vocab;

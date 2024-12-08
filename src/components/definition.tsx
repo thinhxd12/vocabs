@@ -1,13 +1,13 @@
-import { For, Setter, Show } from "solid-js";
+import { Component, For, Setter, Show } from "solid-js";
 import { VocabularyTranslationType, VocabularyType } from "~/types";
 import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
 import ImageLoader from "./ImageLoader";
 
-export default function Definition(props: {
+const Definition: Component<{
   item: VocabularyType;
   onEdit?: () => void;
   onCheck?: Setter<boolean>;
-}) {
+}> = (props) => {
   return (
     <div class="z-50 w-full bg-gray-50 shadow-md">
       <For each={props.item.definitions}>
@@ -123,4 +123,6 @@ export default function Definition(props: {
       </For>
     </div>
   );
-}
+};
+
+export default Definition;
