@@ -20,7 +20,6 @@
     "autoprefixer": "^10.4.19",
     "buffer": "^6.0.3",
     "chart.js": "^4.4.7",
-    "canvas": "^2.6.1",
     "date-fns": "^4.1.0",
     "node-html-parser": "^6.1.13",
     "postcss": "^8.4.38",

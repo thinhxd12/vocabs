@@ -1,4 +1,22 @@
-import { createCanvas } from "canvas";
+export function createCanvas(width: number, height: number): HTMLCanvasElement {
+  let canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  return canvas;
+}
+
+export function loadImage(src: string) {
+  return new Promise((resolve, reject) => {
+    let img = new Image();
+    img.onload = function () {
+      resolve(img);
+    };
+    img.onerror = function () {
+      reject(new Error("Failed to load image " + src));
+    };
+    img.src = src;
+  });
+}
 
 export function random(
   from: number | null = null,

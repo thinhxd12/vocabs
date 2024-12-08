@@ -28,8 +28,12 @@ import {
   makePrediction,
 } from "~/lib/server";
 import { format } from "date-fns";
-import { Raindrops, RainRenderer } from "~/lib/weather";
-import { Canvas, createCanvas, loadImage } from "canvas";
+import {
+  createCanvas,
+  loadImage,
+  Raindrops,
+  RainRenderer,
+} from "~/lib/weather";
 import { createAsync } from "@solidjs/router";
 import { getUser } from "~/lib/login";
 
@@ -40,9 +44,9 @@ export default function Weather() {
   let audioRef: HTMLAudioElement | undefined;
   let hourlyRef: HTMLDivElement | undefined;
   let canvasRef: HTMLCanvasElement | undefined;
-  let textureFg: Canvas;
+  let textureFg: HTMLCanvasElement;
   let textureFgCtx: any;
-  let textureBg: Canvas;
+  let textureBg: HTMLCanvasElement;
   let textureBgCtx: any;
 
   const textureBgSize = {
