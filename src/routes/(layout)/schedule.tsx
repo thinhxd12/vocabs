@@ -10,7 +10,6 @@ import {
 } from "solid-js";
 import "../../styles/layout.css";
 import { chunk } from "~/lib/utils";
-import HistoryCard from "~/components/HistoryCard";
 import Dialog from "@corvu/dialog";
 import { OcPluscircle3, OcX2 } from "solid-icons/oc";
 import { BiSolidSave } from "solid-icons/bi";
@@ -291,7 +290,34 @@ export default function Schedule() {
           <Suspense fallback={<div>Loading...</div>}>
             <div class="relative flex w-full snap-x snap-mandatory overflow-x-auto bg-white [&::-webkit-scrollbar-thumb]:bg-black/90 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar]:h-2">
               <For each={chunk(scheduleStore.historyList, 5).reverse()}>
-                {(data) => <HistoryCard data={data} />}
+                {(data) => (
+                  <div class="min-w-[360px] snap-start overflow-hidden pl-1 pr-1 pt-1">
+                    <For each={data}>
+                      {(item) => (
+                        <div class="mb-0.5 flex h-6 w-full">
+                          <div class="relative h-full w-[90px] bg-black px-1 font-rubik text-3.5 font-500 leading-6 text-white">
+                            {item.index + 1} - {item.index + 200}
+                            <span
+                              class="absolute -right-[5.5px] top-1 h-4 w-2 bg-black"
+                              style={{
+                                "clip-path":
+                                  "polygon(0% 0%, 100% 50%, 0% 100%)",
+                              }}
+                            ></span>
+                          </div>
+                          <div class="flex flex-1 bg-white">
+                            <div class="h-full w-[120px] pl-8 font-rubik text-3.5 font-500 leading-6">
+                              {item.from_date}
+                            </div>
+                            <div class="h-full w-[120px] pl-8 font-rubik text-3.5 font-500 leading-6">
+                              {item.to_date}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </For>
+                  </div>
+                )}
               </For>
               <button
                 class="absolute right-1 top-1 z-50 h-5 w-5 opacity-0 transition hover:opacity-100"
