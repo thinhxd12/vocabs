@@ -1,0 +1,174 @@
+.bookmarkTextContent::first-letter {
+  font-family: "Open Sans";
+  font-size: 125px;
+  color: #dcd8d1;
+  font-style: normal;
+  line-height: 100px;
+  text-transform: uppercase;
+  float: left;
+  margin: 6px 6px 0 0;
+  display: block;
+  background: url("/images/TheEndoftheDay.webp") 0 0 no-repeat;
+  background-size: cover;
+  background-position: center;
+  padding: 0 3px 3px 3px;
+  border: 1px solid #111111;
+  text-shadow: 0 0 6px rgb(0, 0, 0);
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+}
+
+.bookmarkContainer {
+  @apply relative h-full min-h-full w-full overflow-y-scroll border border-[#636363];
+}
+
+.bookmarkContainerCheck {
+  @apply relative h-full min-h-full w-full overflow-y-scroll border border-[#636363];
+
+  box-shadow:
+    rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.bookmarkContent {
+  @apply relative min-h-full w-full overflow-y-scroll;
+}
+
+.bookmarkContainerCheck .bookmarkContent p,
+.bookmarkContainerCheck .bookmarkContent img,
+.bookmarkContainerCheck .bookmarkContent div {
+  position: inherit;
+  z-index: 1;
+}
+
+.bookmarkContainerCheck .bookmarkContent::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-image: url("/images/paper.webp");
+  background-size: 100% auto;
+  background-position: left top;
+  filter: contrast(0.72);
+}
+
+.alert-dialog__overlay {
+  animation: overlayHide 250ms ease 100ms forwards;
+}
+.alert-dialog__overlay[data-expanded] {
+  animation: overlayShow 250ms ease;
+}
+
+.alert-dialog__content {
+  box-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  animation: contentHide 300ms ease-in forwards;
+}
+
+.alert-dialog__content[data-expanded] {
+  animation: contentShow 300ms ease-out;
+}
+
+@keyframes overlayShow {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes overlayHide {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes contentShow {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+}
+
+/* BOOKMARK */
+
+.imageTextContent {
+  mask-image: linear-gradient(
+    to top,
+    transparent,
+    #fff 10%,
+    #fff 98%,
+    transparent 100%
+  );
+}
+
+.imageTextContent p {
+  margin-bottom: 3px;
+  text-indent: 9px;
+}
+
+.imageTextContent::-webkit-scrollbar {
+  display: none;
+}
+
+.scheduleDate:nth-child(7n + 1) span {
+  @apply !text-[#f90000];
+}
+
+.scheduleDate:nth-child(7n + 1) .toDayDate {
+  @apply !bg-[#f90000] !text-white;
+}
+
+/* PROGRESS */
+.progress {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  margin: 1px 0 2px;
+}
+.progress__label-container {
+  display: flex;
+  justify-content: space-between;
+}
+.progress__label,
+.progress__value-label {
+  color: hsl(240 4% 16%);
+  font-size: 14px;
+}
+.progress__track {
+  height: 3px;
+  background-color: rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+}
+.progress__fill {
+  background-color: #38e07b;
+  height: 100%;
+  width: var(--kb-progress-fill-width);
+  transition: width 250ms linear;
+}
+.progress__fill[data-progress="complete"] {
+  background-color: #2563eb;
+  box-shadow: 0px 0px 2px #000000;
+}

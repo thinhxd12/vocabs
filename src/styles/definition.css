@@ -1,0 +1,28 @@
+.definition-example {
+  @apply pb-2 pl-[5px] pr-1 pt-1 indent-6 font-opensans text-4.5 font-400 leading-7.5 text-black;
+}
+
+.definition-example b {
+  @apply px-1 pb-0.1 pt-0.5 indent-6 font-opensans text-4.5 font-700 leading-7.5 text-black;
+  animation: textAnimate 0.1s linear forwards;
+  animation-delay: 3.6s;
+}
+
+@keyframes textAnimate {
+  to {
+    color: #f90000;
+    background: #000000;
+  }
+}
+
+.definition-credit {
+  @apply ml-auto flex w-fit flex-wrap items-end justify-end;
+}
+
+.definition-credit span {
+  @apply bg-[#ededed] px-1 pt-0.5 font-sfpro text-[13px] font-500 leading-[17px] text-black;
+}
+
+.definition-credit > span:first-child {
+  @apply border-l border-black pl-6;
+}
