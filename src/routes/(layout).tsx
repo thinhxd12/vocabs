@@ -1,49 +1,31 @@
+import { RouteSectionProps, useLocation } from "@solidjs/router";
 import {
-  RouteSectionProps,
-  useLocation,
-  useNavigate,
-  useParams,
-  useSubmission,
-} from "@solidjs/router";
-import {
-  Component,
-  createEffect,
   createSignal,
   For,
-  on,
   onCleanup,
   onMount,
-  ParentComponent,
   Show,
   Suspense,
 } from "solid-js";
-import {
-  ImageType,
-  VocabularySearchType,
-  VocabularyTranslationType,
-  VocabularyType,
-} from "~/types";
+import { ImageType, VocabularySearchType } from "~/types";
 import "../styles/layout.css";
-import LayoutImageLoader from "~/components/LayoutImageLoader";
+import LayoutImageLoader from "../components/LayoutImageLoader";
 import { ImBooks } from "solid-icons/im";
 import { TbRefresh } from "solid-icons/tb";
-import Bookmark from "~/components/Bookmark";
-import Nav from "~/components/Nav";
-import ImageLoader from "~/components/ImageLoader";
+import Bookmark from "../components/Bookmark";
+import Nav from "../components/Nav";
+import ImageLoader from "../components/ImageLoader";
 import {
   layoutStore,
   setLayoutStore,
   setVocabStore,
   vocabStore,
 } from "~/lib/store";
-import { BsTrash3, BsTrash3Fill } from "solid-icons/bs";
+import { BsTrash3 } from "solid-icons/bs";
 import { createList } from "solid-list";
 import {
   deleteVocabulary,
-  editVocabularyItem,
   getDataImage,
-  getTextDataWebster,
-  getTranslationArr,
   getUnsplashImage,
   getWordData,
   handleCheckAndRender,
@@ -53,13 +35,6 @@ import { format } from "date-fns";
 import { debounce } from "@solid-primitives/scheduled";
 import { OcX2 } from "solid-icons/oc";
 import Dialog from "@corvu/dialog";
-import type { VoidComponent } from "solid-js";
-import { Dialog as AlertDialog } from "@kobalte/core/dialog";
-import { Collapsible } from "@kobalte/core/collapsible";
-import { FiChevronDown } from "solid-icons/fi";
-import { BiSolidSave } from "solid-icons/bi";
-import Definition from "~/components/Definition";
-import { toast } from "~/components/Toast";
 
 declare module "solid-js" {
   namespace JSX {

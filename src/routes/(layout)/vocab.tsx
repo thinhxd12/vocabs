@@ -1,6 +1,6 @@
 import { createAsync, useSubmission } from "@solidjs/router";
 import { Component, createEffect, createSignal, on, Show } from "solid-js";
-import Definition from "~/components/Definition";
+import Definition from "../../components/Definition";
 import { VocabularyTranslationType, VocabularyType } from "~/types";
 import { OcX2 } from "solid-icons/oc";
 import { Collapsible } from "@kobalte/core/collapsible";
@@ -12,7 +12,7 @@ import {
   setVocabStore,
   vocabStore,
 } from "~/lib/store";
-import FlipNumber from "~/components/FlipNumber";
+import FlipNumber from "../../components/FlipNumber";
 import {
   editVocabularyItem,
   getTextDataWebster,
@@ -21,7 +21,7 @@ import {
   insertVocabularyItem,
   searchMemoriesText,
 } from "~/lib/server";
-import { toast } from "~/components/Toast";
+import { toast } from "../../components/Toast";
 import { Toast } from "@kobalte/core/toast";
 import Dialog from "@corvu/dialog";
 import { Portal } from "solid-js/web";
