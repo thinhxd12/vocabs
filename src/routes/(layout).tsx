@@ -9,12 +9,12 @@ import {
 } from "solid-js";
 import { ImageType, VocabularySearchType } from "~/types";
 import "../styles/layout.css";
-import LayoutImageLoader from "../components/LayoutImageLoader";
+import LayoutImageLoader from "~/components/LayoutImageLoader";
 import { ImBooks } from "solid-icons/im";
 import { TbRefresh } from "solid-icons/tb";
-import Bookmark from "../components/Bookmark";
-import Nav from "../components/Nav";
-import ImageLoader from "../components/ImageLoader";
+import Bookmark from "~/components/Bookmark";
+import Nav from "~/components/Nav";
+import ImageLoader from "~/components/ImageLoader";
 import {
   layoutStore,
   setLayoutStore,

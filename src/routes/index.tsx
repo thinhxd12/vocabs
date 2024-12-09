@@ -46,7 +46,7 @@ export default function Home() {
               name="password"
               type="password"
               required
-              class="ml-10 mr-3 h-7 w-[180px] border-none bg-slate-900/60 text-center shadow-md outline-none hover:shadow-sm"
+              class="ml-10 mr-3 h-7 w-[180px] border-none bg-[#00000073] text-center shadow-md outline-none hover:shadow-sm"
             />
             <button
               type="submit"

@@ -31,7 +31,7 @@ import {
   submitNewSchedule,
   submitTodayReset,
 } from "~/lib/server";
-import { toast } from "../../components/Toast";
+import { toast } from "~/components/Toast";
 import { Toast } from "@kobalte/core/toast";
 import { Portal } from "solid-js/web";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
