@@ -1,4 +1,5 @@
 import { defineConfig } from "@solidjs/start/config";
+import deno from "@deno/vite-plugin";
 
 export default defineConfig({
   server: {
@@ -14,17 +15,6 @@ export default defineConfig({
     },
   },
   vite: {
-    resolve: {
-      extensions: [
-        ".mjs",
-        ".js",
-        ".mts",
-        ".css",
-        ".ts",
-        ".jsx",
-        ".tsx",
-        ".json",
-      ],
-    },
+    plugins: [deno()],
   },
 });
