@@ -31,6 +31,7 @@ import { CurrentlyWeatherType } from "~/types";
 import { WMOCODE } from "~/lib/utils";
 import arrayShuffle from "array-shuffle";
 import { logoutAction } from "~/lib/login";
+import ImageLoader from "./ImageLoader";
 
 const Nav: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
@@ -84,7 +85,7 @@ const Nav: Component<{}> = (props) => {
     });
 
   const [navWeatherBg, setNavWeatherBg] = createSignal<string>(
-    "https://hoctuvung3.vercel.app/images/main/sky.webp",
+    "https://hoctuvung3.vercel.app/images/sky.webp",
   );
 
   const getBottomWeatherData = async () => {
@@ -143,7 +144,11 @@ const Nav: Component<{}> = (props) => {
     setMinute(6);
     setShowTimer(false);
     clearInterval(intervalCountdown);
-    audioRef?.play();
+    if (audioRef) {
+      audioRef.pause();
+      audioRef.currentTime = 0;
+      audioRef.play();
+    }
     showDesktopNotification();
   };
 
@@ -357,9 +362,11 @@ const Nav: Component<{}> = (props) => {
         href="/weather"
         class="relative inline-block h-full min-w-[91px] max-w-[91px] overflow-hidden border-r border-r-[#343434]"
       >
-        <img
+        <ImageLoader
           src={navWeatherBg()}
-          class="absolute bottom-0 h-full w-full object-cover object-center brightness-90"
+          width={90}
+          height={35}
+          className="absolute bottom-0 h-full w-full object-cover object-center brightness-90"
         />
 
         <div class="absolute left-0 top-0 flex h-full w-6 flex-col items-center justify-center bg-black/45">

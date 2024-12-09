@@ -44,13 +44,15 @@ const ImageLoader: Component<{
             const thumbhash = await createThumbhash(props.src);
             const thumbHashFromBase64 = Buffer.from(thumbhash, "base64");
             setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));
-            let editDefinition = JSON.parse(JSON.stringify(props.def));
-            editDefinition.forEach((entry: any) => {
-              entry.definitions.forEach((def: any) => {
-                if (def.image === props.src) def.hash = thumbhash;
+            if (props.id !== undefined) {
+              let editDefinition = JSON.parse(JSON.stringify(props.def));
+              editDefinition.forEach((entry: any) => {
+                entry.definitions.forEach((def: any) => {
+                  if (def.image === props.src) def.hash = thumbhash;
+                });
               });
-            });
-            updateHashVocabularyItem(props.id!, editDefinition);
+              updateHashVocabularyItem(props.id!, editDefinition);
+            }
           } else {
             const thumbHashFromBase64 = Buffer.from(props.hash, "base64");
             setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));

@@ -3,6 +3,7 @@
 @import "./styles/login.css";
 @import "./styles/layout.css";
 @import "./styles/definition.css";
+@import "./styles/tick.css";
 
 @tailwind base;
 @tailwind components;

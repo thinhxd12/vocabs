@@ -3,6 +3,7 @@ import { createSignal, onMount, Show } from "solid-js";
 import { getSpotlightImage } from "~/lib/server";
 import { LoginImageType } from "~/types";
 import { loginAction } from "~/lib/login";
+import ImageLoader from "~/components/ImageLoader";
 
 export default function Home() {
   const [imageData, setImageData] = createSignal<LoginImageType | undefined>();
@@ -21,12 +22,15 @@ export default function Home() {
   const loggingIn = useSubmission(loginAction);
 
   return (
-    <main class="relative h-screen w-screen">
+    <main class="relative h-screen w-screen overflow-hidden">
       <Show when={imageData()}>
-        <img
-          class="absolute h-full w-full object-cover"
-          src={isMobile() ? imageData()?.image_P : imageData()?.image_L}
+        <ImageLoader
+          src={isMobile() ? imageData()!.image_P : imageData()!.image_L}
+          width={window.screen.width}
+          height={window.screen.height}
+          className="absolute z-0"
         />
+
         <div class="absolute left-0 top-0 w-full px-5 pt-3 font-basier text-4 font-500 leading-6 text-white sm:w-2/3 sm:pl-12 sm:pt-10">
           <p class="loginBackgroundText mb-1 w-full">
             {imageData()?.hs1_title}

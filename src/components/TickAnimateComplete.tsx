@@ -1,6 +1,5 @@
 import { Component } from "solid-js";
 import { Motion } from "solid-motionone";
-import "../styles/tick.css";
 import { easeOutBounce, easeOutCubic, easeOutSine } from "~/lib/utils";
 
 const TickAnimateComplete: Component<{

@@ -1,5 +1,4 @@
 import { Component } from "solid-js";
-import "../styles/tick.css";
 
 const TickStatic: Component<{
   number: number;

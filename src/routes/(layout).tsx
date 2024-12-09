@@ -45,7 +45,6 @@ declare module "solid-js" {
 }
 
 export default function Layout(props: RouteSectionProps) {
-  // let layoutMainRef: HTMLDivElement | undefined;
   let audioRef: HTMLAudioElement | undefined;
   let checkTimeout: NodeJS.Timeout;
   let deleteSearchTimeout: NodeJS.Timeout;
@@ -57,11 +56,11 @@ export default function Layout(props: RouteSectionProps) {
   });
 
   const defaultLayoutImageData: ImageType = {
-    image: "https://hoctuvung3.vercel.app/images/main/main-image.webp",
+    image: "https://hoctuvung3.vercel.app/images/main-image.webp",
     date: "01 July 2023",
     title: "The Red Buoy, Saint-Tropez",
     attr: "Oil on canvas • 81 × 65 cm",
-    authorImg: "https://hoctuvung3.vercel.app/images/main/main-author.webp",
+    authorImg: "https://hoctuvung3.vercel.app/images/main-author.webp",
     authorName: "Paul Signac",
     authorYear: "1895",
     content:
@@ -242,7 +241,7 @@ export default function Layout(props: RouteSectionProps) {
     <main
       class="flex h-screen w-screen justify-center overflow-hidden bg-black"
       tabIndex={1}
-      on:keydown={handleKeyDownMain}
+      onKeyDown={handleKeyDownMain}
       ref={(el) => setLayoutStore("layoutMainRef", el)}
     >
       <audio ref={audioRef} hidden src={audioSrc()} />
@@ -315,14 +314,14 @@ export default function Layout(props: RouteSectionProps) {
             {/* search  */}
             <Suspense>
               <Show when={vocabStore.searchResults.length > 0}>
-                <div class="absolute top-11 z-50 flex h-[calc(100vh-72px)] w-full flex-col bg-black">
+                <div class="absolute top-11 z-50 flex h-[calc(100vh-72px)] w-full flex-col bg-black pt-2">
                   <For each={vocabStore.searchResults}>
                     {(item, index) => (
                       <div
                         aria-selected={active() === index()}
                         onMouseOver={() => handleMouseOver(index())}
                         onMouseOut={handleMouseOut}
-                        class="my-3 flex h-9.5 w-[360px] cursor-pointer justify-between bg-[#343434]"
+                        class="my-2 flex h-9.5 w-[360px] cursor-pointer justify-between bg-[#343434]"
                       >
                         <button
                           class="relative z-50 h-full w-9.5 pl-2 font-basier text-3.5 font-400 leading-9.5 text-[#f7f7f7] hover:text-white"

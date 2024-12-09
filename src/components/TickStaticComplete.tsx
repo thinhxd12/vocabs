@@ -1,5 +1,4 @@
 import { Component } from "solid-js";
-import "../styles/tick.css";
 
 const TickStaticComplete: Component<{}> = (props) => {
   return (

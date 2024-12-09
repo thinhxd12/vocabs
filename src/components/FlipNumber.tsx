@@ -31,7 +31,7 @@ const FlipNumber: Component<{
     <Presence>
       <Show when={showFlipAnimate()}>
         <Motion.div
-          initial={{ y: -90 }}
+          initial={{ y: -150 }}
           animate={{
             y: 27,
           }}
@@ -45,7 +45,7 @@ const FlipNumber: Component<{
             delay: 0.5,
             easing: easeOutBounce,
           }}
-          class="absolute left-[89px] z-50 flex font-helvetica text-[100px] font-600 leading-[90px] text-[#f4f4f4]"
+          class="absolute left-[59px] z-50 flex font-helvetica text-[140px] font-600 leading-[115px] text-[#f4f4f4]"
         >
           <Switch
             fallback={

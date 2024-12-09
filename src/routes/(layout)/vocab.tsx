@@ -30,7 +30,7 @@ import { getUser } from "~/lib/login";
 
 const Vocab: Component<{}> = (props) => {
   // ***************check login**************
-  const user = createAsync(() => getUser(), { deferStream: true });
+  // const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
   const totalMemories_data = createAsync(() => getTotalMemories());
