@@ -138,9 +138,9 @@ const Quiz: Component<{}> = (props) => {
           </div>
 
           <Progress
-            value={quizStore.quizCount + 1}
-            minValue={1}
-            maxValue={quizStore.quizContent.length}
+            value={quizStore.quizCount}
+            minValue={0}
+            maxValue={quizStore.quizContent.length - 1}
             class="progress"
           >
             <Progress.Track class="progress__track">

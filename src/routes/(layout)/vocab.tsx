@@ -1,5 +1,12 @@
 import { createAsync, useSubmission } from "@solidjs/router";
-import { Component, createEffect, createSignal, on, Show } from "solid-js";
+import {
+  Component,
+  createEffect,
+  createSignal,
+  on,
+  onCleanup,
+  Show,
+} from "solid-js";
 import Definition from "~/components/Definition";
 import { VocabularyTranslationType, VocabularyType } from "~/types";
 import { OcX2 } from "solid-icons/oc";
@@ -20,6 +27,7 @@ import {
   getTranslationArr,
   insertVocabularyItem,
   searchMemoriesText,
+  searchText,
 } from "~/lib/server";
 import { toast } from "~/components/Toast";
 import { Toast } from "@kobalte/core/toast";
@@ -27,6 +35,7 @@ import Dialog from "@corvu/dialog";
 import { Portal } from "solid-js/web";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { getUser } from "~/lib/login";
+import { debounce } from "@solid-primitives/scheduled";
 
 const Vocab: Component<{}> = (props) => {
   // ***************check login**************
@@ -240,6 +249,30 @@ const Vocab: Component<{}> = (props) => {
     ),
   );
 
+  const triggerMobile = debounce(async (str: string) => {
+    const res = await searchText(str);
+    if (res) {
+      if (res.length === 0) {
+        setVocabStore("searchTermColor", false);
+        setTimeout(() => {
+          setVocabStore("searchTermColor", true);
+          setVocabStore("searchTerm", "");
+          setVocabStore("searchResults", []);
+        }, 1500);
+      } else {
+        setVocabStore("searchTermColor", true);
+        setVocabStore("searchResults", res);
+      }
+    }
+  }, 450);
+
+  onCleanup(() => {
+    setVocabStore("searchTerm", "");
+    setVocabStore("searchTermColor", true);
+    setVocabStore("searchResults", []);
+    setVocabStore("renderWord", undefined);
+  });
+
   return (
     <MetaProvider>
       <Title>{vocabStore.renderWord?.word || "vocab"}</Title>
@@ -251,14 +284,40 @@ const Vocab: Component<{}> = (props) => {
         <audio ref={audioRef2} hidden src={audioSrc2()} />
         <div class="relative h-11 w-full border-b border-[#343434] bg-[url('/images/input-wall.webp')] bg-cover pt-[7px]">
           <p
-            class={`absolute left-0 top-0 w-full truncate px-[72px] text-center font-constantine text-7 font-700 uppercase leading-10.5 ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
+            class={`absolute left-0 top-0 hidden w-full truncate text-center font-constantine text-7 font-700 uppercase leading-10.5 sm:block ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
             style={{
               "text-shadow": "0 2px 2px rgba(0, 0, 0, 0.9)",
             }}
           >
             {vocabStore.searchTerm || renderWordStore()?.word}
           </p>
-          <p class="absolute bottom-0 left-0 w-full truncate px-[72px] text-center font-opensans text-3 font-600 leading-2 text-white/50">
+          <input
+            class={`back absolute left-0 top-0 block w-full truncate bg-transparent text-center font-constantine text-7 font-700 uppercase leading-10.5 outline-none sm:hidden ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
+            type="text"
+            autocomplete="off"
+            value={vocabStore.searchTerm || renderWordStore()?.word}
+            onFocus={(e) => {
+              setVocabStore("searchTerm", "");
+              e.currentTarget.value = "";
+            }}
+            onBlur={() => {
+              setVocabStore("searchTerm", "");
+              setVocabStore("searchTermColor", true);
+            }}
+            onInput={(e) => {
+              setVocabStore(
+                "searchTerm",
+                (e.target as HTMLInputElement).value.toLowerCase(),
+              );
+              if (vocabStore.searchTerm.length > 2) {
+                triggerMobile(vocabStore.searchTerm);
+              }
+            }}
+            onKeyDown={(e) => {
+              e.preventDefault();
+            }}
+          />
+          <p class="absolute bottom-0 left-0 w-full truncate text-center font-opensans text-3 font-600 leading-2 text-white/50">
             {renderWordStore()?.phonetics}
           </p>
         </div>
@@ -279,7 +338,9 @@ const Vocab: Component<{}> = (props) => {
         <Dialog
           open={vocabStore.showTranslate}
           onOpenChange={(open) => setVocabStore("showTranslate", open)}
-          onInitialFocus={() => handleGetTranslateWord(vocabStore.searchTerm)}
+          onInitialFocus={() =>
+            handleGetTranslateWord(vocabStore.translateTerm)
+          }
         >
           <Dialog.Portal>
             <Dialog.Overlay

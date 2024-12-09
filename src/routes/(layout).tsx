@@ -116,7 +116,7 @@ export default function Layout(props: RouteSectionProps) {
         deleteSearchTimeout = setTimeout(() => {
           setVocabStore("searchTermColor", true);
           handleCloseDialogSearch();
-        }, 1000);
+        }, 1500);
         setAudioSrc("/assets/sounds/mp3_Boing.mp3");
         audioRef?.play();
       } else if (res.length === 1 && str.length > 4) {

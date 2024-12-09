@@ -50,7 +50,7 @@ export default function Home() {
               name="password"
               type="password"
               required
-              class="ml-10 mr-3 h-7 w-[180px] border-none bg-[#00000073] text-center shadow-md outline-none hover:shadow-sm"
+              class="ml-10 mr-3 h-7 w-[180px] border-none bg-[#00000073] text-center text-4 leading-7 text-white shadow-md outline-none hover:shadow-sm"
             />
             <button
               type="submit"
