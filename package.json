@@ -9,7 +9,6 @@
   "dependencies": {
     "@corvu/dialog": "^0.2.3",
     "@darylserrano/kindle-clippings": "^2.2.5",
-    "@deno/vite-plugin": "^1.0.2",
     "@kobalte/core": "^0.13.7",
     "@solid-primitives/marker": "^0.1.0",
     "@solid-primitives/scheduled": "^1.4.4",
