@@ -1,22 +1,20 @@
-@import "./styles/fonts.css";
-@import "./styles/buttons.css";
-@import "./styles/login.css";
-@import "./styles/layout.css";
-@import "./styles/definition.css";
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-img {
-  -webkit-user-drag: none;
+:root {
+  --background-rgb: 214, 219, 220;
+  --foreground-rgb: 0, 0, 0;
 }
 
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-rgb: 0, 0, 0;
+    --foreground-rgb: 255, 255, 255;
+  }
 }
 
 body {
-  scroll-behavior: smooth;
-  box-sizing: border-box;
+  background: rgb(var(--background-rgb));
+  color: rgb(var(--foreground-rgb));
 }

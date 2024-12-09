@@ -1,5 +1,0 @@
-user-agent: *
-disallow: /
-allow: /public/
-
-sitemap: https://hoctuvung3.vercel.app/vocabulary
