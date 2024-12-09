@@ -98,24 +98,27 @@ const Schedule: Component<{}> = (props) => {
   createEffect(
     on(
       () => submitNewScheduleAction.result,
-      () => {
-        if (submitNewScheduleAction.result?.message === "success") {
+      (v) => {
+        if (!v) return;
+        toast.clear();
+        if (v!.message === "success") {
           toast.success("Done");
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
-          audioRef?.load();
-          audioRef?.addEventListener("canplaythrough", () => {
-            audioRef?.play();
-          });
-        } else if (
-          submitNewScheduleAction.result?.message !== "success" &&
-          submitNewScheduleAction.result?.message !== undefined
-        ) {
-          toast.error(submitNewScheduleAction.result?.message!);
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
+        } else if (v!.message !== "success" && v!.message !== undefined) {
+          toast.error(v!.message!);
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
-          audioRef?.load();
-          audioRef?.addEventListener("canplaythrough", () => {
-            audioRef?.play();
-          });
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
         }
         setOpenDialogSchedule(false);
       },
@@ -127,24 +130,27 @@ const Schedule: Component<{}> = (props) => {
   createEffect(
     on(
       () => submitTodayResetAction.result,
-      () => {
-        if (submitTodayResetAction.result?.message === "success") {
+      (v) => {
+        if (!v) return;
+        toast.clear();
+        if (v!.message === "success") {
           toast.success("Done");
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
-          audioRef?.load();
-          audioRef?.addEventListener("canplaythrough", () => {
-            audioRef?.play();
-          });
-        } else if (
-          submitTodayResetAction.result?.message !== "success" &&
-          submitTodayResetAction.result?.message !== undefined
-        ) {
-          toast.error(submitTodayResetAction.result?.message!);
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
+        } else if (v!.message !== "success" && v!.message !== undefined) {
+          toast.error(v!.message!);
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
-          audioRef?.load();
-          audioRef?.addEventListener("canplaythrough", () => {
-            audioRef?.play();
-          });
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
         }
         setOpenDialogReset(false);
       },

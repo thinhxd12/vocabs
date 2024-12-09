@@ -163,6 +163,8 @@ export default function Layout(props: RouteSectionProps) {
         if (active() !== null) {
           handleCheckAndRender(vocabStore.searchResults[active()!]);
           handleCloseDialogSearch();
+        } else if (vocabStore.searchResults.length === 0) {
+          setVocabStore("showTranslate", true);
         }
         return;
       }
@@ -223,10 +225,15 @@ export default function Layout(props: RouteSectionProps) {
   };
 
   const [openDeleteAlert, setOpenDeleteAlert] = createSignal<boolean>(false);
+  const [deleteId, setDeleteId] = createSignal<string>("");
+
+  const handleOpenDialogDelete = (id: string) => {
+    setDeleteId(id);
+    setOpenDeleteAlert(true);
+  };
 
   const confirmDelete = () => {
-    const deleteWord = () => vocabStore.searchResults;
-    deleteVocabulary(deleteWord()[active()!].created_at);
+    deleteVocabulary(deleteId());
     rejectDelete();
   };
 
@@ -241,7 +248,7 @@ export default function Layout(props: RouteSectionProps) {
     <main
       class="flex h-screen w-screen justify-center overflow-hidden bg-black"
       tabIndex={1}
-      onKeyDown={handleKeyDownMain}
+      on:keydown={handleKeyDownMain}
       ref={(el) => setLayoutStore("layoutMainRef", el)}
     >
       <audio ref={audioRef} hidden src={audioSrc()} />
@@ -343,7 +350,9 @@ export default function Layout(props: RouteSectionProps) {
                         </div>
                         <div
                           class="relative z-50 flex h-full w-9.5 items-center justify-center pr-1"
-                          onClick={() => setOpenDeleteAlert(true)}
+                          onClick={() =>
+                            handleOpenDialogDelete(item.created_at)
+                          }
                         >
                           <BsTrash3 size={13} color="white" />
                         </div>

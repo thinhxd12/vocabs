@@ -146,7 +146,6 @@
   flex-direction: column;
   gap: 2px;
   width: 100%;
-  margin: 1px 0 2px;
 }
 .progress__label-container {
   display: flex;

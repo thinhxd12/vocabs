@@ -30,7 +30,7 @@ import { getUser } from "~/lib/login";
 
 const Vocab: Component<{}> = (props) => {
   // ***************check login**************
-  // const user = createAsync(() => getUser(), { deferStream: true });
+  const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
   const totalMemories_data = createAsync(() => getTotalMemories());
@@ -41,8 +41,13 @@ const Vocab: Component<{}> = (props) => {
     }
   });
 
+  let audioRef: HTMLAudioElement | undefined;
   let audioRef1: HTMLAudioElement | undefined;
   let audioRef2: HTMLAudioElement | undefined;
+
+  const [audioSrc, setAudioSrc] = createSignal<string>(
+    "/assets/sounds/mp3_Ding.mp3",
+  );
 
   const [audioSrc1, setAudioSrc1] = createSignal<string>(
     "/assets/sounds/mp3_Ding.mp3",
@@ -98,35 +103,34 @@ const Vocab: Component<{}> = (props) => {
   createEffect(
     on(
       () => editActionResult.result,
-      () => {
-        if (editActionResult.result?.message === "success") {
+      (v) => {
+        toast.clear();
+        if (!v) return;
+        if (v!.message === "success") {
           toast.success("Edit Successful");
-          setAudioSrc1("/assets/sounds/mp3_Ding.mp3");
-          audioRef1?.load();
-          audioRef1?.addEventListener("canplaythrough", () => {
-            audioRef1?.play();
-          });
-        } else if (
-          editActionResult.result?.message !== "success" &&
-          editActionResult.result?.message !== undefined
-        ) {
-          toast.error(editActionResult.result?.message!);
-          setAudioSrc1("/assets/sounds/mp3_Boing.mp3");
-          audioRef1?.load();
-          audioRef1?.addEventListener("canplaythrough", () => {
-            audioRef1?.play();
-          });
+          setAudioSrc("/assets/sounds/mp3_Ding.mp3");
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
+          if (renderWordStore()?.word === editWordStore()?.word) {
+            setVocabStore("renderWord", editWordStore());
+          }
+        } else if (v!.message !== "success" && v!.message !== undefined) {
+          toast.error(v!.message);
+          setAudioSrc("/assets/sounds/mp3_Boing.mp3");
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
         }
       },
     ),
   );
-
-  const handleSubmitForm = (e: any) => {
-    e.preventDefault();
-    if (renderWordStore()?.word === editWordStore()?.word) {
-      setVocabStore("renderWord", editWordStore());
-    }
-  };
 
   const handleCloseDialogEdit = (open: boolean) => {
     if (!open) layoutStore.layoutMainRef?.focus();
@@ -137,31 +141,44 @@ const Vocab: Component<{}> = (props) => {
 
   const [translateWord, setTranslateWord] = createSignal<
     VocabularyType | undefined
-  >();
+  >({
+    word: "",
+    audio: "",
+    phonetics: "",
+    number: 240,
+    translations: [],
+    definitions: [],
+    created_at: "",
+  });
 
   const insertActionResult = useSubmission(insertVocabularyItem);
 
   createEffect(
     on(
       () => insertActionResult.result,
-      () => {
-        if (insertActionResult.result?.message === "success") {
-          toast.success("New word has been saved successfully.");
-          setAudioSrc1("/assets/sounds/mp3_Ding.mp3");
-          audioRef1?.load();
-          audioRef1?.addEventListener("canplaythrough", () => {
-            audioRef1?.play();
-          });
-        } else if (
-          insertActionResult.result?.message !== "success" &&
-          insertActionResult.result?.message !== undefined
-        ) {
-          toast.error(insertActionResult.result?.message!);
-          setAudioSrc1("/assets/sounds/mp3_Boing.mp3");
-          audioRef1?.load();
-          audioRef1?.addEventListener("canplaythrough", () => {
-            audioRef1?.play();
-          });
+      (v) => {
+        if (!v) return;
+        toast.clear();
+        if (v!.message === "success") {
+          toast.success(
+            `"${translateWord()?.word}" has been saved successfully.`,
+          );
+          setAudioSrc("/assets/sounds/mp3_Ding.mp3");
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
+        } else if (v!.message !== "success" && v!.message !== undefined) {
+          toast.error(v!.message);
+          setAudioSrc("/assets/sounds/mp3_Boing.mp3");
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
         }
       },
     ),
@@ -170,12 +187,15 @@ const Vocab: Component<{}> = (props) => {
   const handleGetTranslateWord = async (word: string) => {
     const checkMemories = await searchMemoriesText(word);
     if (checkMemories) {
+      toast.clear();
       toast.error(checkMemories.message);
-      setAudioSrc1("/assets/sounds/mp3_Boing.mp3");
-      audioRef1?.load();
-      audioRef1?.addEventListener("canplaythrough", () => {
-        audioRef1?.play();
-      });
+      setAudioSrc("/assets/sounds/mp3_Boing.mp3");
+      if (audioRef) {
+        audioRef.load();
+        audioRef.addEventListener("canplaythrough", () => {
+          audioRef.play();
+        });
+      }
       return;
     }
     const data = await getTextDataWebster(word);
@@ -200,18 +220,22 @@ const Vocab: Component<{}> = (props) => {
         const tranSound = `https://vocabs3.vercel.app/speech?text=${translations}`;
 
         setAudioSrc1(v as string);
-        audioRef1?.load();
-        audioRef1?.addEventListener("canplaythrough", () => {
-          audioRef1?.play();
-        });
-
-        audioRef1?.addEventListener("ended", () => {
-          setAudioSrc2(tranSound);
-          audioRef2?.load();
-          audioRef2?.addEventListener("canplaythrough", () => {
-            audioRef2?.play();
+        if (audioRef1) {
+          audioRef1.load();
+          audioRef1.addEventListener("canplaythrough", () => {
+            audioRef1.play();
           });
-        });
+
+          audioRef1.addEventListener("ended", () => {
+            setAudioSrc2(tranSound);
+            if (audioRef2) {
+              audioRef2.load();
+              audioRef2.addEventListener("canplaythrough", () => {
+                audioRef2.play();
+              });
+            }
+          });
+        }
       },
     ),
   );
@@ -222,6 +246,7 @@ const Vocab: Component<{}> = (props) => {
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <main class="relative h-full w-full">
+        <audio ref={audioRef} hidden src={audioSrc()} />
         <audio ref={audioRef1} hidden src={audioSrc1()} />
         <audio ref={audioRef2} hidden src={audioSrc2()} />
         <div class="relative h-11 w-full border-b border-[#343434] bg-[url('/images/input-wall.webp')] bg-cover pt-[7px]">
@@ -240,7 +265,7 @@ const Vocab: Component<{}> = (props) => {
         <div class="no-scrollbar relative z-50 h-[calc(100vh-72px)] w-full overflow-y-scroll bg-black">
           <Show when={renderWordStore()}>
             <Show when={renderWordStore()}>
-              <FlipNumber value={renderWordStore()?.number!} />
+              <FlipNumber value={renderWordStore()!.number} />
             </Show>
 
             <Definition
@@ -254,16 +279,16 @@ const Vocab: Component<{}> = (props) => {
         <Dialog
           open={vocabStore.showTranslate}
           onOpenChange={(open) => setVocabStore("showTranslate", open)}
+          onInitialFocus={() => handleGetTranslateWord(vocabStore.searchTerm)}
         >
           <Dialog.Portal>
             <Dialog.Overlay
               class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 h-[calc(100vh-36px)] w-[360px] bg-black/60`}
             />
-
             <div
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] w-[360px] items-center justify-center bg-black`}
+              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center bg-black`}
             >
-              <Dialog.Content class="no-scrollbar z-50 h-full w-full overflow-y-scroll outline-none">
+              <Dialog.Content class="no-scrollbar z-50 h-full w-[360px] overflow-y-scroll outline-none">
                 <div class="flex h-8 w-full justify-end border-b border-gray-500 bg-gray-200">
                   <Dialog.Close class="btn-close">
                     <OcX2 size={15} />
@@ -274,6 +299,11 @@ const Vocab: Component<{}> = (props) => {
                   class="w-full bg-[#fffeff] p-1"
                   action={insertVocabularyItem}
                   method="post"
+                  on:keydown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                    }
+                  }}
                 >
                   <input
                     class="h-9 w-full border-0 bg-black text-center font-constantine text-6 font-700 uppercase leading-9 text-white outline-none"
@@ -282,7 +312,6 @@ const Vocab: Component<{}> = (props) => {
                     value={vocabStore.translateTerm}
                     onKeyDown={async (e) => {
                       if (e.key === "Enter") {
-                        e.preventDefault();
                         handleGetTranslateWord(e.currentTarget.value);
                       }
                     }}
@@ -396,7 +425,7 @@ const Vocab: Component<{}> = (props) => {
             />
 
             <div
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] w-[360px] items-center justify-center bg-black`}
+              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center bg-black`}
             >
               <Dialog.Content class="no-scrollbar z-50 h-full w-full overflow-y-scroll outline-none">
                 <div class="flex h-8 w-full justify-end border-b border-gray-500 bg-gray-200">
@@ -409,7 +438,6 @@ const Vocab: Component<{}> = (props) => {
                   class="w-full bg-[#fffeff] p-1"
                   action={editVocabularyItem}
                   method="post"
-                  onSubmit={(e) => handleSubmitForm(e)}
                 >
                   <input
                     hidden
@@ -560,7 +588,7 @@ const Vocab: Component<{}> = (props) => {
         </Dialog>
 
         <Portal>
-          <Toast.Region duration={3000}>
+          <Toast.Region duration={3000} limit={1}>
             <Toast.List class="toast__list" />
           </Toast.Region>
         </Portal>

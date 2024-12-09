@@ -11,6 +11,7 @@ function show(message: string) {
     </Toast>
   ));
 }
+
 function success(message: string) {
   return toaster.show((props) => (
     <Toast toastId={props.toastId} class="toast toast--success">
@@ -95,6 +96,11 @@ function custom(jsx: () => JSX.Element) {
 function dismiss(id: number) {
   return toaster.dismiss(id);
 }
+
+function clear() {
+  return toaster.clear();
+}
+
 export const toast = {
   show,
   success,
@@ -102,4 +108,5 @@ export const toast = {
   promise,
   custom,
   dismiss,
+  clear,
 };

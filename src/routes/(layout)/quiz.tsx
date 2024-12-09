@@ -11,6 +11,7 @@ import {
   updateTodayScheduleStore,
 } from "~/lib/server";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
+import FlipNumber from "~/components/FlipNumber";
 
 const Quiz: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
@@ -27,7 +28,7 @@ const Quiz: Component<{}> = (props) => {
     on(
       () => quizStore.quizContent,
       (v) => {
-        if (quizStore.quizContent.length > 0) {
+        if (v.length > 0) {
           setTimeout(() => {
             getRandomChoices();
           }, 500);
@@ -51,7 +52,7 @@ const Quiz: Component<{}> = (props) => {
     const filteredChoices = quizStore.quizContent.filter(
       (choice) => choice.created_at !== quizStore.quizRender.created_at,
     );
-    let randomChoices = arrayShuffle(filteredChoices).slice(0, 4);
+    let randomChoices = arrayShuffle(filteredChoices).slice(0, 3);
     randomChoices = arrayShuffle([...randomChoices, quizStore.quizRender]);
     const allChoices = randomChoices.map((item) => {
       return {
@@ -135,17 +136,19 @@ const Quiz: Component<{}> = (props) => {
               </span>
             </Show>
           </div>
+
+          <Progress
+            value={quizStore.quizCount + 1}
+            minValue={1}
+            maxValue={quizStore.quizContent.length}
+            class="progress"
+          >
+            <Progress.Track class="progress__track">
+              <Progress.Fill class="progress__fill" />
+            </Progress.Track>
+          </Progress>
+
           <Show when={quizStore.quizContent.length > 0}>
-            <Progress
-              value={quizStore.quizCount + 1}
-              minValue={1}
-              maxValue={quizStore.quizContent.length + 1}
-              class="progress"
-            >
-              <Progress.Track class="progress__track">
-                <Progress.Fill class="progress__fill" />
-              </Progress.Track>
-            </Progress>
             <div class="mt-5 grid w-full grid-cols-1 gap-1">
               <Show
                 when={checked()}
