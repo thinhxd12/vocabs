@@ -34,7 +34,7 @@
     "vinxi": "^0.4.3"
   },
   "overrides": {
-    "vite": "5.4.11"
+    "vite": "5.0.0"
   },
   "engines": {
     "node": ">=18"

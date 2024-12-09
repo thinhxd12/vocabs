@@ -8,9 +8,9 @@ export default defineConfig({
     preset: "vercel",
     compatibilityDate: "2024-11-18",
   },
-  // solid: {
-  //   babel: {
-  //     compact: true,
-  //   },
-  // },
+  solid: {
+    babel: {
+      compact: true,
+    },
+  },
 });
