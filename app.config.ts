@@ -13,4 +13,18 @@ export default defineConfig({
       compact: true,
     },
   },
+  vite: {
+    resolve: {
+      extensions: [
+        ".mjs",
+        ".js",
+        ".mts",
+        ".css",
+        ".ts",
+        ".jsx",
+        ".tsx",
+        ".json",
+      ],
+    },
+  },
 });
