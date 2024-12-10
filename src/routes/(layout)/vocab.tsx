@@ -379,7 +379,7 @@ const Vocab: Component<{}> = (props) => {
                     autocomplete="off"
                     value={vocabStore.translateTerm}
                     onKeyDown={(e) => {
-                      if (e.key === "Enter") {
+                      if (e.keyCode === 13 || e.key === "Enter") {
                         e.preventDefault();
                         handleGetTranslateWord(e.currentTarget.value);
                       }

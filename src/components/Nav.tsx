@@ -58,13 +58,13 @@ const Nav: Component<{}> = (props) => {
       setNavStore("locationList", locationList_data()!);
       setNavStore("defaultLocation", locationList_data()![0]);
 
-      // getBottomWeatherData();
-      // weatherInterval = setInterval(
-      //   () => {
-      //     getBottomWeatherData();
-      //   },
-      //   1000 * 15 * 60,
-      // );
+      getBottomWeatherData();
+      weatherInterval = setInterval(
+        () => {
+          getBottomWeatherData();
+        },
+        1000 * 15 * 60,
+      );
     }
   });
 
