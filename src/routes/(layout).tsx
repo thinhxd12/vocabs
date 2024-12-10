@@ -36,6 +36,7 @@ import { debounce } from "@solid-primitives/scheduled";
 import { OcX2 } from "solid-icons/oc";
 import Dialog from "@corvu/dialog";
 import toast, { Toaster } from "solid-toast";
+import { BiRegularSkipPrevious } from "solid-icons/bi";
 
 declare module "solid-js" {
   namespace JSX {
@@ -75,6 +76,9 @@ export default function Layout(props: RouteSectionProps) {
     clearTimeout(deleteSearchTimeout);
   });
 
+  const [layoutImageDataPrevious, setLayoutImageDataPrevious] =
+    createSignal<ImageType>(defaultLayoutImageData);
+
   const [layoutImageData, setLayoutImageData] = createSignal<ImageType>(
     defaultLayoutImageData,
   );
@@ -83,9 +87,17 @@ export default function Layout(props: RouteSectionProps) {
     if (layoutImageData().nextImageUrl) {
       const result = await getDataImage(layoutImageData().nextImageUrl!);
       if (result) {
+        setLayoutImageDataPrevious(layoutImageData());
         setLayoutImageData(result);
       } else handleGetUnsplashImage();
     } else handleGetUnsplashImage();
+  };
+
+  const handleGetPreviousImage = () => {
+    const previousData = layoutImageDataPrevious();
+    const currentData = layoutImageData();
+    setLayoutImageData(previousData);
+    setLayoutImageDataPrevious(currentData);
   };
 
   const handleGetUnsplashImage = async () => {
@@ -290,6 +302,9 @@ export default function Layout(props: RouteSectionProps) {
 
             <div class="absolute bottom-0.5 right-0.5 z-50 flex">
               <Show when={!showBookmark()}>
+                <button class="btn-layout" onClick={handleGetPreviousImage}>
+                  <BiRegularSkipPrevious size={21} />
+                </button>
                 <button class="btn-layout" onClick={handleGetImage}>
                   <TbRefresh size={18} />
                 </button>
@@ -314,7 +329,6 @@ export default function Layout(props: RouteSectionProps) {
                 src={layoutImageData().authorImg}
                 width={45}
                 height={45}
-                hash="aBgGHwSUL3RQqnZheJh3eJh4pwjmV1AN"
                 className="rounded object-cover drop-shadow"
               />
               <div class="ml-2 font-basier text-4 font-400 leading-4 text-white">
