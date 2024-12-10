@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 import Definition from "~/components/Definition";
 import { VocabularyTranslationType, VocabularyType } from "~/types";
-import { OcX2 } from "solid-icons/oc";
+import { OcSearch2, OcX2 } from "solid-icons/oc";
 import { FiChevronDown } from "solid-icons/fi";
 import { BiSolidSave } from "solid-icons/bi";
 import {
@@ -64,10 +64,25 @@ const Vocab: Component<{}> = (props) => {
   );
 
   /////////////////////edit////////////////////////////
-
   const [editWordGet, setEditWordGet] = createSignal<
     VocabularyType | undefined
   >();
+
+  const handleGetEditWord = async (word: string) => {
+    const data = await getTextDataWebster(word);
+    if (data) {
+      setEditWordGet({
+        ...editWordStore()!,
+        definitions: data!.definitions,
+      });
+      setVocabStore("editWord", {
+        ...editWordStore()!,
+        definitions: data!.definitions,
+        phonetics: data!.phonetics,
+        audio: data!.audio,
+      });
+    }
+  };
 
   const makeTranslationText = (arr: VocabularyTranslationType[]) => {
     return arr
@@ -373,24 +388,36 @@ const Vocab: Component<{}> = (props) => {
                     }
                   }}
                 >
-                  <input
-                    class="h-9 w-full border-0 bg-black text-center font-constantine text-6 font-700 uppercase leading-9 text-white outline-none"
-                    name="word"
-                    autocomplete="off"
-                    value={vocabStore.translateTerm}
-                    onKeyDown={(e) => {
-                      if (e.keyCode === 13 || e.key === "Enter") {
+                  <div class="relative">
+                    <input
+                      class="h-9 w-full border-0 bg-black text-center font-constantine text-6 font-700 uppercase leading-9 text-white outline-none"
+                      name="word"
+                      autocomplete="off"
+                      value={vocabStore.translateTerm}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleGetTranslateWord(e.currentTarget.value);
+                        }
+                      }}
+                      onInput={(e) => {
+                        setTranslateWord({
+                          ...translateWord()!,
+                          word: e.currentTarget.value,
+                        });
+                        setVocabStore("translateTerm", e.currentTarget.value);
+                      }}
+                    />
+                    <button
+                      onClick={(e) => {
                         e.preventDefault();
-                        handleGetTranslateWord(e.currentTarget.value);
-                      }
-                    }}
-                    onChange={async (e) => {
-                      setTranslateWord({
-                        ...translateWord()!,
-                        word: e.currentTarget.value,
-                      });
-                    }}
-                  />
+                        handleGetTranslateWord(vocabStore.translateTerm);
+                      }}
+                      class="absolute right-0 top-0 flex h-9 w-9 items-center justify-center text-white"
+                    >
+                      <OcSearch2 size={18} />
+                    </button>
+                  </div>
 
                   <input
                     class="mb-1 w-full border-0 border-b border-[#343434] p-1 font-basier text-4 font-400 leading-5 text-black outline-none"
@@ -501,38 +528,36 @@ const Vocab: Component<{}> = (props) => {
                     autocomplete="off"
                     value={editWordStore()?.created_at}
                   />
-                  <input
-                    class="h-9 w-full border-0 bg-black text-center font-constantine text-6 font-700 uppercase leading-9 text-white outline-none"
-                    name="word"
-                    autocomplete="off"
-                    value={editWordStore()?.word}
-                    onKeyDown={async (e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        const data = await getTextDataWebster(
-                          e.currentTarget.value,
-                        );
-                        if (data) {
-                          setEditWordGet({
-                            ...editWordStore()!,
-                            definitions: data!.definitions,
-                          });
-                          setVocabStore("editWord", {
-                            ...editWordStore()!,
-                            definitions: data!.definitions,
-                            phonetics: data!.phonetics,
-                            audio: data!.audio,
-                          });
+
+                  <div class="relative">
+                    <input
+                      class="h-9 w-full border-0 bg-black text-center font-constantine text-6 font-700 uppercase leading-9 text-white outline-none"
+                      name="word"
+                      autocomplete="off"
+                      value={editWordStore()?.word}
+                      onKeyDown={async (e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleGetEditWord(e.currentTarget.value);
                         }
-                      }
-                    }}
-                    onChange={async (e) => {
-                      setVocabStore("editWord", {
-                        ...editWordStore()!,
-                        word: e.currentTarget.value,
-                      });
-                    }}
-                  />
+                      }}
+                      onInput={(e) => {
+                        setVocabStore("editWord", {
+                          ...editWordStore()!,
+                          word: e.currentTarget.value,
+                        });
+                      }}
+                    />
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleGetEditWord(vocabStore.editWord!.word);
+                      }}
+                      class="absolute right-0 top-0 flex h-9 w-9 items-center justify-center text-white"
+                    >
+                      <OcSearch2 size={18} />
+                    </button>
+                  </div>
 
                   <input
                     class="mb-1 w-full border-0 border-b border-[#343434] p-1 font-basier text-4 font-400 leading-5 text-black outline-none"
