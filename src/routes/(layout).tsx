@@ -35,6 +35,7 @@ import { format } from "date-fns";
 import { debounce } from "@solid-primitives/scheduled";
 import { OcX2 } from "solid-icons/oc";
 import Dialog from "@corvu/dialog";
+import toast, { Toaster } from "solid-toast";
 
 declare module "solid-js" {
   namespace JSX {
@@ -232,8 +233,33 @@ export default function Layout(props: RouteSectionProps) {
     setOpenDeleteAlert(true);
   };
 
-  const confirmDelete = () => {
-    deleteVocabulary(deleteId());
+  const confirmDelete = async () => {
+    const res = await deleteVocabulary(deleteId());
+    if (res.message === "success") {
+      toast.success("Successfully deleted!", {
+        className: "text-4 font-sfpro",
+        position: "bottom-right",
+      });
+      setAudioSrc("/assets/sounds/mp3_Ding.mp3");
+      if (audioRef) {
+        audioRef.load();
+        audioRef.addEventListener("canplaythrough", () => {
+          audioRef.play();
+        });
+      }
+    } else {
+      toast.error(res.message, {
+        position: "bottom-right",
+        className: "text-4 font-sfpro",
+      });
+      setAudioSrc("/assets/sounds/mp3_Boing.mp3");
+      if (audioRef) {
+        audioRef.load();
+        audioRef.addEventListener("canplaythrough", () => {
+          audioRef.play();
+        });
+      }
+    }
     rejectDelete();
   };
 
@@ -370,10 +396,10 @@ export default function Layout(props: RouteSectionProps) {
       <Dialog open={openDeleteAlert()} onOpenChange={setOpenDeleteAlert}>
         <Dialog.Portal>
           <Dialog.Overlay
-            class={`fixed ${layoutStore.showLayout ? "inset-[36px_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-11 z-50 h-[calc(100vh-72px)] w-[360px] bg-black/60`}
+            class={`fixed ${layoutStore.showLayout ? "inset-[36px_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-11 z-50 h-[calc(100vh-72px)] min-w-[360px] max-w-[360px] bg-black/60`}
           />
           <div
-            class={`fixed ${layoutStore.showLayout ? "inset-[36px_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-11 z-50 flex h-[calc(100vh-72px)] w-[360px] items-center justify-center bg-black`}
+            class={`fixed ${layoutStore.showLayout ? "inset-[36px_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-11 z-50 flex h-[calc(100vh-72px)] min-w-[360px] max-w-[360px] items-center justify-center bg-black`}
           >
             <Dialog.Content
               class={`no-scrollbar z-50 w-[210px] overflow-hidden overflow-y-scroll rounded-sm bg-gray-50 outline-none`}
@@ -404,6 +430,8 @@ export default function Layout(props: RouteSectionProps) {
           </div>
         </Dialog.Portal>
       </Dialog>
+
+      <Toaster />
     </main>
   );
 }

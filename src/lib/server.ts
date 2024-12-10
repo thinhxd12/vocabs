@@ -426,6 +426,8 @@ export const deleteVocabulary = async (time: string) => {
     .from(mapTables.vocabulary)
     .delete()
     .eq("created_at", time);
+  if (error) return { message: error.message };
+  return { message: "success" };
 };
 
 //edit vocabulary

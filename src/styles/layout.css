@@ -141,33 +141,19 @@
 }
 
 /* PROGRESS */
-.progress {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  width: 100%;
-}
-.progress__label-container {
-  display: flex;
-  justify-content: space-between;
-}
-.progress__label,
-.progress__value-label {
-  color: hsl(240 4% 16%);
-  font-size: 14px;
-}
 .progress__track {
   height: 3px;
-  background-color: rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.6);
+  position: relative;
 }
+
 .progress__fill {
+  position: absolute;
+  top: 0;
+  left: 0;
   background-color: #38e07b;
   height: 100%;
-  width: var(--kb-progress-fill-width);
   transition: width 250ms linear;
-}
-.progress__fill[data-progress="complete"] {
-  background-color: #2563eb;
-  box-shadow: 0px 0px 2px #000000;
 }

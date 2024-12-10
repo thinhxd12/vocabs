@@ -31,10 +31,8 @@ import {
   submitNewSchedule,
   submitTodayReset,
 } from "~/lib/server";
-import { toast } from "~/components/Toast";
-import { Toast } from "@kobalte/core/toast";
-import { Portal } from "solid-js/web";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
+import toast, { Toaster } from "solid-toast";
 
 const todayDate = format(new Date(), "yyyy-MM-dd");
 export const route = {
@@ -100,9 +98,11 @@ const Schedule: Component<{}> = (props) => {
       () => submitNewScheduleAction.result,
       (v) => {
         if (!v) return;
-        toast.clear();
         if (v!.message === "success") {
-          toast.success("Done");
+          toast.success("Successfully saved!", {
+            className: "text-4 font-sfpro",
+            position: "bottom-right",
+          });
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
             audioRef.load();
@@ -111,7 +111,10 @@ const Schedule: Component<{}> = (props) => {
             });
           }
         } else if (v!.message !== "success" && v!.message !== undefined) {
-          toast.error(v!.message!);
+          toast.error(v!.message, {
+            position: "bottom-right",
+            className: "text-4 font-sfpro",
+          });
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
           if (audioRef) {
             audioRef.load();
@@ -132,9 +135,11 @@ const Schedule: Component<{}> = (props) => {
       () => submitTodayResetAction.result,
       (v) => {
         if (!v) return;
-        toast.clear();
         if (v!.message === "success") {
-          toast.success("Done");
+          toast.success("Successfully saved!", {
+            className: "text-4 font-sfpro",
+            position: "bottom-right",
+          });
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
             audioRef.load();
@@ -143,7 +148,10 @@ const Schedule: Component<{}> = (props) => {
             });
           }
         } else if (v!.message !== "success" && v!.message !== undefined) {
-          toast.error(v!.message!);
+          toast.error(v!.message, {
+            className: "text-4 font-sfpro",
+            position: "bottom-right",
+          });
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
           if (audioRef) {
             audioRef.load();
@@ -352,11 +360,11 @@ const Schedule: Component<{}> = (props) => {
         <Dialog open={openDialogReset()} onOpenChange={setOpenDialogReset}>
           <Dialog.Portal>
             <Dialog.Overlay
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 h-[calc(100vh-36px)] w-[360px] bg-black/60`}
+              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 h-[calc(100vh-36px)] w-[360px] bg-black/60`}
             />
 
             <div
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] w-[360px] items-center justify-center`}
+              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] w-[360px] items-center justify-center`}
             >
               <Dialog.Content class="no-scrollbar z-50 w-3/4 overflow-y-scroll rounded-sm outline-none">
                 <div class="flex h-8 w-full justify-between border-b border-gray-500 bg-gray-200">
@@ -415,11 +423,11 @@ const Schedule: Component<{}> = (props) => {
         >
           <Dialog.Portal>
             <Dialog.Overlay
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 h-[calc(100vh-36px)] w-[360px] bg-black/60`}
+              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 h-[calc(100vh-36px)] w-[360px] bg-black/60`}
             />
 
             <div
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] w-[360px] items-center justify-center`}
+              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] w-[360px] items-center justify-center`}
             >
               <Dialog.Content class="no-scrollbar z-50 w-3/4 overflow-y-scroll rounded-sm outline-none">
                 <div class="flex h-8 w-full justify-between border-b border-gray-500 bg-gray-200">
@@ -447,11 +455,7 @@ const Schedule: Component<{}> = (props) => {
           </Dialog.Portal>
         </Dialog>
 
-        <Portal>
-          <Toast.Region duration={3000}>
-            <Toast.List class="toast__list" />
-          </Toast.Region>
-        </Portal>
+        <Toaster />
       </main>
     </MetaProvider>
   );

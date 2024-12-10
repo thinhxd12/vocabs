@@ -58,13 +58,13 @@ const Nav: Component<{}> = (props) => {
       setNavStore("locationList", locationList_data()!);
       setNavStore("defaultLocation", locationList_data()![0]);
 
-      getBottomWeatherData();
-      weatherInterval = setInterval(
-        () => {
-          getBottomWeatherData();
-        },
-        1000 * 15 * 60,
-      );
+      // getBottomWeatherData();
+      // weatherInterval = setInterval(
+      //   () => {
+      //     getBottomWeatherData();
+      //   },
+      //   1000 * 15 * 60,
+      // );
     }
   });
 
@@ -447,11 +447,11 @@ const Nav: Component<{}> = (props) => {
           >
             <img
               src="/images/input-left-corner.webp"
-              class="absolute left-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute left-0 top-0 z-20 h-full w-auto"
             />
             <img
               src="/images/input-right-corner.webp"
-              class="absolute right-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute right-0 top-0 z-20 h-full w-auto"
             />
             <div class="absolute bottom-0 left-0 right-0 top-0 z-10 bg-[url('/images/exit.webp')] bg-cover"></div>
           </button>
@@ -464,11 +464,11 @@ const Nav: Component<{}> = (props) => {
           <div class="relative ml-11 h-full w-[86px] border border-[#343434]">
             <img
               src="/images/input-left-corner.webp"
-              class="absolute left-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute left-0 top-0 z-20 h-full w-auto"
             />
             <img
               src="/images/input-right-corner.webp"
-              class="absolute right-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute right-0 top-0 z-20 h-full w-auto"
             />
             <div
               class={`absolute bottom-0 left-0 right-0 top-0 z-10 bg-[url('/images/flower1.webp')] bg-cover text-center font-roslindale text-5.5 font-700 leading-[34px] ${navStore.listType === 1 ? "text-[#38E07B]" : "text-white"} `}
@@ -491,11 +491,11 @@ const Nav: Component<{}> = (props) => {
           <div class="relative ml-11 h-full w-[86px] border border-[#343434]">
             <img
               src="/images/input-left-corner.webp"
-              class="absolute left-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute left-0 top-0 z-20 h-full w-auto"
             />
             <img
               src="/images/input-right-corner.webp"
-              class="absolute right-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute right-0 top-0 z-20 h-full w-auto"
             />
             <div
               class={`absolute bottom-0 left-0 right-0 top-0 z-10 bg-[url('/images/flower2.webp')] bg-cover text-center font-roslindale text-5.5 font-700 leading-[34px] ${navStore.listType === 2 ? "text-[#38E07B]" : "text-white"} `}
@@ -518,11 +518,11 @@ const Nav: Component<{}> = (props) => {
           <div class="relative ml-11 h-full w-[86px] border border-[#343434]">
             <img
               src="/images/input-left-corner.webp"
-              class="absolute left-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute left-0 top-0 z-20 h-full w-auto"
             />
             <img
               src="/images/input-right-corner.webp"
-              class="absolute right-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute right-0 top-0 z-20 h-full w-auto"
             />
             <div class="absolute bottom-0 left-0 right-0 top-0 z-10 bg-[url('/images/bookmark.webp')] bg-cover"></div>
           </div>
@@ -535,11 +535,11 @@ const Nav: Component<{}> = (props) => {
           <div class="relative ml-11 h-full w-[86px] border border-[#343434]">
             <img
               src="/images/input-left-corner.webp"
-              class="absolute left-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute left-0 top-0 z-20 h-full w-auto"
             />
             <img
               src="/images/input-right-corner.webp"
-              class="absolute right-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute right-0 top-0 z-20 h-full w-auto"
             />
             <div class="absolute bottom-0 left-0 right-0 top-0 z-10 bg-[url('/images/translate.webp')] bg-cover"></div>
           </div>
@@ -553,11 +553,11 @@ const Nav: Component<{}> = (props) => {
           <div class="relative ml-11 h-full w-[86px] border border-[#343434] bg-black">
             <img
               src="/images/input-left-corner.webp"
-              class="absolute left-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute left-0 top-0 z-20 h-full w-auto"
             />
             <img
               src="/images/input-right-corner.webp"
-              class="absolute right-0 top-0 z-20 h-[34px] w-auto"
+              class="absolute right-0 top-0 z-20 h-full w-auto"
             />
             <div
               class="absolute bottom-0 left-0 z-10 h-full bg-[url('/images/hourglass.webp')] bg-cover bg-left-top"

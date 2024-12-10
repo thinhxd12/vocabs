@@ -1,6 +1,5 @@
 import { format } from "date-fns";
 import { Component, createEffect, createSignal, For, on, Show } from "solid-js";
-import { Progress } from "@kobalte/core/progress";
 import { navStore, quizStore, setQuizStore } from "~/lib/store";
 import { createAsync } from "@solidjs/router";
 import { getUser } from "~/lib/login";
@@ -11,7 +10,6 @@ import {
   updateTodayScheduleStore,
 } from "~/lib/server";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-import FlipNumber from "~/components/FlipNumber";
 
 const Quiz: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
@@ -137,16 +135,16 @@ const Quiz: Component<{}> = (props) => {
             </Show>
           </div>
 
-          <Progress
-            value={quizStore.quizCount}
-            minValue={0}
-            maxValue={quizStore.quizContent.length - 1}
-            class="progress"
-          >
-            <Progress.Track class="progress__track">
-              <Progress.Fill class="progress__fill" />
-            </Progress.Track>
-          </Progress>
+          <Show when={quizStore.quizCount}>
+            <div class="progress__track">
+              <div
+                class="progress__fill"
+                style={{
+                  width: `${((quizStore.quizCount + 1) / quizStore.quizContent.length) * 100}%`,
+                }}
+              ></div>
+            </div>
+          </Show>
 
           <Show when={quizStore.quizContent.length > 0}>
             <div class="mt-5 grid w-full grid-cols-1 gap-1">

@@ -10,7 +10,6 @@ import {
 import Definition from "~/components/Definition";
 import { VocabularyTranslationType, VocabularyType } from "~/types";
 import { OcX2 } from "solid-icons/oc";
-import { Collapsible } from "@kobalte/core/collapsible";
 import { FiChevronDown } from "solid-icons/fi";
 import { BiSolidSave } from "solid-icons/bi";
 import {
@@ -29,13 +28,12 @@ import {
   searchMemoriesText,
   searchText,
 } from "~/lib/server";
-import { toast } from "~/components/Toast";
-import { Toast } from "@kobalte/core/toast";
 import Dialog from "@corvu/dialog";
-import { Portal } from "solid-js/web";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { getUser } from "~/lib/login";
 import { debounce } from "@solid-primitives/scheduled";
+import toast, { Toaster } from "solid-toast";
+import Collapsible from "~/components/Collapsible";
 
 const Vocab: Component<{}> = (props) => {
   // ***************check login**************
@@ -113,10 +111,12 @@ const Vocab: Component<{}> = (props) => {
     on(
       () => editActionResult.result,
       (v) => {
-        toast.clear();
         if (!v) return;
         if (v!.message === "success") {
-          toast.success("Edit Successful");
+          toast.success("Successfully saved!", {
+            className: "text-4 font-sfpro",
+            position: "bottom-right",
+          });
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
             audioRef.load();
@@ -128,7 +128,10 @@ const Vocab: Component<{}> = (props) => {
             setVocabStore("renderWord", editWordStore());
           }
         } else if (v!.message !== "success" && v!.message !== undefined) {
-          toast.error(v!.message);
+          toast.error(v!.message, {
+            position: "bottom-right",
+            className: "text-4 font-sfpro",
+          });
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
           if (audioRef) {
             audioRef.load();
@@ -147,7 +150,6 @@ const Vocab: Component<{}> = (props) => {
   };
 
   /////////////////////translate////////////////////////////
-
   const [translateWord, setTranslateWord] = createSignal<
     VocabularyType | undefined
   >({
@@ -167,10 +169,13 @@ const Vocab: Component<{}> = (props) => {
       () => insertActionResult.result,
       (v) => {
         if (!v) return;
-        toast.clear();
         if (v!.message === "success") {
           toast.success(
-            `"${translateWord()?.word}" has been saved successfully.`,
+            `"${vocabStore.translateTerm}" has been saved successfully!`,
+            {
+              className: "text-4 font-sfpro",
+              position: "bottom-right",
+            },
           );
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
@@ -180,7 +185,10 @@ const Vocab: Component<{}> = (props) => {
             });
           }
         } else if (v!.message !== "success" && v!.message !== undefined) {
-          toast.error(v!.message);
+          toast.error(v!.message, {
+            position: "bottom-right",
+            className: "text-4 font-sfpro",
+          });
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
           if (audioRef) {
             audioRef.load();
@@ -196,8 +204,10 @@ const Vocab: Component<{}> = (props) => {
   const handleGetTranslateWord = async (word: string) => {
     const checkMemories = await searchMemoriesText(word);
     if (checkMemories) {
-      toast.clear();
-      toast.error(checkMemories.message);
+      toast.error(checkMemories.message, {
+        position: "bottom-right",
+        className: "text-4 font-sfpro",
+      });
       setAudioSrc("/assets/sounds/mp3_Boing.mp3");
       if (audioRef) {
         audioRef.load();
@@ -338,16 +348,13 @@ const Vocab: Component<{}> = (props) => {
         <Dialog
           open={vocabStore.showTranslate}
           onOpenChange={(open) => setVocabStore("showTranslate", open)}
-          onInitialFocus={() =>
-            handleGetTranslateWord(vocabStore.translateTerm)
-          }
         >
           <Dialog.Portal>
             <Dialog.Overlay
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 h-[calc(100vh-36px)] w-[360px] bg-black/60`}
+              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] bg-black/60`}
             />
             <div
-              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center bg-black`}
+              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center bg-black`}
             >
               <Dialog.Content class="no-scrollbar z-50 h-full w-[360px] overflow-y-scroll outline-none">
                 <div class="flex h-8 w-full justify-end border-b border-gray-500 bg-gray-200">
@@ -371,8 +378,9 @@ const Vocab: Component<{}> = (props) => {
                     name="word"
                     autocomplete="off"
                     value={vocabStore.translateTerm}
-                    onKeyDown={async (e) => {
+                    onKeyDown={(e) => {
                       if (e.key === "Enter") {
+                        e.preventDefault();
                         handleGetTranslateWord(e.currentTarget.value);
                       }
                     }}
@@ -417,36 +425,24 @@ const Vocab: Component<{}> = (props) => {
                     value={JSON.stringify(translateWord()?.definitions)}
                   />
 
-                  <Collapsible class="border-b border-[#343434]">
-                    <div class="flex h-[22px] w-full justify-end">
-                      <Show when={translateWord()?.definitions.length}>
-                        <Collapsible.Trigger class="collapsible__trigger">
-                          <FiChevronDown
-                            size={15}
-                            class="collapsible__trigger-icon"
-                          />
-                        </Collapsible.Trigger>
-                      </Show>
-                    </div>
-                    <Collapsible.Content>
-                      <textarea
-                        class="mb-1 h-fit w-full border-0 p-1 font-basier text-4 font-400 leading-5 text-black outline-none"
-                        name="definitions"
-                        autocomplete="off"
-                        rows="12"
-                        value={JSON.stringify(
-                          translateWord()?.definitions,
-                          null,
-                          " ",
-                        )}
-                        onChange={(e) => {
-                          setTranslateWord({
-                            ...translateWord()!,
-                            definitions: JSON.parse(e.currentTarget.value),
-                          });
-                        }}
-                      />
-                    </Collapsible.Content>
+                  <Collapsible>
+                    <textarea
+                      class="w-full border-0 font-basier text-4 font-400 leading-5 text-black outline-none"
+                      name="definitions"
+                      autocomplete="off"
+                      rows="12"
+                      value={JSON.stringify(
+                        translateWord()?.definitions,
+                        null,
+                        " ",
+                      )}
+                      onChange={(e) => {
+                        setTranslateWord({
+                          ...translateWord()!,
+                          definitions: JSON.parse(e.currentTarget.value),
+                        });
+                      }}
+                    />
                   </Collapsible>
 
                   <input
@@ -482,11 +478,10 @@ const Vocab: Component<{}> = (props) => {
         >
           <Dialog.Portal>
             <Dialog.Overlay
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 h-[calc(100vh-36px)] w-[360px] bg-black/60`}
+              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] bg-black/60`}
             />
-
             <div
-              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50%-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center bg-black`}
+              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center bg-black`}
             >
               <Dialog.Content class="no-scrollbar z-50 h-full w-full overflow-y-scroll outline-none">
                 <div class="flex h-8 w-full justify-end border-b border-gray-500 bg-gray-200">
@@ -572,38 +567,28 @@ const Vocab: Component<{}> = (props) => {
                     value={JSON.stringify(editWordStore()?.definitions)}
                   />
 
-                  <Collapsible class="border-b border-[#343434]">
-                    <div class="flex h-[22px] w-full justify-end">
-                      <Collapsible.Trigger class="collapsible__trigger">
-                        <FiChevronDown
-                          size={15}
-                          class="collapsible__trigger-icon"
-                        />
-                      </Collapsible.Trigger>
-                    </div>
-                    <Collapsible.Content>
-                      <textarea
-                        class="mb-1 h-fit w-full border-0 p-1 font-basier text-4 font-400 leading-5 text-black outline-none"
-                        name="definitionsCollapsible"
-                        autocomplete="off"
-                        rows="12"
-                        value={JSON.stringify(
-                          editWordStore()?.definitions,
-                          null,
-                          " ",
-                        )}
-                        onChange={(e) => {
-                          setVocabStore("editWord", {
-                            ...editWordStore()!,
-                            definitions: JSON.parse(e.currentTarget.value),
-                          });
-                          setEditWordGet({
-                            ...editWordStore()!,
-                            definitions: JSON.parse(e.currentTarget.value),
-                          });
-                        }}
-                      />
-                    </Collapsible.Content>
+                  <Collapsible>
+                    <textarea
+                      class="w-full border-0 font-basier text-4 font-400 leading-5 text-black outline-none"
+                      name="definitionsCollapsible"
+                      autocomplete="off"
+                      rows="12"
+                      value={JSON.stringify(
+                        editWordStore()?.definitions,
+                        null,
+                        " ",
+                      )}
+                      onChange={(e) => {
+                        setVocabStore("editWord", {
+                          ...editWordStore()!,
+                          definitions: JSON.parse(e.currentTarget.value),
+                        });
+                        setEditWordGet({
+                          ...editWordStore()!,
+                          definitions: JSON.parse(e.currentTarget.value),
+                        });
+                      }}
+                    />
                   </Collapsible>
 
                   <input
@@ -648,11 +633,7 @@ const Vocab: Component<{}> = (props) => {
           </Dialog.Portal>
         </Dialog>
 
-        <Portal>
-          <Toast.Region duration={3000} limit={1}>
-            <Toast.List class="toast__list" />
-          </Toast.Region>
-        </Portal>
+        <Toaster />
       </main>
     </MetaProvider>
   );
