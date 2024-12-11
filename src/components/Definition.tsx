@@ -13,8 +13,8 @@ const Definition: Component<{
       <For each={props.item.definitions}>
         {(entry) => (
           <div class="w-full">
-            <div class="group flex items-center justify-between px-1 pt-0.5">
-              <div class="pl-4 font-sfpro text-[13px] font-500 leading-4 text-black opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="group flex h-11 items-end justify-between">
+              <div class="w-[143px] text-wrap indent-4 font-sfpro text-[13px] font-500 leading-6 text-black opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 {props.item.translations
                   .find(
                     (el: VocabularyTranslationType) =>
@@ -23,7 +23,7 @@ const Definition: Component<{
                   ?.translations.join("-")}
               </div>
               <div
-                class="-mb-0.5 cursor-pointer font-sfpro text-9.5 font-700 uppercase leading-9 text-black"
+                class="-mb-0.5 w-[143px] cursor-pointer truncate px-0.5 text-right font-sfpro text-8.5 font-700 uppercase leading-8 text-black"
                 onClick={props.onEdit || props.onCheck}
               >
                 {entry.partOfSpeech}

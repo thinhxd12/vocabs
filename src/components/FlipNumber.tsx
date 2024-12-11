@@ -10,6 +10,7 @@ import TickStatic from "./TickStatic";
 import TickAnimate from "./TickAnimate";
 import TickAnimateComplete from "./TickAnimateComplete";
 import { Motion, Presence } from "solid-motionone";
+import TickStaticComplete from "./TickStaticComplete";
 
 const FlipNumber: Component<{
   value: number;
@@ -22,6 +23,8 @@ const FlipNumber: Component<{
     let strNumber = props.value.toString().padStart(3, "0");
     setNumbArray(Array.from(String(strNumber), Number));
     setTimeout(() => {
+      let strNumber = (props.value - 1).toString().padStart(3, "0");
+      setNumbArray(Array.from(String(strNumber), Number));
       setShowFlipAnimate(false);
     }, 3600);
   });
@@ -43,23 +46,23 @@ const FlipNumber: Component<{
 
   return (
     <Presence>
-      <Show when={showFlipAnimate()}>
-        <Motion.div
-          initial={{ y: -150 }}
-          animate={{
-            y: 27,
-          }}
-          exit={{
-            scale: 0.96,
-            opacity: 0,
-            transition: { duration: 0.1, easing: "ease" },
-          }}
-          transition={{
-            duration: 0.3,
-            delay: 0.5,
-            easing: easeOutBounce,
-          }}
-          class="absolute left-[59px] z-50 flex font-helvetica text-[140px] font-600 leading-[115px] text-[#f4f4f4]"
+      <div class="absolute left-[143px] top-0 z-50 flex font-helvetica text-[40px] font-600 leading-[36px] text-[#f4f4f4]">
+        <Show
+          when={showFlipAnimate()}
+          fallback={
+            <Switch>
+              <Match when={props.value > 1}>
+                <TickStatic number={numbArray()[numbArray().length - 3]} />
+                <TickStatic number={numbArray()[numbArray().length - 2]} />
+                <TickStatic number={numbArray()[numbArray().length - 1]} />
+              </Match>
+              <Match when={props.value === 1}>
+                <TickStatic number={0} />
+                <TickStatic number={0} />
+                <TickStaticComplete />
+              </Match>
+            </Switch>
+          }
         >
           <Switch
             fallback={
@@ -104,8 +107,8 @@ const FlipNumber: Component<{
               <TickAnimateComplete delay={1.5} />
             </Match>
           </Switch>
-        </Motion.div>
-      </Show>
+        </Show>
+      </div>
     </Presence>
   );
 };

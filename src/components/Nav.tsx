@@ -512,7 +512,7 @@ const Nav: Component<{}> = (props) => {
         </div>
 
         <div
-          class="h-11 w-fit translate-x-[86px] cursor-pointer transition-all hover:translate-x-0"
+          class="hidden h-11 w-fit translate-x-[86px] cursor-pointer transition-all hover:translate-x-0 sm:block"
           onClick={() => setLayoutStore("showLayout", !layoutStore.showLayout)}
         >
           <div class="relative ml-11 h-full w-[86px] border border-[#343434]">
