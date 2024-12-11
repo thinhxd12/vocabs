@@ -129,7 +129,7 @@ export default function Layout(props: RouteSectionProps) {
         deleteSearchTimeout = setTimeout(() => {
           setVocabStore("searchTermColor", true);
           handleCloseDialogSearch();
-        }, 1500);
+        }, 1000);
         setAudioSrc("/assets/sounds/mp3_Boing.mp3");
         audioRef?.play();
       } else if (res.length === 1 && str.length > 4) {
@@ -145,11 +145,12 @@ export default function Layout(props: RouteSectionProps) {
 
   const handleKeyDownMain = (e: KeyboardEvent) => {
     if (location.pathname === "/vocab") {
-      clearTimeout(checkTimeout);
       let value = vocabStore.searchTerm;
       if (e.key === "Backspace") {
+        checkTimeout && clearTimeout(checkTimeout);
+        deleteSearchTimeout && clearTimeout(deleteSearchTimeout);
         value = value.slice(0, -1);
-        trigger(value.toLowerCase());
+        if (value.length > 2) trigger(value.toLowerCase());
         setVocabStore("searchTerm", value);
         return;
       } else if (e.key.match(/^[1-9]$/)) {
@@ -162,10 +163,11 @@ export default function Layout(props: RouteSectionProps) {
         return;
       } else if (e.key === " ") {
         value = "";
+        checkTimeout && clearTimeout(checkTimeout);
         setVocabStore("searchTerm", value);
         handleCloseDialogSearch();
         return;
-      } else if (e.key.length === 1) {
+      } else if (e.key.match(/^[a-zA-Z\-]$/)) {
         value += e.key;
         if (value.length > 2) {
           trigger(value.toLowerCase());
@@ -377,7 +379,7 @@ export default function Layout(props: RouteSectionProps) {
                           {index() + 1}
                         </button>
                         <div
-                          class={`${active() === index() ? "scale-[2.7]" : ""} relative z-30 grow text-center font-constantine text-7 font-700 leading-9.5 text-white transition duration-100`}
+                          class={`${active() === index() ? "scale-[2.1]" : ""} relative z-30 grow text-center font-constantine text-8 font-700 leading-9 text-white transition duration-100`}
                           style={{
                             "text-shadow":
                               active() === index()

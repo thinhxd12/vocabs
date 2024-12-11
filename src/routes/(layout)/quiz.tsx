@@ -10,6 +10,7 @@ import {
   updateTodayScheduleStore,
 } from "~/lib/server";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
+import FlipNumber from "~/components/FlipNumber";
 
 const Quiz: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
@@ -129,7 +130,7 @@ const Quiz: Component<{}> = (props) => {
                   .map((tran) => tran.translations.join(", "))
                   .join(", ")}
               </p>
-              <span class="absolute left-[101px] top-0.1 font-opensans text-2.5 font-600 leading-2.5 text-white">
+              <span class="absolute left-[135px] top-0 z-10 w-[90px] text-center font-helvetica text-[45px] font-600 leading-11 text-white/45">
                 {quizStore.quizRender.number}
               </span>
             </Show>

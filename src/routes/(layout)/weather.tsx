@@ -400,7 +400,7 @@ const Weather: Component<{}> = (props) => {
 
         <div class="relative z-50 h-full w-full p-2">
           <select
-            class="block min-h-[29px] w-full cursor-pointer rounded-lg bg-transparent p-1.5 text-center font-sfpro text-7 font-400 leading-7 text-white outline-none"
+            class="mx-auto block min-h-[29px] w-1/3 cursor-pointer rounded-lg bg-transparent p-1.5 text-center font-sfpro text-7 font-400 leading-7 text-white outline-none"
             style={{ appearance: "none" }}
             onchange={(e) => handleRenderWeather(e.currentTarget.value)}
           >

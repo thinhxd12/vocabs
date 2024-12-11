@@ -320,6 +320,7 @@ const Vocab: Component<{}> = (props) => {
             class={`back absolute left-0 top-0 block w-full truncate bg-transparent text-center font-constantine text-7 font-700 uppercase leading-10.5 outline-none sm:hidden ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
             type="text"
             autocomplete="off"
+            name="mobileInputSearch"
             value={vocabStore.searchTerm || renderWordStore()?.word}
             onFocus={(e) => {
               setVocabStore("searchTerm", "");

@@ -389,7 +389,7 @@ const Nav: Component<{}> = (props) => {
           }
           width={21}
           height={21}
-          class="absolute right-3.5 top-0.5 brightness-90"
+          class="absolute right-3.5 top-0 brightness-90"
           style={{
             filter: "drop-shadow(0px 2px 2px #000000)",
           }}
@@ -398,7 +398,7 @@ const Nav: Component<{}> = (props) => {
           style={{
             "text-shadow": "0px 0px 6px #000000",
           }}
-          class="absolute right-0.1 top-0.5 font-sfpro text-2.5 font-600 leading-2.5 text-white"
+          class="absolute right-0 top-0 font-sfpro text-2.5 font-600 leading-2.5 text-white"
         >
           {Math.round(navWeatherData().temperature)}°
         </span>
