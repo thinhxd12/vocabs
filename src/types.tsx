@@ -82,16 +82,16 @@ export interface HistoryItemType {
   to_date: string;
 }
 
-export interface ImageType {
-  image: string;
-  date: string;
+export interface LayoutImageType {
+  mainImage: string;
+  shareDate: string;
   title: string;
   attr: string;
-  authorImg: string;
-  authorName: string;
-  authorYear: string;
-  content?: string;
-  nextImageUrl?: string;
+  authorImage: string;
+  author: string;
+  authorYears: string;
+  content: string;
+  alsoItems: { url: string | undefined; img: string | undefined }[];
 }
 
 export interface TranslateType {

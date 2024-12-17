@@ -1,20 +1,6 @@
-import { RouteSectionProps, useLocation } from "@solidjs/router";
-import {
-  createSignal,
-  For,
-  onCleanup,
-  onMount,
-  Show,
-  Suspense,
-} from "solid-js";
-import { ImageType, VocabularySearchType } from "~/types";
-import "../styles/layout.css";
-import LayoutImageLoader from "~/components/LayoutImageLoader";
-import { ImBooks } from "solid-icons/im";
-import { TbRefresh } from "solid-icons/tb";
-import Bookmark from "~/components/Bookmark";
-import Nav from "~/components/Nav";
-import ImageLoader from "~/components/ImageLoader";
+import { createAsync, RouteSectionProps, useLocation } from "@solidjs/router";
+import { createSignal, For, lazy, onCleanup, onMount, Show } from "solid-js";
+import { LoginImageType, VocabularySearchType } from "~/types";
 import {
   layoutStore,
   setLayoutStore,
@@ -25,98 +11,54 @@ import { BsTrash3 } from "solid-icons/bs";
 import { createList } from "solid-list";
 import {
   deleteVocabulary,
-  getDataImage,
-  getUnsplashImage,
+  getSpotlightImage,
   getWordData,
   handleCheckAndRender,
   searchText,
 } from "~/lib/server";
-import { format } from "date-fns";
 import { debounce } from "@solid-primitives/scheduled";
 import { OcX2 } from "solid-icons/oc";
 import Dialog from "@corvu/dialog";
 import toast, { Toaster } from "solid-toast";
-import { BiRegularSkipPrevious } from "solid-icons/bi";
-
-declare module "solid-js" {
-  namespace JSX {
-    interface Directives {
-      handleKeyDown: null;
-    }
-  }
-}
+import { getUser } from "~/lib/login";
+import { VsSymbolColor } from "solid-icons/vs";
+import { FiBookOpen } from "solid-icons/fi";
+const Art = lazy(() => import("~/components/Art"));
+const Bookmark = lazy(() => import("~/components/Bookmark"));
+import Nav from "~/components/Nav";
 
 export default function Layout(props: RouteSectionProps) {
+  // ***************check login**************
+  const user = createAsync(() => getUser(), { deferStream: true });
+  // ***************check login**************
+
   let audioRef: HTMLAudioElement | undefined;
+  let scrollContainer: HTMLDivElement | undefined;
   let checkTimeout: NodeJS.Timeout;
   let deleteSearchTimeout: NodeJS.Timeout;
 
   const [audioSrc, setAudioSrc] = createSignal<string>();
+  const [imageData, setImageData] = createSignal<LoginImageType | undefined>();
 
-  onMount(() => {
+  onMount(() => {});
+
+  onMount(async () => {
     if (audioRef) audioRef.volume = 0.1;
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent,
+      );
+    setLayoutStore("isMobile", isMobile);
+    const data = await getSpotlightImage();
+    setImageData(data);
   });
-
-  const defaultLayoutImageData: ImageType = {
-    image: "https://hoctuvung3.vercel.app/images/main-image.webp",
-    date: "01 July 2023",
-    title: "The Red Buoy, Saint-Tropez",
-    attr: "Oil on canvas • 81 × 65 cm",
-    authorImg: "https://hoctuvung3.vercel.app/images/main-author.webp",
-    authorName: "Paul Signac",
-    authorYear: "1895",
-    content:
-      "\x3Cp>Hello July!\x3C/p>\x3Cp>Time for an artist who in my opinion, created one of the best images of Summer ... the French Pointillist, Paul Signac!\x3C/p>\x3Cp>Signac was a painter and an avid sailor. He created several marine paintings, including a series of views over the port of Saint-Tropez, where he settled in 1892.\x3C/p>\x3Cp>In this vertical painting, the eye initially fixes on the vibrant red-orange buoy, which contrasts with the water's deep blue. The reflections of the buildings then lead the viewer's eye to the background, with lighter tones. The divisionist technique and the combination of pure colors allowed Signac to depict a glittering sea, and the glimmering light of the Midi.\x3C/p>\x3Cp>The Pointillist painters differ from the Impressionists, most notably in the scientific dimension of their work. Regarding the rigor of his initial work, Signac's strokes have widened for this series; the division of tones is more relaxed.\x3C/p>",
-    nextImageUrl:
-      "https://www.getdailyart.com/en/24707/mykola-pymonenko/the-idyll",
-  };
 
   onCleanup(() => {
     clearTimeout(checkTimeout);
     clearTimeout(deleteSearchTimeout);
   });
 
-  const [layoutImageDataPrevious, setLayoutImageDataPrevious] =
-    createSignal<ImageType>(defaultLayoutImageData);
-
-  const [layoutImageData, setLayoutImageData] = createSignal<ImageType>(
-    defaultLayoutImageData,
-  );
-
-  const handleGetImage = async () => {
-    if (layoutImageData().nextImageUrl) {
-      const result = await getDataImage(layoutImageData().nextImageUrl!);
-      if (result) {
-        setLayoutImageDataPrevious(layoutImageData());
-        setLayoutImageData(result);
-      } else handleGetUnsplashImage();
-    } else handleGetUnsplashImage();
-  };
-
-  const handleGetPreviousImage = () => {
-    const previousData = layoutImageDataPrevious();
-    const currentData = layoutImageData();
-    setLayoutImageData(previousData);
-    setLayoutImageDataPrevious(currentData);
-  };
-
-  const handleGetUnsplashImage = async () => {
-    const data = await getUnsplashImage();
-    if (data)
-      setLayoutImageData({
-        image: data[0].urls.regular,
-        date: format(new Date(data[0].created_at), "PP"),
-        title: data[0].description || data[0].alt_description,
-        attr: data[0].exif.name,
-        authorImg: data[0].user.profile_image.medium,
-        authorName: data[0].user.name,
-        authorYear: "",
-      });
-  };
-
   const [showBookmark, setShowBookmark] = createSignal<boolean>(false);
-  const handleShowBookmark = () => setShowBookmark(!showBookmark());
-
   const location = useLocation();
 
   const trigger = debounce(async (str: string) => {
@@ -194,17 +136,12 @@ export default function Layout(props: RouteSectionProps) {
   };
 
   const handleSelectSearchResult = (index: number) => {
-    setActive(null);
+    setActive(index);
     handleCheckAndRender(vocabStore.searchResults[index]);
     setTimeout(() => {
-      setActive(index);
-    }, 200);
-    setTimeout(() => {
       setActive(null);
-    }, 400);
-    setTimeout(() => {
       handleCloseDialogSearch();
-    }, 600);
+    }, 300);
   };
 
   const { active, setActive, onKeyDown } = createList({
@@ -286,157 +223,126 @@ export default function Layout(props: RouteSectionProps) {
 
   return (
     <main
-      class="flex h-screen w-screen justify-center overflow-hidden bg-black"
+      class="relative h-screen w-screen overflow-hidden outline-none"
       tabIndex={1}
       on:keydown={handleKeyDownMain}
       ref={(el) => setLayoutStore("layoutMainRef", el)}
     >
       <audio ref={audioRef} hidden src={audioSrc()} />
-      <Show when={layoutStore.showLayout}>
-        <div class="hidden sm:flex sm:h-full sm:flex-grow">
-          <div class="relative h-full w-[calc(100vw-660px)]">
-            <Show
-              when={showBookmark()}
-              fallback={<LayoutImageLoader src={layoutImageData().image} />}
-            >
+      <Show when={imageData()}>
+        <img
+          src={
+            layoutStore.isMobile ? imageData()!.image_P : imageData()!.image_L
+          }
+          class="absolute z-0 h-screen w-screen object-cover"
+        />
+        <div
+          class="absolute left-0 top-0 z-10 h-full w-full"
+          style={{
+            background:
+              "radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 0.3) 85%)",
+          }}
+        ></div>
+      </Show>
+      <div class="absolute left-0 top-0 z-50 flex h-full w-full justify-center overflow-hidden">
+        <Show when={layoutStore.showLayout}>
+          <div class="relative h-full w-[calc(100vw-360px)] px-[80px] pb-[90px] pt-[50px]">
+            <Show when={showBookmark()} fallback={<Art />}>
               <Bookmark />
             </Show>
 
-            <div class="absolute bottom-0.5 right-0.5 z-50 flex">
-              <Show when={!showBookmark()}>
-                <button class="btn-layout" onClick={handleGetPreviousImage}>
-                  <BiRegularSkipPrevious size={21} />
+            <div class="absolute bottom-0 right-3 top-0 flex items-center">
+              <div class="dark-layout mx-auto flex flex-col items-center justify-center rounded-full p-1 text-white">
+                <button
+                  onClick={() => setShowBookmark(false)}
+                  class="mb-2 flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-white/15"
+                >
+                  <VsSymbolColor size={15} />
                 </button>
-                <button class="btn-layout" onClick={handleGetImage}>
-                  <TbRefresh size={18} />
+                <button
+                  onClick={() => setShowBookmark(true)}
+                  class="flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-white/15"
+                >
+                  <FiBookOpen size={15} />
                 </button>
-              </Show>
-              <button class="btn-layout" onClick={handleShowBookmark}>
-                <ImBooks size={18} />
-              </button>
-            </div>
-          </div>
-          <div class="pb5 flex h-full min-w-[300px] max-w-[300px] flex-col bg-[#19191c] p-3">
-            <p class="font-basier text-4 font-600 leading-5 text-[#989da7]">
-              {layoutImageData().date}
-            </p>
-            <h3 class="font-roslindale text-8 font-600 leading-10 text-white">
-              {layoutImageData().title}
-            </h3>
-            <p class="mb-1 font-basier text-4 font-400 leading-5 text-[#989da7]">
-              {layoutImageData().attr}
-            </p>
-            <div class="mb-4 flex justify-start">
-              <ImageLoader
-                src={layoutImageData().authorImg}
-                width={45}
-                height={45}
-                className="rounded object-cover drop-shadow"
-              />
-              <div class="ml-2 font-basier text-4 font-400 leading-4 text-white">
-                <p class="rounded-md bg-[#343434] px-2 py-1">
-                  {layoutImageData().authorName}
-                </p>
-                <p class="m-1">{layoutImageData().authorYear}</p>
               </div>
             </div>
-            <Show when={layoutImageData().content}>
-              <div
-                class="imageTextContent flex-grow overflow-auto py-3 font-basier text-4 font-400 leading-5.5 text-[#989da7]"
-                innerHTML={layoutImageData().content}
-              />
-            </Show>
           </div>
+        </Show>
+        <div class="relative h-full min-w-[360px] max-w-[360px]">
+          <Show when={vocabStore.searchResults.length > 0}>
+            <div class="dark-layout absolute top-[41px] z-50 flex h-[calc(100vh-81px)] w-full flex-col rounded-2 pt-2">
+              <For each={vocabStore.searchResults}>
+                {(item, index) => (
+                  <div
+                    aria-selected={active() === index()}
+                    onMouseOver={() => handleMouseOver(index())}
+                    onMouseOut={handleMouseOut}
+                    class="my-2 flex h-9.5 w-[360px] cursor-pointer justify-between bg-black/50"
+                  >
+                    <button
+                      class="relative z-50 h-full w-9.5 pl-2 font-basier text-3.5 font-400 leading-9.5 text-secondary-white hover:text-white"
+                      onClick={() => handleEditFromSearch(item)}
+                    >
+                      {index() + 1}
+                    </button>
+                    <div
+                      class={`${active() === index() ? "scale-[2.1]" : ""} relative z-30 grow text-center font-constantine text-8 font-700 leading-9 text-white transition duration-100`}
+                      style={{
+                        "text-shadow":
+                          active() === index()
+                            ? "0 3px 5px black"
+                            : "0 2px 3px black",
+                      }}
+                      onClick={() => handleSelectWordFromSearch(index())}
+                    >
+                      {item.word}
+                    </div>
+                    <div
+                      class="relative z-50 flex h-full w-9.5 items-center justify-center pr-1"
+                      onClick={() => handleOpenDialogDelete(item.created_at)}
+                    >
+                      <BsTrash3 size={13} color="white" />
+                    </div>
+                  </div>
+                )}
+              </For>
+            </div>
+          </Show>
+
+          {props.children}
+
+          <Show when={location.pathname !== "/"}>
+            <Nav />
+          </Show>
         </div>
-      </Show>
-
-      <div
-        class="h-full min-w-[360px] max-w-[360px]"
-        style={{
-          "box-shadow": ".5px 0 #363636,-.5px 0 #363636",
-        }}
-      >
-        <Suspense>
-          <div class="relative z-40 h-[calc(100vh-36px)] w-full">
-            {props.children}
-
-            {/* search  */}
-            <Suspense>
-              <Show when={vocabStore.searchResults.length > 0}>
-                <div class="absolute top-11 z-50 flex h-[calc(100vh-72px)] w-full flex-col bg-black pt-2">
-                  <For each={vocabStore.searchResults}>
-                    {(item, index) => (
-                      <div
-                        aria-selected={active() === index()}
-                        onMouseOver={() => handleMouseOver(index())}
-                        onMouseOut={handleMouseOut}
-                        class="my-2 flex h-9.5 w-[360px] cursor-pointer justify-between bg-[#343434]"
-                      >
-                        <button
-                          class="relative z-50 h-full w-9.5 pl-2 font-basier text-3.5 font-400 leading-9.5 text-[#f7f7f7] hover:text-white"
-                          onClick={() => handleEditFromSearch(item)}
-                        >
-                          {index() + 1}
-                        </button>
-                        <div
-                          class={`${active() === index() ? "scale-[2.1]" : ""} relative z-30 grow text-center font-constantine text-8 font-700 leading-9 text-white transition duration-100`}
-                          style={{
-                            "text-shadow":
-                              active() === index()
-                                ? "0 3px 5px black"
-                                : "0 2px 3px black",
-                          }}
-                          onClick={() => handleSelectWordFromSearch(index())}
-                        >
-                          {item.word}
-                        </div>
-                        <div
-                          class="relative z-50 flex h-full w-9.5 items-center justify-center pr-1"
-                          onClick={() =>
-                            handleOpenDialogDelete(item.created_at)
-                          }
-                        >
-                          <BsTrash3 size={13} color="white" />
-                        </div>
-                      </div>
-                    )}
-                  </For>
-                </div>
-              </Show>
-            </Suspense>
-          </div>
-        </Suspense>
-        <Nav />
       </div>
 
       <Dialog open={openDeleteAlert()} onOpenChange={setOpenDeleteAlert}>
         <Dialog.Portal>
-          <Dialog.Overlay
-            class={`fixed ${layoutStore.showLayout ? "inset-[36px_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-11 z-50 h-[calc(100vh-72px)] min-w-[360px] max-w-[360px] bg-black/60`}
-          />
           <div
-            class={`fixed ${layoutStore.showLayout ? "inset-[36px_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-11 z-50 flex h-[calc(100vh-72px)] min-w-[360px] max-w-[360px] items-center justify-center bg-black`}
+            class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} light-layout top-0 z-50 flex h-[calc(100vh-40px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center rounded-2`}
           >
             <Dialog.Content
-              class={`no-scrollbar z-50 w-[210px] overflow-hidden overflow-y-scroll rounded-sm bg-gray-50 outline-none`}
+              class={`no-scrollbar z-50 w-[210px] overflow-hidden overflow-y-scroll rounded-2 outline-none`}
             >
-              <div class="flex h-8 w-full justify-between border-b border-gray-500 bg-gray-200">
-                <Dialog.Label class="ml-1 font-rubik text-4.5 font-400 leading-8">
+              <div class="flex h-8 w-full justify-between border-b border-black/30 bg-black/90">
+                <Dialog.Label class="pl-2 text-4 font-400 leading-8 text-white">
                   Delete this word?
                 </Dialog.Label>
                 <Dialog.Close class="btn-close">
                   <OcX2 size={15} />
                 </Dialog.Close>
               </div>
-              <div class="flex w-full items-center justify-center p-1">
+              <div class="flex w-full items-center justify-center bg-white/30 p-2">
                 <button
-                  class="mx-3 flex h-8 w-[45px] items-center justify-center rounded-[3px] bg-[#070707] font-basier text-4 font-500 leading-8 text-[#ececec] shadow transition hover:bg-black hover:text-[#de0000]"
+                  class="mx-3 flex h-8 w-[45px] items-center justify-center rounded-[3px] bg-[#070707] font-basier text-4 font-500 leading-8 text-white shadow transition hover:bg-black hover:text-[#de0000]"
                   onClick={confirmDelete}
                 >
                   Yes
                 </button>
                 <button
-                  class="mx-3 flex h-8 w-[45px] items-center justify-center rounded-[3px] bg-[#070707] font-basier text-4 font-500 leading-8 text-[#ececec] shadow transition hover:bg-black hover:text-[#de0000]"
+                  class="mx-3 flex h-8 w-[45px] items-center justify-center rounded-[3px] bg-[#070707] font-basier text-4 font-500 leading-8 text-white shadow transition hover:bg-black hover:text-[#de0000]"
                   onClick={rejectDelete}
                 >
                   No

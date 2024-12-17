@@ -31,22 +31,24 @@ const FlipNumber: Component<{
 
   return (
     <Presence>
-      <div class="absolute left-[143px] top-0 z-50 flex font-helvetica text-[40px] font-600 leading-[36px] text-[#f4f4f4]">
+      <div class="flex font-helvetica text-[40px] font-600 leading-[36px] text-[#f4f4f4]">
         <Show
           when={showFlipAnimate()}
           fallback={
-            <Switch>
-              <Match when={props.value > 1}>
-                <TickStatic number={numbArray()[numbArray().length - 3]} />
-                <TickStatic number={numbArray()[numbArray().length - 2]} />
-                <TickStatic number={numbArray()[numbArray().length - 1]} />
-              </Match>
-              <Match when={props.value === 1}>
-                <TickStatic number={0} />
-                <TickStatic number={0} />
-                <TickStaticComplete />
-              </Match>
-            </Switch>
+            <Show
+              when={props.value > 1}
+              fallback={
+                <>
+                  <TickStatic number={0} />
+                  <TickStatic number={0} />
+                  <TickStaticComplete />
+                </>
+              }
+            >
+              <TickStatic number={numbArray()[numbArray().length - 3]} />
+              <TickStatic number={numbArray()[numbArray().length - 2]} />
+              <TickStatic number={numbArray()[numbArray().length - 1]} />
+            </Show>
           }
         >
           <Switch

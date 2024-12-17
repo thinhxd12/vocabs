@@ -9,12 +9,12 @@ const Definition: Component<{
   onCheck?: Setter<boolean>;
 }> = (props) => {
   return (
-    <div class="z-50 w-full bg-gray-50 shadow-md">
+    <div class="w-full overflow-hidden rounded-2 bg-white/60 shadow-lg shadow-black/45 backdrop-blur-xl">
       <For each={props.item.definitions}>
         {(entry) => (
           <div class="w-full">
-            <div class="group flex h-11 items-end justify-between">
-              <div class="w-[143px] text-wrap indent-4 font-sfpro text-[13px] font-500 leading-6 text-black opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div class="group flex h-9 items-end justify-between">
+              <div class="w-1/2 text-wrap indent-4 font-sfpro text-[13px] font-500 leading-6 text-black opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 {props.item.translations
                   .find(
                     (el: VocabularyTranslationType) =>
@@ -23,7 +23,7 @@ const Definition: Component<{
                   ?.translations.join("-")}
               </div>
               <div
-                class="-mb-0.5 w-[143px] cursor-pointer truncate px-0.5 text-right font-sfpro text-8.5 font-700 uppercase leading-8 text-black"
+                class="-mb-0.5 w-1/2 cursor-pointer truncate px-0.5 text-center font-sfpro text-8.5 font-700 uppercase leading-8 text-black"
                 onClick={props.onEdit || props.onCheck}
               >
                 {entry.partOfSpeech}
@@ -81,7 +81,7 @@ const Definition: Component<{
               </For>
 
               <Show when={entry.synonyms}>
-                <div class="flex items-center justify-start bg-[#777B77] px-1 pb-1 pt-0.1">
+                <div class="flex items-center justify-start bg-[#777b774d] px-1 pb-1 pt-0.1">
                   <RiArrowsCornerDownRightFill
                     size={16}
                     class="ml-0.1 mr-[2px] mt-0.1"

@@ -1,3 +1,4 @@
+import { FaSolidLocationDot } from "solid-icons/fa";
 import {
   Component,
   createEffect,
@@ -8,36 +9,36 @@ import {
 } from "solid-js";
 import toast, { Toaster } from "solid-toast";
 import Collapsible from "~/components/Collapsible";
+import {
+  getLayoutImage,
+  getOedSoundURL,
+  getTextDataWebster,
+} from "~/lib/server";
 
 const Text: Component<{}> = (props) => {
-  const [result, setResult] = createSignal("");
+  const [result, setResult] = createSignal<any>();
   const notify = async () => {
-    "use server";
-    // const url =
-    //   "https://visualelsewhere.wordpress.com/?infinity=scrolling?action=infinite_scroll&page=3&currentday=25.10.24&order=DESC";
-
-    const url = "https://visualelsewhere.wordpress.com/wp-json/wp/v2/2023/07/";
-    const response = await fetch(url);
-    if (!response.ok) {
-      throw new Error("Failed to fetch data");
-    }
-    const res = await response.json();
+    const res = await getOedSoundURL("grizzle");
     console.log(res);
-    // setResult(JSON.stringify(res));
-    // setResult(res);
-    // return res;
+    setResult(res);
   };
 
-  return (
-    <div>
-      <button
-        onClick={notify}
-        class="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-      >
-        Suc
-      </button>
+  // const notify1 = async () => {
+  //   const res = await getTextDataWebster1("gutter");
+  //   console.log(res);
+  //   setResult(res);
+  // };
 
-      <div>{result()}</div>
+  return (
+    <div class="flex flex-col items-start">
+      <button onClick={notify}>click</button>
+      {/* <button onClick={notify1}>click1</button> */}
+      <textarea
+        name="abc"
+        class="border-1 w-1/2 border"
+        value={JSON.stringify(result()?.definitions, null, " ")}
+        rows={12}
+      ></textarea>
     </div>
   );
 };

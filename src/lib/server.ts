@@ -8,7 +8,7 @@ import {
   FixMinutelyTWeatherType,
   HistoryItemType,
   HourlyWeatherType,
-  ImageType,
+  LayoutImageType,
   LoginImageType,
   MinutelyWeatherType,
   ScheduleProgressType,
@@ -24,11 +24,8 @@ import {
 import {
   PRECIPITATION_PROBABILITY,
   REPETITION_PATTERN,
-  getElAttribute,
-  getElText,
   mapTables,
 } from "~/lib/utils";
-import { parse } from "node-html-parser";
 import { supabase } from "./supabase";
 import { navStore, setNavStore, setVocabStore } from "./store";
 import {
@@ -36,6 +33,9 @@ import {
   readKindleClipping,
 } from "@darylserrano/kindle-clippings";
 import { URLSearchParams } from "url";
+import { load } from "cheerio";
+import sharp from "sharp";
+import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
 
 export const searchText = async (text: string) => {
   "use server";
@@ -82,62 +82,76 @@ export const searchMemoriesText = async (text: string) => {
   }
 };
 
-export const getDataImage = async (url: string) => {
+export const createThumbhash = async (imageUrl: string) => {
   "use server";
-  try {
-    const response = await fetch(url);
-    if (response.status !== 200) {
-      return undefined;
-    }
-    const pageImgHtml = await response.text();
-    const doc = parse(pageImgHtml);
-    const imgSrcGet = getElAttribute(doc, ".main-image>img", "srcset");
-    const imgDateGet = getElText(doc, ".main-description__share-date", "");
-    const imgTitleGet = getElText(doc, ".main-description__title", "");
-    const imgAttGet = getElText(doc, ".main-description__attr", "");
-    const imgAuthorImg = getElAttribute(
-      doc,
-      ".main-description__author img",
-      "srcset",
-    );
-    const imgAuthorName = getElText(doc, ".main-description__author", "");
-    const imgAuthorYear = getElText(doc, ".main-description__author-years", "");
-    const textDesc = doc.querySelectorAll(".main-description__text-content p");
-    const imgDesc =
-      textDesc.length > 0
-        ? [...textDesc]
-            .map((item, index) => {
-              const text =
-                item?.textContent &&
-                item.textContent.replace(/[\n\r]+|\s{2,}/g, " ").trim();
-              return `<p>${text}</p>`;
-            })
-            .join("")
-        : `<p>${getElText(doc, ".main-description__text-content", "")}</p>`;
-    const nextImgUrl = getElAttribute(
-      doc,
-      `.also__item:nth-child(${Math.floor(Math.random() * 9) + 1}) a`,
-      "href",
-    );
-    const regexImage = /(https?:\/\/[^\s]+iPhone\.jpg)/g;
-    const regexAuthor = /(https?:\/\/[^\s]+)/g;
-    const convertedImage = imgSrcGet.match(regexImage)[0] || "";
-    const convertedAuthorImg = imgAuthorImg.match(regexAuthor)[0] || "";
+  const imageBuffer = await fetch(imageUrl).then((res) => res.arrayBuffer());
+  const image = sharp(imageBuffer).resize(90, 90, { fit: "inside" });
+  const { data, info } = await image
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
+  return Buffer.from(binaryThumbHash).toString("base64");
+};
 
-    return {
-      image: convertedImage,
-      date: imgDateGet,
-      title: imgTitleGet,
-      attr: imgAttGet,
-      authorImg: convertedAuthorImg,
-      authorName: imgAuthorName,
-      authorYear: imgAuthorYear,
-      content: imgDesc,
-      nextImageUrl: nextImgUrl,
-    } as ImageType;
-  } catch (error) {
-    console.error(error);
+export const decodeThumbhash = (hash: string) => {
+  const thumbHashFromBase64 = Buffer.from(hash, "base64");
+  return thumbHashToDataURL(thumbHashFromBase64) as string;
+};
+
+export const getLayoutImage = async (url: string) => {
+  "use server";
+  const response = await fetch(url);
+  if (response.status !== 200) {
+    return undefined;
   }
+  const pageImgHtml = await response.text();
+  const $ = load(pageImgHtml);
+
+  let mainImage = $(".main-image img")
+    .attr("srcset")
+    ?.trim()
+    .replace(/\n/g, " ");
+  const shareDate = $(".main-description__share-date").text().trim();
+  const title = $(".main-description__title").text().trim();
+  const attr = $(".main-description__attr").text().trim();
+  const authorImage = $(".main-description__author img")
+    .attr("src")
+    ?.trim()
+    .replace(/\n/g, " ");
+  const author = $(".main-description__author").text().trim();
+  const authorYears = $(".main-description__author-years").text().trim();
+  const content = $(".main-description__text-content")
+    .html()
+    ?.trim()
+    .replace(/\n/g, " ");
+  const alsoItems = [] as {
+    url: string | undefined;
+    img: string | undefined;
+  }[];
+  $(".also__item").each((index, element) => {
+    const url = $(element).find("a").attr("href");
+    const img = $(element)
+      .find(".also__item-image img")
+      .attr("srcset")
+      ?.trim()
+      .replace(/\n/g, " ");
+    alsoItems.push({ url, img });
+  });
+
+  mainImage = mainImage?.split(" ")[0];
+  const result = {
+    mainImage,
+    shareDate,
+    title,
+    attr,
+    authorImage,
+    author,
+    authorYears,
+    content,
+    alsoItems,
+  };
+  return result as LayoutImageType;
 };
 
 //get translate data
@@ -175,210 +189,104 @@ export const getTextDataWebster = query(async (text: string) => {
     created_at: "",
   };
 
-  const newText = text.length > 4 ? text.slice(0, -2) : text;
-  const regText = new RegExp(`(${newText}\\w*)`, "gi");
+  interface ExampleExtendType {
+    type: string;
+    content: ExampleType;
+  }
 
   try {
     const data = await Promise.all([fetchGetText(url), getOedSoundURL(text)]);
-    const doc = parse(data[0]);
-    result.word = getElText(doc, "h1.hword", text);
-    result.phonetics = getElText(doc, ".prons-entries-list-inline a", "");
-    result.audio = data[1];
+    const $ = load(data[0]);
+    result.word = $("h1.hword").text();
+    result.audio = data[1] || "";
+    result.phonetics = $(".prons-entries-list-inline a").first().text().trim();
 
-    const firstHead = getElText(
-      doc,
-      ".entry-header-content .parts-of-speech",
-      "",
-    );
-    firstHead.split(" ").shift();
+    //Definitions
+    $('div[id^="dictionary-entry-"]').each((index, element) => {
+      const partOfSpeech = $(element).find(".parts-of-speech a").first().text();
+      let definitions: DefinitionType[] = [];
+      let synonyms = "";
+      let example: ExampleType[] = [];
 
-    //find examples
-    let examplesArray = [] as {
-      partOfSpeech: string;
-      example: ExampleType[];
-    }[];
-    const examplesContent = doc.querySelector(".on-web-container");
-    if (examplesContent) {
-      const header = getElText(examplesContent, ".function-label-header", "");
-      if (header) {
-        examplesContent
-          .querySelectorAll(".function-label-header")
-          .forEach((element, index) => {
-            let resultItem = {
-              partOfSpeech:
-                element.textContent.toLowerCase().split(" ").shift() || "",
-              example: [] as ExampleType[],
-            };
-            const example = element.nextElementSibling;
-            let exampleItem = {
-              sentence: "",
-              author: "",
-              title: "",
-              year: "",
-            } as ExampleType;
-            let quote = getElText(example, ".t", "");
-            if (quote !== "") {
-              quote = quote.replace(regText, `<b>$1</b>`);
-            }
-            exampleItem.sentence = quote !== "" ? quote : "";
-            let cred = getElText(example, ".auth", "")
-              .replace("—", "")
-              .split(", ");
-            exampleItem.author = cred[cred.length - 3]
-              ? cred[cred.length - 3]
-              : "";
-            exampleItem.title = cred[cred.length - 2]
-              ? cred[cred.length - 2]
-              : "";
-            exampleItem.year = cred[cred.length - 1]
-              ? cred[cred.length - 1]
-              : "";
-            resultItem.example.push(exampleItem);
-            examplesArray.push(resultItem);
+      let firstDefinition: DefinitionType = {
+        image: "",
+        hash: "",
+        definition: [],
+      };
+
+      let definitionItems = $(element).find(".vg-sseq-entry-item .sb").first();
+      definitionItems.each((index, element) => {
+        $(element)
+          .find(".sb-entry")
+          .each((ind, item) => {
+            let sense = $(item)
+              .text()
+              .trim()
+              .replace(/[\n\r]+|\s{2,}/g, " ");
+            if (sense.slice(0, 1) === ":") sense = "&emsp;" + sense;
+            firstDefinition.definition.push({ sense });
           });
-      } else {
-        let resultItem = {
-          partOfSpeech: "",
-          example: [] as ExampleType[],
-        };
-        resultItem.partOfSpeech = firstHead;
+      });
 
-        const example = examplesContent.querySelector(".sub-content-thread");
-        let exampleItem = {
-          sentence: "",
-          author: "",
-          title: "",
-          year: "",
-        } as ExampleType;
-        let quote = getElText(example, ".t", "");
-        if (quote !== "") {
-          quote = quote.replace(regText, `<b>$1</b>`);
-        }
-        exampleItem.sentence = quote !== "" ? quote : "";
-        let cred = getElText(example, ".auth", "").replace("—", "").split(", ");
-        exampleItem.author = cred[cred.length - 3] ? cred[cred.length - 3] : "";
-        exampleItem.title = cred[cred.length - 2] ? cred[cred.length - 2] : "";
-        exampleItem.year = cred[cred.length - 1] ? cred[cred.length - 1] : "";
-        resultItem.example.push(exampleItem);
-        examplesArray.push(resultItem);
-      }
-    }
-
-    //find synonyms
-    let synonymsArray = [] as { partOfSpeech: string; synonyms: string }[];
-    const synonymsContent = doc.querySelector("#synonyms");
-    if (synonymsContent) {
-      const header = getElText(synonymsContent, ".function-label", "");
-      if (header) {
-        synonymsContent
-          .querySelectorAll(".function-label")
-          .forEach((element, index) => {
-            let resultItem = {
-              partOfSpeech:
-                element.textContent.toLowerCase().split(" ").shift() || "",
-              synonyms: "",
-            };
-            const synItem = synonymsContent.querySelectorAll("ul")[index];
-            let listItems = synItem.querySelectorAll("li");
-            for (let i = 0; i < 3; i++) {
-              if (listItems[i]) {
-                resultItem.synonyms +=
-                  i < 2
-                    ? listItems[i].textContent + ", "
-                    : listItems[i].textContent;
-              }
-            }
-            synonymsArray.push(resultItem);
-          });
-      } else {
-        let resultItem = {
-          partOfSpeech: "",
-          synonyms: "",
-        };
-        resultItem.partOfSpeech = firstHead;
-        const listItems = synonymsContent.querySelectorAll("ul li");
-        for (let i = 0; i < 3; i++) {
-          if (listItems[i]) {
-            resultItem.synonyms +=
-              i < 2
-                ? listItems[i].textContent + ", "
-                : listItems[i].textContent;
-          }
-        }
-        synonymsArray.push(resultItem);
-      }
-    }
-
-    result.definitions = handleGetDefinitions(data[0]).map((item: any) => {
-      return {
-        partOfSpeech: item.partOfSpeech,
-        definitions: item.definitions,
-        synonyms:
-          synonymsArray.find((ele) => ele.partOfSpeech === item.partOfSpeech)
-            ?.synonyms || "",
-        example:
-          examplesArray.find((ele) => ele.partOfSpeech === item.partOfSpeech)
-            ?.example || [],
-      } as VocabularyDefinitionType;
+      definitions.push(firstDefinition);
+      result.definitions.push({ partOfSpeech, definitions, synonyms, example });
     });
 
+    //Synonym
+    let synonymArray: { type: string; content: string[] }[] = [];
+    const synonymTitle = $("#synonyms").find(".function-label");
+    synonymTitle.each((index, element) => {
+      let type = $(element).text().toLowerCase().trim();
+      let content: any = [];
+      $(element)
+        .next()
+        .find("li")
+        .slice(0, 3)
+        .each((ind, item) => {
+          content.push($(item).text());
+        });
+      synonymArray.push({ type, content });
+    });
+
+    //Example
+    let exampleArray: ExampleExtendType[] = [];
+    const exampleTitle = $(".on-web").find(".function-label-header");
+    exampleTitle.each((index, element) => {
+      let type = $(element).text().toLowerCase().trim();
+      let sentence =
+        $(element).next().find(".t").html()?.replace(" </em>", "</em> ") || "";
+      let cred = $(element)
+        .next()
+        .find(".auth")
+        .text()
+        .trim()
+        .replace("—", "")
+        .split(", ");
+      let author = cred[cred.length - 3] ? cred[cred.length - 3] : "";
+      let title = cred[cred.length - 2] ? cred[cred.length - 2] : "";
+      let year = cred[cred.length - 1] ? cred[cred.length - 1] : "";
+      let content = { sentence, author, title, year };
+      exampleArray.push({ type, content });
+    });
+
+    result.definitions = result.definitions.map((item) => {
+      const example = exampleArray.find(
+        (el) => el.type === item.partOfSpeech,
+      )?.content;
+      return {
+        ...item,
+        synonyms:
+          synonymArray
+            .find((el) => el.type === item.partOfSpeech)
+            ?.content.join(", ") || "",
+        example: example ? [example] : [],
+      };
+    });
     return result;
   } catch (error) {
     console.error(error);
   }
 }, "webster");
-
-const handleGetDefinitions = (data: string) => {
-  const doc = parse(data);
-  const result = [] as any;
-  let resultFinal = [] as any;
-
-  const entryHeader = doc.querySelectorAll(".entry-word-section-container");
-  entryHeader.forEach((item, index) => {
-    interface definitionItemType {
-      definitions: DefinitionType[];
-      partOfSpeech: string;
-    }
-
-    let definitionItem: definitionItemType = {
-      definitions: [
-        {
-          definition: [] as { sense: string }[],
-          image: "",
-          hash: "",
-        },
-      ],
-      partOfSpeech: "",
-    };
-
-    const head = getElText(item, ".entry-header-content .parts-of-speech", "");
-    definitionItem.partOfSpeech = head.split(" ").shift();
-
-    //find only First Definition
-    const firstItem = item.querySelector(".vg-sseq-entry-item");
-
-    if (firstItem) {
-      firstItem.querySelectorAll(".sb-entry .sense").forEach((m, n) => {
-        let letter = getElText(m, ".letter", "");
-        let dtText = getElText(m, ".dtText", "");
-        definitionItem.definitions[0].definition.push({
-          sense: letter !== "" ? letter + " " + dtText : "&emsp;" + dtText,
-        });
-      });
-    }
-    result.push(definitionItem);
-  });
-  resultFinal = result.reduce((acc: any, d: any) => {
-    const found = acc.find((a: any) => a.partOfSpeech === d.partOfSpeech);
-    if (!found) {
-      acc.push(d);
-    } else {
-      found.definitions.push(d.definitions[0]);
-    }
-    return acc;
-  }, []);
-  return resultFinal;
-};
 
 //find sound from oed
 export const getOedSoundURL = async (text: string) => {
@@ -391,29 +299,25 @@ export const getOedSoundURL = async (text: string) => {
     fetchGetText(oxfordUrl),
     fetchGetText(oedUrl),
   ]);
-  const docOxf = parse(data[0]);
-  const docOed = parse(data[1]);
+  const docOxf = load(data[0]);
+  const docOed = load(data[1]);
 
-  const oxfordResultUrl = getElAttribute(
-    docOxf,
-    ".audio_play_button,.pron-us",
+  const oxfordResultUrl = docOxf(".audio_play_button,.pron-us").attr(
     "data-src-mp3",
   );
 
   if (!oxfordResultUrl) {
-    const urlParam = getElAttribute(docOed, ".viewEntry", "href");
+    const urlParam = docOed(".viewEntry").attr("href");
     if (urlParam) {
       const newUrl = "https://www.oed.com" + urlParam;
       const link = newUrl.replace(/\?.+/g, "?tab=factsheet&tl=true#39853451");
-      const nextResponse = await fetch(link);
-      const nextPageHtml = await nextResponse.text();
-      const nextPageDoc = parse(nextPageHtml);
-      const mp3 = nextPageDoc
-        .querySelector(".regional-pronunciation:last-child")
-        ?.querySelector(".pronunciation-play-button")
-        ?.getAttribute("data-src-mp3");
-      const altMp3 = `https://ssl.gstatic.com/dictionary/static/sounds/20220808/${text}--_us_1.mp3`;
-      return mp3 || altMp3;
+      const nextPageHtml = await fetchGetText(link);
+      const nextPageDoc = load(nextPageHtml);
+      const sound = nextPageDoc(".regional-pronunciation")
+        .last()
+        .find(".pronunciation-play-button")
+        .attr("data-src-mp3");
+      return sound || "";
     }
   }
   return oxfordResultUrl;

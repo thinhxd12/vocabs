@@ -10,7 +10,6 @@ import {
   updateTodayScheduleStore,
 } from "~/lib/server";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
-import FlipNumber from "~/components/FlipNumber";
 
 const Quiz: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
@@ -115,81 +114,72 @@ const Quiz: Component<{}> = (props) => {
       <Title>🤔</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <main class="relative h-full w-full bg-[url('/images/jungle.webp')] bg-cover bg-center">
-        <audio ref={audioRef} hidden src={audioSrc()} />
-        <div class="no-scrollbar h-[calc(100vh-36px)] w-full overflow-y-scroll">
-          <div class="relative h-11 w-full border-b border-[#343434] bg-[url('/images/input-wall.webp')] bg-cover">
-            <Show when={quizStore.quizContent.length > 0}>
-              <p
-                class="h-full w-full truncate text-center font-sfpro text-5.5 font-700 leading-10 text-white"
-                style={{
-                  "text-shadow": "0 2px 2px rgba(0, 0, 0, 0.9)",
-                }}
-              >
+      <audio ref={audioRef} hidden src={audioSrc()} />
+      <main class="no-scrollbar relative h-[calc(100vh-40px)] w-[360px] overflow-y-scroll py-0.5">
+        <div class="mb-3 h-[150px] w-full">
+          <div class="no-scrollbar light-layout relative flex h-full w-full flex-col items-center justify-center overflow-y-scroll rounded-3">
+            <h1 class="absolute left-0 top-0 z-10 w-full text-center text-[180px] leading-[120px] text-white/20">
+              {quizStore.quizRender.number}
+            </h1>
+
+            <div class="relative z-30 flex h-[60px] w-full items-center justify-center bg-black/45 shadow-xl shadow-black/30 backdrop-blur-xl">
+              <span class="text-7 font-500 leading-8 text-white">
                 {quizStore.quizRender.translations
                   .map((tran) => tran.translations.join(", "))
                   .join(", ")}
-              </p>
-              <span class="absolute left-[135px] top-0 z-10 w-[90px] text-center font-helvetica text-[45px] font-600 leading-11 text-white/45">
-                {quizStore.quizRender.number}
               </span>
-            </Show>
-          </div>
-
-          <Show when={quizStore.quizCount}>
-            <div class="progress__track">
-              <div
-                class="progress__fill"
-                style={{
-                  width: `${((quizStore.quizCount + 1) / quizStore.quizContent.length) * 100}%`,
-                }}
-              ></div>
             </div>
-          </Show>
+          </div>
+        </div>
 
-          <Show when={quizStore.quizContent.length > 0}>
-            <div class="mt-5 grid w-full grid-cols-1 gap-1">
-              <Show
-                when={checked()}
-                fallback={
-                  <For each={choices()}>
-                    {(item, index) => (
-                      <button
-                        onClick={() =>
-                          selectChoice(item.created_at, index() + 1)
-                        }
-                        class="mx-auto h-11 w-2/3 cursor-pointer select-none rounded-sm bg-[#fffeff] text-center font-sfpro text-5 font-500 leading-11 text-black shadow-md transition hover:bg-[#ececec]"
-                      >
-                        {item.choice}
-                      </button>
-                    )}
-                  </For>
-                }
-              >
+        <Show when={quizStore.quizContent.length > 0}>
+          <div class="flex w-full flex-col items-center justify-center">
+            <Show
+              when={checked()}
+              fallback={
                 <For each={choices()}>
                   {(item, index) => (
-                    <Show
-                      when={index() + 1 === indexChecked()}
-                      fallback={
-                        <div
-                          class={`${item.created_at === quizStore.quizRender.created_at ? "bg-green-400" : "bg-[#fffeff]"} mx-auto h-11 w-2/3 cursor-pointer select-none rounded-sm text-center font-sfpro text-5 font-500 leading-11 text-black shadow-md transition`}
-                        >
-                          {item.choice}
-                        </div>
-                      }
+                    <button
+                      onClick={() => selectChoice(item.created_at, index() + 1)}
+                      class="quiz-choice"
                     >
+                      {item.choice}
+                    </button>
+                  )}
+                </For>
+              }
+            >
+              <For each={choices()}>
+                {(item, index) => (
+                  <Show
+                    when={index() + 1 === indexChecked()}
+                    fallback={
                       <div
-                        class={`${item.created_at === quizStore.quizRender.created_at ? "bg-green-400" : "bg-[rgba(249,0,0,0.9)]"} mx-auto h-11 w-2/3 cursor-pointer select-none rounded-sm text-center font-sfpro text-5 font-500 leading-11 text-black shadow-md transition`}
+                        class={
+                          item.created_at === quizStore.quizRender.created_at
+                            ? "quiz-choice-true"
+                            : "quiz-choice"
+                        }
                       >
                         {item.choice}
                       </div>
-                    </Show>
-                  )}
-                </For>
-              </Show>
-            </div>
-          </Show>
-        </div>
+                    }
+                  >
+                    <div
+                      class={
+                        item.created_at === quizStore.quizRender.created_at
+                          ? "quiz-choice-true"
+                          : "quiz-choice-false"
+                      }
+                    >
+                      {item.choice}
+                    </div>
+                  </Show>
+                )}
+              </For>
+            </Show>
+          </div>
+        </Show>
       </main>
     </MetaProvider>
   );

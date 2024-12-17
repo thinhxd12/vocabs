@@ -6,7 +6,6 @@ import {
   onCleanup,
   onMount,
   Show,
-  Suspense,
 } from "solid-js";
 import {
   FaSolidDroplet,
@@ -221,7 +220,7 @@ const Weather: Component<{}> = (props) => {
 
     const dpi = 1;
     let canvasWidth = 360;
-    let canvasHeight = window.innerHeight - 36;
+    let canvasHeight = window.innerHeight - 40;
 
     if (canvasRef) {
       canvasRef.width = Math.floor(canvasWidth * dpi);
@@ -394,162 +393,165 @@ const Weather: Component<{}> = (props) => {
       <MetaTitle>⛅</MetaTitle>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <main class="w-ful relative h-full">
-        <audio ref={audioRef} hidden src={audioSrc()} />
-        <canvas ref={canvasRef} class="absolute h-full w-full object-cover" />
-
-        <div class="relative z-50 h-full w-full p-2">
-          <select
-            class="mx-auto block min-h-[29px] w-1/3 cursor-pointer rounded-lg bg-transparent p-1.5 text-center font-sfpro text-7 font-400 leading-7 text-white outline-none"
-            style={{ appearance: "none" }}
-            onchange={(e) => handleRenderWeather(e.currentTarget.value)}
-          >
-            <Index each={navStore.locationList}>
-              {(item, index) => (
-                <option
-                  value={index}
-                  selected={item().default ? true : false}
-                  class="font-sfpro text-4 font-400 leading-4 text-black"
-                >
-                  {item().name}
-                </option>
-              )}
-            </Index>
-          </select>
-
-          <Show
-            when={current()}
-            fallback={
-              <div class="flex h-[141px] w-full items-center justify-center">
-                <img src="/assets/svg/loader.svg" width={30} height={7} />
-              </div>
-            }
-          >
-            <h1 class="pl-9 text-center font-sfpro text-[99px] font-100 leading-[99px] text-white">
-              {Math.round(current()?.temperature || 0)}°
-            </h1>
-
-            <div class="flex w-full items-center justify-center pr-1">
-              <span class="font-sfpro text-5.5 font-400 leading-6 text-white">
-                {current()!.isDayTime
-                  ? WMOCODE[current()!.icon].day.description
-                  : WMOCODE[current()!.icon].night.description}
-              </span>
-              <img
-                src={
-                  current()!.isDayTime
-                    ? WMOCODE[current()!.icon].day.image
-                    : WMOCODE[current()!.icon].night.image
-                }
-                width={30}
-                class="ml-1"
-                style={{
-                  filter: "drop-shadow(0 1px 3px black)",
-                }}
-              />
-            </div>
-
-            <div class="flex w-full items-center justify-center pr-1">
-              <div class="mx-1.5 flex items-center justify-center text-white">
-                <FaSolidTemperatureLow size={10} />
-                <span class="ml-1 font-sfpro text-4 font-400 leading-4">
-                  {Math.round(current()?.apparentTemperature || 0)}°
-                </span>
-              </div>
-              <div class="mx-1.5 flex items-center justify-center text-white">
-                <FaSolidDroplet size={10} />
-                <span class="ml-1 font-sfpro text-4 font-400 leading-4">
-                  {current()?.humidity}%
-                </span>
-              </div>
-              <div class="mx-1.5 flex items-end justify-center text-white">
-                <FaSolidLocationArrow
-                  size={10}
-                  class={`!rotate-[${current()!.windDirection - 45}] overflow-hidden rounded-full`}
-                />
-                <span class="ml-1 font-sfpro text-4 font-400 leading-4">
-                  {Math.round(current()?.windSpeed || 0)}
-                  <small class="pt-0.5 leading-3">km/h</small>
-                </span>
-              </div>
-              <div class="mx-1.5 flex items-center justify-center text-white">
-                <span class="ml-1 font-sfpro text-4 font-400 leading-4">
-                  <small class="pt-0.5 leading-3">UV</small>{" "}
-                  {current()?.uvIndex}
-                </span>
-              </div>
-            </div>
-          </Show>
-
-          <div
-            ref={hourlyRef}
-            class="no-scrollbar relative mx-auto mt-3 flex w-[340px] snap-x snap-mandatory overflow-y-hidden overflow-x-scroll border-b border-t border-gray-50/20"
-          >
-            <Show
-              when={hourly()}
-              fallback={
-                <div class="flex h-[96px] w-full items-center justify-center">
-                  <img src="/assets/svg/loader.svg" width={30} height={7} />
-                </div>
-              }
+      <audio ref={audioRef} hidden src={audioSrc()} />
+      <main class="h-[calc(100vh-40px)] w-[360px] py-0.5">
+        <div class="relative h-full w-full overflow-hidden rounded-2 shadow-md shadow-black/30">
+          <canvas ref={canvasRef} class="absolute h-full w-full object-cover" />
+          <div class="relative z-50 h-full w-full p-2">
+            <select
+              class="mx-auto block min-h-[29px] w-1/3 cursor-pointer rounded-lg bg-transparent p-1.5 text-center font-sfpro text-7 font-400 leading-7 text-white outline-none"
+              style={{ appearance: "none" }}
+              onchange={(e) => handleRenderWeather(e.currentTarget.value)}
             >
-              <Index each={hourly()}>
-                {(data, index) => {
-                  return (
-                    <div class="flex h-full min-w-[58px] snap-start flex-col items-center">
-                      <p class="font-sfpro text-4 font-400 leading-7 text-white">
-                        {index === 0 ? "Now" : format(data().time, "K a")}
-                      </p>
-                      <Show
-                        when={data()!.probability > 0}
-                        fallback={<div class="h-5 w-5"></div>}
-                      >
-                        <p class="font-sfpro text-4 font-400 leading-5 text-[#0062bf]">
-                          {data()!.probability}%
-                        </p>
-                      </Show>
-                      <img
-                        height={36}
-                        width={36}
-                        style={{
-                          filter: "drop-shadow(0 1px 3px black)",
-                        }}
-                        src={
-                          data()!.isDayTime
-                            ? WMOCODE[data()!.icon].day.image
-                            : WMOCODE[data()!.icon].night.image
-                        }
-                      />
-                      <p class="font-sfpro text-[13px] font-400 leading-8 text-white">
-                        {Math.round(data()!.temperature)}°
-                      </p>
-                    </div>
-                  );
-                }}
+              <Index each={navStore.locationList}>
+                {(item, index) => (
+                  <option
+                    value={index}
+                    selected={item().default ? true : false}
+                    class="font-sfpro text-4 font-400 leading-4 text-black"
+                  >
+                    {item().name}
+                  </option>
+                )}
               </Index>
-            </Show>
-          </div>
+            </select>
 
-          <div class="mt-3 px-10">
             <Show
-              when={chartData().labels.length}
+              when={current()}
               fallback={
-                <div class="flex h-[150px] w-full items-center justify-center">
+                <div class="flex h-[141px] w-full items-center justify-center">
                   <img src="/assets/svg/loader.svg" width={30} height={7} />
                 </div>
               }
             >
-              <Line
-                data={chartData()}
-                options={chartOptions}
-                width={240}
-                height={150}
-              />
+              <h1 class="pl-9 text-center font-sfpro text-[99px] font-100 leading-[99px] text-white">
+                {Math.round(current()?.temperature || 0)}°
+              </h1>
+
+              <div class="flex w-full items-center justify-center pr-1">
+                <span class="font-sfpro text-5.5 font-400 leading-6 text-white">
+                  {current()!.isDayTime
+                    ? WMOCODE[current()!.icon].day.description
+                    : WMOCODE[current()!.icon].night.description}
+                </span>
+                <img
+                  src={
+                    current()!.isDayTime
+                      ? WMOCODE[current()!.icon].day.image
+                      : WMOCODE[current()!.icon].night.image
+                  }
+                  width={30}
+                  class="ml-1"
+                  style={{
+                    filter: "drop-shadow(0 1px 3px black)",
+                  }}
+                />
+              </div>
+
+              <div class="flex w-full items-center justify-center pr-1">
+                <div class="mx-1.5 flex items-center justify-center text-white">
+                  <FaSolidTemperatureLow size={10} />
+                  <span class="ml-1 font-sfpro text-4 font-400 leading-4">
+                    {Math.round(current()?.apparentTemperature || 0)}°
+                  </span>
+                </div>
+                <div class="mx-1.5 flex items-center justify-center text-white">
+                  <FaSolidDroplet size={10} />
+                  <span class="ml-1 font-sfpro text-4 font-400 leading-4">
+                    {current()?.humidity}%
+                  </span>
+                </div>
+                <div class="mx-1.5 flex items-end justify-center text-white">
+                  <FaSolidLocationArrow
+                    size={10}
+                    class={`!rotate-[${current()!.windDirection - 45}] overflow-hidden rounded-full`}
+                  />
+                  <span class="ml-1 font-sfpro text-4 font-400 leading-4">
+                    {Math.round(current()?.windSpeed || 0)}
+                    <small class="pt-0.5 leading-3">km/h</small>
+                  </span>
+                </div>
+                <div class="mx-1.5 flex items-center justify-center text-white">
+                  <span class="ml-1 font-sfpro text-4 font-400 leading-4">
+                    <small class="pt-0.5 leading-3">UV</small>{" "}
+                    {current()?.uvIndex}
+                  </span>
+                </div>
+              </div>
             </Show>
+
+            <div
+              ref={hourlyRef}
+              class="no-scrollbar relative mx-auto mt-3 flex w-[340px] snap-x snap-mandatory overflow-y-hidden overflow-x-scroll border-b border-t border-gray-50/20"
+            >
+              <Show
+                when={hourly()}
+                fallback={
+                  <div class="flex h-[96px] w-full items-center justify-center">
+                    <img src="/assets/svg/loader.svg" width={30} height={7} />
+                  </div>
+                }
+              >
+                <Index each={hourly()}>
+                  {(data, index) => {
+                    return (
+                      <div class="flex h-full min-w-[58px] snap-start flex-col items-center">
+                        <p class="font-sfpro text-4 font-400 leading-7 text-white">
+                          {index === 0 ? "Now" : format(data().time, "K a")}
+                        </p>
+                        <Show
+                          when={data()!.probability > 0}
+                          fallback={<div class="h-5 w-5"></div>}
+                        >
+                          <p class="font-sfpro text-4 font-400 leading-5 text-[#0062bf]">
+                            {data()!.probability}%
+                          </p>
+                        </Show>
+                        <img
+                          height={36}
+                          width={36}
+                          style={{
+                            filter: "drop-shadow(0 1px 3px black)",
+                          }}
+                          src={
+                            data()!.isDayTime
+                              ? WMOCODE[data()!.icon].day.image
+                              : WMOCODE[data()!.icon].night.image
+                          }
+                        />
+                        <p class="font-sfpro text-[13px] font-400 leading-8 text-white">
+                          {Math.round(data()!.temperature)}°
+                        </p>
+                      </div>
+                    );
+                  }}
+                </Index>
+              </Show>
+            </div>
+
+            <div class="mt-3 px-10">
+              <Show
+                when={chartData().labels.length}
+                fallback={
+                  <div class="flex h-[150px] w-full items-center justify-center">
+                    <img src="/assets/svg/loader.svg" width={30} height={7} />
+                  </div>
+                }
+              >
+                <div class="rounded-2 bg-black/15 p-2 shadow-lg shadow-black/30 backdrop-blur-sm">
+                  <Line
+                    data={chartData()}
+                    options={chartOptions}
+                    width={240}
+                    height={150}
+                  />
+                </div>
+              </Show>
+            </div>
+            <p class="text-center font-sfpro text-4 font-400 leading-6 text-white">
+              {prediction()}
+            </p>
           </div>
-          <p class="text-center font-sfpro text-4 font-400 leading-6 text-white">
-            {prediction()}
-          </p>
         </div>
       </main>
     </MetaProvider>

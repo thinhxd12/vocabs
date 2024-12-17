@@ -6,7 +6,7 @@ const Collapsible: Component<{ title?: string; children: JSX.Element }> = (
   const [isOpen, setIsOpen] = createSignal(false);
 
   return (
-    <div class="flex min-h-7 w-full flex-col border-b border-[#343434]">
+    <div class="flex min-h-7 w-full flex-col border-b border-white/30">
       <button
         class="h-7 w-full px-2 text-left focus:outline-none"
         onClick={(e) => {
@@ -15,13 +15,13 @@ const Collapsible: Component<{ title?: string; children: JSX.Element }> = (
         }}
       >
         <div class="flex items-center justify-between">
-          <span class="font-medium text-gray-800">{props.title}</span>
+          <span></span>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class={`h-5 w-5 transform transition-transform duration-200 ${isOpen() ? "rotate-180" : "rotate-0"}`}
             fill="none"
             viewBox="0 0 24 24"
-            stroke="currentColor"
+            stroke="white"
           >
             <path
               stroke-linecap="round"

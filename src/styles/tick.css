@@ -4,9 +4,10 @@
   overflow: hidden;
   position: relative;
   border-radius: 2px;
-  box-shadow:
+  /* box-shadow:
     0 0.125em 0.3125em rgba(0, 0, 0, 0.25),
-    0 0.02125em 0.06125em rgba(0, 0, 0, 0.25);
+    0 0.02125em 0.06125em rgba(0, 0, 0, 0.25); */
+  @apply shadow-sm shadow-black/70;
 }
 
 .tick-flip:nth-child(2) {

@@ -1,9 +1,10 @@
 import { Component, createEffect, createSignal, on, Show } from "solid-js";
-import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
-import sharp from "sharp";
-import { Buffer } from "buffer";
 import { VocabularyDefinitionType } from "~/types";
-import { updateHashVocabularyItem } from "~/lib/server";
+import {
+  createThumbhash,
+  decodeThumbhash,
+  updateHashVocabularyItem,
+} from "~/lib/server";
 
 const ImageLoader: Component<{
   id?: string;
@@ -21,18 +22,6 @@ const ImageLoader: Component<{
     setLoaded(true);
   };
 
-  const createThumbhash = async (imageUrl: string) => {
-    "use server";
-    const imageBuffer = await fetch(imageUrl).then((res) => res.arrayBuffer());
-    const image = sharp(imageBuffer).resize(90, 90, { fit: "inside" });
-    const { data, info } = await image
-      .ensureAlpha()
-      .raw()
-      .toBuffer({ resolveWithObject: true });
-    const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
-    return Buffer.from(binaryThumbHash).toString("base64");
-  };
-
   createEffect(
     on(
       () => props.src,
@@ -42,8 +31,8 @@ const ImageLoader: Component<{
           setPlaceholderData("");
           if (!props.hash) {
             const thumbhash = await createThumbhash(props.src);
-            const thumbHashFromBase64 = Buffer.from(thumbhash, "base64");
-            setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));
+            const img = decodeThumbhash(thumbhash);
+            setPlaceholderData(img);
             if (props.id !== undefined) {
               let editDefinition = JSON.parse(JSON.stringify(props.def));
               editDefinition.forEach((entry: any) => {
@@ -54,8 +43,8 @@ const ImageLoader: Component<{
               updateHashVocabularyItem(props.id!, editDefinition);
             }
           } else {
-            const thumbHashFromBase64 = Buffer.from(props.hash, "base64");
-            setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));
+            const img = decodeThumbhash(props.hash);
+            setPlaceholderData(img);
           }
         }
       },

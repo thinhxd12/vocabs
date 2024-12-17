@@ -9,8 +9,7 @@ import {
 } from "solid-js";
 import Definition from "~/components/Definition";
 import { VocabularyTranslationType, VocabularyType } from "~/types";
-import { OcSearch2, OcX2 } from "solid-icons/oc";
-import { FiChevronDown } from "solid-icons/fi";
+import { OcSearch2 } from "solid-icons/oc";
 import { BiSolidSave } from "solid-icons/bi";
 import {
   layoutStore,
@@ -217,21 +216,21 @@ const Vocab: Component<{}> = (props) => {
   );
 
   const handleGetTranslateWord = async (word: string) => {
-    const checkMemories = await searchMemoriesText(word);
-    if (checkMemories) {
-      toast.error(checkMemories.message, {
-        position: "bottom-right",
-        className: "text-4 font-sfpro",
-      });
-      setAudioSrc("/assets/sounds/mp3_Boing.mp3");
-      if (audioRef) {
-        audioRef.load();
-        audioRef.addEventListener("canplaythrough", () => {
-          audioRef.play();
-        });
-      }
-      return;
-    }
+    // const checkMemories = await searchMemoriesText(word);
+    // if (checkMemories) {
+    //   toast.error(checkMemories.message, {
+    //     position: "bottom-right",
+    //     className: "text-4 font-sfpro",
+    //   });
+    //   setAudioSrc("/assets/sounds/mp3_Boing.mp3");
+    //   if (audioRef) {
+    //     audioRef.load();
+    //     audioRef.addEventListener("canplaythrough", () => {
+    //       audioRef.play();
+    //     });
+    //   }
+    //   return;
+    // }
     const data = await getTextDataWebster(word);
     if (data) {
       setTranslateWord({
@@ -297,67 +296,86 @@ const Vocab: Component<{}> = (props) => {
     setVocabStore("searchResults", []);
     setVocabStore("renderWord", undefined);
   });
-
   return (
     <MetaProvider>
       <Title>{vocabStore.renderWord?.word || "vocab"}</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <main class="relative h-full w-full">
-        <audio ref={audioRef} hidden src={audioSrc()} />
-        <audio ref={audioRef1} hidden src={audioSrc1()} />
-        <audio ref={audioRef2} hidden src={audioSrc2()} />
-        <div class="relative h-11 w-full border-b border-[#343434] bg-[url('/images/input-wall.webp')] bg-cover pt-[7px]">
-          <p
-            class={`absolute left-0 top-0 hidden w-full truncate text-center font-constantine text-7 font-700 uppercase leading-10.5 sm:block ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
-            style={{
-              "text-shadow": "0 2px 2px rgba(0, 0, 0, 0.9)",
-            }}
+      <audio ref={audioRef} hidden src={audioSrc()} />
+      <audio ref={audioRef1} hidden src={audioSrc1()} />
+      <audio ref={audioRef2} hidden src={audioSrc2()} />
+      <main class="relative h-[calc(100vh-40px)] w-[360px]">
+        <div class="flex h-[40px] w-full justify-between gap-1 py-0.5">
+          <Show
+            when={renderWordStore()}
+            fallback={
+              <div class="light-layout mr-1 h-full w-[74px] rounded-2"></div>
+            }
           >
-            {vocabStore.searchTerm || renderWordStore()?.word}
-          </p>
-          <input
-            class={`back absolute left-0 top-0 block w-full truncate bg-transparent text-center font-constantine text-7 font-700 uppercase leading-10.5 outline-none sm:hidden ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
-            type="text"
-            autocomplete="off"
-            name="mobileInputSearch"
-            value={vocabStore.searchTerm || renderWordStore()?.word}
-            onFocus={(e) => {
-              setVocabStore("searchTerm", "");
-              e.currentTarget.value = "";
-            }}
-            onBlur={() => {
-              setVocabStore("searchTerm", "");
-              setVocabStore("searchTermColor", true);
-            }}
-            onInput={(e) => {
-              setVocabStore(
-                "searchTerm",
-                (e.target as HTMLInputElement).value.toLowerCase(),
-              );
-              if (vocabStore.searchTerm.length > 2) {
-                triggerMobile(vocabStore.searchTerm);
-              }
-            }}
-            onKeyDown={(e) => {
-              e.preventDefault();
-            }}
-          />
-          <p class="absolute bottom-0 left-0 w-full truncate text-center font-opensans text-3 font-600 leading-2 text-white/50">
-            {renderWordStore()?.phonetics}
-          </p>
-        </div>
-        <div class="no-scrollbar relative z-50 h-[calc(100vh-72px)] w-full overflow-y-scroll bg-black">
-          <Show when={renderWordStore()}>
-            <Show when={renderWordStore()}>
-              <FlipNumber value={renderWordStore()!.number} />
-            </Show>
-
-            <Definition
-              item={renderWordStore()!}
-              onEdit={handleEditFromDefinition}
-            />
+            <FlipNumber value={renderWordStore()!.number} />
           </Show>
+          <div class="light-layout relative flex h-full flex-grow items-center justify-center rounded-2 p-1">
+            <Show
+              when={layoutStore.isMobile}
+              fallback={
+                <>
+                  <span
+                    class={`truncate text-center align-baseline font-constantine text-7 font-700 uppercase leading-7 ${vocabStore.searchTermColor ? "text-white" : "text-black"} `}
+                    style={{
+                      "text-shadow": "0 2px 2px rgba(0, 0, 0, 0.9)",
+                    }}
+                  >
+                    {vocabStore.searchTerm || renderWordStore()?.word}
+                  </span>
+                  <small class="pl-1 pt-3 text-center align-baseline font-opensans text-3 font-600 leading-4 text-secondary-white">
+                    {renderWordStore()?.phonetics}
+                  </small>
+                </>
+              }
+            >
+              <input
+                class={`back absolute left-0 top-0 block w-full truncate bg-transparent text-center font-constantine text-7 font-700 uppercase leading-10.5 outline-none sm:block ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
+                type="text"
+                autocomplete="off"
+                name="mobileInputSearch"
+                value={vocabStore.searchTerm || renderWordStore()?.word}
+                onFocus={(e) => {
+                  setVocabStore("searchTerm", "");
+                  e.currentTarget.value = "";
+                }}
+                onBlur={() => {
+                  setVocabStore("searchTerm", "");
+                  setVocabStore("searchTermColor", true);
+                }}
+                onInput={(e) => {
+                  setVocabStore(
+                    "searchTerm",
+                    (e.target as HTMLInputElement).value.toLowerCase(),
+                  );
+                  if (vocabStore.searchTerm.length > 2) {
+                    triggerMobile(vocabStore.searchTerm);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  e.preventDefault();
+                }}
+              />
+              <p class="absolute bottom-0 left-0 w-full truncate text-center font-opensans text-3 font-600 leading-2 text-white/50">
+                {renderWordStore()?.phonetics}
+              </p>
+            </Show>
+          </div>
+        </div>
+
+        <div class="h-[calc(100vh-80px)] w-full py-0.1">
+          <div class="no-scrollbar relative h-full w-full overflow-y-scroll rounded-1">
+            <Show when={renderWordStore()}>
+              <Definition
+                item={renderWordStore()!}
+                onEdit={handleEditFromDefinition}
+              />
+            </Show>
+          </div>
         </div>
 
         {/* translate  */}
@@ -366,21 +384,12 @@ const Vocab: Component<{}> = (props) => {
           onOpenChange={(open) => setVocabStore("showTranslate", open)}
         >
           <Dialog.Portal>
-            <Dialog.Overlay
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] bg-black/60`}
-            />
             <div
-              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center bg-black`}
+              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} light-layout top-0 z-50 flex h-[calc(100vh-41px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center`}
             >
               <Dialog.Content class="no-scrollbar z-50 h-full w-[360px] overflow-y-scroll outline-none">
-                <div class="flex h-8 w-full justify-end border-b border-gray-500 bg-gray-200">
-                  <Dialog.Close class="btn-close">
-                    <OcX2 size={15} />
-                  </Dialog.Close>
-                </div>
-
                 <form
-                  class="w-full bg-[#fffeff] p-1"
+                  class="w-full p-1"
                   action={insertVocabularyItem}
                   method="post"
                   on:keydown={(e) => {
@@ -389,9 +398,17 @@ const Vocab: Component<{}> = (props) => {
                     }
                   }}
                 >
-                  <div class="relative">
+                  <div class="relative mx-auto h-9 w-3/4 overflow-hidden rounded-full bg-black/15 shadow-[0_0_3px_0px_#00000054_inset]">
+                    <span
+                      class="absolute right-0.1 top-0.1 z-30 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-white transition hover:bg-white/10"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleGetTranslateWord(vocabStore.translateTerm);
+                      }}
+                    >
+                      <OcSearch2 size={15} />
+                    </span>
                     <input
-                      class="h-9 w-full border-0 bg-black text-center font-constantine text-6 font-700 uppercase leading-9 text-white outline-none"
                       name="word"
                       autocomplete="off"
                       value={vocabStore.translateTerm}
@@ -408,20 +425,12 @@ const Vocab: Component<{}> = (props) => {
                         });
                         setVocabStore("translateTerm", e.currentTarget.value);
                       }}
+                      class="absolute left-0 top-0 h-full w-full rounded-3 bg-transparent px-3 text-center font-constantine text-6 font-700 uppercase leading-9 text-white outline-none"
                     />
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleGetTranslateWord(vocabStore.translateTerm);
-                      }}
-                      class="absolute right-0 top-0 flex h-9 w-9 items-center justify-center text-white"
-                    >
-                      <OcSearch2 size={18} />
-                    </button>
                   </div>
 
                   <input
-                    class="mb-1 w-full border-0 border-b border-[#343434] p-1 font-basier text-4 font-400 leading-5 text-black outline-none"
+                    class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 pl-2 text-4 font-400 leading-5 text-white outline-none"
                     name="audio"
                     autocomplete="off"
                     value={translateWord()?.audio}
@@ -434,7 +443,7 @@ const Vocab: Component<{}> = (props) => {
                   />
 
                   <input
-                    class="mb-1 w-full border-0 border-b border-[#343434] p-1 font-sfpro text-4 font-400 leading-5 text-black outline-none"
+                    class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 pl-2 text-4 font-400 leading-5 text-white outline-none"
                     name="phonetics"
                     autocomplete="off"
                     value={translateWord()?.phonetics}
@@ -455,7 +464,7 @@ const Vocab: Component<{}> = (props) => {
 
                   <Collapsible>
                     <textarea
-                      class="w-full border-0 font-basier text-4 font-400 leading-5 text-black outline-none"
+                      class="w-full border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
                       name="definitions"
                       autocomplete="off"
                       rows="12"
@@ -474,7 +483,7 @@ const Vocab: Component<{}> = (props) => {
                   </Collapsible>
 
                   <input
-                    class="mb-1 w-full border-0 border-b border-[#343434] p-1 font-sfpro text-4 font-400 leading-5 text-black outline-none"
+                    class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
                     name="meaning"
                     autocomplete="off"
                     onChange={(e) => {
@@ -485,7 +494,7 @@ const Vocab: Component<{}> = (props) => {
                     }}
                   />
 
-                  <button class="btn-submit" type="submit">
+                  <button class="btn-submit ml-auto" type="submit">
                     <BiSolidSave size={15} />
                   </button>
                 </form>
@@ -505,21 +514,12 @@ const Vocab: Component<{}> = (props) => {
           onInitialFocus={getEditWordDefinition}
         >
           <Dialog.Portal>
-            <Dialog.Overlay
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] bg-black/60`}
-            />
             <div
-              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center bg-black`}
+              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} light-layout top-0 z-50 flex h-[calc(100vh-41px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center`}
             >
               <Dialog.Content class="no-scrollbar z-50 h-full w-full overflow-y-scroll outline-none">
-                <div class="flex h-8 w-full justify-end border-b border-gray-500 bg-gray-200">
-                  <Dialog.Close class="btn-close">
-                    <OcX2 size={15} />
-                  </Dialog.Close>
-                </div>
-
                 <form
-                  class="w-full bg-[#fffeff] p-1"
+                  class="w-full p-1"
                   action={editVocabularyItem}
                   method="post"
                 >
@@ -530,9 +530,17 @@ const Vocab: Component<{}> = (props) => {
                     value={editWordStore()?.created_at}
                   />
 
-                  <div class="relative">
+                  <div class="relative mx-auto h-9 w-3/4 overflow-hidden rounded-full bg-black/15 shadow-[0_0_3px_0px_#00000054_inset]">
+                    <span
+                      class="absolute right-0.1 top-0.1 z-30 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full text-white transition hover:bg-white/10"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleGetEditWord(vocabStore.editWord!.word);
+                      }}
+                    >
+                      <OcSearch2 size={15} />
+                    </span>
                     <input
-                      class="h-9 w-full border-0 bg-black text-center font-constantine text-6 font-700 uppercase leading-9 text-white outline-none"
                       name="word"
                       autocomplete="off"
                       value={editWordStore()?.word}
@@ -548,20 +556,12 @@ const Vocab: Component<{}> = (props) => {
                           word: e.currentTarget.value,
                         });
                       }}
+                      class="absolute left-0 top-0 h-full w-full rounded-3 bg-transparent px-3 text-center font-constantine text-6 font-700 uppercase leading-9 text-white outline-none"
                     />
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleGetEditWord(vocabStore.editWord!.word);
-                      }}
-                      class="absolute right-0 top-0 flex h-9 w-9 items-center justify-center text-white"
-                    >
-                      <OcSearch2 size={18} />
-                    </button>
                   </div>
 
                   <input
-                    class="mb-1 w-full border-0 border-b border-[#343434] p-1 font-basier text-4 font-400 leading-5 text-black outline-none"
+                    class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 pl-2 text-4 font-400 leading-5 text-white outline-none"
                     name="audio"
                     autocomplete="off"
                     value={editWordStore()?.audio}
@@ -574,7 +574,7 @@ const Vocab: Component<{}> = (props) => {
                   />
 
                   <input
-                    class="mb-1 w-full border-0 border-b border-[#343434] p-1 font-sfpro text-4 font-400 leading-5 text-black outline-none"
+                    class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 pl-2 text-4 font-400 leading-5 text-white outline-none"
                     name="phonetics"
                     autocomplete="off"
                     value={editWordStore()?.phonetics}
@@ -595,7 +595,7 @@ const Vocab: Component<{}> = (props) => {
 
                   <Collapsible>
                     <textarea
-                      class="w-full border-0 font-basier text-4 font-400 leading-5 text-black outline-none"
+                      class="w-full border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
                       name="definitionsCollapsible"
                       autocomplete="off"
                       rows="12"
@@ -618,7 +618,7 @@ const Vocab: Component<{}> = (props) => {
                   </Collapsible>
 
                   <input
-                    class="mb-1 w-full border-0 border-b border-[#343434] p-1 font-sfpro text-4 font-400 leading-5 text-black outline-none"
+                    class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
                     name="meaning"
                     autocomplete="off"
                     value={makeTranslationText(editWordStore()?.translations!)}
@@ -631,7 +631,7 @@ const Vocab: Component<{}> = (props) => {
                   />
 
                   <input
-                    class="mb-1 w-full border-0 border-b border-[#343434] p-1 font-basier text-4 font-400 leading-5 text-black outline-none"
+                    class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 pl-2 text-4 font-400 leading-5 text-white outline-none"
                     name="number"
                     type="number"
                     max={240}
@@ -646,7 +646,7 @@ const Vocab: Component<{}> = (props) => {
                     }}
                   />
 
-                  <button class="btn-submit" type="submit">
+                  <button class="btn-submit ml-auto" type="submit">
                     <BiSolidSave size={15} />
                   </button>
                 </form>

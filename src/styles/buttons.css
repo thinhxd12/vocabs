@@ -3,34 +3,39 @@
 }
 
 .btn-nav {
-  @apply flex-1 overflow-hidden border-r border-r-[#343434];
-  text-shadow: 1px 1px 1px #000000;
+  @apply h-full flex-1 overflow-hidden rounded-1 pl-0.5 text-left text-2.5 font-400 leading-2.5 text-white transition hover:bg-white/10;
 }
 
-.btn-nav span {
-  @apply inline-block h-full w-full font-sfpro text-2.5 font-600 leading-2.5 text-[#d1d1d1] opacity-0 transition hover:text-white hover:opacity-100;
-  padding: 1px;
+.btn-nav-active {
+  @apply h-full flex-1 overflow-hidden rounded-1 bg-black/20 pl-0.5 text-left text-2.5 font-400 leading-2.5 text-white transition;
 }
 
-.btn-menu {
-  @apply h-11 w-[86px] bg-cover;
+.btn-bookmark {
+  @apply mr-1 flex h-8.5 w-8.5 items-center justify-center rounded-full bg-black/15 text-white ring-1 ring-white/5 transition duration-100 hover:bg-black/5;
+}
+
+.btn-bookmark svg {
+  @apply active:scale-90;
+}
+
+.btn-bookmark-delete {
+  @apply h-9 w-[60px] rounded-2 bg-black/15 text-center text-4 font-600 leading-9 text-black/75 ring-1 ring-white/5 transition duration-100 first-of-type:mr-2 hover:bg-black/10;
+}
+
+.btn-nav-menu {
+  @apply my-0.1 flex h-9 w-9 items-center justify-center rounded-full text-white transition duration-100 hover:bg-white/15;
+}
+
+.btn-nav-menu-timer {
+  @apply relative my-0.1 flex h-9 w-9 items-center justify-center overflow-hidden rounded-full text-white transition duration-100 hover:bg-white/15;
 }
 
 .btn-close {
-  @apply m-0.1 flex h-5 w-9.5 items-center justify-center rounded-sm bg-[#070707] text-[#ececec] outline-none transition hover:bg-[#de0000] hover:text-white;
+  @apply flex h-5 w-9.5 items-center justify-center text-white outline-none transition duration-100 hover:bg-[#de0000] hover:text-white;
 }
 
 .btn-submit {
-  @apply flex h-9 w-[90px] items-center justify-center rounded-[3px] bg-[#070707] text-[#ececec] transition hover:bg-black hover:text-white;
-  background-image: url("/images/input-left-corner.webp"),
-    url("/images/input-right-corner.webp");
-  background-position:
-    left top,
-    right top;
-  background-repeat: no-repeat, no-repeat;
-  background-size:
-    auto 27px,
-    auto 27px;
+  @apply mr-1 flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-white ring-1 ring-white/30 transition duration-100 hover:bg-white/10;
 }
 
 @keyframes marquee {

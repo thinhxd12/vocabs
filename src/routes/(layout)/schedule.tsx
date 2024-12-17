@@ -33,6 +33,7 @@ import {
 } from "~/lib/server";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import toast, { Toaster } from "solid-toast";
+import { VsCalendar } from "solid-icons/vs";
 
 const todayDate = format(new Date(), "yyyy-MM-dd");
 export const route = {
@@ -177,150 +178,122 @@ const Schedule: Component<{}> = (props) => {
       <Title>📆</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <main class="relative h-full w-full bg-black">
-        <audio ref={audioRef} hidden src={audioSrc()} />
-        <div class="no-scrollbar h-[calc(100vh-36px)] w-full overflow-y-scroll">
-          <div class="relative h-[240px] w-full">
-            <img
-              class="h-full w-full object-cover"
-              src={`/images/${format(new Date(), "M")}.webp`}
-            />
-            <div
-              class="absolute left-0.5 top-0.5 cursor-default bg-black px-1 py-0.1"
-              style={{
-                "box-shadow": "#0000004d 0 3px 9px,#00000038 0 6px 9px",
-              }}
-            >
-              <Suspense>
-                <For each={scheduleStore.progressList}>
-                  {(item) => (
-                    <p class="font-rubik text-[7px] font-400 leading-3.5 text-white">
-                      {item.date} {item.count}
-                    </p>
-                  )}
-                </For>
-              </Suspense>
-            </div>
-
-            <div class="absolute bottom-0.5 right-0.5">
-              <p
-                style={{
-                  "box-shadow": "#0000004d 0 0 9px,#00000038 0 3px 9px",
-                }}
-                class="mb-0.1 cursor-pointer bg-black px-1 text-center font-basier text-3.5 font-500 uppercase leading-4.5 text-white"
-                onClick={handleLoadAllHistory}
-              >
-                {format(new Date(), "MMMM")}
-              </p>
-              <p
-                style={{
-                  "box-shadow": "#0000004d 0 0 9px,#00000038 0 3px 9px",
-                }}
-                class="mb-0.1 cursor-pointer bg-black px-1 text-center font-basier text-6 font-500 uppercase leading-7 text-[#f4f4f4] hover:text-white"
-                onClick={() => setOpenDialogReset(true)}
-              >
-                {format(new Date(), "yyyy")}
-              </p>
-              <p
-                style={{
-                  "box-shadow": "#0000004d 0 0 9px,#00000038 0 3px 9px",
-                }}
-                class="mb-0.1 cursor-pointer bg-black px-1 text-center font-basier text-2.5 font-500 uppercase leading-4 text-[#f4f4f4] hover:text-white"
-                onClick={() => setOpenDialogSchedule(true)}
-              >
-                <Show when={scheduleStore.thisWeekIndex > 0} fallback={"hiems"}>
-                  {Number(scheduleStore.thisWeekIndex) +
-                    " - " +
-                    Number(scheduleStore.thisWeekIndex + 199)}
-                </Show>
-              </p>
-            </div>
-          </div>
-
-          <div class="flex cursor-default flex-wrap justify-center bg-white">
-            <div class="my-1.5 h-7 w-[50px] bg-black text-center font-rubik text-4 font-700 uppercase leading-7 text-[#f90000]">
-              Sun
-            </div>
-            <div class="my-1.5 h-7 w-[50px] bg-black text-center font-rubik text-4 font-700 uppercase leading-7 text-[#f4f4f4]">
-              Mon
-            </div>
-            <div class="my-1.5 h-7 w-[50px] bg-black text-center font-rubik text-4 font-700 uppercase leading-7 text-[#f4f4f4]">
-              Tue
-            </div>
-            <div class="my-1.5 h-7 w-[50px] bg-black text-center font-rubik text-4 font-700 uppercase leading-7 text-[#f4f4f4]">
-              Wed
-            </div>
-            <div class="my-1.5 h-7 w-[50px] bg-black text-center font-rubik text-4 font-700 uppercase leading-7 text-[#f4f4f4]">
-              Thu
-            </div>
-            <div class="my-1.5 h-7 w-[50px] bg-black text-center font-rubik text-4 font-700 uppercase leading-7 text-[#f4f4f4]">
-              Fri
-            </div>
-            <div class="my-1.5 h-7 w-[50px] bg-black text-center font-rubik text-4 font-700 uppercase leading-7 text-[#f4f4f4]">
-              Sat
-            </div>
-            <Suspense fallback={<div>Loading...</div>}>
-              <For each={scheduleStore.calendarList}>
-                {(item) => {
-                  const isThisMoth =
-                    item.month === new Date(todayDate).getMonth();
-                  const isToday =
-                    item.month === new Date(todayDate).getMonth() &&
-                    item.date === new Date(todayDate).getDate();
-                  return (
-                    <div
-                      class={`scheduleDate flex h-7 w-[50px] items-center justify-center border-b border-dotted border-b-[#16161633] text-center font-rubik text-[13px] font-700 uppercase leading-7 ${isThisMoth ? "text-[#383838]" : "text-[#0000004d]"}`}
-                    >
-                      <Show
-                        when={item.time1 >= 0}
-                        fallback={
-                          <span
-                            class={`${isToday ? "toDayDate mx-0.5 h-6.5 w-7.5 rounded-sm bg-[#38E07B] shadow-md" : ""}`}
-                          >
-                            {item.date}
-                          </span>
-                        }
-                      >
-                        <span class="flex flex-col font-rubik text-2.5 font-600 uppercase leading-2.5 text-[#0000004d] opacity-0">
-                          <span>{item.time1}</span>
-                          <span>{item.time2}</span>
-                        </span>
-                        <span
-                          class={`${isToday ? "toDayDate mx-0.5 h-6.5 w-7.5 rounded-sm bg-[#38E07B] shadow-md" : ""}`}
-                        >
-                          {item.date}
-                        </span>
-                        <span class="flex flex-col font-rubik text-2.5 font-600 uppercase leading-2.5 text-[#0000004d]">
-                          <span>{item.time1}</span>
-                          <span>{item.time2}</span>
-                        </span>
-                      </Show>
-                    </div>
-                  );
-                }}
+      <audio ref={audioRef} hidden src={audioSrc()} />
+      <main class="no-scrollbar relative h-[calc(100vh-40px)] w-[360px] overflow-y-scroll py-0.5">
+        <div class="light-layout relative mb-1.5 h-[240px] w-full overflow-hidden rounded-2 p-2">
+          <img
+            class="h-full w-full rounded-2 border border-black/30 object-cover shadow-sm shadow-black/30 brightness-90"
+            src={`/images/${format(new Date(), "M")}.webp`}
+          />
+          <div class="absolute left-6 top-6 cursor-default rounded-2 bg-black/30 px-2 py-0.5 shadow-xl shadow-black/30 backdrop-blur-xl">
+            <Suspense>
+              <For each={scheduleStore.progressList}>
+                {(item) => (
+                  <p class="text-[7px] font-400 leading-3.5 text-white">
+                    {item.date} {item.count}
+                  </p>
+                )}
               </For>
             </Suspense>
           </div>
 
+          <div class="absolute bottom-6 right-6">
+            <p
+              class="mb-0.5 cursor-pointer rounded-1 bg-black/30 px-1 text-center text-3.5 font-500 uppercase leading-4.5 text-white shadow-sm shadow-black/15 backdrop-blur-xl transition duration-100 hover:bg-black/5"
+              onClick={handleLoadAllHistory}
+            >
+              {format(new Date(), "MMMM")}
+            </p>
+            <p
+              class="mb-0.5 cursor-pointer rounded-1 bg-black/30 px-1 text-center text-6 font-500 uppercase leading-7 text-white shadow-sm shadow-black/15 backdrop-blur-xl transition duration-100 hover:bg-black/5"
+              onClick={() => setOpenDialogReset(true)}
+            >
+              {format(new Date(), "yyyy")}
+            </p>
+            <p
+              class="leading-45 mb-0.5 cursor-pointer rounded-1 bg-black/30 px-1 text-center text-2.5 font-500 uppercase text-white shadow-sm shadow-black/15 backdrop-blur-xl transition duration-100 hover:bg-black/5"
+              onClick={() => setOpenDialogSchedule(true)}
+            >
+              <Show when={scheduleStore.thisWeekIndex > 0} fallback={"hiems"}>
+                {Number(scheduleStore.thisWeekIndex) +
+                  " - " +
+                  Number(scheduleStore.thisWeekIndex + 199)}
+              </Show>
+            </p>
+          </div>
+        </div>
+
+        <div class="light-layout relative mb-1.5 flex w-full cursor-default flex-wrap justify-center overflow-hidden rounded-2">
+          <div class="schedule-title rounded-l-6 !text-[#f90000]">Sun</div>
+          <div class="schedule-title">Mon</div>
+          <div class="schedule-title">Tue</div>
+          <div class="schedule-title">Wed</div>
+          <div class="schedule-title">Thu</div>
+          <div class="schedule-title">Fri</div>
+          <div class="schedule-title rounded-r-6">Sat</div>
           <Suspense fallback={<div>Loading...</div>}>
-            <div class="relative flex w-full snap-x snap-mandatory overflow-x-auto bg-white [&::-webkit-scrollbar-thumb]:bg-black/90 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar]:h-2">
+            <For each={scheduleStore.calendarList}>
+              {(item) => {
+                const isThisMoth =
+                  item.month === new Date(todayDate).getMonth();
+                const isToday =
+                  item.month === new Date(todayDate).getMonth() &&
+                  item.date === new Date(todayDate).getDate();
+                return (
+                  <div
+                    class={`schedule-date ${isThisMoth ? "text-white" : "text-secondary-white/50"}`}
+                  >
+                    <Show
+                      when={item.time1 >= 0}
+                      fallback={
+                        <span
+                          class={`${isToday ? "today-date mx-0.5 h-6.5 w-7.5 rounded-sm bg-[#38E07B] shadow-md" : ""}`}
+                        >
+                          {item.date}
+                        </span>
+                      }
+                    >
+                      <span class="flex flex-col font-rubik text-2.5 font-600 uppercase leading-2.5 text-[#0000004d] opacity-0">
+                        <span>{item.time1}</span>
+                        <span>{item.time2}</span>
+                      </span>
+                      <span
+                        class={`${isToday ? "today-date mx-0.5 h-6.5 w-7.5 rounded-1 bg-[#38E07B] shadow-lg shadow-black/30" : "mx-0.5"}`}
+                      >
+                        {item.date}
+                      </span>
+                      <span class="flex flex-col font-rubik text-2.5 font-600 uppercase leading-2.5 text-secondary-white/80">
+                        <span>{item.time1}</span>
+                        <span>{item.time2}</span>
+                      </span>
+                    </Show>
+                  </div>
+                );
+              }}
+            </For>
+          </Suspense>
+        </div>
+
+        <div class="light-layout relative mb-1.5 w-full overflow-hidden rounded-2 p-2">
+          <Suspense fallback={<div>Loading...</div>}>
+            <div class="relative flex w-full snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar-thumb]:bg-black/60 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white/15 [&::-webkit-scrollbar]:h-1">
               <For each={chunk(scheduleStore.historyList, 5).reverse()}>
                 {(data) => (
                   <div class="min-w-[360px] snap-start overflow-hidden pl-1 pr-1 pt-1">
                     <For each={data}>
                       {(item) => (
                         <div class="mb-0.5 flex h-6 w-full">
-                          <div class="relative h-full w-[90px] bg-black px-1 font-rubik text-3.5 font-500 leading-6 text-white">
+                          <div class="relative h-full w-[90px] bg-black/60 px-1 font-rubik text-3.5 font-500 leading-6 text-white">
                             {item.index + 1} - {item.index + 200}
                             <span
-                              class="absolute -right-[5.5px] top-1 h-4 w-2 bg-black"
+                              class="absolute -right-2 top-1 h-4 w-2 bg-black/60"
                               style={{
                                 "clip-path":
                                   "polygon(0% 0%, 100% 50%, 0% 100%)",
                               }}
                             ></span>
                           </div>
-                          <div class="flex flex-1 bg-white">
+                          <div class="flex flex-1 bg-white/30">
                             <div class="h-full w-[120px] pl-8 font-rubik text-3.5 font-500 leading-6">
                               {item.from_date}
                             </div>
@@ -342,33 +315,29 @@ const Schedule: Component<{}> = (props) => {
               </button>
             </div>
           </Suspense>
+        </div>
 
-          <div class="h-fit w-full bg-[url('/images/grunge-image-tree.webp')] bg-cover bg-center">
-            <p class="p-1 font-garamond text-4 font-500 leading-4.5">
-              The tree that is supposed to grow to a proud height can dispense
-              with bad weather and storms. Whether misfortune and external
-              resistance, some kinds of hatred, jealousy, stubbornness,
-              mistrust, hardness, avarice, and violence do not belong among the
-              favorable conditions without which any great growth. The poison of
-              which weaker natures perish strengthens the strong — nor do they
-              call it poison.
-            </p>
-          </div>
+        <div class="light-layout relative mb-1.5 w-full overflow-hidden rounded-2 !bg-green-400/15 p-2">
+          <p class="font-garamond text-4 font-500 leading-4.5">
+            The tree that is supposed to grow to a proud height can dispense
+            with bad weather and storms. Whether misfortune and external
+            resistance, some kinds of hatred, jealousy, stubbornness, mistrust,
+            hardness, avarice, and violence do not belong among the favorable
+            conditions without which any great growth. The poison of which
+            weaker natures perish strengthens the strong — nor do they call it
+            poison.
+          </p>
         </div>
 
         {/* ///////////////////////////////////////////////////////////// */}
         <Dialog open={openDialogReset()} onOpenChange={setOpenDialogReset}>
           <Dialog.Portal>
-            <Dialog.Overlay
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 h-[calc(100vh-36px)] w-[360px] bg-black/60`}
-            />
-
             <div
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] w-[360px] items-center justify-center`}
+              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} dark-layout top-0 z-50 flex h-[calc(100vh-41px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center`}
             >
-              <Dialog.Content class="no-scrollbar z-50 w-3/4 overflow-y-scroll rounded-sm outline-none">
-                <div class="flex h-8 w-full justify-between border-b border-gray-500 bg-gray-200">
-                  <Dialog.Label class="ml-1 font-rubik text-4.5 font-400 leading-8">
+              <Dialog.Content class="no-scrollbar z-50 w-3/4 overflow-y-scroll rounded-2 outline-none">
+                <div class="flex h-8 w-full justify-between border-b border-black/30 bg-black/90">
+                  <Dialog.Label class="pl-2 text-4 font-400 leading-8 text-white">
                     Reset today task
                   </Dialog.Label>
                   <Dialog.Close class="btn-close">
@@ -378,7 +347,7 @@ const Schedule: Component<{}> = (props) => {
                 <form
                   action={submitTodayReset}
                   method="post"
-                  class="w-full bg-gray-50 p-1"
+                  class="w-full bg-white/30 p-2"
                 >
                   <input
                     hidden
@@ -388,7 +357,7 @@ const Schedule: Component<{}> = (props) => {
                   />
                   <div class="mb-1 grid grid-cols-2 gap-1">
                     <input
-                      class="rounded-[3px] border border-gray-200 pl-2 pt-0.5 font-rubik text-4.5 leading-4.5 outline-none"
+                      class="my-1 rounded-8 bg-black/15 py-1 pl-3 text-4.5 leading-4.5 shadow-[0_0_3px_0px_#00000054_inset] outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       name="todayIndex1"
                       autocomplete="off"
                       type="number"
@@ -396,7 +365,7 @@ const Schedule: Component<{}> = (props) => {
                       value={navStore.todaySchedule.time1}
                     />
                     <input
-                      class="rounded-[3px] border border-gray-200 pl-2 pt-0.5 font-rubik text-4.5 leading-4.5 outline-none"
+                      class="my-1 rounded-8 bg-black/15 py-1 pl-3 text-4.5 leading-4.5 shadow-[0_0_3px_0px_#00000054_inset] outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                       name="todayIndex2"
                       autocomplete="off"
                       type="number"
@@ -405,10 +374,7 @@ const Schedule: Component<{}> = (props) => {
                     />
                   </div>
 
-                  <button
-                    type="submit"
-                    class="flex h-9 w-full items-center justify-center rounded-[3px] bg-[#070707] text-[#ececec] shadow transition hover:bg-black hover:text-white"
-                  >
+                  <button type="submit" class="btn-bookmark">
                     <BiSolidSave size={15} />
                   </button>
                 </form>
@@ -422,16 +388,12 @@ const Schedule: Component<{}> = (props) => {
           onOpenChange={setOpenDialogSchedule}
         >
           <Dialog.Portal>
-            <Dialog.Overlay
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 h-[calc(100vh-36px)] w-[360px] bg-black/60`}
-            />
-
             <div
-              class={`fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} top-0 z-50 flex h-[calc(100vh-36px)] w-[360px] items-center justify-center`}
+              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} dark-layout top-0 z-50 flex h-[calc(100vh-41px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center`}
             >
-              <Dialog.Content class="no-scrollbar z-50 w-3/4 overflow-y-scroll rounded-sm outline-none">
-                <div class="flex h-8 w-full justify-between border-b border-gray-500 bg-gray-200">
-                  <Dialog.Label class="ml-1 font-rubik text-4.5 font-400 leading-8">
+              <Dialog.Content class="no-scrollbar z-50 w-1/2 overflow-y-scroll rounded-2 outline-none">
+                <div class="flex h-8 w-full justify-between border-b border-black/30 bg-black/90">
+                  <Dialog.Label class="pl-2 text-4 font-400 leading-8 text-white">
                     Create new schedule
                   </Dialog.Label>
                   <Dialog.Close class="btn-close">
@@ -439,15 +401,12 @@ const Schedule: Component<{}> = (props) => {
                   </Dialog.Close>
                 </div>
                 <form
-                  class="w-full bg-gray-50 p-1"
+                  class="w-full bg-white/30 p-2"
                   action={submitNewSchedule}
                   method="post"
                 >
-                  <button
-                    type="submit"
-                    class="h-9 w-full items-center justify-center rounded-[3px] bg-[#070707] shadow transition hover:bg-black"
-                  >
-                    🗓️
+                  <button type="submit" class="btn-bookmark">
+                    <VsCalendar size={15} />
                   </button>
                 </form>
               </Dialog.Content>

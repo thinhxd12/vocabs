@@ -28,6 +28,8 @@ module.exports = {
         "11": "36px",
       },
       fontFamily: {
+        sans: ['SF Pro Display', 'sans-serif'],
+        serif: ['Roslindale', 'serif'],
         sfpro: ['SF Pro Display', 'sans-serif'],
         opensans: ['Open Sans', 'sans-serif'],
         roslindale: ['Roslindale', 'sans-serif'],
@@ -44,6 +46,9 @@ module.exports = {
       lineHeight: theme => ({
         ...theme('spacing'),
       }),
+      borderRadius: theme => ({
+        ...theme('spacing'),
+      }),
       fontWeight: {
         '100': '100',
         '200': '200',
@@ -57,17 +62,18 @@ module.exports = {
       },
       colors: {
         gray: {
-          50: '#F9FAFB',  // very light gray (off-white)
-          100: '#F4F5F7', // light gray (subtle background)
-          200: '#E4E7EB', // light-medium gray (soft text contrast)
-          300: '#D1D5DB', // medium-light gray (neutral light background)
-          400: '#9CA3AF', // medium gray (standard text color)
-          500: '#6B7280', // base gray (clean neutral for various UI elements)
-          600: '#4B5563', // medium-dark gray (slightly darker)
-          700: '#374151', // dark gray (great for text)
-          800: '#1F2937', // very dark gray (deep contrast)
-          900: '#111827', // almost black (for deep contrasts or header text)
+          50: '#F9FAFB',
+          100: '#F4F5F7',
+          200: '#E4E7EB',
+          300: '#D1D5DB',
+          400: '#9CA3AF',
+          500: '#6B7280',
+          600: '#4B5563',
+          700: '#374151',
+          800: '#1F2937',
+          900: '#111827',
         },
+        "secondary-white": "#F1F1F1"
       }
     },
   },

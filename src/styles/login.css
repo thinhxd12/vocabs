@@ -8,11 +8,3 @@ input:-webkit-autofill:active {
   line-height: 21px !important;
   background: rgba(0, 0, 0, 0.15) !important;
 }
-
-.loginBackgroundText {
-  text-shadow: 0 0 12px rgba(0, 0, 0, 0.9);
-}
-
-.loginAlert {
-  text-shadow: 0 0 1px rgba(0, 0, 0, 0.9);
-}

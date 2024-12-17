@@ -54,7 +54,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Clear",
       image: "/assets/openmeteo/icons/01n.svg",
     },
-    textdescription: "day sky",
+    textdescription: "/assets/openmeteo/weather/clear.webp",
   },
   "1": {
     day: {
@@ -65,7 +65,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Mainly Clear",
       image: "/assets/openmeteo/icons/02n.svg",
     },
-    textdescription: "day sky",
+    textdescription: "/assets/openmeteo/weather/clear.webp",
   },
   "2": {
     day: {
@@ -76,7 +76,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Partly Cloudy",
       image: "/assets/openmeteo/icons/03n.svg",
     },
-    textdescription: "landscapes",
+    textdescription: "/assets/openmeteo/weather/partly-cloudy.webp",
   },
   "3": {
     day: {
@@ -87,7 +87,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Mostly Cloudy",
       image: "/assets/openmeteo/icons/04.svg",
     },
-    textdescription: "cloudy",
+    textdescription: "/assets/openmeteo/weather/cloudy.webp",
   },
   "45": {
     day: {
@@ -98,7 +98,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Foggy",
       image: "/assets/openmeteo/icons/15.svg",
     },
-    textdescription: "foggy forest road",
+    textdescription: "/assets/openmeteo/weather/foggy.webp",
   },
   "48": {
     day: {
@@ -109,7 +109,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Rime Fog",
       image: "/assets/openmeteo/icons/15.svg",
     },
-    textdescription: "foggy forest road",
+    textdescription: "/assets/openmeteo/weather/foggy.webp",
   },
   "51": {
     day: {
@@ -120,7 +120,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Light Drizzle",
       image: "/assets/openmeteo/icons/46.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "53": {
     day: {
@@ -131,7 +131,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Drizzle",
       image: "/assets/openmeteo/icons/46.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "55": {
     day: {
@@ -142,7 +142,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Heavy Drizzle",
       image: "/assets/openmeteo/icons/09.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "56": {
     day: {
@@ -153,7 +153,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Light Freezing Drizzle",
       image: "/assets/openmeteo/icons/47.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "57": {
     day: {
@@ -164,7 +164,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Freezing Drizzle",
       image: "/assets/openmeteo/icons/49.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "61": {
     day: {
@@ -175,7 +175,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Light Rain",
       image: "/assets/openmeteo/icons/46.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "63": {
     day: {
@@ -186,7 +186,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Rain",
       image: "/assets/openmeteo/icons/09.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "65": {
     day: {
@@ -197,7 +197,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Heavy Rain",
       image: "/assets/openmeteo/icons/10.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "66": {
     day: {
@@ -208,7 +208,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Light Freezing Rain",
       image: "/assets/openmeteo/icons/47.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "67": {
     day: {
@@ -219,7 +219,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Freezing Rain",
       image: "/assets/openmeteo/icons/12.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "71": {
     day: {
@@ -230,7 +230,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Light Snow",
       image: "/assets/openmeteo/icons/49.svg",
     },
-    textdescription: "snow falling",
+    textdescription: "/assets/openmeteo/weather/snow.webp",
   },
   "73": {
     day: {
@@ -241,7 +241,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Snow",
       image: "/assets/openmeteo/icons/13.svg",
     },
-    textdescription: "snow falling",
+    textdescription: "/assets/openmeteo/weather/snow.webp",
   },
   "75": {
     day: {
@@ -252,7 +252,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Heavy Snow",
       image: "/assets/openmeteo/icons/50.svg",
     },
-    textdescription: "snow falling",
+    textdescription: "/assets/openmeteo/weather/snow.webp",
   },
   "77": {
     day: {
@@ -263,7 +263,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Snow Grains",
       image: "/assets/openmeteo/icons/49.svg",
     },
-    textdescription: "snow falling",
+    textdescription: "/assets/openmeteo/weather/snow.webp",
   },
   "80": {
     day: {
@@ -274,7 +274,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Light Showers",
       image: "/assets/openmeteo/icons/46.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "81": {
     day: {
@@ -285,7 +285,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Showers",
       image: "/assets/openmeteo/icons/09.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "82": {
     day: {
@@ -296,7 +296,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Heavy Showers",
       image: "/assets/openmeteo/icons/10.svg",
     },
-    textdescription: "rain",
+    textdescription: "/assets/openmeteo/weather/rain.webp",
   },
   "85": {
     day: {
@@ -307,7 +307,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Light Snow Showers",
       image: "/assets/openmeteo/icons/49.svg",
     },
-    textdescription: "snow falling",
+    textdescription: "/assets/openmeteo/weather/snow.webp",
   },
   "86": {
     day: {
@@ -318,7 +318,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Snow Showers",
       image: "/assets/openmeteo/icons/13.svg",
     },
-    textdescription: "snow falling",
+    textdescription: "/assets/openmeteo/weather/snow.webp",
   },
   "95": {
     day: {
@@ -329,7 +329,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Thunderstorm",
       image: "/assets/openmeteo/icons/11.svg",
     },
-    textdescription: "thunderstorm",
+    textdescription: "/assets/openmeteo/weather/thunderstorm.webp",
   },
   "96": {
     day: {
@@ -340,7 +340,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Light Thunderstorms With Hail",
       image: "/assets/openmeteo/icons/20n.svg",
     },
-    textdescription: "thunderstorm",
+    textdescription: "/assets/openmeteo/weather/thunderstorm.webp",
   },
   "99": {
     day: {
@@ -351,7 +351,7 @@ export const WMOCODE: WeatherCodeData = {
       description: "Thunderstorm With Hail",
       image: "/assets/openmeteo/icons/27n.svg",
     },
-    textdescription: "thunderstorm",
+    textdescription: "/assets/openmeteo/weather/thunderstorm-hail.webp",
   },
 };
 
