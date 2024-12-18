@@ -279,27 +279,18 @@ const Schedule: Component<{}> = (props) => {
             <div class="relative flex w-full snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar-thumb]:bg-black/60 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white/15 [&::-webkit-scrollbar]:h-1">
               <For each={chunk(scheduleStore.historyList, 5).reverse()}>
                 {(data) => (
-                  <div class="min-w-[360px] snap-start overflow-hidden pl-1 pr-1 pt-1">
+                  <div class="min-w-full snap-start overflow-hidden pl-1 pr-1 pt-1">
                     <For each={data}>
                       {(item) => (
-                        <div class="mb-0.5 flex h-6 w-full">
-                          <div class="relative h-full w-[90px] bg-black/60 px-1 font-rubik text-3.5 font-500 leading-6 text-white">
+                        <div class="mb-1 flex w-full items-center overflow-hidden rounded-2 bg-white/15 p-1 shadow-md shadow-black/45 backdrop-blur-lg">
+                          <div class="w-[90px] rounded-2 bg-black/30 pl-3 text-3.5 leading-6 text-white shadow-[0_0_3px_0px_#00000078_inset]">
                             {item.index + 1} - {item.index + 200}
-                            <span
-                              class="absolute -right-2 top-1 h-4 w-2 bg-black/60"
-                              style={{
-                                "clip-path":
-                                  "polygon(0% 0%, 100% 50%, 0% 100%)",
-                              }}
-                            ></span>
                           </div>
-                          <div class="flex flex-1 bg-white/30">
-                            <div class="h-full w-[120px] pl-8 font-rubik text-3.5 font-500 leading-6">
-                              {item.from_date}
-                            </div>
-                            <div class="h-full w-[120px] pl-8 font-rubik text-3.5 font-500 leading-6">
-                              {item.to_date}
-                            </div>
+                          <div class="flex-1 text-center text-3.5 leading-6 text-white">
+                            {item.from_date}
+                          </div>
+                          <div class="flex-1 text-center text-3.5 leading-6 text-white">
+                            {item.to_date}
                           </div>
                         </div>
                       )}

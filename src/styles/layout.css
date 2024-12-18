@@ -36,15 +36,15 @@
 }
 
 .quiz-choice {
-  @apply mb-2 w-2/3 cursor-pointer select-none rounded-3 bg-white/15 pb-3 pt-2 text-center text-5 font-500 leading-7 text-white shadow-xl shadow-black/30 backdrop-blur-xl transition hover:bg-white/25;
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-black/15 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/30 backdrop-blur-lg transition hover:bg-black/10 hover:shadow-lg;
 }
 
 .quiz-choice-true {
-  @apply mb-2 w-2/3 cursor-pointer select-none rounded-3 bg-green-400/90 pb-3 pt-2 text-center text-5 font-500 leading-7 text-white shadow-xl shadow-black/30 backdrop-blur-xl transition;
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-green-400/60 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/30 backdrop-blur-lg transition;
 }
 
 .quiz-choice-false {
-  @apply mb-2 w-2/3 cursor-pointer select-none rounded-3 bg-red-500/90 pb-3 pt-2 text-center text-5 font-500 leading-7 text-white shadow-xl shadow-black/30 backdrop-blur-xl transition;
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-red-500/60 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/30 backdrop-blur-lg transition;
 }
 
 .light-layout {
@@ -52,7 +52,7 @@
 }
 
 .dark-layout {
-  @apply border-y border-b-white/10 border-t-white/20 bg-black/50 shadow-xl shadow-black/30 backdrop-blur-xl;
+  @apply border-y border-b-white/10 border-t-white/20 bg-black/45 shadow-xl shadow-black/30 backdrop-blur-xl;
 }
 
 .definition-example {

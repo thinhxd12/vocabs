@@ -116,19 +116,17 @@ const Quiz: Component<{}> = (props) => {
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio ref={audioRef} hidden src={audioSrc()} />
       <main class="no-scrollbar relative h-[calc(100vh-40px)] w-[360px] overflow-y-scroll py-0.5">
-        <div class="mb-3 h-[150px] w-full">
-          <div class="no-scrollbar light-layout relative flex h-full w-full flex-col items-center justify-center overflow-y-scroll rounded-3">
-            <h1 class="absolute left-0 top-0 z-10 w-full text-center text-[180px] leading-[120px] text-white/20">
+        <div class="mx-auto mb-6 mt-9 h-[90px] w-2/3">
+          <div class="no-scrollbar light-layout relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-3 !backdrop-blur-lg">
+            <h1 class="absolute -top-3 left-0 z-10 w-full bg-transparent text-center text-[125px] leading-[90px] text-white/20">
               {quizStore.quizRender.number}
             </h1>
 
-            <div class="relative z-30 flex h-[60px] w-full items-center justify-center bg-black/45 shadow-xl shadow-black/30 backdrop-blur-xl">
-              <span class="text-7 font-500 leading-8 text-white">
-                {quizStore.quizRender.translations
-                  .map((tran) => tran.translations.join(", "))
-                  .join(", ")}
-              </span>
-            </div>
+            <p class="relative z-30 w-full bg-black/60 px-1 pb-1.5 text-center text-5 font-400 leading-7 text-white shadow-lg shadow-black/60 backdrop-blur-xl">
+              {quizStore.quizRender.translations
+                .map((tran) => tran.translations.join(", "))
+                .join(", ")}
+            </p>
           </div>
         </div>
 

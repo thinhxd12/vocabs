@@ -369,7 +369,7 @@ const Vocab: Component<{}> = (props) => {
         </div>
 
         <div class="h-[calc(100vh-80px)] w-full py-0.1">
-          <div class="no-scrollbar relative h-full w-full overflow-y-scroll rounded-2">
+          <div class="no-scrollbar relative h-full w-full overflow-y-scroll pt-2">
             <Show when={renderWordStore()}>
               <Definition
                 item={renderWordStore()!}

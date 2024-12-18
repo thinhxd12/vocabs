@@ -14,7 +14,7 @@ const Definition: Component<{
         {(entry) => (
           <div class="w-full">
             <div class="group flex h-9 items-end justify-between">
-              <div class="w-1/2 text-wrap indent-4 font-sfpro text-[13px] font-500 leading-6 text-black opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <div class="w-1/2 truncate text-wrap indent-4 font-sfpro text-4 font-500 leading-5 text-black opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 {props.item.translations
                   .find(
                     (el: VocabularyTranslationType) =>

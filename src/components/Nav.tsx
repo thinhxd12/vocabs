@@ -436,7 +436,7 @@ const Nav: Component<{}> = (props) => {
             >
               <span class="absolute bottom-0 z-10 h-full w-full bg-white/15"></span>
               <span
-                class="absolute bottom-0 z-20 w-full bg-green-400/60"
+                class="absolute bottom-0 z-20 w-full bg-green-400/90"
                 style={{
                   height: `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`,
                 }}
@@ -449,7 +449,7 @@ const Nav: Component<{}> = (props) => {
                 navStore.listContent.length > 0
               }
             >
-              <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/60"></span>
+              <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/90"></span>
             </Show>
             <Show
               when={navStore.todaySchedule.created_at}
@@ -476,7 +476,7 @@ const Nav: Component<{}> = (props) => {
             >
               <span class="absolute bottom-0 z-10 h-full w-full bg-white/15"></span>
               <span
-                class="absolute bottom-0 z-20 w-full bg-green-400/60"
+                class="absolute bottom-0 z-20 w-full bg-green-400/90"
                 style={{
                   height: `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`,
                 }}
@@ -489,7 +489,7 @@ const Nav: Component<{}> = (props) => {
                 navStore.listContent.length > 0
               }
             >
-              <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/60"></span>
+              <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/90"></span>
             </Show>
             <Show
               when={navStore.todaySchedule.created_at}
@@ -530,7 +530,7 @@ const Nav: Component<{}> = (props) => {
           >
             <Show when={showTimer()}>
               <span
-                class="absolute bottom-0 z-10 w-full bg-blue-600/60"
+                class="absolute bottom-0 z-10 w-full bg-blue-600/90"
                 style={{
                   height: `${(minute() / 6) * 100}%`,
                 }}
