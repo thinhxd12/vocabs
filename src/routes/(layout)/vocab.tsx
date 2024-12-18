@@ -216,21 +216,21 @@ const Vocab: Component<{}> = (props) => {
   );
 
   const handleGetTranslateWord = async (word: string) => {
-    // const checkMemories = await searchMemoriesText(word);
-    // if (checkMemories) {
-    //   toast.error(checkMemories.message, {
-    //     position: "bottom-right",
-    //     className: "text-4 font-sfpro",
-    //   });
-    //   setAudioSrc("/assets/sounds/mp3_Boing.mp3");
-    //   if (audioRef) {
-    //     audioRef.load();
-    //     audioRef.addEventListener("canplaythrough", () => {
-    //       audioRef.play();
-    //     });
-    //   }
-    //   return;
-    // }
+    const checkMemories = await searchMemoriesText(word);
+    if (checkMemories) {
+      toast.error(checkMemories.message, {
+        position: "bottom-right",
+        className: "text-4 font-sfpro",
+      });
+      setAudioSrc("/assets/sounds/mp3_Boing.mp3");
+      if (audioRef) {
+        audioRef.load();
+        audioRef.addEventListener("canplaythrough", () => {
+          audioRef.play();
+        });
+      }
+      return;
+    }
     const data = await getTextDataWebster(word);
     if (data) {
       setTranslateWord({
@@ -296,6 +296,7 @@ const Vocab: Component<{}> = (props) => {
     setVocabStore("searchResults", []);
     setVocabStore("renderWord", undefined);
   });
+
   return (
     <MetaProvider>
       <Title>{vocabStore.renderWord?.word || "vocab"}</Title>
@@ -368,7 +369,7 @@ const Vocab: Component<{}> = (props) => {
         </div>
 
         <div class="h-[calc(100vh-80px)] w-full py-0.1">
-          <div class="no-scrollbar relative h-full w-full overflow-y-scroll rounded-1">
+          <div class="no-scrollbar relative h-full w-full overflow-y-scroll rounded-2">
             <Show when={renderWordStore()}>
               <Definition
                 item={renderWordStore()!}

@@ -3,11 +3,11 @@
 }
 
 .btn-nav {
-  @apply h-full flex-1 overflow-hidden rounded-1 pl-0.5 text-left text-2.5 font-400 leading-2.5 text-white transition hover:bg-white/10;
+  @apply ml-0.1 h-full flex-1 overflow-hidden rounded-1 pl-0.5 text-left text-2.5 font-400 leading-2.5 text-white transition hover:bg-black/20 hover:shadow-[0_0_3px_0px_#00000078_inset];
 }
 
 .btn-nav-active {
-  @apply h-full flex-1 overflow-hidden rounded-1 bg-black/20 pl-0.5 text-left text-2.5 font-400 leading-2.5 text-white transition;
+  @apply h-full flex-1 overflow-hidden rounded-1 bg-black/20 pl-0.5 text-left text-2.5 font-400 leading-2.5 text-white shadow-[0_0_3px_0px_#00000078_inset] transition;
 }
 
 .btn-bookmark {

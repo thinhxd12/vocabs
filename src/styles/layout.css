@@ -36,7 +36,7 @@
 }
 
 .quiz-choice {
-  @apply mb-2 w-2/3 cursor-pointer select-none rounded-3 bg-black/30 pb-3 pt-2 text-center text-5 font-500 leading-7 text-white shadow-xl shadow-black/30 backdrop-blur-xl transition hover:bg-black/15;
+  @apply mb-2 w-2/3 cursor-pointer select-none rounded-3 bg-white/15 pb-3 pt-2 text-center text-5 font-500 leading-7 text-white shadow-xl shadow-black/30 backdrop-blur-xl transition hover:bg-white/25;
 }
 
 .quiz-choice-true {

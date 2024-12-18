@@ -298,28 +298,28 @@ const Nav: Component<{}> = (props) => {
       />
 
       <div class="light-layout flex h-full w-full items-center justify-center rounded-1 p-0.5">
-        <div class="flex h-full w-4 flex-col rounded-1 bg-black/15 shadow-[0_0_1px_0px_#00000078_inset]">
+        <div class="flex h-full w-4 flex-col items-center justify-between overflow-hidden rounded-1 bg-black/60 shadow-[0_0_1px_0px_#00000078_inset]">
           <Show
             when={navStore.todaySchedule.created_at}
             fallback={
               <>
-                <span class="w-full text-center text-3 leading-3 text-white">
+                <span class="w-full text-center text-3 leading-2.5 text-white">
                   N
                 </span>
-                <span class="mb-0.5 w-full text-center text-3 leading-3 text-white">
+                <span class="w-full text-center text-3 leading-3 text-white">
                   N
                 </span>
               </>
             }
           >
-            <span class="w-full text-center text-3 leading-3 text-white">
+            <span class="w-full text-center text-3 leading-2.5 text-white">
               {navStore.todaySchedule.time1}
             </span>
-            <span class="mb-0.5 w-full text-center text-3 leading-3 text-white">
+            <span class="w-full text-center text-3 leading-3 text-white">
               {navStore.todaySchedule.time2}
             </span>
           </Show>
-          <span class="h-3.5 w-4 -rotate-90 rounded-0.5 bg-white/20 text-center text-2.5 leading-3 text-white">
+          <span class="mb-0.1 -rotate-90 rounded-0.5 bg-white/25 text-left text-2.5 leading-3.5 text-white">
             {format(new Date(), "eeeeee")}
           </span>
         </div>
@@ -333,7 +333,7 @@ const Nav: Component<{}> = (props) => {
         </A>
 
         <A href="/quiz" activeClass="btn-nav-active" class="btn-nav">
-          <span>Memento mori. Remember you will die.</span>
+          <span>Memento mori Remember you will die.</span>
         </A>
 
         <div class="ml-0.1 flex h-full flex-col items-center rounded-1 bg-black/45 px-0.5 text-white ring-0 ring-white/5">
@@ -401,14 +401,14 @@ const Nav: Component<{}> = (props) => {
         </A>
 
         <div
-          class={`relative mr-0.1 h-full min-w-[81px] max-w-[81px] rounded-1 ${navStore.playButton ? "bg-[url('/images/sunrise.webp')]" : "bg-[url('/images/sunset.webp')]"} cursor-pointer bg-cover transition-all`}
+          class={`relative mr-0.1 h-full min-w-[81px] max-w-[81px] overflow-hidden rounded-1 ${navStore.playButton ? "bg-[url('/images/sunrise.webp')]" : "bg-[url('/images/sunset.webp')]"} cursor-pointer bg-cover transition-all`}
           onClick={handleAutoplay}
         >
           <Show when={navStore.listCount}>
             <div
               class={`absolute left-0 top-0 h-full bg-[url('/images/sunrise.webp')] bg-cover transition-all duration-300`}
               style={{
-                width: `${Math.floor(((navStore.listCount + 1) / navStore.listContent.length) * 85)}px`,
+                width: `${Math.floor(((navStore.listCount + 1) / navStore.listContent.length) * 81)}px`,
                 "box-shadow": "2px 0px 6px rgba(0, 0, 0, 0.6)",
                 "border-right": "0.5px solid #000000",
               }}
@@ -424,19 +424,32 @@ const Nav: Component<{}> = (props) => {
           </button>
 
           <button
-            class={`btn-nav-menu-timer ${navStore.listType === 1 ? "bg-white/15" : ""}`}
+            class="btn-nav-menu-timer"
             onClick={() => handleGetListContent(1)}
           >
-            <Show when={navStore.listType === 1}>
+            <Show
+              when={
+                navStore.listType === 1 &&
+                location.pathname === "/quiz" &&
+                quizStore.quizContent.length > 0
+              }
+            >
+              <span class="absolute bottom-0 z-10 h-full w-full bg-white/15"></span>
               <span
-                class="absolute bottom-0 z-10 w-full bg-green-400/60"
+                class="absolute bottom-0 z-20 w-full bg-green-400/60"
                 style={{
-                  height:
-                    location.pathname === "/quiz"
-                      ? `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`
-                      : "100%",
+                  height: `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`,
                 }}
               ></span>
+            </Show>
+            <Show
+              when={
+                navStore.listType === 1 &&
+                location.pathname === "/vocab" &&
+                navStore.listContent.length > 0
+              }
+            >
+              <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/60"></span>
             </Show>
             <Show
               when={navStore.todaySchedule.created_at}
@@ -451,19 +464,32 @@ const Nav: Component<{}> = (props) => {
           </button>
 
           <button
-            class={`btn-nav-menu-timer ${navStore.listType === 2 ? "bg-white/15" : ""}`}
+            class="btn-nav-menu-timer"
             onClick={() => handleGetListContent(2)}
           >
-            <Show when={navStore.listType === 2}>
+            <Show
+              when={
+                navStore.listType === 2 &&
+                location.pathname === "/quiz" &&
+                quizStore.quizContent.length > 0
+              }
+            >
+              <span class="absolute bottom-0 z-10 h-full w-full bg-white/15"></span>
               <span
-                class="absolute bottom-0 z-10 w-full bg-green-400/60"
+                class="absolute bottom-0 z-20 w-full bg-green-400/60"
                 style={{
-                  height:
-                    location.pathname === "/quiz"
-                      ? `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`
-                      : "100%",
+                  height: `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`,
                 }}
               ></span>
+            </Show>
+            <Show
+              when={
+                navStore.listType === 2 &&
+                location.pathname === "/vocab" &&
+                navStore.listContent.length > 0
+              }
+            >
+              <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/60"></span>
             </Show>
             <Show
               when={navStore.todaySchedule.created_at}

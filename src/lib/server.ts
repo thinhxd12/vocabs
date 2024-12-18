@@ -3,6 +3,7 @@ import {
   BookmarkType,
   CalendarType,
   CurrentlyWeatherType,
+  DefinitionSenseType,
   DefinitionType,
   ExampleType,
   FixMinutelyTWeatherType,
@@ -34,8 +35,6 @@ import {
 } from "@darylserrano/kindle-clippings";
 import { URLSearchParams } from "url";
 import { load } from "cheerio";
-import sharp from "sharp";
-import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
 
 export const searchText = async (text: string) => {
   "use server";
@@ -80,23 +79,6 @@ export const searchMemoriesText = async (text: string) => {
   } catch (error) {
     console.error(error);
   }
-};
-
-export const createThumbhash = async (imageUrl: string) => {
-  "use server";
-  const imageBuffer = await fetch(imageUrl).then((res) => res.arrayBuffer());
-  const image = sharp(imageBuffer).resize(90, 90, { fit: "inside" });
-  const { data, info } = await image
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
-  return Buffer.from(binaryThumbHash).toString("base64");
-};
-
-export const decodeThumbhash = (hash: string) => {
-  const thumbHashFromBase64 = Buffer.from(hash, "base64");
-  return thumbHashToDataURL(thumbHashFromBase64) as string;
 };
 
 export const getLayoutImage = async (url: string) => {
@@ -203,7 +185,11 @@ export const getTextDataWebster = query(async (text: string) => {
 
     //Definitions
     $('div[id^="dictionary-entry-"]').each((index, element) => {
-      const partOfSpeech = $(element).find(".parts-of-speech a").first().text();
+      const partOfSpeech = $(element)
+        .find(".parts-of-speech a")
+        .first()
+        .text()
+        .split(" ")[0];
       let definitions: DefinitionType[] = [];
       let synonyms = "";
       let example: ExampleType[] = [];
@@ -214,29 +200,47 @@ export const getTextDataWebster = query(async (text: string) => {
         definition: [],
       };
 
-      let definitionItems = $(element).find(".vg-sseq-entry-item .sb").first();
+      let definitionItems = $(element).find(".vg-sseq-entry-item").first();
       definitionItems.each((index, element) => {
+        let senseArray: DefinitionSenseType[] = [];
         $(element)
           .find(".sb-entry")
           .each((ind, item) => {
-            let sense = $(item)
-              .text()
-              .trim()
-              .replace(/[\n\r]+|\s{2,}/g, " ");
-            if (sense.slice(0, 1) === ":") sense = "&emsp;" + sense;
-            firstDefinition.definition.push({ sense });
+            $(item)
+              .find(".sense")
+              .each((m, n) => {
+                let letter = $(n).find(".letter").text().trim();
+                let num = $(n).find(".sub-num").text().trim();
+                let sense = $(n)
+                  .find(".dtText")
+                  .text()
+                  .trim()
+                  .replace(/[\n\r]+|\s{2,}/g, " ");
+                senseArray.push({ letter, num, sense });
+              });
           });
+        firstDefinition.definition = senseArray;
       });
 
       definitions.push(firstDefinition);
       result.definitions.push({ partOfSpeech, definitions, synonyms, example });
     });
 
+    result.definitions = result.definitions.reduce((acc: any, d: any) => {
+      const found = acc.find((a: any) => a.partOfSpeech === d.partOfSpeech);
+      if (!found) {
+        acc.push(d);
+      } else {
+        found.definitions.push(d.definitions[0]);
+      }
+      return acc;
+    }, []);
+
     //Synonym
     let synonymArray: { type: string; content: string[] }[] = [];
     const synonymTitle = $("#synonyms").find(".function-label");
     synonymTitle.each((index, element) => {
-      let type = $(element).text().toLowerCase().trim();
+      let type = $(element).text().toLowerCase().trim().split(" ")[0];
       let content: any = [];
       $(element)
         .next()
@@ -251,13 +255,14 @@ export const getTextDataWebster = query(async (text: string) => {
     //Example
     let exampleArray: ExampleExtendType[] = [];
     const exampleTitle = $(".on-web").find(".function-label-header");
-    exampleTitle.each((index, element) => {
-      let type = $(element).text().toLowerCase().trim();
+    if (!exampleTitle.text()) {
+      let type = result.definitions[0].partOfSpeech;
       let sentence =
-        $(element).next().find(".t").html()?.replace(" </em>", "</em> ") || "";
-      let cred = $(element)
-        .next()
+        $(".on-web").find(".t").first().html()?.replace(" </em>", "</em> ") ||
+        "";
+      let cred = $(".on-web")
         .find(".auth")
+        .first()
         .text()
         .trim()
         .replace("—", "")
@@ -267,7 +272,26 @@ export const getTextDataWebster = query(async (text: string) => {
       let year = cred[cred.length - 1] ? cred[cred.length - 1] : "";
       let content = { sentence, author, title, year };
       exampleArray.push({ type, content });
-    });
+    } else {
+      exampleTitle.each((index, element) => {
+        let type = $(element).text().toLowerCase().trim().split(" ")[0];
+        let sentence =
+          $(element).next().find(".t").html()?.replace(" </em>", "</em> ") ||
+          "";
+        let cred = $(element)
+          .next()
+          .find(".auth")
+          .text()
+          .trim()
+          .replace("—", "")
+          .split(", ");
+        let author = cred[cred.length - 3] ? cred[cred.length - 3] : "";
+        let title = cred[cred.length - 2] ? cred[cred.length - 2] : "";
+        let year = cred[cred.length - 1] ? cred[cred.length - 1] : "";
+        let content = { sentence, author, title, year };
+        exampleArray.push({ type, content });
+      });
+    }
 
     result.definitions = result.definitions.map((item) => {
       const example = exampleArray.find(

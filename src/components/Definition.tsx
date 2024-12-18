@@ -38,14 +38,17 @@ const Definition: Component<{
                     fallback={
                       <For each={item.definition}>
                         {(def) => (
-                          <p
-                            class="bg-black pb-0.5 pl-2 pr-1 pt-0.5 font-sfpro text-[13px] font-500 leading-6 text-white first-letter:text-4.5 first-letter:font-700 first-letter:uppercase"
-                            innerHTML={
-                              def.similar
-                                ? def.sense + " : " + def.similar
-                                : def.sense
-                            }
-                          ></p>
+                          <p class="flex bg-black pb-0.5 pl-2 pr-1 pt-0.5 align-baseline font-sfpro text-[13px] font-500 leading-6 text-white">
+                            <span class="inline-block min-w-4 text-4.5 font-700 uppercase">
+                              {def.letter}
+                            </span>
+                            {def.num && (
+                              <small class="inline-block min-w-4 pr-0.5">
+                                {def.num}
+                              </small>
+                            )}
+                            <span innerHTML={def.sense}></span>
+                          </p>
                         )}
                       </For>
                     }
@@ -64,14 +67,17 @@ const Definition: Component<{
                       <div class="no-scrollbar absolute bottom-0 left-0 z-50 flex h-[202px] flex-col items-start justify-end overflow-y-scroll p-1">
                         <For each={item.definition}>
                           {(def) => (
-                            <p
-                              class="pl-1 font-sfpro text-[13px] font-500 leading-6 text-white first-letter:text-4.5 first-letter:font-700 first-letter:uppercase"
-                              innerHTML={
-                                def.similar
-                                  ? def.sense + " : " + def.similar
-                                  : def.sense
-                              }
-                            />
+                            <p class="flex pl-1 font-sfpro text-[13px] font-500 leading-6 text-white">
+                              <span class="inline-block min-w-4 text-4.5 font-700 uppercase">
+                                {def.letter}
+                              </span>
+                              {def.num && (
+                                <small class="inline-block min-w-4 pr-0.5">
+                                  {def.num}
+                                </small>
+                              )}
+                              <span innerHTML={def.sense}></span>
+                            </p>
                           )}
                         </For>
                       </div>

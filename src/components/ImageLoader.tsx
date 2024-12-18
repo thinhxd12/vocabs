@@ -1,10 +1,8 @@
 import { Component, createEffect, createSignal, on, Show } from "solid-js";
+import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
+import sharp from "sharp";
 import { VocabularyDefinitionType } from "~/types";
-import {
-  createThumbhash,
-  decodeThumbhash,
-  updateHashVocabularyItem,
-} from "~/lib/server";
+import { updateHashVocabularyItem } from "~/lib/server";
 
 const ImageLoader: Component<{
   id?: string;
@@ -22,6 +20,30 @@ const ImageLoader: Component<{
     setLoaded(true);
   };
 
+  const createThumbhash = async (imageUrl: string) => {
+    "use server";
+    const imageBuffer = await fetch(imageUrl).then((res) => res.arrayBuffer());
+    const image = sharp(imageBuffer).resize(90, 90, { fit: "inside" });
+    const { data, info } = await image
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
+    const base64String = btoa(
+      String.fromCharCode(...new Uint8Array(binaryThumbHash)),
+    );
+    return base64String;
+  };
+
+  function base64ToUint8Array(base64String: string) {
+    const binaryString = atob(base64String);
+    const uint8Array = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      uint8Array[i] = binaryString.charCodeAt(i);
+    }
+    return uint8Array;
+  }
+
   createEffect(
     on(
       () => props.src,
@@ -31,8 +53,8 @@ const ImageLoader: Component<{
           setPlaceholderData("");
           if (!props.hash) {
             const thumbhash = await createThumbhash(props.src);
-            const img = decodeThumbhash(thumbhash);
-            setPlaceholderData(img);
+            const thumbHashFromBase64 = base64ToUint8Array(thumbhash);
+            setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));
             if (props.id !== undefined) {
               let editDefinition = JSON.parse(JSON.stringify(props.def));
               editDefinition.forEach((entry: any) => {
@@ -43,8 +65,8 @@ const ImageLoader: Component<{
               updateHashVocabularyItem(props.id!, editDefinition);
             }
           } else {
-            const img = decodeThumbhash(props.hash);
-            setPlaceholderData(img);
+            const thumbHashFromBase64 = base64ToUint8Array(props.hash);
+            setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));
           }
         }
       },

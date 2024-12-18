@@ -34,9 +34,15 @@ export interface VocabularyDefinitionType {
 }
 
 export interface DefinitionType {
-  definition: { sense: string; similar?: string }[];
+  definition: DefinitionSenseType[];
   image: string;
   hash: string;
+}
+
+export interface DefinitionSenseType {
+  letter?: string;
+  num?: string;
+  sense: string;
 }
 
 export interface ExampleType {

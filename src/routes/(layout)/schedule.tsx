@@ -185,7 +185,7 @@ const Schedule: Component<{}> = (props) => {
             class="h-full w-full rounded-2 border border-black/30 object-cover shadow-sm shadow-black/30 brightness-90"
             src={`/images/${format(new Date(), "M")}.webp`}
           />
-          <div class="absolute left-6 top-6 cursor-default rounded-2 bg-black/30 px-2 py-0.5 shadow-xl shadow-black/30 backdrop-blur-xl">
+          <div class="absolute left-3 top-3 cursor-default rounded-2 bg-black/30 px-2 py-0.5 shadow-xl shadow-black/30 backdrop-blur-xl">
             <Suspense>
               <For each={scheduleStore.progressList}>
                 {(item) => (
@@ -197,7 +197,7 @@ const Schedule: Component<{}> = (props) => {
             </Suspense>
           </div>
 
-          <div class="absolute bottom-6 right-6">
+          <div class="absolute bottom-3 right-3">
             <p
               class="mb-0.5 cursor-pointer rounded-1 bg-black/30 px-1 text-center text-3.5 font-500 uppercase leading-4.5 text-white shadow-sm shadow-black/15 backdrop-blur-xl transition duration-100 hover:bg-black/5"
               onClick={handleLoadAllHistory}
@@ -223,14 +223,14 @@ const Schedule: Component<{}> = (props) => {
           </div>
         </div>
 
-        <div class="light-layout relative mb-1.5 flex w-full cursor-default flex-wrap justify-center overflow-hidden rounded-2">
-          <div class="schedule-title rounded-l-6 !text-[#f90000]">Sun</div>
+        <div class="light-layout relative mb-1.5 flex w-full cursor-default flex-wrap justify-center overflow-hidden rounded-2 pt-1">
+          <div class="schedule-title rounded-l-2 !text-[#f90000]">Sun</div>
           <div class="schedule-title">Mon</div>
           <div class="schedule-title">Tue</div>
           <div class="schedule-title">Wed</div>
           <div class="schedule-title">Thu</div>
           <div class="schedule-title">Fri</div>
-          <div class="schedule-title rounded-r-6">Sat</div>
+          <div class="schedule-title rounded-r-2">Sat</div>
           <Suspense fallback={<div>Loading...</div>}>
             <For each={scheduleStore.calendarList}>
               {(item) => {

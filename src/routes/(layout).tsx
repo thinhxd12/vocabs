@@ -33,7 +33,6 @@ export default function Layout(props: RouteSectionProps) {
   // ***************check login**************
 
   let audioRef: HTMLAudioElement | undefined;
-  let scrollContainer: HTMLDivElement | undefined;
   let checkTimeout: NodeJS.Timeout;
   let deleteSearchTimeout: NodeJS.Timeout;
 
@@ -234,15 +233,8 @@ export default function Layout(props: RouteSectionProps) {
           src={
             layoutStore.isMobile ? imageData()!.image_P : imageData()!.image_L
           }
-          class="absolute z-0 h-screen w-screen object-cover"
+          class="absolute z-0 h-screen w-screen object-cover brightness-75"
         />
-        <div
-          class="absolute left-0 top-0 z-10 h-full w-full"
-          style={{
-            background:
-              "radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 0.3) 85%)",
-          }}
-        ></div>
       </Show>
       <div class="absolute left-0 top-0 z-50 flex h-full w-full justify-center overflow-hidden">
         <Show when={layoutStore.showLayout}>
