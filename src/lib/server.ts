@@ -239,19 +239,30 @@ export const getTextDataWebster = query(async (text: string) => {
     //Synonym
     let synonymArray: { type: string; content: string[] }[] = [];
     const synonymTitle = $("#synonyms").find(".function-label");
-    synonymTitle.each((index, element) => {
-      let type = $(element).text().toLowerCase().trim().split(" ")[0];
+    if (!synonymTitle.text()) {
+      let type = result.definitions[0].partOfSpeech;
       let content: any = [];
-      $(element)
-        .next()
+      $("#synonyms")
         .find("li")
         .slice(0, 3)
         .each((ind, item) => {
           content.push($(item).text());
         });
       synonymArray.push({ type, content });
-    });
-
+    } else {
+      synonymTitle.each((index, element) => {
+        let type = $(element).text().toLowerCase().trim().split(" ")[0];
+        let content: any = [];
+        $(element)
+          .next()
+          .find("li")
+          .slice(0, 3)
+          .each((ind, item) => {
+            content.push($(item).text());
+          });
+        synonymArray.push({ type, content });
+      });
+    }
     //Example
     let exampleArray: ExampleExtendType[] = [];
     const exampleTitle = $(".on-web").find(".function-label-header");
@@ -859,9 +870,10 @@ const selectBookMarkData = async (id: string, val: boolean) => {
 
 export const insertBookmarkData = action(async (formData: FormData) => {
   "use server";
-  const doc = String(formData.get("bookmarks"));
+  const doc = String(formData.get("bookmarksInsert"));
   let entries = readKindleClipping(doc);
   let parsedEntries = parseKindleEntries(entries);
+
   for (let i = 0; i < parsedEntries.length; i++) {
     const row = {
       authors: parsedEntries[i].authors,

@@ -390,7 +390,7 @@ const Vocab: Component<{}> = (props) => {
             >
               <Dialog.Content class="no-scrollbar z-50 h-full w-[360px] overflow-y-scroll outline-none">
                 <form
-                  class="w-full p-1"
+                  class="mb-2 w-full p-1"
                   action={insertVocabularyItem}
                   method="post"
                   on:keydown={(e) => {
@@ -495,7 +495,7 @@ const Vocab: Component<{}> = (props) => {
                     }}
                   />
 
-                  <button class="btn-submit ml-auto" type="submit">
+                  <button class="btn-submit ml-2 mt-2" type="submit">
                     <BiSolidSave size={15} />
                   </button>
                 </form>
@@ -520,7 +520,7 @@ const Vocab: Component<{}> = (props) => {
             >
               <Dialog.Content class="no-scrollbar z-50 h-full w-full overflow-y-scroll outline-none">
                 <form
-                  class="w-full p-1"
+                  class="mb-2 w-full p-1"
                   action={editVocabularyItem}
                   method="post"
                 >
@@ -647,7 +647,7 @@ const Vocab: Component<{}> = (props) => {
                     }}
                   />
 
-                  <button class="btn-submit ml-auto" type="submit">
+                  <button class="btn-submit ml-2 mt-2" type="submit">
                     <BiSolidSave size={15} />
                   </button>
                 </form>

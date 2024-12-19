@@ -350,10 +350,10 @@ const Nav: Component<{}> = (props) => {
 
         <A
           href="/weather"
-          class="relative mx-0.5 block h-full min-w-[81px] overflow-hidden rounded-1 shadow-xl"
+          class="relative mx-0.5 block h-full min-w-[81px] overflow-hidden rounded-1 shadow shadow-black/60"
         >
           <img
-            class="absolute left-0 top-0 h-full w-full object-cover brightness-75"
+            class="absolute left-0 top-0 h-full w-full object-cover brightness-90"
             src={WMOCODE[navWeatherData().icon].textdescription}
           />
 
@@ -401,7 +401,7 @@ const Nav: Component<{}> = (props) => {
         </A>
 
         <div
-          class={`relative mr-0.1 h-full min-w-[81px] max-w-[81px] overflow-hidden rounded-1 ${navStore.playButton ? "bg-[url('/images/sunrise.webp')]" : "bg-[url('/images/sunset.webp')]"} cursor-pointer bg-cover transition-all`}
+          class={`relative mr-0.1 h-full min-w-[81px] max-w-[81px] overflow-hidden rounded-1 shadow shadow-black/60 ${navStore.playButton ? "bg-[url('/images/sunrise.webp')]" : "bg-[url('/images/sunset.webp')]"} cursor-pointer bg-cover transition-all`}
           onClick={handleAutoplay}
         >
           <Show when={navStore.listCount}>
