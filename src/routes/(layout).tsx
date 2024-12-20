@@ -11,7 +11,7 @@ import { BsTrash3 } from "solid-icons/bs";
 import { createList } from "solid-list";
 import {
   deleteVocabulary,
-  getSpotlightImage,
+  getSpotlightImage_v4,
   getWordData,
   handleCheckAndRender,
   searchText,
@@ -38,8 +38,8 @@ export default function Layout(props: RouteSectionProps) {
 
   const [audioSrc, setAudioSrc] = createSignal<string>();
   const [imageData, setImageData] = createSignal<LoginImageType | undefined>();
-
-  onMount(() => {});
+  const [showLayoutImageInfo, setShowLayoutImageInfo] =
+    createSignal<boolean>(false);
 
   onMount(async () => {
     if (audioRef) audioRef.volume = 0.1;
@@ -48,7 +48,7 @@ export default function Layout(props: RouteSectionProps) {
         navigator.userAgent,
       );
     setLayoutStore("isMobile", isMobile);
-    const data = await getSpotlightImage();
+    const data = await getSpotlightImage_v4();
     setImageData(data);
   });
 
@@ -235,8 +235,30 @@ export default function Layout(props: RouteSectionProps) {
           }
           class="absolute z-0 h-screen w-screen object-cover brightness-90"
         />
+
+        <Show
+          when={showLayoutImageInfo()}
+          fallback={
+            <p
+              onClick={() => setShowLayoutImageInfo(!showLayoutImageInfo())}
+              class="absolute left-0 top-0 z-40 hidden w-1/4 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white sm:block"
+            >
+              {imageData()?.title}
+            </p>
+          }
+        >
+          <p
+            onClick={() => setShowLayoutImageInfo(!showLayoutImageInfo())}
+            class="absolute left-0 top-0 z-40 hidden w-1/4 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white sm:block"
+          >
+            {imageData()?.hs2_title}
+          </p>
+        </Show>
+        <p class="absolute bottom-0 right-0 hidden w-1/4 truncate pb-1 pr-1 text-right text-4 leading-7 text-white sm:block">
+          {imageData()?.hs1_title}
+        </p>
       </Show>
-      <div class="absolute left-0 top-0 z-50 flex h-full w-full justify-center overflow-hidden">
+      <div class="absolute left-0 top-0 z-30 flex h-full w-full justify-center overflow-hidden">
         <Show when={layoutStore.showLayout}>
           <div class="relative h-full w-[calc(100vw-360px)] px-[80px] pb-[90px] pt-[50px]">
             <Show when={showBookmark()} fallback={<Art />}>
@@ -263,42 +285,44 @@ export default function Layout(props: RouteSectionProps) {
         </Show>
         <div class="relative h-full min-w-[360px] max-w-[360px]">
           <Show when={vocabStore.searchResults.length > 0}>
-            <div class="dark-layout absolute top-[41px] z-50 flex h-[calc(100vh-81px)] w-full flex-col rounded-2 pt-2">
-              <For each={vocabStore.searchResults}>
-                {(item, index) => (
-                  <div
-                    aria-selected={active() === index()}
-                    onMouseOver={() => handleMouseOver(index())}
-                    onMouseOut={handleMouseOut}
-                    class="my-2 flex h-9.5 w-[360px] cursor-pointer justify-between bg-black/50"
-                  >
-                    <button
-                      class="relative z-50 h-full w-9.5 pl-2 font-basier text-3.5 font-400 leading-9.5 text-secondary-white hover:text-white"
-                      onClick={() => handleEditFromSearch(item)}
-                    >
-                      {index() + 1}
-                    </button>
+            <div class="absolute top-[40px] z-50 h-[calc(100vh-81px)] w-full py-2">
+              <div class="dark-layout no-scrollbar flex h-full flex-col overflow-y-scroll rounded-2 pt-2">
+                <For each={vocabStore.searchResults}>
+                  {(item, index) => (
                     <div
-                      class={`${active() === index() ? "scale-[2.1]" : ""} relative z-30 grow text-center font-constantine text-8 font-700 leading-9 text-white transition duration-100`}
-                      style={{
-                        "text-shadow":
-                          active() === index()
-                            ? "0 3px 5px black"
-                            : "0 2px 3px black",
-                      }}
-                      onClick={() => handleSelectWordFromSearch(index())}
+                      aria-selected={active() === index()}
+                      onMouseOver={() => handleMouseOver(index())}
+                      onMouseOut={handleMouseOut}
+                      class="my-2 flex h-9.5 w-[360px] cursor-pointer justify-between bg-black/50"
                     >
-                      {item.word}
+                      <button
+                        class="relative z-50 h-full w-9.5 pl-2 text-3.5 font-400 leading-9.5 text-secondary-white hover:text-white"
+                        onClick={() => handleEditFromSearch(item)}
+                      >
+                        {index() + 1}
+                      </button>
+                      <div
+                        class={`${active() === index() ? "scale-[2.1]" : ""} relative z-30 grow text-center font-constantine text-8 font-700 leading-9 text-white transition duration-100`}
+                        style={{
+                          "text-shadow":
+                            active() === index()
+                              ? "0 3px 5px black"
+                              : "0 2px 3px black",
+                        }}
+                        onClick={() => handleSelectWordFromSearch(index())}
+                      >
+                        {item.word}
+                      </div>
+                      <div
+                        class="relative z-50 flex h-full w-9.5 items-center justify-center pr-1"
+                        onClick={() => handleOpenDialogDelete(item.created_at)}
+                      >
+                        <BsTrash3 size={13} color="white" />
+                      </div>
                     </div>
-                    <div
-                      class="relative z-50 flex h-full w-9.5 items-center justify-center pr-1"
-                      onClick={() => handleOpenDialogDelete(item.created_at)}
-                    >
-                      <BsTrash3 size={13} color="white" />
-                    </div>
-                  </div>
-                )}
-              </For>
+                  )}
+                </For>
+              </div>
             </div>
           </Show>
 
@@ -328,13 +352,13 @@ export default function Layout(props: RouteSectionProps) {
               </div>
               <div class="flex w-full items-center justify-center bg-white/30 p-2">
                 <button
-                  class="mx-3 flex h-8 w-[45px] items-center justify-center rounded-[3px] bg-[#070707] font-basier text-4 font-500 leading-8 text-white shadow transition hover:bg-black hover:text-[#de0000]"
+                  class="mx-3 flex h-8 w-[45px] items-center justify-center rounded-[3px] bg-[#070707] text-4 font-500 leading-8 text-white shadow transition hover:bg-black hover:text-[#de0000]"
                   onClick={confirmDelete}
                 >
                   Yes
                 </button>
                 <button
-                  class="mx-3 flex h-8 w-[45px] items-center justify-center rounded-[3px] bg-[#070707] font-basier text-4 font-500 leading-8 text-white shadow transition hover:bg-black hover:text-[#de0000]"
+                  class="mx-3 flex h-8 w-[45px] items-center justify-center rounded-[3px] bg-[#070707] text-4 font-500 leading-8 text-white shadow transition hover:bg-black hover:text-[#de0000]"
                   onClick={rejectDelete}
                 >
                   No

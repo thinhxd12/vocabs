@@ -23,7 +23,12 @@ const FlipCard: Component<{
         animating={props.number % 10 === 0}
         delay={1650}
       />
-      <Tick number={numbArray()[2]} animating={true} delay={1500} />
+      <Tick
+        number={numbArray()[2]}
+        animating={true}
+        delay={1500}
+        image={props.number === 1}
+      />
     </div>
   );
 };

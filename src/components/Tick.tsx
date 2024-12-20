@@ -6,6 +6,7 @@ const Tick = (initialProps: {
   animating: boolean;
   duration?: number;
   delay?: number;
+  image?: boolean;
 }) => {
   const props = mergeProps({ delay: 0, duration: 800 }, initialProps);
 
@@ -140,7 +141,16 @@ const Tick = (initialProps: {
           >
             <span class="tick-flip-panel-front-text">
               <span class="tick-flip-panel-text-wrapper">
-                {props.number === 0 ? 9 : props.number - 1}
+                {props.image ? (
+                  <img
+                    src="/images/cup.webp"
+                    class="absolute left-0.1 w-8 object-contain"
+                  />
+                ) : props.number === 0 ? (
+                  9
+                ) : (
+                  props.number - 1
+                )}
               </span>
             </span>
             <span
@@ -183,7 +193,16 @@ const Tick = (initialProps: {
           >
             <span class="tick-flip-panel-back-text">
               <span class="tick-flip-panel-text-wrapper">
-                {props.number === 0 ? 9 : props.number - 1}
+                {props.image ? (
+                  <img
+                    src="/images/cup.webp"
+                    class="absolute left-0.1 w-8 object-contain"
+                  />
+                ) : props.number === 0 ? (
+                  9
+                ) : (
+                  props.number - 1
+                )}
               </span>
             </span>
             <span

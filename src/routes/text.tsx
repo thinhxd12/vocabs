@@ -34,14 +34,14 @@ const Text: Component<{}> = (props) => {
   };
 
   const notify2 = () => {
-    setNumber(27);
+    setNumber(1);
   };
 
   return (
     <div class="flex flex-col items-start">
       <button onClick={notify}>100</button>
       <button onClick={notify1}>99</button>
-      <button onClick={notify2}>27</button>
+      <button onClick={notify2}>1</button>
       <FlipCard number={number()} />
     </div>
   );

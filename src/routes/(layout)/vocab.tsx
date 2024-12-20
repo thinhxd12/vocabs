@@ -10,7 +10,7 @@ import {
 import Definition from "~/components/Definition";
 import { VocabularyTranslationType, VocabularyType } from "~/types";
 import { OcSearch2 } from "solid-icons/oc";
-import { BiSolidSave } from "solid-icons/bi";
+import { BiRegularBandAid, BiSolidSave } from "solid-icons/bi";
 import {
   layoutStore,
   setNavStore,
@@ -161,6 +161,32 @@ const Vocab: Component<{}> = (props) => {
   const handleCloseDialogEdit = (open: boolean) => {
     if (!open) layoutStore.layoutMainRef?.focus();
     setVocabStore("showEdit", open);
+  };
+
+  const handleFixDefinition = () => {
+    const definition = editWordStore()?.definitions;
+    if (definition) {
+      const definitionFixed = JSON.stringify(definition).replace("&emsp;", "");
+      const definitionFixedFull = editWordStore()?.definitions.map(
+        (item, index) => {
+          return {
+            ...item,
+            definitions: item.definitions.map((el) => {
+              return {
+                ...el,
+                definition: editWordGet()?.definitions.find(
+                  (m) => m.partOfSpeech === item.partOfSpeech,
+                )?.definitions[index].definition,
+              };
+            }),
+          };
+        },
+      );
+      setVocabStore("editWord", {
+        ...editWordStore()!,
+        definitions: definitionFixedFull || JSON.parse(definitionFixed),
+      });
+    }
   };
 
   /////////////////////translate////////////////////////////
@@ -368,8 +394,8 @@ const Vocab: Component<{}> = (props) => {
           </div>
         </div>
 
-        <div class="h-[calc(100vh-80px)] w-full py-0.1">
-          <div class="no-scrollbar relative h-full w-full overflow-y-scroll pt-2">
+        <div class="h-[calc(100vh-80px)] w-full py-2">
+          <div class="no-scrollbar relative h-full w-full overflow-y-scroll">
             <Show when={renderWordStore()}>
               <Definition
                 item={renderWordStore()!}
@@ -647,9 +673,21 @@ const Vocab: Component<{}> = (props) => {
                     }}
                   />
 
-                  <button class="btn-submit ml-2 mt-2" type="submit">
-                    <BiSolidSave size={15} />
-                  </button>
+                  <div class="flex w-full">
+                    <button class="btn-submit ml-2 mt-2" type="submit">
+                      <BiSolidSave size={15} />
+                    </button>
+
+                    <button
+                      class="btn-submit ml-2 mt-2"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleFixDefinition();
+                      }}
+                    >
+                      <BiRegularBandAid size={15} />
+                    </button>
+                  </div>
                 </form>
 
                 <Show when={editWordGet()}>

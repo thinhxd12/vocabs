@@ -179,7 +179,7 @@ const Schedule: Component<{}> = (props) => {
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio ref={audioRef} hidden src={audioSrc()} />
-      <main class="no-scrollbar relative h-[calc(100vh-40px)] w-[360px] overflow-y-scroll py-0.5">
+      <main class="no-scrollbar relative h-[calc(100vh-40px)] w-[360px] overflow-y-scroll py-2">
         <div class="light-layout relative mb-1.5 h-[240px] w-full overflow-hidden rounded-2 p-2">
           <img
             class="h-full w-full rounded-2 border border-black/30 object-cover shadow-sm shadow-black/30 brightness-90"

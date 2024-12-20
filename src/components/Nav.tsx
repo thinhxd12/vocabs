@@ -302,24 +302,26 @@ const Nav: Component<{}> = (props) => {
           <Show
             when={navStore.todaySchedule.created_at}
             fallback={
-              <>
+              <div class="flex flex-col justify-center">
                 <span class="w-full text-center text-3 leading-2.5 text-white">
                   N
                 </span>
                 <span class="w-full text-center text-3 leading-3 text-white">
                   N
                 </span>
-              </>
+              </div>
             }
           >
-            <span class="w-full text-center text-3 leading-2.5 text-white">
-              {navStore.todaySchedule.time1}
-            </span>
-            <span class="w-full text-center text-3 leading-3 text-white">
-              {navStore.todaySchedule.time2}
-            </span>
+            <div class="flex flex-col justify-center">
+              <span class="w-full text-center text-3 leading-2.5 text-white">
+                {navStore.todaySchedule.time1}
+              </span>
+              <span class="w-full text-center text-3 leading-3 text-white">
+                {navStore.todaySchedule.time2}
+              </span>
+            </div>
           </Show>
-          <span class="mb-0.1 -rotate-90 rounded-0.5 bg-white/25 text-left text-2.5 leading-3.5 text-white">
+          <span class="mb-0.1 -rotate-90 rounded-0.5 bg-white/25 px-0.1 text-left text-2.5 leading-3.5 text-white">
             {format(new Date(), "eeeeee")}
           </span>
         </div>
@@ -504,7 +506,7 @@ const Nav: Component<{}> = (props) => {
           </button>
 
           <button
-            class="btn-nav-menu"
+            class="btn-nav-menu hidden sm:flex"
             onClick={() =>
               setLayoutStore("showLayout", !layoutStore.showLayout)
             }

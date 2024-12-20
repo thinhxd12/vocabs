@@ -940,20 +940,23 @@ export const getBookMarkDataItem = async (time: string) => {
   if (data) return data[0];
 };
 
-export const getSpotlightImage = async () => {
+// https://github.com/ORelio/Spotlight-Downloader/blob/master/SpotlightAPI.md
+
+export const getSpotlightImage_v3 = async () => {
   "use server";
   let batchQuery = {} as any;
-  batchQuery["pid"] = "338387";
+  batchQuery["pid"] = "209567";
   batchQuery["fmt"] = "json";
   batchQuery["rafb"] = "0";
   batchQuery["ua"] = "WindowsShellClient/0";
   batchQuery["cdm"] = "1";
-  batchQuery["disphorzres"] = "2560";
-  batchQuery["dispvertres"] = "1440";
+  batchQuery["disphorzres"] = "9999";
+  batchQuery["dispvertres"] = "9999";
   batchQuery["lo"] = "80217";
   batchQuery["pl"] = "en-US";
   batchQuery["lc"] = "en-US";
-  batchQuery["ctry"] = "kr";
+  batchQuery["ctry"] = "hk";
+
   const baseUrl =
     "https://arc.msn.com/v3/Delivery/Placement?" +
     new URLSearchParams(batchQuery).toString();
@@ -973,6 +976,25 @@ export const getSpotlightImage = async () => {
       hs2_title: hs2_title_text,
       image_L: jsImageL,
       image_P: jsImageP,
+    } as LoginImageType;
+  }
+};
+
+export const getSpotlightImage_v4 = async () => {
+  "use server";
+  const baseUrl =
+    "https://fd.api.iris.microsoft.com/v4/api/selection?&placement=88000820&bcnt=1&country=DK&locale=en-US&fmt=json";
+  const data = await (await fetch(baseUrl)).json();
+
+  if (data) {
+    const response = data["batchrsp"]["items"][0]["item"];
+    const result = JSON.parse(response)["ad"];
+    return {
+      title: result.title,
+      hs1_title: result.iconHoverText.replace("Right-click to learn more", ""),
+      hs2_title: result.description,
+      image_L: result.landscapeImage.asset,
+      image_P: result.portraitImage.asset,
     } as LoginImageType;
   }
 };

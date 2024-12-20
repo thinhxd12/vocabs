@@ -109,7 +109,7 @@ const Art: Component<{}> = (props) => {
 
   return (
     <>
-      <div class="light-layout relative flex h-full w-full rounded-3">
+      <div class="light-layout relative flex h-full w-full overflow-hidden rounded-3">
         <div class="flex h-full w-1/4 flex-col bg-black/15 p-4">
           <div class="w-full">
             <p class="text-4 font-500 leading-5 text-secondary-white">

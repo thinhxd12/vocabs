@@ -394,7 +394,7 @@ const Weather: Component<{}> = (props) => {
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio ref={audioRef} hidden src={audioSrc()} />
-      <main class="h-[calc(100vh-40px)] w-[360px] py-0.5">
+      <main class="h-[calc(100vh-40px)] w-[360px] py-2">
         <div class="relative h-full w-full overflow-hidden rounded-2 shadow-md shadow-black/30">
           <canvas ref={canvasRef} class="absolute h-full w-full object-cover" />
           <div class="relative z-50 h-full w-full p-2">
