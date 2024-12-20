@@ -1,46 +1,29 @@
-import { Component } from "solid-js";
+import { Component, createSignal, createEffect } from "solid-js";
+import Tick from "./Tick";
 
 const FlipCard: Component<{
-  frontValue: number;
-  backValue: number;
-  highlightBackOpacity: number;
-  shadowBackOpacity: number;
-  shadowFrontOpacity: number;
-  rotate: number;
+  number: number;
 }> = (props) => {
-  return (
-    <div class="tick-flip-card">
-      {/* Front Panel */}
-      <span
-        class="tick-flip-panel-front tick-flip-front tick-flip-panel"
-        style={{ transform: `rotateX(${props.rotate}deg)` }}
-      >
-        <span class="tick-flip-panel-front-text">
-          <span class="tick-flip-panel-text-wrapper">{props.frontValue}</span>
-        </span>
-        <span
-          class="tick-flip-panel-front-shadow"
-          style={{ opacity: props.shadowFrontOpacity }}
-        />
-      </span>
+  const [numbArray, setNumbArray] = createSignal<number[]>([3, 6, 9]);
 
-      {/* Back Panel */}
-      <span
-        class="tick-flip-panel-back tick-flip-back tick-flip-panel"
-        style={{ transform: `rotateX(${-180 + props.rotate}deg)` }}
-      >
-        <span class="tick-flip-panel-back-text">
-          <span class="tick-flip-panel-text-wrapper">{props.backValue}</span>
-        </span>
-        <span
-          class="tick-flip-panel-back-highlight"
-          style={{ opacity: props.highlightBackOpacity }}
-        />
-        <span
-          class="tick-flip-panel-back-shadow"
-          style={{ opacity: props.shadowBackOpacity }}
-        />
-      </span>
+  createEffect(() => {
+    let strNumber = props.number.toString().padStart(3, "0");
+    setNumbArray(Array.from(String(strNumber), Number));
+  });
+
+  return (
+    <div class="relative flex font-helvetica text-[40px] font-600 leading-[36px]">
+      <Tick
+        number={props.number % 100 === 0 ? numbArray()[0] : numbArray()[0] + 1}
+        animating={props.number % 100 === 0}
+        delay={1800}
+      />
+      <Tick
+        number={props.number % 10 === 0 ? numbArray()[1] : numbArray()[1] + 1}
+        animating={props.number % 10 === 0}
+        delay={1650}
+      />
+      <Tick number={numbArray()[2]} animating={true} delay={1500} />
     </div>
   );
 };

@@ -279,7 +279,7 @@ const Schedule: Component<{}> = (props) => {
             <div class="relative flex w-full snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar-thumb]:bg-black/60 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white/15 [&::-webkit-scrollbar]:h-1">
               <For each={chunk(scheduleStore.historyList, 5).reverse()}>
                 {(data) => (
-                  <div class="min-w-full snap-start overflow-hidden pl-1 pr-1 pt-1">
+                  <div class="min-w-full select-none snap-start overflow-hidden pl-1 pr-1 pt-1">
                     <For each={data}>
                       {(item) => (
                         <div class="mb-1 flex w-full items-center overflow-hidden rounded-2 bg-white/15 p-1 shadow-md shadow-black/45 backdrop-blur-lg">

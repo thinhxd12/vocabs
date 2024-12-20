@@ -1,56 +1,29 @@
 .tick-flip {
-  min-width: 24px;
-  height: 36px;
-  overflow: hidden;
-  position: relative;
-  border-radius: 2px;
-  /* box-shadow:
-    0 0.125em 0.3125em rgba(0, 0, 0, 0.25),
-    0 0.02125em 0.06125em rgba(0, 0, 0, 0.25); */
-  @apply shadow-sm shadow-black/70;
-}
-
-.tick-flip:nth-child(2) {
-  margin: 0 1px;
-}
-
-.tick-flip-panel {
-  background-color: #1b1b1b;
-}
-
-.tick-flip-shadow {
-  box-shadow:
-    0 0.125em 0.3125em rgba(0, 0, 0, 0.25),
-    0 0.02125em 0.06125em rgba(0, 0, 0, 0.25);
-}
-
-.tick-flip {
   position: relative;
   text-align: center;
+  margin: 0 0.5px;
+  border-radius: 3px;
+  letter-spacing: 3px;
+  text-indent: 2px;
 }
-
 .tick-flip * {
   border-radius: inherit;
   white-space: pre;
   letter-spacing: inherit;
   text-indent: inherit;
 }
-
 .tick-flip-front {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
-
 .tick-flip-back {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-
 .tick-flip-spacer {
   display: block;
   visibility: hidden;
 }
-
 .tick-flip-shadow {
   position: absolute;
   left: 1px;
@@ -60,15 +33,12 @@
   color: transparent !important;
   background: transparent !important;
 }
-
 .tick-flip-shadow-top {
   bottom: calc(50% - 1px);
 }
-
 .tick-flip-shadow-bottom {
   top: calc(50% + 1px);
 }
-
 .tick-flip-card-shadow {
   position: absolute;
   left: 0.15em;
@@ -84,10 +54,6 @@
     0 0.125em 0.5em rgba(0, 0, 0, 0.75);
   z-index: 0;
 }
-
-/**
- * Card
- */
 .tick-flip-card {
   position: absolute;
   z-index: 1;
@@ -97,9 +63,8 @@
   height: 100%;
   perspective: 4em;
 }
-
-.tick-flip-panel-front,
-.tick-flip-panel-back {
+.tick-flip-panel-back,
+.tick-flip-panel-front {
   position: absolute;
   left: 0;
   width: 100%;
@@ -107,9 +72,8 @@
   backface-visibility: hidden;
   transform-style: preserve-3d;
 }
-
-.tick-flip-panel-front-text,
-.tick-flip-panel-back-text {
+.tick-flip-panel-back-text,
+.tick-flip-panel-front-text {
   position: absolute;
   left: -1px;
   top: 0;
@@ -117,42 +81,29 @@
   height: 100%;
   overflow: hidden;
 }
-
 .tick-flip-panel-text-wrapper {
   position: absolute;
   left: 0;
   top: 0;
   right: 0;
   height: 100%;
-
-  img {
-    padding-top: 1px;
-    width: 80%;
-    margin: 0 auto;
-    object-fit: contain;
-  }
 }
-
 .tick-flip-panel-back-text .tick-flip-panel-text-wrapper {
   height: 200%;
   top: -100%;
 }
-
 .tick-flip-panel-front {
   transform-origin: center bottom;
   top: 0;
   z-index: 2;
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 1px hsla(0, 0%, 100%, 0.05);
 }
-
 .tick-flip-panel-back {
-  -webkit-transform-origin: center top;
   transform-origin: center top;
   top: 50%;
   z-index: 1;
   box-shadow: inset 0 -1px rgba(0, 0, 0, 0.1);
 }
-
 .tick-flip-panel-back:after {
   z-index: 1;
   content: "";
@@ -168,24 +119,20 @@
     transparent 30%
   );
 }
-
 .tick-flip-panel-back-shadow {
   z-index: 2;
 }
-
 .tick-flip-panel-back-highlight {
   z-index: 3;
 }
-
-.tick-flip-panel-back-shadow,
-.tick-flip-panel-back-highlight {
+.tick-flip-panel-back-highlight,
+.tick-flip-panel-back-shadow {
   border-bottom-left-radius: inherit;
   border-bottom-right-radius: inherit;
 }
-
-.tick-flip-panel-front-shadow,
+.tick-flip-panel-back-highlight,
 .tick-flip-panel-back-shadow,
-.tick-flip-panel-back-highlight {
+.tick-flip-panel-front-shadow {
   position: absolute;
   left: 0;
   top: 0;
@@ -193,27 +140,61 @@
   bottom: 0;
   opacity: 0;
 }
-
 .tick-flip-panel-front-shadow {
   background-image: linear-gradient(
-    to top,
+    0deg,
     rgba(0, 0, 0, 0.8),
     rgba(0, 0, 0, 0.3)
   );
 }
-
 .tick-flip-panel-back-shadow {
   background-image: linear-gradient(
-    to bottom,
+    180deg,
     rgba(0, 0, 0, 0.7),
     rgba(0, 0, 0, 0.5)
   );
 }
-
 .tick-flip-panel-back-highlight {
   background-image: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.15),
-    rgba(255, 255, 255, 0.3)
+    180deg,
+    hsla(0, 0%, 100%, 0.15),
+    hsla(0, 0%, 100%, 0.3)
   );
+}
+.tick [data-style*="shadow:inner"],
+.tick [data-style*="shadow:inner"] .tick-flip-card-shadow,
+.tick [data-style*="shadow:none"] .tick-flip-card-shadow,
+.tick [data-style*="shadow:none"] .tick-flip-panel-back,
+.tick [data-style*="shadow:none"] .tick-flip-panel-front,
+.tick [data-style*="shadow:none"] .tick-flip-shadow {
+  box-shadow: none;
+}
+.tick [data-style*="shadow:none"] .tick-flip-back:after,
+.tick [data-style*="shadow:none"] .tick-flip-panel-back-shadow,
+.tick [data-style*="shadow:none"] .tick-flip-panel-back-text:after,
+.tick [data-style*="shadow:none"] .tick-flip-panel-front-shadow {
+  background-image: none;
+}
+.tick [data-style*="rounded:none"] {
+  border-radius: 0;
+}
+.tick [data-style*="rounded:panels"] .tick-flip-front,
+.tick [data-style*="rounded:panels"] .tick-flip-shadow-bottom {
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+.tick [data-style*="rounded:panels"] .tick-flip-back,
+.tick [data-style*="rounded:panels"] .tick-flip-panel-back:after,
+.tick [data-style*="rounded:panels"] .tick-flip-shadow-top {
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+.tick-flip-panel {
+  color: #edebeb;
+  background-color: #333232;
+}
+.tick-flip-shadow {
+  box-shadow:
+    0 0.125em 0.3125em rgba(0, 0, 0, 0.25),
+    0 0.02125em 0.06125em rgba(0, 0, 0, 0.25);
 }

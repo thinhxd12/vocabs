@@ -1,21 +1,15 @@
-import { createEffect, createSignal, on, onCleanup } from "solid-js";
-import "../styles/test.css";
-import FlipCard from "./FlipCard";
+import { createEffect, createSignal, mergeProps, on, Show } from "solid-js";
+// https://github.com/pqina/flip/blob/master/src/js/index.js
 
-type FlipCardType = {
-  frontValue: number;
-  backValue: number;
-  highlightBackOpacity: number;
-  shadowBackOpacity: number;
-  shadowFrontOpacity: number;
-  rotate: number;
-};
+const Tick = (initialProps: {
+  number: number;
+  animating: boolean;
+  duration?: number;
+  delay?: number;
+}) => {
+  const props = mergeProps({ delay: 0, duration: 800 }, initialProps);
 
-const Tick = (props: { number: number }) => {
-  const [prevNumber, setPrevNumber] = createSignal(props.number);
-  const [rotation, setRotation] = createSignal(0);
-
-  const ease = (t: number) => {
+  const easeOutBounce = (t: number) => {
     var scaledTime = t / 1;
     if (scaledTime < 1 / 2.75) {
       return 7.5625 * scaledTime * scaledTime;
@@ -31,61 +25,228 @@ const Tick = (props: { number: number }) => {
     }
   };
 
-  const flipDuration = 800;
+  const easeOutSine = (t: number) => {
+    return Math.sin(t * (Math.PI / 2));
+  };
 
-  const [offset, setOffset] = createSignal<number>(0);
-  const [done, setDone] = createSignal<boolean>(false);
-  const [visual_progress, setVisual_progress] = createSignal<number>(0);
+  const easeOutCubic = (t: number) => {
+    var t1 = t - 1;
+    return t1 * t1 * t1 + 1;
+  };
 
   createEffect(
     on(
       () => props.number,
       () => {
-        animate();
+        draw();
       },
     ),
   );
-  const animate = () => {
-    setOffset(Date.now());
-    const tick = () => {
-      let progress = (Date.now() - offset()) / flipDuration;
-      if (progress >= 1) {
-        progress = 1;
-        setDone(true);
-      }
 
-      let visual_progress = ease(progress);
+  const [done, setDone] = createSignal<boolean>(false);
+  const [shadowFront, setShadowFront] = createSignal<number>(0);
+  const [highlightBack, setHighlightBack] = createSignal<number>(0);
+  const [shadowBack, setShadowBack] = createSignal<number>(0);
+  const [zIndex, setzIndex] = createSignal<number | string>("unset");
+  const [degrees, setDegrees] = createSignal<number>(0);
+  const [shadowCard, setShadowCard] = createSignal<number>(0);
+  const [shadowCardScaleY, setShadowCardScaleY] = createSignal<number>(0);
 
-      // set default shadow and highlight levels based on visual animation progress
-      const shadowFrontProgress = 1 - Math.abs(visual_progress - 0.5) * 2;
-      const highlightBackProgress = 1 - (visual_progress - 0.5) / 0.5;
+  const draw = () => {
+    const start = performance.now();
 
-      let shadowFront = shadowFrontProgress;
-      let highlightBack = highlightBackProgress;
+    if (props.animating) {
+      setDone(false);
+      setShadowBack(0);
+      setzIndex(1);
+      setDegrees(0);
 
-      console.log(visual_progress);
+      const tick = () => {
+        const t = performance.now() - start - props.delay;
 
-      //    const p = visual_progress;
+        if (t < props.duration) {
+          const progress = t >= 0 ? t / props.duration : 0;
 
-      //           if (p > 0.5 && !car.done) {
-      //             card.root.style.zIndex = 10 + index;
-      //           } else {
-      //             card.root.style.removeProperty("z-index");
-      //           }
+          if (progress >= 1) {
+            setDone(true);
+            return;
+          }
 
-      //           card.rotate(p * -180);
-    };
+          if (progress > 0) {
+            let visual_progress = easeOutBounce(progress);
 
-    tick();
+            // update shadows
+            // set default shadow and highlight levels based on visual animation progress
+            const shadowFront = 1 - Math.abs(visual_progress - 0.5) * 2;
+            const highlightBack = 1 - (visual_progress - 0.5) / 0.5;
+
+            setShadowFront(shadowFront);
+            setHighlightBack(highlightBack);
+
+            // if there's a card above me, my back is visible, and the above card is falling
+            if (visual_progress > 0.5 && visual_progress > 0) {
+              const shadowBack = easeOutCubic(visual_progress);
+              setShadowBack(shadowBack);
+            }
+
+            // update and animate cards
+
+            if (visual_progress > 0.5 && !done()) {
+              setzIndex(10);
+            } else {
+              setzIndex(1);
+            }
+
+            setDegrees(visual_progress * -180);
+
+            // handle card stack shadow
+            let shadowProgress = 0;
+            let dist = 1;
+
+            let d = Math.abs(visual_progress - 0.5);
+            if (d < dist) {
+              dist = d;
+              shadowProgress = visual_progress;
+            }
+
+            let s =
+              shadowProgress < 0.5
+                ? easeOutSine(shadowProgress / 0.5)
+                : easeOutSine((1 - shadowProgress) / 0.5);
+            setShadowCard(s);
+            setShadowCardScaleY(s);
+          }
+          requestAnimationFrame(tick);
+        }
+      };
+      tick();
+    } else {
+      setDone(true);
+      setShadowBack(1);
+      setzIndex(10);
+      setDegrees(-180);
+    }
   };
 
   return (
-    <span class="tick-flip">
-      {/* card back */}
-      {/* <FlipCard /> */}
-      {/* card front */}
-      {/* <FlipCard /> */}
-    </span>
+    <>
+      <span class="tick-flip">
+        {/* card back */}
+
+        <span class="tick-flip-card">
+          <span
+            class="tick-flip-panel-front tick-flip-front tick-flip-panel"
+            style="transform: rotateX(0deg);"
+          >
+            <span class="tick-flip-panel-front-text">
+              <span class="tick-flip-panel-text-wrapper">
+                {props.number === 0 ? 9 : props.number - 1}
+              </span>
+            </span>
+            <span
+              class="tick-flip-panel-front-shadow"
+              style="opacity: 0;"
+            ></span>
+          </span>
+          <span
+            class="tick-flip-panel-back tick-flip-back tick-flip-panel"
+            style="transform: rotateX(-180deg);"
+          >
+            <span class="tick-flip-panel-back-text">
+              <span class="tick-flip-panel-text-wrapper"></span>
+            </span>
+            <span
+              class="tick-flip-panel-back-highlight"
+              style="opacity: 2;"
+            ></span>
+            <span class="tick-flip-panel-back-shadow"></span>
+          </span>
+        </span>
+
+        {/* card front */}
+        <span class="tick-flip-card" style={{ "z-index": zIndex() }}>
+          <span
+            class="tick-flip-panel-front tick-flip-front tick-flip-panel"
+            style={{ transform: `rotateX(${degrees()}deg)` }}
+          >
+            <span class="tick-flip-panel-front-text">
+              <span class="tick-flip-panel-text-wrapper">{props.number}</span>
+            </span>
+            <span
+              class="tick-flip-panel-front-shadow"
+              style={{ opacity: shadowFront() }}
+            ></span>
+          </span>
+          <span
+            class="tick-flip-panel-back tick-flip-back tick-flip-panel"
+            style={{ transform: `rotateX(${-180 + degrees()}deg)` }}
+          >
+            <span class="tick-flip-panel-back-text">
+              <span class="tick-flip-panel-text-wrapper">
+                {props.number === 0 ? 9 : props.number - 1}
+              </span>
+            </span>
+            <span
+              class="tick-flip-panel-back-highlight"
+              style={{ opacity: highlightBack() }}
+            ></span>
+            <span
+              class="tick-flip-panel-back-shadow"
+              style="opacity: 0;"
+            ></span>
+          </span>
+        </span>
+
+        <Show when={!done()}>
+          {/* card animate */}
+          <span class="tick-flip-card" style="">
+            <span
+              class="tick-flip-panel-front tick-flip-front tick-flip-panel"
+              style="transform: rotateX(-180deg);"
+            >
+              <span class="tick-flip-panel-front-text">
+                <span class="tick-flip-panel-text-wrapper">
+                  {props.number === 9 ? 0 : props.number + 1}
+                </span>
+              </span>
+              <span
+                class="tick-flip-panel-front-shadow"
+                style="opacity: 0;"
+              ></span>
+            </span>
+            <span
+              class="tick-flip-panel-back tick-flip-back tick-flip-panel"
+              style="transform: rotateX(-360deg);"
+            >
+              <span class="tick-flip-panel-back-text">
+                <span class="tick-flip-panel-text-wrapper">{props.number}</span>
+              </span>
+              <span
+                class="tick-flip-panel-back-highlight"
+                style="opacity: 0;"
+              ></span>
+              <span
+                class="tick-flip-panel-back-shadow"
+                style={{ opacity: shadowBack() }}
+              ></span>
+            </span>
+          </span>
+        </Show>
+
+        <span class="tick-flip-spacer">
+          {props.number === 0 ? 9 : props.number - 1}
+        </span>
+        <span class="tick-flip-shadow-top tick-flip-shadow tick-flip-front"></span>
+        <span class="tick-flip-shadow-bottom tick-flip-shadow tick-flip-back"></span>
+        <span
+          class="tick-flip-card-shadow"
+          style={{
+            opacity: shadowCard(),
+            transform: `scaleY(${shadowCardScaleY()})`,
+          }}
+        ></span>
+      </span>
+    </>
   );
 };
 

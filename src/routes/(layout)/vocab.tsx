@@ -17,7 +17,6 @@ import {
   setVocabStore,
   vocabStore,
 } from "~/lib/store";
-import FlipNumber from "~/components/FlipNumber";
 import {
   editVocabularyItem,
   getTextDataWebster,
@@ -33,6 +32,7 @@ import { getUser } from "~/lib/login";
 import { debounce } from "@solid-primitives/scheduled";
 import toast, { Toaster } from "solid-toast";
 import Collapsible from "~/components/Collapsible";
+import FlipCard from "~/components/FlipCard";
 
 const Vocab: Component<{}> = (props) => {
   // ***************check login**************
@@ -313,7 +313,7 @@ const Vocab: Component<{}> = (props) => {
               <div class="light-layout mr-1 h-full w-[74px] rounded-2"></div>
             }
           >
-            <FlipNumber value={renderWordStore()!.number} />
+            <FlipCard number={renderWordStore()!.number} />
           </Show>
           <div class="light-layout relative flex h-full flex-grow items-center justify-center rounded-2 p-1">
             <Show

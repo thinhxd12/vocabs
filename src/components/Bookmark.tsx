@@ -181,6 +181,7 @@ const Bookmark: Component<{}> = (props) => {
   const handleDeleteBookmark = () => {
     deleteBookmark(bookmark()!.created_at);
     handleGetNextBookmark();
+    setOpenDeleteAlert(false);
   };
 
   return (

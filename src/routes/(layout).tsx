@@ -233,7 +233,7 @@ export default function Layout(props: RouteSectionProps) {
           src={
             layoutStore.isMobile ? imageData()!.image_P : imageData()!.image_L
           }
-          class="absolute z-0 h-screen w-screen object-cover brightness-75"
+          class="absolute z-0 h-screen w-screen object-cover brightness-90"
         />
       </Show>
       <div class="absolute left-0 top-0 z-50 flex h-full w-full justify-center overflow-hidden">

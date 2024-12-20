@@ -19,26 +19,30 @@ import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
 import sharp from "sharp";
 import { Buffer } from "buffer";
 import Tick from "~/components/Tick";
+import FlipCard from "~/components/FlipCard";
 
 const Text: Component<{}> = (props) => {
   const [result, setResult] = createSignal<any>();
   const [number, setNumber] = createSignal<number>(9);
 
   const notify = () => {
-    if (number() > 0) setNumber(number() - 1);
+    setNumber(100);
   };
 
   const notify1 = () => {
-    setNumber(78);
+    setNumber(99);
+  };
+
+  const notify2 = () => {
+    setNumber(27);
   };
 
   return (
     <div class="flex flex-col items-start">
-      <button onClick={notify}>click</button>
-      <button onClick={notify1}>click1</button>
-      <div class="flex font-helvetica text-[40px] font-600 leading-[36px] text-[#f4f4f4]">
-        <Tick number={number()} />
-      </div>
+      <button onClick={notify}>100</button>
+      <button onClick={notify1}>99</button>
+      <button onClick={notify2}>27</button>
+      <FlipCard number={number()} />
     </div>
   );
 };
