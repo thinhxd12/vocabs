@@ -1,37 +1,25 @@
-import { FaSolidLocationDot } from "solid-icons/fa";
-import {
-  Component,
-  createEffect,
-  createSignal,
-  onMount,
-  Show,
-  Suspense,
-} from "solid-js";
-import toast, { Toaster } from "solid-toast";
-import Collapsible from "~/components/Collapsible";
-import {
-  getLayoutImage,
-  getOedSoundURL,
-  getTextDataWebster,
-} from "~/lib/server";
+import { Component, createEffect, createSignal, onCleanup } from "solid-js";
 
-import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
-import sharp from "sharp";
-import { Buffer } from "buffer";
-import Tick from "~/components/Tick";
-import FlipCard from "~/components/FlipCard";
-
-const Text: Component<{}> = (props) => {
+const HeartAnimate: Component<{ id: number }> = (props) => {
   let canvasRef: HTMLCanvasElement | undefined;
   let ani: number;
   let canvasWidth: number;
   let canvasHeight: number;
   let img: HTMLImageElement;
-
   const hearSvg =
-    '<svg stroke-width="0" color="red" fill="red" viewBox="0 0 16 16" size="15" class="text-white" height="15" width="15" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path></svg>';
+    '<svg stroke-width="0" color="#fd2c55" fill="#fd2c55" viewBox="0 0 16 16" size="15" class="text-white" height="15" width="15" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path></svg>';
 
-  const notify = () => {
+  const [isShow, setIsShow] = createSignal<boolean>(false);
+
+  createEffect(() => {
+    if (props.id > 0) {
+      clearCanvas();
+      runAnimate();
+      setIsShow(true);
+    }
+  });
+
+  const runAnimate = () => {
     generateRandomPositions();
     img = new Image();
     const svgBlob = new Blob([hearSvg], { type: "image/svg+xml" });
@@ -43,30 +31,30 @@ const Text: Component<{}> = (props) => {
   };
 
   const [positions, setPositions] = createSignal<
-    { x: number; y: number; speed: number; targetX: number }[]
+    { x: number; y: number; speed: number; targetX: number; size: number }[]
   >([]);
   const hearts = Array.from({ length: 99 }, (_, i) => i);
 
   const generateRandomPositions = () => {
     if (canvasRef) {
-      canvasRef.width = window.innerWidth;
+      canvasRef.width = window.innerWidth - 360;
       canvasRef.height = window.innerHeight;
       canvasWidth = canvasRef.width;
       canvasHeight = canvasRef.height;
 
       const initialPositions = [];
       for (let i = 0; i < hearts.length; i++) {
+        const sizeRandom = Math.random() * 10 + 20;
         initialPositions.push({
           x: Math.random() * canvasWidth,
-          y: canvasHeight + 30,
-          speed: 2 + Math.random() * 4,
+          y: canvasHeight + (Math.random() * canvasHeight) / 2,
+          speed: 3 + Math.random() * 6,
           targetX: Math.random() * canvasWidth,
+          size: sizeRandom,
         });
       }
       setPositions(initialPositions);
     }
-
-    console.log(positions());
   };
 
   const drawImages = () => {
@@ -75,7 +63,7 @@ const Text: Component<{}> = (props) => {
       ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
       positions().forEach((pos, index) => {
-        ctx.drawImage(img, pos.x, pos.y, 30, 30);
+        ctx.drawImage(img, pos.x, pos.y, pos.size, pos.size);
       });
     }
   };
@@ -94,7 +82,7 @@ const Text: Component<{}> = (props) => {
         if (newY < -30) {
           newY = -31;
           pos.x = Math.random() * canvasRef!.width;
-          pos.speed = 3 + Math.random() * 6;
+          pos.speed = 6 + Math.random() * 6;
         }
         return { ...pos, x: newX, y: newY };
       }),
@@ -111,32 +99,30 @@ const Text: Component<{}> = (props) => {
     if (!allImagesGone()) {
       ani = requestAnimationFrame(animate);
     } else {
-      console.log("All images have moved off the canvas. Animation stopped.");
-      notify1();
+      clearCanvas();
     }
   };
 
-  const notify1 = () => {
+  const clearCanvas = () => {
+    setIsShow(false);
     cancelAnimationFrame(ani);
     if (canvasRef) {
       const ctx = canvasRef.getContext("2d")!;
       ctx.clearRect(0, 0, canvasRef.width, canvasRef.height);
     }
+    console.log(123123);
   };
 
-  return (
-    <div class="relative h-screen w-screen">
-      <div class="flex items-start">
-        <button onClick={notify} class="mr-2">
-          run
-        </button>
-        <button onClick={notify1}>reset</button>
-      </div>
-      <canvas ref={canvasRef} class="absolute h-full w-full object-cover" />
+  onCleanup(() => {
+    clearCanvas();
+  });
 
-      <canvas />
-    </div>
+  return (
+    <canvas
+      ref={canvasRef}
+      class={`fixed z-[99] ${isShow() ? "pointer-events-auto" : "pointer-events-none"} left-0 top-0`}
+    />
   );
 };
 
-export default Text;
+export default HeartAnimate;

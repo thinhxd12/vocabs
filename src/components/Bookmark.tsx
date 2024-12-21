@@ -3,6 +3,7 @@ import {
   createMemo,
   createSignal,
   For,
+  lazy,
   onMount,
   Show,
   Suspense,
@@ -37,8 +38,8 @@ import {
   updateBookmarkData,
 } from "~/lib/server";
 import { createMarker, makeSearchRegex } from "@solid-primitives/marker";
-import { Motion } from "solid-motionone";
 import Dialog from "@corvu/dialog";
+const HeartAnimate = lazy(() => import("./HeartAnimate"));
 
 const Bookmark: Component<{}> = (props) => {
   let searchInputRef: HTMLInputElement | undefined;
@@ -89,7 +90,7 @@ const Bookmark: Component<{}> = (props) => {
       setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
       checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
       setLikeReset(!likeReset());
-      animationRun();
+      setHeartId(heartId() + 1);
     }
   };
 
@@ -171,50 +172,18 @@ const Bookmark: Component<{}> = (props) => {
     setOpenDialogSearch(open);
   };
 
-  const [hearts, setHearts] = createSignal<number[]>([]);
-
-  const animationRun = () => {
-    setHearts(Array.from({ length: 36 }, (_, i) => i));
-    setTimeout(() => setHearts([]), 3000);
-  };
-
   const handleDeleteBookmark = () => {
     deleteBookmark(bookmark()!.created_at);
     handleGetNextBookmark();
     setOpenDeleteAlert(false);
   };
 
+  const [heartId, setHeartId] = createSignal<number>(0);
+
   return (
     <>
-      <Show when={hearts().length}>
-        <div class="fixed inset-0 left-0 z-50 h-screen w-[calc(100vw-360px)]">
-          <For each={hearts()}>
-            {(item) => (
-              <Motion.span
-                class="absolute text-5.5"
-                animate={{
-                  left: [`${Math.random() * 99}%`, `${Math.random() * 99}%`],
-                  bottom: ["-30px", "120%"],
-                  transform: `scale(${Math.random() + 1})`,
-                  opacity: [1, 0.3],
-                }}
-                transition={{
-                  duration: 1.5,
-                  delay: Math.random() * 1,
-                }}
-              >
-                <BsHeartFill
-                  size={21}
-                  color="#fd2c55"
-                  style={{
-                    filter: "drop-shadow(0 0 6px rgba(0, 0, 0, 0.3))",
-                  }}
-                />
-              </Motion.span>
-            )}
-          </For>
-        </div>
-      </Show>
+      <HeartAnimate id={heartId()} />
+
       <div class="light-layout flex h-full w-full rounded-3 px-11 py-8">
         <div
           class={`no-scrollbar relative h-full w-full overflow-y-scroll rounded-3 border border-black/60 ${bookmark()?.like ? "bg-[url('/images/paper.webp')] shadow-md shadow-black/60" : "bg-[#dcd8d1]"} bg-cover bg-local`}

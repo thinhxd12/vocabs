@@ -38,8 +38,6 @@ export default function Layout(props: RouteSectionProps) {
 
   const [audioSrc, setAudioSrc] = createSignal<string>();
   const [imageData, setImageData] = createSignal<LoginImageType | undefined>();
-  const [showLayoutImageInfo, setShowLayoutImageInfo] =
-    createSignal<boolean>(false);
 
   onMount(async () => {
     if (audioRef) audioRef.volume = 0.1;
@@ -237,25 +235,16 @@ export default function Layout(props: RouteSectionProps) {
           class="absolute z-0 h-screen w-screen object-cover brightness-90"
         />
 
-        <Show
-          when={showLayoutImageInfo()}
-          fallback={
-            <p
-              onMouseOver={() => setShowLayoutImageInfo(!showLayoutImageInfo())}
-              class="absolute left-0 top-0 z-40 hidden w-1/4 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white sm:block"
-            >
+        <Show when={!layoutStore.showLayout}>
+          <div class="group absolute left-0 top-0 z-50 hidden w-1/4 sm:block">
+            <p class="absolute left-0 top-0 z-40 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white opacity-100 transition group-hover:opacity-0">
               {imageData()?.hs1_title}
             </p>
-          }
-        >
-          <p
-            onMouseLeave={() => setShowLayoutImageInfo(!showLayoutImageInfo())}
-            class="absolute left-0 top-0 z-40 hidden w-1/4 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white sm:block"
-          >
-            {imageData()?.hs2_title}
-          </p>
-        </Show>
-        <Show when={!layoutStore.showLayout}>
+            <p class="absolute left-0 top-0 z-40 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white opacity-0 transition group-hover:opacity-100">
+              {imageData()?.hs2_title}
+            </p>
+          </div>
+
           <p class="absolute bottom-0 right-0 hidden w-1/4 truncate pb-1 pr-1 text-right text-4 leading-6 text-white sm:block">
             {imageData()?.title}
           </p>
