@@ -8,7 +8,11 @@ import {
   Show,
 } from "solid-js";
 import Definition from "~/components/Definition";
-import { VocabularyTranslationType, VocabularyType } from "~/types";
+import {
+  VocabularyDefinitionType,
+  VocabularyTranslationType,
+  VocabularyType,
+} from "~/types";
 import { OcSearch2 } from "solid-icons/oc";
 import { BiRegularBandAid, BiSolidSave } from "solid-icons/bi";
 import {
@@ -164,27 +168,35 @@ const Vocab: Component<{}> = (props) => {
   };
 
   const handleFixDefinition = () => {
-    const definition = editWordStore()?.definitions;
+    const definition = JSON.parse(
+      JSON.stringify(editWordStore()?.definitions),
+    ) as VocabularyDefinitionType[];
     if (definition) {
       const definitionFixed = JSON.stringify(definition).replace("&emsp;", "");
-      const definitionFixedFull = editWordStore()?.definitions.map(
-        (item, index) => {
+      const definitionFixedFull = definition.map((item, index) => {
+        const getDefinition = editWordGet()?.definitions.find(
+          (m) => m.partOfSpeech === item.partOfSpeech,
+        )?.definitions;
+
+        const fixDefinitions = item.definitions.map((d, i) => {
           return {
-            ...item,
-            definitions: item.definitions.map((el) => {
-              return {
-                ...el,
-                definition: editWordGet()?.definitions.find(
-                  (m) => m.partOfSpeech === item.partOfSpeech,
-                )?.definitions[index].definition,
-              };
-            }),
+            ...d,
+            definition: getDefinition
+              ? getDefinition[i].definition
+              : d.definition,
           };
-        },
-      );
+        });
+
+        return {
+          ...item,
+          definitions: fixDefinitions,
+        };
+      });
       setVocabStore("editWord", {
         ...editWordStore()!,
-        definitions: definitionFixedFull || JSON.parse(definitionFixed),
+        definitions: definitionFixedFull
+          ? definitionFixedFull
+          : JSON.parse(definitionFixed),
       });
     }
   };

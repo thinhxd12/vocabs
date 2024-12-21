@@ -9,6 +9,7 @@ const Tick = (initialProps: {
   image?: boolean;
 }) => {
   const props = mergeProps({ delay: 0, duration: 800 }, initialProps);
+  let animationFrameIdRef: number;
 
   const easeOutBounce = (t: number) => {
     var scaledTime = t / 1;
@@ -39,6 +40,8 @@ const Tick = (initialProps: {
     on(
       () => props.number,
       () => {
+        cancelAnimationFrame(animationFrameIdRef);
+
         draw();
       },
     ),
@@ -48,20 +51,18 @@ const Tick = (initialProps: {
   const [shadowFront, setShadowFront] = createSignal<number>(0);
   const [highlightBack, setHighlightBack] = createSignal<number>(0);
   const [shadowBack, setShadowBack] = createSignal<number>(0);
-  const [zIndex, setzIndex] = createSignal<number | string>("unset");
+  const [zIndex, setzIndex] = createSignal<number>(1);
   const [degrees, setDegrees] = createSignal<number>(0);
   const [shadowCard, setShadowCard] = createSignal<number>(0);
   const [shadowCardScaleY, setShadowCardScaleY] = createSignal<number>(0);
 
   const draw = () => {
     const start = performance.now();
-
+    setDone(false);
+    setShadowBack(0);
+    setzIndex(1);
+    setDegrees(0);
     if (props.animating) {
-      setDone(false);
-      setShadowBack(0);
-      setzIndex(1);
-      setDegrees(0);
-
       const tick = () => {
         const t = performance.now() - start - props.delay;
 
@@ -117,7 +118,7 @@ const Tick = (initialProps: {
             setShadowCard(s);
             setShadowCardScaleY(s);
           }
-          requestAnimationFrame(tick);
+          animationFrameIdRef = requestAnimationFrame(tick);
         }
       };
       tick();

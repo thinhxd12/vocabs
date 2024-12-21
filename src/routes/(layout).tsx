@@ -60,6 +60,9 @@ export default function Layout(props: RouteSectionProps) {
   const [showBookmark, setShowBookmark] = createSignal<boolean>(false);
   const location = useLocation();
 
+  const [showSearchResults, setShowSearchResults] =
+    createSignal<boolean>(false);
+
   const trigger = debounce(async (str: string) => {
     checkTimeout && clearTimeout(checkTimeout);
     const res = await searchText(str);
@@ -70,16 +73,18 @@ export default function Layout(props: RouteSectionProps) {
         deleteSearchTimeout = setTimeout(() => {
           setVocabStore("searchTermColor", true);
           handleCloseDialogSearch();
-        }, 1000);
+        }, 1500);
         setAudioSrc("/assets/sounds/mp3_Boing.mp3");
         audioRef?.play();
       } else if (res.length === 1 && str.length > 4) {
         setVocabStore("searchResults", res);
+        setShowSearchResults(true);
         checkTimeout = setTimeout(() => {
           handleSelectSearchResult(0);
         }, 1500);
       } else {
         setVocabStore("searchResults", res);
+        setShowSearchResults(true);
       }
     }
   }, 450);
@@ -131,16 +136,12 @@ export default function Layout(props: RouteSectionProps) {
   const handleCloseDialogSearch = () => {
     setActive(null);
     setVocabStore("searchTerm", "");
-    setVocabStore("searchResults", []);
+    setShowSearchResults(false);
   };
 
   const handleSelectSearchResult = (index: number) => {
-    setActive(index);
     handleCheckAndRender(vocabStore.searchResults[index]);
-    setTimeout(() => {
-      setActive(null);
-      handleCloseDialogSearch();
-    }, 300);
+    handleCloseDialogSearch();
   };
 
   const { active, setActive, onKeyDown } = createList({
@@ -164,7 +165,7 @@ export default function Layout(props: RouteSectionProps) {
     setActive(null);
     setVocabStore("editWord", data);
     setVocabStore("searchTerm", "");
-    setVocabStore("searchResults", []);
+    setShowSearchResults(false);
     setVocabStore("showEdit", true);
   };
 
@@ -172,7 +173,7 @@ export default function Layout(props: RouteSectionProps) {
     handleCheckAndRender(vocabStore.searchResults[index]);
     setActive(null);
     setVocabStore("searchTerm", "");
-    setVocabStore("searchResults", []);
+    setShowSearchResults(false);
   };
 
   const [openDeleteAlert, setOpenDeleteAlert] = createSignal<boolean>(false);
@@ -217,7 +218,7 @@ export default function Layout(props: RouteSectionProps) {
     setOpenDeleteAlert(false);
     setActive(null);
     setVocabStore("searchTerm", "");
-    setVocabStore("searchResults", []);
+    setShowSearchResults(false);
   };
 
   return (
@@ -240,23 +241,25 @@ export default function Layout(props: RouteSectionProps) {
           when={showLayoutImageInfo()}
           fallback={
             <p
-              onClick={() => setShowLayoutImageInfo(!showLayoutImageInfo())}
+              onMouseOver={() => setShowLayoutImageInfo(!showLayoutImageInfo())}
               class="absolute left-0 top-0 z-40 hidden w-1/4 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white sm:block"
             >
-              {imageData()?.title}
+              {imageData()?.hs1_title}
             </p>
           }
         >
           <p
-            onClick={() => setShowLayoutImageInfo(!showLayoutImageInfo())}
+            onMouseLeave={() => setShowLayoutImageInfo(!showLayoutImageInfo())}
             class="absolute left-0 top-0 z-40 hidden w-1/4 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white sm:block"
           >
             {imageData()?.hs2_title}
           </p>
         </Show>
-        <p class="absolute bottom-0 right-0 hidden w-1/4 truncate pb-1 pr-1 text-right text-4 leading-7 text-white sm:block">
-          {imageData()?.hs1_title}
-        </p>
+        <Show when={!layoutStore.showLayout}>
+          <p class="absolute bottom-0 right-0 hidden w-1/4 truncate pb-1 pr-1 text-right text-4 leading-6 text-white sm:block">
+            {imageData()?.title}
+          </p>
+        </Show>
       </Show>
       <div class="absolute left-0 top-0 z-30 flex h-full w-full justify-center overflow-hidden">
         <Show when={layoutStore.showLayout}>
@@ -284,7 +287,7 @@ export default function Layout(props: RouteSectionProps) {
           </div>
         </Show>
         <div class="relative h-full min-w-[360px] max-w-[360px]">
-          <Show when={vocabStore.searchResults.length > 0}>
+          <Show when={showSearchResults()}>
             <div class="absolute top-[40px] z-50 h-[calc(100vh-81px)] w-full py-2">
               <div class="dark-layout no-scrollbar flex h-full flex-col overflow-y-scroll rounded-2 pt-2">
                 <For each={vocabStore.searchResults}>

@@ -282,7 +282,7 @@ const Schedule: Component<{}> = (props) => {
                   <div class="min-w-full select-none snap-start overflow-hidden pl-1 pr-1 pt-1">
                     <For each={data}>
                       {(item) => (
-                        <div class="mb-1 flex w-full items-center overflow-hidden rounded-2 bg-white/15 p-1 shadow-md shadow-black/45 backdrop-blur-lg">
+                        <div class="mb-1 flex w-full items-center overflow-hidden rounded-2 bg-white/15 p-1 shadow-sm shadow-black/45 backdrop-blur-lg">
                           <div class="w-[90px] rounded-2 bg-black/30 pl-3 text-3.5 leading-6 text-white shadow-[0_0_3px_0px_#00000078_inset]">
                             {item.index + 1} - {item.index + 200}
                           </div>

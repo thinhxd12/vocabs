@@ -322,7 +322,7 @@ const Nav: Component<{}> = (props) => {
             </div>
           </Show>
           <span class="mb-0.1 -rotate-90 rounded-0.5 bg-white/25 px-0.1 text-left text-2.5 leading-3.5 text-white">
-            {format(new Date(), "eeeeee")}
+            {format(todayDate, "eeeeee")}
           </span>
         </div>
 
