@@ -257,7 +257,7 @@ export default function Layout(props: RouteSectionProps) {
 
           <button
             onClick={handleChangeBackground}
-            class="absolute bottom-0 right-0 z-50 flex h-7 w-7 items-center justify-center text-white opacity-30 hover:opacity-100"
+            class="absolute bottom-[38px] right-[calc(50vw-173px)] z-50 flex h-7 w-7 items-center justify-center text-white opacity-30 hover:opacity-100 sm:bottom-0 sm:right-0"
           >
             <VsTarget size={15} />
           </button>

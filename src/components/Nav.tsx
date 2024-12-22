@@ -419,8 +419,10 @@ const Nav: Component<{}> = (props) => {
         </div>
       </div>
 
-      <div class="absolute bottom-[45px] left-0 flex flex-col sm:-left-[40px]">
-        <div class="dark-layout mx-auto flex flex-col items-center justify-center rounded-full p-1 text-white">
+      <div
+        class={`fixed bottom-[60px] ${layoutStore.showLayout ? "left-[calc(50vw-215px)]" : "right-[calc(50vw-180px)]"} z-50 flex flex-col sm:right-[calc(50vw-215px)]`}
+      >
+        <div class="dark-layout flex flex-col items-center justify-center rounded-full p-1 text-white">
           <button class="btn-nav-menu" onClick={logout}>
             <RiSystemLogoutCircleRLine size={15} />
           </button>

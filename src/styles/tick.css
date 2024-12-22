@@ -1,10 +1,10 @@
 .tick-flip {
   position: relative;
   text-align: center;
-  margin: 0 0.5px;
+  margin: 0 1px;
   border-radius: 3px;
   letter-spacing: 3px;
-  text-indent: 2px;
+  text-indent: 3px;
 }
 .tick-flip * {
   border-radius: inherit;
