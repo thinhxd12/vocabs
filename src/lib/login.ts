@@ -1,4 +1,4 @@
-import { action, query, redirect } from "@solidjs/router";
+import { action, cache, redirect } from "@solidjs/router";
 import { supabase } from "./supabase";
 import { useSession } from "vinxi/http";
 
@@ -50,7 +50,7 @@ function getSession() {
   });
 }
 
-export const getUser = query(async () => {
+export const getUser = cache(async () => {
   "use server";
   try {
     const session = await getSession();

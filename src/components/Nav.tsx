@@ -339,13 +339,13 @@ const Nav: Component<{}> = (props) => {
         </A>
 
         <div class="ml-0.1 flex h-full flex-col items-center rounded-1 bg-black/45 px-0.5 text-white ring-0 ring-white/5">
-          <span class="font-tupa text-5.5 font-600 leading-5">
+          <span class="font-tupa text-5 font-600 leading-5">
             {String(navStore.totalMemories).slice(
               0,
               String(navStore.totalMemories).length - 2,
             )}
           </span>
-          <span class="font-tupa text-5.5 font-600 leading-5">
+          <span class="font-tupa text-5.5 font-600 leading-4">
             {String(navStore.totalMemories).slice(2)}
           </span>
         </div>
@@ -420,129 +420,121 @@ const Nav: Component<{}> = (props) => {
       </div>
 
       <div
-        class={`fixed bottom-[60px] ${layoutStore.showLayout ? "left-[calc(50vw-215px)]" : "right-[calc(50vw-180px)]"} z-50 flex flex-col sm:right-[calc(50vw-215px)]`}
+        class={`fixed bottom-[60px] w-[33px] ${layoutStore.showLayout ? "left-[calc(100vw-400px)]" : "right-[calc(50vw-180px)]"} dark-layout z-50 flex flex-col items-center justify-center rounded-full px-1 py-0.1 text-white sm:right-[calc(50vw-220px)]`}
       >
-        <div class="dark-layout flex flex-col items-center justify-center rounded-full p-1 text-white">
-          <button class="btn-nav-menu" onClick={logout}>
-            <RiSystemLogoutCircleRLine size={15} />
-          </button>
+        <button class="btn-nav-menu" onClick={logout}>
+          <RiSystemLogoutCircleRLine size={15} />
+        </button>
 
-          <button
-            class="btn-nav-menu-timer"
-            onClick={() => handleGetListContent(1)}
-          >
-            <Show
-              when={
-                navStore.listType === 1 &&
-                location.pathname === "/quiz" &&
-                quizStore.quizContent.length > 0
-              }
-            >
-              <span class="absolute bottom-0 z-10 h-full w-full bg-white/15"></span>
-              <span
-                class="absolute bottom-0 z-20 w-full bg-green-400/90"
-                style={{
-                  height: `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`,
-                }}
-              ></span>
-            </Show>
-            <Show
-              when={
-                navStore.listType === 1 &&
-                location.pathname === "/vocab" &&
-                navStore.listContent.length > 0
-              }
-            >
-              <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/90"></span>
-            </Show>
-            <Show
-              when={navStore.todaySchedule.created_at}
-              fallback={
-                <RiSystemQuestionLine size={15} class="relative z-30" />
-              }
-            >
-              <span class="relative z-30 text-3">
-                {navStore.todaySchedule.index1 + 1}
-              </span>
-            </Show>
-          </button>
-
-          <button
-            class="btn-nav-menu-timer"
-            onClick={() => handleGetListContent(2)}
-          >
-            <Show
-              when={
-                navStore.listType === 2 &&
-                location.pathname === "/quiz" &&
-                quizStore.quizContent.length > 0
-              }
-            >
-              <span class="absolute bottom-0 z-10 h-full w-full bg-white/15"></span>
-              <span
-                class="absolute bottom-0 z-20 w-full bg-green-400/90"
-                style={{
-                  height: `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`,
-                }}
-              ></span>
-            </Show>
-            <Show
-              when={
-                navStore.listType === 2 &&
-                location.pathname === "/vocab" &&
-                navStore.listContent.length > 0
-              }
-            >
-              <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/90"></span>
-            </Show>
-            <Show
-              when={navStore.todaySchedule.created_at}
-              fallback={
-                <RiSystemQuestionLine size={15} class="relative z-30" />
-              }
-            >
-              <span class="relative z-30 text-3">
-                {navStore.todaySchedule.index2 + 1}
-              </span>
-            </Show>
-          </button>
-
-          <button
-            class="btn-nav-menu hidden sm:flex"
-            onClick={() =>
-              setLayoutStore("showLayout", !layoutStore.showLayout)
+        <button
+          class="btn-nav-menu-timer"
+          onClick={() => handleGetListContent(1)}
+        >
+          <Show
+            when={
+              navStore.listType === 1 &&
+              location.pathname === "/quiz" &&
+              quizStore.quizContent.length > 0
             }
           >
-            <Show
-              when={layoutStore.showLayout}
-              fallback={<RiDesignLayoutLeftFill size={15} />}
-            >
-              <RiDesignLayoutRightFill size={15} />
-            </Show>
-          </button>
-          <button
-            class="btn-nav-menu"
-            onClick={() =>
-              setVocabStore("showTranslate", !vocabStore.showTranslate)
+            <span class="absolute bottom-0 z-10 h-full w-full bg-white/15"></span>
+            <span
+              class="absolute bottom-0 z-20 w-full bg-green-400/90"
+              style={{
+                height: `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`,
+              }}
+            ></span>
+          </Show>
+          <Show
+            when={
+              navStore.listType === 1 &&
+              location.pathname === "/vocab" &&
+              navStore.listContent.length > 0
             }
           >
-            <RiEditorTranslate size={15} />
-          </button>
-          <button
-            class={`btn-nav-menu-timer ${showTimer() ? "bg-white/15" : ""}`}
-            onClick={startOrStopCountdown}
+            <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/90"></span>
+          </Show>
+          <Show
+            when={navStore.todaySchedule.created_at}
+            fallback={<RiSystemQuestionLine size={15} class="relative z-30" />}
           >
-            <Show when={showTimer()}>
-              <span
-                class="absolute bottom-0 z-10 w-full bg-blue-600/90"
-                style={{
-                  height: `${(minute() / 6) * 100}%`,
-                }}
-              ></span>
-            </Show>
-            <RiSystemHourglass2Line size={15} class="relative z-20" />
-          </button>
-        </div>
+            <span class="relative z-30 text-3">
+              {navStore.todaySchedule.index1 + 1}
+            </span>
+          </Show>
+        </button>
+
+        <button
+          class="btn-nav-menu-timer"
+          onClick={() => handleGetListContent(2)}
+        >
+          <Show
+            when={
+              navStore.listType === 2 &&
+              location.pathname === "/quiz" &&
+              quizStore.quizContent.length > 0
+            }
+          >
+            <span class="absolute bottom-0 z-10 h-full w-full bg-white/15"></span>
+            <span
+              class="absolute bottom-0 z-20 w-full bg-green-400/90"
+              style={{
+                height: `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`,
+              }}
+            ></span>
+          </Show>
+          <Show
+            when={
+              navStore.listType === 2 &&
+              location.pathname === "/vocab" &&
+              navStore.listContent.length > 0
+            }
+          >
+            <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/90"></span>
+          </Show>
+          <Show
+            when={navStore.todaySchedule.created_at}
+            fallback={<RiSystemQuestionLine size={15} class="relative z-30" />}
+          >
+            <span class="relative z-30 text-3">
+              {navStore.todaySchedule.index2 + 1}
+            </span>
+          </Show>
+        </button>
+
+        <button
+          class="btn-nav-menu hidden sm:flex"
+          onClick={() => setLayoutStore("showLayout", !layoutStore.showLayout)}
+        >
+          <Show
+            when={layoutStore.showLayout}
+            fallback={<RiDesignLayoutLeftFill size={15} />}
+          >
+            <RiDesignLayoutRightFill size={15} />
+          </Show>
+        </button>
+        <button
+          class="btn-nav-menu"
+          onClick={() =>
+            setVocabStore("showTranslate", !vocabStore.showTranslate)
+          }
+        >
+          <RiEditorTranslate size={15} />
+        </button>
+        <button
+          class={`btn-nav-menu-timer ${showTimer() ? "bg-white/15" : ""}`}
+          onClick={startOrStopCountdown}
+        >
+          <Show when={showTimer()}>
+            <span
+              class="absolute bottom-0 z-10 w-full bg-blue-600/90"
+              style={{
+                height: `${(minute() / 6) * 100}%`,
+              }}
+            ></span>
+          </Show>
+          <RiSystemHourglass2Line size={15} class="relative z-20" />
+        </button>
       </div>
     </nav>
   );

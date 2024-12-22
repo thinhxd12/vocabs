@@ -180,7 +180,7 @@ const Schedule: Component<{}> = (props) => {
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio ref={audioRef} hidden src={audioSrc()} />
       <main class="no-scrollbar relative h-[calc(100vh-40px)] w-[360px] overflow-y-scroll py-2">
-        <div class="light-layout relative mb-1.5 h-[240px] w-full overflow-hidden rounded-2 p-2">
+        <div class="light-layout relative mb-2 h-[240px] w-full overflow-hidden rounded-2 p-2">
           <img
             class="h-full w-full rounded-2 border border-black/30 object-cover shadow-sm shadow-black/30 brightness-90"
             src={`/images/${format(new Date(), "M")}.webp`}
@@ -223,7 +223,7 @@ const Schedule: Component<{}> = (props) => {
           </div>
         </div>
 
-        <div class="light-layout relative mb-1.5 flex w-full cursor-default flex-wrap justify-center overflow-hidden rounded-2 pt-1">
+        <div class="light-layout relative mb-2 flex w-full cursor-default flex-wrap justify-center overflow-hidden rounded-2 pt-1">
           <div class="schedule-title rounded-l-2 !text-[#f90000]">Sun</div>
           <div class="schedule-title">Mon</div>
           <div class="schedule-title">Tue</div>
@@ -274,7 +274,7 @@ const Schedule: Component<{}> = (props) => {
           </Suspense>
         </div>
 
-        <div class="light-layout relative mb-1.5 w-full overflow-hidden rounded-2 p-2">
+        <div class="light-layout relative mb-2 w-full overflow-hidden rounded-2 p-2">
           <Suspense fallback={<div>Loading...</div>}>
             <div class="relative flex w-full snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar-thumb]:bg-black/60 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white/15 [&::-webkit-scrollbar]:h-1">
               <For each={chunk(scheduleStore.historyList, 5).reverse()}>
@@ -308,7 +308,7 @@ const Schedule: Component<{}> = (props) => {
           </Suspense>
         </div>
 
-        <div class="light-layout relative mb-1.5 w-full overflow-hidden rounded-2 !bg-green-400/15 p-2">
+        <div class="light-layout relative w-full overflow-hidden rounded-2 !bg-green-400/15 p-2">
           <p class="font-garamond text-4 font-500 leading-4.5">
             The tree that is supposed to grow to a proud height can dispense
             with bad weather and storms. Whether misfortune and external

@@ -48,11 +48,11 @@
 }
 
 .light-layout {
-  @apply border-y border-b-white/10 border-t-white/15 bg-black/15 shadow-md shadow-black/30 backdrop-blur-xl;
+  @apply border-y border-b-white/10 border-t-white/15 bg-black/15 shadow-md shadow-black/45 backdrop-blur-xl;
 }
 
 .dark-layout {
-  @apply border-y border-b-white/10 border-t-white/20 bg-black/45 shadow-xl shadow-black/30 backdrop-blur-xl;
+  @apply border-y border-b-white/10 border-t-white/15 bg-black/45 shadow-md shadow-black/45 backdrop-blur-xl;
 }
 
 .definition-example {

@@ -1,4 +1,4 @@
-import { action, query } from "@solidjs/router";
+import { action, cache } from "@solidjs/router";
 import {
   BookmarkType,
   CalendarType,
@@ -156,7 +156,7 @@ async function fetchGetText(url: string) {
   }
 }
 
-export const getTextDataWebster = query(async (text: string) => {
+export const getTextDataWebster = cache(async (text: string) => {
   "use server";
   if (!text) return;
   const url = `https://www.merriam-webster.com/dictionary/${text}`;
@@ -615,7 +615,7 @@ export const archiveVocabulary = async (text: string) => {
 };
 
 //get all history
-export const getHistoryList = query(async (run: boolean) => {
+export const getHistoryList = cache(async (run: boolean) => {
   "use server";
   if (run) return;
   const { count } = await supabase
@@ -640,7 +640,7 @@ export const getAllHistoryList = async () => {
   return data as HistoryItemType[];
 };
 
-export const getCalendarList = query(async (str: string) => {
+export const getCalendarList = cache(async (str: string) => {
   "use server";
   const date = new Date(str);
   const thisMonth = date.getMonth();
@@ -708,7 +708,7 @@ export const getCalendarList = query(async (str: string) => {
   }
 }, "getCalendarList");
 
-export const getThisWeekIndex = query(async (dayToday: string) => {
+export const getThisWeekIndex = cache(async (dayToday: string) => {
   "use server";
   const { data: thisWeekSchedule, error } = await supabase
     .from(mapTables.schedule)
@@ -749,7 +749,7 @@ export const getThisWeekIndex = query(async (dayToday: string) => {
   } else return (thisWeekIndex + 1) as number;
 }, "getThisWeekIndex");
 
-export const getProgressList = query(async () => {
+export const getProgressList = cache(async () => {
   "use server";
   const { data } = await supabase
     .from(mapTables.progress)
@@ -758,7 +758,7 @@ export const getProgressList = query(async () => {
   if (data) return data as ScheduleProgressType[];
 }, "getProgressList");
 
-export const getTodaySchedule = query(async (date: string) => {
+export const getTodaySchedule = cache(async (date: string) => {
   "use server";
   const { data: dataByDate } = await supabase
     .from(mapTables.schedule)
@@ -775,7 +775,7 @@ export const getTodaySchedule = query(async (date: string) => {
   if (data) return data[0] as ScheduleType;
 }, "getTodaySchedule");
 
-export const getTotalMemories = query(async () => {
+export const getTotalMemories = cache(async () => {
   "use server";
   const { count } = await supabase
     .from(mapTables.memories)
@@ -783,7 +783,7 @@ export const getTotalMemories = query(async () => {
   return count as number;
 }, "getTotalMemories");
 
-export const getLocationList = query(async () => {
+export const getLocationList = cache(async () => {
   "use server";
   const { data } = await supabase
     .from(mapTables.weather)

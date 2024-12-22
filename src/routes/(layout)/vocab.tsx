@@ -25,6 +25,7 @@ import {
   editVocabularyItem,
   getTextDataWebster,
   getTotalMemories,
+  getTranslateData,
   getTranslationArr,
   insertVocabularyItem,
   searchMemoriesText,
@@ -269,14 +270,23 @@ const Vocab: Component<{}> = (props) => {
       }
       return;
     }
-    const data = await getTextDataWebster(word);
-    if (data) {
+    // const data = await getTextDataWebster(word);
+    const data = await Promise.all([
+      getTextDataWebster(word),
+      getTranslateData(word),
+    ]);
+    if (data[0]) {
       setTranslateWord({
         ...translateWord()!,
-        definitions: data!.definitions,
-        phonetics: data!.phonetics,
-        audio: data!.audio,
-        translations: [],
+        definitions: data[0].definitions,
+        phonetics: data[0].phonetics,
+        audio: data[0].audio,
+        translations: [
+          {
+            partOfSpeech: "noun",
+            translations: [data[1]?.translation || ""],
+          },
+        ],
       });
     }
   };
@@ -525,6 +535,7 @@ const Vocab: Component<{}> = (props) => {
                     class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
                     name="meaning"
                     autocomplete="off"
+                    value={makeTranslationText(translateWord()?.translations!)}
                     onChange={(e) => {
                       setTranslateWord({
                         ...translateWord()!,
