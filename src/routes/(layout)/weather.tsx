@@ -148,7 +148,6 @@ const Weather: Component<{}> = (props) => {
     navStore.defaultLocation,
   );
   const [current, setCurrent] = createSignal<CurrentlyWeatherType>();
-  // const [minutely, setMinutely] = createSignal<FixMinutelyTWeatherType[]>();
   const [hourly, setHourly] = createSignal<HourlyWeatherType[]>();
   const [prediction, setPrediction] = createSignal<string>("");
 

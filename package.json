@@ -30,6 +30,9 @@
     "thumbhash": "^0.1.1",
     "vinxi": "^0.3.11"
   },
+  "overrides": {
+    "vite": "^5.0.0"
+  },
   "devDependencies": {
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.9"
