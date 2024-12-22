@@ -1,4 +1,10 @@
-import { createEffect, createSignal, mergeProps, on, Show } from "solid-js";
+import {
+  createEffect,
+  createSignal,
+  mergeProps,
+  Show,
+  untrack,
+} from "solid-js";
 // https://github.com/pqina/flip/blob/master/src/js/index.js
 
 const Tick = (initialProps: {
@@ -36,16 +42,12 @@ const Tick = (initialProps: {
     return t1 * t1 * t1 + 1;
   };
 
-  createEffect(
-    on(
-      () => props.number,
-      () => {
-        cancelAnimationFrame(animationFrameIdRef);
-
-        draw();
-      },
-    ),
-  );
+  createEffect(() => {
+    let v = props.number;
+    untrack(() => {
+      draw();
+    });
+  });
 
   const [done, setDone] = createSignal<boolean>(false);
   const [shadowFront, setShadowFront] = createSignal<number>(0);
@@ -58,6 +60,7 @@ const Tick = (initialProps: {
 
   const draw = () => {
     const start = performance.now();
+    cancelAnimationFrame(animationFrameIdRef);
     setDone(false);
     setShadowBack(0);
     setzIndex(1);
@@ -71,6 +74,7 @@ const Tick = (initialProps: {
 
           if (progress >= 1) {
             setDone(true);
+            cancelAnimationFrame(animationFrameIdRef);
             return;
           }
 

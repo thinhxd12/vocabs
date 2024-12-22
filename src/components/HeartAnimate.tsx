@@ -110,7 +110,6 @@ const HeartAnimate: Component<{ id: number }> = (props) => {
       const ctx = canvasRef.getContext("2d")!;
       ctx.clearRect(0, 0, canvasRef.width, canvasRef.height);
     }
-    console.log(123123);
   };
 
   onCleanup(() => {

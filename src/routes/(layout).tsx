@@ -21,7 +21,7 @@ import { OcX2 } from "solid-icons/oc";
 import Dialog from "@corvu/dialog";
 import toast, { Toaster } from "solid-toast";
 import { getUser } from "~/lib/login";
-import { VsSymbolColor } from "solid-icons/vs";
+import { VsSymbolColor, VsTarget } from "solid-icons/vs";
 import { FiBookOpen } from "solid-icons/fi";
 const Art = lazy(() => import("~/components/Art"));
 const Bookmark = lazy(() => import("~/components/Bookmark"));
@@ -219,6 +219,11 @@ export default function Layout(props: RouteSectionProps) {
     setShowSearchResults(false);
   };
 
+  const handleChangeBackground = async () => {
+    const data = await getSpotlightImage_v4();
+    setImageData(data);
+  };
+
   return (
     <main
       class="relative h-screen w-screen overflow-hidden outline-none"
@@ -227,6 +232,7 @@ export default function Layout(props: RouteSectionProps) {
       ref={(el) => setLayoutStore("layoutMainRef", el)}
     >
       <audio ref={audioRef} hidden src={audioSrc()} />
+
       <Show when={imageData()}>
         <img
           src={
@@ -245,11 +251,19 @@ export default function Layout(props: RouteSectionProps) {
             </p>
           </div>
 
-          <p class="absolute bottom-0 right-0 hidden w-1/4 truncate pb-1 pr-1 text-right text-4 leading-6 text-white sm:block">
+          <p class="absolute bottom-0 left-0 hidden w-1/4 truncate pb-1 pl-2 pr-1 text-4 leading-7 text-white sm:block">
             {imageData()?.title}
           </p>
+
+          <button
+            onClick={handleChangeBackground}
+            class="absolute bottom-0 right-0 z-50 flex h-7 w-7 items-center justify-center text-white opacity-30 hover:opacity-100"
+          >
+            <VsTarget size={15} />
+          </button>
         </Show>
       </Show>
+
       <div class="absolute left-0 top-0 z-30 flex h-full w-full justify-center overflow-hidden">
         <Show when={layoutStore.showLayout}>
           <div class="relative h-full w-[calc(100vw-360px)] px-[80px] pb-[90px] pt-[50px]">
