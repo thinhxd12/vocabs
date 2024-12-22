@@ -175,4 +175,5 @@ export type LoginImageType = {
   hs2_title: string;
   image_L: string;
   image_P: string;
+  hash: string;
 };

@@ -10,6 +10,7 @@ import {
 import { BsTrash3 } from "solid-icons/bs";
 import { createList } from "solid-list";
 import {
+  base64ToUint8Array,
   deleteVocabulary,
   getSpotlightImage_v4,
   getWordData,
@@ -26,6 +27,7 @@ import { FiBookOpen } from "solid-icons/fi";
 const Art = lazy(() => import("~/components/Art"));
 const Bookmark = lazy(() => import("~/components/Bookmark"));
 import Nav from "~/components/Nav";
+import { thumbHashToDataURL } from "thumbhash";
 
 export default function Layout(props: RouteSectionProps) {
   // ***************check login**************
@@ -38,6 +40,17 @@ export default function Layout(props: RouteSectionProps) {
 
   const [audioSrc, setAudioSrc] = createSignal<string>();
   const [imageData, setImageData] = createSignal<LoginImageType | undefined>();
+  const [isLoaded, setIsLoaded] = createSignal<boolean>(false);
+
+  const handleLoadImage = () => {
+    setIsLoaded(true);
+  };
+
+  const handleChangeBackground = async () => {
+    const data = await getSpotlightImage_v4();
+    setImageData(data);
+    setIsLoaded(false);
+  };
 
   onMount(async () => {
     if (audioRef) audioRef.volume = 0.1;
@@ -46,8 +59,7 @@ export default function Layout(props: RouteSectionProps) {
         navigator.userAgent,
       );
     setLayoutStore("isMobile", isMobile);
-    const data = await getSpotlightImage_v4();
-    setImageData(data);
+    handleChangeBackground();
   });
 
   onCleanup(() => {
@@ -219,10 +231,7 @@ export default function Layout(props: RouteSectionProps) {
     setShowSearchResults(false);
   };
 
-  const handleChangeBackground = async () => {
-    const data = await getSpotlightImage_v4();
-    setImageData(data);
-  };
+
 
   return (
     <main
@@ -238,9 +247,24 @@ export default function Layout(props: RouteSectionProps) {
           src={
             layoutStore.isMobile ? imageData()!.image_P : imageData()!.image_L
           }
-          class="absolute z-0 h-screen w-screen object-cover brightness-90"
+          onLoad={handleLoadImage}
+          style={{
+            opacity: isLoaded() ? 1 : 0,
+          }}
+          class="absolute z-10 h-screen w-screen object-cover brightness-90"
         />
 
+        <Show when={!isLoaded()}>
+          <img
+            src={
+              thumbHashToDataURL(base64ToUint8Array(imageData()!.hash))
+            }
+            style={{
+              opacity: isLoaded() ? 0 : 1,
+            }}
+            class="absolute z-0 h-screen w-screen object-cover brightness-90"
+          />
+        </Show>
         <Show when={!layoutStore.showLayout}>
           <div class="group absolute left-0 top-0 z-50 hidden w-1/4 sm:block">
             <p class="absolute left-0 top-0 z-40 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white opacity-100 transition group-hover:opacity-0">
@@ -257,7 +281,7 @@ export default function Layout(props: RouteSectionProps) {
 
           <button
             onClick={handleChangeBackground}
-            class="absolute bottom-[38px] right-[calc(50vw-173px)] z-50 flex h-7 w-7 items-center justify-center text-white opacity-30 hover:opacity-100 sm:bottom-0 sm:right-0"
+            class="absolute bottom-[38px] outline-none right-[calc(50vw-173px)] z-50 flex h-7 w-7 items-center justify-center text-white opacity-30 hover:opacity-100 sm:bottom-0 sm:right-0"
           >
             <VsTarget size={15} />
           </button>

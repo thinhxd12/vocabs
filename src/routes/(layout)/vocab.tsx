@@ -369,7 +369,7 @@ const Vocab: Component<{}> = (props) => {
               fallback={
                 <>
                   <span
-                    class={`truncate text-center align-baseline font-constantine text-7 font-700 uppercase leading-7 ${vocabStore.searchTermColor ? "text-white" : "text-black"} `}
+                    class={`truncate text-center align-baseline font-constantine text-7 font-700 uppercase leading-10 ${vocabStore.searchTermColor ? "text-white" : "text-black"} `}
                     style={{
                       "text-shadow": "0 2px 2px rgba(0, 0, 0, 0.9)",
                     }}
@@ -441,11 +441,6 @@ const Vocab: Component<{}> = (props) => {
                   class="mb-2 w-full p-1"
                   action={insertVocabularyItem}
                   method="post"
-                  on:keydown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                    }
-                  }}
                 >
                   <div class="relative mx-auto h-9 w-3/4 overflow-hidden rounded-full bg-black/15 shadow-[0_0_3px_0px_#00000054_inset]">
                     <span
@@ -461,7 +456,7 @@ const Vocab: Component<{}> = (props) => {
                       name="word"
                       autocomplete="off"
                       value={vocabStore.translateTerm}
-                      onKeyDown={(e) => {
+                      on:keydown={(e) => {
                         if (e.key === "Enter") {
                           e.preventDefault();
                           handleGetTranslateWord(e.currentTarget.value);
@@ -537,6 +532,7 @@ const Vocab: Component<{}> = (props) => {
                     autocomplete="off"
                     value={makeTranslationText(translateWord()?.translations!)}
                     onChange={(e) => {
+                      e.preventDefault();
                       setTranslateWord({
                         ...translateWord()!,
                         translations: getTranslationArr(e.currentTarget.value),
@@ -594,7 +590,7 @@ const Vocab: Component<{}> = (props) => {
                       name="word"
                       autocomplete="off"
                       value={editWordStore()?.word}
-                      onKeyDown={async (e) => {
+                      on:keydown={async (e) => {
                         if (e.key === "Enter") {
                           e.preventDefault();
                           handleGetEditWord(e.currentTarget.value);
@@ -673,6 +669,7 @@ const Vocab: Component<{}> = (props) => {
                     autocomplete="off"
                     value={makeTranslationText(editWordStore()?.translations!)}
                     onChange={(e) => {
+                      e.preventDefault();
                       setVocabStore("editWord", {
                         ...editWordStore()!,
                         translations: getTranslationArr(e.currentTarget.value),

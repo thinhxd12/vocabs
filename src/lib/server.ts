@@ -35,6 +35,8 @@ import {
 } from "@darylserrano/kindle-clippings";
 import { URLSearchParams } from "url";
 import { load } from "cheerio";
+import sharp from "sharp";
+import { rgbaToThumbHash } from "thumbhash";
 
 export const searchText = async (text: string) => {
   "use server";
@@ -970,12 +972,14 @@ export const getSpotlightImage_v3 = async () => {
     const hs2_title_text = itemObj["hs2_title_text"]?.tx;
     const jsImageL = itemObj["image_fullscreen_001_landscape"].u;
     const jsImageP = itemObj["image_fullscreen_001_portrait"].u;
+    const thumbhash = await createThumbhash(jsImageP);
     return {
       title: title,
       hs1_title: hs1_title_text,
       hs2_title: hs2_title_text,
       image_L: jsImageL,
       image_P: jsImageP,
+      hash:thumbhash
     } as LoginImageType;
   }
 };
@@ -989,12 +993,15 @@ export const getSpotlightImage_v4 = async () => {
   if (data) {
     const response = data["batchrsp"]["items"][0]["item"];
     const result = JSON.parse(response)["ad"];
+    const urlP=result.portraitImage.asset;
+    const thumbhash = await createThumbhash(urlP);
     return {
       title: result.title,
       hs1_title: result.iconHoverText.replace("Right-click to learn more", ""),
       hs2_title: result.description,
       image_L: result.landscapeImage.asset,
-      image_P: result.portraitImage.asset,
+      image_P: urlP,
+      hash:thumbhash
     } as LoginImageType;
   }
 };
@@ -1241,6 +1248,32 @@ export const makePrediction = async (data?: FixMinutelyTWeatherType[]) => {
       return "";
   }
 };
+
+export const createThumbhash = async (imageUrl: string) => {
+  "use server";
+  const imageBuffer = await fetch(imageUrl).then((res) => res.arrayBuffer());
+  const image = sharp(imageBuffer).resize(90, 90, { fit: "inside" });
+  const { data, info } = await image
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
+  const base64String = btoa(
+    String.fromCharCode(...new Uint8Array(binaryThumbHash)),
+  );
+  return base64String;
+};
+
+export function base64ToUint8Array(base64String: string) {
+  const binaryString = atob(base64String);
+  const uint8Array = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    uint8Array[i] = binaryString.charCodeAt(i);
+  }
+  return uint8Array;
+}
+
+
 
 // =====Insert data============
 // export const insertData = async (data: any) => {

@@ -36,15 +36,15 @@
 }
 
 .quiz-choice {
-  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-black/15 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/30 backdrop-blur-lg transition hover:bg-black/10 hover:shadow-lg;
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-black/10 py-1.5 text-center text-5 leading-7 text-white shadow-lg shadow-black/30 backdrop-blur-lg transition hover:bg-black/15 hover:shadow-md hover:shadow-black/45;
 }
 
 .quiz-choice-true {
-  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-green-400/60 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/30 backdrop-blur-lg transition;
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-green-400 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/45 backdrop-blur-lg transition;
 }
 
 .quiz-choice-false {
-  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-red-500/60 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/30 backdrop-blur-lg transition;
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-red-500 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/45 backdrop-blur-lg transition;
 }
 
 .light-layout {

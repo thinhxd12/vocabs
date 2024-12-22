@@ -398,7 +398,7 @@ const Bookmark: Component<{}> = (props) => {
                     onInput={(e) =>
                       setSearchTerm((e.target as HTMLInputElement).value)
                     }
-                    onKeyDown={handleBookmarkSearchKeyDown}
+                    on:keydown={handleBookmarkSearchKeyDown}
                     value={searchTerm()}
                     class="absolute left-0 right-0 ml-10 h-full rounded-3 bg-transparent px-3 text-5 font-400 leading-10 text-white outline-none"
                   />

@@ -335,7 +335,7 @@ const Nav: Component<{}> = (props) => {
         </A>
 
         <A href="/quiz" activeClass="btn-nav-active" class="btn-nav">
-          <span>Memento mori Remember you will die.</span>
+          <span>Memento mor. Remember you will die.</span>
         </A>
 
         <div class="ml-0.1 flex h-full flex-col items-center rounded-1 bg-black/45 px-0.5 text-white ring-0 ring-white/5">

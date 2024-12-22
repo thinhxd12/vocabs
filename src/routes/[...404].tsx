@@ -4,7 +4,7 @@ export default function NotFound() {
   return (
     <main class="flex h-screen w-screen justify-center overflow-hidden bg-black">
       <div
-        class="flex h-full min-w-[360px] max-w-[360px] flex-col items-center justify-start pt-32"
+        class="flex h-full    min-w-[360px] max-w-[360px] flex-col items-center justify-start pt-32"
         style={{
           "box-shadow": ".5px 0 #363636,-.5px 0 #363636",
         }}
