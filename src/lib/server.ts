@@ -979,7 +979,7 @@ export const getSpotlightImage_v3 = async () => {
       hs2_title: hs2_title_text,
       image_L: jsImageL,
       image_P: jsImageP,
-      hash:thumbhash
+      hash: thumbhash,
     } as LoginImageType;
   }
 };
@@ -993,7 +993,7 @@ export const getSpotlightImage_v4 = async () => {
   if (data) {
     const response = data["batchrsp"]["items"][0]["item"];
     const result = JSON.parse(response)["ad"];
-    const urlP=result.portraitImage.asset;
+    const urlP = result.portraitImage.asset;
     const thumbhash = await createThumbhash(urlP);
     return {
       title: result.title,
@@ -1001,7 +1001,7 @@ export const getSpotlightImage_v4 = async () => {
       hs2_title: result.description,
       image_L: result.landscapeImage.asset,
       image_P: urlP,
-      hash:thumbhash
+      hash: thumbhash,
     } as LoginImageType;
   }
 };
@@ -1272,8 +1272,6 @@ export function base64ToUint8Array(base64String: string) {
   }
   return uint8Array;
 }
-
-
 
 // =====Insert data============
 // export const insertData = async (data: any) => {

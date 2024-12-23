@@ -35,18 +35,6 @@
   @apply my-1 h-8 w-[50px] border-b border-black/20 bg-black/30 pt-1.5 text-center font-rubik text-4 font-500 uppercase leading-6 text-white;
 }
 
-.quiz-choice {
-  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-black/10 py-1.5 text-center text-5 leading-7 text-white shadow-lg shadow-black/30 backdrop-blur-lg transition hover:bg-black/15 hover:shadow-md hover:shadow-black/45;
-}
-
-.quiz-choice-true {
-  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-green-400 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/45 backdrop-blur-lg transition;
-}
-
-.quiz-choice-false {
-  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-red-500 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/45 backdrop-blur-lg transition;
-}
-
 .light-layout {
   @apply border-y border-b-white/10 border-t-white/15 bg-black/15 shadow-md shadow-black/45 backdrop-blur-xl;
 }
@@ -61,7 +49,7 @@
 
 .definition-example b,
 .definition-example em {
-  @apply px-1 pb-0.1 pt-0.5 indent-6 font-opensans text-4.5 font-700 leading-7.5 text-black;
+  @apply rounded-2 px-1.5 py-0.5 indent-6 font-opensans text-4.5 font-700 leading-7.5 text-black;
   animation: textAnimate 0.1s linear forwards;
   animation-delay: 3s;
 }
@@ -83,4 +71,22 @@
 
 .definition-credit > span:first-child {
   @apply border-l border-black pl-6;
+}
+
+.w-phone {
+  width: 412px;
+}
+
+.w-main {
+  width: 400px;
+  margin: 0 auto;
+}
+
+.h-main {
+  height: calc(100vh - 48px);
+}
+
+.w-content {
+  width: 388px;
+  margin: 6px auto;
 }

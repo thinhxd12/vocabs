@@ -30,12 +30,14 @@ export const [quizStore, setQuizStore] = createStore<QuizStoreType>({
 
 type LayoutStoreType = {
   showLayout: boolean;
+  showBookmark: boolean;
   layoutMainRef: HTMLDivElement | null;
   isMobile: boolean;
 };
 
 export const [layoutStore, setLayoutStore] = createStore<LayoutStoreType>({
   showLayout: false,
+  showBookmark: false,
   layoutMainRef: null as HTMLDivElement | null,
   isMobile: false,
 });

@@ -3,11 +3,11 @@
 }
 
 .btn-nav {
-  @apply ml-0.1 h-full flex-1 overflow-hidden rounded-1 pt-0.5 text-center text-2.5 font-400 leading-2.5 text-white transition hover:bg-black/20 hover:shadow-[0_0_3px_0px_#00000078_inset];
+  @apply ml-0.5 h-[32px] flex-1 overflow-hidden rounded-1 pt-0.5 text-center text-2.5 font-400 leading-2.5 text-white transition hover:bg-black/20 hover:shadow-[0_0_3px_0px_#00000078_inset];
 }
 
 .btn-nav-active {
-  @apply ml-0.1 h-full flex-1 overflow-hidden rounded-1 bg-black/20 pt-0.5 text-center text-2.5 font-400 leading-2.5 text-white shadow-[0_0_3px_0px_#00000078_inset] transition;
+  @apply ml-0.5 h-[32px] flex-1 overflow-hidden rounded-1 bg-black/20 pt-0.5 text-center text-2.5 font-400 leading-2.5 text-white shadow-[0_0_3px_0px_#00000078_inset] transition;
 }
 
 .btn-bookmark {
@@ -49,4 +49,16 @@
 
 .animate-marquee {
   animation: marquee 9s linear infinite;
+}
+
+.quiz-choice {
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-black/10 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/30 backdrop-blur-lg transition duration-100 hover:bg-black/15 hover:shadow-sm hover:shadow-black/45;
+}
+
+.quiz-choice-true {
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-green-400 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/45 backdrop-blur-lg transition;
+}
+
+.quiz-choice-false {
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-red-500 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/45 backdrop-blur-lg transition;
 }

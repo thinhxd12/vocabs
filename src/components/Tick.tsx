@@ -135,27 +135,92 @@ const Tick = (initialProps: {
   };
 
   return (
-    <>
-      <span class="tick-flip">
-        {/* card back */}
+    <span class="tick-flip">
+      <span class="tick-flip-card">
+        <span
+          class="tick-flip-panel-front tick-flip-front tick-flip-panel"
+          style="transform: rotateX(0deg);"
+        >
+          <span class="tick-flip-panel-front-text">
+            <span class="tick-flip-panel-text-wrapper">
+              {props.image ? (
+                <img
+                  src="/images/cup.webp"
+                  class="absolute left-0.1 w-8 object-contain"
+                />
+              ) : props.number === 0 ? (
+                9
+              ) : (
+                props.number - 1
+              )}
+            </span>
+          </span>
+          <span class="tick-flip-panel-front-shadow" style="opacity: 0;"></span>
+        </span>
+        <span
+          class="tick-flip-panel-back tick-flip-back tick-flip-panel"
+          style="transform: rotateX(-180deg);"
+        >
+          <span class="tick-flip-panel-back-text">
+            <span class="tick-flip-panel-text-wrapper"></span>
+          </span>
+          <span
+            class="tick-flip-panel-back-highlight"
+            style="opacity: 2;"
+          ></span>
+          <span class="tick-flip-panel-back-shadow"></span>
+        </span>
+      </span>
 
-        <span class="tick-flip-card">
+      <span class="tick-flip-card" style={{ "z-index": zIndex() }}>
+        <span
+          class="tick-flip-panel-front tick-flip-front tick-flip-panel"
+          style={{ transform: `rotateX(${degrees()}deg)` }}
+        >
+          <span class="tick-flip-panel-front-text">
+            <span class="tick-flip-panel-text-wrapper">{props.number}</span>
+          </span>
+          <span
+            class="tick-flip-panel-front-shadow"
+            style={{ opacity: shadowFront() }}
+          ></span>
+        </span>
+        <span
+          class="tick-flip-panel-back tick-flip-back tick-flip-panel"
+          style={{ transform: `rotateX(${-180 + degrees()}deg)` }}
+        >
+          <span class="tick-flip-panel-back-text">
+            <span class="tick-flip-panel-text-wrapper">
+              {props.image ? (
+                <img
+                  src="/images/cup.webp"
+                  class="absolute left-0.1 w-8 object-contain"
+                />
+              ) : props.number === 0 ? (
+                9
+              ) : (
+                props.number - 1
+              )}
+            </span>
+          </span>
+          <span
+            class="tick-flip-panel-back-highlight"
+            style={{ opacity: highlightBack() }}
+          ></span>
+          <span class="tick-flip-panel-back-shadow" style="opacity: 0;"></span>
+        </span>
+      </span>
+
+      <Show when={!done()}>
+        {/* card animate */}
+        <span class="tick-flip-card" style="">
           <span
             class="tick-flip-panel-front tick-flip-front tick-flip-panel"
-            style="transform: rotateX(0deg);"
+            style="transform: rotateX(-180deg);"
           >
             <span class="tick-flip-panel-front-text">
               <span class="tick-flip-panel-text-wrapper">
-                {props.image ? (
-                  <img
-                    src="/images/cup.webp"
-                    class="absolute left-0.1 w-8 object-contain"
-                  />
-                ) : props.number === 0 ? (
-                  9
-                ) : (
-                  props.number - 1
-                )}
+                {props.number === 9 ? 0 : props.number + 1}
               </span>
             </span>
             <span
@@ -165,112 +230,36 @@ const Tick = (initialProps: {
           </span>
           <span
             class="tick-flip-panel-back tick-flip-back tick-flip-panel"
-            style="transform: rotateX(-180deg);"
+            style="transform: rotateX(-360deg);"
           >
             <span class="tick-flip-panel-back-text">
-              <span class="tick-flip-panel-text-wrapper"></span>
-            </span>
-            <span
-              class="tick-flip-panel-back-highlight"
-              style="opacity: 2;"
-            ></span>
-            <span class="tick-flip-panel-back-shadow"></span>
-          </span>
-        </span>
-
-        {/* card front */}
-        <span class="tick-flip-card" style={{ "z-index": zIndex() }}>
-          <span
-            class="tick-flip-panel-front tick-flip-front tick-flip-panel"
-            style={{ transform: `rotateX(${degrees()}deg)` }}
-          >
-            <span class="tick-flip-panel-front-text">
               <span class="tick-flip-panel-text-wrapper">{props.number}</span>
             </span>
             <span
-              class="tick-flip-panel-front-shadow"
-              style={{ opacity: shadowFront() }}
-            ></span>
-          </span>
-          <span
-            class="tick-flip-panel-back tick-flip-back tick-flip-panel"
-            style={{ transform: `rotateX(${-180 + degrees()}deg)` }}
-          >
-            <span class="tick-flip-panel-back-text">
-              <span class="tick-flip-panel-text-wrapper">
-                {props.image ? (
-                  <img
-                    src="/images/cup.webp"
-                    class="absolute left-0.1 w-8 object-contain"
-                  />
-                ) : props.number === 0 ? (
-                  9
-                ) : (
-                  props.number - 1
-                )}
-              </span>
-            </span>
-            <span
               class="tick-flip-panel-back-highlight"
-              style={{ opacity: highlightBack() }}
+              style="opacity: 0;"
             ></span>
             <span
               class="tick-flip-panel-back-shadow"
-              style="opacity: 0;"
+              style={{ opacity: shadowBack() }}
             ></span>
           </span>
         </span>
+      </Show>
 
-        <Show when={!done()}>
-          {/* card animate */}
-          <span class="tick-flip-card" style="">
-            <span
-              class="tick-flip-panel-front tick-flip-front tick-flip-panel"
-              style="transform: rotateX(-180deg);"
-            >
-              <span class="tick-flip-panel-front-text">
-                <span class="tick-flip-panel-text-wrapper">
-                  {props.number === 9 ? 0 : props.number + 1}
-                </span>
-              </span>
-              <span
-                class="tick-flip-panel-front-shadow"
-                style="opacity: 0;"
-              ></span>
-            </span>
-            <span
-              class="tick-flip-panel-back tick-flip-back tick-flip-panel"
-              style="transform: rotateX(-360deg);"
-            >
-              <span class="tick-flip-panel-back-text">
-                <span class="tick-flip-panel-text-wrapper">{props.number}</span>
-              </span>
-              <span
-                class="tick-flip-panel-back-highlight"
-                style="opacity: 0;"
-              ></span>
-              <span
-                class="tick-flip-panel-back-shadow"
-                style={{ opacity: shadowBack() }}
-              ></span>
-            </span>
-          </span>
-        </Show>
-
-        <span class="tick-flip-spacer">
-          {props.number === 0 ? 9 : props.number - 1}
-        </span>
-        <span class="tick-flip-shadow-top tick-flip-shadow tick-flip-front"></span>
-        <span class="tick-flip-shadow-bottom tick-flip-shadow tick-flip-back"></span>
-        <span
-          class="tick-flip-card-shadow"
-          style={{
-            opacity: shadowCard(),
-            transform: `scaleY(${shadowCardScaleY()})`,
-          }}
-        ></span>
+      <span class="tick-flip-spacer">
+        {props.number === 0 ? 9 : props.number - 1}
       </span>
-    </>
+      <span class="tick-flip-shadow-top tick-flip-shadow tick-flip-front"></span>
+      <span class="tick-flip-shadow-bottom tick-flip-shadow tick-flip-back"></span>
+      <span
+        class="tick-flip-card-shadow"
+        style={{
+          opacity: shadowCard(),
+          transform: `scaleY(${shadowCardScaleY()})`,
+        }}
+      ></span>
+    </span>
   );
 };
 

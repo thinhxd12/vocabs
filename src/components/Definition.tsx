@@ -9,11 +9,11 @@ const Definition: Component<{
   onCheck?: Setter<boolean>;
 }> = (props) => {
   return (
-    <div class="w-full overflow-hidden rounded-2 bg-white/60 shadow-lg shadow-black/45 backdrop-blur-xl">
+    <div class="w-content light-layout overflow-hidden rounded-2 !bg-white/20">
       <For each={props.item.definitions}>
         {(entry) => (
           <div class="w-full">
-            <div class="group flex h-9 items-end justify-between">
+            <div class="group flex h-10 items-end justify-between">
               <div class="w-1/2 truncate text-wrap indent-4 font-sfpro text-4 font-500 leading-5 text-black opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 {props.item.translations
                   .find(
@@ -23,7 +23,7 @@ const Definition: Component<{
                   ?.translations.join("-")}
               </div>
               <div
-                class="-mb-0.5 w-1/2 cursor-pointer truncate px-0.5 text-center font-sfpro text-8.5 font-700 uppercase leading-8 text-black"
+                class="-mb-0.5 w-1/2 cursor-pointer truncate px-0.5 text-center font-sfpro text-9 font-700 uppercase leading-8.5 text-black"
                 onClick={props.onEdit || props.onCheck}
               >
                 {entry.partOfSpeech}
@@ -59,8 +59,8 @@ const Definition: Component<{
                         def={props.item.definitions}
                         src={item.image}
                         hash={item.hash}
-                        width={360}
-                        height={202}
+                        width={388}
+                        height={218}
                         className="object-cover brightness-75"
                       />
 

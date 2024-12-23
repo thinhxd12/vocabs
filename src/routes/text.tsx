@@ -29,9 +29,11 @@ const Text: Component<{}> = (props) => {
   let canvasHeight: number;
   let img: HTMLImageElement;
 
+  const [state, setstate] = createSignal(9);
+
   const notify = async () => {
-    const data = await getTranslateData("river");
-    console.log(data);
+    // state() !== 0 ? setstate(state() - 1) : setstate(9);
+    setstate(Math.floor(Math.random() * 240) + 1);
   };
 
   const notify1 = () => {};
@@ -40,9 +42,13 @@ const Text: Component<{}> = (props) => {
     <div class="relative h-screen w-screen">
       <div class="flex items-start">
         <button onClick={notify} class="mr-2">
-          run
+          run {state()}
         </button>
         <button onClick={notify1}>reset</button>
+      </div>
+      <div class="relative flex font-helvetica text-[40px] font-600 leading-[36px]">
+        {/* <Tick number={state()} animating /> */}
+        <FlipCard number={state()} />
       </div>
     </div>
   );

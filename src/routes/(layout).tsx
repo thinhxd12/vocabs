@@ -22,8 +22,7 @@ import { OcX2 } from "solid-icons/oc";
 import Dialog from "@corvu/dialog";
 import toast, { Toaster } from "solid-toast";
 import { getUser } from "~/lib/login";
-import { VsSymbolColor, VsTarget } from "solid-icons/vs";
-import { FiBookOpen } from "solid-icons/fi";
+import { VsTarget } from "solid-icons/vs";
 const Art = lazy(() => import("~/components/Art"));
 const Bookmark = lazy(() => import("~/components/Bookmark"));
 import Nav from "~/components/Nav";
@@ -67,7 +66,6 @@ export default function Layout(props: RouteSectionProps) {
     clearTimeout(deleteSearchTimeout);
   });
 
-  const [showBookmark, setShowBookmark] = createSignal<boolean>(false);
   const location = useLocation();
 
   const [showSearchResults, setShowSearchResults] =
@@ -87,6 +85,7 @@ export default function Layout(props: RouteSectionProps) {
         setAudioSrc("/assets/sounds/mp3_Boing.mp3");
         audioRef?.play();
       } else if (res.length === 1 && str.length > 4) {
+        setVocabStore("searchTermColor", true);
         setVocabStore("searchResults", res);
         setShowSearchResults(true);
         checkTimeout = setTimeout(() => {
@@ -94,6 +93,7 @@ export default function Layout(props: RouteSectionProps) {
         }, 1500);
       } else {
         setVocabStore("searchResults", res);
+        setVocabStore("searchTermColor", true);
         setShowSearchResults(true);
       }
     }
@@ -101,10 +101,11 @@ export default function Layout(props: RouteSectionProps) {
 
   const handleKeyDownMain = (e: KeyboardEvent) => {
     if (location.pathname === "/vocab") {
+      checkTimeout && clearTimeout(checkTimeout);
+      deleteSearchTimeout && clearTimeout(deleteSearchTimeout);
       let value = vocabStore.searchTerm;
+      trigger.clear();
       if (e.key === "Backspace") {
-        checkTimeout && clearTimeout(checkTimeout);
-        deleteSearchTimeout && clearTimeout(deleteSearchTimeout);
         value = value.slice(0, -1);
         if (value.length > 2) trigger(value.toLowerCase());
         setVocabStore("searchTerm", value);
@@ -119,7 +120,6 @@ export default function Layout(props: RouteSectionProps) {
         return;
       } else if (e.key === " ") {
         value = "";
-        checkTimeout && clearTimeout(checkTimeout);
         setVocabStore("searchTerm", value);
         handleCloseDialogSearch();
         return;
@@ -231,8 +231,6 @@ export default function Layout(props: RouteSectionProps) {
     setShowSearchResults(false);
   };
 
-
-
   return (
     <main
       class="relative h-screen w-screen overflow-hidden outline-none"
@@ -256,9 +254,7 @@ export default function Layout(props: RouteSectionProps) {
 
         <Show when={!isLoaded()}>
           <img
-            src={
-              thumbHashToDataURL(base64ToUint8Array(imageData()!.hash))
-            }
+            src={thumbHashToDataURL(base64ToUint8Array(imageData()!.hash))}
             style={{
               opacity: isLoaded() ? 0 : 1,
             }}
@@ -281,7 +277,7 @@ export default function Layout(props: RouteSectionProps) {
 
           <button
             onClick={handleChangeBackground}
-            class="absolute bottom-[38px] outline-none right-[calc(50vw-173px)] z-50 flex h-7 w-7 items-center justify-center text-white opacity-30 hover:opacity-100 sm:bottom-0 sm:right-0"
+            class="absolute bottom-[215px] right-[calc(50vw-188px)] z-50 flex h-7 w-7 items-center justify-center text-white opacity-30 outline-none hover:opacity-100 sm:bottom-0 sm:right-0"
           >
             <VsTarget size={15} />
           </button>
@@ -291,68 +287,51 @@ export default function Layout(props: RouteSectionProps) {
       <div class="absolute left-0 top-0 z-30 flex h-full w-full justify-center overflow-hidden">
         <Show when={layoutStore.showLayout}>
           <div class="relative h-full w-[calc(100vw-360px)] px-[80px] pb-[90px] pt-[50px]">
-            <Show when={showBookmark()} fallback={<Art />}>
+            <Show when={layoutStore.showBookmark} fallback={<Art />}>
               <Bookmark />
             </Show>
-
-            <div class="absolute bottom-0 right-3 top-0 flex items-center">
-              <div class="dark-layout mx-auto flex flex-col items-center justify-center rounded-full p-1 text-white">
-                <button
-                  onClick={() => setShowBookmark(false)}
-                  class="mb-2 flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-white/15"
-                >
-                  <VsSymbolColor size={15} />
-                </button>
-                <button
-                  onClick={() => setShowBookmark(true)}
-                  class="flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-white/15"
-                >
-                  <FiBookOpen size={15} />
-                </button>
-              </div>
-            </div>
           </div>
         </Show>
-        <div class="relative h-full min-w-[360px] max-w-[360px]">
+        <div class="w-phone relative h-full">
           <Show when={showSearchResults()}>
-            <div class="absolute top-[40px] z-50 h-[calc(100vh-81px)] w-full py-2">
-              <div class="dark-layout no-scrollbar flex h-full flex-col overflow-y-scroll rounded-2 pt-2">
-                <For each={vocabStore.searchResults}>
-                  {(item, index) => (
-                    <div
-                      aria-selected={active() === index()}
-                      onMouseOver={() => handleMouseOver(index())}
-                      onMouseOut={handleMouseOut}
-                      class="my-2 flex h-9.5 w-[360px] cursor-pointer justify-between bg-black/50"
+            <div
+              class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-2" : "left-1/2 -translate-x-1/2"} top-[42px] z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
+            >
+              <For each={vocabStore.searchResults}>
+                {(item, index) => (
+                  <div
+                    aria-selected={active() === index()}
+                    onMouseOver={() => handleMouseOver(index())}
+                    onMouseOut={handleMouseOut}
+                    class="my-2 flex h-9.5 w-full cursor-pointer justify-between rounded-2 bg-black/50 shadow-md shadow-black/30"
+                  >
+                    <button
+                      class="relative z-50 h-full w-9.5 pl-2 text-3.5 font-400 leading-9.5 text-secondary-white hover:text-white"
+                      onClick={() => handleEditFromSearch(item)}
                     >
-                      <button
-                        class="relative z-50 h-full w-9.5 pl-2 text-3.5 font-400 leading-9.5 text-secondary-white hover:text-white"
-                        onClick={() => handleEditFromSearch(item)}
-                      >
-                        {index() + 1}
-                      </button>
-                      <div
-                        class={`${active() === index() ? "scale-[2.1]" : ""} relative z-30 grow text-center font-constantine text-8 font-700 leading-9 text-white transition duration-100`}
-                        style={{
-                          "text-shadow":
-                            active() === index()
-                              ? "0 3px 5px black"
-                              : "0 2px 3px black",
-                        }}
-                        onClick={() => handleSelectWordFromSearch(index())}
-                      >
-                        {item.word}
-                      </div>
-                      <div
-                        class="relative z-50 flex h-full w-9.5 items-center justify-center pr-1"
-                        onClick={() => handleOpenDialogDelete(item.created_at)}
-                      >
-                        <BsTrash3 size={13} color="white" />
-                      </div>
+                      {index() + 1}
+                    </button>
+                    <div
+                      class={`${active() === index() ? "scale-[2]" : ""} relative z-30 grow text-center font-constantine text-8 font-700 leading-9 text-white transition duration-100`}
+                      style={{
+                        "text-shadow":
+                          active() === index()
+                            ? "0 3px 5px black"
+                            : "0 2px 3px black",
+                      }}
+                      onClick={() => handleSelectWordFromSearch(index())}
+                    >
+                      {item.word}
                     </div>
-                  )}
-                </For>
-              </div>
+                    <div
+                      class="relative z-50 flex h-full w-9.5 items-center justify-center pr-1"
+                      onClick={() => handleOpenDialogDelete(item.created_at)}
+                    >
+                      <BsTrash3 size={13} color="white" />
+                    </div>
+                  </div>
+                )}
+              </For>
             </div>
           </Show>
 

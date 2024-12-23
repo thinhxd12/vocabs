@@ -218,8 +218,8 @@ const Weather: Component<{}> = (props) => {
     ]);
 
     const dpi = 1;
-    let canvasWidth = 360;
-    let canvasHeight = window.innerHeight - 40;
+    let canvasWidth = 388;
+    let canvasHeight = window.innerHeight - 54;
 
     if (canvasRef) {
       canvasRef.width = Math.floor(canvasWidth * dpi);
@@ -393,8 +393,8 @@ const Weather: Component<{}> = (props) => {
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio ref={audioRef} hidden src={audioSrc()} />
-      <main class="h-[calc(100vh-40px)] w-[360px] py-2">
-        <div class="relative h-full w-full overflow-hidden rounded-2 shadow-md shadow-black/30">
+      <main class="h-main w-main relative flex items-center overflow-hidden">
+        <div class="w-content relative h-[calc(100vh-54px)] overflow-hidden rounded-2 shadow-sm shadow-black/30">
           <canvas ref={canvasRef} class="absolute h-full w-full object-cover" />
           <div class="relative z-50 h-full w-full p-2">
             <select

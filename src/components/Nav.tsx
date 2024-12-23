@@ -39,6 +39,8 @@ import {
   RiSystemLogoutCircleRLine,
   RiSystemQuestionLine,
 } from "solid-icons/ri";
+import { VsSymbolColor } from "solid-icons/vs";
+import { FiBookOpen } from "solid-icons/fi";
 
 const Nav: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
@@ -287,7 +289,7 @@ const Nav: Component<{}> = (props) => {
   // -------------------AUTOPLAY END-------------------- //
 
   return (
-    <nav class="relative h-[40px] w-full py-0.5">
+    <>
       <audio
         ref={audioRef}
         hidden
@@ -296,131 +298,129 @@ const Nav: Component<{}> = (props) => {
           "/storage/v1/object/public/weather/Ophelia.mp3"
         }
       />
-
-      <div class="light-layout flex h-full w-full items-center justify-center rounded-1 p-0.5">
-        <div class="flex h-full w-4 flex-col items-center justify-between overflow-hidden rounded-1 bg-black/60 shadow-[0_0_1px_0px_#00000078_inset]">
-          <Show
-            when={navStore.todaySchedule.created_at}
-            fallback={
+      <nav class="w-main relative flex h-[48px] items-center justify-center">
+        <div class="light-layout w-content m-2 flex h-[36px] items-center rounded-1">
+          <div class="ml-0.5 flex h-[32px] w-4 flex-col items-center justify-between rounded-1 bg-black/60 shadow-[0_0_1px_0px_#00000078_inset]">
+            <Show
+              when={navStore.todaySchedule.created_at}
+              fallback={
+                <div class="flex flex-col justify-center">
+                  <span class="text-3 leading-3 text-white">N</span>
+                  <span class="text-3 leading-3.5 text-white">N</span>
+                </div>
+              }
+            >
               <div class="flex flex-col justify-center">
-                <span class="w-full text-center text-3 leading-2.5 text-white">
-                  N
+                <span class="text-3 leading-3 text-white">
+                  {navStore.todaySchedule.time1}
                 </span>
-                <span class="w-full text-center text-3 leading-3 text-white">
-                  N
+                <span class="text-3 leading-3.5 text-white">
+                  {navStore.todaySchedule.time2}
                 </span>
               </div>
-            }
-          >
-            <div class="flex flex-col justify-center">
-              <span class="w-full text-center text-3 leading-2.5 text-white">
-                {navStore.todaySchedule.time1}
-              </span>
-              <span class="w-full text-center text-3 leading-3 text-white">
-                {navStore.todaySchedule.time2}
-              </span>
-            </div>
-          </Show>
-          <span class="mb-0.1 -rotate-90 rounded-0.5 bg-white/25 px-0.1 text-left text-2.5 leading-3.5 text-white">
-            {format(todayDate, "eeeeee")}
-          </span>
-        </div>
+            </Show>
 
-        <A href="/vocab" activeClass="btn-nav-active" class="btn-nav">
-          <span>Danger is sweet. Dulce periculum.</span>
-        </A>
-
-        <A href="/schedule" activeClass="btn-nav-active" class="btn-nav">
-          <span>Pecunia non olet. Money does not stink.</span>
-        </A>
-
-        <A href="/quiz" activeClass="btn-nav-active" class="btn-nav">
-          <span>Memento mor. Remember you will die.</span>
-        </A>
-
-        <div class="ml-0.1 flex h-full flex-col items-center rounded-1 bg-black/45 px-0.5 text-white ring-0 ring-white/5">
-          <span class="font-tupa text-5 font-600 leading-5">
-            {String(navStore.totalMemories).slice(
-              0,
-              String(navStore.totalMemories).length - 2,
-            )}
-          </span>
-          <span class="font-tupa text-5.5 font-600 leading-4">
-            {String(navStore.totalMemories).slice(2)}
-          </span>
-        </div>
-
-        <A
-          href="/weather"
-          class="relative mx-0.5 block h-full min-w-[81px] overflow-hidden rounded-1 shadow shadow-black/60"
-        >
-          <img
-            class="absolute left-0 top-0 h-full w-full object-cover brightness-90"
-            src={WMOCODE[navWeatherData().icon].textdescription}
-          />
-
-          <img
-            src={
-              navWeatherData().isDayTime
-                ? WMOCODE[navWeatherData().icon].day.image
-                : WMOCODE[navWeatherData().icon].night.image
-            }
-            width={21}
-            height={21}
-            class="absolute right-4 top-0.1 z-10 brightness-90"
-            style={{
-              filter: "drop-shadow(0px 2px 2px #000000)",
-            }}
-          />
-
-          <span
-            style={{
-              "text-shadow": "0px 0px 6px #000000",
-            }}
-            class="absolute right-0.1 top-0.1 z-10 text-2.5 font-600 leading-2.5 text-white"
-          >
-            {Math.round(navWeatherData().temperature)}°
-          </span>
-
-          <div class="absolute bottom-0 right-0 z-10 w-[81px] overflow-hidden">
-            <div class="flex">
-              <div class="animate-marquee flex">
-                <div class="min-w-[72px] text-nowrap px-3 text-2.5 font-600 leading-3 text-white">
-                  {navWeatherData()?.isDayTime
-                    ? WMOCODE[navWeatherData()?.icon].day.description
-                    : WMOCODE[navWeatherData()?.icon].night.description}
-                </div>
-              </div>
-              <div class="animate-marquee flex">
-                <div class="min-w-[72px] text-nowrap px-3 text-2.5 font-600 leading-3 text-white">
-                  {navWeatherData()?.isDayTime
-                    ? WMOCODE[navWeatherData()?.icon].day.description
-                    : WMOCODE[navWeatherData()?.icon].night.description}
-                </div>
-              </div>
-            </div>
+            <span class="w-full -translate-y-0.5 -rotate-90 rounded-1 bg-blue-500 bg-white/25 text-center text-2.5 leading-3.5 text-white">
+              {format(todayDate, "eeeeee")}
+            </span>
           </div>
-        </A>
 
-        <div
-          class={`relative mr-0.1 h-full min-w-[81px] max-w-[81px] overflow-hidden rounded-1 shadow shadow-black/60 ${navStore.playButton ? "bg-[url('/images/sunrise.webp')]" : "bg-[url('/images/sunset.webp')]"} cursor-pointer bg-cover transition-all`}
-          onClick={handleAutoplay}
-        >
-          <Show when={navStore.listCount}>
-            <div
-              class={`absolute left-0 top-0 h-full bg-[url('/images/sunrise.webp')] bg-cover transition-all duration-300`}
+          <A href="/vocab" activeClass="btn-nav-active" class="btn-nav">
+            <span>Danger is sweet. Dulce periculum.</span>
+          </A>
+
+          <A href="/schedule" activeClass="btn-nav-active" class="btn-nav">
+            <span>Pecunia non olet. Money does not stink.</span>
+          </A>
+
+          <A href="/quiz" activeClass="btn-nav-active" class="btn-nav">
+            <span>Memento mor. Remember you will die.</span>
+          </A>
+
+          <div class="ml-0.5 flex h-[32px] flex-col items-center rounded-1 bg-black/60 px-0.5 text-white">
+            <span class="mb-0.1 font-tupa text-6 font-600 leading-5">
+              {String(navStore.totalMemories).slice(
+                0,
+                String(navStore.totalMemories).length - 2,
+              )}
+            </span>
+            <span class="font-tupa text-6 font-600 leading-4.5">
+              {String(navStore.totalMemories).slice(2)}
+            </span>
+          </div>
+
+          <A
+            href="/weather"
+            class="relative ml-0.5 block h-[32px] min-w-[90px] overflow-hidden rounded-1 shadow shadow-black/60"
+          >
+            <img
+              class="absolute left-0 top-0 h-full w-full object-cover brightness-90"
+              src={WMOCODE[navWeatherData().icon].textdescription}
+            />
+
+            <img
+              src={
+                navWeatherData().isDayTime
+                  ? WMOCODE[navWeatherData().icon].day.image
+                  : WMOCODE[navWeatherData().icon].night.image
+              }
+              width={21}
+              height={21}
+              class="absolute right-4 top-0.1 z-10 brightness-90"
               style={{
-                width: `${Math.floor(((navStore.listCount + 1) / navStore.listContent.length) * 81)}px`,
-                "box-shadow": "2px 0px 6px rgba(0, 0, 0, 0.6)",
-                "border-right": "0.5px solid #000000",
+                filter: "drop-shadow(0px 2px 2px #000000)",
               }}
-            ></div>
-          </Show>
+            />
+
+            <span
+              style={{
+                "text-shadow": "0px 0px 6px #000000",
+              }}
+              class="absolute right-0.1 top-0.1 z-10 text-2.5 font-600 leading-2.5 text-white"
+            >
+              {Math.round(navWeatherData().temperature)}°
+            </span>
+
+            <div class="absolute bottom-0 right-0 z-10 w-[90px] overflow-hidden">
+              <div class="flex">
+                <div class="animate-marquee flex">
+                  <div class="min-w-[72px] text-nowrap px-3 text-2.5 font-600 leading-3 text-white">
+                    {navWeatherData()?.isDayTime
+                      ? WMOCODE[navWeatherData()?.icon].day.description
+                      : WMOCODE[navWeatherData()?.icon].night.description}
+                  </div>
+                </div>
+                <div class="animate-marquee flex">
+                  <div class="min-w-[72px] text-nowrap px-3 text-2.5 font-600 leading-3 text-white">
+                    {navWeatherData()?.isDayTime
+                      ? WMOCODE[navWeatherData()?.icon].day.description
+                      : WMOCODE[navWeatherData()?.icon].night.description}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </A>
+
+          <div
+            class={`relative mx-0.5 h-[32px] min-w-[90px] max-w-[90px] overflow-hidden rounded-1 shadow shadow-black/60 ${navStore.playButton ? "bg-[url('/images/sunrise.webp')]" : "bg-[url('/images/sunset.webp')]"} cursor-pointer bg-cover transition-all`}
+            onClick={handleAutoplay}
+          >
+            <Show when={navStore.listCount}>
+              <div
+                class={`absolute left-0 top-0 h-full bg-[url('/images/sunrise.webp')] bg-cover transition-all duration-300`}
+                style={{
+                  width: `${Math.floor(((navStore.listCount + 1) / navStore.listContent.length) * 90)}px`,
+                  "box-shadow": "2px 0px 6px rgba(0, 0, 0, 0.6)",
+                  "border-right": "0.5px solid #000000",
+                }}
+              ></div>
+            </Show>
+          </div>
         </div>
-      </div>
+      </nav>
 
       <div
-        class={`fixed bottom-[60px] w-[33px] ${layoutStore.showLayout ? "left-[calc(100vw-400px)]" : "right-[calc(50vw-180px)]"} dark-layout z-50 flex flex-col items-center justify-center rounded-full px-1 py-0.1 text-white sm:right-[calc(50vw-220px)]`}
+        class={`dark-layout fixed bottom-[60px] w-[33px] ${layoutStore.showLayout ? "right-0 !-translate-x-[400px]" : "left-1/2 translate-x-[161px]"} z-50 flex flex-col items-center justify-center rounded-full px-1 py-0.1 text-white sm:translate-x-[200px]`}
       >
         <button class="btn-nav-menu" onClick={logout}>
           <RiSystemLogoutCircleRLine size={15} />
@@ -502,6 +502,27 @@ const Nav: Component<{}> = (props) => {
           </Show>
         </button>
 
+        <Show when={layoutStore.showLayout}>
+          <Show
+            when={layoutStore.showBookmark}
+            fallback={
+              <button
+                class="btn-nav-menu"
+                onClick={() => setLayoutStore("showBookmark", true)}
+              >
+                <FiBookOpen size={15} />
+              </button>
+            }
+          >
+            <button
+              class="btn-nav-menu"
+              onClick={() => setLayoutStore("showBookmark", false)}
+            >
+              <VsSymbolColor size={15} />
+            </button>
+          </Show>
+        </Show>
+
         <button
           class="btn-nav-menu hidden sm:flex"
           onClick={() => setLayoutStore("showLayout", !layoutStore.showLayout)}
@@ -536,7 +557,7 @@ const Nav: Component<{}> = (props) => {
           <RiSystemHourglass2Line size={15} class="relative z-20" />
         </button>
       </div>
-    </nav>
+    </>
   );
 };
 
