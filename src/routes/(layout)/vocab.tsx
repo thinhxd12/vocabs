@@ -17,6 +17,7 @@ import { OcSearch2 } from "solid-icons/oc";
 import { BiRegularBandAid, BiSolidSave } from "solid-icons/bi";
 import {
   layoutStore,
+  setLayoutStore,
   setNavStore,
   setVocabStore,
   vocabStore,
@@ -333,10 +334,12 @@ const Vocab: Component<{}> = (props) => {
           setVocabStore("searchTermColor", true);
           setVocabStore("searchTerm", "");
           setVocabStore("searchResults", []);
+          setLayoutStore("showSearchResults", false);
         }, 1500);
       } else {
         setVocabStore("searchTermColor", true);
         setVocabStore("searchResults", res);
+        setLayoutStore("showSearchResults", true);
       }
     }
   }, 450);
@@ -403,6 +406,9 @@ const Vocab: Component<{}> = (props) => {
                   if (vocabStore.searchTerm.length > 2) {
                     triggerMobile(vocabStore.searchTerm);
                   }
+                }}
+                onKeyDown={(e) => {
+                  e.preventDefault();
                 }}
               />
               <p class="absolute -bottom-0.5 left-0 w-full truncate text-center font-opensans text-3 font-600 leading-3 text-white/50">

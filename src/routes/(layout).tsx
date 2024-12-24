@@ -68,9 +68,6 @@ export default function Layout(props: RouteSectionProps) {
 
   const location = useLocation();
 
-  const [showSearchResults, setShowSearchResults] =
-    createSignal<boolean>(false);
-
   const trigger = debounce(async (str: string) => {
     checkTimeout && clearTimeout(checkTimeout);
     const res = await searchText(str);
@@ -87,14 +84,14 @@ export default function Layout(props: RouteSectionProps) {
       } else if (res.length === 1 && str.length > 4) {
         setVocabStore("searchTermColor", true);
         setVocabStore("searchResults", res);
-        setShowSearchResults(true);
+        setLayoutStore("showSearchResults", true);
         checkTimeout = setTimeout(() => {
           handleSelectSearchResult(0);
         }, 1500);
       } else {
         setVocabStore("searchResults", res);
         setVocabStore("searchTermColor", true);
-        setShowSearchResults(true);
+        setLayoutStore("showSearchResults", true);
       }
     }
   }, 450);
@@ -146,7 +143,7 @@ export default function Layout(props: RouteSectionProps) {
   const handleCloseDialogSearch = () => {
     setActive(null);
     setVocabStore("searchTerm", "");
-    setShowSearchResults(false);
+    setLayoutStore("showSearchResults", false);
   };
 
   const handleSelectSearchResult = (index: number) => {
@@ -175,7 +172,7 @@ export default function Layout(props: RouteSectionProps) {
     setActive(null);
     setVocabStore("editWord", data);
     setVocabStore("searchTerm", "");
-    setShowSearchResults(false);
+    setLayoutStore("showSearchResults", false);
     setVocabStore("showEdit", true);
   };
 
@@ -183,7 +180,7 @@ export default function Layout(props: RouteSectionProps) {
     handleCheckAndRender(vocabStore.searchResults[index]);
     setActive(null);
     setVocabStore("searchTerm", "");
-    setShowSearchResults(false);
+    setLayoutStore("showSearchResults", false);
   };
 
   const [openDeleteAlert, setOpenDeleteAlert] = createSignal<boolean>(false);
@@ -228,7 +225,7 @@ export default function Layout(props: RouteSectionProps) {
     setOpenDeleteAlert(false);
     setActive(null);
     setVocabStore("searchTerm", "");
-    setShowSearchResults(false);
+    setLayoutStore("showSearchResults", false);
   };
 
   return (
@@ -293,7 +290,7 @@ export default function Layout(props: RouteSectionProps) {
           </div>
         </Show>
         <div class="w-main relative h-full">
-          <Show when={showSearchResults()}>
+          <Show when={layoutStore.showSearchResults}>
             <div
               class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
             >
