@@ -387,14 +387,14 @@ const Vocab: Component<{}> = (props) => {
                 name="mobileInputSearch"
                 value={vocabStore.searchTerm || renderWordStore()?.word}
                 onFocus={(e) => {
-                  setVocabStore("searchTerm", "");
                   e.currentTarget.value = "";
+                  setVocabStore("searchTerm", "");
                 }}
                 onBlur={() => {
                   setVocabStore("searchTerm", "");
                   setVocabStore("searchTermColor", true);
                 }}
-                onChange={(e) => {
+                onInput={(e) => {
                   triggerMobile.clear();
                   setVocabStore(
                     "searchTerm",
@@ -403,9 +403,6 @@ const Vocab: Component<{}> = (props) => {
                   if (vocabStore.searchTerm.length > 2) {
                     triggerMobile(vocabStore.searchTerm);
                   }
-                }}
-                onKeyDown={(e) => {
-                  e.preventDefault();
                 }}
               />
               <p class="absolute -bottom-0.5 left-0 w-full truncate text-center font-opensans text-3 font-600 leading-3 text-white/50">
