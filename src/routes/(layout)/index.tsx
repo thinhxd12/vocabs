@@ -12,7 +12,7 @@ const Login: Component<{}> = (props) => {
           name="password"
           type="password"
           required
-          class="w-[210px] rounded-2 border-0 bg-black/30 px-4 py-1 text-center text-white shadow-2xl outline-none backdrop-blur-md transition focus:bg-black/25 focus:ring-1 focus:ring-white/10"
+          class="w-[210px] rounded-2 border-0 bg-black/30 px-4 py-1 text-center text-white shadow-md shadow-black/30 outline-none backdrop-blur-md transition hover:shadow-sm focus:bg-black/25 focus:ring-1 focus:ring-white/10"
         />
         <button
           type="submit"

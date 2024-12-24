@@ -304,17 +304,17 @@ const Nav: Component<{}> = (props) => {
             <Show
               when={navStore.todaySchedule.created_at}
               fallback={
-                <div class="flex flex-col justify-center">
+                <div class="flex flex-col justify-center text-center">
                   <span class="text-3 leading-3 text-white">N</span>
-                  <span class="text-3 leading-3.5 text-white">N</span>
+                  <span class="text-3 leading-3 text-white">N</span>
                 </div>
               }
             >
-              <div class="flex flex-col justify-center">
+              <div class="flex flex-col justify-center text-center">
                 <span class="text-3 leading-3 text-white">
                   {navStore.todaySchedule.time1}
                 </span>
-                <span class="text-3 leading-3.5 text-white">
+                <span class="text-3 leading-3 text-white">
                   {navStore.todaySchedule.time2}
                 </span>
               </div>
@@ -334,7 +334,7 @@ const Nav: Component<{}> = (props) => {
           </A>
 
           <A href="/quiz" activeClass="btn-nav-active" class="btn-nav">
-            Memento mor. Remember you will die.
+            Memento mori. Remember you will die.
           </A>
 
           <div class="ml-0.5 flex h-[32px] flex-col items-center rounded-1 bg-black/60 px-0.5 text-white">

@@ -223,7 +223,7 @@ const Schedule: Component<{}> = (props) => {
           </div>
         </div>
 
-        <div class="light-layout w-content relative !my-2 flex cursor-default flex-wrap justify-center overflow-hidden rounded-2">
+        <div class="light-layout w-content relative !my-2 flex cursor-default flex-wrap justify-center overflow-hidden rounded-2 pt-2">
           <div class="schedule-title rounded-l-2 !text-[#f90000]">Sun</div>
           <div class="schedule-title">Mon</div>
           <div class="schedule-title">Tue</div>
@@ -274,7 +274,7 @@ const Schedule: Component<{}> = (props) => {
           </Suspense>
         </div>
 
-        <div class="light-layout w-content relative !my-2 overflow-hidden rounded-2 p-2">
+        <div class="w-content relative !my-2 overflow-hidden rounded-2">
           <Suspense fallback={<div>Loading...</div>}>
             <div class="relative flex w-full snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar-thumb]:bg-black/60 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white/15 [&::-webkit-scrollbar]:h-1">
               <For each={chunk(scheduleStore.historyList, 5).reverse()}>

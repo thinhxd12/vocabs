@@ -222,7 +222,7 @@ const Bookmark: Component<{}> = (props) => {
         <div class="dark-layout mx-auto flex items-center justify-center rounded-3 px-3 py-2">
           <button class="btn-bookmark pt-0.5" onClick={handleCheckBookmark}>
             <BsHeartFill
-              size={15}
+              size={16}
               class={
                 bookmark()?.like
                   ? likeReset()

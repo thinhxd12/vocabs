@@ -260,10 +260,16 @@ export default function Layout(props: RouteSectionProps) {
         </Show>
         <Show when={!layoutStore.showLayout}>
           <div class="group absolute left-0 top-0 z-50 hidden w-1/4 sm:block">
-            <p class="absolute left-0 top-0 z-40 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white opacity-100 transition group-hover:opacity-0">
+            <p
+              style="text-shadow: 0 0 3px black;"
+              class="absolute left-0 top-0 z-40 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white opacity-100 transition group-hover:opacity-0"
+            >
               {imageData()?.hs1_title}
             </p>
-            <p class="absolute left-0 top-0 z-40 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white opacity-0 transition group-hover:opacity-100">
+            <p
+              style="text-shadow: 0 0 3px black;"
+              class="absolute left-0 top-0 z-40 cursor-pointer pl-2 pt-1 text-4 leading-7 text-white opacity-0 transition group-hover:opacity-100"
+            >
               {imageData()?.hs2_title}
             </p>
           </div>

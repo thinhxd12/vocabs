@@ -56,9 +56,9 @@
 }
 
 .quiz-choice-true {
-  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-green-400 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/45 backdrop-blur-lg transition;
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-green-400 py-1.5 text-center text-5 leading-7 text-white shadow-sm shadow-black/45 backdrop-blur-lg transition;
 }
 
 .quiz-choice-false {
-  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-red-500 py-1.5 text-center text-5 leading-7 text-white shadow-md shadow-black/45 backdrop-blur-lg transition;
+  @apply mb-3 w-2/3 select-none overflow-hidden rounded-2 border-y border-b-white/10 border-t-white/15 bg-red-500 py-1.5 text-center text-5 leading-7 text-white shadow-sm shadow-black/45 backdrop-blur-lg transition;
 }

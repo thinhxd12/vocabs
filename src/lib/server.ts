@@ -1,4 +1,4 @@
-import { action, cache } from "@solidjs/router";
+import { action, query } from "@solidjs/router";
 import {
   BookmarkType,
   CalendarType,
@@ -158,7 +158,7 @@ async function fetchGetText(url: string) {
   }
 }
 
-export const getTextDataWebster = cache(async (text: string) => {
+export const getTextDataWebster = query(async (text: string) => {
   "use server";
   if (!text) return;
   const url = `https://www.merriam-webster.com/dictionary/${text}`;
@@ -617,7 +617,7 @@ export const archiveVocabulary = async (text: string) => {
 };
 
 //get all history
-export const getHistoryList = cache(async (run: boolean) => {
+export const getHistoryList = query(async (run: boolean) => {
   "use server";
   if (run) return;
   const { count } = await supabase
@@ -642,7 +642,7 @@ export const getAllHistoryList = async () => {
   return data as HistoryItemType[];
 };
 
-export const getCalendarList = cache(async (str: string) => {
+export const getCalendarList = query(async (str: string) => {
   "use server";
   const date = new Date(str);
   const thisMonth = date.getMonth();
@@ -710,7 +710,7 @@ export const getCalendarList = cache(async (str: string) => {
   }
 }, "getCalendarList");
 
-export const getThisWeekIndex = cache(async (dayToday: string) => {
+export const getThisWeekIndex = query(async (dayToday: string) => {
   "use server";
   const { data: thisWeekSchedule, error } = await supabase
     .from(mapTables.schedule)
@@ -751,7 +751,7 @@ export const getThisWeekIndex = cache(async (dayToday: string) => {
   } else return (thisWeekIndex + 1) as number;
 }, "getThisWeekIndex");
 
-export const getProgressList = cache(async () => {
+export const getProgressList = query(async () => {
   "use server";
   const { data } = await supabase
     .from(mapTables.progress)
@@ -760,7 +760,7 @@ export const getProgressList = cache(async () => {
   if (data) return data as ScheduleProgressType[];
 }, "getProgressList");
 
-export const getTodaySchedule = cache(async (date: string) => {
+export const getTodaySchedule = query(async (date: string) => {
   "use server";
   const { data: dataByDate } = await supabase
     .from(mapTables.schedule)
@@ -777,7 +777,7 @@ export const getTodaySchedule = cache(async (date: string) => {
   if (data) return data[0] as ScheduleType;
 }, "getTodaySchedule");
 
-export const getTotalMemories = cache(async () => {
+export const getTotalMemories = query(async () => {
   "use server";
   const { count } = await supabase
     .from(mapTables.memories)
@@ -785,7 +785,7 @@ export const getTotalMemories = cache(async () => {
   return count as number;
 }, "getTotalMemories");
 
-export const getLocationList = cache(async () => {
+export const getLocationList = query(async () => {
   "use server";
   const { data } = await supabase
     .from(mapTables.weather)
@@ -995,9 +995,11 @@ export const getSpotlightImage_v4 = async () => {
     const result = JSON.parse(response)["ad"];
     const urlP = result.portraitImage.asset;
     const thumbhash = await createThumbhash(urlP);
+    const hs1 = result.iconHoverText.split("\r\n©");
+
     return {
       title: result.title,
-      hs1_title: result.iconHoverText.replace("Right-click to learn more", ""),
+      hs1_title: hs1[0],
       hs2_title: result.description,
       image_L: result.landscapeImage.asset,
       image_P: urlP,

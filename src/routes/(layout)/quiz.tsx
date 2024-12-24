@@ -76,7 +76,7 @@ const Quiz: Component<{}> = (props) => {
         audioRef?.play();
       });
     } else {
-      setAudioSrc("/assets/sounds/mp3_Ding.mp3");
+      setAudioSrc("/assets/sounds/mp3_Boing.mp3");
       audioRef?.load();
       audioRef?.addEventListener("canplaythrough", () => {
         audioRef?.play();
@@ -118,15 +118,17 @@ const Quiz: Component<{}> = (props) => {
       <main class="no-scrollbar h-main w-main relative overflow-hidden">
         <div class="mx-auto mb-6 mt-9 h-[120px] w-2/3">
           <div class="no-scrollbar light-layout relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-3 !backdrop-blur-lg">
-            <h1 class="absolute -top-3 left-0 z-10 w-full bg-transparent text-center text-[165px] leading-[115px] text-white/20">
+            <h1 class="absolute -top-2.5 left-0 z-10 w-full bg-transparent text-center text-[168px] leading-[115px] text-white/20">
               {quizStore.quizRender.number}
             </h1>
 
-            <p class="relative z-30 w-full bg-black/60 px-1 pb-1.5 text-center text-5 font-400 leading-7 text-white shadow-lg shadow-black/60 backdrop-blur-xl">
-              {quizStore.quizRender.translations
-                .map((tran) => tran.translations.join(", "))
-                .join(", ")}
-            </p>
+            <div class="relative z-30 flex min-h-11 w-full items-center bg-black/60 shadow-lg shadow-black/60 backdrop-blur-xl">
+              <p class="w-full px-1 pb-1.5 text-center text-5 font-400 leading-7 text-white">
+                {quizStore.quizRender.translations
+                  .map((tran) => tran.translations.join(", "))
+                  .join(", ")}
+              </p>
+            </div>
           </div>
         </div>
 
