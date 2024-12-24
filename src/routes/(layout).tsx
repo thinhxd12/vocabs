@@ -277,25 +277,25 @@ export default function Layout(props: RouteSectionProps) {
 
           <button
             onClick={handleChangeBackground}
-            class="absolute bottom-[215px] right-[calc(50vw-188px)] z-50 flex h-7 w-7 items-center justify-center text-white opacity-30 outline-none hover:opacity-100 sm:bottom-0 sm:right-0"
+            class="absolute bottom-[215px] left-[calc(50vw+163px)] z-50 flex h-7 w-7 items-center justify-center text-white opacity-30 outline-none hover:opacity-100 sm:bottom-0 sm:left-[calc(100vw-21px)]"
           >
             <VsTarget size={15} />
           </button>
         </Show>
       </Show>
 
-      <div class="absolute left-0 top-0 z-30 flex h-full w-full justify-center overflow-hidden">
+      <div class="absolute left-0 top-0 z-30 flex h-screen w-screen justify-center overflow-hidden">
         <Show when={layoutStore.showLayout}>
-          <div class="relative h-full w-[calc(100vw-360px)] px-[80px] pb-[90px] pt-[50px]">
+          <div class="relative h-full w-[calc(100vw-402px)] px-[80px] pb-[90px] pt-[50px]">
             <Show when={layoutStore.showBookmark} fallback={<Art />}>
               <Bookmark />
             </Show>
           </div>
         </Show>
-        <div class="w-phone relative h-full">
+        <div class="w-main relative h-full">
           <Show when={showSearchResults()}>
             <div
-              class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-2" : "left-1/2 -translate-x-1/2"} top-[42px] z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
+              class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
             >
               <For each={vocabStore.searchResults}>
                 {(item, index) => (
@@ -345,12 +345,10 @@ export default function Layout(props: RouteSectionProps) {
 
       <Dialog open={openDeleteAlert()} onOpenChange={setOpenDeleteAlert}>
         <Dialog.Portal>
-          <div
-            class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} light-layout top-0 z-50 flex h-[calc(100vh-40px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center rounded-2`}
+          <Dialog.Content
+            class={`no-scrollbar light-layout w-content fixed flex items-center justify-center p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
           >
-            <Dialog.Content
-              class={`no-scrollbar z-50 w-[210px] overflow-hidden overflow-y-scroll rounded-2 outline-none`}
-            >
+            <div class="w-2/3 overflow-hidden rounded-2">
               <div class="flex h-8 w-full justify-between border-b border-black/30 bg-black/90">
                 <Dialog.Label class="pl-2 text-4 font-400 leading-8 text-white">
                   Delete this word?
@@ -373,8 +371,8 @@ export default function Layout(props: RouteSectionProps) {
                   No
                 </button>
               </div>
-            </Dialog.Content>
-          </div>
+            </div>
+          </Dialog.Content>
         </Dialog.Portal>
       </Dialog>
 

@@ -36,7 +36,7 @@
 }
 
 .light-layout {
-  @apply border-y border-b-white/10 border-t-white/15 bg-black/15 shadow-md shadow-black/45 backdrop-blur-xl;
+  @apply border-y border-b-white/15 border-t-white/25 bg-black/15 shadow-md shadow-black/45 backdrop-blur-xl;
 }
 
 .dark-layout {
@@ -73,20 +73,20 @@
   @apply border-l border-black pl-6;
 }
 
-.w-phone {
-  width: 412px;
-}
-
 .w-main {
-  width: 400px;
+  width: 402px;
   margin: 0 auto;
 }
 
 .h-main {
-  height: calc(100vh - 48px);
+  height: calc(100vh - 42px);
 }
 
 .w-content {
-  width: 388px;
-  margin: 6px auto;
+  width: 378px;
+  margin: 0 auto;
+}
+
+.h-content {
+  height: calc(100vh - 90px);
 }

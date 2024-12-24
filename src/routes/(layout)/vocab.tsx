@@ -290,10 +290,14 @@ const Vocab: Component<{}> = (props) => {
     }
   };
 
+  const [switchFlipcard, setSwitchFlipcard] = createSignal<boolean>(false);
+
   createEffect(
     on(
       () => vocabStore.renderWord?.audio,
       (v) => {
+        setSwitchFlipcard(!switchFlipcard());
+
         const translations = vocabStore.renderWord?.translations
           .map((item) => item.translations.join(", "))
           .join(", ");
@@ -353,63 +357,65 @@ const Vocab: Component<{}> = (props) => {
       <audio ref={audioRef1} hidden src={audioSrc1()} />
       <audio ref={audioRef2} hidden src={audioSrc2()} />
       <main class="h-main w-main relative flex flex-wrap">
-        <div class="my-2 ml-2">
-          <Show
-            when={renderWordStore()}
-            fallback={<div class="light-layout h-11 w-[82px] rounded-2"></div>}
-          >
-            <FlipCard number={renderWordStore()!.number} />
+        <div class="w-content flex h-12 items-center gap-2">
+          <Show when={renderWordStore()}>
+            <Show
+              when={switchFlipcard()}
+              fallback={<FlipCard number={renderWordStore()!.number} />}
+            >
+              <FlipCard number={renderWordStore()!.number} />
+            </Show>
           </Show>
+          <div class="relative grow overflow-hidden rounded-1 bg-black/15 shadow-sm shadow-black/45 backdrop-blur-xl">
+            <Show
+              when={layoutStore.isMobile}
+              fallback={
+                <p
+                  class={`h-[34px] w-full truncate pt-1 text-center align-baseline font-constantine text-7 font-700 uppercase leading-10 ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
+                >
+                  {vocabStore.searchTerm || renderWordStore()?.word}
+                  <small class="pl-1 pt-3 text-center align-baseline font-opensans text-3 font-600 !lowercase leading-4 text-secondary-white">
+                    {renderWordStore()?.phonetics}
+                  </small>
+                </p>
+              }
+            >
+              <input
+                class={`h-[34px] w-full truncate bg-transparent text-center font-constantine text-7 font-700 uppercase leading-10.5 outline-none sm:block ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
+                type="text"
+                autocomplete="off"
+                name="mobileInputSearch"
+                value={vocabStore.searchTerm || renderWordStore()?.word}
+                onFocus={(e) => {
+                  setVocabStore("searchTerm", "");
+                  e.currentTarget.value = "";
+                }}
+                onBlur={() => {
+                  setVocabStore("searchTerm", "");
+                  setVocabStore("searchTermColor", true);
+                }}
+                onChange={(e) => {
+                  triggerMobile.clear();
+                  setVocabStore(
+                    "searchTerm",
+                    (e.target as HTMLInputElement).value.toLowerCase(),
+                  );
+                  if (vocabStore.searchTerm.length > 2) {
+                    triggerMobile(vocabStore.searchTerm);
+                  }
+                }}
+                onKeyDown={(e) => {
+                  e.preventDefault();
+                }}
+              />
+              <p class="absolute -bottom-0.5 left-0 w-full truncate text-center font-opensans text-3 font-600 leading-3 text-white/50">
+                {renderWordStore()?.phonetics}
+              </p>
+            </Show>
+          </div>
         </div>
 
-        <div class="relative m-2 grow">
-          <Show
-            when={layoutStore.isMobile}
-            fallback={
-              <div
-                class={`light-layout h-11 w-full truncate rounded-2 pt-1 text-center align-baseline font-constantine text-7 font-700 uppercase leading-10 ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
-              >
-                {vocabStore.searchTerm || renderWordStore()?.word}
-                <small class="pl-1 pt-3 text-center align-baseline font-opensans text-3 font-600 leading-4 text-secondary-white">
-                  {renderWordStore()?.phonetics}
-                </small>
-              </div>
-            }
-          >
-            <input
-              class={`back light-layout absolute left-0 top-0 block h-11 w-full truncate rounded-2 bg-transparent text-center font-constantine text-7 font-700 uppercase leading-10.5 outline-none sm:block ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
-              type="text"
-              autocomplete="off"
-              name="mobileInputSearch"
-              value={vocabStore.searchTerm || renderWordStore()?.word}
-              onFocus={(e) => {
-                setVocabStore("searchTerm", "");
-                e.currentTarget.value = "";
-              }}
-              onBlur={() => {
-                setVocabStore("searchTerm", "");
-                setVocabStore("searchTermColor", true);
-              }}
-              onInput={(e) => {
-                setVocabStore(
-                  "searchTerm",
-                  (e.target as HTMLInputElement).value.toLowerCase(),
-                );
-                if (vocabStore.searchTerm.length > 2) {
-                  triggerMobile(vocabStore.searchTerm);
-                }
-              }}
-              onKeyDown={(e) => {
-                e.preventDefault();
-              }}
-            />
-            <p class="absolute bottom-0 left-0 w-full truncate text-center font-opensans text-3 font-600 leading-3 text-white/50">
-              {renderWordStore()?.phonetics}
-            </p>
-          </Show>
-        </div>
-
-        <div class="no-scrollbar h-[calc(100vh-96px)] w-full overflow-y-scroll">
+        <div class="no-scrollbar h-content w-full overflow-y-scroll">
           <Show when={renderWordStore()}>
             <Definition
               item={renderWordStore()!}
@@ -418,13 +424,14 @@ const Vocab: Component<{}> = (props) => {
           </Show>
         </div>
 
+        {/* translate */}
         <Dialog
           open={vocabStore.showTranslate}
           onOpenChange={(open) => setVocabStore("showTranslate", open)}
         >
           <Dialog.Portal>
             <Dialog.Content
-              class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-2" : "left-1/2 -translate-x-1/2"} top-[42px] z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
+              class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
             >
               <form
                 class="mb-2 w-full p-1"
@@ -551,7 +558,7 @@ const Vocab: Component<{}> = (props) => {
         >
           <Dialog.Portal>
             <Dialog.Content
-              class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-2" : "left-1/2 -translate-x-1/2"} top-[42px] z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
+              class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
             >
               <form
                 class="mb-2 w-full p-1"

@@ -302,7 +302,7 @@ const Bookmark: Component<{}> = (props) => {
 
       <Dialog open={openDialogEdit()} onOpenChange={setOpenDialogEdit}>
         <Dialog.Portal>
-          <div class="fixed inset-0 left-0 z-50 h-screen w-[calc(100vw-360px)] px-[80px] pb-[90px] pt-[30px]">
+          <div class="fixed inset-0 left-0 z-50 h-screen w-[calc(100vw-402px)] px-[80px] pb-[90px] pt-[30px]">
             <Dialog.Content class="no-scrollbar dark-layout h-full w-full rounded-3 px-11 pb-4 pt-8">
               <form
                 method="post"
@@ -343,7 +343,7 @@ const Bookmark: Component<{}> = (props) => {
 
       <Dialog open={openDialogInsert()} onOpenChange={setOpenDialogInsert}>
         <Dialog.Portal>
-          <div class="fixed inset-0 left-0 z-50 h-screen w-[calc(100vw-360px)] px-[80px] pb-[90px] pt-[30px]">
+          <div class="fixed inset-0 left-0 z-50 h-screen w-[calc(100vw-402px)] px-[80px] pb-[90px] pt-[30px]">
             <Dialog.Content class="no-scrollbar dark-layout h-full w-full rounded-3 px-11 pb-4 pt-8">
               <form
                 class="flex h-full w-full flex-col overflow-hidden"
@@ -379,7 +379,7 @@ const Bookmark: Component<{}> = (props) => {
         onOpenChange={(open) => handleCloseDialogSearch(open)}
       >
         <Dialog.Portal>
-          <div class="fixed inset-0 left-0 z-50 h-screen w-[calc(100vw-360px)] px-[80px] pb-[90px] pt-[30px]">
+          <div class="fixed inset-0 left-0 z-50 h-screen w-[calc(100vw-402px)] px-[80px] pb-[90px] pt-[30px]">
             <Dialog.Content class="no-scrollbar light-layout h-full w-full rounded-3 px-11 pb-4 pt-8">
               <div class="flex h-[40px] w-full justify-center overflow-hidden rounded-full bg-white/15 py-2 shadow focus-within:shadow-md">
                 <div class="relative h-full w-1/2 overflow-hidden rounded-full bg-black/15 shadow-[0_0_3px_0px_#00000054_inset]">

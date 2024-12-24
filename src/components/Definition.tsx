@@ -9,10 +9,10 @@ const Definition: Component<{
   onCheck?: Setter<boolean>;
 }> = (props) => {
   return (
-    <div class="w-content light-layout overflow-hidden rounded-2 !bg-white/20">
+    <div class="w-content">
       <For each={props.item.definitions}>
         {(entry) => (
-          <div class="w-full">
+          <div class="mb-2 w-full overflow-hidden rounded-2 bg-white/60 shadow-md shadow-black/30 backdrop-blur-xl">
             <div class="group flex h-10 items-end justify-between">
               <div class="w-1/2 truncate text-wrap indent-4 font-sfpro text-4 font-500 leading-5 text-black opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 {props.item.translations

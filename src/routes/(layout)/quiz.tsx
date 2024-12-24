@@ -115,7 +115,7 @@ const Quiz: Component<{}> = (props) => {
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio ref={audioRef} hidden src={audioSrc()} />
-      <main class="no-scrollbar h-main w-main relative overflow-y-scroll">
+      <main class="no-scrollbar h-main w-main relative overflow-hidden">
         <div class="mx-auto mb-6 mt-9 h-[120px] w-2/3">
           <div class="no-scrollbar light-layout relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-3 !backdrop-blur-lg">
             <h1 class="absolute -top-3 left-0 z-10 w-full bg-transparent text-center text-[165px] leading-[115px] text-white/20">

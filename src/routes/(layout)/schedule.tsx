@@ -180,7 +180,7 @@ const Schedule: Component<{}> = (props) => {
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio ref={audioRef} hidden src={audioSrc()} />
       <main class="no-scrollbar h-main w-main relative overflow-y-scroll">
-        <div class="light-layout w-content relative m-2 h-[240px] overflow-hidden rounded-2 p-2">
+        <div class="light-layout w-content relative !my-2 h-[240px] overflow-hidden rounded-2 p-2">
           <img
             class="h-full w-full rounded-2 border border-black/30 object-cover shadow-sm shadow-black/30 brightness-90"
             src={`/images/${format(new Date(), "M")}.webp`}
@@ -223,7 +223,7 @@ const Schedule: Component<{}> = (props) => {
           </div>
         </div>
 
-        <div class="light-layout w-content relative m-2 flex cursor-default flex-wrap justify-center overflow-hidden rounded-2 pt-1">
+        <div class="light-layout w-content relative !my-2 flex cursor-default flex-wrap justify-center overflow-hidden rounded-2">
           <div class="schedule-title rounded-l-2 !text-[#f90000]">Sun</div>
           <div class="schedule-title">Mon</div>
           <div class="schedule-title">Tue</div>
@@ -274,7 +274,7 @@ const Schedule: Component<{}> = (props) => {
           </Suspense>
         </div>
 
-        <div class="light-layout w-content relative m-2 overflow-hidden rounded-2 p-2">
+        <div class="light-layout w-content relative !my-2 overflow-hidden rounded-2 p-2">
           <Suspense fallback={<div>Loading...</div>}>
             <div class="relative flex w-full snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar-thumb]:bg-black/60 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white/15 [&::-webkit-scrollbar]:h-1">
               <For each={chunk(scheduleStore.historyList, 5).reverse()}>
@@ -308,7 +308,7 @@ const Schedule: Component<{}> = (props) => {
           </Suspense>
         </div>
 
-        <div class="light-layout w-content relative overflow-hidden rounded-2 !bg-green-400/15 p-2">
+        <div class="light-layout w-content relative !my-2 overflow-hidden rounded-2 !bg-green-400/15 p-2">
           <p class="font-garamond text-4 font-500 leading-4.5">
             The tree that is supposed to grow to a proud height can dispense
             with bad weather and storms. Whether misfortune and external
@@ -323,10 +323,10 @@ const Schedule: Component<{}> = (props) => {
         {/* ///////////////////////////////////////////////////////////// */}
         <Dialog open={openDialogReset()} onOpenChange={setOpenDialogReset}>
           <Dialog.Portal>
-            <div
-              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} dark-layout top-0 z-50 flex h-[calc(100vh-41px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center`}
+            <Dialog.Content
+              class={`no-scrollbar w-content light-layout fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-2 z-50 flex h-[calc(100vh-54px)] items-center justify-center overflow-y-scroll rounded-2 p-2 outline-none`}
             >
-              <Dialog.Content class="no-scrollbar z-50 w-3/4 overflow-y-scroll rounded-2 outline-none">
+              <div class="w-2/3 overflow-hidden rounded-2">
                 <div class="flex h-8 w-full justify-between border-b border-black/30 bg-black/90">
                   <Dialog.Label class="pl-2 text-4 font-400 leading-8 text-white">
                     Reset today task
@@ -369,8 +369,8 @@ const Schedule: Component<{}> = (props) => {
                     <BiSolidSave size={15} />
                   </button>
                 </form>
-              </Dialog.Content>
-            </div>
+              </div>
+            </Dialog.Content>
           </Dialog.Portal>
         </Dialog>
 
@@ -379,10 +379,10 @@ const Schedule: Component<{}> = (props) => {
           onOpenChange={setOpenDialogSchedule}
         >
           <Dialog.Portal>
-            <div
-              class={`no-scrollbar fixed ${layoutStore.showLayout ? "inset-[0_0_auto_auto]" : "inset-0 left-[calc(50vw-180px)]"} dark-layout top-0 z-50 flex h-[calc(100vh-41px)] min-w-[360px] max-w-[360px] flex-col items-center justify-center`}
+            <Dialog.Content
+              class={`no-scrollbar w-content light-layout fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-2 z-50 flex h-[calc(100vh-54px)] items-center justify-center overflow-y-scroll rounded-2 p-2 outline-none`}
             >
-              <Dialog.Content class="no-scrollbar z-50 w-1/2 overflow-y-scroll rounded-2 outline-none">
+              <div class="w-1/2 overflow-hidden rounded-2">
                 <div class="flex h-8 w-full justify-between border-b border-black/30 bg-black/90">
                   <Dialog.Label class="pl-2 text-4 font-400 leading-8 text-white">
                     Create new schedule
@@ -400,8 +400,8 @@ const Schedule: Component<{}> = (props) => {
                     <VsCalendar size={15} />
                   </button>
                 </form>
-              </Dialog.Content>
-            </div>
+              </div>
+            </Dialog.Content>
           </Dialog.Portal>
         </Dialog>
 

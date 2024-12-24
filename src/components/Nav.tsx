@@ -298,8 +298,8 @@ const Nav: Component<{}> = (props) => {
           "/storage/v1/object/public/weather/Ophelia.mp3"
         }
       />
-      <nav class="w-main relative flex h-[48px] items-center justify-center">
-        <div class="light-layout w-content m-2 flex h-[36px] items-center rounded-1">
+      <nav class="w-main h-[42px]">
+        <div class="light-layout w-content flex h-11 items-center rounded-1">
           <div class="ml-0.5 flex h-[32px] w-4 flex-col items-center justify-between rounded-1 bg-black/60 shadow-[0_0_1px_0px_#00000078_inset]">
             <Show
               when={navStore.todaySchedule.created_at}
@@ -326,15 +326,15 @@ const Nav: Component<{}> = (props) => {
           </div>
 
           <A href="/vocab" activeClass="btn-nav-active" class="btn-nav">
-            <span>Danger is sweet. Dulce periculum.</span>
+            Danger is sweet. Dulce periculum.
           </A>
 
           <A href="/schedule" activeClass="btn-nav-active" class="btn-nav">
-            <span>Pecunia non olet. Money does not stink.</span>
+            Pecunia non olet. Money does not stink.
           </A>
 
           <A href="/quiz" activeClass="btn-nav-active" class="btn-nav">
-            <span>Memento mor. Remember you will die.</span>
+            Memento mor. Remember you will die.
           </A>
 
           <div class="ml-0.5 flex h-[32px] flex-col items-center rounded-1 bg-black/60 px-0.5 text-white">
@@ -420,7 +420,7 @@ const Nav: Component<{}> = (props) => {
       </nav>
 
       <div
-        class={`dark-layout fixed bottom-[60px] w-[33px] ${layoutStore.showLayout ? "right-0 !-translate-x-[400px]" : "left-1/2 translate-x-[161px]"} z-50 flex flex-col items-center justify-center rounded-full px-1 py-0.1 text-white sm:translate-x-[200px]`}
+        class={`dark-layout fixed bottom-[60px] ${layoutStore.showLayout ? "right-0 !-translate-x-[402px]" : "left-1/2 translate-x-[158px]"} z-50 flex flex-col items-center justify-center rounded-full px-0.5 py-0.1 text-white sm:translate-x-[201px]`}
       >
         <button class="btn-nav-menu" onClick={logout}>
           <RiSystemLogoutCircleRLine size={15} />
