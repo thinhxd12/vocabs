@@ -2,6 +2,7 @@ import {
   createEffect,
   createSignal,
   mergeProps,
+  onCleanup,
   Show,
   untrack,
 } from "solid-js";
@@ -133,6 +134,11 @@ const Tick = (initialProps: {
       setDegrees(-180);
     }
   };
+
+  onCleanup(() => {
+    cancelAnimationFrame(animationFrameIdRef);
+    setDone(true);
+  });
 
   return (
     <span class="tick-flip">
