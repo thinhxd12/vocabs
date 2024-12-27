@@ -135,11 +135,6 @@ const Tick = (initialProps: {
     }
   };
 
-  onCleanup(() => {
-    cancelAnimationFrame(animationFrameIdRef);
-    setDone(true);
-  });
-
   return (
     <span class="tick-flip">
       <span class="tick-flip-card">

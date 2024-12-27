@@ -15,11 +15,7 @@ import {
 import { chartOptions, WMOCODE } from "~/lib/utils";
 import { Chart, Title, Tooltip, Legend, Colors, Filler } from "chart.js";
 import { Line } from "solid-chartjs";
-import {
-  CurrentlyWeatherType,
-  HourlyWeatherType,
-  WeatherGeoType,
-} from "~/types";
+import { CurrentlyWeatherType, HourlyWeatherType } from "~/types";
 import { navStore } from "~/lib/store";
 import {
   getCurrentWeatherData,
@@ -218,7 +214,11 @@ const Weather: Component<{}> = (props) => {
       textureDayBg,
     ]);
 
-    const dpi = 1;
+    const isMobile =
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent,
+      );
+    const dpi = isMobile ? 3 : 1;
     let canvasWidth = 378;
     let canvasHeight = window.innerHeight - 54;
 
@@ -393,7 +393,7 @@ const Weather: Component<{}> = (props) => {
       <MetaTitle>⛅</MetaTitle>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
-      <audio ref={audioRef} hidden src={audioSrc()} />
+      <audio ref={audioRef} hidden src={audioSrc()} loop />
       <main class="h-main w-main flex items-center overflow-hidden">
         <div class="w-content relative h-[calc(100vh-54px)] overflow-hidden rounded-2 shadow-md shadow-black/30">
           <canvas ref={canvasRef} class="absolute h-full w-full object-cover" />

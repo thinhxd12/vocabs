@@ -1,5 +1,5 @@
-import { Component, createEffect, For, Setter, Show } from "solid-js";
-import { VocabularyTranslationType, VocabularyType } from "~/types";
+import { Component, For, Setter, Show } from "solid-js";
+import { VocabularyTranslationType } from "~/types";
 import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
 import ImageLoader from "./ImageLoader";
 import { InsertVocab, SelectVocab } from "~/db/schema";

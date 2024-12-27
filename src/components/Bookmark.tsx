@@ -24,7 +24,6 @@ import { BsHeartFill } from "solid-icons/bs";
 import { BiSolidSave } from "solid-icons/bi";
 import { OcSearch2 } from "solid-icons/oc";
 import { createList } from "solid-list";
-import { BookmarkType } from "~/types";
 import {
   deleteBookmark,
   findBookMarkData,
@@ -40,13 +39,14 @@ import {
 } from "~/lib/server";
 import { createMarker, makeSearchRegex } from "@solid-primitives/marker";
 import Dialog from "@corvu/dialog";
+import { SelectBookmark } from "~/db/schema";
 const HeartAnimate = lazy(() => import("./HeartAnimate"));
 
 const Bookmark: Component<{}> = (props) => {
   let searchInputRef: HTMLInputElement | undefined;
   let searchResultsRef: HTMLInputElement | undefined;
 
-  const [bookmark, setBookmark] = createSignal<BookmarkType>();
+  const [bookmark, setBookmark] = createSignal<SelectBookmark>();
   const [likeReset, setLikeReset] = createSignal<boolean>(true);
 
   onMount(async () => {
@@ -115,7 +115,7 @@ const Bookmark: Component<{}> = (props) => {
   const [openDialogSearch, setOpenDialogSearch] = createSignal<boolean>(false);
   const [openDeleteAlert, setOpenDeleteAlert] = createSignal<boolean>(false);
   const [searchTerm, setSearchTerm] = createSignal<string>("");
-  const [searchResults, setSearchResults] = createSignal<BookmarkType[]>([]);
+  const [searchResults, setSearchResults] = createSignal<SelectBookmark[]>([]);
   const { active, setActive, onKeyDown } = createList({
     items: () => searchResults().map((result, index) => index),
     initialActive: null,
@@ -157,7 +157,7 @@ const Bookmark: Component<{}> = (props) => {
     onKeyDown(e);
   };
 
-  const handleSelectSearch = async (item: BookmarkType) => {
+  const handleSelectSearch = async (item: SelectBookmark) => {
     setSearchTerm("");
     setSearchResults([]);
     setOpenDialogSearch(false);

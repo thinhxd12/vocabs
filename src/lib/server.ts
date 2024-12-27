@@ -1,35 +1,21 @@
 import { action, query } from "@solidjs/router";
 import {
-  BookmarkType,
   CalendarType,
   CurrentlyWeatherType,
   DefinitionSenseType,
   DefinitionType,
   ExampleType,
   FixMinutelyTWeatherType,
-  HistoryItemType,
   HourlyWeatherType,
   LayoutImageType,
   LoginImageType,
   MinutelyWeatherType,
-  ScheduleProgressType,
-  ScheduleType,
-  ToastResult,
   TranslateType,
-  VocabularyDefinitionType,
-  VocabularyQuizType,
   VocabularySearchType,
   VocabularyTranslationType,
-  VocabularyType,
-  WeatherGeoType,
 } from "~/types";
-import {
-  PRECIPITATION_PROBABILITY,
-  REPETITION_PATTERN,
-  mapTables,
-} from "~/lib/utils";
-import { supabase } from "./supabase";
-import { navStore, setNavStore, setVocabStore, vocabStore } from "./store";
+import { PRECIPITATION_PROBABILITY, REPETITION_PATTERN } from "~/lib/utils";
+import { navStore, setNavStore, setVocabStore } from "./store";
 import {
   parseKindleEntries,
   readKindleClipping,
@@ -40,22 +26,16 @@ import sharp from "sharp";
 import { rgbaToThumbHash } from "thumbhash";
 import {
   insertBookmark,
-  insertDiary,
   insertMemories,
   insertProgress,
   insertSchedule,
   insertVocab,
-  insertWeather,
 } from "~/db/queries/insert";
 import {
-  diaryTable,
   InsertBookmark,
-  InsertDiary,
-  InsertMemories,
   InsertProgress,
   InsertSchedule,
   InsertVocab,
-  InsertWeather,
   memoriesTable,
   progressTable,
   scheduleTable,
@@ -85,7 +65,7 @@ import {
   getRandomBookmark,
   findTextBookmark,
 } from "~/db/queries/select";
-import { DrizzleError, sql, count, asc, eq, desc } from "drizzle-orm";
+import { count, asc, eq, desc } from "drizzle-orm";
 import {
   decreaseBookmarkLikeById,
   decreaseNumberVocabById,
@@ -1189,136 +1169,3 @@ export const findBookMarkData = async (val: string) => {
   const data = await findTextBookmark(val);
   if (data) return data;
 };
-
-////////////////////////////////////////////////////
-//insert data//
-////////////////////////////////////////////////////
-
-// export const insertWeatherData = async () => {
-//   "use server";
-//   const weatherdata: InsertWeather[] = [
-//     {
-//       name: "Thủ Thừa",
-//       lat: "10.588468",
-//       lon: "106.40065",
-//       default: true,
-//     },
-//     {
-//       name: "Cần Thơ",
-//       lat: "10.0364216",
-//       lon: "105.7875219",
-//       default: false,
-//     },
-//     {
-//       name: "Tokyo",
-//       lat: "35.652832",
-//       lon: "139.839478",
-//       default: false,
-//     },
-//   ];
-//   for (let i = 0; i < weatherdata.length; i++) {
-//     const res = await insertWeather(weatherdata[i]);
-//     if (res) console.log("Error:", res);
-//     else console.log(`Row ${i} inserted`);
-//   }
-// };
-
-// export const insertProgressData = async () => {
-//   "use server";
-
-//   const { data, error } = await supabase
-//     .from(mapTables.history)
-//     .select()
-//     .order("created_at");
-//   for (let i = 0; i < data!.length; i++) {
-//     const row: InsertProgress = {
-//       index: data![i].index,
-//       start_date: new Date(data![i].from_date),
-//       end_date: new Date(data![i].to_date),
-//     };
-//     const res = await insertProgress(row);
-//     if (res) console.log("Error:", res);
-//     else console.log(`Row ${i} inserted`);
-//   }
-// };
-
-// export const insertDiaryData = async () => {
-//   "use server";
-//   const { data, error } = await supabase
-//     .from(mapTables.progress)
-//     .select()
-//     .order("created_at");
-//   for (let i = 0; i < data!.length; i++) {
-//     const row: InsertDiary = {
-//       date: new Date(data![i].date),
-//       count: data![i].count,
-//     };
-//     const res = await insertDiary(row);
-//     if (res) console.log("Error:", res);
-//     else console.log(`Row ${i} inserted`);
-//   }
-// };
-
-// export const insertBookmarkData = async () => {
-//   "use server";
-//   const { data, error } = await supabase
-//     .from(mapTables.bookmarks)
-//     .select()
-//     .order("created_at");
-
-//   for (let i = 0; i < data!.length; i++) {
-//     const row: InsertBookmark = {
-//       authors: data![i].authors,
-//       bookTile: data![i].bookTile,
-//       page: data![i].page,
-//       location: data![i].location,
-//       dateOfCreation: data![i].dateOfCreation,
-//       content: data![i].content,
-//       type: data![i].type,
-//       like: data![i].like,
-//     };
-
-//     const res = await insertBookmark(row);
-//     if (res) console.log("Error:", res);
-//     else console.log(`Row ${i} inserted`);
-//   }
-// };
-
-// export const insertVocabData = async () => {
-//   "use server";
-//   const { data, error } = await supabase
-//     .from(mapTables.vocabulary)
-//     .select()
-//     .order("created_at", { ascending: true });
-//   for (let i = 0; i < data!.length; i++) {
-//     const row: InsertVocab = {
-//       word: data![i].word,
-//       number: data![i].number,
-//       audio: data![i].audio,
-//       phonetics: data![i].phonetics,
-//       definitions: data![i].definitions,
-//       translations: data![i].translations,
-//     };
-
-//     const res = await insertVocab(row);
-//     if (!res.status) console.log("Error:", res);
-//     else console.log(`Row ${i} inserted`);
-//   }
-// };
-
-// export const insertMemoriesData = async () => {
-//   "use server";
-//   const { data, error } = await supabase
-//     .from(mapTables.memories)
-//     .select()
-//     .order("created_at", { ascending: true });
-//   for (let i = 0; i < data!.length; i++) {
-//     const row: InsertMemories = {
-//       word: data![i].word,
-//       createdAt: new Date(data![i].created_at),
-//     };
-//     const res = await insertMemories(row);
-//     if (res) console.log("Error:", res);
-//     else console.log(`Row ${i} inserted`);
-//   }
-// };

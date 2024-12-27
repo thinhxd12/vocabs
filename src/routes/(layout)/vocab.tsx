@@ -8,16 +8,11 @@ import {
   Show,
 } from "solid-js";
 import Definition from "~/components/Definition";
-import {
-  VocabularyDefinitionType,
-  VocabularyTranslationType,
-  VocabularyType,
-} from "~/types";
+import { VocabularyDefinitionType, VocabularyTranslationType } from "~/types";
 import { OcSearch2 } from "solid-icons/oc";
 import { BiRegularBandAid, BiSolidSave } from "solid-icons/bi";
 import {
   layoutStore,
-  navStore,
   setLayoutStore,
   setNavStore,
   setVocabStore,
@@ -41,7 +36,7 @@ import { debounce } from "@solid-primitives/scheduled";
 import toast, { Toaster } from "solid-toast";
 import Collapsible from "~/components/Collapsible";
 import FlipCard from "~/components/FlipCard";
-import { InsertVocab, SelectVocab } from "~/db/schema";
+import { InsertVocab } from "~/db/schema";
 
 const Vocab: Component<{}> = (props) => {
   // ***************check login**************

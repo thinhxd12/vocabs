@@ -4,11 +4,7 @@ import { navStore, quizStore, setNavStore, setQuizStore } from "~/lib/store";
 import { createAsync } from "@solidjs/router";
 import { getUser } from "~/lib/login";
 import arrayShuffle from "array-shuffle";
-import {
-  handleCheckQuizWord,
-  updateTodaySchedule,
-  updateTodayScheduleLocal,
-} from "~/lib/server";
+import { handleCheckQuizWord, updateTodayScheduleLocal } from "~/lib/server";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 
 const Quiz: Component<{}> = (props) => {
@@ -28,7 +24,7 @@ const Quiz: Component<{}> = (props) => {
       (v) => {
         if (v.length > 0) {
           setTimeout(() => {
-            getRandomChoices();
+            if (navStore.listContent.length) getRandomChoices();
           }, 500);
         }
       },

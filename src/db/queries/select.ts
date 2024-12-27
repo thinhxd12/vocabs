@@ -1,10 +1,7 @@
 import {
   asc,
-  between,
   count,
-  DrizzleError,
   eq,
-  getTableColumns,
   like,
   sql,
   isNull,
@@ -14,7 +11,6 @@ import {
   desc,
 } from "drizzle-orm";
 import { db } from "../index";
-import { VocabularyType } from "~/types";
 import {
   bookmarkTable,
   diaryTable,
@@ -23,7 +19,6 @@ import {
   scheduleTable,
   SelectBookmark,
   SelectMemories,
-  SelectSchedule,
   SelectVocab,
   vocabTable,
   weatherTable,

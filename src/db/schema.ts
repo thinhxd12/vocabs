@@ -1,15 +1,10 @@
-import { sql } from "drizzle-orm";
 import {
   boolean,
   date,
-  integer,
-  json,
   jsonb,
   numeric,
   pgTable,
-  serial,
   smallint,
-  smallserial,
   text,
   timestamp,
   uuid,

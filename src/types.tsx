@@ -1,24 +1,6 @@
-export interface VocabularyType {
-  word: string;
-  audio: string;
-  phonetics: string;
-  number: number;
-  id: number;
-  translations: VocabularyTranslationType[];
-  definitions: VocabularyDefinitionType[];
-}
-
 export interface VocabularySearchType {
   id: string;
   word: string;
-}
-
-export interface VocabularyQuizType {
-  id: string;
-  word: string;
-  audio: string;
-  number: number;
-  translations: VocabularyTranslationType[];
 }
 
 export interface VocabularyTranslationType {
@@ -52,39 +34,10 @@ export interface ExampleType {
   year: string;
 }
 
-export interface BookmarkType {
-  id: string;
-  authors: string;
-  bookTile: string;
-  page: number;
-  location: string;
-  dateOfCreation: string;
-  content: string;
-  type: string;
-  selected: boolean;
-  like: number;
-}
-
-export interface ScheduleType {
-  id: string;
-  date: string;
-  index1: number;
-  index2: number;
-  time1: number;
-  time2: number;
-}
-
 export interface CalendarType {
   date: number;
   month: number;
   count: number;
-}
-
-export interface HistoryItemType {
-  id: string;
-  index: number;
-  from_date: string;
-  to_date: string;
 }
 
 export interface LayoutImageType {
@@ -142,13 +95,6 @@ export interface FixMinutelyTWeatherType {
   probability: number;
 }
 
-export interface WeatherGeoType {
-  name: string;
-  lat: number;
-  lon: number;
-  default: boolean;
-}
-
 export interface WeatherCodeData {
   [key: string]: {
     day: {
@@ -163,11 +109,6 @@ export interface WeatherCodeData {
   };
 }
 
-export interface ScheduleProgressType {
-  date: string;
-  count: number;
-}
-
 export type LoginImageType = {
   title: string;
   hs1_title: string;
@@ -175,9 +116,4 @@ export type LoginImageType = {
   image_L: string;
   image_P: string;
   hash: string;
-};
-
-export type ToastResult = {
-  success: boolean;
-  message: string;
 };

@@ -211,15 +211,18 @@ const Nav: Component<{}> = (props) => {
   };
 
   const handleGetListContentVocab = async (type: number) => {
+    setNavStore("currentSchedule", undefined);
     setNavStore("currentSchedule", navStore.todaySchedule[type]);
     const data = await getListContent(navStore.todaySchedule[type].index);
     if (data) {
       setNavStore("listContent", data);
       setNavStore("playButton", true);
     }
+    console.log(navStore.todaySchedule);
   };
 
   const handleGetListContentQuiz = async (type: number) => {
+    setNavStore("currentSchedule", undefined);
     setNavStore("currentSchedule", navStore.todaySchedule[type]);
     const data = await getListContent(navStore.todaySchedule[type].index);
     if (data) {
@@ -231,8 +234,10 @@ const Nav: Component<{}> = (props) => {
   const handleGetListContent = (type: number) => {
     if (location.pathname === "/vocab") {
       handleGetListContentVocab(type);
+      return;
     } else if (location.pathname === "/quiz") {
       handleGetListContentQuiz(type);
+      return;
     } else {
       setNavStore("listContent", []);
       setNavStore("currentSchedule", undefined);
