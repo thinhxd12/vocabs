@@ -36,6 +36,7 @@ import {
 } from "~/lib/weather";
 import { createAsync } from "@solidjs/router";
 import { getUser } from "~/lib/login";
+import { SelectWeather } from "~/db/schema";
 
 const Weather: Component<{}> = (props) => {
   // ***************check login**************
@@ -144,7 +145,7 @@ const Weather: Component<{}> = (props) => {
     datasets: any[];
   }>({ labels: [], datasets: [] });
 
-  const [currentLocation, setCurrentLocation] = createSignal<WeatherGeoType>(
+  const [currentLocation, setCurrentLocation] = createSignal<SelectWeather>(
     navStore.defaultLocation,
   );
   const [current, setCurrent] = createSignal<CurrentlyWeatherType>();

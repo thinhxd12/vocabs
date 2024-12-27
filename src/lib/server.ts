@@ -14,6 +14,7 @@ import {
   MinutelyWeatherType,
   ScheduleProgressType,
   ScheduleType,
+  ToastResult,
   TranslateType,
   VocabularyDefinitionType,
   VocabularyQuizType,
@@ -28,7 +29,7 @@ import {
   mapTables,
 } from "~/lib/utils";
 import { supabase } from "./supabase";
-import { navStore, setNavStore, setVocabStore } from "./store";
+import { navStore, setNavStore, setVocabStore, vocabStore } from "./store";
 import {
   parseKindleEntries,
   readKindleClipping,
@@ -37,49 +38,185 @@ import { URLSearchParams } from "url";
 import { load } from "cheerio";
 import sharp from "sharp";
 import { rgbaToThumbHash } from "thumbhash";
+import {
+  insertBookmark,
+  insertDiary,
+  insertMemories,
+  insertProgress,
+  insertSchedule,
+  insertVocab,
+  insertWeather,
+} from "~/db/queries/insert";
+import {
+  diaryTable,
+  InsertBookmark,
+  InsertDiary,
+  InsertMemories,
+  InsertProgress,
+  InsertSchedule,
+  InsertVocab,
+  InsertWeather,
+  memoriesTable,
+  progressTable,
+  scheduleTable,
+  SelectBookmark,
+  SelectMemories,
+  SelectSchedule,
+  SelectVocab,
+  vocabTable,
+} from "~/db/schema";
+import { deleteBookmarkById, deleteVocabById } from "~/db/queries/delete";
+import {
+  getMemoriesByWord,
+  getAllProgress,
+  getScheduleByDate,
+  getScheduleByProgress,
+  getVocabById,
+  getVocabByWord,
+  getVocabList,
+  getWeather,
+  getLastPartProgress,
+  getAllScheduleHaveDate,
+  getDiary,
+  getBookmarkById,
+  getBookmarkBySelected,
+  getNextBookmark,
+  getPreviousBookmark,
+  getRandomBookmark,
+  findTextBookmark,
+} from "~/db/queries/select";
+import { DrizzleError, sql, count, asc, eq, desc } from "drizzle-orm";
+import {
+  decreaseBookmarkLikeById,
+  decreaseNumberVocabById,
+  increaseBookmarkLikeById,
+  increaseScheduleById,
+  updateBookmarkContentById,
+  updateBookmarkSelectById,
+  updateCountScheduleById,
+  updateDateScheduleById,
+  updateVocabById,
+} from "~/db/queries/update";
+import { db } from "~/db";
 
-export const searchText = async (text: string) => {
+////// Layoutpage //////
+
+export const createThumbhash = async (imageUrl: string) => {
   "use server";
-  try {
-    const { data, error } = await supabase
-      .from(mapTables.vocabulary)
-      .select("word,created_at")
-      .like("word", `${text}%`)
-      .limit(6);
+  const imageBuffer = await fetch(imageUrl).then((res) => res.arrayBuffer());
+  const image = sharp(imageBuffer).resize(90, 90, { fit: "inside" });
+  const { data, info } = await image
+    .ensureAlpha()
+    .raw()
+    .toBuffer({ resolveWithObject: true });
+  const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
+  const base64String = btoa(
+    String.fromCharCode(...new Uint8Array(binaryThumbHash)),
+  );
+  return base64String;
+};
 
-    return data as VocabularySearchType[];
+export function base64ToUint8Array(base64String: string) {
+  const binaryString = atob(base64String);
+  const uint8Array = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    uint8Array[i] = binaryString.charCodeAt(i);
+  }
+  return uint8Array;
+}
+
+async function fetchGetText(url: string) {
+  try {
+    let response = await fetch(url);
+    let text = await response.text();
+    return text;
   } catch (error) {
-    console.error(error);
+    return "";
+  }
+}
+
+const fetchGetJSON = async (url: string) => {
+  try {
+    let response = await fetch(url);
+    let res = await response.json();
+    return res;
+  } catch (error) {
+    return "";
   }
 };
 
-export const getWordData = async (time: string) => {
+export const deleteVocabulary = async (id: SelectVocab["id"]) => {
   "use server";
-  try {
-    const { data, error } = await supabase
-      .from(mapTables.vocabulary)
-      .select()
-      .eq("created_at", time);
-    if (data) return data[0] as VocabularyType;
-  } catch (error) {
-    console.error(error);
+  const result = await deleteVocabById(id);
+  return {
+    status: result.status,
+    data: result.data.message,
+  };
+};
+
+// https://github.com/ORelio/Spotlight-Downloader/blob/master/SpotlightAPI.md
+
+export const getSpotlightImage_v3 = async () => {
+  "use server";
+  let batchQuery = {} as any;
+  batchQuery["pid"] = "209567";
+  batchQuery["fmt"] = "json";
+  batchQuery["rafb"] = "0";
+  batchQuery["ua"] = "WindowsShellClient/0";
+  batchQuery["cdm"] = "1";
+  batchQuery["disphorzres"] = "9999";
+  batchQuery["dispvertres"] = "9999";
+  batchQuery["lo"] = "80217";
+  batchQuery["pl"] = "en-US";
+  batchQuery["lc"] = "en-US";
+  batchQuery["ctry"] = "hk";
+
+  const baseUrl =
+    "https://arc.msn.com/v3/Delivery/Placement?" +
+    new URLSearchParams(batchQuery).toString();
+  const data = await (await fetch(baseUrl)).json();
+
+  if (data) {
+    const itemStr = data["batchrsp"]["items"][0].item;
+    const itemObj = JSON.parse(itemStr)["ad"];
+    const title = itemObj["title_text"]?.tx;
+    const hs1_title_text = itemObj["hs1_title_text"]?.tx;
+    const hs2_title_text = itemObj["hs2_title_text"]?.tx;
+    const jsImageL = itemObj["image_fullscreen_001_landscape"].u;
+    const jsImageP = itemObj["image_fullscreen_001_portrait"].u;
+    const thumbhash = await createThumbhash(jsImageP);
+    return {
+      title: title,
+      hs1_title: hs1_title_text,
+      hs2_title: hs2_title_text,
+      image_L: jsImageL,
+      image_P: jsImageP,
+      hash: thumbhash,
+    } as LoginImageType;
   }
 };
 
-export const searchMemoriesText = async (text: string) => {
+export const getSpotlightImage_v4 = async () => {
   "use server";
-  try {
-    const { data, error } = await supabase
-      .from(mapTables.memories)
-      .select()
-      .textSearch("word", text);
+  const baseUrl =
+    "https://fd.api.iris.microsoft.com/v4/api/selection?&placement=88000820&bcnt=1&country=DK&locale=en-US&fmt=json";
+  const data = await (await fetch(baseUrl)).json();
 
-    if (data) {
-      if (data.length > 0)
-        return { message: `Memorized "${data[0].word.toUpperCase()}"` };
-    }
-  } catch (error) {
-    console.error(error);
+  if (data) {
+    const response = data["batchrsp"]["items"][0]["item"];
+    const result = JSON.parse(response)["ad"];
+    const urlP = result.portraitImage.asset;
+    const thumbhash = await createThumbhash(urlP);
+    const hs1 = result.iconHoverText.split("\r\n©");
+
+    return {
+      title: result.title,
+      hs1_title: hs1[0],
+      hs2_title: result.description,
+      image_L: result.landscapeImage.asset,
+      image_P: urlP,
+      hash: thumbhash,
+    } as LoginImageType;
   }
 };
 
@@ -138,39 +275,144 @@ export const getLayoutImage = async (url: string) => {
   return result as LayoutImageType;
 };
 
-//get translate data
-export const getTranslateData = async (text: string) => {
+export const getWordData = async (id: SelectVocab["id"]) => {
   "use server";
-  if (!text) return;
-  const url = `https://vocabs3.vercel.app/trans?text=${text}&from=auto&to=vi`;
-  const response = await fetch(url);
-  const data = await response.json();
-  if (data) return data as TranslateType;
+  const result = await getVocabById(id);
+  if (result.status) return result.data;
 };
 
-async function fetchGetText(url: string) {
-  try {
-    let response = await fetch(url);
-    let text = await response.text();
-    return text;
-  } catch (error) {
-    return "";
+export const searchText = async (text: SelectVocab["word"]) => {
+  "use server";
+  return await getVocabByWord(text);
+};
+
+// handlecheck
+export const handleCheckAndRender = async (text: VocabularySearchType) => {
+  const wordData = await getWordData(text.id);
+  if (wordData) {
+    setVocabStore("renderWord", wordData);
+
+    if (wordData.number > 1) {
+      checkVocabulary(text.id);
+    } else {
+      setNavStore("totalMemories", navStore.totalMemories + 1);
+      await archiveVocabulary(text.word);
+      await deleteVocabulary(text.id);
+      updateLastRowWord(text.id);
+    }
   }
-}
+};
+
+const checkVocabulary = async (id: SelectVocab["id"]) => {
+  "use server";
+  await decreaseNumberVocabById(id);
+};
+
+export const archiveVocabulary = async (text: SelectVocab["word"]) => {
+  "use server";
+  await insertMemories({ word: text });
+};
+
+export const updateLastRowWord = async (replacedId: SelectVocab["id"]) => {
+  "use server";
+  const lengthVocabTable = await db.select({ count: count() }).from(vocabTable);
+  if (lengthVocabTable[0].count % 200 === 0) return;
+  const endOfIndex = Math.floor(lengthVocabTable[0].count / 200) * 200;
+
+  const rangeResults = db
+    .select()
+    .from(vocabTable)
+    .orderBy(asc(vocabTable.id))
+    .offset(endOfIndex)
+    .as("rangeResults");
+
+  const smallestRow = await db
+    .select()
+    .from(vocabTable)
+    .leftJoin(rangeResults, eq(vocabTable.id, rangeResults.id))
+    .orderBy(asc(rangeResults.number))
+    .limit(1);
+
+  await db
+    .update(vocabTable)
+    .set({
+      id: replacedId,
+    })
+    .where(eq(vocabTable.id, smallestRow[0].rangeResults!.id));
+};
+
+////// Vocabpage //////
+
+export const getTranslationArr = (str: string) => {
+  const breakpoint = /\s+-/g;
+  let means = str.split(breakpoint).filter((item) => item);
+  const matchesMean = means.map((m) => {
+    if (m) {
+      let newM = /(\w+)\-.+/.exec(m);
+      return {
+        partOfSpeech: newM ? newM[1] : "null",
+        translations: newM
+          ? m
+              .replace(newM[1], "")
+              .split(/\-|\s-/)
+              .filter((item) => item)
+          : [],
+      };
+    }
+  }) as VocabularyTranslationType[];
+  return matchesMean;
+};
+
+export const editVocabularyItem = action(async (formData: FormData) => {
+  "use server";
+  const wordT = String(formData.get("word"));
+  const audioT = String(formData.get("audio"));
+  const phoneticsT = String(formData.get("phonetics"));
+  const definitionsT = JSON.parse(String(formData.get("definitions")));
+  const numberT = Number(formData.get("number"));
+  const idT = String(formData.get("id"));
+  const meaningT = String(formData.get("meaning"));
+  const translationsT = getTranslationArr(meaningT);
+
+  if (
+    definitionsT.length === 0 ||
+    translationsT.length === 0 ||
+    wordT === "" ||
+    audioT === "" ||
+    phoneticsT === ""
+  )
+    return {
+      status: false,
+      data: {
+        message: "Invalid data.",
+      },
+    };
+
+  const editedWord: SelectVocab = {
+    word: wordT,
+    audio: audioT,
+    phonetics: phoneticsT,
+    number: numberT,
+    translations: translationsT,
+    definitions: definitionsT,
+    id: idT,
+  };
+
+  const result = await updateVocabById(editedWord);
+  return result;
+});
 
 export const getTextDataWebster = query(async (text: string) => {
   "use server";
   if (!text) return;
   const url = `https://www.merriam-webster.com/dictionary/${text}`;
 
-  const result: VocabularyType = {
+  const result: InsertVocab = {
     word: "",
     audio: "",
     phonetics: "",
-    number: 240,
     translations: [],
     definitions: [],
-    created_at: "",
   };
 
   interface ExampleExtendType {
@@ -325,7 +567,6 @@ export const getTextDataWebster = query(async (text: string) => {
   }
 }, "webster");
 
-//find sound from oed
 export const getOedSoundURL = async (text: string) => {
   "use server";
   if (!text) return;
@@ -360,80 +601,21 @@ export const getOedSoundURL = async (text: string) => {
   return oxfordResultUrl;
 };
 
-//delete vocabulary
-export const deleteVocabulary = async (time: string) => {
+export const getTotalMemories = query(async () => {
   "use server";
-  const { error } = await supabase
-    .from(mapTables.vocabulary)
-    .delete()
-    .eq("created_at", time);
-  if (error) return { message: error.message };
-  return { message: "success" };
+  const length = await db.select({ count: count() }).from(memoriesTable);
+  return length[0].count;
+}, "getTotalMemories");
+
+export const getTranslateData = async (text: string) => {
+  "use server";
+  if (!text) return;
+  const url = `https://vocabs3.vercel.app/trans?text=${text}&from=auto&to=vi`;
+  const response = await fetch(url);
+  const data = await response.json();
+  if (data) return data as TranslateType;
 };
 
-//edit vocabulary
-export const editVocabularyItem = action(async (formData: FormData) => {
-  "use server";
-  const wordT = String(formData.get("word"));
-  const audioT = String(formData.get("audio"));
-  const phoneticsT = String(formData.get("phonetics"));
-  const definitionsT = JSON.parse(String(formData.get("definitions")));
-  const numberT = Number(formData.get("number"));
-  const createT = String(formData.get("created_at"));
-  const meaningT = String(formData.get("meaning"));
-  const translationsT = getTranslationArr(meaningT);
-
-  if (definitionsT.length === 0 || translationsT.length === 0)
-    return { message: "Incorrect data" };
-  const { error } = await supabase
-    .from(mapTables.vocabulary)
-    .update({
-      word: wordT,
-      audio: audioT,
-      phonetics: phoneticsT,
-      number: numberT,
-      translations: translationsT,
-      definitions: definitionsT,
-    })
-    .eq("created_at", createT);
-  if (error) return { message: error.message };
-  return { message: "success" };
-});
-
-export const updateHashVocabularyItem = async (
-  id: string,
-  data: VocabularyDefinitionType[],
-) => {
-  "use server";
-  const { error } = await supabase
-    .from(mapTables.vocabulary)
-    .update({
-      definitions: data,
-    })
-    .eq("created_at", id);
-};
-
-export const getTranslationArr = (str: string) => {
-  const breakpoint = /\s+-/g;
-  let means = str.split(breakpoint).filter((item) => item);
-  const matchesMean = means.map((m) => {
-    if (m) {
-      let newM = /(\w+)\-.+/.exec(m);
-      return {
-        partOfSpeech: newM ? newM[1] : "null",
-        translations: newM
-          ? m
-              .replace(newM[1], "")
-              .split(/\-|\s-/)
-              .filter((item) => item)
-          : [],
-      };
-    }
-  }) as VocabularyTranslationType[];
-  return matchesMean;
-};
-
-//insert new vocabulary
 export const insertVocabularyItem = action(async (formData: FormData) => {
   "use server";
   const wordT = String(formData.get("word"));
@@ -443,204 +625,194 @@ export const insertVocabularyItem = action(async (formData: FormData) => {
   const meaningT = String(formData.get("meaning"));
   const translationsT = getTranslationArr(meaningT);
 
-  if (definitionsT.length === 0 || translationsT.length === 0)
-    return { message: "Incorrect data" };
-  const { error } = await supabase.from(mapTables.vocabulary).insert({
+  if (
+    definitionsT.length === 0 ||
+    translationsT.length === 0 ||
+    wordT === "" ||
+    audioT === "" ||
+    phoneticsT === ""
+  )
+    return {
+      status: false,
+      data: {
+        message: "Invalid data.",
+      },
+    };
+
+  const insertWord: InsertVocab = {
     word: wordT,
     audio: audioT,
     phonetics: phoneticsT,
-    number: 240,
     translations: translationsT,
     definitions: definitionsT,
-  });
-  if (error) return { message: error.message };
-  return { message: "success" };
+  };
+
+  const result = await insertVocab(insertWord);
+  return result;
 });
 
-//get image from unsplash
-export const getImageFromUnsplashByKeyword = async (keyword: string) => {
+export const searchMemoriesText = async (text: SelectMemories["word"]) => {
   "use server";
-  const apiKey = "EAEQdLT0Wze4Lhf_Xn2O-IAuow2Z-Rh2sHIEu7pTXms";
-  const response = await fetch(
-    `https://api.unsplash.com/photos/random?query=${keyword}&count=1&orientation=landscape&client_id=${apiKey}`,
-  );
-  if (response.status === 200) {
-    const data = await response.json();
-    return data[0].urls.small_s3;
+  return await getMemoriesByWord(text);
+};
+
+////// Navbar //////
+
+export const getCurrentWeatherData = async ({
+  lat: lat,
+  lon: lon,
+}: {
+  lat: string;
+  lon: string;
+}) => {
+  "use server";
+  const params = {
+    latitude: lat,
+    longitude: lon,
+    current: [
+      "temperature_2m",
+      "relative_humidity_2m",
+      "apparent_temperature",
+      "is_day",
+      "uv_index",
+      "weather_code",
+      "wind_speed_10m",
+      "wind_direction_10m",
+    ],
+    models: "best_match",
+    timezone: "auto",
+  };
+
+  const url = "https://api.open-meteo.com/v1/forecast?";
+  const paramsString = new URLSearchParams(params).toString();
+  const responses = await fetch(url + paramsString);
+  if (responses.status !== 200) return;
+  const data = await responses.json();
+
+  const result: CurrentlyWeatherType = {
+    apparentTemperature: data.current.apparent_temperature,
+    isDayTime: data.current.is_day,
+    humidity: data.current.relative_humidity_2m,
+    temperature: data.current.temperature_2m,
+    uvIndex: data.current.uv_index,
+    icon: data.current.weather_code,
+    windDirection: data.current.wind_direction_10m,
+    windSpeed: data.current.wind_speed_10m,
+  };
+  return result;
+};
+
+export const getListContent = async (start: number) => {
+  "use server";
+  const data = await getVocabList(start);
+  if (data.length > 0) return data;
+};
+
+export const getLocationList = query(async () => {
+  "use server";
+  const data = await getWeather();
+  if (data.length > 0) return data;
+}, "location-list");
+
+export const getTodaySchedule = query(async (date: string) => {
+  "use server";
+  const dataByDate = await getScheduleByDate(date);
+  if (dataByDate.length === 2) return dataByDate;
+  const dataByNull = await getScheduleByProgress();
+  if (dataByDate.length === 1) {
+    return [dataByDate[0], dataByNull[0]];
+  }
+  return dataByNull;
+}, "getTodaySchedule");
+
+export const updateTodaySchedule = async (
+  id: SelectSchedule["id"],
+  updatedDate: string,
+) => {
+  "use server";
+  const result = await increaseScheduleById(id);
+  if (result[0].count < 9) return result[0];
+  if (!result[0].date) {
+    const updated = await updateDateScheduleById(id, updatedDate);
+    return updated[0];
+  }
+  return result[0];
+};
+
+export const updateTodayScheduleLocal = async (dateToday: string) => {
+  if (navStore.currentSchedule) {
+    const result = await updateTodaySchedule(
+      navStore.currentSchedule.id,
+      dateToday,
+    );
+    const updatedTodaySchedule = navStore.todaySchedule.map((item) => {
+      return item.id === result.id ? result : item;
+    });
+    setNavStore("todaySchedule", updatedTodaySchedule);
+    setNavStore("currentSchedule", result);
   }
 };
 
-export const getUnsplashImage = async () => {
-  const apiKey = "EAEQdLT0Wze4Lhf_Xn2O-IAuow2Z-Rh2sHIEu7pTXms";
-  const response = await fetch(
-    `https://api.unsplash.com/photos/random?&count=1&client_id=${apiKey}`,
-  );
-  const data = await response.json();
+////// Schedulepage //////
+
+export const getLastPartProgressList = async (run: boolean) => {
+  "use server";
+  if (run) return;
+  const data = await getLastPartProgress();
   return data;
 };
 
-//reset today schedule
-export const submitTodayReset = action(async (formData: FormData) => {
+export const getAllProgressList = async () => {
   "use server";
-  const todayIndex1 = Number(formData.get("todayIndex1"));
-  const todayIndex2 = Number(formData.get("todayIndex2"));
-  const createdAt = formData.get("createdAt");
+  const data = await getAllProgress();
+  return data;
+};
 
-  const { error } = await supabase
-    .from(mapTables.schedule)
-    .update({
-      time1: todayIndex1,
-      time2: todayIndex2,
-    })
-    .eq("created_at", createdAt);
-  if (error) return { message: error.message };
-  return { message: "success" };
-}, "todayReset");
-
-// -------------------------------NEW------------------------------------
-export const submitNewSchedule = action(async (formData: FormData) => {
+export const getDiaryList = async () => {
   "use server";
-  const { data: dataHistory } = await supabase
-    .from(mapTables.history)
-    .select("index,created_at")
-    .order("created_at", { ascending: false })
+  const data = await getDiary();
+  return data;
+};
+
+export const getThisWeekIndex = query(async (dayToday: string) => {
+  "use server";
+  const thisWeekSchedule = await db
+    .select()
+    .from(scheduleTable)
+    .orderBy(asc(scheduleTable.id));
+
+  const lastProgress = await db
+    .select()
+    .from(progressTable)
+    .orderBy(desc(progressTable.id))
     .limit(1);
-  if (!dataHistory) return { message: "Error get history" };
 
-  const lastWeekIndex = dataHistory[0].index;
+  const thisWeekIndex = thisWeekSchedule[0].index;
+  const allGreater = thisWeekSchedule.every((item) => item.count >= 9);
+  const allDone = thisWeekSchedule.every((item) => item.date !== null);
 
-  const { count } = await supabase
-    .from(mapTables.vocabulary)
-    .select("created_at", { count: "exact" });
-  if (!count) return { message: "Error get vocabulary count" };
-
-  const { error } = await supabase
-    .from(mapTables.schedule)
-    .delete()
-    .gte("time1", 0);
-  if (error) return { message: error.message };
-
-  const limitStartIndex = Math.floor(count / 200);
-
-  const currentPatternArr = REPETITION_PATTERN.filter(
-    (item) => item < limitStartIndex * 200,
-  );
-
-  function findNextElement(arr: Array<number>, currentElement: number) {
-    const currentIndex = arr.indexOf(currentElement);
-    const nextIndex = (currentIndex + 1) % arr.length;
-    return arr[nextIndex];
-  }
-
-  let thisWeekIndex = 0;
-  if (count >= 200)
-    thisWeekIndex = findNextElement(currentPatternArr, lastWeekIndex);
-
-  for (let i = 0; i < 6; i++) {
-    let { error } = await supabase.from(mapTables.schedule).insert([
-      {
-        date: null,
-        index1: i % 2 == 0 ? thisWeekIndex : thisWeekIndex + 50,
-        index2: i % 2 == 0 ? thisWeekIndex + 100 : thisWeekIndex + 150,
-        time1: 0,
-        time2: 0,
-      },
-    ]);
-  }
-
-  return { message: "success" };
-}, "submitNewSchedule");
-
-// handlecheck
-export const handleCheckAndRender = async (text: VocabularySearchType) => {
-  const wordData = await getWordData(text.created_at);
-  if (wordData) {
-    setVocabStore("renderWord", wordData);
-
-    if (wordData.number > 1) {
-      checkVocabulary(text.created_at);
-    } else {
-      setNavStore("totalMemories", navStore.totalMemories + 1);
-      await archiveVocabulary(text.word);
-      await deleteVocabulary(text.created_at);
-      updateLastRowWord(text.created_at);
+  if (allDone) {
+    const startDaySchedule = new Date(thisWeekSchedule[0].date!);
+    const endDaySchedule = new Date(
+      thisWeekSchedule[thisWeekSchedule.length - 1].date!,
+    );
+    const today = new Date(dayToday);
+    if (today < startDaySchedule || today > endDaySchedule) return -9;
+    if (allGreater) {
+      if (thisWeekSchedule[0].date !== lastProgress[0].start_date) {
+        const insertData: InsertProgress = {
+          index: thisWeekIndex,
+          start_date: new Date(thisWeekSchedule[0].date!),
+          end_date: new Date(
+            thisWeekSchedule[thisWeekSchedule.length - 1].date!,
+          ),
+        };
+        await insertProgress(insertData);
+      }
     }
   }
-};
-
-export const handleCheckQuizWord = async (word: VocabularyQuizType) => {
-  if (word.number > 1) {
-    checkVocabulary(word.created_at);
-  } else {
-    setNavStore("totalMemories", navStore.totalMemories + 1);
-    await archiveVocabulary(word.word);
-    await deleteVocabulary(word.created_at);
-    updateLastRowWord(word.created_at);
-  }
-};
-
-export const updateLastRowWord = async (time: string) => {
-  "use server";
-  const { count } = await supabase
-    .from(mapTables.vocabulary)
-    .select("*", { count: "exact" });
-  if (count! % 200 === 0) return;
-  const endOfIndex = Math.floor(count! / 200) * 200;
-
-  const { data, error } = await supabase
-    .from(mapTables.vocabulary)
-    .select("number,created_at")
-    .neq("created_at", time)
-    .order("created_at", { ascending: true })
-    .range(endOfIndex + 1, 9999);
-
-  if (data && data.length > 0) {
-    const sortedArr = data.sort((a: any, b: any) => a.number - b.number);
-    const { error: updateError } = await supabase
-      .from(mapTables.vocabulary)
-      .update({ created_at: time })
-      .eq("created_at", sortedArr[0].created_at);
-  }
-};
-
-const checkVocabulary = async (time: string) => {
-  "use server";
-  const { error } = await supabase.rpc("checkitem", { date: time });
-};
-
-export const archiveVocabulary = async (text: string) => {
-  "use server";
-  const { error } = await supabase.from(mapTables.memories).insert({
-    word: text,
-  });
-  if (error) return error;
-};
-
-//get all history
-export const getHistoryList = query(async (run: boolean) => {
-  "use server";
-  if (run) return;
-  const { count } = await supabase
-    .from(mapTables.history)
-    .select("*", { count: "exact" });
-  const startOfIndex = Math.floor(count! / 5 - 3);
-
-  const { data, error } = await supabase
-    .from(mapTables.history)
-    .select()
-    .order("created_at")
-    .range(startOfIndex * 5, 9999);
-  return data as HistoryItemType[];
-}, "getHistoryList");
-
-export const getAllHistoryList = async () => {
-  "use server";
-  const { data, error } = await supabase
-    .from(mapTables.history)
-    .select()
-    .order("created_at");
-  return data as HistoryItemType[];
-};
+  return thisWeekIndex + 1;
+}, "getThisWeekIndex");
 
 export const getCalendarList = query(async (str: string) => {
   "use server";
@@ -677,30 +849,34 @@ export const getCalendarList = query(async (str: string) => {
 
   monthDateArr = monthDateArr.map((item) => ({
     ...item,
-    time1: -1,
-    time2: -1,
+    count: -1,
   }));
 
-  const { data, error } = await supabase
-    .from(mapTables.schedule)
-    .select()
-    .order("date");
+  const data = (await getAllScheduleHaveDate()) as SelectSchedule[];
 
-  if (data) {
-    const scheduleData = data.map((item: ScheduleType, index: number) => {
-      const day = new Date(item.date);
-      return {
-        date: day.getDate(),
-        month: day.getMonth(),
-        time1: item.time1,
-        time2: item.time2,
-      };
-    });
+  if (data.length) {
+    const transformed = data.reduce((acc: any, curr: SelectSchedule) => {
+      const dateObj = new Date(curr.date!);
+      const day = dateObj.getDate();
+      const month = dateObj.getMonth();
+
+      const existing = acc.find(
+        (item: any) => item.date === day && item.month === month,
+      );
+
+      if (existing) {
+        existing.count += curr.count;
+      } else {
+        acc.push({ date: day, month: month, count: curr.count });
+      }
+
+      return acc;
+    }, []);
 
     const mergedArray = monthDateArr.map((item) => {
       return {
         ...item,
-        ...scheduleData.find(
+        ...transformed.find(
           (item2: any) =>
             item2.date === item.date && item2.month === item.month,
         ),
@@ -708,423 +884,95 @@ export const getCalendarList = query(async (str: string) => {
     });
     return mergedArray as CalendarType[];
   }
+  return monthDateArr as CalendarType[];
 }, "getCalendarList");
 
-export const getThisWeekIndex = query(async (dayToday: string) => {
+export const submitNewSchedule = action(async () => {
   "use server";
-  const { data: thisWeekSchedule, error } = await supabase
-    .from(mapTables.schedule)
+  const lastProgress = await db
     .select()
-    .order("created_at", { ascending: true });
-  if (error) return;
-
-  const { data: history } = await supabase
-    .from(mapTables.history)
-    .select()
-    .order("created_at", { ascending: false })
+    .from(progressTable)
+    .orderBy(desc(progressTable.id))
     .limit(1);
 
-  const thisWeekIndex = thisWeekSchedule[0].index1;
+  const lastWeekIndex = lastProgress[0].index;
 
-  const allGreater = thisWeekSchedule.every(
-    (item) => item.time1 >= 9 && item.time2 >= 9,
+  const lengthVocabTable = await db.select({ count: count() }).from(vocabTable);
+
+  // //delete table
+  await db.delete(scheduleTable);
+
+  const limitStartIndex = Math.floor(lengthVocabTable[0].count / 200);
+
+  const currentPatternArr = REPETITION_PATTERN.filter(
+    (item) => item < limitStartIndex * 200,
   );
-  const allDone = thisWeekSchedule.every((item) => item.date !== null);
 
-  if (allDone) {
-    const date1 = new Date(thisWeekSchedule[0].date);
-    const date2 = new Date(thisWeekSchedule[thisWeekSchedule.length - 1].date);
-    const today = new Date(dayToday);
-    if (today < date1 || today > date2) return -9;
-    if (allGreater) {
-      if (thisWeekSchedule[0].date !== history![0].from_date) {
-        const insertData = {
-          index: thisWeekIndex,
-          from_date: thisWeekSchedule[0].date,
-          to_date: thisWeekSchedule[thisWeekSchedule.length - 1].date,
-        };
-        let { error: errorMonth } = await supabase
-          .from(mapTables.history)
-          .insert(insertData);
-      }
-    }
-  } else return (thisWeekIndex + 1) as number;
-}, "getThisWeekIndex");
-
-export const getProgressList = query(async () => {
-  "use server";
-  const { data } = await supabase
-    .from(mapTables.progress)
-    .select()
-    .order("created_at");
-  if (data) return data as ScheduleProgressType[];
-}, "getProgressList");
-
-export const getTodaySchedule = query(async (date: string) => {
-  "use server";
-  const { data: dataByDate } = await supabase
-    .from(mapTables.schedule)
-    .select()
-    .eq("date", date);
-  if (dataByDate && dataByDate.length > 0) return dataByDate[0] as ScheduleType;
-
-  const { data } = await supabase
-    .from(mapTables.schedule)
-    .select()
-    .order("created_at", { ascending: true })
-    .is("date", null)
-    .limit(1);
-  if (data) return data[0] as ScheduleType;
-}, "getTodaySchedule");
-
-export const getTotalMemories = query(async () => {
-  "use server";
-  const { count } = await supabase
-    .from(mapTables.memories)
-    .select("*", { count: "exact" });
-  return count as number;
-}, "getTotalMemories");
-
-export const getLocationList = query(async () => {
-  "use server";
-  const { data } = await supabase
-    .from(mapTables.weather)
-    .select()
-    .order("default", { ascending: false });
-  if (data) return data as WeatherGeoType[];
-}, "getLocationList");
-
-export const deleteBookmark = async (time: string) => {
-  "use server";
-  const { error } = await supabase
-    .from(mapTables.bookmarks)
-    .delete()
-    .eq("created_at", time);
-};
-
-export const getRandomBookMarkData = async () => {
-  "use server";
-  const { data, error } = await supabase.rpc("get_random_bookmark");
-
-  if (data) return data as BookmarkType;
-};
-
-export const getBookMarkData = async () => {
-  "use server";
-  const { data, error } = await supabase
-    .from(mapTables.bookmarks)
-    .select()
-    .eq("selected", true);
-  if (data) return data[0] as BookmarkType;
-};
-
-export const getNextBookMarkData = async (cur: string) => {
-  "use server";
-  const { data, error } = await supabase
-    .from(mapTables.bookmarks)
-    .select()
-    .gt("created_at", cur)
-    .order("created_at", { ascending: true })
-    .limit(1);
-  if (error) return undefined;
-  if (data.length > 0) {
-    await selectBookMarkData(cur, false);
-    await selectBookMarkData(data[0].created_at, true);
-    return data[0] as BookmarkType;
+  function findNextElement(arr: Array<number>, currentElement: number) {
+    const currentIndex = arr.indexOf(currentElement);
+    const nextIndex = (currentIndex + 1) % arr.length;
+    return arr[nextIndex];
   }
-};
 
-export const getPrevBookMarkData = async (cur: string) => {
-  "use server";
-  const { data, error } = await supabase
-    .from(mapTables.bookmarks)
-    .select()
-    .lt("created_at", cur)
-    .order("created_at", { ascending: false })
-    .limit(1);
-  if (error) return undefined;
-  if (data.length > 0) {
-    await selectBookMarkData(cur, false);
-    await selectBookMarkData(data[0].created_at, true);
-    return data[0] as BookmarkType;
-  }
-};
+  let thisWeekIndex = 0;
+  if (lengthVocabTable[0].count >= 200)
+    thisWeekIndex = findNextElement(currentPatternArr, lastWeekIndex);
 
-export const checkBookMarkData = async (id: string, val: number) => {
-  "use server";
-  const { error } = await supabase
-    .from(mapTables.bookmarks)
-    .update({
-      like: val,
-    })
-    .eq("created_at", id);
-};
+  const pattern = [0, 100, 50, 150];
 
-const selectBookMarkData = async (id: string, val: boolean) => {
-  "use server";
-  const { error } = await supabase
-    .from(mapTables.bookmarks)
-    .update({
-      selected: val,
-    })
-    .eq("created_at", id);
-};
-
-export const insertBookmarkData = action(async (formData: FormData) => {
-  "use server";
-  const doc = String(formData.get("bookmarksInsert"));
-  let entries = readKindleClipping(doc);
-  let parsedEntries = parseKindleEntries(entries);
-
-  for (let i = 0; i < parsedEntries.length; i++) {
-    const row = {
-      authors: parsedEntries[i].authors,
-      bookTile: parsedEntries[i].bookTile,
-      page: parsedEntries[i].page,
-      location: parsedEntries[i].location,
-      dateOfCreation: parsedEntries[i].dateOfCreation,
-      content: parsedEntries[i].content,
-      type: parsedEntries[i].type,
+  for (let i = 0; i < 12; i++) {
+    const row: InsertSchedule = {
+      index: thisWeekIndex + pattern[i % pattern.length],
     };
-    const { error } = await supabase.from(mapTables.bookmarks).insert([row]);
-    if (error) console.log("Error:", error);
-    else console.log(`Row ${i} inserted`);
-  }
-}, "insert bookmark");
-
-export const updateBookmarkData = action(async (formData: FormData) => {
-  "use server";
-  const id = String(formData.get("id"));
-  const doc = String(formData.get("bookmarks"));
-  const { error } = await supabase
-    .from(mapTables.bookmarks)
-    .update({
-      content: doc,
-    })
-    .eq("created_at", id);
-}, "insert bookmark");
-
-export const findBookMarkData = async (val: string) => {
-  "use server";
-  const { data, error } = await supabase
-    .from(mapTables.bookmarks)
-    .select()
-    .textSearch("content", val);
-
-  const res = data?.map((item) => {
-    let newcontent = findSentence(item.content, val);
-    return {
-      ...item,
-      content: newcontent,
-    };
-  });
-
-  return res;
-};
-
-function findSentence(text: string, word: string) {
-  var sentences = text.match(/[^\.!\?]+[\.!\?]+/g);
-  if (sentences)
-    for (var i = 0; i < sentences.length; i++) {
-      if (sentences[i].includes(word)) {
-        return sentences[i];
-      }
-    }
-  return "";
-}
-
-export const getBookMarkDataItem = async (time: string) => {
-  "use server";
-  const { data, error } = await supabase
-    .from(mapTables.bookmarks)
-    .select()
-    .eq("created_at", time);
-  if (data) return data[0];
-};
-
-// https://github.com/ORelio/Spotlight-Downloader/blob/master/SpotlightAPI.md
-
-export const getSpotlightImage_v3 = async () => {
-  "use server";
-  let batchQuery = {} as any;
-  batchQuery["pid"] = "209567";
-  batchQuery["fmt"] = "json";
-  batchQuery["rafb"] = "0";
-  batchQuery["ua"] = "WindowsShellClient/0";
-  batchQuery["cdm"] = "1";
-  batchQuery["disphorzres"] = "9999";
-  batchQuery["dispvertres"] = "9999";
-  batchQuery["lo"] = "80217";
-  batchQuery["pl"] = "en-US";
-  batchQuery["lc"] = "en-US";
-  batchQuery["ctry"] = "hk";
-
-  const baseUrl =
-    "https://arc.msn.com/v3/Delivery/Placement?" +
-    new URLSearchParams(batchQuery).toString();
-  const data = await (await fetch(baseUrl)).json();
-
-  if (data) {
-    const itemStr = data["batchrsp"]["items"][0].item;
-    const itemObj = JSON.parse(itemStr)["ad"];
-    const title = itemObj["title_text"]?.tx;
-    const hs1_title_text = itemObj["hs1_title_text"]?.tx;
-    const hs2_title_text = itemObj["hs2_title_text"]?.tx;
-    const jsImageL = itemObj["image_fullscreen_001_landscape"].u;
-    const jsImageP = itemObj["image_fullscreen_001_portrait"].u;
-    const thumbhash = await createThumbhash(jsImageP);
-    return {
-      title: title,
-      hs1_title: hs1_title_text,
-      hs2_title: hs2_title_text,
-      image_L: jsImageL,
-      image_P: jsImageP,
-      hash: thumbhash,
-    } as LoginImageType;
-  }
-};
-
-export const getSpotlightImage_v4 = async () => {
-  "use server";
-  const baseUrl =
-    "https://fd.api.iris.microsoft.com/v4/api/selection?&placement=88000820&bcnt=1&country=DK&locale=en-US&fmt=json";
-  const data = await (await fetch(baseUrl)).json();
-
-  if (data) {
-    const response = data["batchrsp"]["items"][0]["item"];
-    const result = JSON.parse(response)["ad"];
-    const urlP = result.portraitImage.asset;
-    const thumbhash = await createThumbhash(urlP);
-    const hs1 = result.iconHoverText.split("\r\n©");
-
-    return {
-      title: result.title,
-      hs1_title: hs1[0],
-      hs2_title: result.description,
-      image_L: result.landscapeImage.asset,
-      image_P: urlP,
-      hash: thumbhash,
-    } as LoginImageType;
-  }
-};
-
-export const updateTodaySchedule = async (date: string, type: number) => {
-  "use server";
-  const data = await getTodaySchedule(date);
-  const updateObj =
-    type === 1 ? { time1: data!.time1 + 1 } : { time2: data!.time2 + 1 };
-  const { data: updatedData, error } = await supabase
-    .from(mapTables.schedule)
-    .update(updateObj)
-    .eq("created_at", data!.created_at);
-
-  if (data!.date === null) {
-    if (
-      (data!.time1 >= 9 && data!.time2 >= 9) ||
-      (type === 2 && data!.time1 >= 9 && data!.time2 + 1 >= 9)
-    ) {
-      const { error } = await supabase
-        .from(mapTables.schedule)
-        .update({ date: date })
-        .eq("created_at", data!.created_at);
+    try {
+      await insertSchedule(row);
+    } catch (error) {
+      return {
+        status: false,
+        message: "Error insert schedule",
+      };
     }
   }
-  return updateObj;
-};
 
-export const updateTodayScheduleStore = (data: {
-  time1?: number;
-  time2?: number;
-}) => {
-  setNavStore("todaySchedule", {
-    ...navStore.todaySchedule,
-    ...data,
-  });
-};
+  return { status: true, message: "Successfully create new schedule." };
+}, "submitNewSchedule");
 
-//get 50 word
-export const getListContentVocab = async (start: number, end: number) => {
+export const submitTodayReset = action(async (formData: FormData) => {
   "use server";
-  const { data, error } = await supabase
-    .from(mapTables.vocabulary)
-    .select("created_at,word")
-    .order("created_at")
-    .range(start, end);
-  if (data) return data as VocabularySearchType[];
-};
-
-export const getListContentQuiz = async (start: number, end: number) => {
-  "use server";
-  const { data, error } = await supabase
-    .from(mapTables.vocabulary)
-    .select("created_at,word,translations,audio,number")
-    .order("created_at")
-    .range(start, end);
-  if (data) return data as VocabularyQuizType[];
-};
-
-//get weather data
-
-const fetchGetJSON = async (url: string) => {
+  const count0 = Number(formData.get("count0"));
+  const count1 = Number(formData.get("count1"));
+  const id0 = String(formData.get("id0"));
+  const id1 = String(formData.get("id1"));
   try {
-    let response = await fetch(url);
-    let res = await response.json();
-    return res;
+    await updateCountScheduleById(id0, count0);
+    await updateCountScheduleById(id1, count1);
   } catch (error) {
-    return "";
+    return { status: true, message: "Update error." };
+  }
+  return { status: true, message: "Schedule saved." };
+}, "todayReset");
+
+////// Quizpage //////
+
+export const handleCheckQuizWord = async (text: SelectVocab) => {
+  if (text.number > 1) {
+    checkVocabulary(text.id);
+  } else {
+    setNavStore("totalMemories", navStore.totalMemories + 1);
+    await archiveVocabulary(text.word);
+    await deleteVocabulary(text.id);
+    updateLastRowWord(text.id);
   }
 };
 
-export const getCurrentWeatherData = async ({
-  lat: lat,
-  lon: lon,
-}: {
-  lat: number;
-  lon: number;
-}) => {
-  "use server";
-  const params = {
-    latitude: String(lat),
-    longitude: String(lon),
-    current: [
-      "temperature_2m",
-      "relative_humidity_2m",
-      "apparent_temperature",
-      "is_day",
-      "uv_index",
-      "weather_code",
-      "wind_speed_10m",
-      "wind_direction_10m",
-    ],
-    models: "best_match",
-    timezone: "auto",
-  };
-
-  const url = "https://api.open-meteo.com/v1/forecast?";
-  const paramsString = new URLSearchParams(params).toString();
-  const responses = await fetch(url + paramsString);
-  if (responses.status !== 200) return;
-  const data = await responses.json();
-
-  const result: CurrentlyWeatherType = {
-    apparentTemperature: data.current.apparent_temperature,
-    isDayTime: data.current.is_day,
-    humidity: data.current.relative_humidity_2m,
-    temperature: data.current.temperature_2m,
-    uvIndex: data.current.uv_index,
-    icon: data.current.weather_code,
-    windDirection: data.current.wind_direction_10m,
-    windSpeed: data.current.wind_speed_10m,
-  };
-  return result;
-};
+////// Weatherpage //////
 
 export const getHourlyWeatherData = async ({
   lat: lat,
   lon: lon,
 }: {
-  lat: number;
-  lon: number;
+  lat: string;
+  lon: string;
 }) => {
   "use server";
   const params = {
@@ -1161,8 +1009,8 @@ export const getMinutelyWeatherData = async ({
   lat: lat,
   lon: lon,
 }: {
-  lat: number;
-  lon: number;
+  lat: string;
+  lon: string;
 }) => {
   "use server";
   const WEATHER_KEY = import.meta.env.VITE_PIRATE_KEY;
@@ -1251,38 +1099,226 @@ export const makePrediction = async (data?: FixMinutelyTWeatherType[]) => {
   }
 };
 
-export const createThumbhash = async (imageUrl: string) => {
+////// Bookmarkpage //////
+export const likeBookMarkById = async (id: SelectBookmark["id"]) => {
   "use server";
-  const imageBuffer = await fetch(imageUrl).then((res) => res.arrayBuffer());
-  const image = sharp(imageBuffer).resize(90, 90, { fit: "inside" });
-  const { data, info } = await image
-    .ensureAlpha()
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-  const binaryThumbHash = rgbaToThumbHash(info.width, info.height, data);
-  const base64String = btoa(
-    String.fromCharCode(...new Uint8Array(binaryThumbHash)),
-  );
-  return base64String;
+  await increaseBookmarkLikeById(id);
 };
 
-export function base64ToUint8Array(base64String: string) {
-  const binaryString = atob(base64String);
-  const uint8Array = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
-    uint8Array[i] = binaryString.charCodeAt(i);
+export const unlikeBookMarkById = async (id: SelectBookmark["id"]) => {
+  "use server";
+  await decreaseBookmarkLikeById(id);
+};
+
+export const deleteBookmark = async (id: SelectBookmark["id"]) => {
+  "use server";
+  await deleteBookmarkById(id);
+};
+
+export const getBookMarkDataItem = async (id: SelectBookmark["id"]) => {
+  "use server";
+  const data = await getBookmarkById(id);
+  if (data) return data[0];
+};
+
+export const getBookMarkData = async () => {
+  "use server";
+  const data = await getBookmarkBySelected();
+  if (data) return data[0];
+};
+
+export const getNextBookMarkData = async (id: SelectBookmark["id"]) => {
+  "use server";
+  const data = await getNextBookmark(id);
+  if (data) {
+    await updateBookmarkSelectById(id, false);
+    await updateBookmarkSelectById(data[0].id, true);
+    return data[0];
   }
-  return uint8Array;
-}
+  return undefined;
+};
 
-// =====Insert data============
-// export const insertData = async (data: any) => {
+export const getPrevBookMarkData = async (id: SelectBookmark["id"]) => {
+  "use server";
+  const data = await getPreviousBookmark(id);
+  if (data) {
+    await updateBookmarkSelectById(id, false);
+    await updateBookmarkSelectById(data[0].id, true);
+    return data[0];
+  }
+  return undefined;
+};
+
+export const updateBookmarkData = action(async (formData: FormData) => {
+  "use server";
+  const id = String(formData.get("id"));
+  const doc = String(formData.get("bookmarks"));
+  await updateBookmarkContentById(id, doc);
+}, "update-bookmark");
+
+export const insertBookmarkData = action(async (formData: FormData) => {
+  "use server";
+  const doc = String(formData.get("bookmarksInsert"));
+  let entries = readKindleClipping(doc);
+  let parsedEntries = parseKindleEntries(entries);
+
+  for (let i = 0; i < parsedEntries.length; i++) {
+    const row: InsertBookmark = {
+      authors: parsedEntries[i].authors,
+      bookTile: parsedEntries[i].bookTile,
+      page: parsedEntries[i].page,
+      location: parsedEntries[i].location,
+      dateOfCreation: parsedEntries[i].dateOfCreation,
+      content: parsedEntries[i].content,
+      type: parsedEntries[i].type,
+    };
+    const res = await insertBookmark(row);
+    if (res) console.log("Error:", res);
+    else console.log(`Row ${i} inserted`);
+  }
+}, "insert-bookmark");
+
+export const getRandomBookMarkData = async () => {
+  "use server";
+  const data = await getRandomBookmark();
+  if (data) return data[0];
+};
+
+export const findBookMarkData = async (val: string) => {
+  "use server";
+  const data = await findTextBookmark(val);
+  if (data) return data;
+};
+
+////////////////////////////////////////////////////
+//insert data//
+////////////////////////////////////////////////////
+
+// export const insertWeatherData = async () => {
 //   "use server";
-//   for (let i = 0; i < data.length; i++) {
-//     const row = data[i];
-//     const { error } = await supabase.from("history_duplicate").insert(row);
+//   const weatherdata: InsertWeather[] = [
+//     {
+//       name: "Thủ Thừa",
+//       lat: "10.588468",
+//       lon: "106.40065",
+//       default: true,
+//     },
+//     {
+//       name: "Cần Thơ",
+//       lat: "10.0364216",
+//       lon: "105.7875219",
+//       default: false,
+//     },
+//     {
+//       name: "Tokyo",
+//       lat: "35.652832",
+//       lon: "139.839478",
+//       default: false,
+//     },
+//   ];
+//   for (let i = 0; i < weatherdata.length; i++) {
+//     const res = await insertWeather(weatherdata[i]);
+//     if (res) console.log("Error:", res);
+//     else console.log(`Row ${i} inserted`);
+//   }
+// };
 
-//     if (error) console.log("Error:", error);
+// export const insertProgressData = async () => {
+//   "use server";
+
+//   const { data, error } = await supabase
+//     .from(mapTables.history)
+//     .select()
+//     .order("created_at");
+//   for (let i = 0; i < data!.length; i++) {
+//     const row: InsertProgress = {
+//       index: data![i].index,
+//       start_date: new Date(data![i].from_date),
+//       end_date: new Date(data![i].to_date),
+//     };
+//     const res = await insertProgress(row);
+//     if (res) console.log("Error:", res);
+//     else console.log(`Row ${i} inserted`);
+//   }
+// };
+
+// export const insertDiaryData = async () => {
+//   "use server";
+//   const { data, error } = await supabase
+//     .from(mapTables.progress)
+//     .select()
+//     .order("created_at");
+//   for (let i = 0; i < data!.length; i++) {
+//     const row: InsertDiary = {
+//       date: new Date(data![i].date),
+//       count: data![i].count,
+//     };
+//     const res = await insertDiary(row);
+//     if (res) console.log("Error:", res);
+//     else console.log(`Row ${i} inserted`);
+//   }
+// };
+
+// export const insertBookmarkData = async () => {
+//   "use server";
+//   const { data, error } = await supabase
+//     .from(mapTables.bookmarks)
+//     .select()
+//     .order("created_at");
+
+//   for (let i = 0; i < data!.length; i++) {
+//     const row: InsertBookmark = {
+//       authors: data![i].authors,
+//       bookTile: data![i].bookTile,
+//       page: data![i].page,
+//       location: data![i].location,
+//       dateOfCreation: data![i].dateOfCreation,
+//       content: data![i].content,
+//       type: data![i].type,
+//       like: data![i].like,
+//     };
+
+//     const res = await insertBookmark(row);
+//     if (res) console.log("Error:", res);
+//     else console.log(`Row ${i} inserted`);
+//   }
+// };
+
+// export const insertVocabData = async () => {
+//   "use server";
+//   const { data, error } = await supabase
+//     .from(mapTables.vocabulary)
+//     .select()
+//     .order("created_at", { ascending: true });
+//   for (let i = 0; i < data!.length; i++) {
+//     const row: InsertVocab = {
+//       word: data![i].word,
+//       number: data![i].number,
+//       audio: data![i].audio,
+//       phonetics: data![i].phonetics,
+//       definitions: data![i].definitions,
+//       translations: data![i].translations,
+//     };
+
+//     const res = await insertVocab(row);
+//     if (!res.status) console.log("Error:", res);
+//     else console.log(`Row ${i} inserted`);
+//   }
+// };
+
+// export const insertMemoriesData = async () => {
+//   "use server";
+//   const { data, error } = await supabase
+//     .from(mapTables.memories)
+//     .select()
+//     .order("created_at", { ascending: true });
+//   for (let i = 0; i < data!.length; i++) {
+//     const row: InsertMemories = {
+//       word: data![i].word,
+//       createdAt: new Date(data![i].created_at),
+//     };
+//     const res = await insertMemories(row);
+//     if (res) console.log("Error:", res);
 //     else console.log(`Row ${i} inserted`);
 //   }
 // };

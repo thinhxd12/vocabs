@@ -1,4 +1,4 @@
-import { createAsync, RouteSectionProps, useLocation } from "@solidjs/router";
+import { RouteSectionProps, useLocation } from "@solidjs/router";
 import { createSignal, For, lazy, onCleanup, onMount, Show } from "solid-js";
 import { LoginImageType, VocabularySearchType } from "~/types";
 import {
@@ -21,7 +21,6 @@ import { debounce } from "@solid-primitives/scheduled";
 import { OcX2 } from "solid-icons/oc";
 import Dialog from "@corvu/dialog";
 import toast, { Toaster } from "solid-toast";
-import { getUser } from "~/lib/login";
 import { VsTarget } from "solid-icons/vs";
 const Art = lazy(() => import("~/components/Art"));
 const Bookmark = lazy(() => import("~/components/Bookmark"));
@@ -29,10 +28,6 @@ import Nav from "~/components/Nav";
 import { thumbHashToDataURL } from "thumbhash";
 
 export default function Layout(props: RouteSectionProps) {
-  // ***************check login**************
-  const user = createAsync(() => getUser(), { deferStream: true });
-  // ***************check login**************
-
   let audioRef: HTMLAudioElement | undefined;
   let checkTimeout: NodeJS.Timeout;
   let deleteSearchTimeout: NodeJS.Timeout;
@@ -167,7 +162,7 @@ export default function Layout(props: RouteSectionProps) {
   };
 
   const handleEditFromSearch = async (word: VocabularySearchType) => {
-    const data = await getWordData(word.created_at);
+    const data = await getWordData(word.id);
     if (!data) return;
     setActive(null);
     setVocabStore("editWord", data);
@@ -193,7 +188,7 @@ export default function Layout(props: RouteSectionProps) {
 
   const confirmDelete = async () => {
     const res = await deleteVocabulary(deleteId());
-    if (res.message === "success") {
+    if (res.status) {
       toast.success("Successfully deleted!", {
         className: "text-4 font-sfpro",
         position: "bottom-right",
@@ -206,7 +201,7 @@ export default function Layout(props: RouteSectionProps) {
         });
       }
     } else {
-      toast.error(res.message, {
+      toast.error(res.data, {
         position: "bottom-right",
         className: "text-4 font-sfpro",
       });
@@ -328,7 +323,7 @@ export default function Layout(props: RouteSectionProps) {
                     </div>
                     <div
                       class="relative z-50 flex h-full w-9.5 items-center justify-center pr-1"
-                      onClick={() => handleOpenDialogDelete(item.created_at)}
+                      onClick={() => handleOpenDialogDelete(item.id)}
                     >
                       <BsTrash3 size={13} color="white" />
                     </div>

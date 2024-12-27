@@ -1,13 +1,13 @@
 import { format } from "date-fns";
 import { Component, createEffect, createSignal, For, on, Show } from "solid-js";
-import { navStore, quizStore, setQuizStore } from "~/lib/store";
+import { navStore, quizStore, setNavStore, setQuizStore } from "~/lib/store";
 import { createAsync } from "@solidjs/router";
 import { getUser } from "~/lib/login";
 import arrayShuffle from "array-shuffle";
 import {
   handleCheckQuizWord,
   updateTodaySchedule,
-  updateTodayScheduleStore,
+  updateTodayScheduleLocal,
 } from "~/lib/server";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 
@@ -24,7 +24,7 @@ const Quiz: Component<{}> = (props) => {
 
   createEffect(
     on(
-      () => quizStore.quizContent,
+      () => navStore.listContent,
       (v) => {
         if (v.length > 0) {
           setTimeout(() => {
@@ -35,36 +35,34 @@ const Quiz: Component<{}> = (props) => {
     ),
   );
 
-  const [choices, setChoices] = createSignal<
-    { created_at: string; choice: string }[]
-  >([
-    { created_at: "", choice: "" },
-    { created_at: "", choice: "" },
-    { created_at: "", choice: "" },
-    { created_at: "", choice: "" },
+  const [choices, setChoices] = createSignal<{ id: string; choice: string }[]>([
+    { id: "", choice: "" },
+    { id: "", choice: "" },
+    { id: "", choice: "" },
+    { id: "", choice: "" },
   ]);
   const [checked, setChecked] = createSignal<boolean>(false);
   const [indexChecked, setIndexChecked] = createSignal<number>(0);
 
   const getRandomChoices = () => {
-    const filteredChoices = quizStore.quizContent.filter(
-      (choice) => choice.created_at !== quizStore.quizRender.created_at,
+    const filteredChoices = navStore.listContent.filter(
+      (choice) => choice.id !== quizStore.quizRender?.id,
     );
     let randomChoices = arrayShuffle(filteredChoices).slice(0, 3);
-    randomChoices = arrayShuffle([...randomChoices, quizStore.quizRender]);
+    randomChoices = arrayShuffle([...randomChoices, quizStore.quizRender!]);
     const allChoices = randomChoices.map((item) => {
       return {
-        created_at: item.created_at,
+        id: item.id,
         choice: item.word,
       };
     });
     setChoices(allChoices);
   };
 
-  const selectChoice = async (time: string, index: number) => {
+  const selectChoice = async (id: string, index: number) => {
     setIndexChecked(index);
     setChecked(true);
-    if (time === quizStore.quizRender.created_at) {
+    if (id === quizStore.quizRender?.id) {
       handleCheckQuizWord(quizStore.quizRender);
       setQuizStore("quizRender", {
         ...quizStore.quizRender,
@@ -84,12 +82,12 @@ const Quiz: Component<{}> = (props) => {
     }
 
     const nextCount = quizStore.quizCount + 1;
-    if (nextCount < quizStore.quizContent.length) {
+    if (nextCount < navStore.listContent.length) {
       setTimeout(() => {
         setIndexChecked(0);
         setChecked(false);
         setQuizStore("quizCount", nextCount);
-        setQuizStore("quizRender", quizStore.quizContent[nextCount]);
+        setQuizStore("quizRender", navStore.listContent[nextCount]);
         getRandomChoices();
       }, 1000);
     } else {
@@ -99,12 +97,11 @@ const Quiz: Component<{}> = (props) => {
         audioRef?.addEventListener("canplaythrough", () => {
           audioRef?.play();
         });
-        setQuizStore("quizContent", []);
+        setNavStore("listContent", []);
         setQuizStore("quizCount", 0);
         setIndexChecked(0);
         setChecked(false);
-        const res = await updateTodaySchedule(todayDate, navStore.listType);
-        updateTodayScheduleStore(res);
+        await updateTodayScheduleLocal(todayDate);
       }, 1000);
     }
   };
@@ -118,13 +115,13 @@ const Quiz: Component<{}> = (props) => {
       <main class="no-scrollbar h-main w-main relative overflow-hidden">
         <div class="mx-auto mb-6 mt-9 h-[120px] w-2/3">
           <div class="no-scrollbar light-layout relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-3 !backdrop-blur-lg">
-            <h1 class="absolute -top-2.5 left-0 z-10 w-full bg-transparent text-center text-[168px] leading-[115px] text-white/20">
-              {quizStore.quizRender.number}
+            <h1 class="absolute -top-2.5 left-1/2 z-10 -translate-x-1/2 bg-transparent text-center text-[168px] leading-[115px] text-white/20">
+              {quizStore.quizRender?.number}
             </h1>
 
             <div class="relative z-30 flex min-h-11 w-full items-center bg-black/60 shadow-lg shadow-black/60 backdrop-blur-xl">
               <p class="w-full px-1 pb-1.5 text-center text-5 font-400 leading-7 text-white">
-                {quizStore.quizRender.translations
+                {quizStore.quizRender?.translations
                   .map((tran) => tran.translations.join(", "))
                   .join(", ")}
               </p>
@@ -132,7 +129,7 @@ const Quiz: Component<{}> = (props) => {
           </div>
         </div>
 
-        <Show when={quizStore.quizContent.length > 0}>
+        <Show when={navStore.listContent.length > 0}>
           <div class="flex w-full flex-col items-center justify-center">
             <Show
               when={checked()}
@@ -140,7 +137,7 @@ const Quiz: Component<{}> = (props) => {
                 <For each={choices()}>
                   {(item, index) => (
                     <button
-                      onClick={() => selectChoice(item.created_at, index() + 1)}
+                      onClick={() => selectChoice(item.id, index() + 1)}
                       class="quiz-choice"
                     >
                       {item.choice}
@@ -156,7 +153,7 @@ const Quiz: Component<{}> = (props) => {
                     fallback={
                       <div
                         class={
-                          item.created_at === quizStore.quizRender.created_at
+                          item.id === quizStore.quizRender?.id
                             ? "quiz-choice-true"
                             : "quiz-choice"
                         }
@@ -167,7 +164,7 @@ const Quiz: Component<{}> = (props) => {
                   >
                     <div
                       class={
-                        item.created_at === quizStore.quizRender.created_at
+                        item.id === quizStore.quizRender?.id
                           ? "quiz-choice-true"
                           : "quiz-choice-false"
                       }

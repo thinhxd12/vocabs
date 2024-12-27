@@ -17,6 +17,7 @@ import { OcSearch2 } from "solid-icons/oc";
 import { BiRegularBandAid, BiSolidSave } from "solid-icons/bi";
 import {
   layoutStore,
+  navStore,
   setLayoutStore,
   setNavStore,
   setVocabStore,
@@ -40,6 +41,7 @@ import { debounce } from "@solid-primitives/scheduled";
 import toast, { Toaster } from "solid-toast";
 import Collapsible from "~/components/Collapsible";
 import FlipCard from "~/components/FlipCard";
+import { InsertVocab, SelectVocab } from "~/db/schema";
 
 const Vocab: Component<{}> = (props) => {
   // ***************check login**************
@@ -70,19 +72,17 @@ const Vocab: Component<{}> = (props) => {
   );
 
   /////////////////////edit////////////////////////////
-  const [editWordGet, setEditWordGet] = createSignal<
-    VocabularyType | undefined
-  >();
+  const [editWordGet, setEditWordGet] = createSignal<InsertVocab | undefined>();
 
   const handleGetEditWord = async (word: string) => {
     const data = await getTextDataWebster(word);
     if (data) {
       setEditWordGet({
-        ...editWordStore()!,
+        ...vocabStore.editWord!,
         definitions: data!.definitions,
       });
       setVocabStore("editWord", {
-        ...editWordStore()!,
+        ...vocabStore.editWord!,
         definitions: data!.definitions,
         phonetics: data!.phonetics,
         audio: data!.audio,
@@ -100,11 +100,8 @@ const Vocab: Component<{}> = (props) => {
       .join("");
   };
 
-  const renderWordStore = () => vocabStore.renderWord;
-  const editWordStore = () => vocabStore.editWord;
-
   const handleEditFromDefinition = async () => {
-    const data = await getWordData(renderWordStore()!.created_at);
+    const data = await getWordData(vocabStore.renderWord!.id);
     if (!data) return;
     setVocabStore("editWord", data);
     setVocabStore("showEdit", true);
@@ -119,7 +116,7 @@ const Vocab: Component<{}> = (props) => {
 
   const handleCheckEdit = () => {
     setVocabStore("editWord", {
-      ...editWordStore(),
+      ...vocabStore.editWord,
       definitions: editWordGet()?.definitions!,
       phonetics: editWordGet()?.phonetics!,
     });
@@ -132,8 +129,8 @@ const Vocab: Component<{}> = (props) => {
       () => editActionResult.result,
       (v) => {
         if (!v) return;
-        if (v!.message === "success") {
-          toast.success("Successfully saved!", {
+        if (v.status) {
+          toast.success(v.data.message, {
             className: "text-4 font-sfpro",
             position: "bottom-right",
           });
@@ -144,11 +141,11 @@ const Vocab: Component<{}> = (props) => {
               audioRef.play();
             });
           }
-          if (renderWordStore()?.word === editWordStore()?.word) {
-            setVocabStore("renderWord", editWordStore());
+          if (vocabStore.renderWord?.word === vocabStore.editWord?.word) {
+            setVocabStore("renderWord", vocabStore.editWord);
           }
-        } else if (v!.message !== "success" && v!.message !== undefined) {
-          toast.error(v!.message, {
+        } else if (!v.status) {
+          toast.error(v.data.message, {
             position: "bottom-right",
             className: "text-4 font-sfpro",
           });
@@ -171,7 +168,7 @@ const Vocab: Component<{}> = (props) => {
 
   const handleFixDefinition = () => {
     const definition = JSON.parse(
-      JSON.stringify(editWordStore()?.definitions),
+      JSON.stringify(vocabStore.editWord?.definitions),
     ) as VocabularyDefinitionType[];
     if (definition) {
       const definitionFixed = JSON.stringify(definition).replace("&emsp;", "");
@@ -195,7 +192,7 @@ const Vocab: Component<{}> = (props) => {
         };
       });
       setVocabStore("editWord", {
-        ...editWordStore()!,
+        ...vocabStore.editWord!,
         definitions: definitionFixedFull
           ? definitionFixedFull
           : JSON.parse(definitionFixed),
@@ -203,17 +200,13 @@ const Vocab: Component<{}> = (props) => {
     }
   };
 
-  /////////////////////translate////////////////////////////
-  const [translateWord, setTranslateWord] = createSignal<
-    VocabularyType | undefined
-  >({
+  //////////////////////translate////////////////////////////
+  const [translateWord, setTranslateWord] = createSignal<InsertVocab>({
     word: "",
     audio: "",
     phonetics: "",
-    number: 240,
     translations: [],
     definitions: [],
-    created_at: "",
   });
 
   const insertActionResult = useSubmission(insertVocabularyItem);
@@ -223,14 +216,11 @@ const Vocab: Component<{}> = (props) => {
       () => insertActionResult.result,
       (v) => {
         if (!v) return;
-        if (v!.message === "success") {
-          toast.success(
-            `"${vocabStore.translateTerm}" has been saved successfully!`,
-            {
-              className: "text-4 font-sfpro",
-              position: "bottom-right",
-            },
-          );
+        if (v.status) {
+          toast.success(v.data.message, {
+            className: "text-4 font-sfpro",
+            position: "bottom-right",
+          });
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
             audioRef.load();
@@ -238,8 +228,8 @@ const Vocab: Component<{}> = (props) => {
               audioRef.play();
             });
           }
-        } else if (v!.message !== "success" && v!.message !== undefined) {
-          toast.error(v!.message, {
+        } else if (!v.status) {
+          toast.error(v.data.message, {
             position: "bottom-right",
             className: "text-4 font-sfpro",
           });
@@ -256,9 +246,9 @@ const Vocab: Component<{}> = (props) => {
   );
 
   const handleGetTranslateWord = async (word: string) => {
-    const checkMemories = await searchMemoriesText(word);
-    if (checkMemories) {
-      toast.error(checkMemories.message, {
+    const result = await searchMemoriesText(word);
+    if (result.status) {
+      toast.error(result.message, {
         position: "bottom-right",
         className: "text-4 font-sfpro",
       });
@@ -269,7 +259,6 @@ const Vocab: Component<{}> = (props) => {
           audioRef.play();
         });
       }
-      return;
     }
     const data = await Promise.all([
       getTextDataWebster(word),
@@ -291,14 +280,10 @@ const Vocab: Component<{}> = (props) => {
     }
   };
 
-  const [switchFlipcard, setSwitchFlipcard] = createSignal<boolean>(false);
-
   createEffect(
     on(
       () => vocabStore.renderWord?.audio,
       (v) => {
-        setSwitchFlipcard(!switchFlipcard());
-
         const translations = vocabStore.renderWord?.translations
           .map((item) => item.translations.join(", "))
           .join(", ");
@@ -361,13 +346,8 @@ const Vocab: Component<{}> = (props) => {
       <audio ref={audioRef2} hidden src={audioSrc2()} />
       <main class="h-main w-main relative flex flex-wrap">
         <div class="w-content flex h-12 items-center gap-2">
-          <Show when={renderWordStore()}>
-            <Show
-              when={switchFlipcard()}
-              fallback={<FlipCard number={renderWordStore()!.number} />}
-            >
-              <FlipCard number={renderWordStore()!.number} />
-            </Show>
+          <Show when={vocabStore.renderWord}>
+            <FlipCard number={vocabStore.renderWord!.number} />
           </Show>
           <div class="relative grow overflow-hidden rounded-1 bg-black/15 shadow-sm shadow-black/45 backdrop-blur-xl">
             <Show
@@ -376,9 +356,9 @@ const Vocab: Component<{}> = (props) => {
                 <p
                   class={`h-[34px] w-full truncate pt-1 text-center align-baseline font-constantine text-7 font-700 uppercase leading-10 ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
                 >
-                  {vocabStore.searchTerm || renderWordStore()?.word}
+                  {vocabStore.searchTerm || vocabStore.renderWord?.word}
                   <small class="pl-1 pt-3 text-center align-baseline font-opensans text-3 font-600 !lowercase leading-4 text-secondary-white">
-                    {renderWordStore()?.phonetics}
+                    {vocabStore.renderWord?.phonetics}
                   </small>
                 </p>
               }
@@ -388,7 +368,7 @@ const Vocab: Component<{}> = (props) => {
                 type="text"
                 autocomplete="off"
                 name="mobileInputSearch"
-                value={vocabStore.searchTerm || renderWordStore()?.word}
+                value={vocabStore.searchTerm || vocabStore.renderWord?.word}
                 onFocus={(e) => {
                   e.currentTarget.value = "";
                   setVocabStore("searchTerm", "");
@@ -412,16 +392,16 @@ const Vocab: Component<{}> = (props) => {
                 }}
               />
               <p class="absolute -bottom-0.5 left-0 w-full truncate text-center font-opensans text-3 font-600 leading-3 text-white/50">
-                {renderWordStore()?.phonetics}
+                {vocabStore.renderWord?.phonetics}
               </p>
             </Show>
           </div>
         </div>
 
         <div class="no-scrollbar h-content w-full overflow-y-scroll">
-          <Show when={renderWordStore()}>
+          <Show when={vocabStore.renderWord}>
             <Definition
-              item={renderWordStore()!}
+              item={vocabStore.renderWord!}
               onEdit={handleEditFromDefinition}
             />
           </Show>
@@ -570,9 +550,9 @@ const Vocab: Component<{}> = (props) => {
               >
                 <input
                   hidden
-                  name="created_at"
+                  name="id"
                   autocomplete="off"
-                  value={editWordStore()?.created_at}
+                  value={vocabStore.editWord?.id}
                 />
 
                 <div class="relative mx-auto h-9 w-3/4 overflow-hidden rounded-full bg-black/15 shadow-[0_0_3px_0px_#00000054_inset]">
@@ -588,7 +568,7 @@ const Vocab: Component<{}> = (props) => {
                   <input
                     name="word"
                     autocomplete="off"
-                    value={editWordStore()?.word}
+                    value={vocabStore.editWord?.word}
                     on:keydown={async (e) => {
                       if (e.key === "Enter") {
                         e.preventDefault();
@@ -597,7 +577,7 @@ const Vocab: Component<{}> = (props) => {
                     }}
                     onInput={(e) => {
                       setVocabStore("editWord", {
-                        ...editWordStore()!,
+                        ...vocabStore.editWord!,
                         word: e.currentTarget.value,
                       });
                     }}
@@ -609,10 +589,10 @@ const Vocab: Component<{}> = (props) => {
                   class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 pl-2 text-4 font-400 leading-5 text-white outline-none"
                   name="audio"
                   autocomplete="off"
-                  value={editWordStore()?.audio}
+                  value={vocabStore.editWord?.audio}
                   onChange={(e) => {
                     setVocabStore("editWord", {
-                      ...editWordStore()!,
+                      ...vocabStore.editWord!,
                       audio: e.currentTarget.value,
                     });
                   }}
@@ -622,10 +602,10 @@ const Vocab: Component<{}> = (props) => {
                   class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 pl-2 text-4 font-400 leading-5 text-white outline-none"
                   name="phonetics"
                   autocomplete="off"
-                  value={editWordStore()?.phonetics}
+                  value={vocabStore.editWord?.phonetics}
                   onChange={(e) => {
                     setVocabStore("editWord", {
-                      ...editWordStore()!,
+                      ...vocabStore.editWord!,
                       phonetics: e.currentTarget.value,
                     });
                   }}
@@ -635,7 +615,7 @@ const Vocab: Component<{}> = (props) => {
                   hidden
                   name="definitions"
                   autocomplete="off"
-                  value={JSON.stringify(editWordStore()?.definitions)}
+                  value={JSON.stringify(vocabStore.editWord?.definitions)}
                 />
 
                 <Collapsible>
@@ -645,17 +625,17 @@ const Vocab: Component<{}> = (props) => {
                     autocomplete="off"
                     rows="12"
                     value={JSON.stringify(
-                      editWordStore()?.definitions,
+                      vocabStore.editWord?.definitions,
                       null,
                       " ",
                     )}
                     onChange={(e) => {
                       setVocabStore("editWord", {
-                        ...editWordStore()!,
+                        ...vocabStore.editWord!,
                         definitions: JSON.parse(e.currentTarget.value),
                       });
                       setEditWordGet({
-                        ...editWordStore()!,
+                        ...vocabStore.editWord!,
                         definitions: JSON.parse(e.currentTarget.value),
                       });
                     }}
@@ -666,11 +646,13 @@ const Vocab: Component<{}> = (props) => {
                   class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
                   name="meaning"
                   autocomplete="off"
-                  value={makeTranslationText(editWordStore()?.translations!)}
+                  value={makeTranslationText(
+                    vocabStore.editWord?.translations!,
+                  )}
                   onChange={(e) => {
                     e.preventDefault();
                     setVocabStore("editWord", {
-                      ...editWordStore()!,
+                      ...vocabStore.editWord!,
                       translations: getTranslationArr(e.currentTarget.value),
                     });
                   }}
@@ -683,10 +665,10 @@ const Vocab: Component<{}> = (props) => {
                   max={240}
                   min={1}
                   autocomplete="off"
-                  value={editWordStore()?.number}
+                  value={vocabStore.editWord?.number}
                   onChange={(e) => {
                     setVocabStore("editWord", {
-                      ...editWordStore()!,
+                      ...vocabStore.editWord!,
                       number: Number(e.currentTarget.value),
                     });
                   }}

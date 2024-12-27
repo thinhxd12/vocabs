@@ -19,13 +19,12 @@ import {
 } from "~/lib/store";
 import {
   getCurrentWeatherData,
-  getListContentQuiz,
-  getListContentVocab,
+  getListContent,
   getLocationList,
-  getTodaySchedule,
   handleCheckAndRender,
+  getTodaySchedule,
   updateTodaySchedule,
-  updateTodayScheduleStore,
+  updateTodayScheduleLocal,
 } from "~/lib/server";
 import { CurrentlyWeatherType } from "~/types";
 import { WMOCODE } from "~/lib/utils";
@@ -104,27 +103,30 @@ const Nav: Component<{}> = (props) => {
 
   const showDesktopNotification = () => {
     const img = "https://cdn-icons-png.flaticon.com/512/2617/2617511.png";
-    const letter = navStore.listType === 1 ? "I" : "II";
-    const newProgress =
-      navStore.listType === 1
-        ? navStore.todaySchedule.time1 + 1
-        : navStore.todaySchedule.time2 + 1;
-    const notification = new Notification("Start Focusing", {
-      icon: img,
-      requireInteraction: true,
-      body: `${letter}-${newProgress}`,
-    });
-    notification.onclose = async () => {
-      clearInterval(intervalCountdown);
-      intervalCountdown = undefined;
-      audioRef?.pause();
-      if (location.pathname === "/vocab") {
-        await handleGetListContentVocab(navStore.listType);
-        handleAutoplay();
-      } else {
-        handleGetListContentQuiz(navStore.listType);
-      }
-    };
+    if (navStore.currentSchedule) {
+      const listType = navStore.todaySchedule.findIndex(
+        (item) => item.id === navStore.currentSchedule!.id,
+      );
+      const letter = listType === 0 ? "I" : "II";
+      const newProgress = navStore.currentSchedule.count + 1;
+      const notification = new Notification("Start Focusing", {
+        icon: img,
+        requireInteraction: true,
+        body: `${letter}-${newProgress}`,
+      });
+
+      notification.onclose = async () => {
+        clearInterval(intervalCountdown);
+        intervalCountdown = undefined;
+        audioRef?.pause();
+        if (location.pathname === "/vocab") {
+          await handleGetListContentVocab(listType);
+          handleAutoplay();
+        } else {
+          handleGetListContentQuiz(listType);
+        }
+      };
+    }
   };
 
   const startCountdown = () => {
@@ -190,13 +192,8 @@ const Nav: Component<{}> = (props) => {
   const endAutoplay = async () => {
     clearInterval(intervalAutoplay);
     setNavStore("listCount", 0);
-    const res = await updateTodaySchedule(todayDate, navStore.listType);
-    updateTodayScheduleStore(res);
-    const currentProgress =
-      navStore.listType === 1
-        ? navStore.todaySchedule.time1
-        : navStore.todaySchedule.time2;
-    if (currentProgress < 9) {
+    await updateTodayScheduleLocal(todayDate);
+    if (navStore.currentSchedule && navStore.currentSchedule.count < 9) {
       startCountdown();
     }
   };
@@ -213,65 +210,22 @@ const Nav: Component<{}> = (props) => {
     }
   };
 
-  const handleGetListContentVocab = async (id: number) => {
-    switch (id) {
-      case 1:
-        setNavStore("listType", 1);
-        const data1 = await getListContentVocab(
-          navStore.todaySchedule.index1,
-          navStore.todaySchedule.index1 + 49,
-        );
-        if (data1) {
-          setNavStore("listContent", data1);
-          setNavStore("playButton", true);
-        }
-        break;
-      case 2:
-        setNavStore("listType", 2);
-        const data2 = await getListContentVocab(
-          navStore.todaySchedule.index2,
-          navStore.todaySchedule.index2 + 49,
-        );
-        if (data2) {
-          setNavStore("listContent", data2);
-          setNavStore("playButton", true);
-        }
-        break;
-      default:
-        break;
+  const handleGetListContentVocab = async (type: number) => {
+    setNavStore("currentSchedule", navStore.todaySchedule[type]);
+    const data = await getListContent(navStore.todaySchedule[type].index);
+    if (data) {
+      setNavStore("listContent", data);
+      setNavStore("playButton", true);
     }
   };
 
-  const handleGetListContentQuiz = async (id: number) => {
-    switch (id) {
-      case 1:
-        setNavStore("listType", 1);
-        const data1 = await getListContentQuiz(
-          navStore.todaySchedule.index1,
-          navStore.todaySchedule.index1 + 49,
-        );
-        if (data1) {
-          setQuizStore("quizContent", arrayShuffle(data1));
-          setQuizStore("quizRender", quizStore.quizContent[0]);
-        }
-        break;
-      case 2:
-        setNavStore("listType", 2);
-        const data2 = await getListContentQuiz(
-          navStore.todaySchedule.index2,
-          navStore.todaySchedule.index2 + 49,
-        );
-        if (data2) {
-          setQuizStore("quizContent", arrayShuffle(data2));
-          setQuizStore("quizRender", quizStore.quizContent[0]);
-        }
-        break;
-      default:
-        break;
+  const handleGetListContentQuiz = async (type: number) => {
+    setNavStore("currentSchedule", navStore.todaySchedule[type]);
+    const data = await getListContent(navStore.todaySchedule[type].index);
+    if (data) {
+      setNavStore("listContent", arrayShuffle(data));
+      setQuizStore("quizRender", navStore.listContent[0]);
     }
-    setNavStore("listContent", []);
-    setNavStore("listCount", 0);
-    setNavStore("playButton", false);
   };
 
   const handleGetListContent = (type: number) => {
@@ -281,8 +235,7 @@ const Nav: Component<{}> = (props) => {
       handleGetListContentQuiz(type);
     } else {
       setNavStore("listContent", []);
-      setQuizStore("quizContent", []);
-      setNavStore("listType", 0);
+      setNavStore("currentSchedule", undefined);
     }
   };
 
@@ -302,7 +255,7 @@ const Nav: Component<{}> = (props) => {
         <div class="light-layout w-content flex h-11 items-center rounded-1">
           <div class="ml-0.5 flex h-[32px] w-4 flex-col items-center justify-between rounded-1 bg-black/60 shadow-[0_0_1px_0px_#00000078_inset]">
             <Show
-              when={navStore.todaySchedule.created_at}
+              when={navStore.todaySchedule.length}
               fallback={
                 <div class="flex flex-col justify-center text-center">
                   <span class="text-3 leading-3 text-white">N</span>
@@ -312,10 +265,10 @@ const Nav: Component<{}> = (props) => {
             >
               <div class="flex flex-col justify-center text-center">
                 <span class="text-3 leading-3 text-white">
-                  {navStore.todaySchedule.time1}
+                  {navStore.todaySchedule[0].count}
                 </span>
                 <span class="text-3 leading-3 text-white">
-                  {navStore.todaySchedule.time2}
+                  {navStore.todaySchedule[1].count}
                 </span>
               </div>
             </Show>
@@ -326,26 +279,27 @@ const Nav: Component<{}> = (props) => {
           </div>
 
           <A href="/vocab" activeClass="btn-nav-active" class="btn-nav">
-            Danger is sweet. Dulce periculum.
+            Danger is sweet.Dulce periculum.
           </A>
 
           <A href="/schedule" activeClass="btn-nav-active" class="btn-nav">
-            Pecunia non olet. Money does not stink.
+            Pecunia non olet.Money does not stink.
           </A>
 
           <A href="/quiz" activeClass="btn-nav-active" class="btn-nav">
-            Memento mori. Remember you will die.
+            Memento mori.Remind you will die.
           </A>
 
           <div class="ml-0.5 flex h-[32px] flex-col items-center rounded-1 bg-black/60 px-0.5 text-white">
             <span class="mb-0.1 font-tupa text-6 font-600 leading-5">
-              {String(navStore.totalMemories).slice(
-                0,
-                String(navStore.totalMemories).length - 2,
-              )}
+              {Math.floor(navStore.totalMemories / 100) < 10
+                ? "0" + Math.floor(navStore.totalMemories / 100)
+                : Math.floor(navStore.totalMemories / 100)}
             </span>
             <span class="font-tupa text-6 font-600 leading-4.5">
-              {String(navStore.totalMemories).slice(2)}
+              {navStore.totalMemories % 100 < 10
+                ? "0" + (navStore.totalMemories % 100)
+                : navStore.totalMemories % 100}
             </span>
           </div>
 
@@ -428,76 +382,76 @@ const Nav: Component<{}> = (props) => {
 
         <button
           class="btn-nav-menu-timer"
-          onClick={() => handleGetListContent(1)}
+          onClick={() => handleGetListContent(0)}
         >
           <Show
             when={
-              navStore.listType === 1 &&
-              location.pathname === "/quiz" &&
-              quizStore.quizContent.length > 0
+              navStore.currentSchedule &&
+              navStore.todaySchedule[0].id === navStore.currentSchedule!.id &&
+              location.pathname === "/quiz"
             }
           >
             <span class="absolute bottom-0 z-10 h-full w-full bg-white/15"></span>
             <span
               class="absolute bottom-0 z-20 w-full bg-green-400/90"
               style={{
-                height: `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`,
+                height: `${(quizStore.quizCount / (navStore.listContent.length - 1)) * 100}%`,
               }}
             ></span>
           </Show>
           <Show
             when={
-              navStore.listType === 1 &&
-              location.pathname === "/vocab" &&
-              navStore.listContent.length > 0
+              navStore.currentSchedule &&
+              navStore.todaySchedule[0].id === navStore.currentSchedule!.id &&
+              location.pathname === "/vocab"
             }
           >
             <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/90"></span>
           </Show>
           <Show
-            when={navStore.todaySchedule.created_at}
+            when={navStore.todaySchedule.length}
             fallback={<RiSystemQuestionLine size={15} class="relative z-30" />}
           >
             <span class="relative z-30 text-3">
-              {navStore.todaySchedule.index1 + 1}
+              {navStore.todaySchedule[0].index + 1}
             </span>
           </Show>
         </button>
 
         <button
           class="btn-nav-menu-timer"
-          onClick={() => handleGetListContent(2)}
+          onClick={() => handleGetListContent(1)}
         >
           <Show
             when={
-              navStore.listType === 2 &&
-              location.pathname === "/quiz" &&
-              quizStore.quizContent.length > 0
+              navStore.currentSchedule &&
+              navStore.todaySchedule[1].id === navStore.currentSchedule!.id &&
+              location.pathname === "/quiz"
             }
           >
             <span class="absolute bottom-0 z-10 h-full w-full bg-white/15"></span>
             <span
               class="absolute bottom-0 z-20 w-full bg-green-400/90"
               style={{
-                height: `${(quizStore.quizCount / (quizStore.quizContent.length - 1)) * 100}%`,
+                height: `${(quizStore.quizCount / (navStore.listContent.length - 1)) * 100}%`,
               }}
             ></span>
           </Show>
           <Show
             when={
-              navStore.listType === 2 &&
-              location.pathname === "/vocab" &&
-              navStore.listContent.length > 0
+              navStore.currentSchedule &&
+              navStore.todaySchedule[1].id === navStore.currentSchedule!.id &&
+              location.pathname === "/vocab"
             }
           >
             <span class="absolute bottom-0 z-10 h-full w-full bg-green-400/90"></span>
           </Show>
           <Show
-            when={navStore.todaySchedule.created_at}
+            when={navStore.todaySchedule.length}
             fallback={<RiSystemQuestionLine size={15} class="relative z-30" />}
           >
             <span class="relative z-30 text-3">
-              {navStore.todaySchedule.index2 + 1}
+              {navStore.todaySchedule[1].index + 1}
             </span>
           </Show>
         </button>

@@ -1,31 +1,21 @@
 import { createStore } from "solid-js/store";
 import {
-  CalendarType,
-  HistoryItemType,
-  ScheduleProgressType,
-  ScheduleType,
-  VocabularyQuizType,
-  VocabularySearchType,
-  VocabularyType,
-  WeatherGeoType,
-} from "~/types";
+  SelectDiary,
+  SelectProgress,
+  SelectSchedule,
+  SelectVocab,
+  SelectWeather,
+} from "~/db/schema";
+import { CalendarType, VocabularySearchType } from "~/types";
 
 type QuizStoreType = {
   quizCount: number;
-  quizContent: VocabularyQuizType[];
-  quizRender: VocabularyQuizType;
+  quizRender: SelectVocab | undefined;
 };
 
 export const [quizStore, setQuizStore] = createStore<QuizStoreType>({
   quizCount: 0,
-  quizContent: [],
-  quizRender: {
-    created_at: "",
-    word: "",
-    number: 0,
-    audio: "",
-    translations: [],
-  },
+  quizRender: undefined,
 });
 
 type LayoutStoreType = {
@@ -48,10 +38,10 @@ type VocabStoreType = {
   translateTerm: string;
   showTranslate: boolean;
   showEdit: boolean;
-  editWord: VocabularyType | undefined;
+  editWord: SelectVocab | undefined;
   searchTerm: string;
   searchResults: VocabularySearchType[];
-  renderWord: VocabularyType | undefined;
+  renderWord: SelectVocab | undefined;
   searchTermColor: boolean;
 };
 
@@ -67,50 +57,44 @@ export const [vocabStore, setVocabStore] = createStore<VocabStoreType>({
 });
 
 type ScheduleStoreType = {
-  historyList: HistoryItemType[];
+  progressList: SelectProgress[];
   calendarList: CalendarType[];
   thisWeekIndex: number;
-  progressList: ScheduleProgressType[];
+  diaryList: SelectDiary[];
 };
 
 export const [scheduleStore, setScheduleStore] = createStore<ScheduleStoreType>(
   {
-    historyList: [],
+    progressList: [],
     calendarList: [],
     thisWeekIndex: -1,
-    progressList: [],
+    diaryList: [],
   },
 );
 
 type NavStore = {
-  defaultLocation: WeatherGeoType;
-  locationList: WeatherGeoType[];
+  defaultLocation: SelectWeather;
+  locationList: SelectWeather[];
   totalMemories: number;
-  todaySchedule: ScheduleType;
-  listType: 0 | 1 | 2;
+  todaySchedule: SelectSchedule[];
+  currentSchedule: SelectSchedule | undefined;
   listCount: number;
-  listContent: VocabularySearchType[];
+  listContent: SelectVocab[];
   playButton: boolean;
 };
 
 export const [navStore, setNavStore] = createStore<NavStore>({
   defaultLocation: {
+    id: "0194033c-fa9f-7719-ba80-d7a657153032",
     name: "Default Location",
-    lat: 10.6023,
-    lon: 106.4021,
-    default: false,
+    lat: "10.588468",
+    lon: "106.40065",
+    default: true,
   },
   locationList: [],
   totalMemories: 0,
-  todaySchedule: {
-    created_at: "",
-    date: "",
-    index1: 0,
-    index2: 0,
-    time1: 0,
-    time2: 0,
-  },
-  listType: 0,
+  todaySchedule: [],
+  currentSchedule: undefined,
   listCount: 0,
   listContent: [],
   playButton: false,

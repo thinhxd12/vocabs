@@ -1,10 +1,11 @@
-import { Component, For, Setter, Show } from "solid-js";
+import { Component, createEffect, For, Setter, Show } from "solid-js";
 import { VocabularyTranslationType, VocabularyType } from "~/types";
 import { RiArrowsCornerDownRightFill } from "solid-icons/ri";
 import ImageLoader from "./ImageLoader";
+import { InsertVocab, SelectVocab } from "~/db/schema";
 
 const Definition: Component<{
-  item: VocabularyType;
+  item: SelectVocab | InsertVocab;
   onEdit?: () => void;
   onCheck?: Setter<boolean>;
 }> = (props) => {
@@ -55,7 +56,7 @@ const Definition: Component<{
                   >
                     <div class="relative w-full">
                       <ImageLoader
-                        id={props.item.created_at}
+                        id={props.item.id}
                         def={props.item.definitions}
                         src={item.image}
                         hash={item.hash}

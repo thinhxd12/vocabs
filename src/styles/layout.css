@@ -20,7 +20,7 @@
 }
 
 .schedule-date {
-  @apply flex h-8 w-[50px] items-center justify-center text-center font-rubik text-4 font-400 uppercase leading-7.5;
+  @apply flex h-8 w-[50px] items-start justify-center text-center font-rubik text-4 font-400 uppercase leading-7.5;
 }
 
 .schedule-date:nth-child(7n + 1) span {
@@ -49,7 +49,7 @@
 
 .definition-example b,
 .definition-example em {
-  @apply rounded-2 px-1.5 py-0.5 indent-6 font-opensans text-4.5 font-700 leading-7.5 text-black;
+  @apply px-1.5 py-0.5 indent-6 font-opensans text-4.5 font-700 leading-7.5 text-black;
   animation: textAnimate 0.1s linear forwards;
   animation-delay: 3s;
 }

@@ -26,7 +26,6 @@ import { OcSearch2 } from "solid-icons/oc";
 import { createList } from "solid-list";
 import { BookmarkType } from "~/types";
 import {
-  checkBookMarkData,
   deleteBookmark,
   findBookMarkData,
   getBookMarkData,
@@ -35,6 +34,8 @@ import {
   getPrevBookMarkData,
   getRandomBookMarkData,
   insertBookmarkData,
+  likeBookMarkById,
+  unlikeBookMarkById,
   updateBookmarkData,
 } from "~/lib/server";
 import { createMarker, makeSearchRegex } from "@solid-primitives/marker";
@@ -62,7 +63,7 @@ const Bookmark: Component<{}> = (props) => {
       like: 0,
     });
     setLikeReset(true);
-    const data = await getPrevBookMarkData(bookmark()!.created_at);
+    const data = await getPrevBookMarkData(bookmark()!.id);
     if (data) {
       setBookmark(data);
     }
@@ -75,7 +76,7 @@ const Bookmark: Component<{}> = (props) => {
       like: 0,
     });
     setLikeReset(true);
-    const data = await getNextBookMarkData(bookmark()!.created_at);
+    const data = await getNextBookMarkData(bookmark()!.id);
     if (data) {
       setBookmark(data);
     }
@@ -84,11 +85,11 @@ const Bookmark: Component<{}> = (props) => {
   const handleCheckBookmark = () => {
     if (!likeReset()) {
       setBookmark({ ...bookmark()!, like: bookmark()!.like - 1 });
-      checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
+      unlikeBookMarkById(bookmark()!.id);
       setLikeReset(!likeReset());
     } else {
       setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
-      checkBookMarkData(bookmark()!.created_at, bookmark()!.like);
+      likeBookMarkById(bookmark()!.id);
       setLikeReset(!likeReset());
       setHeartId(heartId() + 1);
     }
@@ -142,7 +143,7 @@ const Bookmark: Component<{}> = (props) => {
           if (bookmark())
             setBookmark({
               ...searchResults()[active()!],
-              created_at: bookmark()!.created_at,
+              id: bookmark()!.id,
             });
           setSearchTerm("");
           setSearchResults([]);
@@ -160,8 +161,8 @@ const Bookmark: Component<{}> = (props) => {
     setSearchTerm("");
     setSearchResults([]);
     setOpenDialogSearch(false);
-    const data = await getBookMarkDataItem(item.created_at);
-    if (data) setBookmark({ ...data, created_at: bookmark()?.created_at });
+    const data = await getBookMarkDataItem(item.id);
+    if (data) setBookmark({ ...data, created_at: bookmark()?.id });
   };
 
   const handleCloseDialogSearch = (open: boolean) => {
@@ -173,7 +174,7 @@ const Bookmark: Component<{}> = (props) => {
   };
 
   const handleDeleteBookmark = () => {
-    deleteBookmark(bookmark()!.created_at);
+    deleteBookmark(bookmark()!.id);
     handleGetNextBookmark();
     setOpenDeleteAlert(false);
   };
@@ -314,7 +315,7 @@ const Bookmark: Component<{}> = (props) => {
                   hidden
                   name="id"
                   autocomplete="off"
-                  value={bookmark()?.created_at}
+                  value={bookmark()?.id}
                 />
                 <textarea
                   class="w-full flex-grow rounded-3 p-2 pl-3 indent-3 font-garamond text-6 font-400 leading-7 text-black outline-none"
@@ -355,7 +356,7 @@ const Bookmark: Component<{}> = (props) => {
                   hidden
                   name="id"
                   autocomplete="off"
-                  value={bookmark()?.created_at}
+                  value={bookmark()?.id}
                 />
                 <textarea
                   class="w-full flex-grow rounded-3 p-2 pl-3 indent-3 font-garamond text-6 font-400 leading-7 text-black outline-none"

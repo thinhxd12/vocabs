@@ -13,4 +13,7 @@ export default defineConfig({
       compact: true,
     },
   },
+  vite: {
+    ssr: { external: ["drizzle-orm"] },
+  },
 });

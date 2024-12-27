@@ -1,7 +1,7 @@
 import { Component, createEffect, createSignal, on, Show } from "solid-js";
 import { thumbHashToDataURL } from "thumbhash";
 import { VocabularyDefinitionType } from "~/types";
-import { base64ToUint8Array, createThumbhash, updateHashVocabularyItem } from "~/lib/server";
+import { base64ToUint8Array, createThumbhash } from "~/lib/server";
 
 const ImageLoader: Component<{
   id?: string;
@@ -30,15 +30,15 @@ const ImageLoader: Component<{
             const thumbhash = await createThumbhash(props.src);
             const thumbHashFromBase64 = base64ToUint8Array(thumbhash);
             setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));
-            if (props.id !== undefined) {
-              let editDefinition = JSON.parse(JSON.stringify(props.def));
-              editDefinition.forEach((entry: any) => {
-                entry.definitions.forEach((def: any) => {
-                  if (def.image === props.src) def.hash = thumbhash;
-                });
-              });
-              updateHashVocabularyItem(props.id!, editDefinition);
-            }
+            // if (props.id !== undefined) {
+            //   let editDefinition = JSON.parse(JSON.stringify(props.def));
+            //   editDefinition.forEach((entry: any) => {
+            //     entry.definitions.forEach((def: any) => {
+            //       if (def.image === props.src) def.hash = thumbhash;
+            //     });
+            //   });
+            //   updateHashVocabularyItem(props.id!, editDefinition);
+            // }
           } else {
             const thumbHashFromBase64 = base64ToUint8Array(props.hash);
             setPlaceholderData(thumbHashToDataURL(thumbHashFromBase64));

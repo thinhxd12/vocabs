@@ -3,18 +3,18 @@ export interface VocabularyType {
   audio: string;
   phonetics: string;
   number: number;
-  created_at: string;
+  id: number;
   translations: VocabularyTranslationType[];
   definitions: VocabularyDefinitionType[];
 }
 
 export interface VocabularySearchType {
-  created_at: string;
+  id: string;
   word: string;
 }
 
 export interface VocabularyQuizType {
-  created_at: string;
+  id: string;
   word: string;
   audio: string;
   number: number;
@@ -53,7 +53,7 @@ export interface ExampleType {
 }
 
 export interface BookmarkType {
-  created_at: string;
+  id: string;
   authors: string;
   bookTile: string;
   page: number;
@@ -66,7 +66,7 @@ export interface BookmarkType {
 }
 
 export interface ScheduleType {
-  created_at: string;
+  id: string;
   date: string;
   index1: number;
   index2: number;
@@ -77,12 +77,11 @@ export interface ScheduleType {
 export interface CalendarType {
   date: number;
   month: number;
-  time1: number;
-  time2: number;
+  count: number;
 }
 
 export interface HistoryItemType {
-  created_at: string;
+  id: string;
   index: number;
   from_date: string;
   to_date: string;
@@ -176,4 +175,9 @@ export type LoginImageType = {
   image_L: string;
   image_P: string;
   hash: string;
+};
+
+export type ToastResult = {
+  success: boolean;
+  message: string;
 };

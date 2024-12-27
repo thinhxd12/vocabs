@@ -23,10 +23,10 @@ import {
 import { createAsync, useSubmission } from "@solidjs/router";
 import { getUser } from "~/lib/login";
 import {
-  getAllHistoryList,
+  getAllProgressList,
   getCalendarList,
-  getHistoryList,
-  getProgressList,
+  getDiaryList,
+  getLastPartProgressList,
   getThisWeekIndex,
   submitNewSchedule,
   submitTodayReset,
@@ -40,7 +40,7 @@ export const route = {
   preload: () => {
     getCalendarList(todayDate),
       getThisWeekIndex(todayDate),
-      getHistoryList(scheduleStore.historyList.length > 0);
+      getLastPartProgressList(scheduleStore.progressList.length > 0);
   },
 };
 
@@ -54,8 +54,8 @@ const Schedule: Component<{}> = (props) => {
   const user = createAsync(() => getUser(), { deferStream: true });
   // ***************check login**************
 
-  const historyList_data = createAsync(() =>
-    getHistoryList(scheduleStore.historyList.length > 0),
+  const progressList_data = createAsync(() =>
+    getLastPartProgressList(scheduleStore.progressList.length > 0),
   );
 
   const calendarList_data = createAsync(() => getCalendarList(todayDate));
@@ -63,8 +63,8 @@ const Schedule: Component<{}> = (props) => {
   const thisWeekIndex_data = createAsync(() => getThisWeekIndex(todayDate));
 
   createEffect(() => {
-    if (historyList_data()) {
-      setScheduleStore("historyList", historyList_data()!);
+    if (progressList_data()) {
+      setScheduleStore("progressList", progressList_data()!);
     }
   });
 
@@ -81,10 +81,10 @@ const Schedule: Component<{}> = (props) => {
   });
 
   onMount(async () => {
-    if (scheduleStore.progressList.length > 0) return;
-    const data = await getProgressList();
+    if (scheduleStore.diaryList.length > 0) return;
+    const data = await getDiaryList();
     if (data) {
-      setScheduleStore("progressList", data);
+      setScheduleStore("diaryList", data);
     }
   });
 
@@ -99,8 +99,8 @@ const Schedule: Component<{}> = (props) => {
       () => submitNewScheduleAction.result,
       (v) => {
         if (!v) return;
-        if (v!.message === "success") {
-          toast.success("Successfully saved!", {
+        if (v.status) {
+          toast.success(v.message, {
             className: "text-4 font-sfpro",
             position: "bottom-right",
           });
@@ -111,8 +111,8 @@ const Schedule: Component<{}> = (props) => {
               audioRef.play();
             });
           }
-        } else if (v!.message !== "success" && v!.message !== undefined) {
-          toast.error(v!.message, {
+        } else if (!v.status) {
+          toast.error(v.message, {
             position: "bottom-right",
             className: "text-4 font-sfpro",
           });
@@ -136,8 +136,8 @@ const Schedule: Component<{}> = (props) => {
       () => submitTodayResetAction.result,
       (v) => {
         if (!v) return;
-        if (v!.message === "success") {
-          toast.success("Successfully saved!", {
+        if (v.status) {
+          toast.success(v.message, {
             className: "text-4 font-sfpro",
             position: "bottom-right",
           });
@@ -148,8 +148,8 @@ const Schedule: Component<{}> = (props) => {
               audioRef.play();
             });
           }
-        } else if (v!.message !== "success" && v!.message !== undefined) {
-          toast.error(v!.message, {
+        } else if (!v.status) {
+          toast.error(v.message, {
             className: "text-4 font-sfpro",
             position: "bottom-right",
           });
@@ -167,9 +167,9 @@ const Schedule: Component<{}> = (props) => {
   );
 
   const handleLoadAllHistory = async () => {
-    const data = await getAllHistoryList();
+    const data = await getAllProgressList();
     if (data) {
-      setScheduleStore("historyList", data);
+      setScheduleStore("progressList", data);
     }
   };
 
@@ -187,10 +187,10 @@ const Schedule: Component<{}> = (props) => {
           />
           <div class="absolute left-3 top-3 cursor-default rounded-2 bg-black/30 px-2 py-0.5 shadow-xl shadow-black/30 backdrop-blur-xl">
             <Suspense>
-              <For each={scheduleStore.progressList}>
+              <For each={scheduleStore.diaryList}>
                 {(item) => (
                   <p class="text-[7px] font-400 leading-3.5 text-white">
-                    {item.date} {item.count}
+                    {format(new Date(item.date), "yyyy-MM-dd")} {item.count}
                   </p>
                 )}
               </For>
@@ -244,7 +244,7 @@ const Schedule: Component<{}> = (props) => {
                     class={`schedule-date ${isThisMoth ? "text-white" : "text-secondary-white/50"}`}
                   >
                     <Show
-                      when={item.time1 >= 0}
+                      when={item.count >= 0}
                       fallback={
                         <span
                           class={`${isToday ? "today-date mx-0.5 h-6.5 w-7.5 rounded-sm bg-[#38E07B] shadow-md" : ""}`}
@@ -253,18 +253,16 @@ const Schedule: Component<{}> = (props) => {
                         </span>
                       }
                     >
-                      <span class="flex flex-col font-rubik text-2.5 font-600 uppercase leading-2.5 text-[#0000004d] opacity-0">
-                        <span>{item.time1}</span>
-                        <span>{item.time2}</span>
+                      <span class="font-rubik text-2.5 font-600 uppercase leading-2.5 text-black/30 opacity-0">
+                        {item.count}
                       </span>
                       <span
                         class={`${isToday ? "today-date mx-0.5 h-6.5 w-7.5 rounded-1 bg-[#38E07B] shadow-lg shadow-black/30" : "mx-0.5"}`}
                       >
                         {item.date}
                       </span>
-                      <span class="flex flex-col font-rubik text-2.5 font-600 uppercase leading-2.5 text-secondary-white/80">
-                        <span>{item.time1}</span>
-                        <span>{item.time2}</span>
+                      <span class="font-rubik text-2.5 font-600 uppercase leading-2.5 text-secondary-white/80">
+                        {item.count}
                       </span>
                     </Show>
                   </div>
@@ -277,7 +275,7 @@ const Schedule: Component<{}> = (props) => {
         <div class="w-content relative !my-2 overflow-hidden rounded-2">
           <Suspense fallback={<div>Loading...</div>}>
             <div class="relative flex w-full snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar-thumb]:bg-black/60 [&::-webkit-scrollbar-track]:rounded-full [&::-webkit-scrollbar-track]:bg-white/15 [&::-webkit-scrollbar]:h-1">
-              <For each={chunk(scheduleStore.historyList, 5).reverse()}>
+              <For each={chunk(scheduleStore.progressList, 5).reverse()}>
                 {(data) => (
                   <div class="min-w-full select-none snap-start overflow-hidden pl-1 pr-1 pt-1">
                     <For each={data}>
@@ -287,10 +285,10 @@ const Schedule: Component<{}> = (props) => {
                             {item.index + 1} - {item.index + 200}
                           </div>
                           <div class="flex-1 text-center text-3.5 leading-6 text-white">
-                            {item.from_date}
+                            {format(new Date(item.start_date), "yyyy-MM-dd")}
                           </div>
                           <div class="flex-1 text-center text-3.5 leading-6 text-white">
-                            {item.to_date}
+                            {format(new Date(item.end_date), "yyyy-MM-dd")}
                           </div>
                         </div>
                       )}
@@ -342,26 +340,32 @@ const Schedule: Component<{}> = (props) => {
                 >
                   <input
                     hidden
-                    name="createdAt"
+                    name="id0"
                     autocomplete="off"
-                    value={navStore.todaySchedule.created_at}
+                    value={navStore.todaySchedule[0].id}
+                  />
+                  <input
+                    hidden
+                    name="id1"
+                    autocomplete="off"
+                    value={navStore.todaySchedule[1].id}
                   />
                   <div class="mb-1 grid grid-cols-2 gap-1">
                     <input
                       class="my-1 rounded-8 bg-black/15 py-1 pl-3 text-4.5 leading-4.5 shadow-[0_0_3px_0px_#00000054_inset] outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                      name="todayIndex1"
+                      name="count0"
                       autocomplete="off"
                       type="number"
                       min={0}
-                      value={navStore.todaySchedule.time1}
+                      value={navStore.todaySchedule[0].count}
                     />
                     <input
                       class="my-1 rounded-8 bg-black/15 py-1 pl-3 text-4.5 leading-4.5 shadow-[0_0_3px_0px_#00000054_inset] outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                      name="todayIndex2"
+                      name="count1"
                       autocomplete="off"
                       type="number"
                       min={0}
-                      value={navStore.todaySchedule.time2}
+                      value={navStore.todaySchedule[1].count}
                     />
                   </div>
 
