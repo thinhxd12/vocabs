@@ -55,7 +55,8 @@ export const getVocabByWord = async (
       .select({ id: vocabTable.id, word: vocabTable.word })
       .from(vocabTable)
       .where(like(vocabTable.word, `${text}%`))
-      .limit(9);
+      .orderBy(asc(vocabTable.id))
+      .limit(12);
     return result;
   } catch (error) {
     return [];

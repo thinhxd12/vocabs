@@ -20,11 +20,11 @@ const Quiz: Component<{}> = (props) => {
 
   createEffect(
     on(
-      () => navStore.listContent,
+      () => quizStore.quizRender,
       (v) => {
-        if (v.length > 0) {
+        if (v) {
           setTimeout(() => {
-            if (navStore.listContent.length) getRandomChoices();
+            getRandomChoices();
           }, 500);
         }
       },
@@ -109,23 +109,23 @@ const Quiz: Component<{}> = (props) => {
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio ref={audioRef} hidden src={audioSrc()} />
       <main class="no-scrollbar h-main w-main relative overflow-hidden">
-        <div class="mx-auto mb-6 mt-9 h-[120px] w-2/3">
-          <div class="no-scrollbar light-layout relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-3 !backdrop-blur-lg">
-            <h1 class="absolute -top-2.5 left-1/2 z-10 -translate-x-1/2 bg-transparent text-center text-[168px] leading-[115px] text-white/20">
-              {quizStore.quizRender?.number}
-            </h1>
+        <Show when={quizStore.quizRender}>
+          <div class="mx-auto mb-6 mt-9 h-[120px] w-2/3">
+            <div class="no-scrollbar light-layout relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-3 !backdrop-blur-lg">
+              <h1 class="absolute -top-2.5 left-1/2 z-10 -translate-x-1/2 bg-transparent text-center text-[168px] leading-[115px] text-white/20">
+                {quizStore.quizRender?.number}
+              </h1>
 
-            <div class="relative z-30 flex min-h-11 w-full items-center bg-black/60 shadow-lg shadow-black/60 backdrop-blur-xl">
-              <p class="w-full px-1 pb-1.5 text-center text-5 font-400 leading-7 text-white">
-                {quizStore.quizRender?.translations
-                  .map((tran) => tran.translations.join(", "))
-                  .join(", ")}
-              </p>
+              <div class="relative z-30 flex min-h-11 w-full items-center bg-black/60 shadow-lg shadow-black/60 backdrop-blur-xl">
+                <p class="w-full px-1 pb-1.5 text-center text-5 font-400 leading-7 text-white">
+                  {quizStore.quizRender?.translations
+                    .map((tran) => tran.translations.join(", "))
+                    .join(", ")}
+                </p>
+              </div>
             </div>
           </div>
-        </div>
 
-        <Show when={navStore.listContent.length > 0}>
           <div class="flex w-full flex-col items-center justify-center">
             <Show
               when={checked()}

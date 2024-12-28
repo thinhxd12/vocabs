@@ -218,11 +218,11 @@ const Nav: Component<{}> = (props) => {
       setNavStore("listContent", data);
       setNavStore("playButton", true);
     }
-    console.log(navStore.todaySchedule);
   };
 
   const handleGetListContentQuiz = async (type: number) => {
     setNavStore("currentSchedule", undefined);
+    setQuizStore("quizRender", undefined);
     setNavStore("currentSchedule", navStore.todaySchedule[type]);
     const data = await getListContent(navStore.todaySchedule[type].index);
     if (data) {
@@ -257,7 +257,7 @@ const Nav: Component<{}> = (props) => {
         }
       />
       <nav class="w-main h-[42px]">
-        <div class="light-layout w-content flex h-11 items-center rounded-1">
+        <div class="light-layout w-content flex h-[39px] items-center rounded-1 !shadow-sm">
           <div class="ml-0.5 flex h-[32px] w-4 flex-col items-center justify-between rounded-1 bg-black/60 shadow-[0_0_1px_0px_#00000078_inset]">
             <Show
               when={navStore.todaySchedule.length}
@@ -292,7 +292,7 @@ const Nav: Component<{}> = (props) => {
           </A>
 
           <A href="/quiz" activeClass="btn-nav-active" class="btn-nav">
-            Memento mori.Remind you will die.
+            Memento mori.Rem'ber you will die.
           </A>
 
           <div class="ml-0.5 flex h-[32px] flex-col items-center rounded-1 bg-black/60 px-0.5 text-white">

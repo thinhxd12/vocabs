@@ -84,8 +84,7 @@ export const increaseBookmarkLikeById = async (id: SelectBookmark["id"]) => {
     .set({
       like: sql`${bookmarkTable.like} + 1`,
     })
-    .where(eq(bookmarkTable.id, id))
-    .returning();
+    .where(eq(bookmarkTable.id, id));
 };
 
 export const decreaseBookmarkLikeById = async (id: SelectBookmark["id"]) => {
@@ -94,8 +93,11 @@ export const decreaseBookmarkLikeById = async (id: SelectBookmark["id"]) => {
     .set({
       like: sql`${bookmarkTable.like} - 1`,
     })
-    .where(eq(bookmarkTable.id, id))
-    .returning();
+    .where(eq(bookmarkTable.id, id));
+};
+
+export const updateBookmarkSelectFalse = async () => {
+  return await db.update(bookmarkTable).set({ selected: false }).execute();
 };
 
 export const updateBookmarkSelectById = async (
@@ -107,8 +109,7 @@ export const updateBookmarkSelectById = async (
     .set({
       selected: value,
     })
-    .where(eq(bookmarkTable.id, id))
-    .returning();
+    .where(eq(bookmarkTable.id, id));
 };
 
 export const updateBookmarkContentById = async (
@@ -120,6 +121,5 @@ export const updateBookmarkContentById = async (
     .set({
       content: value,
     })
-    .where(eq(bookmarkTable.id, id))
-    .returning();
+    .where(eq(bookmarkTable.id, id));
 };

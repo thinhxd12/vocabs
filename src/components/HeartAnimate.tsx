@@ -37,7 +37,7 @@ const HeartAnimate: Component<{ id: number }> = (props) => {
 
   const generateRandomPositions = () => {
     if (canvasRef) {
-      canvasRef.width = window.innerWidth - 360;
+      canvasRef.width = window.innerWidth - 402;
       canvasRef.height = window.innerHeight;
       canvasWidth = canvasRef.width;
       canvasHeight = canvasRef.height;
@@ -119,7 +119,7 @@ const HeartAnimate: Component<{ id: number }> = (props) => {
   return (
     <canvas
       ref={canvasRef}
-      class={`fixed z-[99] ${isShow() ? "pointer-events-auto" : "pointer-events-none"} left-0 top-0`}
+      class={`fixed z-40 ${isShow() ? "pointer-events-auto" : "pointer-events-none"} left-0 top-0`}
     />
   );
 };

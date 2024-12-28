@@ -73,6 +73,7 @@ import {
   increaseScheduleById,
   updateBookmarkContentById,
   updateBookmarkSelectById,
+  updateBookmarkSelectFalse,
   updateCountScheduleById,
   updateDateScheduleById,
   updateVocabById,
@@ -1110,8 +1111,8 @@ export const getBookMarkData = async () => {
 export const getNextBookMarkData = async (id: SelectBookmark["id"]) => {
   "use server";
   const data = await getNextBookmark(id);
+  await updateBookmarkSelectFalse();
   if (data) {
-    await updateBookmarkSelectById(id, false);
     await updateBookmarkSelectById(data[0].id, true);
     return data[0];
   }
@@ -1121,8 +1122,8 @@ export const getNextBookMarkData = async (id: SelectBookmark["id"]) => {
 export const getPrevBookMarkData = async (id: SelectBookmark["id"]) => {
   "use server";
   const data = await getPreviousBookmark(id);
+  await updateBookmarkSelectFalse();
   if (data) {
-    await updateBookmarkSelectById(id, false);
     await updateBookmarkSelectById(data[0].id, true);
     return data[0];
   }

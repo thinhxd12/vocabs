@@ -219,7 +219,7 @@ const Bookmark: Component<{}> = (props) => {
         </div>
       </div>
 
-      <div class="absolute bottom-0 left-0 right-0 flex items-center p-2">
+      <div class="absolute bottom-0 left-0 right-0 z-50 flex items-center p-2">
         <div class="dark-layout mx-auto flex items-center justify-center rounded-3 px-3 py-2">
           <button class="btn-bookmark pt-0.5" onClick={handleCheckBookmark}>
             <BsHeartFill

@@ -9,7 +9,7 @@ import {
 } from "solid-js";
 import Definition from "~/components/Definition";
 import { VocabularyDefinitionType, VocabularyTranslationType } from "~/types";
-import { OcSearch2 } from "solid-icons/oc";
+import { OcSearch2, OcX2 } from "solid-icons/oc";
 import { BiRegularBandAid, BiSolidSave } from "solid-icons/bi";
 import {
   layoutStore,
@@ -33,7 +33,7 @@ import Dialog from "@corvu/dialog";
 import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { getUser } from "~/lib/login";
 import { debounce } from "@solid-primitives/scheduled";
-import toast, { Toaster } from "solid-toast";
+import toast from "solid-toast";
 import Collapsible from "~/components/Collapsible";
 import FlipCard from "~/components/FlipCard";
 import { InsertVocab } from "~/db/schema";
@@ -411,6 +411,9 @@ const Vocab: Component<{}> = (props) => {
             <Dialog.Content
               class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
             >
+              <Dialog.Close class="btn-close-edit absolute right-0 z-50">
+                <OcX2 size={15} />
+              </Dialog.Close>
               <form
                 class="mb-2 w-full p-1"
                 action={insertVocabularyItem}
@@ -538,6 +541,9 @@ const Vocab: Component<{}> = (props) => {
             <Dialog.Content
               class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
             >
+              <Dialog.Close class="btn-close-edit absolute right-0 z-50">
+                <OcX2 size={15} />
+              </Dialog.Close>
               <form
                 class="mb-2 w-full p-1"
                 action={editVocabularyItem}
@@ -694,8 +700,6 @@ const Vocab: Component<{}> = (props) => {
             </Dialog.Content>
           </Dialog.Portal>
         </Dialog>
-
-        <Toaster />
       </main>
     </MetaProvider>
   );
