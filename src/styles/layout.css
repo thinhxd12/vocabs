@@ -90,3 +90,17 @@
 .h-content {
   height: calc(100vh - 90px);
 }
+
+.search-results {
+  animation: expand-height 0.1s linear forwards;
+}
+
+@keyframes expand-height {
+  from {
+    height: 30vh;
+  }
+
+  to {
+    height: calc(100vh - 96px);
+  }
+}

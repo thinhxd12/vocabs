@@ -293,7 +293,7 @@ export default function Layout(props: RouteSectionProps) {
         <div class="w-main relative h-full">
           <Show when={layoutStore.showSearchResults}>
             <div
-              class={`no-scrollbar light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 max-h-[calc(100vh-96px)] overflow-y-scroll rounded-2 p-2 outline-none`}
+              class={`no-scrollbar search-results light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 overflow-y-scroll rounded-2 p-2 outline-none`}
             >
               <For each={vocabStore.searchResults}>
                 {(item, index) => (

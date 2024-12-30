@@ -93,6 +93,7 @@ const Quiz: Component<{}> = (props) => {
         audioRef?.addEventListener("canplaythrough", () => {
           audioRef?.play();
         });
+        setQuizStore("quizRender", undefined);
         setNavStore("listContent", []);
         setQuizStore("quizCount", 0);
         setIndexChecked(0);
