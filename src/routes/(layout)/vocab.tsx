@@ -152,6 +152,7 @@ const Vocab: Component<{}> = (props) => {
             });
           }
         }
+        editActionResult.clear();
       },
     ),
   );
@@ -236,6 +237,7 @@ const Vocab: Component<{}> = (props) => {
             });
           }
         }
+        insertActionResult.clear();
       },
     ),
   );

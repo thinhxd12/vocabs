@@ -1,9 +1,12 @@
 import {
   Component,
+  createEffect,
   createMemo,
   createSignal,
   For,
   lazy,
+  on,
+  onCleanup,
   onMount,
   Show,
   Suspense,
@@ -40,12 +43,16 @@ import {
 import { createMarker, makeSearchRegex } from "@solid-primitives/marker";
 import Dialog from "@corvu/dialog";
 import { SelectBookmark } from "~/db/schema";
+import { useSubmission } from "@solidjs/router";
+import toast from "solid-toast";
 const HeartAnimate = lazy(() => import("./HeartAnimate"));
 
 const Bookmark: Component<{}> = (props) => {
   let searchInputRef: HTMLInputElement | undefined;
   let searchResultsRef: HTMLInputElement | undefined;
+  let audioRef: HTMLAudioElement | undefined;
 
+  const [audioSrc, setAudioSrc] = createSignal<string>("");
   const [bookmark, setBookmark] = createSignal<SelectBookmark>();
   const [likeReset, setLikeReset] = createSignal<boolean>(true);
 
@@ -181,10 +188,84 @@ const Bookmark: Component<{}> = (props) => {
 
   const [heartId, setHeartId] = createSignal<number>(0);
 
+  const updateBookmarResult = useSubmission(updateBookmarkData);
+
+  createEffect(
+    on(
+      () => updateBookmarResult.result,
+      (v) => {
+        if (!v) return;
+        if (v.status) {
+          toast.success(v.data.message, {
+            className: "text-4 font-sfpro",
+            position: "bottom-right",
+          });
+          setAudioSrc("/assets/sounds/mp3_Ding.mp3");
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
+        } else if (!v.status) {
+          toast.error(v.data.message, {
+            position: "bottom-right",
+            className: "text-4 font-sfpro",
+          });
+          setAudioSrc("/assets/sounds/mp3_Boing.mp3");
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
+        }
+        updateBookmarResult.clear();
+      },
+    ),
+  );
+
+  const insertBookmarResult = useSubmission(insertBookmarkData);
+
+  createEffect(
+    on(
+      () => insertBookmarResult.result,
+      (v) => {
+        if (!v) return;
+        if (v.status) {
+          toast.success(v.data.message, {
+            className: "text-4 font-sfpro",
+            position: "bottom-right",
+          });
+          setAudioSrc("/assets/sounds/mp3_Ding.mp3");
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
+        } else if (!v.status) {
+          toast.error(v.data.message, {
+            position: "bottom-right",
+            className: "text-4 font-sfpro",
+          });
+          setAudioSrc("/assets/sounds/mp3_Boing.mp3");
+          if (audioRef) {
+            audioRef.load();
+            audioRef.addEventListener("canplaythrough", () => {
+              audioRef.play();
+            });
+          }
+        }
+        insertBookmarResult.clear();
+      },
+    ),
+  );
+
   return (
     <>
+      <audio ref={audioRef} hidden src={audioSrc()} />
       <HeartAnimate id={heartId()} />
-
       <div class="light-layout flex h-full w-full rounded-3 px-11 py-8">
         <div
           class={`no-scrollbar relative h-full w-full overflow-y-scroll rounded-3 border border-black/60 ${bookmark()?.like ? "bg-[url('/images/paper.webp')] shadow-md shadow-black/60" : "bg-[#dcd8d1]"} bg-cover bg-local`}
@@ -309,7 +390,6 @@ const Bookmark: Component<{}> = (props) => {
                 method="post"
                 action={updateBookmarkData}
                 class="flex h-full w-full flex-col overflow-hidden"
-                onSubmit={() => setOpenDialogEdit(false)}
               >
                 <input
                   hidden
@@ -350,7 +430,6 @@ const Bookmark: Component<{}> = (props) => {
                 class="flex h-full w-full flex-col overflow-hidden"
                 method="post"
                 action={insertBookmarkData}
-                onSubmit={() => setOpenDialogInsert(false)}
               >
                 <input
                   hidden

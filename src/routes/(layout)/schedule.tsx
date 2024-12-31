@@ -125,6 +125,7 @@ const Schedule: Component<{}> = (props) => {
           }
         }
         setOpenDialogSchedule(false);
+        submitNewScheduleAction.clear();
       },
     ),
   );
@@ -161,7 +162,7 @@ const Schedule: Component<{}> = (props) => {
             });
           }
         }
-        setOpenDialogReset(false);
+        submitTodayResetAction.clear();
       },
     ),
   );
@@ -352,7 +353,7 @@ const Schedule: Component<{}> = (props) => {
                   />
                   <div class="mb-1 grid grid-cols-2 gap-1">
                     <input
-                      class="my-1 rounded-8 bg-black/15 py-1 pl-3 text-4.5 leading-4.5 shadow-[0_0_3px_0px_#00000054_inset] outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                      class="my-1 rounded-8 bg-black/15 px-3 text-4.5 leading-4 shadow-[0_0_3px_0px_#00000054_inset] outline-none"
                       name="count0"
                       autocomplete="off"
                       type="number"
@@ -360,7 +361,7 @@ const Schedule: Component<{}> = (props) => {
                       value={navStore.todaySchedule[0].count}
                     />
                     <input
-                      class="my-1 rounded-8 bg-black/15 py-1 pl-3 text-4.5 leading-4.5 shadow-[0_0_3px_0px_#00000054_inset] outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                      class="my-1 rounded-8 bg-black/15 px-3 text-4.5 leading-4 shadow-[0_0_3px_0px_#00000054_inset] outline-none"
                       name="count1"
                       autocomplete="off"
                       type="number"

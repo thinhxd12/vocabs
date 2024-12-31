@@ -65,7 +65,7 @@ import {
   getRandomBookmark,
   findTextBookmark,
 } from "~/db/queries/select";
-import { count, asc, eq, desc } from "drizzle-orm";
+import { count, asc, eq, desc, DrizzleError } from "drizzle-orm";
 import {
   decreaseBookmarkLikeById,
   decreaseNumberVocabById,
@@ -1134,12 +1134,27 @@ export const updateBookmarkData = action(async (formData: FormData) => {
   "use server";
   const id = String(formData.get("id"));
   const doc = String(formData.get("bookmarks"));
-  await updateBookmarkContentById(id, doc);
+  if (id.length === 0 || doc.length === 0)
+    return {
+      status: false,
+      data: {
+        message: "Invalid data.",
+      } as DrizzleError,
+    };
+  const result = await updateBookmarkContentById(id, doc);
+  return result;
 }, "update-bookmark");
 
 export const insertBookmarkData = action(async (formData: FormData) => {
   "use server";
   const doc = String(formData.get("bookmarksInsert"));
+  if (doc.length === 0)
+    return {
+      status: false,
+      data: {
+        message: "Invalid data.",
+      } as DrizzleError,
+    };
   let entries = readKindleClipping(doc);
   let parsedEntries = parseKindleEntries(entries);
 
@@ -1154,9 +1169,13 @@ export const insertBookmarkData = action(async (formData: FormData) => {
       type: parsedEntries[i].type,
     };
     const res = await insertBookmark(row);
-    if (res) console.log("Error:", res);
+    if (res) throw { status: false, data: { message: res } };
     else console.log(`Row ${i} inserted`);
   }
+  return {
+    status: true,
+    data: { message: "Action was successful!" },
+  };
 }, "insert-bookmark");
 
 export const getRandomBookMarkData = async () => {

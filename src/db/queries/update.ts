@@ -116,10 +116,21 @@ export const updateBookmarkContentById = async (
   id: SelectBookmark["id"],
   value: SelectBookmark["content"],
 ) => {
-  return await db
-    .update(bookmarkTable)
-    .set({
-      content: value,
-    })
-    .where(eq(bookmarkTable.id, id));
+  try {
+    await db
+      .update(bookmarkTable)
+      .set({
+        content: value,
+      })
+      .where(eq(bookmarkTable.id, id));
+    return {
+      status: true,
+      data: { message: "Action was successful!" } as DrizzleError,
+    };
+  } catch (error) {
+    return {
+      status: false,
+      data: error as DrizzleError,
+    };
+  }
 };
