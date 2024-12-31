@@ -278,7 +278,7 @@ const Nav: Component<{}> = (props) => {
               </div>
             </Show>
 
-            <span class="w-full -translate-y-0.5 -rotate-90 rounded-1 bg-blue-500 bg-white/25 text-center text-2.5 leading-3.5 text-white">
+            <span class="w-full -translate-y-0.5 -rotate-90 rounded-1 bg-white/15 text-center text-2.5 leading-3.5 text-white">
               {format(todayDate, "eeeeee")}
             </span>
           </div>

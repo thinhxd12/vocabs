@@ -780,7 +780,9 @@ export const getThisWeekIndex = query(async (dayToday: string) => {
     const today = new Date(dayToday);
     if (today < startDaySchedule || today > endDaySchedule) return -9;
     if (allGreater) {
-      if (thisWeekSchedule[0].date !== lastProgress[0].start_date) {
+      if (
+        String(thisWeekSchedule[0].date) !== String(lastProgress[0].start_date)
+      ) {
         const insertData: InsertProgress = {
           index: thisWeekIndex,
           start_date: new Date(thisWeekSchedule[0].date!),
@@ -790,6 +792,7 @@ export const getThisWeekIndex = query(async (dayToday: string) => {
         };
         await insertProgress(insertData);
       }
+      return -9;
     }
   }
   return thisWeekIndex + 1;
