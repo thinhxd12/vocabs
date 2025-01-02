@@ -105,7 +105,9 @@ const HeartAnimate: Component<{ id: number }> = (props) => {
 
   const clearCanvas = () => {
     setIsShow(false);
-    cancelAnimationFrame(ani);
+    if (typeof cancelAnimationFrame !== "undefined") {
+      cancelAnimationFrame(ani);
+    }
     if (canvasRef) {
       const ctx = canvasRef.getContext("2d")!;
       ctx.clearRect(0, 0, canvasRef.width, canvasRef.height);
@@ -114,6 +116,9 @@ const HeartAnimate: Component<{ id: number }> = (props) => {
 
   onCleanup(() => {
     clearCanvas();
+    if (typeof cancelAnimationFrame !== "undefined") {
+      cancelAnimationFrame(ani);
+    }
   });
 
   return (

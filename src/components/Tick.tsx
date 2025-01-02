@@ -61,9 +61,12 @@ const Tick = (initialProps: {
 
   const draw = () => {
     const start = performance.now();
-    cancelAnimationFrame(animationFrameIdRef);
+    if (typeof cancelAnimationFrame !== "undefined") {
+      cancelAnimationFrame(animationFrameIdRef);
+    }
     setDone(false);
     setShadowBack(0);
+    setShadowFront(0);
     setzIndex(1);
     setDegrees(0);
     if (props.animating) {
@@ -75,28 +78,24 @@ const Tick = (initialProps: {
 
           if (progress >= 1) {
             setDone(true);
-            cancelAnimationFrame(animationFrameIdRef);
+            if (typeof cancelAnimationFrame !== "undefined") {
+              cancelAnimationFrame(animationFrameIdRef);
+            }
             return;
           }
 
           if (progress > 0) {
             let visual_progress = easeOutBounce(progress);
-
-            // update shadows
-            // set default shadow and highlight levels based on visual animation progress
             const shadowFront = 1 - Math.abs(visual_progress - 0.5) * 2;
             const highlightBack = 1 - (visual_progress - 0.5) / 0.5;
 
             setShadowFront(shadowFront);
             setHighlightBack(highlightBack);
 
-            // if there's a card above me, my back is visible, and the above card is falling
             if (visual_progress > 0.5 && visual_progress > 0) {
               const shadowBack = easeOutCubic(visual_progress);
               setShadowBack(shadowBack);
             }
-
-            // update and animate cards
 
             if (visual_progress > 0.5 && !done()) {
               setzIndex(10);
@@ -106,7 +105,6 @@ const Tick = (initialProps: {
 
             setDegrees(visual_progress * -180);
 
-            // handle card stack shadow
             let shadowProgress = 0;
             let dist = 1;
 
@@ -130,6 +128,8 @@ const Tick = (initialProps: {
     } else {
       setDone(true);
       setShadowBack(1);
+      setShadowFront(0);
+      setHighlightBack(0);
       setzIndex(10);
       setDegrees(-180);
     }

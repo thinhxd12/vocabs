@@ -38,6 +38,11 @@
   @apply mr-1 flex h-9 w-9 items-center justify-center rounded-full bg-white/5 text-white ring-1 ring-white/30 transition duration-100 hover:bg-white/10;
 }
 
+.btn-submit:active,
+.btn-submit:focus {
+  @apply mr-1 flex h-9 w-9 items-center justify-center rounded-full bg-white/25 text-white ring-1 ring-white/30;
+}
+
 .btn-close-edit {
   @apply flex h-5 w-9.5 items-center justify-center text-white opacity-10 outline-none transition duration-100 hover:opacity-100;
 }

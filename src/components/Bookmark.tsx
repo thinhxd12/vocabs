@@ -266,19 +266,17 @@ const Bookmark: Component<{}> = (props) => {
     <>
       <audio ref={audioRef} hidden src={audioSrc()} />
       <HeartAnimate id={heartId()} />
+      <p
+        class="fixed left-0 top-1 w-[calc(100vw-402px)] truncate px-2 text-center font-garamond text-11 font-600 uppercase leading-12 text-white"
+        style="text-shadow: 0 3px 6px black;"
+      >
+        {bookmark()?.bookTile}
+      </p>
       <div class="light-layout flex h-full w-full rounded-3 px-11 py-8">
         <div
           class={`no-scrollbar relative h-full w-full overflow-y-scroll rounded-3 border border-black/60 ${bookmark()?.like ? "bg-[url('/images/paper.webp')] shadow-md shadow-black/60" : "bg-[#dcd8d1]"} bg-cover bg-local`}
         >
-          <p class="px-2 pt-4 text-center font-garamond text-11 font-600 uppercase leading-11">
-            {bookmark()?.bookTile}
-          </p>
-          <img
-            src="/images/bookmark-onarment-1.webp"
-            width={120}
-            class="mx-auto mb-8 mt-2"
-          />
-          <p class="bookmarkTextContent pl-7 pr-3 font-garamond text-6.5 font-400 leading-10">
+          <p class="bookmarkTextContent pl-7 pr-3 pt-3 font-garamond text-6.5 font-400 leading-10">
             <Show
               when={bookmark()?.content}
               fallback={
