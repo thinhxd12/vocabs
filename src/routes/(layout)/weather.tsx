@@ -218,7 +218,7 @@ const Weather: Component<{}> = (props) => {
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
         navigator.userAgent,
       );
-    const dpi = isMobile ? 3 : 1;
+    const dpi = isMobile ? 0.5 : 1;
     let canvasWidth = 378;
     let canvasHeight = window.innerHeight - 54;
 

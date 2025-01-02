@@ -21,7 +21,6 @@ import { debounce } from "@solid-primitives/scheduled";
 import { OcX2 } from "solid-icons/oc";
 import Dialog from "@corvu/dialog";
 import toast, { Toaster } from "solid-toast";
-import { VsTarget } from "solid-icons/vs";
 const Art = lazy(() => import("~/components/Art"));
 const Bookmark = lazy(() => import("~/components/Bookmark"));
 import Nav from "~/components/Nav";
@@ -272,13 +271,6 @@ export default function Layout(props: RouteSectionProps) {
           <p class="absolute bottom-0 left-0 hidden w-1/4 truncate pb-1 pl-2 pr-1 text-4 leading-7 text-white sm:block">
             {imageData()?.title}
           </p>
-
-          <button
-            onClick={handleChangeBackground}
-            class="absolute bottom-[215px] left-[calc(50vw+163px)] z-50 flex h-7 w-7 items-center justify-center text-white opacity-30 outline-none hover:opacity-100 sm:bottom-0 sm:left-[calc(100vw-21px)]"
-          >
-            <VsTarget size={15} />
-          </button>
         </Show>
       </Show>
 
@@ -336,7 +328,7 @@ export default function Layout(props: RouteSectionProps) {
           {props.children}
 
           <Show when={location.pathname !== "/"}>
-            <Nav />
+            <Nav changeBackground={handleChangeBackground} />
           </Show>
         </div>
       </div>

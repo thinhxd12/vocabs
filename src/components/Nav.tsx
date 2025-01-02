@@ -23,7 +23,6 @@ import {
   getLocationList,
   handleCheckAndRender,
   getTodaySchedule,
-  updateTodaySchedule,
   updateTodayScheduleLocal,
 } from "~/lib/server";
 import { CurrentlyWeatherType } from "~/types";
@@ -38,10 +37,12 @@ import {
   RiSystemLogoutCircleRLine,
   RiSystemQuestionLine,
 } from "solid-icons/ri";
-import { VsSymbolColor } from "solid-icons/vs";
+import { VsSymbolColor, VsTarget } from "solid-icons/vs";
 import { FiBookOpen } from "solid-icons/fi";
 
-const Nav: Component<{}> = (props) => {
+const Nav: Component<{
+  changeBackground: () => {};
+}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
   let intervalCountdown: NodeJS.Timeout | undefined;
   let intervalAutoplay: NodeJS.Timeout;
@@ -361,16 +362,22 @@ const Nav: Component<{}> = (props) => {
           </A>
 
           <div
-            class={`relative mx-0.5 h-[32px] min-w-[90px] max-w-[90px] overflow-hidden rounded-1 shadow shadow-black/60 ${navStore.playButton ? "bg-[url('/images/sunrise.webp')]" : "bg-[url('/images/sunset.webp')]"} cursor-pointer bg-cover transition-all`}
+            class={`relative mx-0.5 h-[32px] min-w-[90px] max-w-[90px] cursor-pointer overflow-hidden rounded-1 shadow shadow-black/60`}
             onClick={handleAutoplay}
           >
+            <div
+              class={`absolute left-0 top-0 z-10 h-full w-full ${navStore.playButton ? "bg-[url('/images/sunrise.webp')]" : "bg-[url('/images/sunset.webp')]"} bg-cover`}
+              style="background-size: 90px 32px;"
+            ></div>
+
             <Show when={navStore.listCount}>
               <div
-                class={`absolute left-0 top-0 h-full bg-[url('/images/sunrise.webp')] bg-cover transition-all duration-300`}
+                class={`absolute left-0 top-0 z-30 h-full bg-[url('/images/sunrise.webp')] bg-cover transition-all duration-300`}
                 style={{
                   width: `${Math.floor(((navStore.listCount + 1) / navStore.listContent.length) * 90)}px`,
                   "box-shadow": "2px 0px 6px rgba(0, 0, 0, 0.6)",
                   "border-right": "0.5px solid #000000",
+                  "background-size": "90px 32px",
                 }}
               ></div>
             </Show>
@@ -500,6 +507,9 @@ const Nav: Component<{}> = (props) => {
           }
         >
           <RiEditorTranslate size={15} />
+        </button>
+        <button class="btn-nav-menu" onClick={props.changeBackground}>
+          <VsTarget size={15} />
         </button>
         <button
           class={`btn-nav-menu-timer ${showTimer() ? "bg-white/15" : ""}`}

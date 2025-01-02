@@ -181,96 +181,97 @@ const Schedule: Component<{}> = (props) => {
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio ref={audioRef} hidden src={audioSrc()} />
       <main class="no-scrollbar h-main w-main relative overflow-y-scroll">
-        <div class="light-layout w-content relative !my-2 h-[240px] overflow-hidden rounded-2 p-2">
-          <img
-            class="h-full w-full rounded-2 border border-black/30 object-cover shadow-sm shadow-black/30 brightness-90"
-            src={`/images/${format(new Date(), "M")}.webp`}
-          />
-          <div class="absolute left-3 top-3 cursor-default rounded-2 bg-black/30 px-2 py-0.5 shadow-xl shadow-black/30 backdrop-blur-xl">
-            <Suspense>
-              <For each={scheduleStore.diaryList}>
-                {(item) => (
-                  <p class="text-[7px] font-400 leading-3.5 text-white">
-                    {format(new Date(item.date), "yyyy-MM-dd")} {item.count}
-                  </p>
-                )}
-              </For>
-            </Suspense>
-          </div>
+        <div class="dark-layout w-content relative !my-2 overflow-hidden rounded-2">
+          <div class="relative h-[210px] w-full">
+            <img
+              class="h-full w-full rounded-t-2 object-cover brightness-90"
+              src={`/images/${format(new Date(), "M")}.webp`}
+            />
+            <div class="absolute left-2 top-2 cursor-default rounded-2 bg-black/30 px-2 py-0.5 shadow-xl shadow-black/30 backdrop-blur-xl">
+              <Suspense>
+                <For each={scheduleStore.diaryList}>
+                  {(item) => (
+                    <p class="text-[7px] font-400 leading-3.5 text-white">
+                      {format(new Date(item.date), "yyyy-MM-dd")} {item.count}
+                    </p>
+                  )}
+                </For>
+              </Suspense>
+            </div>
 
-          <div class="absolute bottom-3 right-3">
-            <p
-              class="mb-0.5 cursor-pointer rounded-1 bg-black/30 px-1 text-center text-3.5 font-500 uppercase leading-4.5 text-white shadow-sm shadow-black/15 backdrop-blur-xl transition duration-100 hover:bg-black/5"
-              onClick={handleLoadAllHistory}
-            >
-              {format(new Date(), "MMMM")}
-            </p>
-            <p
-              class="mb-0.5 cursor-pointer rounded-1 bg-black/30 px-1 text-center text-6 font-500 uppercase leading-7 text-white shadow-sm shadow-black/15 backdrop-blur-xl transition duration-100 hover:bg-black/5"
-              onClick={() => setOpenDialogReset(true)}
-            >
-              {format(new Date(), "yyyy")}
-            </p>
-            <p
-              class="leading-45 mb-0.5 cursor-pointer rounded-1 bg-black/30 px-1 text-center text-2.5 font-500 uppercase text-white shadow-sm shadow-black/15 backdrop-blur-xl transition duration-100 hover:bg-black/5"
-              onClick={() => setOpenDialogSchedule(true)}
-            >
-              <Show when={scheduleStore.thisWeekIndex > 0} fallback={"hiems"}>
-                {Number(scheduleStore.thisWeekIndex) +
-                  " - " +
-                  Number(scheduleStore.thisWeekIndex + 199)}
-              </Show>
-            </p>
+            <div class="absolute bottom-2 right-2 min-w-[60px]">
+              <p
+                class="mb-0.5 cursor-pointer rounded-1 bg-black/30 px-1 text-center text-3.5 font-500 uppercase leading-5 text-white shadow-sm shadow-black/15 backdrop-blur-xl transition duration-100 hover:bg-black/5"
+                onClick={handleLoadAllHistory}
+              >
+                {format(new Date(), "MMMM")}
+              </p>
+              <p
+                class="mb-0.5 cursor-pointer rounded-1 bg-black/30 px-1 pb-1 pt-0.5 text-center text-6 font-500 uppercase leading-6 text-white shadow-sm shadow-black/15 backdrop-blur-xl transition duration-100 hover:bg-black/5"
+                onClick={() => setOpenDialogReset(true)}
+              >
+                {format(new Date(), "yyyy")}
+              </p>
+              <p
+                class="leading-45 cursor-pointer rounded-1 bg-black/30 px-1 text-center text-2.5 font-500 uppercase leading-4 text-white shadow-sm shadow-black/15 backdrop-blur-xl transition duration-100 hover:bg-black/5"
+                onClick={() => setOpenDialogSchedule(true)}
+              >
+                <Show when={scheduleStore.thisWeekIndex > 0} fallback={"hiems"}>
+                  {Number(scheduleStore.thisWeekIndex) +
+                    " - " +
+                    Number(scheduleStore.thisWeekIndex + 199)}
+                </Show>
+              </p>
+            </div>
           </div>
-        </div>
-
-        <div class="light-layout w-content relative !my-2 flex cursor-default flex-wrap justify-center overflow-hidden rounded-2 pt-2">
-          <div class="schedule-title rounded-l-2 !text-[#f90000]">Sun</div>
-          <div class="schedule-title">Mon</div>
-          <div class="schedule-title">Tue</div>
-          <div class="schedule-title">Wed</div>
-          <div class="schedule-title">Thu</div>
-          <div class="schedule-title">Fri</div>
-          <div class="schedule-title rounded-r-2">Sat</div>
-          <Suspense fallback={<div>Loading...</div>}>
-            <For each={scheduleStore.calendarList}>
-              {(item) => {
-                const isThisMoth =
-                  item.month === new Date(todayDate).getMonth();
-                const isToday =
-                  item.month === new Date(todayDate).getMonth() &&
-                  item.date === new Date(todayDate).getDate();
-                return (
-                  <div
-                    class={`schedule-date ${isThisMoth ? "text-white" : "text-secondary-white/50"}`}
-                  >
-                    <Show
-                      when={item.count >= 0}
-                      fallback={
+          <div class="relative flex w-full cursor-default flex-wrap justify-center overflow-hidden rounded-b-2 pt-3">
+            <div class="schedule-title rounded-l-2 !text-[#f90000]">Sun</div>
+            <div class="schedule-title">Mon</div>
+            <div class="schedule-title">Tue</div>
+            <div class="schedule-title">Wed</div>
+            <div class="schedule-title">Thu</div>
+            <div class="schedule-title">Fri</div>
+            <div class="schedule-title rounded-r-2">Sat</div>
+            <Suspense fallback={<div>Loading...</div>}>
+              <For each={scheduleStore.calendarList}>
+                {(item) => {
+                  const isThisMoth =
+                    item.month === new Date(todayDate).getMonth();
+                  const isToday =
+                    item.month === new Date(todayDate).getMonth() &&
+                    item.date === new Date(todayDate).getDate();
+                  return (
+                    <div
+                      class={`schedule-date ${isThisMoth ? "text-white" : "text-secondary-white/50"}`}
+                    >
+                      <Show
+                        when={item.count >= 0}
+                        fallback={
+                          <span
+                            class={`${isToday ? "today-date mx-0.5 h-6.5 w-7.5 rounded-sm bg-[#38E07B] shadow-md" : ""}`}
+                          >
+                            {item.date}
+                          </span>
+                        }
+                      >
+                        <span class="font-rubik text-2.5 font-600 uppercase leading-2.5 text-black/30 opacity-0">
+                          {item.count}
+                        </span>
                         <span
-                          class={`${isToday ? "today-date mx-0.5 h-6.5 w-7.5 rounded-sm bg-[#38E07B] shadow-md" : ""}`}
+                          class={`${isToday ? "today-date mx-0.5 h-6.5 w-7.5 rounded-1 bg-[#38E07B] shadow-lg shadow-black/30" : "mx-0.5"}`}
                         >
                           {item.date}
                         </span>
-                      }
-                    >
-                      <span class="font-rubik text-2.5 font-600 uppercase leading-2.5 text-black/30 opacity-0">
-                        {item.count}
-                      </span>
-                      <span
-                        class={`${isToday ? "today-date mx-0.5 h-6.5 w-7.5 rounded-1 bg-[#38E07B] shadow-lg shadow-black/30" : "mx-0.5"}`}
-                      >
-                        {item.date}
-                      </span>
-                      <span class="font-rubik text-2.5 font-600 uppercase leading-2.5 text-secondary-white/80">
-                        {item.count}
-                      </span>
-                    </Show>
-                  </div>
-                );
-              }}
-            </For>
-          </Suspense>
+                        <span class="font-rubik text-2.5 font-600 uppercase leading-2.5 text-secondary-white/80">
+                          {item.count}
+                        </span>
+                      </Show>
+                    </div>
+                  );
+                }}
+              </For>
+            </Suspense>
+          </div>
         </div>
 
         <div class="w-content relative !my-2 overflow-hidden rounded-2">

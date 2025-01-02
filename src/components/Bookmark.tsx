@@ -266,15 +266,15 @@ const Bookmark: Component<{}> = (props) => {
     <>
       <audio ref={audioRef} hidden src={audioSrc()} />
       <HeartAnimate id={heartId()} />
-      <p
-        class="fixed left-0 top-1 w-[calc(100vw-402px)] truncate px-2 text-center font-garamond text-11 font-600 uppercase leading-12 text-white"
-        style="text-shadow: 0 3px 6px black;"
-      >
-        {bookmark()?.bookTile}
-      </p>
-      <div class="light-layout flex h-full w-full rounded-3 px-11 py-8">
+      <div class="light-layout h-full w-full rounded-3 px-8 pb-8">
+        <p
+          class="mb-2 mt-3 w-full truncate px-2 text-center font-garamond text-11 font-600 uppercase leading-11 text-white"
+          style="text-shadow: 0 3px 6px black;"
+        >
+          {bookmark()?.bookTile}
+        </p>
         <div
-          class={`no-scrollbar relative h-full w-full overflow-y-scroll rounded-3 border border-black/60 ${bookmark()?.like ? "bg-[url('/images/paper.webp')] shadow-md shadow-black/60" : "bg-[#dcd8d1]"} bg-cover bg-local`}
+          class={`no-scrollbar relative h-[calc(100%-42px)] w-full overflow-y-scroll rounded-3 border border-black/60 ${bookmark()?.like ? "bg-[url('/images/paper.webp')] shadow-md shadow-black/60" : "bg-[#dcd8d1]"} bg-cover bg-local`}
         >
           <p class="bookmarkTextContent pl-7 pr-3 pt-3 font-garamond text-6.5 font-400 leading-10">
             <Show
@@ -286,15 +286,15 @@ const Bookmark: Component<{}> = (props) => {
               {bookmark()?.content}
             </Show>
           </p>
-          <div class="mb-4 ml-auto mr-6 mt-6 flex w-fit flex-col items-center justify-center">
-            <img src="/images/bookmark-onarment-2.webp" class="mb-1 w-[72px]" />
-            <p class="font-garamond text-5 font-700 leading-5">
+          <div class="ml-auto mr-2 mt-3 flex w-fit flex-col items-center justify-center">
+            <img src="/images/bookmark-onarment-2.webp" class="mb-2 w-[72px]" />
+            <p class="mb-1 font-garamond text-5 font-700 leading-5">
               {bookmark()?.authors}
             </p>
+            <p class="font-garamond text-5 font-700 leading-5">
+              {bookmark()?.dateOfCreation}
+            </p>
           </div>
-          <p class="px-3 pb-3 text-right font-garamond text-5 font-700 leading-5">
-            {bookmark()?.dateOfCreation}
-          </p>
         </div>
       </div>
 

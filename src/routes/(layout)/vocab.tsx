@@ -3,6 +3,7 @@ import {
   Component,
   createEffect,
   createSignal,
+  lazy,
   on,
   onCleanup,
   Show,
@@ -34,9 +35,9 @@ import { Meta, MetaProvider, Title } from "@solidjs/meta";
 import { getUser } from "~/lib/login";
 import { debounce } from "@solid-primitives/scheduled";
 import toast from "solid-toast";
-import Collapsible from "~/components/Collapsible";
 import FlipCard from "~/components/FlipCard";
 import { InsertVocab } from "~/db/schema";
+const Collapsible = lazy(() => import("~/components/Collapsible"));
 
 const Vocab: Component<{}> = (props) => {
   // ***************check login**************
@@ -485,25 +486,23 @@ const Vocab: Component<{}> = (props) => {
                   value={JSON.stringify(translateWord()?.definitions)}
                 />
 
-                <Collapsible>
-                  <textarea
-                    class="w-full border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
-                    name="definitions"
-                    autocomplete="off"
-                    rows="12"
-                    value={JSON.stringify(
-                      translateWord()?.definitions,
-                      null,
-                      " ",
-                    )}
-                    onChange={(e) => {
-                      setTranslateWord({
-                        ...translateWord()!,
-                        definitions: JSON.parse(e.currentTarget.value),
-                      });
-                    }}
-                  />
-                </Collapsible>
+                <textarea
+                  class="no-scrollbar mt-8 w-full rounded-2 border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none ring-1 ring-white/30"
+                  name="definitions"
+                  autocomplete="off"
+                  rows="12"
+                  value={JSON.stringify(
+                    translateWord()?.definitions,
+                    null,
+                    "     ",
+                  )}
+                  onChange={(e) => {
+                    setTranslateWord({
+                      ...translateWord()!,
+                      definitions: JSON.parse(e.currentTarget.value),
+                    });
+                  }}
+                />
 
                 <input
                   class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
@@ -621,29 +620,27 @@ const Vocab: Component<{}> = (props) => {
                   value={JSON.stringify(vocabStore.editWord?.definitions)}
                 />
 
-                <Collapsible>
-                  <textarea
-                    class="w-full border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
-                    name="definitionsCollapsible"
-                    autocomplete="off"
-                    rows="12"
-                    value={JSON.stringify(
-                      vocabStore.editWord?.definitions,
-                      null,
-                      " ",
-                    )}
-                    onChange={(e) => {
-                      setVocabStore("editWord", {
-                        ...vocabStore.editWord!,
-                        definitions: JSON.parse(e.currentTarget.value),
-                      });
-                      setEditWordGet({
-                        ...vocabStore.editWord!,
-                        definitions: JSON.parse(e.currentTarget.value),
-                      });
-                    }}
-                  />
-                </Collapsible>
+                <textarea
+                  class="no-scrollbar mt-8 w-full rounded-2 border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none ring-1 ring-white/30"
+                  name="definitions"
+                  autocomplete="off"
+                  rows="12"
+                  value={JSON.stringify(
+                    vocabStore.editWord?.definitions,
+                    null,
+                    "     ",
+                  )}
+                  onChange={(e) => {
+                    setVocabStore("editWord", {
+                      ...vocabStore.editWord!,
+                      definitions: JSON.parse(e.currentTarget.value),
+                    });
+                    setEditWordGet({
+                      ...vocabStore.editWord!,
+                      definitions: JSON.parse(e.currentTarget.value),
+                    });
+                  }}
+                />
 
                 <input
                   class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
