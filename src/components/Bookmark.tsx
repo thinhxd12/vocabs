@@ -17,6 +17,7 @@ import {
   FaSolidDiceThree,
   FaSolidFeather,
   FaSolidFileCirclePlus,
+  FaSolidStar,
 } from "solid-icons/fa";
 import {
   AiOutlineInsertRowBelow,
@@ -45,6 +46,8 @@ import Dialog from "@corvu/dialog";
 import { SelectBookmark } from "~/db/schema";
 import { useSubmission } from "@solidjs/router";
 import toast from "solid-toast";
+import { BookDetailType } from "~/types";
+import { searchBook } from "~/lib/booksearch";
 const HeartAnimate = lazy(() => import("./HeartAnimate"));
 
 const Bookmark: Component<{}> = (props) => {
@@ -55,11 +58,14 @@ const Bookmark: Component<{}> = (props) => {
   const [audioSrc, setAudioSrc] = createSignal<string>("");
   const [bookmark, setBookmark] = createSignal<SelectBookmark>();
   const [likeReset, setLikeReset] = createSignal<boolean>(true);
+  const [bookDetail, setBookDetail] = createSignal<BookDetailType>();
 
   onMount(async () => {
     const data = await getBookMarkData();
     if (data) {
       setBookmark(data);
+      const bookDetail = await searchBook(data.bookTile, "title");
+      setBookDetail(bookDetail);
     }
   });
 
@@ -72,6 +78,12 @@ const Bookmark: Component<{}> = (props) => {
     setLikeReset(true);
     const data = await getPrevBookMarkData(bookmark()!.id);
     if (data) {
+      if (data.bookTile !== bookmark()?.bookTile) {
+        setBookmark(data);
+        const bookDetail = await searchBook(data.bookTile, "title");
+        setBookDetail(bookDetail);
+        return;
+      }
       setBookmark(data);
     }
   };
@@ -85,6 +97,12 @@ const Bookmark: Component<{}> = (props) => {
     setLikeReset(true);
     const data = await getNextBookMarkData(bookmark()!.id);
     if (data) {
+      if (data.bookTile !== bookmark()?.bookTile) {
+        setBookmark(data);
+        const bookDetail = await searchBook(data.bookTile, "title");
+        setBookDetail(bookDetail);
+        return;
+      }
       setBookmark(data);
     }
   };
@@ -113,6 +131,12 @@ const Bookmark: Component<{}> = (props) => {
   const getRandomBookmark = async () => {
     const data = await getRandomBookMarkData();
     if (data) {
+      if (data.bookTile !== bookmark()?.bookTile) {
+        setBookmark(data);
+        const bookDetail = await searchBook(data.bookTile, "title");
+        setBookDetail(bookDetail);
+        return;
+      }
       setBookmark(data);
     }
   };
@@ -266,15 +290,54 @@ const Bookmark: Component<{}> = (props) => {
     <>
       <audio ref={audioRef} hidden src={audioSrc()} />
       <HeartAnimate id={heartId()} />
-      <div class="light-layout h-full w-full rounded-3 px-8 pb-8">
-        <p
-          class="mb-2 mt-3 w-full truncate px-2 text-center font-garamond text-11 font-600 uppercase leading-11 text-white"
-          style="text-shadow: 0 3px 6px black;"
-        >
-          {bookmark()?.bookTile}
-        </p>
+      <div class="light-layout relative flex h-full w-full overflow-hidden rounded-3">
+        <div class="flex h-full w-1/4 flex-col bg-black/15 p-4">
+          <Show when={bookDetail()?.title}>
+            <Show when={bookDetail()?.coverImage}>
+              <img
+                src={bookDetail()?.coverImage!}
+                alt="book-cover"
+                class="mx-auto mb-3 w-2/3 shadow-lg shadow-black/75"
+              />
+            </Show>
+            <h3 class="mb-1 text-5 font-400 leading-6 text-white">
+              {bookDetail()?.title}
+            </h3>
+            <p class="mb-1 text-4 leading-6 text-secondary-white/60">
+              {bookDetail()?.authors}
+            </p>
+            <div class="mb-1 flex items-center pl-1">
+              <FaSolidStar size={15} color="#f1ce42" />
+              <span class="ml-1 text-3.5 leading-5 text-secondary-white/60">
+                {bookDetail()?.rating}
+              </span>
+              <span class="ml-1 text-3.5 leading-5 text-secondary-white/60">
+                ({bookDetail()?.numberOfRatings} ratings)
+              </span>
+            </div>
+            <Show when={bookDetail()?.numberOfPages}>
+              <p class="mb-1 text-4 leading-6 text-secondary-white/60">
+                {bookDetail()?.numberOfPages} pages
+              </p>
+            </Show>
+            <Show when={bookDetail()?.firstPublished}>
+              <p class="mb-1 text-4 leading-6 text-secondary-white/60">
+                First published {bookDetail()?.firstPublished}
+              </p>
+            </Show>
+            <Show when={bookDetail()?.description}>
+              <div
+                style="mask-image: linear-gradient(to top, transparent, #fff 5%, #fff 100%)"
+                class="no-scrollbar w-full flex-1 overflow-y-scroll indent-2 text-4 leading-6 text-secondary-white"
+              >
+                {bookDetail()?.description}
+              </div>
+            </Show>
+          </Show>
+        </div>
+
         <div
-          class={`no-scrollbar relative h-[calc(100%-42px)] w-full overflow-y-scroll rounded-3 border border-black/60 ${bookmark()?.like ? "bg-[url('/images/paper.webp')] shadow-md shadow-black/60" : "bg-[#dcd8d1]"} bg-cover bg-local`}
+          class={`no-scrollbar relative h-full w-3/4 overflow-y-scroll ${bookmark()?.like ? "bg-[url('/images/paper.webp')]" : "bg-[#dcd8d1]"} bg-cover bg-local`}
         >
           <p class="bookmarkTextContent pl-7 pr-3 pt-3 font-garamond text-6.5 font-400 leading-10">
             <Show
@@ -286,11 +349,8 @@ const Bookmark: Component<{}> = (props) => {
               {bookmark()?.content}
             </Show>
           </p>
-          <div class="ml-auto mr-2 mt-3 flex w-fit flex-col items-center justify-center">
+          <div class="ml-auto mr-2 mt-4 flex w-fit flex-col items-center justify-center">
             <img src="/images/bookmark-onarment-2.webp" class="mb-2 w-[72px]" />
-            <p class="mb-1 font-garamond text-5 font-700 leading-5">
-              {bookmark()?.authors}
-            </p>
             <p class="font-garamond text-5 font-700 leading-5">
               {bookmark()?.dateOfCreation}
             </p>

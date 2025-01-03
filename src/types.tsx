@@ -117,3 +117,17 @@ export type LoginImageType = {
   image_P: string;
   hash: string;
 };
+
+export type BookDetailType = {
+  title: string | null;
+  authors: string[];
+  coverImage: string | null;
+  rating: string | null;
+  numberOfRatings: string | null;
+  numberOfReviews: string | null;
+  series: string | null;
+  genres: string[];
+  description: string | null;
+  firstPublished: string | null;
+  numberOfPages: string | null;
+};
