@@ -303,32 +303,32 @@ const Bookmark: Component<{}> = (props) => {
             <h3 class="mb-1 text-5 font-400 leading-6 text-white">
               {bookDetail()?.title}
             </h3>
-            <p class="mb-1 text-4 leading-6 text-secondary-white/60">
+            <p class="mb-0.5 text-4 leading-6 text-secondary-white/60">
               {bookDetail()?.authors}
             </p>
             <div class="mb-1 flex items-center pl-1">
-              <FaSolidStar size={15} color="#f1ce42" />
-              <span class="ml-1 text-3.5 leading-5 text-secondary-white/60">
+              <FaSolidStar size={13} color="#f1ce42" />
+              <span class="ml-1 text-[11px] leading-4 text-secondary-white/60">
                 {bookDetail()?.rating}
               </span>
-              <span class="ml-1 text-3.5 leading-5 text-secondary-white/60">
+              <span class="ml-1 text-[11px] leading-4 text-secondary-white/60">
                 ({bookDetail()?.numberOfRatings} ratings)
               </span>
             </div>
             <Show when={bookDetail()?.numberOfPages}>
-              <p class="mb-1 text-4 leading-6 text-secondary-white/60">
+              <p class="mb-0.5 text-[11px] leading-4 text-secondary-white/60">
                 {bookDetail()?.numberOfPages} pages
               </p>
             </Show>
             <Show when={bookDetail()?.firstPublished}>
-              <p class="mb-1 text-4 leading-6 text-secondary-white/60">
+              <p class="text-[11px] leading-4 text-secondary-white/60">
                 First published {bookDetail()?.firstPublished}
               </p>
             </Show>
             <Show when={bookDetail()?.description}>
               <div
                 style="mask-image: linear-gradient(to top, transparent, #fff 5%, #fff 100%)"
-                class="no-scrollbar w-full flex-1 overflow-y-scroll indent-2 text-4 leading-6 text-secondary-white"
+                class="no-scrollbar mt-5 w-full flex-1 overflow-y-scroll indent-3 text-[11px] leading-4 text-secondary-white"
               >
                 {bookDetail()?.description}
               </div>
@@ -349,10 +349,10 @@ const Bookmark: Component<{}> = (props) => {
               {bookmark()?.content}
             </Show>
           </p>
-          <div class="ml-auto mr-2 mt-4 flex w-fit flex-col items-center justify-center">
-            <img src="/images/bookmark-onarment-2.webp" class="mb-2 w-[72px]" />
-            <p class="font-garamond text-5 font-700 leading-5">
-              {bookmark()?.dateOfCreation}
+          <div class="mt-4 flex w-full flex-col items-center justify-center">
+            <img src="/images/bookmark-onarment-2.webp" class="mb-1 w-[72px]" />
+            <p class="font-garamond text-5 leading-5">
+              {bookmark()?.dateOfCreation.slice(9)}
             </p>
           </div>
         </div>
