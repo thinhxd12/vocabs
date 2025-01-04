@@ -64,7 +64,9 @@ const Bookmark: Component<{}> = (props) => {
     const data = await getBookMarkData();
     if (data) {
       setBookmark(data);
-      const bookDetail = await searchBook(data.bookTile, "title");
+      const bookDetail = await searchBook(
+        data.bookTile + " by " + data.authors,
+      );
       setBookDetail(bookDetail);
     }
   });
