@@ -80,7 +80,6 @@ const Bookmark: Component<{}> = (props) => {
     setBookmark({
       ...bookmark()!,
       content: "",
-      like: 0,
     });
     setLikeReset(true);
     const data = await getPrevBookMarkData(bookmark()!.id);
@@ -98,7 +97,6 @@ const Bookmark: Component<{}> = (props) => {
     setBookmark({
       ...bookmark()!,
       content: "",
-      like: 0,
     });
     setLikeReset(true);
     const data = await getNextBookMarkData(bookmark()!.id);
@@ -333,22 +331,27 @@ const Bookmark: Component<{}> = (props) => {
         <div
           class={`no-scrollbar relative h-full w-3/4 overflow-y-scroll ${bookmark()?.like ? "bg-[url('/images/paper.webp')]" : "bg-[#dcd8d1]"} bg-cover bg-local`}
         >
-          <p class="bookmarkTextContent pl-7 pr-3 pt-3 font-garamond text-6.5 font-400 leading-10">
-            <Show
-              when={bookmark()?.content}
-              fallback={
-                <img src="/assets/svg/loader.svg" class="mx-auto w-11" />
-              }
-            >
+          <Show
+            when={bookmark()?.content}
+            fallback={
+              <div class="flex h-full w-full items-center justify-center">
+                <img src="/assets/svg/loader.svg" class="w-11" />
+              </div>
+            }
+          >
+            <p class="bookmarkTextContent pl-7 pr-3 pt-3 font-garamond text-6.5 font-400 leading-10">
               {bookmark()?.content}
-            </Show>
-          </p>
-          <div class="mt-4 flex w-full flex-col items-center justify-center">
-            <img src="/images/bookmark-onarment-2.webp" class="mb-1 w-[72px]" />
-            <p class="font-garamond text-5 leading-5">
-              {bookmark()?.dateOfCreation.slice(9)}
             </p>
-          </div>
+            <div class="mt-1 flex w-full flex-col items-center justify-center">
+              <img
+                src="/images/bookmark-onarment-2.webp"
+                class="mb-1 w-[72px]"
+              />
+              <p class="font-garamond text-4.5 font-400 leading-5">
+                {bookmark()?.dateOfCreation.slice(9)}
+              </p>
+            </div>
+          </Show>
         </div>
       </div>
 
