@@ -5,6 +5,16 @@ import { BookDetailType } from "~/types";
 
 const BASE_URL = "https://www.goodreads.com/search";
 
+type BookSearchType = {
+  title: string | null;
+  authors: any[];
+  detailsUrl: string | null;
+  goodreadsId: string | null;
+  publishedYear: string | null;
+  averageRating: string | null;
+  numberOfRatings: string | null;
+};
+
 /**
  * Build the search URL with the provided parameters
  * @param {string} query - Search query
@@ -50,9 +60,20 @@ export async function searchBook(
  */
 function parseSearchResults(html: string) {
   const $ = load(html);
-  const element = $('tr[itemtype="http://schema.org/Book"]').first();
-  const bookData = parseBookData($, element);
-  return bookData;
+  const results: BookSearchType[] = [];
+
+  $('tr[itemtype="http://schema.org/Book"]').each((index, element) => {
+    const bookData = parseBookData($, element);
+    results.push(bookData);
+  });
+
+  const sortedResults = results.sort((a, b) => {
+    if (a.numberOfRatings === null) return 1;
+    if (b.numberOfRatings === null) return -1;
+    return Number(b.numberOfRatings) - Number(a.numberOfRatings);
+  });
+
+  return sortedResults[0];
 }
 
 /**
@@ -63,7 +84,25 @@ function parseSearchResults(html: string) {
  */
 function parseBookData($: CheerioAPI, element: any) {
   const book = initializeBookObject($(element));
+  parseRatingsSearch($, $(element), book);
   return book;
+}
+
+/**
+ * Parse ratings information from a book row
+ * @param {CheerioStatic} $ - Cheerio instance
+ * @param {Cheerio} $el - Book row element
+ * @param {Object} book - Book object to update
+ */
+function parseRatingsSearch($: CheerioAPI, $el: Cheerio<any>, book: any) {
+  const ratingText = $el.find(".minirating").text();
+  const ratingMatch = ratingText.match(/([\d.]+)\s+avg rating/);
+  book.averageRating = ratingMatch ? ratingMatch[1] : null;
+
+  const ratingsMatch = ratingText.match(/—\s+([\d,]+)\s+ratings/);
+  book.numberOfRatings = ratingsMatch
+    ? ratingsMatch[1].replace(/,/g, "")
+    : null;
 }
 
 /**
