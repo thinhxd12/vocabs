@@ -103,75 +103,110 @@ const Quiz: Component<{}> = (props) => {
     }
   };
 
+  const choiceLetter = ["d", "f", "j", "k"];
+
+  const handleKeyDownQuiz = (e: KeyboardEvent) => {
+    switch (e.key.toLowerCase()) {
+      case choiceLetter[0]:
+        selectChoice(choices()[0].id, 1);
+        break;
+      case choiceLetter[1]:
+        selectChoice(choices()[1].id, 2);
+        break;
+      case choiceLetter[2]:
+        selectChoice(choices()[2].id, 3);
+        break;
+      case choiceLetter[3]:
+        selectChoice(choices()[3].id, 4);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <MetaProvider>
       <Title>🤔</Title>
       <Meta name="author" content="thinhxd12@gmail.com" />
       <Meta name="description" content="Thinh's Vocabulary Learning App" />
       <audio ref={audioRef} hidden src={audioSrc()} />
-      <main class="no-scrollbar h-main w-main relative overflow-hidden">
+      <main
+        on:keydown={handleKeyDownQuiz}
+        tabIndex={1}
+        class="no-scrollbar h-main w-main group overflow-hidden px-4 py-2 outline-none"
+      >
         <Show when={quizStore.quizRender}>
-          <div class="mx-auto mb-6 mt-9 h-[120px] w-2/3">
-            <div class="no-scrollbar light-layout relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-3 !backdrop-blur-lg">
-              <h1 class="absolute -top-2.5 left-1/2 z-10 -translate-x-1/2 bg-transparent text-center text-[168px] leading-[115px] text-white/20">
-                {quizStore.quizRender?.number}
-              </h1>
+          <div class="relative flex h-full w-full flex-col rounded-2 group-focus-within:shadow-md group-focus-within:shadow-black/45">
+            <div class="mx-auto mb-6 mt-9 h-[120px] w-2/3">
+              <div class="no-scrollbar light-layout relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-3 !backdrop-blur-lg">
+                <h1 class="absolute -top-2.5 left-1/2 z-10 -translate-x-1/2 bg-transparent text-center text-[168px] leading-[115px] text-white/20">
+                  {quizStore.quizRender?.number}
+                </h1>
 
-              <div class="relative z-30 flex min-h-11 w-full items-center bg-black/60 shadow-lg shadow-black/60 backdrop-blur-xl">
-                <p class="w-full px-1 pb-1.5 text-center text-5 font-400 leading-7 text-white">
-                  {quizStore.quizRender?.translations
-                    .map((tran) => tran.translations.join(", "))
-                    .join(", ")}
-                </p>
+                <div class="relative z-30 flex min-h-11 w-full items-center bg-black/60 shadow-lg shadow-black/60 backdrop-blur-xl">
+                  <p class="w-full px-1 pb-1.5 text-center text-5 font-400 leading-7 text-white">
+                    {quizStore.quizRender?.translations
+                      .map((tran) => tran.translations.join(", "))
+                      .join(", ")}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div class="flex w-full flex-col items-center justify-center">
-            <Show
-              when={checked()}
-              fallback={
+            <div class="flex w-full flex-col items-center justify-center">
+              <Show
+                when={checked()}
+                fallback={
+                  <For each={choices()}>
+                    {(item, index) => (
+                      <button
+                        onClick={() => selectChoice(item.id, index() + 1)}
+                        class="quiz-choice"
+                      >
+                        <span class="quiz-choice-letter">
+                          {choiceLetter[index()]}
+                        </span>
+                        <span>{item.choice}</span>
+                      </button>
+                    )}
+                  </For>
+                }
+              >
                 <For each={choices()}>
                   {(item, index) => (
-                    <button
-                      onClick={() => selectChoice(item.id, index() + 1)}
-                      class="quiz-choice"
+                    <Show
+                      when={index() + 1 === indexChecked()}
+                      fallback={
+                        <div
+                          class={
+                            item.id === quizStore.quizRender?.id
+                              ? "quiz-choice-true"
+                              : "quiz-choice"
+                          }
+                        >
+                          <span class="quiz-choice-letter">
+                            {choiceLetter[index()]}
+                          </span>
+                          <span>{item.choice}</span>
+                        </div>
+                      }
                     >
-                      {item.choice}
-                    </button>
-                  )}
-                </For>
-              }
-            >
-              <For each={choices()}>
-                {(item, index) => (
-                  <Show
-                    when={index() + 1 === indexChecked()}
-                    fallback={
                       <div
                         class={
                           item.id === quizStore.quizRender?.id
                             ? "quiz-choice-true"
-                            : "quiz-choice"
+                            : "quiz-choice-false"
                         }
                       >
-                        {item.choice}
+                        <span class="quiz-choice-letter">
+                          {choiceLetter[index()]}
+                        </span>
+                        <span>{item.choice}</span>
                       </div>
-                    }
-                  >
-                    <div
-                      class={
-                        item.id === quizStore.quizRender?.id
-                          ? "quiz-choice-true"
-                          : "quiz-choice-false"
-                      }
-                    >
-                      {item.choice}
-                    </div>
-                  </Show>
-                )}
-              </For>
-            </Show>
+                    </Show>
+                  )}
+                </For>
+              </Show>
+            </div>
           </div>
         </Show>
       </main>
