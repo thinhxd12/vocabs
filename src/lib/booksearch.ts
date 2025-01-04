@@ -32,13 +32,14 @@ function buildSearchUrl(
 
 export async function searchBook(
   query: string,
+  author: string,
   searchType = "books",
   searchField = "all",
 ) {
   const searchUrl = buildSearchUrl(query, searchType, searchField);
   const response = await fetch(searchUrl);
   const responseText = await response.text();
-  const bookInfo = parseSearchResults(responseText);
+  const bookInfo = parseSearchResults(responseText, author);
   return bookInfo;
 }
 
@@ -48,7 +49,7 @@ export async function searchBook(
  * @param {string} html - HTML content of the page
  * @returns {Array} Parsed search results
  */
-function parseSearchResults(html: string) {
+function parseSearchResults(html: string, author: string) {
   const $ = load(html);
   const results: BookSearchType[] = [];
 
@@ -57,13 +58,14 @@ function parseSearchResults(html: string) {
     results.push(bookData);
   });
 
-  const sortedResults = results.sort((a, b) => {
+  const res = results.filter((item) => item.authors.includes(author));
+  const sortedResults = res.sort((a, b) => {
     if (a.numberOfRatings === null) return 1;
     if (b.numberOfRatings === null) return -1;
     return Number(b.numberOfRatings) - Number(a.numberOfRatings);
   });
 
-  return sortedResults[0];
+  return sortedResults[0] || results[0];
 }
 
 /**
@@ -113,12 +115,10 @@ function parsePublishedDateSearch($: CheerioAPI, $el: Cheerio<any>, book: any) {
  * @param {Object} bookDetails - Book details object to update
  */
 function parseCoverImageSearch($: CheerioAPI, $el: Cheerio<any>, book: any) {
-  let coverImage = $("img.bookCover").attr("src");
+  let coverImage = $el.find("img.bookCover").attr("src");
   if (coverImage) {
-    coverImage = coverImage.replace(
-      /\.\_([A-Z]+)([0-9]+)\_\.jpg/,
-      "._$1500_.jpg",
-    );
+    coverImage = coverImage.replace("SX50", "SX500");
+    coverImage = coverImage.replace("SY75", "SX500");
   }
   book.coverImage = coverImage || null;
 }

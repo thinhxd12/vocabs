@@ -70,8 +70,8 @@ const Bookmark: Component<{}> = (props) => {
 
   const handleGetBookDetail = async (data: SelectBookmark) => {
     const bookDetail = await searchBook(
-      data.bookTile.split(":")[0] + " by " + data.authors.split(";")[0],
-      "book",
+      data.bookTile.split(":")[0],
+      data.authors.split(";")[0],
     );
     setBookDetail(bookDetail);
   };
@@ -308,7 +308,7 @@ const Bookmark: Component<{}> = (props) => {
               {bookDetail()?.title}
             </h3>
             <p class="mb-0.5 text-4 leading-6 text-secondary-white/60">
-              {bookDetail()?.authors}
+              {bookDetail()?.authors.join(", ")}
             </p>
             <Show when={bookDetail()?.numberOfRatings}>
               <div class="mb-1 flex items-center">
