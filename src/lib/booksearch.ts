@@ -1,19 +1,9 @@
 "use server";
 // https://www.npmjs.com/package/goodreads-cli
 import { Cheerio, CheerioAPI, load } from "cheerio";
-import { BookDetailType } from "~/types";
+import { BookDetailType, BookSearchType } from "~/types";
 
 const BASE_URL = "https://www.goodreads.com/search";
-
-type BookSearchType = {
-  title: string | null;
-  authors: any[];
-  detailsUrl: string | null;
-  goodreadsId: string | null;
-  publishedYear: string | null;
-  averageRating: string | null;
-  numberOfRatings: string | null;
-};
 
 /**
  * Build the search URL with the provided parameters
@@ -48,8 +38,8 @@ export async function searchBook(
   const searchUrl = buildSearchUrl(query, searchType, searchField);
   const response = await fetch(searchUrl);
   const responseText = await response.text();
-  const bookURL = parseSearchResults(responseText).detailsUrl;
-  if (bookURL) return lookupBook(bookURL);
+  const bookInfo = parseSearchResults(responseText);
+  return bookInfo;
 }
 
 /**
@@ -84,8 +74,53 @@ function parseSearchResults(html: string) {
  */
 function parseBookData($: CheerioAPI, element: any) {
   const book = initializeBookObject($(element));
+  parseAuthorsSearch($, $(element), book);
+  parsePublishedDateSearch($, $(element), book);
   parseRatingsSearch($, $(element), book);
+  parseCoverImageSearch($, $(element), book);
   return book;
+}
+
+/**
+ * Parse authors from a book row
+ * @param {CheerioStatic} $ - Cheerio instance
+ * @param {Cheerio} $el - Book row element
+ * @param {Object} book - Book object to update
+ */
+function parseAuthorsSearch($: CheerioAPI, $el: Cheerio<any>, book: any) {
+  $el.find(".authorName__container").each((i, authorElement) => {
+    book.authors.push(
+      $(authorElement).find('span[itemprop="name"]').text().trim(),
+    );
+  });
+}
+
+/**
+ * Parse published date from a book row
+ * @param {CheerioStatic} $ - Cheerio instance
+ * @param {Cheerio} $el - Book row element
+ * @param {Object} book - Book object to update
+ */
+function parsePublishedDateSearch($: CheerioAPI, $el: Cheerio<any>, book: any) {
+  const greyText = $el.find(".greyText.smallText.uitext").text();
+  const publishedMatch = greyText.match(/published\s+(\d{4})/);
+  book.publishedYear = publishedMatch ? publishedMatch[1] : null;
+}
+
+/**
+ * Parse cover image URL
+ * @param {CheerioStatic} $ - Cheerio instance
+ * @param {Object} bookDetails - Book details object to update
+ */
+function parseCoverImageSearch($: CheerioAPI, $el: Cheerio<any>, book: any) {
+  let coverImage = $("img.bookCover").attr("src");
+  if (coverImage) {
+    coverImage = coverImage.replace(
+      /\.\_([A-Z]+)([0-9]+)\_\.jpg/,
+      "._$1500_.jpg",
+    );
+  }
+  book.coverImage = coverImage || null;
 }
 
 /**
@@ -116,12 +151,13 @@ function initializeBookObject($el: Cheerio<any>) {
   return {
     title: $el.find('.bookTitle span[itemprop="name"]').text().trim() || null,
     authors: [],
+    coverImage: null,
     detailsUrl: detailsUrl || null,
     goodreadsId: detailsUrl.match(/\/show\/(\d+)/)?.[1] || null,
     publishedYear: null,
     averageRating: null,
     numberOfRatings: null,
-  };
+  } as BookSearchType;
 }
 
 /**

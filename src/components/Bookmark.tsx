@@ -46,7 +46,7 @@ import Dialog from "@corvu/dialog";
 import { SelectBookmark } from "~/db/schema";
 import { useSubmission } from "@solidjs/router";
 import toast from "solid-toast";
-import { BookDetailType } from "~/types";
+import { BookSearchType } from "~/types";
 import { searchBook } from "~/lib/booksearch";
 const HeartAnimate = lazy(() => import("./HeartAnimate"));
 
@@ -58,18 +58,23 @@ const Bookmark: Component<{}> = (props) => {
   const [audioSrc, setAudioSrc] = createSignal<string>("");
   const [bookmark, setBookmark] = createSignal<SelectBookmark>();
   const [likeReset, setLikeReset] = createSignal<boolean>(true);
-  const [bookDetail, setBookDetail] = createSignal<BookDetailType>();
+  const [bookDetail, setBookDetail] = createSignal<BookSearchType>();
 
   onMount(async () => {
     const data = await getBookMarkData();
     if (data) {
       setBookmark(data);
-      const bookDetail = await searchBook(
-        data.bookTile + " by " + data.authors,
-      );
-      setBookDetail(bookDetail);
+      handleGetBookDetail(data);
     }
   });
+
+  const handleGetBookDetail = async (data: SelectBookmark) => {
+    const bookDetail = await searchBook(
+      data.bookTile.split(":")[0] + " by " + data.authors.split(";")[0],
+      "book",
+    );
+    setBookDetail(bookDetail);
+  };
 
   const handleGetPrevBookmark = async () => {
     setBookmark({
@@ -82,8 +87,7 @@ const Bookmark: Component<{}> = (props) => {
     if (data) {
       if (data.bookTile !== bookmark()?.bookTile) {
         setBookmark(data);
-        const bookDetail = await searchBook(data.bookTile, "title");
-        setBookDetail(bookDetail);
+        handleGetBookDetail(data);
         return;
       }
       setBookmark(data);
@@ -101,8 +105,7 @@ const Bookmark: Component<{}> = (props) => {
     if (data) {
       if (data.bookTile !== bookmark()?.bookTile) {
         setBookmark(data);
-        const bookDetail = await searchBook(data.bookTile, "title");
-        setBookDetail(bookDetail);
+        handleGetBookDetail(data);
         return;
       }
       setBookmark(data);
@@ -135,8 +138,7 @@ const Bookmark: Component<{}> = (props) => {
     if (data) {
       if (data.bookTile !== bookmark()?.bookTile) {
         setBookmark(data);
-        const bookDetail = await searchBook(data.bookTile, "title");
-        setBookDetail(bookDetail);
+        handleGetBookDetail(data);
         return;
       }
       setBookmark(data);
@@ -299,7 +301,7 @@ const Bookmark: Component<{}> = (props) => {
               <img
                 src={bookDetail()?.coverImage!}
                 alt="book-cover"
-                class="mx-auto mb-3 w-2/3 shadow-lg shadow-black/75"
+                class="mx-auto mb-6 w-3/4 shadow-xl shadow-black/90"
               />
             </Show>
             <h3 class="mb-1 text-5 font-400 leading-6 text-white">
@@ -308,32 +310,22 @@ const Bookmark: Component<{}> = (props) => {
             <p class="mb-0.5 text-4 leading-6 text-secondary-white/60">
               {bookDetail()?.authors}
             </p>
-            <div class="mb-1 flex items-center pl-1">
-              <FaSolidStar size={13} color="#f1ce42" />
-              <span class="ml-1 text-[11px] leading-4 text-secondary-white/60">
-                {bookDetail()?.rating}
-              </span>
-              <span class="ml-1 text-[11px] leading-4 text-secondary-white/60">
-                ({bookDetail()?.numberOfRatings} ratings)
-              </span>
-            </div>
-            <Show when={bookDetail()?.numberOfPages}>
-              <p class="mb-0.5 text-[11px] leading-4 text-secondary-white/60">
-                {bookDetail()?.numberOfPages} pages
-              </p>
-            </Show>
-            <Show when={bookDetail()?.firstPublished}>
-              <p class="text-[11px] leading-4 text-secondary-white/60">
-                First published {bookDetail()?.firstPublished}
-              </p>
-            </Show>
-            <Show when={bookDetail()?.description}>
-              <div
-                style="mask-image: linear-gradient(to top, transparent, #fff 5%, #fff 100%)"
-                class="no-scrollbar mt-5 w-full flex-1 overflow-y-scroll indent-3 text-[11px] leading-4 text-secondary-white"
-              >
-                {bookDetail()?.description}
+            <Show when={bookDetail()?.numberOfRatings}>
+              <div class="mb-1 flex items-center">
+                <FaSolidStar size={13} color="#f1ce42" />
+                <span class="ml-1 text-[11px] leading-4 text-secondary-white/60">
+                  {bookDetail()?.averageRating}
+                </span>
+                <span class="ml-1 text-[11px] leading-4 text-secondary-white/60">
+                  ({Number(bookDetail()?.numberOfRatings!).toLocaleString()}{" "}
+                  ratings)
+                </span>
               </div>
+            </Show>
+            <Show when={bookDetail()?.publishedYear}>
+              <p class="text-[11px] leading-4 text-secondary-white/60">
+                First published {bookDetail()?.publishedYear}
+              </p>
             </Show>
           </Show>
         </div>
