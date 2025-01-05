@@ -133,10 +133,10 @@ const Quiz: Component<{}> = (props) => {
       <main
         on:keydown={handleKeyDownQuiz}
         tabIndex={1}
-        class="no-scrollbar h-main w-main group overflow-hidden px-4 py-2 outline-none"
+        class="no-scrollbar h-main w-main overflow-hidden px-4 py-2 outline-none"
       >
         <Show when={quizStore.quizRender}>
-          <div class="relative flex h-full w-full flex-col rounded-2 group-focus-within:shadow-md group-focus-within:shadow-black/45">
+          <div class="relative flex h-full w-full flex-col rounded-2">
             <div class="mx-auto mb-6 mt-9 h-[120px] w-2/3">
               <div class="no-scrollbar light-layout relative flex h-full w-full select-none flex-col items-center justify-center overflow-hidden rounded-3 !backdrop-blur-lg">
                 <h1 class="absolute -top-2.5 left-1/2 z-10 -translate-x-1/2 bg-transparent text-center text-[168px] leading-[115px] text-white/20">
