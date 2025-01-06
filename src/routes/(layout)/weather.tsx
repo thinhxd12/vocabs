@@ -385,7 +385,7 @@ const Weather: Component<{}> = (props) => {
   });
 
   onCleanup(() => {
-    audioRef?.pause();
+    audioRef && audioRef.pause();
   });
 
   return (

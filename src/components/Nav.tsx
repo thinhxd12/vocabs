@@ -193,6 +193,7 @@ const Nav: Component<{
   const endAutoplay = async () => {
     clearInterval(intervalAutoplay);
     setNavStore("listCount", 0);
+    setVocabStore("renderWord", undefined);
     await updateTodayScheduleLocal(todayDate);
     if (navStore.currentSchedule && navStore.currentSchedule.count < 9) {
       startCountdown();

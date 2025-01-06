@@ -1,8 +1,8 @@
 import {
+  batch,
   createEffect,
   createSignal,
   mergeProps,
-  onCleanup,
   Show,
   untrack,
 } from "solid-js";
@@ -15,7 +15,7 @@ const Tick = (initialProps: {
   delay?: number;
   image?: boolean;
 }) => {
-  const props = mergeProps({ delay: 0, duration: 800 }, initialProps);
+  const props = mergeProps({ delay: 0, duration: 600 }, initialProps);
   let animationFrameIdRef: number;
 
   const easeOutBounce = (t: number) => {
@@ -44,7 +44,7 @@ const Tick = (initialProps: {
   };
 
   createEffect(() => {
-    let v = props.number;
+    const v = props.number;
     untrack(() => {
       draw();
     });
@@ -64,11 +64,13 @@ const Tick = (initialProps: {
     if (typeof cancelAnimationFrame !== "undefined") {
       cancelAnimationFrame(animationFrameIdRef);
     }
-    setDone(false);
-    setShadowBack(0);
-    setShadowFront(0);
-    setzIndex(1);
-    setDegrees(0);
+    batch(() => {
+      setDone(false);
+      setShadowBack(0);
+      setShadowFront(0);
+      setzIndex(1);
+      setDegrees(0);
+    });
     if (props.animating) {
       const tick = () => {
         const t = performance.now() - start - props.delay;
@@ -89,49 +91,53 @@ const Tick = (initialProps: {
             const shadowFront = 1 - Math.abs(visual_progress - 0.5) * 2;
             const highlightBack = 1 - (visual_progress - 0.5) / 0.5;
 
-            setShadowFront(shadowFront);
-            setHighlightBack(highlightBack);
+            batch(() => {
+              setShadowFront(shadowFront);
+              setHighlightBack(highlightBack);
 
-            if (visual_progress > 0.5 && visual_progress > 0) {
-              const shadowBack = easeOutCubic(visual_progress);
-              setShadowBack(shadowBack);
-            }
+              if (visual_progress > 0.5 && visual_progress > 0) {
+                const shadowBack = easeOutCubic(visual_progress);
+                setShadowBack(shadowBack);
+              }
 
-            if (visual_progress > 0.5 && !done()) {
-              setzIndex(10);
-            } else {
-              setzIndex(1);
-            }
+              if (visual_progress > 0.5 && !done()) {
+                setzIndex(10);
+              } else {
+                setzIndex(1);
+              }
 
-            setDegrees(visual_progress * -180);
+              setDegrees(visual_progress * -180);
 
-            let shadowProgress = 0;
-            let dist = 1;
+              let shadowProgress = 0;
+              let dist = 1;
 
-            let d = Math.abs(visual_progress - 0.5);
-            if (d < dist) {
-              dist = d;
-              shadowProgress = visual_progress;
-            }
+              let d = Math.abs(visual_progress - 0.5);
+              if (d < dist) {
+                dist = d;
+                shadowProgress = visual_progress;
+              }
 
-            let s =
-              shadowProgress < 0.5
-                ? easeOutSine(shadowProgress / 0.5)
-                : easeOutSine((1 - shadowProgress) / 0.5);
-            setShadowCard(s);
-            setShadowCardScaleY(s);
+              let s =
+                shadowProgress < 0.5
+                  ? easeOutSine(shadowProgress / 0.5)
+                  : easeOutSine((1 - shadowProgress) / 0.5);
+              setShadowCard(s);
+              setShadowCardScaleY(s);
+            });
           }
           animationFrameIdRef = requestAnimationFrame(tick);
         }
       };
       tick();
     } else {
-      setDone(true);
-      setShadowBack(1);
-      setShadowFront(0);
-      setHighlightBack(0);
-      setzIndex(10);
-      setDegrees(-180);
+      batch(() => {
+        setDone(true);
+        setShadowBack(1);
+        setShadowFront(0);
+        setHighlightBack(0);
+        setzIndex(10);
+        setDegrees(-180);
+      });
     }
   };
 

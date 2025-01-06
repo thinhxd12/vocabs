@@ -396,13 +396,15 @@ const Vocab: Component<{}> = (props) => {
           </div>
         </div>
 
-        <div class="no-scrollbar h-content w-full overflow-y-scroll">
-          <Show when={vocabStore.renderWord}>
-            <Definition
-              item={vocabStore.renderWord!}
-              onEdit={handleEditFromDefinition}
-            />
-          </Show>
+        <div class="h-content w-full overflow-hidden pb-2">
+          <div class="no-scrollbar h-full w-full overflow-y-scroll">
+            <Show when={vocabStore.renderWord}>
+              <Definition
+                item={vocabStore.renderWord!}
+                onEdit={handleEditFromDefinition}
+              />
+            </Show>
+          </div>
         </div>
 
         {/* translate */}
