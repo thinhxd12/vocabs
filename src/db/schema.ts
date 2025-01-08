@@ -9,8 +9,8 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
-import { VocabularyDefinitionType, VocabularyTranslationType } from "~/types";
 import { v7 as uuidv7 } from "uuid";
+import { VocabMeaningType } from "~/types";
 
 export const vocabTable = pgTable("vocab_table", {
   id: uuid("id").notNull().primaryKey().$defaultFn(uuidv7),
@@ -18,12 +18,7 @@ export const vocabTable = pgTable("vocab_table", {
   phonetics: text("phonetics").notNull(),
   number: smallint("number").notNull().default(240),
   audio: text("audio").notNull(),
-  translations: jsonb("translations")
-    .$type<VocabularyTranslationType[]>()
-    .notNull(),
-  definitions: jsonb("definitions")
-    .$type<VocabularyDefinitionType[]>()
-    .notNull(),
+  meanings: jsonb("meanings").$type<VocabMeaningType[]>().notNull(),
 });
 
 export const scheduleTable = pgTable("schedule_table", {

@@ -6,7 +6,6 @@ import {
   For,
   lazy,
   on,
-  onCleanup,
   onMount,
   Show,
   Suspense,
@@ -224,7 +223,7 @@ const Bookmark: Component<{}> = (props) => {
         if (v.status) {
           toast.success(v.data.message, {
             className: "text-4 font-sfpro",
-            position: "bottom-right",
+            position: "top-right",
           });
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
@@ -235,7 +234,7 @@ const Bookmark: Component<{}> = (props) => {
           }
         } else if (!v.status) {
           toast.error(v.data.message, {
-            position: "bottom-right",
+            position: "top-right",
             className: "text-4 font-sfpro",
           });
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
@@ -261,7 +260,7 @@ const Bookmark: Component<{}> = (props) => {
         if (v.status) {
           toast.success(v.data.message, {
             className: "text-4 font-sfpro",
-            position: "bottom-right",
+            position: "top-right",
           });
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
@@ -272,7 +271,7 @@ const Bookmark: Component<{}> = (props) => {
           }
         } else if (!v.status) {
           toast.error(v.data.message, {
-            position: "bottom-right",
+            position: "top-right",
             className: "text-4 font-sfpro",
           });
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");

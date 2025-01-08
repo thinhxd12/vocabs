@@ -112,6 +112,7 @@ export default function Layout(props: RouteSectionProps) {
       } else if (e.key === " ") {
         value = "";
         setVocabStore("searchTerm", value);
+        setVocabStore("searchTermColor", true);
         handleCloseDialogSearch();
         return;
       } else if (e.key.match(/^[a-zA-Z\-]$/)) {
@@ -190,7 +191,7 @@ export default function Layout(props: RouteSectionProps) {
     if (res.status) {
       toast.success("Successfully deleted!", {
         className: "text-4 font-sfpro",
-        position: "bottom-right",
+        position: "top-right",
       });
       setAudioSrc("/assets/sounds/mp3_Ding.mp3");
       if (audioRef) {
@@ -201,7 +202,7 @@ export default function Layout(props: RouteSectionProps) {
       }
     } else {
       toast.error(res.data, {
-        position: "bottom-right",
+        position: "top-right",
         className: "text-4 font-sfpro",
       });
       setAudioSrc("/assets/sounds/mp3_Boing.mp3");

@@ -44,20 +44,20 @@
 }
 
 .definition-example {
-  @apply pb-2 pl-[5px] pr-1 pt-1 indent-6 font-opensans text-4.5 font-400 leading-7.5 text-black;
+  @apply bg-white;
 }
 
 .definition-example b,
 .definition-example em {
-  @apply px-1.5 py-0.5 indent-6 font-opensans text-4.5 font-700 leading-7.5 text-black;
+  font-weight: 500;
+  font-style: normal;
   animation: textAnimate 0.1s linear forwards;
-  animation-delay: 3s;
+  animation-delay: 2.5s;
 }
 
 @keyframes textAnimate {
   to {
     color: #f90000;
-    background: #000000;
   }
 }
 
@@ -66,7 +66,7 @@
 }
 
 .definition-credit span {
-  @apply bg-[#ededed4d] px-1 pt-0.5 font-sfpro text-[13px] font-500 leading-[17px] text-black;
+  @apply bg-white/30 px-1 pt-0.5 font-sfpro text-[13px] font-500 leading-[17px] text-black;
 }
 
 .definition-credit > span:first-child {

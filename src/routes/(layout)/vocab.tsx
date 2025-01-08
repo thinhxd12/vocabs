@@ -3,13 +3,11 @@ import {
   Component,
   createEffect,
   createSignal,
-  lazy,
   on,
   onCleanup,
   Show,
 } from "solid-js";
 import Definition from "~/components/Definition";
-import { VocabularyDefinitionType, VocabularyTranslationType } from "~/types";
 import { OcSearch2, OcX2 } from "solid-icons/oc";
 import { BiRegularBandAid, BiSolidSave } from "solid-icons/bi";
 import {
@@ -21,6 +19,7 @@ import {
 } from "~/lib/store";
 import {
   editVocabularyItem,
+  getOldWordData,
   getTextDataWebster,
   getTotalMemories,
   getTranslateData,
@@ -37,7 +36,7 @@ import { debounce } from "@solid-primitives/scheduled";
 import toast from "solid-toast";
 import FlipCard from "~/components/FlipCard";
 import { InsertVocab } from "~/db/schema";
-const Collapsible = lazy(() => import("~/components/Collapsible"));
+import { VocabExampleType, VocabMeaningType } from "~/types";
 
 const Vocab: Component<{}> = (props) => {
   // ***************check login**************
@@ -75,22 +74,22 @@ const Vocab: Component<{}> = (props) => {
     if (data) {
       setEditWordGet({
         ...vocabStore.editWord!,
-        definitions: data!.definitions,
+        meanings: data!.meanings,
       });
       setVocabStore("editWord", {
         ...vocabStore.editWord!,
-        definitions: data!.definitions,
+        meanings: data!.meanings,
         phonetics: data!.phonetics,
         audio: data!.audio,
       });
     }
   };
 
-  const makeTranslationText = (arr: VocabularyTranslationType[]) => {
+  const makeTranslationText = (arr: VocabMeaningType[]) => {
     return arr
       .map((item) => {
         let part = item.partOfSpeech;
-        let mean = item.translations.join("-");
+        let mean = item.translation.join("-");
         return " -" + part + "-" + mean;
       })
       .join("");
@@ -103,17 +102,10 @@ const Vocab: Component<{}> = (props) => {
     setVocabStore("showEdit", true);
   };
 
-  const getEditWordDefinition = async () => {
-    if (vocabStore.editWord!.word !== editWordGet()?.word) {
-      const data = await getTextDataWebster(vocabStore.editWord!.word);
-      if (data) setEditWordGet(data);
-    }
-  };
-
   const handleCheckEdit = () => {
     setVocabStore("editWord", {
       ...vocabStore.editWord,
-      definitions: editWordGet()?.definitions!,
+      meanings: editWordGet()?.meanings!,
       phonetics: editWordGet()?.phonetics!,
     });
   };
@@ -128,7 +120,7 @@ const Vocab: Component<{}> = (props) => {
         if (v.status) {
           toast.success(v.data.message, {
             className: "text-4 font-sfpro",
-            position: "bottom-right",
+            position: "top-right",
           });
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
@@ -142,7 +134,7 @@ const Vocab: Component<{}> = (props) => {
           }
         } else if (!v.status) {
           toast.error(v.data.message, {
-            position: "bottom-right",
+            position: "top-right",
             className: "text-4 font-sfpro",
           });
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
@@ -163,38 +155,71 @@ const Vocab: Component<{}> = (props) => {
     setVocabStore("showEdit", open);
   };
 
-  const handleFixDefinition = () => {
-    const definition = JSON.parse(
-      JSON.stringify(vocabStore.editWord?.definitions),
-    ) as VocabularyDefinitionType[];
-    if (definition) {
-      const definitionFixed = JSON.stringify(definition).replace("&emsp;", "");
-      const definitionFixedFull = definition.map((item, index) => {
-        const getDefinition = editWordGet()?.definitions.find(
-          (m) => m.partOfSpeech === item.partOfSpeech,
-        )?.definitions;
+  const handleFixDefinition = async () => {
+    type FilterType = {
+      partOfSpeech: string;
+      image: string;
+      hash: string;
+      example: VocabExampleType;
+      translation: string[];
+    };
 
-        const fixDefinitions = item.definitions.map((d, i) => {
-          return {
-            ...d,
-            definition: getDefinition
-              ? getDefinition[i].definition
-              : d.definition,
-          };
-        });
+    const data = (await getOldWordData(
+      vocabStore.editWord!.word,
+    )) as FilterType[];
 
+    const coppyMeaning: VocabMeaningType[] = JSON.parse(
+      JSON.stringify(vocabStore.editWord!.meanings),
+    );
+
+    const newWord = coppyMeaning.map((item) => {
+      const dataexample = data.find(
+        (el) => el.partOfSpeech === item.partOfSpeech,
+      );
+      if (dataexample) {
+        if (dataexample.example)
+          item.definitions[0].example = dataexample.example;
+        item.definitions[0].hash = dataexample.hash;
+        item.definitions[0].image = dataexample.image;
+        if (dataexample.translation.length)
+          item.translation = dataexample.translation;
+      }
+      return { ...item };
+    });
+    setEditWordGet({ ...editWordGet()!, meanings: newWord! });
+
+    setVocabStore("editWord", {
+      ...vocabStore.editWord,
+      meanings: newWord!,
+    });
+  };
+
+  const handleChangeTranslationEdit = (str: string) => {
+    const arr = getTranslationArr(str);
+    if (!arr) return;
+    setVocabStore("editWord", {
+      ...vocabStore.editWord!,
+      meanings: vocabStore.editWord!.meanings.map((item, index) => {
         return {
           ...item,
-          definitions: fixDefinitions,
+          translation:
+            arr.find((el) => el?.partOfSpeech === item.partOfSpeech)
+              ?.translations || [],
         };
-      });
-      setVocabStore("editWord", {
-        ...vocabStore.editWord!,
-        definitions: definitionFixedFull
-          ? definitionFixedFull
-          : JSON.parse(definitionFixed),
-      });
-    }
+      }),
+    });
+  };
+
+  const handleChangeMeaningEdit = (str: string) => {
+    const newMeanings = JSON.parse(str);
+    setEditWordGet({
+      ...editWordGet()!,
+      meanings: newMeanings,
+    });
+    setVocabStore("editWord", {
+      ...vocabStore.editWord!,
+      meanings: newMeanings,
+    });
   };
 
   //////////////////////translate////////////////////////////
@@ -202,8 +227,7 @@ const Vocab: Component<{}> = (props) => {
     word: "",
     audio: "",
     phonetics: "",
-    translations: [],
-    definitions: [],
+    meanings: [],
   });
 
   const insertActionResult = useSubmission(insertVocabularyItem);
@@ -216,7 +240,7 @@ const Vocab: Component<{}> = (props) => {
         if (v.status) {
           toast.success(v.data.message, {
             className: "text-4 font-sfpro",
-            position: "bottom-right",
+            position: "top-right",
           });
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
@@ -227,7 +251,7 @@ const Vocab: Component<{}> = (props) => {
           }
         } else if (!v.status) {
           toast.error(v.data.message, {
-            position: "bottom-right",
+            position: "top-right",
             className: "text-4 font-sfpro",
           });
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
@@ -247,7 +271,7 @@ const Vocab: Component<{}> = (props) => {
     const result = await searchMemoriesText(word);
     if (result.status) {
       toast.error(result.message, {
-        position: "bottom-right",
+        position: "top-right",
         className: "text-4 font-sfpro",
       });
       setAudioSrc("/assets/sounds/mp3_Boing.mp3");
@@ -265,26 +289,45 @@ const Vocab: Component<{}> = (props) => {
     if (data[0]) {
       setTranslateWord({
         ...translateWord()!,
-        definitions: data[0].definitions,
+        meanings: data[0].meanings.map((item, index) => {
+          if (index === 0)
+            item.translation = [data[1]?.translation.toLowerCase() || ""];
+          return {
+            ...item,
+          };
+        }),
         phonetics: data[0].phonetics,
         audio: data[0].audio,
-        translations: [
-          {
-            partOfSpeech: "noun",
-            translations: [data[1]?.translation || ""],
-          },
-        ],
       });
     }
   };
+
+  const handleChangeTranslationTranslate = (str: string) => {
+    const arr = getTranslationArr(str);
+    if (!arr) return;
+    setTranslateWord({
+      ...translateWord()!,
+      meanings: translateWord().meanings.map((item, index) => {
+        return {
+          ...item,
+          translation:
+            arr.find((el) => el?.partOfSpeech === item.partOfSpeech)
+              ?.translations || [],
+        };
+      }),
+    });
+  };
+
+  //////////////////////Vocab////////////////////////////
 
   createEffect(
     on(
       () => vocabStore.renderWord?.audio,
       (v) => {
-        const translations = vocabStore.renderWord?.translations
-          .map((item) => item.translations.join(", "))
+        const translations = vocabStore.renderWord?.meanings
+          .flatMap((item) => item.translation)
           .join(", ");
+
         const tranSound = `https://vocabs3.vercel.app/speech?text=${translations}`;
 
         setAudioSrc1(v as string);
@@ -295,12 +338,14 @@ const Vocab: Component<{}> = (props) => {
           });
 
           audioRef1.addEventListener("ended", () => {
-            setAudioSrc2(tranSound);
-            if (audioRef2) {
-              audioRef2.load();
-              audioRef2.addEventListener("canplaythrough", () => {
-                audioRef2.play();
-              });
+            if (translations) {
+              setAudioSrc2(tranSound);
+              if (audioRef2) {
+                audioRef2.load();
+                audioRef2.addEventListener("canplaythrough", () => {
+                  audioRef2.play();
+                });
+              }
             }
           });
         }
@@ -483,25 +528,25 @@ const Vocab: Component<{}> = (props) => {
 
                 <input
                   hidden
-                  name="definitions"
+                  name="meanings"
                   autocomplete="off"
-                  value={JSON.stringify(translateWord()?.definitions)}
+                  value={JSON.stringify(translateWord()?.meanings)}
                 />
 
                 <textarea
-                  class="no-scrollbar mt-8 w-full rounded-2 border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none ring-1 ring-white/30"
-                  name="definitions"
+                  class="mt-8 w-full rounded-2 border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none ring-1 ring-white/30"
+                  name="meaningsEdit"
                   autocomplete="off"
                   rows="12"
                   value={JSON.stringify(
-                    translateWord()?.definitions,
+                    translateWord()?.meanings,
                     null,
                     "     ",
                   )}
                   onChange={(e) => {
                     setTranslateWord({
                       ...translateWord()!,
-                      definitions: JSON.parse(e.currentTarget.value),
+                      meanings: JSON.parse(e.currentTarget.value),
                     });
                   }}
                 />
@@ -510,13 +555,10 @@ const Vocab: Component<{}> = (props) => {
                   class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
                   name="meaning"
                   autocomplete="off"
-                  value={makeTranslationText(translateWord()?.translations!)}
+                  value={makeTranslationText(translateWord()?.meanings)}
                   onChange={(e) => {
                     e.preventDefault();
-                    setTranslateWord({
-                      ...translateWord()!,
-                      translations: getTranslationArr(e.currentTarget.value),
-                    });
+                    handleChangeTranslationTranslate(e.currentTarget.value);
                   }}
                 />
 
@@ -538,7 +580,6 @@ const Vocab: Component<{}> = (props) => {
         <Dialog
           open={vocabStore.showEdit}
           onOpenChange={(open) => handleCloseDialogEdit(open)}
-          onInitialFocus={getEditWordDefinition}
         >
           <Dialog.Portal>
             <Dialog.Content
@@ -617,30 +658,23 @@ const Vocab: Component<{}> = (props) => {
 
                 <input
                   hidden
-                  name="definitions"
+                  name="meanings"
                   autocomplete="off"
-                  value={JSON.stringify(vocabStore.editWord?.definitions)}
+                  value={JSON.stringify(vocabStore.editWord?.meanings)}
                 />
 
                 <textarea
-                  class="no-scrollbar mt-8 w-full rounded-2 border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none ring-1 ring-white/30"
-                  name="definitions"
+                  class="mt-8 w-full rounded-2 border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none ring-1 ring-white/30"
+                  name="meaningsEdit"
                   autocomplete="off"
                   rows="12"
                   value={JSON.stringify(
-                    vocabStore.editWord?.definitions,
+                    vocabStore.editWord?.meanings,
                     null,
                     "     ",
                   )}
                   onChange={(e) => {
-                    setVocabStore("editWord", {
-                      ...vocabStore.editWord!,
-                      definitions: JSON.parse(e.currentTarget.value),
-                    });
-                    setEditWordGet({
-                      ...vocabStore.editWord!,
-                      definitions: JSON.parse(e.currentTarget.value),
-                    });
+                    handleChangeMeaningEdit(e.currentTarget.value);
                   }}
                 />
 
@@ -648,15 +682,10 @@ const Vocab: Component<{}> = (props) => {
                   class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
                   name="meaning"
                   autocomplete="off"
-                  value={makeTranslationText(
-                    vocabStore.editWord?.translations!,
-                  )}
+                  value={makeTranslationText(vocabStore.editWord?.meanings!)}
                   onChange={(e) => {
                     e.preventDefault();
-                    setVocabStore("editWord", {
-                      ...vocabStore.editWord!,
-                      translations: getTranslationArr(e.currentTarget.value),
-                    });
+                    handleChangeTranslationEdit(e.currentTarget.value);
                   }}
                 />
 

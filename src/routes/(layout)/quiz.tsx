@@ -145,8 +145,8 @@ const Quiz: Component<{}> = (props) => {
 
                 <div class="relative z-30 flex min-h-11 w-full items-center bg-black/60 shadow-lg shadow-black/60 backdrop-blur-xl">
                   <p class="w-full px-1 pb-1.5 text-center text-5 font-400 leading-7 text-white">
-                    {quizStore.quizRender?.translations
-                      .map((tran) => tran.translations.join(", "))
+                    {quizStore.quizRender?.meanings
+                      .flatMap((item) => item.translation)
                       .join(", ")}
                   </p>
                 </div>

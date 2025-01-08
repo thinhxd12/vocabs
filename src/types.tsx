@@ -3,31 +3,36 @@ export interface VocabularySearchType {
   word: string;
 }
 
-export interface VocabularyTranslationType {
-  partOfSpeech: string;
-  translations: string[];
+export interface VocabType {
+  id: string;
+  word: string;
+  phonetics: string;
+  number: number;
+  audio: string;
+  meanings: VocabMeaningType[];
 }
 
-export interface VocabularyDefinitionType {
+export interface VocabMeaningType {
   partOfSpeech: string;
-  definitions: DefinitionType[];
-  synonyms: string;
-  example: ExampleType[];
+  definitions: VocabDefinitionsType[];
+  synonyms: string[];
+  translation: string[];
 }
 
-export interface DefinitionType {
-  definition: DefinitionSenseType[];
+export interface VocabDefinitionsType {
   image: string;
   hash: string;
+  definition: VocabDefinitionType[];
+  example: VocabExampleType;
 }
 
-export interface DefinitionSenseType {
-  letter?: string;
-  num?: string;
+export interface VocabDefinitionType {
+  num: string;
   sense: string;
+  letter: string;
 }
 
-export interface ExampleType {
+export interface VocabExampleType {
   sentence: string;
   author: string;
   title: string;

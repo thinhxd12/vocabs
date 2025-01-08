@@ -2,17 +2,16 @@ import { action, query } from "@solidjs/router";
 import {
   CalendarType,
   CurrentlyWeatherType,
-  DefinitionSenseType,
-  DefinitionType,
-  ExampleType,
   FixMinutelyTWeatherType,
   HourlyWeatherType,
   LayoutImageType,
   LoginImageType,
   MinutelyWeatherType,
   TranslateType,
+  VocabDefinitionsType,
+  VocabExampleType,
+  VocabMeaningType,
   VocabularySearchType,
-  VocabularyTranslationType,
 } from "~/types";
 import { PRECIPITATION_PROBABILITY, REPETITION_PATTERN } from "~/lib/utils";
 import { navStore, setNavStore, setVocabStore } from "./store";
@@ -79,6 +78,7 @@ import {
   updateVocabById,
 } from "~/db/queries/update";
 import { db } from "~/db";
+import { supabase } from "./supabase";
 
 ////// Layoutpage //////
 
@@ -271,6 +271,7 @@ export const searchText = async (text: SelectVocab["word"]) => {
 export const handleCheckAndRender = async (text: VocabularySearchType) => {
   const wordData = await getWordData(text.id);
   if (wordData) {
+    setVocabStore("renderWord", undefined);
     setVocabStore("renderWord", wordData);
 
     if (wordData.number > 1) {
@@ -340,7 +341,7 @@ export const getTranslationArr = (str: string) => {
           : [],
       };
     }
-  }) as VocabularyTranslationType[];
+  });
   return matchesMean;
 };
 
@@ -349,15 +350,12 @@ export const editVocabularyItem = action(async (formData: FormData) => {
   const wordT = String(formData.get("word"));
   const audioT = String(formData.get("audio"));
   const phoneticsT = String(formData.get("phonetics"));
-  const definitionsT = JSON.parse(String(formData.get("definitions")));
+  const meaningsT = JSON.parse(String(formData.get("meanings")));
   const numberT = Number(formData.get("number"));
   const idT = String(formData.get("id"));
-  const meaningT = String(formData.get("meaning"));
-  const translationsT = getTranslationArr(meaningT);
 
   if (
-    definitionsT.length === 0 ||
-    translationsT.length === 0 ||
+    meaningsT.length === 0 ||
     wordT === "" ||
     audioT === "" ||
     phoneticsT === ""
@@ -374,14 +372,18 @@ export const editVocabularyItem = action(async (formData: FormData) => {
     audio: audioT,
     phonetics: phoneticsT,
     number: numberT,
-    translations: translationsT,
-    definitions: definitionsT,
+    meanings: meaningsT,
     id: idT,
   };
 
   const result = await updateVocabById(editedWord);
   return result;
 });
+
+export const editVocabularyById = async (editWord: SelectVocab) => {
+  "use server";
+  await updateVocabById(editWord);
+};
 
 export const getTextDataWebster = query(async (text: string) => {
   "use server";
@@ -392,14 +394,8 @@ export const getTextDataWebster = query(async (text: string) => {
     word: "",
     audio: "",
     phonetics: "",
-    translations: [],
-    definitions: [],
+    meanings: [],
   };
-
-  interface ExampleExtendType {
-    type: string;
-    content: ExampleType;
-  }
 
   try {
     const data = await Promise.all([fetchGetText(url), getOedSoundURL(text)]);
@@ -410,24 +406,37 @@ export const getTextDataWebster = query(async (text: string) => {
 
     //Definitions
     $('div[id^="dictionary-entry-"]').each((index, element) => {
+      let meaning: VocabMeaningType = {
+        partOfSpeech: "",
+        definitions: [],
+        synonyms: [],
+        translation: [],
+      };
       const partOfSpeech = $(element)
         .find(".parts-of-speech a")
         .first()
         .text()
         .split(" ")[0];
-      let definitions: DefinitionType[] = [];
-      let synonyms = "";
-      let example: ExampleType[] = [];
 
-      let firstDefinition: DefinitionType = {
-        image: "",
-        hash: "",
+      meaning.partOfSpeech = partOfSpeech;
+      meaning.definitions = [];
+      meaning.synonyms = [];
+      meaning.translation = [];
+
+      let dummyDefinition: VocabDefinitionsType = {
         definition: [],
+        example: {
+          author: "",
+          sentence: "",
+          title: "",
+          year: "",
+        },
+        hash: "",
+        image: "",
       };
 
       let definitionItems = $(element).find(".vg-sseq-entry-item").first();
       definitionItems.each((index, element) => {
-        let senseArray: DefinitionSenseType[] = [];
         $(element)
           .find(".sb-entry")
           .each((ind, item) => {
@@ -441,17 +450,15 @@ export const getTextDataWebster = query(async (text: string) => {
                   .text()
                   .trim()
                   .replace(/[\n\r]+|\s{2,}/g, " ");
-                senseArray.push({ letter, num, sense });
+                dummyDefinition.definition.push({ letter, num, sense });
               });
           });
-        firstDefinition.definition = senseArray;
+        meaning.definitions.push(dummyDefinition);
       });
-
-      definitions.push(firstDefinition);
-      result.definitions.push({ partOfSpeech, definitions, synonyms, example });
+      result.meanings.push(meaning);
     });
 
-    result.definitions = result.definitions.reduce((acc: any, d: any) => {
+    result.meanings = result.meanings.reduce((acc: any, d: any) => {
       const found = acc.find((a: any) => a.partOfSpeech === d.partOfSpeech);
       if (!found) {
         acc.push(d);
@@ -465,7 +472,7 @@ export const getTextDataWebster = query(async (text: string) => {
     let synonymArray: { type: string; content: string[] }[] = [];
     const synonymTitle = $("#synonyms").find(".function-label");
     if (!synonymTitle.text()) {
-      let type = result.definitions[0].partOfSpeech;
+      let type = result.meanings[0].partOfSpeech;
       let content: any = [];
       $("#synonyms")
         .find("li")
@@ -488,11 +495,16 @@ export const getTextDataWebster = query(async (text: string) => {
         synonymArray.push({ type, content });
       });
     }
+
     //Example
-    let exampleArray: ExampleExtendType[] = [];
+
+    let exampleArray: {
+      type: string;
+      content: VocabExampleType;
+    }[] = [];
     const exampleTitle = $(".on-web").find(".function-label-header");
     if (!exampleTitle.text()) {
-      let type = result.definitions[0].partOfSpeech;
+      let type = result.meanings[0].partOfSpeech;
       let sentence =
         $(".on-web").find(".t").first().html()?.replace(" </em>", "</em> ") ||
         "";
@@ -529,19 +541,23 @@ export const getTextDataWebster = query(async (text: string) => {
       });
     }
 
-    result.definitions = result.definitions.map((item) => {
-      const example = exampleArray.find(
-        (el) => el.type === item.partOfSpeech,
-      )?.content;
+    result.meanings = result.meanings.map((item) => {
       return {
         ...item,
         synonyms:
-          synonymArray
-            .find((el) => el.type === item.partOfSpeech)
-            ?.content.join(", ") || "",
-        example: example ? [example] : [],
+          synonymArray.find((el) => el.type === item.partOfSpeech)?.content ||
+          [],
+        definitions: item.definitions.map((el, ind) => {
+          if (ind === 0) {
+            el.example =
+              exampleArray.find((el) => el.type === item.partOfSpeech)
+                ?.content || el.example;
+          }
+          return { ...el };
+        }),
       };
     });
+
     return result;
   } catch (error) {
     console.error(error);
@@ -580,6 +596,8 @@ export const getOedSoundURL = async (text: string) => {
     }
   }
   return oxfordResultUrl;
+
+  return "";
 };
 
 export const getTotalMemories = query(async () => {
@@ -602,13 +620,10 @@ export const insertVocabularyItem = action(async (formData: FormData) => {
   const wordT = String(formData.get("word"));
   const audioT = String(formData.get("audio"));
   const phoneticsT = String(formData.get("phonetics"));
-  const definitionsT = JSON.parse(String(formData.get("definitions")));
-  const meaningT = String(formData.get("meaning"));
-  const translationsT = getTranslationArr(meaningT);
+  const meaningsT = JSON.parse(String(formData.get("meanings")));
 
   if (
-    definitionsT.length === 0 ||
-    translationsT.length === 0 ||
+    meaningsT.length === 0 ||
     wordT === "" ||
     audioT === "" ||
     phoneticsT === ""
@@ -624,8 +639,7 @@ export const insertVocabularyItem = action(async (formData: FormData) => {
     word: wordT,
     audio: audioT,
     phonetics: phoneticsT,
-    translations: translationsT,
-    definitions: definitionsT,
+    meanings: meaningsT,
   };
 
   const result = await insertVocab(insertWord);
@@ -1191,4 +1205,49 @@ export const findBookMarkData = async (val: string) => {
   "use server";
   const data = await findTextBookmark(val);
   if (data) return data;
+};
+
+// export const getAllvocab = async () => {
+//   "use server";
+//   const { data } = await supabase.from("vocab_table").select().order("id");
+//   if (!data) return;
+//   for (let i = 0; i < data.length; i++) {
+//     const row = data[i];
+//     const { error } = await supabase.from("history_duplicate").insert(row);
+
+//     if (error) console.log("Error:", error);
+//     else console.log(`Row ${i} inserted`);
+//   }
+//   if (data) return data;
+// };
+
+export const getOldWordData = async (word: string) => {
+  "use server";
+  const { data } = (await supabase
+    .from("vocab_table_duplicate")
+    .select("definitions,translations")
+    .eq("word", word)) as any;
+  if (!data) return;
+
+  type FilterType = {
+    partOfSpeech: string;
+    image: string;
+    hash: string;
+    example: VocabExampleType;
+    translation: { partOfSpeech: string; translations: string[] };
+  };
+
+  const result = data[0].definitions.map((item: any, index: number) => {
+    const translate = data[0].translations.find(
+      (el: any) => el.partOfSpeech == item.partOfSpeech,
+    );
+    return {
+      partOfSpeech: item.partOfSpeech,
+      image: item.definitions.find((el: any) => el.image !== "")?.image || "",
+      hash: item.definitions.find((el: any) => el.image !== "")?.hash || "",
+      example: item.example[0],
+      translation: translate ? translate.translations : [],
+    } as FilterType;
+  });
+  return result;
 };

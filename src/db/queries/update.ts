@@ -27,8 +27,7 @@ export const updateVocabById = async (data: SelectVocab) => {
         audio: data.audio,
         phonetics: data.phonetics,
         number: data.number,
-        translations: data.translations,
-        definitions: data.definitions,
+        meanings: data.meanings,
       })
       .where(eq(vocabTable.id, data.id));
     return {

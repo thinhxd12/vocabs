@@ -24,6 +24,7 @@ import {
   handleCheckAndRender,
   getTodaySchedule,
   updateTodayScheduleLocal,
+  getWordData,
 } from "~/lib/server";
 import { CurrentlyWeatherType } from "~/types";
 import { WMOCODE } from "~/lib/utils";
@@ -39,6 +40,7 @@ import {
 } from "solid-icons/ri";
 import { VsSymbolColor, VsTarget } from "solid-icons/vs";
 import { FiBookOpen } from "solid-icons/fi";
+import { FaSolidFeather } from "solid-icons/fa";
 
 const Nav: Component<{
   changeBackground: () => {};
@@ -247,6 +249,18 @@ const Nav: Component<{
   };
 
   // -------------------AUTOPLAY END-------------------- //
+
+  const handleShowEditCurrentWord = async () => {
+    const id =
+      navStore.listContent.length > 0 && quizStore.quizRender
+        ? quizStore.quizRender?.id
+        : vocabStore.renderWord?.id;
+    if (!id) return;
+    const data = await getWordData(id);
+    if (!data) return;
+    setVocabStore("editWord", data);
+    setVocabStore("showEdit", true);
+  };
 
   return (
     <>
@@ -512,6 +526,11 @@ const Nav: Component<{
         <button class="btn-nav-menu" onClick={props.changeBackground}>
           <VsTarget size={15} />
         </button>
+
+        <button class="btn-nav-menu" onClick={handleShowEditCurrentWord}>
+          <FaSolidFeather size={15} />
+        </button>
+
         <button
           class={`btn-nav-menu-timer ${showTimer() ? "bg-white/15" : ""}`}
           onClick={startOrStopCountdown}

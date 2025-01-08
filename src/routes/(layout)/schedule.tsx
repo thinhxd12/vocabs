@@ -102,7 +102,7 @@ const Schedule: Component<{}> = (props) => {
         if (v.status) {
           toast.success(v.message, {
             className: "text-4 font-sfpro",
-            position: "bottom-right",
+            position: "top-right",
           });
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
@@ -113,7 +113,7 @@ const Schedule: Component<{}> = (props) => {
           }
         } else if (!v.status) {
           toast.error(v.message, {
-            position: "bottom-right",
+            position: "top-right",
             className: "text-4 font-sfpro",
           });
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
@@ -140,7 +140,7 @@ const Schedule: Component<{}> = (props) => {
         if (v.status) {
           toast.success(v.message, {
             className: "text-4 font-sfpro",
-            position: "bottom-right",
+            position: "top-right",
           });
           setAudioSrc("/assets/sounds/mp3_Ding.mp3");
           if (audioRef) {
@@ -152,7 +152,7 @@ const Schedule: Component<{}> = (props) => {
         } else if (!v.status) {
           toast.error(v.message, {
             className: "text-4 font-sfpro",
-            position: "bottom-right",
+            position: "top-right",
           });
           setAudioSrc("/assets/sounds/mp3_Boing.mp3");
           if (audioRef) {
