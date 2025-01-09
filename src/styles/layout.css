@@ -44,7 +44,9 @@
 }
 
 .definition-example {
-  @apply bg-white;
+  background: #fff none repeat scroll 0 0;
+  box-decoration-break: clone;
+  padding: 0 9px;
 }
 
 .definition-example b,
