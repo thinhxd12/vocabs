@@ -12,7 +12,7 @@ const Definition: Component<{
     <Show when={props.item.meanings}>
       <For each={props.item.meanings}>
         {(entry) => (
-          <div class="w-content mb-3 rounded-3 bg-white/15 shadow-sm shadow-black/45 backdrop-blur-xl">
+          <div class="w-content mb-3 overflow-hidden rounded-1 bg-white/15 py-1 shadow-sm shadow-black/45 backdrop-blur-xl">
             <div class="flex justify-between px-2">
               <span
                 class="cursor-pointer font-roslindale text-8 font-500"
@@ -29,7 +29,7 @@ const Definition: Component<{
               {(el) => (
                 <>
                   <Show when={el.image || el.example.sentence}>
-                    <div class="relative mb-3 flex min-h-[210px] w-full flex-col justify-between">
+                    <div class="relative mb-2 flex min-h-[210px] w-full flex-col justify-between">
                       <Show when={el.image}>
                         <ImageLoader
                           width={388}
