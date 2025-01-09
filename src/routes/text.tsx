@@ -127,7 +127,7 @@ const Text: Component<{}> = (props) => {
         src="https://res.public.onecdn.static.microsoft/creativeservice/03eaa581-ff4d-0bc4-b161-84295b10bcea_desktop-b004_cloudyvalleydolomites_adobestock_469430780_3840x2160_1689173699682.jpg"
       />
       <div class="w-main no-scrollbar absolute left-1/2 z-30 h-full -translate-x-1/2 overflow-y-scroll">
-        <For each={state()}>
+        {/* <For each={item.meanings}>
           {(entry) => (
             <div class="w-content light-layout mb-2 rounded-3">
               <div class="flex justify-between px-2">
@@ -206,7 +206,8 @@ const Text: Component<{}> = (props) => {
               </Show>
             </div>
           )}
-        </For>
+        </For> */}
+        <Definition item={item}/>
       </div>
     </div>
   );
