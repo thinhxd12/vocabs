@@ -43,10 +43,6 @@
   @apply border-y border-b-white/10 border-t-white/15 bg-black/45 shadow-md shadow-black/45 backdrop-blur-xl;
 }
 
-.definition {
-  @apply rounded-3 border-y border-b-white/10 border-t-white/15 bg-black/10 p-3 shadow-md shadow-black/30 backdrop-blur-lg;
-}
-
 .definition-example {
   background: #fff none repeat scroll 0 0;
   box-decoration-break: clone;
