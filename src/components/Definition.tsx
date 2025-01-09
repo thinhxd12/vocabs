@@ -28,7 +28,7 @@ const Definition: Component<{
             <For each={entry.definitions}>
               {(el) => (
                 <>
-                  <Show when={el.example.sentence}>
+                  <Show when={el.image || el.example.sentence}>
                     <div class="relative mb-3 flex min-h-[210px] w-full flex-col justify-between">
                       <Show when={el.image}>
                         <ImageLoader
@@ -40,14 +40,16 @@ const Definition: Component<{
                           className="!absolute !h-full !w-full object-cover brightness-75"
                         />
                       </Show>
-                      <div class="z-30 flex flex-1 items-center p-6">
-                        <h2 class="text-center text-6 leading-9">
-                          <span
-                            class="definition-example shadow shadow-black/30"
-                            innerHTML={el.example.sentence}
-                          ></span>
-                        </h2>
-                      </div>
+                      <Show when={el.example.sentence}>
+                        <div class="z-30 flex flex-1 items-center p-6">
+                          <h2 class="text-center text-6 leading-9">
+                            <span
+                              class="definition-example shadow shadow-black/30"
+                              innerHTML={el.example.sentence}
+                            ></span>
+                          </h2>
+                        </div>
+                      </Show>
 
                       <div class="definition-credit relative z-30">
                         <Show when={el.example.author}>
