@@ -596,8 +596,6 @@ export const getOedSoundURL = async (text: string) => {
     }
   }
   return oxfordResultUrl;
-
-  return "";
 };
 
 export const getTotalMemories = query(async () => {
