@@ -13,7 +13,7 @@ const Definition: Component<{
       <For each={props.item.meanings}>
         {(entry) => (
           <div class="w-content mb-3 overflow-hidden rounded-1 bg-white/35 py-1 shadow-sm shadow-black/45 backdrop-blur-xl">
-            <div class="flex justify-between px-2">
+            <div class="flex justify-between px-3">
               <span
                 class="cursor-pointer font-roslindale text-8 font-500"
                 onClick={props.onEdit || props.onCheck}
@@ -74,7 +74,7 @@ const Definition: Component<{
                   </Show>
                   <For each={el.definition}>
                     {(def) => (
-                      <p class="flex pl-1 text-4 font-500 leading-5">
+                      <p class="flex px-3 text-4 font-500 leading-5">
                         <span class="inline-block min-w-4 text-4 font-700 uppercase leading-4.5">
                           {def.letter}
                         </span>

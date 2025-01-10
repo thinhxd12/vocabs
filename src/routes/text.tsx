@@ -15,6 +15,7 @@ import {
   getOedSoundURL,
   getTextDataWebster,
   getTranslateData,
+  getTranslationArr,
 } from "~/lib/server";
 
 import { rgbaToThumbHash, thumbHashToDataURL } from "thumbhash";
@@ -42,15 +43,22 @@ const Text: Component<{}> = (props) => {
 
   const [state, setstate] = createSignal<VocabMeaningType[]>();
 
-  const notify = async () => {
-    const has = "aaaaaaaaaaaaaaaaaaaaa";
+  const makeTranslationText = (arr: VocabMeaningType[]) => {
+    return arr
+      .map((item) => {
+        let part = item.partOfSpeech;
+        let mean = item.translation.join("-");
+        return " -" + part + "-" + mean;
+      })
+      .join("");
+  };
 
-    const newItemMeaning = item.meanings.map((item) => {
-      item.definitions = item.definitions.map((el) => {
-        return { ...el, hash: el.image ? has : "" };
-      });
-      return { ...item };
-    });
+  const notify = async () => {
+    const has = makeTranslationText(item.meanings);
+
+    const newItemMeaning = getTranslationArr(has);
+    if (!newItemMeaning) return;
+    console.log(has);
     console.log(newItemMeaning);
   };
 
@@ -207,7 +215,7 @@ const Text: Component<{}> = (props) => {
             </div>
           )}
         </For> */}
-        <Definition item={item}/>
+        <Definition item={item} />
       </div>
     </div>
   );

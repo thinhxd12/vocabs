@@ -92,7 +92,7 @@ const Vocab: Component<{}> = (props) => {
         let mean = item.translation.join("-");
         return " -" + part + "-" + mean;
       })
-      .join("");
+      .join("") as string;
   };
 
   const handleEditFromDefinition = async () => {
@@ -526,16 +526,9 @@ const Vocab: Component<{}> = (props) => {
                   }}
                 />
 
-                <input
-                  hidden
-                  name="meanings"
-                  autocomplete="off"
-                  value={JSON.stringify(translateWord()?.meanings)}
-                />
-
                 <textarea
                   class="mt-8 w-full rounded-2 border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none ring-1 ring-white/30"
-                  name="meaningsEdit"
+                  name="meanings"
                   autocomplete="off"
                   rows="12"
                   value={JSON.stringify(
@@ -656,16 +649,9 @@ const Vocab: Component<{}> = (props) => {
                   }}
                 />
 
-                <input
-                  hidden
-                  name="meanings"
-                  autocomplete="off"
-                  value={JSON.stringify(vocabStore.editWord?.meanings)}
-                />
-
                 <textarea
                   class="mt-8 w-full rounded-2 border-0 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none ring-1 ring-white/30"
-                  name="meaningsEdit"
+                  name="meanings"
                   autocomplete="off"
                   rows="12"
                   value={JSON.stringify(
@@ -680,7 +666,7 @@ const Vocab: Component<{}> = (props) => {
 
                 <input
                   class="mb-1 w-full border-0 border-b border-white/30 bg-transparent p-1 text-4 font-400 leading-5 text-white outline-none"
-                  name="meaning"
+                  name="meaningInput"
                   autocomplete="off"
                   value={makeTranslationText(vocabStore.editWord?.meanings!)}
                   onChange={(e) => {
