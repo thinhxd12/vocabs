@@ -53,14 +53,7 @@
 .definition-example em {
   font-weight: 500;
   font-style: normal;
-  animation: textAnimate 0.1s linear forwards;
-  animation-delay: 2.5s;
-}
-
-@keyframes textAnimate {
-  to {
-    color: #f90000;
-  }
+  color: #f90000;
 }
 
 .definition-credit {
