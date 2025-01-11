@@ -7,6 +7,7 @@ import {
   onMount,
   Show,
   Suspense,
+  untrack,
 } from "solid-js";
 import toast, { Toaster } from "solid-toast";
 import {
@@ -41,7 +42,7 @@ const Text: Component<{}> = (props) => {
   let canvasHeight: number;
   let img: HTMLImageElement;
 
-  const [state, setstate] = createSignal<VocabMeaningType[]>();
+  const [state, setstate] = createSignal<number>(0);
 
   const makeTranslationText = (arr: VocabMeaningType[]) => {
     return arr
@@ -125,97 +126,54 @@ const Text: Component<{}> = (props) => {
     ],
   };
 
+  const [hundreds, setHundreds] = createSignal<number>(0);
+  const [tens, setTens] = createSignal<number>(0);
+  const [ones, setOnes] = createSignal<number>(0);
+
+  createEffect(() => {
+    const v = state();
+    untrack(() => {
+      setHundreds(Math.floor(v / 100));
+      setTens(Math.floor((v % 100) / 10));
+      setOnes(v % 10);
+    });
+  });
+
   return (
     <div class="relative h-screen w-screen">
       <div class="absolute z-30 flex items-start text-white">
-        <button onClick={notify}>run</button>
+        <button
+          onClick={() => setstate(100)}
+          class="mr-2 rounded-1 border px-1"
+        >
+          100
+        </button>
+        <button
+          onClick={() => setstate(127)}
+          class="mr-2 rounded-1 border px-1"
+        >
+          127
+        </button>
+        <button onClick={() => setstate(10)} class="mr-2 rounded-1 border px-1">
+          10
+        </button>
+        <button
+          onClick={() => setstate(223)}
+          class="mr-2 rounded-1 border px-1"
+        >
+          223
+        </button>
       </div>
       <img
         class="absolute z-10 h-full w-full object-cover brightness-90"
         src="https://res.public.onecdn.static.microsoft/creativeservice/03eaa581-ff4d-0bc4-b161-84295b10bcea_desktop-b004_cloudyvalleydolomites_adobestock_469430780_3840x2160_1689173699682.jpg"
       />
       <div class="w-main no-scrollbar absolute left-1/2 z-30 h-full -translate-x-1/2 overflow-y-scroll">
-        {/* <For each={item.meanings}>
-          {(entry) => (
-            <div class="w-content light-layout mb-2 rounded-3">
-              <div class="flex justify-between px-2">
-                <span class="font-roslindale text-8 font-500">
-                  {entry.partOfSpeech}
-                </span>
-                <span class="text-4.5 leading-6 opacity-0 hover:opacity-100">
-                  {entry.translation.join("-")}
-                </span>
-              </div>
-
-              <For each={entry.definitions}>
-                {(el) => (
-                  <>
-                    <Show when={el.example.sentence}>
-                      <div class="relative mb-3 flex min-h-[210px] w-full flex-col justify-between">
-                        <Show when={el.image}>
-                          <img
-                            class="absolute h-full w-full object-cover brightness-50"
-                            src={el.image}
-                          />
-                        </Show>
-                        <div class="z-30 flex flex-1 items-center p-6">
-                          <h2 class="text-center text-6 leading-9">
-                            <span
-                              class="definition-example"
-                              innerHTML={el.example.sentence}
-                            ></span>
-                          </h2>
-                        </div>
-
-                        <div class="definition-credit relative z-30">
-                          <span
-                            style={{
-                              "font-variant": "small-caps",
-                            }}
-                          >
-                            {el.example.author}
-                          </span>
-                          <span class="!font-700 uppercase">
-                            {el.example.title}
-                          </span>
-                          <span>{el.example.year}</span>
-                        </div>
-                      </div>
-                    </Show>
-                    <For each={el.definition}>
-                      {(def) => (
-                        <p class="flex pl-1 text-4.5 font-500 leading-6">
-                          <span class="mt-0.1 inline-block min-w-4 text-4.5 font-700 uppercase">
-                            {def.letter}
-                          </span>
-                          {def.num && (
-                            <small class="inline-block min-w-4 pr-0.5">
-                              {def.num}
-                            </small>
-                          )}
-                          <span>{def.sense}</span>
-                        </p>
-                      )}
-                    </For>
-                  </>
-                )}
-              </For>
-
-              <Show when={entry.synonyms.length}>
-                <div class="flex items-center justify-start px-1 pb-1 pt-0.1">
-                  <RiArrowsCornerDownRightFill
-                    size={16}
-                    class="ml-0.1 mr-0.5 mt-0.5"
-                  />
-                  <span class="text-4.5 font-500 leading-5.5 text-black">
-                    {entry.synonyms.join(", ")}
-                  </span>
-                </div>
-              </Show>
-            </div>
-          )}
-        </For> */}
-        <Definition item={item} />
+        <div class="relative flex font-helvetica text-[40px] font-600 leading-[36px]">
+          <Tick number={hundreds()} delay={300} />
+          <Tick number={tens()} delay={150} />
+          <Tick number={ones()} image={state() === 1} />
+        </div>
       </div>
     </div>
   );

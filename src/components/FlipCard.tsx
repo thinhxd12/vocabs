@@ -19,22 +19,9 @@ const FlipCard: Component<{
 
   return (
     <div class="relative flex font-helvetica text-[40px] font-600 leading-[36px]">
-      <Tick
-        number={props.number % 100 === 0 ? hundreds() : hundreds() + 1}
-        animating={props.number % 100 === 0}
-        delay={1800}
-      />
-      <Tick
-        number={props.number % 10 === 0 ? tens() : tens() + 1}
-        animating={props.number % 10 === 0}
-        delay={1650}
-      />
-      <Tick
-        number={ones()}
-        animating={true}
-        delay={1500}
-        image={props.number === 1}
-      />
+      <Tick number={hundreds()} delay={300} />
+      <Tick number={tens()} delay={150} />
+      <Tick number={ones()} image={props.number === 0} />
     </div>
   );
 };

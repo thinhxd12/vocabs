@@ -320,6 +320,8 @@ const Vocab: Component<{}> = (props) => {
 
   //////////////////////Vocab////////////////////////////
 
+  const [flipNumber, setFlipNumber] = createSignal<number>(0);
+
   createEffect(
     on(
       () => vocabStore.renderWord?.audio,
@@ -330,6 +332,7 @@ const Vocab: Component<{}> = (props) => {
 
         const tranSound = `https://vocabs3.vercel.app/speech?text=${translations}`;
 
+        setFlipNumber(vocabStore.renderWord?.number!);
         setAudioSrc1(v as string);
         if (audioRef1) {
           audioRef1.load();
@@ -344,6 +347,7 @@ const Vocab: Component<{}> = (props) => {
                 audioRef2.load();
                 audioRef2.addEventListener("canplaythrough", () => {
                   audioRef2.play();
+                  setFlipNumber(vocabStore.renderWord?.number! - 1);
                 });
               }
             }
@@ -390,14 +394,14 @@ const Vocab: Component<{}> = (props) => {
       <main class="h-main w-main relative flex flex-wrap">
         <div class="w-content flex h-12 items-center gap-2">
           <Show when={vocabStore.renderWord}>
-            <FlipCard number={vocabStore.renderWord!.number} />
+            <FlipCard number={flipNumber()} />
           </Show>
-          <div class="relative grow overflow-hidden rounded-1 bg-black/15 shadow-sm shadow-black/45 backdrop-blur-xl">
+          <div class="relative grow overflow-hidden rounded-1 bg-white/35 shadow-sm shadow-black/45 backdrop-blur-xl">
             <Show
               when={layoutStore.isMobile}
               fallback={
                 <p
-                  class={`h-[34px] w-full truncate pt-1 text-center align-baseline font-constantine text-7 font-700 uppercase leading-10 ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
+                  class={`h-11 w-full truncate pt-1 text-center align-baseline font-constantine text-7 font-700 uppercase leading-10 ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
                 >
                   {vocabStore.searchTerm || vocabStore.renderWord?.word}
                   <small class="pl-1 pt-3 text-center align-baseline font-opensans text-3 font-600 !lowercase leading-4 text-secondary-white">
@@ -407,7 +411,7 @@ const Vocab: Component<{}> = (props) => {
               }
             >
               <input
-                class={`h-[34px] w-full truncate bg-transparent text-center font-constantine text-7 font-700 uppercase leading-10.5 outline-none sm:block ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
+                class={`h-11 w-full truncate bg-transparent text-center font-constantine text-7 font-700 uppercase leading-10.5 outline-none sm:block ${vocabStore.searchTermColor ? "text-white" : "text-black"}`}
                 type="text"
                 autocomplete="off"
                 name="mobileInputSearch"

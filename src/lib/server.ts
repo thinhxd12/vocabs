@@ -271,7 +271,6 @@ export const searchText = async (text: SelectVocab["word"]) => {
 export const handleCheckAndRender = async (text: VocabularySearchType) => {
   const wordData = await getWordData(text.id);
   if (wordData) {
-    setVocabStore("renderWord", undefined);
     setVocabStore("renderWord", wordData);
 
     if (wordData.number > 1) {
