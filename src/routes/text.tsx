@@ -169,7 +169,7 @@ const Text: Component<{}> = (props) => {
         src="https://res.public.onecdn.static.microsoft/creativeservice/03eaa581-ff4d-0bc4-b161-84295b10bcea_desktop-b004_cloudyvalleydolomites_adobestock_469430780_3840x2160_1689173699682.jpg"
       />
       <div class="w-main no-scrollbar absolute left-1/2 z-30 h-full -translate-x-1/2 overflow-y-scroll">
-        <div class="relative flex font-helvetica text-[40px] font-600 leading-[36px]">
+        <div class="relative flex font-helvetica text-[120px] font-600 leading-[100px]">
           <Tick number={hundreds()} delay={300} />
           <Tick number={tens()} delay={150} />
           <Tick number={ones()} image={state() === 1} />

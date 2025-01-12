@@ -7,7 +7,7 @@
 }
 
 .tick-flip:nth-child(2) {
-  margin: 0 1px;
+  margin: 0 2px;
 }
 
 .tick-flip * {
@@ -194,8 +194,8 @@
   border-top-right-radius: inherit;
 }
 .tick-flip-panel {
-  color: #edebeb;
-  background-color: #111111;
+  color: #f8f5f5;
+  background: #3c3e3c url("/images/noise-64x64.png");
 }
 .tick-flip-shadow {
   box-shadow:
