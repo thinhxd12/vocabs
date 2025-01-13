@@ -154,14 +154,17 @@ const Text: Component<{}> = (props) => {
         >
           127
         </button>
-        <button onClick={() => setstate(10)} class="mr-2 rounded-1 border px-1">
-          10
+        <button onClick={() => setstate(1)} class="mr-2 rounded-1 border px-1">
+          1
         </button>
         <button
           onClick={() => setstate(223)}
           class="mr-2 rounded-1 border px-1"
         >
           223
+        </button>
+        <button onClick={() => setstate(13)} class="mr-2 rounded-1 border px-1">
+          13
         </button>
       </div>
       <img

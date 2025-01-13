@@ -55,16 +55,9 @@ const Vocab: Component<{}> = (props) => {
   let audioRef1: HTMLAudioElement | undefined;
   let audioRef2: HTMLAudioElement | undefined;
 
-  const [audioSrc, setAudioSrc] = createSignal<string>(
-    "/assets/sounds/mp3_Ding.mp3",
-  );
-
-  const [audioSrc1, setAudioSrc1] = createSignal<string>(
-    "/assets/sounds/mp3_Ding.mp3",
-  );
-  const [audioSrc2, setAudioSrc2] = createSignal<string>(
-    "/assets/sounds/mp3_Ding.mp3",
-  );
+  const [audioSrc, setAudioSrc] = createSignal<string>("");
+  const [audioSrc1, setAudioSrc1] = createSignal<string>("");
+  const [audioSrc2, setAudioSrc2] = createSignal<string>("");
 
   /////////////////////edit////////////////////////////
   const [editWordGet, setEditWordGet] = createSignal<InsertVocab | undefined>();

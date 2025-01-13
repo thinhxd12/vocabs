@@ -132,9 +132,7 @@ const Weather: Component<{}> = (props) => {
   let raindrops: Raindrops;
   let renderer: RainRenderer;
 
-  const [audioSrc, setAudioSrc] = createSignal<string>(
-    "/assets/assets/sounds/mp3_Ding.mp3",
-  );
+  const [audioSrc, setAudioSrc] = createSignal<string>("");
 
   const [chartData, setChartData] = createSignal<{
     labels: any[];

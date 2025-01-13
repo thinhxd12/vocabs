@@ -46,9 +46,7 @@ export const route = {
 
 const Schedule: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
-  const [audioSrc, setAudioSrc] = createSignal<string>(
-    "/assets/sounds/mp3_Ding.mp3",
-  );
+  const [audioSrc, setAudioSrc] = createSignal<string>("");
 
   // ***************check login**************
   const user = createAsync(() => getUser(), { deferStream: true });

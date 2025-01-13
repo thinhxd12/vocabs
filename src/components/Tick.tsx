@@ -1,12 +1,11 @@
 import {
-  batch,
   createEffect,
   createSignal,
   mergeProps,
-  onCleanup,
   Show,
   untrack,
 } from "solid-js";
+import { createMs } from "@solid-primitives/raf";
 // https://github.com/pqina/flip/blob/master/src/js/index.js
 
 const Tick = (initialProps: {
@@ -19,7 +18,6 @@ const Tick = (initialProps: {
     { delay: 0, duration: 900, image: false },
     initialProps,
   );
-  let animationFrameIdRef: number;
 
   const [fromNumber, setFromNumber] = createSignal<number>(0);
   const [toNumber, setToNumber] = createSignal<number>(props.number);
@@ -52,60 +50,47 @@ const Tick = (initialProps: {
   createEffect(() => {
     const v = props.number;
     untrack(() => {
-      batch(() => {
-        setDone(false);
-        setToNumber(v);
-        setVisualProgress(0);
-      });
-      draw();
+      setToNumber(v);
+      ms.reset();
+      ms.start();
     });
   });
 
-  const [done, setDone] = createSignal<boolean>(false);
-  const [shadowCard, setShadowCard] = createSignal<number>(0);
-  const [shadowCardScaleY, setShadowCardScaleY] = createSignal<number>(0);
-  const [visualProgress, setVisualProgress] = createSignal<number>(0);
+  const ms = createMs(30);
 
-  const draw = () => {
-    const start = performance.now();
-
-    const tick = () => {
-      const t = performance.now() - start - props.delay;
-      let progress = t >= 0 ? t / props.duration : 0;
-      if (progress >= 1) {
-        setDone(true);
+  createEffect(() => {
+    const v = ms();
+    untrack(() => {
+      if (v > props.duration) {
+        ms.stop();
         setFromNumber(props.number);
-        setVisualProgress(0);
-        return;
       }
-      const visual_progress = easeOutBounce(progress);
-      setVisualProgress(visual_progress);
+    });
+  });
 
-      let shadowProgress = 0;
-      let dist = 1;
+  const cardShadow = () => {
+    const visual_progress = visualProgress();
+    let shadowProgress = 0;
+    let dist = 1;
 
-      let d = Math.abs(visual_progress - 0.5);
-      if (d < dist) {
-        dist = d;
-        shadowProgress = visual_progress;
-      }
-
-      let s =
-        shadowProgress < 0.5
-          ? easeOutSine(shadowProgress / 0.5)
-          : easeOutSine((1 - shadowProgress) / 0.5);
-      setShadowCard(s);
-      setShadowCardScaleY(s);
-      requestAnimationFrame(tick);
-    };
-    tick();
+    let d = Math.abs(visual_progress - 0.5);
+    if (d < dist) {
+      dist = d;
+      shadowProgress = visual_progress;
+    }
+    let s =
+      shadowProgress < 0.5
+        ? easeOutSine(shadowProgress / 0.5)
+        : easeOutSine((1 - shadowProgress) / 0.5);
+    return ms() < props.duration ? s : 0;
   };
 
-  onCleanup(() => {
-    if (typeof cancelAnimationFrame !== "undefined") {
-      cancelAnimationFrame(animationFrameIdRef);
-    }
-  });
+  const visualProgress = () => {
+    const visual_progress = easeOutBounce(
+      (ms() - props.delay) / props.duration,
+    );
+    return ms() < props.duration && ms() >= props.delay ? visual_progress : 0;
+  };
 
   return (
     <span class="tick-flip">
@@ -143,10 +128,10 @@ const Tick = (initialProps: {
         </span>
       </span>
 
-      <Show when={!done()}>
+      <Show when={ms() < props.duration}>
         <span
           class="tick-flip-card"
-          style={{ "z-index": visualProgress() > 0.5 && !done() ? 10 : 1 }}
+          style={{ "z-index": visualProgress() > 0.5 ? 10 : 1 }}
         >
           <span
             class="tick-flip-panel-front tick-flip-front tick-flip-panel"
@@ -206,7 +191,16 @@ const Tick = (initialProps: {
           style="transform: rotateX(-360deg);"
         >
           <span class="tick-flip-panel-back-text">
-            <span class="tick-flip-panel-text-wrapper">{fromNumber()}</span>
+            <span class="tick-flip-panel-text-wrapper">
+              {props.image ? (
+                <img
+                  src="/images/cup.webp"
+                  class="absolute left-0.1 w-8 object-contain"
+                />
+              ) : (
+                fromNumber()
+              )}
+            </span>
           </span>
           <span
             class="tick-flip-panel-back-highlight"
@@ -227,8 +221,8 @@ const Tick = (initialProps: {
       <span
         class="tick-flip-card-shadow"
         style={{
-          opacity: shadowCard(),
-          transform: `scaleY(${shadowCardScaleY()})`,
+          opacity: cardShadow(),
+          transform: `scaleY(${cardShadow()})`,
         }}
       ></span>
     </span>

@@ -9,9 +9,7 @@ import { Meta, MetaProvider, Title } from "@solidjs/meta";
 
 const Quiz: Component<{}> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
-  const [audioSrc, setAudioSrc] = createSignal<string>(
-    "/assets/sounds/mp3_Ding.mp3",
-  );
+  const [audioSrc, setAudioSrc] = createSignal<string>("");
 
   const todayDate = format(new Date(), "yyyy-MM-dd");
   // ***************check login**************
