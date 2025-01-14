@@ -23,11 +23,11 @@
 }
 
 .btn-nav-menu {
-  @apply my-0.1 flex h-9 w-9 items-center justify-center rounded-full text-white transition duration-100 hover:bg-white/15;
+  @apply my-0.1 flex h-9 w-9 items-center justify-center rounded-full text-white outline-none transition duration-100 hover:bg-white/15;
 }
 
 .btn-nav-menu-timer {
-  @apply relative my-0.1 flex h-9 w-9 items-center justify-center overflow-hidden rounded-full text-white transition duration-100 hover:bg-white/15;
+  @apply relative my-0.1 flex h-9 w-9 items-center justify-center overflow-hidden rounded-full text-white outline-none transition duration-100 hover:bg-white/15;
 }
 
 .btn-close {

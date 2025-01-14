@@ -1,11 +1,5 @@
 import { A, createAsync, useAction, useLocation } from "@solidjs/router";
-import {
-  Component,
-  createEffect,
-  createSignal,
-  onCleanup,
-  Show,
-} from "solid-js";
+import { Component, createEffect, createSignal, Show } from "solid-js";
 import { format } from "date-fns";
 import {
   setVocabStore,
@@ -41,14 +35,12 @@ import {
 import { VsSymbolColor, VsTarget } from "solid-icons/vs";
 import { FiBookOpen } from "solid-icons/fi";
 import { FaSolidFeather } from "solid-icons/fa";
+import { createTimer } from "@solid-primitives/timer";
 
 const Nav: Component<{
   changeBackground: () => {};
 }> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
-  let intervalCountdown: NodeJS.Timeout | undefined;
-  let intervalAutoplay: NodeJS.Timeout;
-  let weatherInterval: NodeJS.Timeout | undefined;
   const todayDate = format(new Date(), "yyyy-MM-dd");
   const [showTimer, setShowTimer] = createSignal<boolean>(false);
   const [minute, setMinute] = createSignal<number>(6);
@@ -69,17 +61,8 @@ const Nav: Component<{
       setNavStore("defaultLocation", locationList_data()![0]);
 
       getBottomWeatherData();
-      weatherInterval = setInterval(
-        () => {
-          getBottomWeatherData();
-        },
-        1000 * 15 * 60,
-      );
+      createTimer(getBottomWeatherData, 1000 * 15 * 60, setInterval);
     }
-  });
-
-  onCleanup(() => {
-    clearInterval(weatherInterval);
   });
 
   const [navWeatherData, setNavWeatherData] =
@@ -118,10 +101,15 @@ const Nav: Component<{
         body: `${letter}-${newProgress}`,
       });
 
+      if (audioRef) {
+        audioRef.pause();
+        audioRef.currentTime = 0;
+        audioRef.play();
+      }
       notification.onclose = async () => {
-        clearInterval(intervalCountdown);
-        intervalCountdown = undefined;
-        audioRef?.pause();
+        if (audioRef) {
+          audioRef.pause();
+        }
         if (location.pathname === "/vocab") {
           await handleGetListContentVocab(listType);
           handleAutoplay();
@@ -129,71 +117,74 @@ const Nav: Component<{
           handleGetListContentQuiz(listType);
         }
       };
+    } else {
+      new Notification("hoctuvung3", {
+        icon: img,
+        requireInteraction: true,
+      });
+      if (audioRef) {
+        audioRef.pause();
+        audioRef.currentTime = 0;
+        audioRef.play();
+      }
     }
   };
 
+  const handleCountdown = () => {
+    if (minute() !== 1) {
+      setMinute(minute() - 1);
+    } else endCountdown();
+  };
+
+  const [pausedCountdown, setPausedCountdown] = createSignal<boolean>(true);
+  createTimer(handleCountdown, () => !pausedCountdown() && 60000, setInterval);
+
   const startCountdown = () => {
-    clearInterval(intervalCountdown);
+    setPausedCountdown(false);
     setShowTimer(true);
-    intervalCountdown = setInterval(() => {
-      setMinute((prev: number) => {
-        if (prev === 1) {
-          endCountdown();
-          return 6;
-        } else return prev - 1;
-      });
-    }, 60000);
   };
 
   const endCountdown = () => {
+    showDesktopNotification();
+    setPausedCountdown(true);
     setMinute(6);
     setShowTimer(false);
-    clearInterval(intervalCountdown);
-    if (audioRef) {
-      audioRef.pause();
-      audioRef.currentTime = 0;
-      audioRef.play();
-    }
-    showDesktopNotification();
   };
 
   const stopCountdown = () => {
-    setShowTimer(false);
-    clearInterval(intervalCountdown);
-    intervalCountdown = undefined;
+    setPausedCountdown(true);
     setMinute(6);
+    setShowTimer(false);
   };
 
   const startOrStopCountdown = () => {
-    intervalCountdown ? stopCountdown() : startCountdown();
+    minute() !== 6 ? stopCountdown() : startCountdown();
   };
 
   // // -------------------COUNTDOWN END-------------------- //
   // // -------------------AUTOPLAY START-------------------- //
 
   const handleRenderWord = () => {
-    handleCheckAndRender(navStore.listContent[navStore.listCount]);
-    setNavStore("listCount", navStore.listCount + 1);
+    if (navStore.listCount < navStore.listContent.length) {
+      handleCheckAndRender(navStore.listContent[navStore.listCount]);
+      setNavStore("listCount", navStore.listCount + 1);
+    } else endAutoplay();
   };
 
-  const startAutoplay = async () => {
-    clearInterval(intervalAutoplay);
+  const [pausedAutoplay, setPausedAutoplay] = createSignal<boolean>(true);
+  createTimer(handleRenderWord, () => !pausedAutoplay() && 7000, setInterval);
+
+  const startAutoplay = () => {
     handleRenderWord();
-    intervalAutoplay = setInterval(() => {
-      if (navStore.listCount < navStore.listContent.length) {
-        handleRenderWord();
-      } else {
-        endAutoplay();
-      }
-    }, 7000);
+    setPausedAutoplay(!pausedAutoplay());
   };
 
   const pauseAutoplay = () => {
-    clearInterval(intervalAutoplay);
+    setPausedAutoplay(!pausedAutoplay());
   };
 
   const endAutoplay = async () => {
-    clearInterval(intervalAutoplay);
+    setPausedAutoplay(!pausedAutoplay());
     setNavStore("listCount", 0);
     setVocabStore("renderWord", undefined);
     await updateTodayScheduleLocal(todayDate);

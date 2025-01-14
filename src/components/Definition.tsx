@@ -12,7 +12,7 @@ const Definition: Component<{
     <Show when={props.item.meanings}>
       <For each={props.item.meanings}>
         {(entry) => (
-          <div class="w-content mb-3 overflow-hidden rounded-1 bg-white/35 py-1 shadow-sm shadow-black/45 backdrop-blur-xl">
+          <div class="w-content mb-2 overflow-hidden rounded-1 bg-white/35 py-1 shadow-sm shadow-black/45 backdrop-blur-xl">
             <div class="flex justify-between px-3">
               <span
                 class="cursor-pointer font-roslindale text-8 font-500"
