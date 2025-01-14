@@ -118,7 +118,7 @@ const Nav: Component<{
         }
       };
     } else {
-      new Notification("hoctuvung3", {
+      const notification = new Notification("hoctuvung3", {
         icon: img,
         requireInteraction: true,
       });
@@ -127,11 +127,16 @@ const Nav: Component<{
         audioRef.currentTime = 0;
         audioRef.play();
       }
+      notification.onclose = () => {
+        if (audioRef) {
+          audioRef.pause();
+        }
+      };
     }
   };
 
   const handleCountdown = () => {
-    if (minute() !== 1) {
+    if (minute() > 1) {
       setMinute(minute() - 1);
     } else endCountdown();
   };
@@ -158,7 +163,7 @@ const Nav: Component<{
   };
 
   const startOrStopCountdown = () => {
-    minute() !== 6 ? stopCountdown() : startCountdown();
+    minute() < 6 ? stopCountdown() : startCountdown();
   };
 
   // // -------------------COUNTDOWN END-------------------- //
@@ -264,19 +269,19 @@ const Nav: Component<{
         }
       />
       <nav class="w-main h-[42px]">
-        <div class="light-layout w-content flex h-[39px] items-center rounded-1 !shadow-sm">
-          <div class="ml-0.5 flex h-[32px] w-4 flex-col items-center justify-between rounded-1 bg-black/60 shadow-[0_0_1px_0px_#00000078_inset]">
+        <div class="w-content flex h-11 items-center">
+          <div class="flex h-full w-4 flex-col items-center justify-between rounded-1 bg-black/60 shadow-md shadow-black/30 backdrop-blur-md">
             <Show
               when={navStore.todaySchedule.length}
               fallback={
                 <div class="flex flex-col justify-center text-center">
-                  <span class="text-3 leading-3 text-white">N</span>
+                  <span class="text-3 leading-4 text-white">N</span>
                   <span class="text-3 leading-3 text-white">N</span>
                 </div>
               }
             >
               <div class="flex flex-col justify-center text-center">
-                <span class="text-3 leading-3 text-white">
+                <span class="text-3 leading-4 text-white">
                   {navStore.todaySchedule[0].count}
                 </span>
                 <span class="text-3 leading-3 text-white">
@@ -302,13 +307,13 @@ const Nav: Component<{
             Memento mori.Rem'ber you will die.
           </A>
 
-          <div class="ml-0.5 flex h-[32px] flex-col items-center rounded-1 bg-black/60 px-0.5 text-white">
-            <span class="mb-0.1 font-tupa text-6 font-600 leading-5">
+          <div class="ml-0.5 flex h-full flex-col items-center justify-center rounded-1 bg-black/60 px-0.5 text-white shadow-sm shadow-black/30 backdrop-blur-md">
+            <span class="font-tupa text-6 font-600 leading-5">
               {Math.floor(navStore.totalMemories / 100) < 10
                 ? "0" + Math.floor(navStore.totalMemories / 100)
                 : Math.floor(navStore.totalMemories / 100)}
             </span>
-            <span class="font-tupa text-6 font-600 leading-4.5">
+            <span class="font-tupa text-6 font-600 leading-6">
               {navStore.totalMemories % 100 < 10
                 ? "0" + (navStore.totalMemories % 100)
                 : navStore.totalMemories % 100}
@@ -317,7 +322,7 @@ const Nav: Component<{
 
           <A
             href="/weather"
-            class="relative ml-0.5 block h-[32px] min-w-[90px] overflow-hidden rounded-1 shadow shadow-black/60"
+            class="relative ml-0.5 block h-full min-w-[90px] overflow-hidden rounded-1 shadow-sm shadow-black/30"
           >
             <img
               class="absolute left-0 top-0 h-full w-full object-cover brightness-90"
@@ -368,12 +373,12 @@ const Nav: Component<{
           </A>
 
           <div
-            class={`relative mx-0.5 h-[32px] min-w-[90px] max-w-[90px] cursor-pointer overflow-hidden rounded-1 shadow shadow-black/60`}
+            class={`relative ml-1 h-full min-w-[90px] max-w-[90px] cursor-pointer overflow-hidden rounded-1 shadow shadow-black/60`}
             onClick={handleAutoplay}
           >
             <div
               class={`absolute left-0 top-0 z-10 h-full w-full ${navStore.playButton ? "bg-[url('/images/sunrise.webp')]" : "bg-[url('/images/sunset.webp')]"} bg-cover`}
-              style="background-size: 90px 32px;"
+              style="background-size: 90px 36px;"
             ></div>
 
             <Show when={navStore.listCount}>
@@ -383,7 +388,7 @@ const Nav: Component<{
                   width: `${Math.floor(((navStore.listCount + 1) / navStore.listContent.length) * 90)}px`,
                   "box-shadow": "2px 0px 6px rgba(0, 0, 0, 0.6)",
                   "border-right": "0.5px solid #000000",
-                  "background-size": "90px 32px",
+                  "background-size": "90px 36px",
                 }}
               ></div>
             </Show>

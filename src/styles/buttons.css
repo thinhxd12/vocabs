@@ -3,11 +3,11 @@
 }
 
 .btn-nav {
-  @apply ml-0.5 flex h-[32px] flex-1 items-center justify-center overflow-hidden rounded-1 text-center text-2.5 font-400 leading-2.5 text-white transition hover:bg-black/20 hover:shadow-[0_0_3px_0px_#00000078_inset];
+  @apply ml-1 flex h-full flex-1 items-center justify-center overflow-hidden rounded-1 text-center text-2.5 font-400 leading-2.5 text-white shadow-sm shadow-black/30 backdrop-blur-md transition hover:bg-black/20 hover:shadow-[0_0_3px_0px_#00000078_inset];
 }
 
 .btn-nav-active {
-  @apply ml-0.5 flex h-[32px] flex-1 items-center justify-center overflow-hidden rounded-1 bg-black/20 text-center text-2.5 font-400 leading-2.5 text-white shadow-[0_0_3px_0px_#00000078_inset] transition;
+  @apply ml-1 flex h-full flex-1 items-center justify-center overflow-hidden rounded-1 bg-black/20 text-center text-2.5 font-400 leading-2.5 text-white shadow-sm shadow-black/30 backdrop-blur-md transition;
 }
 
 .btn-bookmark {
