@@ -212,11 +212,7 @@ const Weather: Component<{}> = (props) => {
       textureDayBg,
     ]);
 
-    const isMobile =
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-        navigator.userAgent,
-      );
-    const dpi = isMobile ? 2.625 : 1;
+    const dpi = window.devicePixelRatio;
     let canvasWidth = 378;
     let canvasHeight = window.innerHeight - 54;
 

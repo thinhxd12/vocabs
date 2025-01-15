@@ -91,7 +91,8 @@ export function createProgramGL(gl: any, vertexScript: any, fragScript: any) {
   }
 
   var positionLocation = gl.getAttribLocation(program, "a_position");
-  var texCoordLocation = gl.getAttribLocation(program, "a_texCoord");
+  // var texCoordLocation = gl.getAttribLocation(program, "a_texCoord");
+  var texCoordLocation = 0;
 
   var texCoordBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, texCoordBuffer);
@@ -102,8 +103,8 @@ export function createProgramGL(gl: any, vertexScript: any, fragScript: any) {
     ]),
     gl.STATIC_DRAW,
   );
-  // gl.enableVertexAttribArray(texCoordLocation);
-  // gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
+  gl.enableVertexAttribArray(texCoordLocation);
+  gl.vertexAttribPointer(texCoordLocation, 2, gl.FLOAT, false, 0, 0);
   gl.enableVertexAttribArray(0);
   gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
 
@@ -373,7 +374,7 @@ export class Raindrops {
     let clearDropletsCtx = this.clearDropletsGfx.getContext("2d")!;
     clearDropletsCtx.fillStyle = "#000";
     clearDropletsCtx.beginPath();
-    clearDropletsCtx.arc(64, 64, 64, 0, Math.PI * 2);
+    clearDropletsCtx.arc(45, 45, 45, 0, Math.PI * 2);
     clearDropletsCtx.fill();
   }
 

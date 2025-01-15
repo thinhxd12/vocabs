@@ -19,8 +19,8 @@ const Tick = (initialProps: {
     initialProps,
   );
 
-  const [fromNumber, setFromNumber] = createSignal<number>(0);
-  const [toNumber, setToNumber] = createSignal<number>(props.number);
+  const [fromNumber, setFromNumber] = createSignal<number | Element>(0);
+  const [toNumber, setToNumber] = createSignal<number | Element>(props.number);
 
   const easeOutBounce = (t: number) => {
     var scaledTime = t / 1;
@@ -101,14 +101,12 @@ const Tick = (initialProps: {
         >
           <span class="tick-flip-panel-front-text">
             <span class="tick-flip-panel-text-wrapper">
-              {props.image ? (
+              <Show when={props.image} fallback={toNumber()}>
                 <img
                   src="/images/cup.webp"
                   class="absolute left-0.1 w-8 object-contain"
                 />
-              ) : (
-                toNumber()
-              )}
+              </Show>
             </span>
           </span>
           <span class="tick-flip-panel-front-shadow" style="opacity: 0;"></span>
@@ -154,14 +152,12 @@ const Tick = (initialProps: {
           >
             <span class="tick-flip-panel-back-text">
               <span class="tick-flip-panel-text-wrapper">
-                {props.image ? (
+                <Show when={props.image} fallback={toNumber()}>
                   <img
                     src="/images/cup.webp"
                     class="absolute left-0.1 w-8 object-contain"
                   />
-                ) : (
-                  toNumber()
-                )}
+                </Show>
               </span>
             </span>
             <span
@@ -192,14 +188,15 @@ const Tick = (initialProps: {
         >
           <span class="tick-flip-panel-back-text">
             <span class="tick-flip-panel-text-wrapper">
-              {props.image ? (
+              <Show
+                when={props.image && ms() > props.duration}
+                fallback={fromNumber()}
+              >
                 <img
                   src="/images/cup.webp"
                   class="absolute left-0.1 w-8 object-contain"
                 />
-              ) : (
-                fromNumber()
-              )}
+              </Show>
             </span>
           </span>
           <span

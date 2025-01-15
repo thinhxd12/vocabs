@@ -41,6 +41,8 @@ const Nav: Component<{
   changeBackground: () => {};
 }> = (props) => {
   let audioRef: HTMLAudioElement | undefined;
+  let intervalCountdown: NodeJS.Timeout | undefined;
+  let intervalAutoplay: NodeJS.Timeout | undefined;
   const todayDate = format(new Date(), "yyyy-MM-dd");
   const [showTimer, setShowTimer] = createSignal<boolean>(false);
   const [minute, setMinute] = createSignal<number>(6);
@@ -107,6 +109,8 @@ const Nav: Component<{
         audioRef.play();
       }
       notification.onclose = async () => {
+        clearInterval(intervalCountdown);
+        intervalCountdown = undefined;
         if (audioRef) {
           audioRef.pause();
         }
@@ -135,61 +139,67 @@ const Nav: Component<{
     }
   };
 
-  const handleCountdown = () => {
-    if (minute() > 1) {
-      setMinute(minute() - 1);
-    } else endCountdown();
-  };
-
-  const [pausedCountdown, setPausedCountdown] = createSignal<boolean>(true);
-  createTimer(handleCountdown, () => !pausedCountdown() && 60000, setInterval);
-
   const startCountdown = () => {
-    setPausedCountdown(false);
+    clearInterval(intervalCountdown);
     setShowTimer(true);
+    intervalCountdown = setInterval(() => {
+      setMinute((prev: number) => {
+        if (prev === 1) {
+          endCountdown();
+          return 6;
+        } else return prev - 1;
+      });
+    }, 60000);
   };
 
   const endCountdown = () => {
-    showDesktopNotification();
-    setPausedCountdown(true);
     setMinute(6);
     setShowTimer(false);
+    clearInterval(intervalCountdown);
+    if (audioRef) {
+      audioRef.pause();
+      audioRef.currentTime = 0;
+      audioRef.play();
+    }
+    showDesktopNotification();
   };
 
   const stopCountdown = () => {
-    setPausedCountdown(true);
-    setMinute(6);
     setShowTimer(false);
+    clearInterval(intervalCountdown);
+    intervalCountdown = undefined;
+    setMinute(6);
   };
 
   const startOrStopCountdown = () => {
-    minute() < 6 ? stopCountdown() : startCountdown();
+    intervalCountdown ? stopCountdown() : startCountdown();
   };
 
   // // -------------------COUNTDOWN END-------------------- //
   // // -------------------AUTOPLAY START-------------------- //
-
   const handleRenderWord = () => {
-    if (navStore.listCount < navStore.listContent.length) {
-      handleCheckAndRender(navStore.listContent[navStore.listCount]);
-      setNavStore("listCount", navStore.listCount + 1);
-    } else endAutoplay();
+    handleCheckAndRender(navStore.listContent[navStore.listCount]);
+    setNavStore("listCount", navStore.listCount + 1);
   };
 
-  const [pausedAutoplay, setPausedAutoplay] = createSignal<boolean>(true);
-  createTimer(handleRenderWord, () => !pausedAutoplay() && 7000, setInterval);
-
-  const startAutoplay = () => {
+  const startAutoplay = async () => {
+    clearInterval(intervalAutoplay);
     handleRenderWord();
-    setPausedAutoplay(!pausedAutoplay());
+    intervalAutoplay = setInterval(() => {
+      if (navStore.listCount < navStore.listContent.length) {
+        handleRenderWord();
+      } else {
+        endAutoplay();
+      }
+    }, 7000);
   };
 
   const pauseAutoplay = () => {
-    setPausedAutoplay(!pausedAutoplay());
+    clearInterval(intervalAutoplay);
   };
 
   const endAutoplay = async () => {
-    setPausedAutoplay(!pausedAutoplay());
+    clearInterval(intervalAutoplay);
     setNavStore("listCount", 0);
     setVocabStore("renderWord", undefined);
     await updateTodayScheduleLocal(todayDate);

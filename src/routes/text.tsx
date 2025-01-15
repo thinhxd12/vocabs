@@ -34,54 +34,137 @@ import {
 } from "~/types";
 import { InsertVocab } from "~/db/schema";
 import Definition from "~/components/Definition";
-import { createMs } from "@solid-primitives/raf";
-import {
-  createIntervalCounter,
-  createPolled,
-  createTimeoutLoop,
-  createTimer,
-  makeTimer,
-} from "@solid-primitives/timer";
 
 const Text: Component<{}> = (props) => {
-  const [count, setCount] = createSignal(0);
-  const legn = 10;
+  let canvasRef: HTMLCanvasElement | undefined;
+  let ani: number;
+  let canvasWidth: number;
+  let canvasHeight: number;
+  let img: HTMLImageElement;
 
-  const callback = () => {
-    if (count() < legn) {
-      setCount(count() + 1);
-    } else stopautoplay();
+  const [state, setstate] = createSignal<number>(0);
+
+  const makeTranslationText = (arr: VocabMeaningType[]) => {
+    return arr
+      .map((item) => {
+        let part = item.partOfSpeech;
+        let mean = item.translation.join("-");
+        return " -" + part + "-" + mean;
+      })
+      .join("");
   };
 
-  // createPolled(() => callback(), 1000);
+  const notify = async () => {
+    const has = makeTranslationText(item.meanings);
 
-  const [paused, setPaused] = createSignal(true);
-  const [delay, setDelay] = createSignal(1000);
-  // createTimer(callback, () => !paused() && delay(), setInterval);
-  // createTimer(callback, delay(), setInterval);
+    const newItemMeaning = getTranslationArr(has);
+    if (!newItemMeaning) return;
+    console.log(has);
+    console.log(newItemMeaning);
+  };
 
-  const startautoplay = () => {
-    callback();
-    setPaused(!paused());
+  const item: VocabType = {
+    id: "0194071f-90f8-75d6-85e1-a3a17c972910",
+    word: "sham",
+    phonetics: "ˈsham",
+    number: 144,
+    audio:
+      "https://www.oxfordlearnersdictionaries.com/media/american_english/us_pron/s/sha/sham_/sham__us_1.mp3",
+    meanings: [
+      {
+        partOfSpeech: "noun",
+        definitions: [
+          {
+            definition: [
+              {
+                num: "",
+                sense: ": a trick that deludes : hoax",
+                letter: "",
+              },
+            ],
+            example: {
+              year: "28 July 2024",
+              title: "Peoplemag",
+              author: "Maggie Horton",
+              sentence:
+                "Complete the set with matching linen sheets, pillowcases, and <b>shams</b>, also on sale for an additional 20 percent off now.",
+            },
+            hash: "",
+            image:
+              "https://media.gettyimages.com/id/159307508/photo/job-interview.jpg?s=612x612&w=0&k=20&c=srvyVlB-9SUlIVuKpucAM0okoO5kdKJHDO7lpGtKjFM=",
+          },
+        ],
+        synonyms: ["caricature", "cartoon", "farce"],
+        translation: ["giả mạo", "adfasdf asdf"],
+      },
+      {
+        partOfSpeech: "verb",
+        definitions: [
+          {
+            definition: [
+              {
+                num: "",
+                sense:
+                  ": to go through the external motions necessary to counterfeit",
+                letter: "",
+              },
+            ],
+            example: {
+              year: "1 Aug. 2024",
+              title: "Los Angeles Times",
+              author: "Nathan Solis",
+              sentence:
+                "The <b>sham</b> citations claimed that residents had not moved their vehicles for scheduled street sweeping, which immediately raised red flags for those familiar with the local parking schedule.",
+            },
+            hash: "",
+            image: "",
+          },
+        ],
+        synonyms: ["act", "affect", "assume"],
+        translation: ["giả mạo"],
+      },
+    ],
   };
-  const pauseautoplay = () => {
-    setPaused(!paused());
-  };
-  const stopautoplay = () => {
-    setPaused(!paused());
-    setCount(0);
-  };
+
+  const [hundreds, setHundreds] = createSignal<number>(0);
+  const [tens, setTens] = createSignal<number>(0);
+  const [ones, setOnes] = createSignal<number>(0);
+
+  createEffect(() => {
+    const v = state();
+    untrack(() => {
+      setHundreds(Math.floor(v / 100));
+      setTens(Math.floor((v % 100) / 10));
+      setOnes(v % 10);
+    });
+  });
+
   return (
     <div class="relative h-screen w-screen">
       <div class="absolute z-30 flex items-start text-white">
-        <button onClick={startautoplay} class="mr-2 rounded-1 border px-1">
-          start
+        <button
+          onClick={() => setstate(100)}
+          class="mr-2 rounded-1 border px-1"
+        >
+          100
         </button>
-        <button onClick={pauseautoplay} class="mr-2 rounded-1 border px-1">
-          pause
+        <button
+          onClick={() => setstate(127)}
+          class="mr-2 rounded-1 border px-1"
+        >
+          127
         </button>
-        <button onClick={stopautoplay} class="mr-2 rounded-1 border px-1">
-          stop
+        <button onClick={() => setstate(1)} class="mr-2 rounded-1 border px-1">
+          1
+        </button>
+        <button onClick={() => setstate(0)} class="mr-2 rounded-1 border px-1">
+          0
+        </button>
+        <button
+          onClick={() => setstate(223)}
+          class="mr-2 rounded-1 border px-1"
+        >
+          223
         </button>
       </div>
       <img
@@ -89,7 +172,11 @@ const Text: Component<{}> = (props) => {
         src="https://res.public.onecdn.static.microsoft/creativeservice/03eaa581-ff4d-0bc4-b161-84295b10bcea_desktop-b004_cloudyvalleydolomites_adobestock_469430780_3840x2160_1689173699682.jpg"
       />
       <div class="w-main no-scrollbar absolute left-1/2 z-30 h-full -translate-x-1/2 overflow-y-scroll">
-        <h1 class="text-[90px] text-white">{count()}</h1>
+        <div class="relative flex font-helvetica text-[40px] font-600 leading-[36px]">
+          <Tick number={hundreds()} delay={300} />
+          <Tick number={tens()} delay={150} />
+          <Tick number={ones()} image={state() === 0} />
+        </div>
       </div>
     </div>
   );
