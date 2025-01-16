@@ -34,6 +34,7 @@ import {
 } from "~/types";
 import { InsertVocab } from "~/db/schema";
 import Definition from "~/components/Definition";
+import HeartAnimate from "~/components/HeartAnimate";
 
 const Text: Component<{}> = (props) => {
   let canvasRef: HTMLCanvasElement | undefined;
@@ -129,6 +130,7 @@ const Text: Component<{}> = (props) => {
   const [hundreds, setHundreds] = createSignal<number>(0);
   const [tens, setTens] = createSignal<number>(0);
   const [ones, setOnes] = createSignal<number>(0);
+  const [isShow, setIsShow] = createSignal<boolean>(false);
 
   createEffect(() => {
     const v = state();
@@ -138,6 +140,10 @@ const Text: Component<{}> = (props) => {
       setOnes(v % 10);
     });
   });
+
+  const handleCloseHearts = () => {
+    setIsShow(!isShow());
+  };
 
   return (
     <div class="relative h-screen w-screen">
@@ -161,23 +167,26 @@ const Text: Component<{}> = (props) => {
           0
         </button>
         <button
-          onClick={() => setstate(223)}
+          onClick={() => setIsShow(!isShow())}
           class="mr-2 rounded-1 border px-1"
         >
-          223
+          setIsShow
         </button>
       </div>
       <img
         class="absolute z-10 h-full w-full object-cover brightness-90"
         src="https://res.public.onecdn.static.microsoft/creativeservice/03eaa581-ff4d-0bc4-b161-84295b10bcea_desktop-b004_cloudyvalleydolomites_adobestock_469430780_3840x2160_1689173699682.jpg"
       />
-      <div class="w-main no-scrollbar absolute left-1/2 z-30 h-full -translate-x-1/2 overflow-y-scroll">
+      {/* <div class="w-main no-scrollbar absolute left-1/2 z-30 h-full -translate-x-1/2 overflow-y-scroll">
         <div class="relative flex font-helvetica text-[40px] font-600 leading-[36px]">
           <Tick number={hundreds()} delay={300} />
           <Tick number={tens()} delay={150} />
           <Tick number={ones()} image={state() === 0} />
         </div>
-      </div>
+      </div> */}
+      <Show when={isShow()}>
+        <HeartAnimate close={handleCloseHearts} />
+      </Show>
     </div>
   );
 };

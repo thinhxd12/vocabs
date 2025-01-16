@@ -114,11 +114,12 @@ const Bookmark: Component<{}> = (props) => {
       setBookmark({ ...bookmark()!, like: bookmark()!.like - 1 });
       unlikeBookMarkById(bookmark()!.id);
       setLikeReset(!likeReset());
+      setShowHearts(false);
     } else {
       setBookmark({ ...bookmark()!, like: bookmark()!.like + 1 });
       likeBookMarkById(bookmark()!.id);
       setLikeReset(!likeReset());
-      setHeartId(heartId() + 1);
+      setShowHearts(true);
     }
   };
 
@@ -211,8 +212,6 @@ const Bookmark: Component<{}> = (props) => {
     setOpenDeleteAlert(false);
   };
 
-  const [heartId, setHeartId] = createSignal<number>(0);
-
   const updateBookmarResult = useSubmission(updateBookmarkData);
 
   createEffect(
@@ -287,10 +286,18 @@ const Bookmark: Component<{}> = (props) => {
     ),
   );
 
+  const [showHearts, setShowHearts] = createSignal<boolean>(false);
+
+  const handleCloseHearts = () => {
+    setShowHearts(!showHearts());
+  };
+
   return (
     <>
       <audio ref={audioRef} hidden src={audioSrc()} />
-      <HeartAnimate id={heartId()} />
+      <Show when={showHearts()}>
+        <HeartAnimate close={handleCloseHearts} />
+      </Show>
       <div class="light-layout relative flex h-full w-full overflow-hidden rounded-3">
         <div class="flex h-full w-1/4 flex-col bg-black/15 p-4">
           <Show when={bookDetail()?.title}>

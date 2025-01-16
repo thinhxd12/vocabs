@@ -1,22 +1,34 @@
-import { Component, createEffect, createSignal, onCleanup } from "solid-js";
+import { createMs } from "@solid-primitives/raf";
+import {
+  Component,
+  createEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+  untrack,
+} from "solid-js";
 
-const HeartAnimate: Component<{ id: number }> = (props) => {
+const HeartAnimate: Component<{
+  close: () => void;
+}> = (props) => {
   let canvasRef: HTMLCanvasElement | undefined;
-  let ani: number;
   let canvasWidth: number;
   let canvasHeight: number;
   let img: HTMLImageElement;
   const hearSvg =
     '<svg stroke-width="0" color="#fd2c55" fill="#fd2c55" viewBox="0 0 16 16" size="15" class="text-white" height="15" width="15" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"></path></svg>';
+  const ms = createMs(30);
 
-  const [isShow, setIsShow] = createSignal<boolean>(false);
+  onMount(() => {
+    ms.reset();
+    ms.start();
+    clearCanvas();
+    runAnimate();
+  });
 
-  createEffect(() => {
-    if (props.id > 0) {
-      clearCanvas();
-      runAnimate();
-      setIsShow(true);
-    }
+  onCleanup(() => {
+    ms.stop();
+    clearCanvas();
   });
 
   const runAnimate = () => {
@@ -25,15 +37,12 @@ const HeartAnimate: Component<{ id: number }> = (props) => {
     const svgBlob = new Blob([hearSvg], { type: "image/svg+xml" });
     const url = URL.createObjectURL(svgBlob);
     img.src = url;
-    img.onload = () => {
-      animate();
-    };
   };
 
   const [positions, setPositions] = createSignal<
     { x: number; y: number; speed: number; targetX: number; size: number }[]
   >([]);
-  const hearts = Array.from({ length: 99 }, (_, i) => i);
+  const hearts = Array.from({ length: 45 }, (_, i) => i);
 
   const generateRandomPositions = () => {
     if (canvasRef) {
@@ -48,7 +57,7 @@ const HeartAnimate: Component<{ id: number }> = (props) => {
         initialPositions.push({
           x: Math.random() * canvasWidth,
           y: canvasHeight + (Math.random() * canvasHeight) / 2,
-          speed: 3 + Math.random() * 6,
+          speed: 9 + Math.random() * 9,
           targetX: Math.random() * canvasWidth,
           size: sizeRandom,
         });
@@ -82,7 +91,7 @@ const HeartAnimate: Component<{ id: number }> = (props) => {
         if (newY < -30) {
           newY = -31;
           pos.x = Math.random() * canvasRef!.width;
-          pos.speed = 6 + Math.random() * 6;
+          pos.speed = 30 + Math.random() * 12;
         }
         return { ...pos, x: newX, y: newY };
       }),
@@ -93,38 +102,30 @@ const HeartAnimate: Component<{ id: number }> = (props) => {
     return positions().every((pos) => pos.y < -30);
   };
 
-  const animate = () => {
-    updatePositions();
-    drawImages();
-    if (!allImagesGone()) {
-      ani = requestAnimationFrame(animate);
-    } else {
-      clearCanvas();
-    }
-  };
+  createEffect(() => {
+    const v = ms();
+    untrack(() => {
+      if (!allImagesGone()) {
+        updatePositions();
+        drawImages();
+      } else {
+        clearCanvas();
+        props.close();
+      }
+    });
+  });
 
   const clearCanvas = () => {
-    setIsShow(false);
-    if (typeof cancelAnimationFrame !== "undefined") {
-      cancelAnimationFrame(ani);
-    }
     if (canvasRef) {
       const ctx = canvasRef.getContext("2d")!;
       ctx.clearRect(0, 0, canvasRef.width, canvasRef.height);
     }
   };
 
-  onCleanup(() => {
-    clearCanvas();
-    if (typeof cancelAnimationFrame !== "undefined") {
-      cancelAnimationFrame(ani);
-    }
-  });
-
   return (
     <canvas
       ref={canvasRef}
-      class={`fixed z-40 ${isShow() ? "pointer-events-auto" : "pointer-events-none"} left-0 top-0`}
+      class="pointer-events-auto fixed left-0 top-0 z-40"
     />
   );
 };
