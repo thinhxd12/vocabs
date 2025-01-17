@@ -563,7 +563,7 @@ export const getTextDataWebster = query(async (text: string) => {
   }
 }, "webster");
 
-export const getOedSoundURL = async (text: string) => {
+export const getOxfordSoundURL = async (text: string) => {
   "use server";
   if (!text) return;
   const oxfordUrl = `https://www.oxfordlearnersdictionaries.com/search/american_english/direct/?q=${text}`;
@@ -595,6 +595,25 @@ export const getOedSoundURL = async (text: string) => {
     }
   }
   return oxfordResultUrl;
+};
+
+export const getOedSoundURL = async (text: string) => {
+  "use server";
+  const oedUrl = `https://www.oed.com/search/dictionary/?scope=Entries&q=${text}&tl=true`;
+  const data = await fetchGetText(oedUrl);
+  const docOed = load(data);
+  const urlParam = docOed(".viewEntry").attr("href");
+  if (urlParam) {
+    const newUrl = "https://www.oed.com" + urlParam;
+    const link = newUrl.replace(/\?.+/g, "?tab=factsheet&tl=true#39853451");
+    const nextPageHtml = await fetchGetText(link);
+    const nextPageDoc = load(nextPageHtml);
+    const sound = nextPageDoc(".regional-pronunciation")
+      .last()
+      .find(".pronunciation-play-button")
+      .attr("data-src-mp3");
+    return sound;
+  }
 };
 
 export const getTotalMemories = query(async () => {
