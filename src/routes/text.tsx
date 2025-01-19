@@ -145,8 +145,19 @@ const Text: Component<{}> = (props) => {
     setIsShow(!isShow());
   };
 
+  const textfunc = async () => {
+    const data = await getOedSoundURL("baleful");
+    if (data) {
+      setAudioSrc(data);
+      audioRef?.play();
+    }
+  };
+  let audioRef: HTMLAudioElement | undefined;
+  const [audioSrc, setAudioSrc] = createSignal<string>();
+
   return (
     <div class="relative h-screen w-screen">
+      <audio ref={audioRef} hidden src={audioSrc()} />
       <div class="absolute z-30 flex items-start text-white">
         <button
           onClick={() => setstate(100)}
@@ -166,10 +177,7 @@ const Text: Component<{}> = (props) => {
         <button onClick={() => setstate(0)} class="mr-2 rounded-1 border px-1">
           0
         </button>
-        <button
-          onClick={() => setIsShow(!isShow())}
-          class="mr-2 rounded-1 border px-1"
-        >
+        <button onClick={textfunc} class="mr-2 rounded-1 border px-1">
           setIsShow
         </button>
       </div>
@@ -177,16 +185,7 @@ const Text: Component<{}> = (props) => {
         class="absolute z-10 h-full w-full object-cover brightness-90"
         src="https://res.public.onecdn.static.microsoft/creativeservice/03eaa581-ff4d-0bc4-b161-84295b10bcea_desktop-b004_cloudyvalleydolomites_adobestock_469430780_3840x2160_1689173699682.jpg"
       />
-      {/* <div class="w-main no-scrollbar absolute left-1/2 z-30 h-full -translate-x-1/2 overflow-y-scroll">
-        <div class="relative flex font-helvetica text-[40px] font-600 leading-[36px]">
-          <Tick number={hundreds()} delay={300} />
-          <Tick number={tens()} delay={150} />
-          <Tick number={ones()} image={state() === 0} />
-        </div>
-      </div> */}
-      <Show when={isShow()}>
-        <HeartAnimate close={handleCloseHearts} />
-      </Show>
+      <h3 class="absolute top-10 z-20 text-white">{audioSrc()}</h3>
     </div>
   );
 };

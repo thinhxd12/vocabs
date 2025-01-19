@@ -97,11 +97,9 @@
 @keyframes expand-height {
   from {
     height: 30vh;
-    opacity: 0;
   }
 
   to {
     height: calc(100vh - 96px);
-    opacity: 1;
   }
 }
