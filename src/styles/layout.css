@@ -86,16 +86,22 @@
   height: calc(100vh - 90px);
 }
 
-.search-results {
-  animation: expand-height 0.1s linear forwards;
+.search-results-enter-active {
+  animation: expand-height 0.3s;
+}
+
+.search-results-exit-active {
+  animation: expand-height 0.3s reverse;
 }
 
 @keyframes expand-height {
   from {
     height: 30vh;
+    opacity: 0;
   }
 
   to {
     height: calc(100vh - 96px);
+    opacity: 1;
   }
 }

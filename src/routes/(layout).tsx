@@ -25,6 +25,7 @@ const Art = lazy(() => import("~/components/Art"));
 const Bookmark = lazy(() => import("~/components/Bookmark"));
 import Nav from "~/components/Nav";
 import { thumbHashToDataURL } from "thumbhash";
+import { Transition } from "solid-transition-group";
 
 export default function Layout(props: RouteSectionProps) {
   let audioRef: HTMLAudioElement | undefined;
@@ -72,7 +73,7 @@ export default function Layout(props: RouteSectionProps) {
         deleteSearchTimeout = setTimeout(() => {
           setVocabStore("searchTermColor", true);
           handleCloseDialogSearch();
-        }, 1500);
+        }, 1000);
         setAudioSrc("/assets/sounds/mp3_Boing.mp3");
         audioRef?.play();
       } else if (res.length === 1 && str.length > 4) {
@@ -88,7 +89,7 @@ export default function Layout(props: RouteSectionProps) {
         setLayoutStore("showSearchResults", true);
       }
     }
-  }, 450);
+  }, 300);
 
   const handleKeyDownMain = (e: KeyboardEvent) => {
     if (location.pathname === "/vocab") {
@@ -138,6 +139,7 @@ export default function Layout(props: RouteSectionProps) {
   const handleCloseDialogSearch = () => {
     setActive(null);
     setVocabStore("searchTerm", "");
+    // setVocabStore("searchResults", []);
     setLayoutStore("showSearchResults", false);
   };
 
@@ -284,47 +286,49 @@ export default function Layout(props: RouteSectionProps) {
           </div>
         </Show>
         <div class="w-main relative h-full">
-          <Show when={layoutStore.showSearchResults}>
-            <div
-              class={`no-scrollbar search-results light-layout w-content fixed p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 overflow-y-scroll rounded-2 p-2 outline-none`}
-            >
-              <For each={vocabStore.searchResults}>
-                {(item, index) => (
-                  <div
-                    aria-selected={active() === index()}
-                    onMouseOver={() => handleMouseOver(index())}
-                    onMouseOut={handleMouseOut}
-                    class="my-2 flex h-9.5 w-full cursor-pointer justify-between rounded-2 bg-black/50 shadow-md shadow-black/30"
-                  >
-                    <button
-                      class="relative z-50 h-full w-9.5 pl-2 text-3.5 font-400 leading-9.5 text-secondary-white hover:text-white"
-                      onClick={() => handleEditFromSearch(item)}
-                    >
-                      {index() + 1}
-                    </button>
+          <Transition name="search-results">
+            <Show when={layoutStore.showSearchResults}>
+              <div
+                class={`no-scrollbar light-layout w-content fixed h-[calc(100vh-96px)] p-2 ${layoutStore.showLayout ? "right-0 -translate-x-4" : "left-1/2 -translate-x-1/2"} top-12 z-50 overflow-y-scroll rounded-2 outline-none`}
+              >
+                <For each={vocabStore.searchResults}>
+                  {(item, index) => (
                     <div
-                      class={`${active() === index() ? "scale-[2]" : ""} relative z-30 grow text-center font-constantine text-8 font-700 leading-9 text-white transition duration-100`}
-                      style={{
-                        "text-shadow":
-                          active() === index()
-                            ? "0 3px 5px black"
-                            : "0 2px 3px black",
-                      }}
-                      onClick={() => handleSelectWordFromSearch(index())}
+                      aria-selected={active() === index()}
+                      onMouseOver={() => handleMouseOver(index())}
+                      onMouseOut={handleMouseOut}
+                      class="my-2 flex h-9.5 w-full cursor-pointer justify-between rounded-2 bg-black/50 shadow-md shadow-black/30"
                     >
-                      {item.word}
+                      <button
+                        class="relative z-50 h-full w-9.5 pl-2 text-3.5 font-400 leading-9.5 text-secondary-white hover:text-white"
+                        onClick={() => handleEditFromSearch(item)}
+                      >
+                        {index() + 1}
+                      </button>
+                      <div
+                        class={`${active() === index() ? "scale-[2]" : ""} relative z-30 grow text-center font-constantine text-8 font-700 leading-9 text-white transition duration-100`}
+                        style={{
+                          "text-shadow":
+                            active() === index()
+                              ? "0 3px 5px black"
+                              : "0 2px 3px black",
+                        }}
+                        onClick={() => handleSelectWordFromSearch(index())}
+                      >
+                        {item.word}
+                      </div>
+                      <div
+                        class="relative z-50 flex h-full w-9.5 items-center justify-center pr-1"
+                        onClick={() => handleOpenDialogDelete(item.id)}
+                      >
+                        <BsTrash3 size={13} color="white" />
+                      </div>
                     </div>
-                    <div
-                      class="relative z-50 flex h-full w-9.5 items-center justify-center pr-1"
-                      onClick={() => handleOpenDialogDelete(item.id)}
-                    >
-                      <BsTrash3 size={13} color="white" />
-                    </div>
-                  </div>
-                )}
-              </For>
-            </div>
-          </Show>
+                  )}
+                </For>
+              </div>
+            </Show>
+          </Transition>
 
           {props.children}
 
