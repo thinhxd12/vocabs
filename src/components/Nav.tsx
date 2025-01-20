@@ -407,7 +407,7 @@ const Nav: Component<{
       </nav>
 
       <div
-        class={`dark-layout fixed bottom-[60px] ${layoutStore.showLayout ? "right-0 !-translate-x-[402px]" : "left-1/2 translate-x-[158px]"} z-50 flex flex-col items-center justify-center rounded-full px-0.5 py-0.1 text-white sm:translate-x-[201px]`}
+        class={`fixed bottom-[60px] ${layoutStore.showLayout ? "right-0 !-translate-x-[402px]" : "left-1/2 translate-x-[158px]"} z-50 flex flex-col items-center justify-center text-white sm:translate-x-[201px]`}
       >
         <button class="btn-nav-menu" onClick={logout}>
           <RiSystemLogoutCircleRLine size={15} />
