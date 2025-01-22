@@ -85,13 +85,8 @@
 .h-content {
   height: calc(100vh - 90px);
 }
-
-.search-results-enter-active {
-  animation: expand-height 0.3s;
-}
-
-.search-results-exit-active {
-  animation: expand-height 0.3s reverse;
+.search-results {
+  animation: expand-height 0.1s linear forwards;
 }
 
 @keyframes expand-height {
